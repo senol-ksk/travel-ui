@@ -9,6 +9,7 @@
     "prepare": "husky",
     "format": "prettier",
     "test": "vitest run",
+    "test:staged": "vitest --run",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier": "prettier --write **/**/*.{ts,tsx,css}"

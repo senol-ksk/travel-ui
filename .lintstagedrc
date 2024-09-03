@@ -1,3 +1,7 @@
 {
-  "src/**/**/*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix", "eslint"]
+  "src/**/*.{js,jsx,ts,tsx}": [
+    "yarn lint:fix",
+    "yarn prettier",
+    "yarn run test:staged"
+  ]
 }
