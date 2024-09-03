@@ -10,5 +10,5 @@ module.exports = {
     buildEslintCommand,
     'prettier --write --ignore-unknown',
   ],
-  '**/*.{ts,tsx}': ['yarn type-check'],
+  '**/*.ts?(x)': () => 'yarn type-check',
 }
