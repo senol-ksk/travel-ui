@@ -2,3 +2,4 @@
 #yarn lint
 #yarn test
 npx lint-staged
+npm run test
