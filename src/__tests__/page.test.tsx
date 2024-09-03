@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { render, asss } from '@testing-library/react'
+import { render, screen, something } from '@testing-library/react'
 
 import Page from '../app/page'
 // import { expect } from 'vitest'
