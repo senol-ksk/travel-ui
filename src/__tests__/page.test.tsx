@@ -1,12 +1,12 @@
 import { test, expect } from 'vitest'
-import { render, screen, something } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 
 import Page from '../app/page'
 // import { expect } from 'vitest'
 
-test('should have text', async () => {
+test('should have text', () => {
   render(<Page />)
   var heading = screen.getByRole('heading', { level: 1, name: 'Hello' })
 
-  await expect(heading).toBeDefined()
+  expect(heading).toBeDefined()
 })

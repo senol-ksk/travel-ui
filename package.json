@@ -12,6 +12,7 @@
     "test:staged": "vitest --run",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
     "prettier": "prettier --write **/**/*.{ts,tsx,css}"
   },
   "dependencies": {
