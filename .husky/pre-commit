@@ -1,3 +1,4 @@
 # yarn format
-yarn lint
-yarn test
+#yarn lint
+#yarn test
+npx lint-staged
