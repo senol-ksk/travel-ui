@@ -3,6 +3,6 @@
     "prettier --write",
     "eslint --fix",
     "eslint",
-    "jest --bail --findRelatedTests"
+    "vitest"
   ]
 }
