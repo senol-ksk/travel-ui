@@ -10,4 +10,5 @@ module.exports = {
     buildEslintCommand,
     'prettier --write --ignore-unknown',
   ],
+  '*.{ts,tsx}': ['tsc --noEmit'],
 }
