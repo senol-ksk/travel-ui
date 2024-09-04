@@ -1,5 +1,7 @@
 {
   "files.exclude": {
-    ".next": true
+    ".next": true,
+    "*.tsbuildinfo": true,
+    "next-env.d.ts": true
   }
 }
