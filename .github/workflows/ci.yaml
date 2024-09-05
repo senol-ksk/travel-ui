@@ -24,11 +24,14 @@ jobs:
         with:
           node-version: '20.11.1'
 
-      - name: Run Tests
-        run: yarn test:staged
       - name: Install Depndencies
         run: yarn
+
+      - name: Run Tests
+        run: yarn test:staged
+
       - name: Run Lint
         run: yarn lint:fix
+
       - name: Run Format Check
         run: yarn prettier
