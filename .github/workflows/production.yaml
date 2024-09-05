@@ -10,9 +10,7 @@ on:
     workflows: [Continuous Integration]
     branches: [main]
     types: [completed]
-  push:
-    branches:
-      - main
+
 jobs:
   on-success:
     runs-on: ubuntu-latest
