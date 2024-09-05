@@ -27,13 +27,13 @@ export default function RootLayout({
         <header className='bg-white'>
           <div className='container mx-auto flex items-center p-2'>
             <Link href='/'>
-{/*               <Image
+              <Image
                 src='/logo.png'
                 width={152}
                 height={41}
                 alt='Fulltrip'
                 priority
-              /> */}
+              />
             </Link>
             <div className='flex flex-1 items-center'>
               <div className='flex gap-2 px-3 md:gap-4 md:px-5'>
