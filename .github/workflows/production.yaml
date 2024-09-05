@@ -1,5 +1,8 @@
-name: Build and Deploy to Production
+name: Vercel development Deployment
 env:
+  #THIS IS PROJECT INFORMATION WHICH COMES FROM .VERCEL/PROJECT.JSON FILE.
+  # THIS KEY VALUE STORE IN GITHUB ACTION.
+  # GITHUB.COM > SETTINGS > SECRETS AND VARIABLES > ACTIONS > REPOSITORY SECRETS.
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
@@ -9,22 +12,28 @@ on:
 jobs:
   Deploy-development:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
+      #INSTALL NODEJS & NPM ON VERCEL
+      - uses: actions/checkout@v2
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
+
+      - name: Install npm
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org/'
-      - name: Install Depndencies
-        uses: npm install
-      - name: Build
-        uses: npm run build
+      #INSTALL DEPENDENCIES
+      - name: Install dependencies
+        run: npm install
+      #INSTALL VERCEL CLI IN SERVER.
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
+      #SET ENVIRONMENT IN VERCEL.
+      #CREATE ENVIRONMENT IN VERCEL & BUILD IN VERCEL.
+      # GITHUB.COM > SETTINGS > SECRETS AND VARIABLES > ACTIONS > ENVRIONEMENT SECRETS.
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=development --token=${{ secrets.VERCEL_TOKEN }}
       - name: Build Project Artifacts
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy Project Artifacts to Vercel
