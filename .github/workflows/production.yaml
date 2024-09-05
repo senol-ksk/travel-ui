@@ -9,8 +9,7 @@ on:
   workflow_run:
     workflows: [Continuous Integration]
     branches: [main]
-    types:
-      - completed
+    types: [completed]
   push:
     branches:
       - main
