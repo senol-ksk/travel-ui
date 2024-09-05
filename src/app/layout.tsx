@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={`${inter.className} flex min-h-screen flex-col`}>
         <header className='bg-white'>
           <div className='container mx-auto flex items-center p-2'>
-            <Link href='/'>
+            {/* <Link href='/'>
               <Image
                 src='/logo.png'
                 width={152}
@@ -35,6 +35,18 @@ export default function RootLayout({
                 priority
               />
             </Link>
+            
+            
+            
+            
+            
+            */}
+
+
+
+
+
+            
             <div className='flex flex-1 items-center'>
               <div className='flex gap-2 px-3 md:gap-4 md:px-5'>
                 <Link href='/'>Otel</Link>
