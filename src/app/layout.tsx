@@ -42,11 +42,6 @@ export default function RootLayout({
             
             */}
 
-
-
-
-
-            
             <div className='flex flex-1 items-center'>
               <div className='flex gap-2 px-3 md:gap-4 md:px-5'>
                 <Link href='/'>Otel</Link>
