@@ -3,6 +3,8 @@
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
-    "formulahendry.auto-close-tag"
+    "formulahendry.auto-close-tag",
+    "vunguyentuan.vscode-postcss",
+    "vunguyentuan.vscode-css-variables"
   ]
 }
