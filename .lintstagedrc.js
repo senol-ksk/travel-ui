@@ -10,5 +10,5 @@ module.exports = {
     buildEslintCommand,
     'prettier --write --ignore-unknown',
   ],
-  '**/*.ts?(x)': () => 'yarn typecheck',
+  '**/*.ts?(x)': () => 'npm run typecheck',
 }
