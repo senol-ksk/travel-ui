@@ -7,12 +7,15 @@
     "build": "next build",
     "start": "next start",
     "prepare": "husky",
-    "test": "vitest",
+    "test:watch": "vitest",
     "test:staged": "vitest --run",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "type-check": "tsc --noEmit",
-    "prettier": "prettier --write **/**/*.{ts,tsx,css}"
+    "typecheck": "tsc --noEmit",
+    "test": "npm run prettier:check && npm run lint && npm run typecheck && npm run test:staged",
+    "prettier": "prettier --write **/**/*.{ts,tsx,css}",
+    "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
+    "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@mantine/core": "^7.12.2",

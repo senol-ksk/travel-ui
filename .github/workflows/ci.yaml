@@ -1,16 +1,14 @@
-name: Continuous Integration
-# this is trigger CI on push and PR for main branch only
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
+name: CI for Pull Request
 
-# this is trigger CI on all kinds of branches and PRs
 on:
-  push:
   pull_request:
+    branches:
+      - '**'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,13 +23,7 @@ jobs:
           node-version: '20.11.1'
 
       - name: Install Depndencies
-        run: yarn
+        run: npm i
 
-      - name: Run Tests
-        run: yarn test:staged
-
-      - name: Run Lint
-        run: yarn lint:fix
-
-      - name: Run Format Check
-        run: yarn prettier
+      - name: Run Tests and Linting Rules
+        run: npm run test
