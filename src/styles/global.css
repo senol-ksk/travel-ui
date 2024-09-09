@@ -9,3 +9,7 @@
 body {
   background: hsl(210deg 10% 96.08%);
 }
+
+a {
+  color: inherit;
+}
