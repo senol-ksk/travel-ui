@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { Button } from '@mantine/core'
+import { FaRegUserCircle } from 'react-icons/fa'
+
 export const Header = () => (
   <header className='bg-white'>
     <div className='container mx-auto flex items-center p-2'>
@@ -14,7 +17,7 @@ export const Header = () => (
         />
       </Link>
 
-      <div className='flex flex-1 items-center'>
+      <div className='hidden flex-1 items-center md:flex'>
         <div className='flex gap-2 px-3 md:gap-4 md:px-5'>
           <Link href='/'>Otel</Link>
           <Link href='/'>Uçak</Link>
@@ -25,14 +28,15 @@ export const Header = () => (
         </div>
         <div className='ms-auto flex items-center gap-2'>
           <Link href='/'>Kampanyalar</Link>
-          {/* <Button
-      type='button'
-      variant={'outlinePill'}
-      className='flex gap-2'
-    >
-      <FaRegUserCircle />
-      <span>Hesabım</span>
-    </Button> */}
+          <Button
+            type='button'
+            variant={'outline'}
+            className='flex gap-3'
+            radius={'xl'}
+            leftSection={<FaRegUserCircle />}
+          >
+            Hesabım
+          </Button>
         </div>
       </div>
     </div>

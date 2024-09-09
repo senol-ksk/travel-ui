@@ -1,4 +1,4 @@
-import { test, expect, vi, describe, beforeEach } from 'vitest'
+import { test, expect, vi, describe } from 'vitest'
 import { render, screen } from '@/__test-utils__'
 
 import Header from '@/components/header'

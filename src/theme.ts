@@ -1,7 +1,11 @@
-'use client'
+import { createTheme, rem, TabsTab } from '@mantine/core'
 
-import { createTheme } from '@mantine/core'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+})
 
 export const theme = createTheme({
-  /* Put your mantine theme override here */
+  fontFamily: inter.style.fontFamily,
 })
