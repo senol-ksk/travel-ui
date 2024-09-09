@@ -5,3 +5,7 @@
 }
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background: hsl(210deg 10% 96.08%);
+}

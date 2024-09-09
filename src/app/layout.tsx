@@ -1,11 +1,10 @@
 import '@/styles/global.css'
 
 import type { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
 import Header from '@/components/header'
+import { theme } from '@/theme'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
@@ -26,10 +25,9 @@ export default function RootLayout({
       </head>
 
       <body>
-        <MantineProvider>
+        <MantineProvider theme={theme}>
           <Header />
-          <main className='flex-shrink flex-grow'>{children}</main>
-          <footer>Footer</footer>
+          <main>{children}</main>
         </MantineProvider>
       </body>
     </html>
