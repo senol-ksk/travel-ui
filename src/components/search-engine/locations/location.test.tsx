@@ -4,9 +4,9 @@ import { Locations } from './location'
 
 describe('Search engine locations', () => {
   test('should open autocomplete box', async () => {
-    render(<Locations />)
+    render(<Locations title='Testing' />)
 
-    const inputFakeButton = screen.getByRole('button', { name: 'Nereden' })
+    const inputFakeButton = screen.getByRole('button', { name: 'Testing' })
 
     fireEvent.click(inputFakeButton)
 
@@ -18,9 +18,9 @@ describe('Search engine locations', () => {
 
   test('should clear input value', async () => {
     // 'Aramayı temizle'
-    render(<Locations />)
+    render(<Locations title='Testing' />)
 
-    const inputFakeButton = screen.getByRole('button', { name: 'Nereden' })
+    const inputFakeButton = screen.getByRole('button', { name: 'Testing' })
 
     fireEvent.click(inputFakeButton)
 

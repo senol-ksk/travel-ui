@@ -11,9 +11,16 @@ type Props = {
   icon: 'location' | 'passenger' | 'calendar' | React.ReactElement
   title?: string | null | undefined
   onClick?: () => void
+  error?: boolean
 }
 
-export const Input: React.FC<Props> = ({ label, icon, title, onClick }) => {
+export const Input: React.FC<Props> = ({
+  label,
+  icon,
+  title,
+  onClick,
+  error,
+}) => {
   let iconComponent = <FaLocationDot />
   const labelId = useId()
 
@@ -32,7 +39,12 @@ export const Input: React.FC<Props> = ({ label, icon, title, onClick }) => {
   }
 
   return (
-    <div className='grid'>
+    <div
+      className={clsx('grid rounded border', {
+        'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
+        'border-slate-300': !error,
+      })}
+    >
       <label
         id={labelId}
         aria-labelledby={labelId}
@@ -47,11 +59,17 @@ export const Input: React.FC<Props> = ({ label, icon, title, onClick }) => {
       </label>
       <button
         type='button'
-        className='flex items-center justify-start gap-2 rounded border border-slate-300 p-3 text-start leading-none md:gap-4 md:p-4'
+        className='flex items-center justify-start gap-2 border-0 p-3 text-start leading-none md:gap-4 md:p-4'
         onClick={onClick}
         id={labelId}
       >
-        <span className='text-lg'>{iconComponent}</span>
+        <span
+          className={clsx('text-lg', {
+            'text-red-500': error,
+          })}
+        >
+          {iconComponent}
+        </span>
         <span>{!!title ? title : label}</span>
       </button>
     </div>

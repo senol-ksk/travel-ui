@@ -1,12 +1,24 @@
 import { useRef, useState } from 'react'
-import { TextInput, Transition, Paper, CloseButton } from '@mantine/core'
+import {
+  TextInput,
+  Transition,
+  Paper,
+  CloseButton,
+  TextInputProps,
+} from '@mantine/core'
 import { useClickOutside, useFocusTrap } from '@mantine/hooks'
 
 import { IoSearch } from 'react-icons/io5'
 
 import { Input } from '@/components/search-engine/input'
 
-export const Locations = () => {
+type Props = {
+  title: string
+  // name: string
+  inputProps?: TextInputProps
+}
+
+export const Locations: React.FC<Props> = ({ title, inputProps }) => {
   const [returnLocationOpened, setReturnLocationOpened] = useState(false)
   const clickOutsideRef = useClickOutside(() => setReturnLocationOpened(false))
   const [originValue, setOriginValue] = useState('')
@@ -17,22 +29,23 @@ export const Locations = () => {
   return (
     <div className='relative'>
       <Input
-        label='Nereden'
+        label={title}
         icon='location'
         onClick={() => {
           setReturnLocationOpened(true)
         }}
+        error={!!inputProps?.error}
       />
       <Transition mounted={returnLocationOpened} transition='pop-top-right'>
         {(styles) => (
           <Paper
             ref={clickOutsideRef}
-            className='fixed start-0 top-0 z-50 min-w-[320px] shadow-xl md:absolute'
+            className='fixed start-0 top-0 z-50 -ms-1 -mt-1 min-w-[320px] shadow-xl md:absolute'
             style={{ ...styles }}
           >
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
               <label htmlFor='location_select' className='sr-only'>
-                Nereden
+                {title}
               </label>
               <TextInput
                 ref={inputRef}
@@ -40,7 +53,7 @@ export const Locations = () => {
                 onChange={(event) => setOriginValue(event.currentTarget.value)}
                 autoComplete='off'
                 id='location_select'
-                placeholder='Nereden'
+                placeholder={title}
                 size='lg'
                 rightSectionPointerEvents='all'
                 rightSection={
@@ -53,6 +66,7 @@ export const Locations = () => {
                     style={{ display: originValue ? undefined : 'none' }}
                   />
                 }
+                // {...inputProps}
               />
             </div>
             <div className='min-h-[400px]'>

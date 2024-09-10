@@ -33,4 +33,22 @@ describe('Search Engine Components', () => {
 
     expect(label).not.toHaveClass('opacity-0')
   })
+
+  test('should have error classes', () => {
+    const { container } = render(
+      <Input label={text} error={true} icon={'location'} />
+    )
+    const wrapper = container.querySelector('.grid.rounded.border')
+
+    expect(wrapper).toHaveClass('border-red-500')
+  })
+  test('should have not error classes', () => {
+    const { container } = render(
+      <Input label={text} error={false} icon={'location'} />
+    )
+    const wrapper = container.querySelector('.grid.rounded.border')
+
+    expect(wrapper).not.toHaveClass('border-red-500')
+    expect(wrapper).toHaveClass('border-slate-300')
+  })
 })
