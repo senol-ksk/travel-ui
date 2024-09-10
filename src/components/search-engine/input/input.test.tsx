@@ -24,14 +24,14 @@ describe('Search Engine Components', () => {
     render(<Input label={text} icon={'calendar'} />)
     const label = screen.getByLabelText(text)
 
-    expect(label).toHaveClass('opacity-0')
+    expect(label).toHaveClass('sr-only')
   })
 
   test('label should not be hidden when no `title`', () => {
     render(<Input label={text} icon={'calendar'} title={'Heloo'} />)
     const label = screen.getByLabelText(text)
 
-    expect(label).not.toHaveClass('opacity-0')
+    expect(label).not.toHaveClass('sr-only')
   })
 
   test('should have error classes', () => {

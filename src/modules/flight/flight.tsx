@@ -1,7 +1,7 @@
-import { zodResolver } from 'mantine-form-zod-resolver'
 import { z } from 'zod'
-import { useForm } from '@mantine/form'
+import { zodResolver } from 'mantine-form-zod-resolver'
 
+import { useForm } from '@mantine/form'
 import { Button } from '@mantine/core'
 
 import { Input } from '@/components/search-engine/input'
@@ -16,17 +16,18 @@ const locationSchema = z.object({
 })
 
 const schema = z.object({
-  // DepartureTime: z.string().date(), //"2024-09-11",
-  // CabinClass: z.number(),
-  // MaxConnections: z.number(),
-  Origin: locationSchema,
-  Destination: locationSchema,
+  Origin: z.string().min(4),
+  Destination: z.string().min(4),
 })
 
 export const Flight = () => {
   const form = useForm<typeof schema.shape>({
     mode: 'uncontrolled',
     validate: zodResolver(schema),
+    initialValues: {
+      //@ts-ignore-next-line
+      Origin: '',
+    },
   })
 
   return (
@@ -34,16 +35,27 @@ export const Flight = () => {
       <div className='grid gap-2 md:grid-cols-12 md:gap-4'>
         <div className='col-span-6 md:col-span-3'>
           <Locations
-            title='Kalkış'
-            key={form.key('Origin')}
+            label='Kalkış'
             inputProps={{ ...form.getInputProps('Origin') }}
+            onSelect={(params) => {
+              console.log(params)
+              form.setValues({
+                //@ts-ignore-next-line
+                Origin: params,
+              })
+            }}
           />
         </div>
         <div className='col-span-6 md:col-span-3'>
           <Locations
-            title='Nereye'
-            key={form.key('Destination')}
+            label='Nereye'
             inputProps={{ ...form.getInputProps('Destination') }}
+            onSelect={(value) => {
+              form.setValues({
+                //@ts-ignore-next-line
+                Destination: value,
+              })
+            }}
           />
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>

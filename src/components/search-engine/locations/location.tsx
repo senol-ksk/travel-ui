@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   TextInput,
   Transition,
@@ -13,28 +13,29 @@ import { IoSearch } from 'react-icons/io5'
 import { Input } from '@/components/search-engine/input'
 
 type Props = {
-  title: string
-  // name: string
+  label: string
   inputProps?: TextInputProps
+  onSelect?: (params: string) => void
 }
 
-export const Locations: React.FC<Props> = ({ title, inputProps }) => {
+export const Locations: React.FC<Props> = ({ label, inputProps, onSelect }) => {
   const [returnLocationOpened, setReturnLocationOpened] = useState(false)
   const clickOutsideRef = useClickOutside(() => setReturnLocationOpened(false))
   const [originValue, setOriginValue] = useState('')
 
-  const focusTrapRef = useFocusTrap()
+  const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className='relative'>
       <Input
-        label={title}
+        label={label}
         icon='location'
         onClick={() => {
           setReturnLocationOpened(true)
         }}
         error={!!inputProps?.error}
+        title={originValue}
       />
       <Transition mounted={returnLocationOpened} transition='pop-top-right'>
         {(styles) => (
@@ -45,15 +46,19 @@ export const Locations: React.FC<Props> = ({ title, inputProps }) => {
           >
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
               <label htmlFor='location_select' className='sr-only'>
-                {title}
+                {label}
               </label>
               <TextInput
                 ref={inputRef}
                 value={originValue}
-                onChange={(event) => setOriginValue(event.currentTarget.value)}
+                onChange={(event) => {
+                  setOriginValue(event.currentTarget.value)
+                  onSelect && onSelect(event.currentTarget.value)
+                }}
+                onFocus={(event) => event.target.select()}
                 autoComplete='off'
                 id='location_select'
-                placeholder={title}
+                placeholder={label}
                 size='lg'
                 rightSectionPointerEvents='all'
                 rightSection={
@@ -66,7 +71,6 @@ export const Locations: React.FC<Props> = ({ title, inputProps }) => {
                     style={{ display: originValue ? undefined : 'none' }}
                   />
                 }
-                // {...inputProps}
               />
             </div>
             <div className='min-h-[400px]'>

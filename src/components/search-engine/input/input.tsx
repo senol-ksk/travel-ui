@@ -9,7 +9,7 @@ import clsx from 'clsx'
 type Props = {
   label: string | React.ReactNode
   icon: 'location' | 'passenger' | 'calendar' | React.ReactElement
-  title?: string | null | undefined
+  title?: string
   onClick?: () => void
   error?: boolean
 }
@@ -50,27 +50,29 @@ export const Input: React.FC<Props> = ({
         aria-labelledby={labelId}
         className={clsx(
           {
-            'opacity-0': !title,
+            'sr-only': !title,
           },
-          'absolute'
+          'absolute start-12 top-1 ps-1 text-xs text-gray-800'
         )}
       >
         {label}
       </label>
       <button
         type='button'
-        className='flex items-center justify-start gap-2 border-0 p-3 text-start leading-none md:gap-4 md:p-4'
+        className='relative flex items-center justify-start gap-2 overflow-hidden text-ellipsis border-0 p-3 text-start leading-none md:gap-4 md:p-4'
         onClick={onClick}
         id={labelId}
       >
-        <span
+        <div
           className={clsx('text-lg', {
             'text-red-500': error,
           })}
         >
           {iconComponent}
-        </span>
-        <span>{!!title ? title : label}</span>
+        </div>
+        <div className='overflow-hidden text-ellipsis text-nowrap'>
+          {!!title ? title : label}
+        </div>
       </button>
     </div>
   )
