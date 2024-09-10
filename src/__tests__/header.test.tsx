@@ -1,15 +1,7 @@
-import { test, expect, vi, describe } from 'vitest'
+import { test, expect, describe } from 'vitest'
 import { render, screen } from '@/__test-utils__'
 
 import Header from '@/components/header'
-
-vi.mock('next/font/google', () => ({
-  Inter: () => ({
-    style: {
-      fontFamily: 'mocked',
-    },
-  }),
-}))
 
 describe('Logo', () => {
   test('should be defined', () => {

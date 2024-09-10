@@ -1,15 +1,8 @@
-import { test, expect, describe, vi } from 'vitest'
+import { test, expect, describe } from 'vitest'
 
 import { render, screen } from '@/__test-utils__'
 import { Input } from './input'
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({
-    style: {
-      fontFamily: 'mocked',
-    },
-  }),
-}))
 const text = 'Label Value'
 
 describe('Search Engine Components', () => {
@@ -31,13 +24,31 @@ describe('Search Engine Components', () => {
     render(<Input label={text} icon={'calendar'} />)
     const label = screen.getByLabelText(text)
 
-    expect(label).toHaveClass('opacity-0')
+    expect(label).toHaveClass('sr-only')
   })
 
   test('label should not be hidden when no `title`', () => {
     render(<Input label={text} icon={'calendar'} title={'Heloo'} />)
     const label = screen.getByLabelText(text)
 
-    expect(label).not.toHaveClass('opacity-0')
+    expect(label).not.toHaveClass('sr-only')
+  })
+
+  test('should have error classes', () => {
+    const { container } = render(
+      <Input label={text} error={true} icon={'location'} />
+    )
+    const wrapper = container.querySelector('.grid.rounded.border')
+
+    expect(wrapper).toHaveClass('border-red-500')
+  })
+  test('should have not error classes', () => {
+    const { container } = render(
+      <Input label={text} error={false} icon={'location'} />
+    )
+    const wrapper = container.querySelector('.grid.rounded.border')
+
+    expect(wrapper).not.toHaveClass('border-red-500')
+    expect(wrapper).toHaveClass('border-slate-300')
   })
 })
