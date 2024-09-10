@@ -1,15 +1,8 @@
-import { test, expect, describe, vi } from 'vitest'
+import { test, expect, describe } from 'vitest'
 
 import { render, screen } from '@/__test-utils__'
 import { Input } from './input'
 
-vi.mock('next/font/google', () => ({
-  Inter: () => ({
-    style: {
-      fontFamily: 'mocked',
-    },
-  }),
-}))
 const text = 'Label Value'
 
 describe('Search Engine Components', () => {

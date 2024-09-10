@@ -31,7 +31,7 @@ export const Locations = () => {
             style={{ ...styles }}
           >
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
-              <label htmlFor='origin_select' className='sr-only'>
+              <label htmlFor='location_select' className='sr-only'>
                 Nereden
               </label>
               <TextInput
@@ -39,7 +39,7 @@ export const Locations = () => {
                 value={originValue}
                 onChange={(event) => setOriginValue(event.currentTarget.value)}
                 autoComplete='off'
-                id='origin_select'
+                id='location_select'
                 placeholder='Nereden'
                 size='lg'
                 rightSectionPointerEvents='all'
