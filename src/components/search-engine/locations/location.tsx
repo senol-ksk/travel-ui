@@ -41,9 +41,15 @@ export const Locations: React.FC<Props> = ({ label, inputProps, onSelect }) => {
         {(styles) => (
           <Paper
             ref={clickOutsideRef}
-            className='fixed start-0 top-0 z-50 -ms-1 -mt-1 min-w-[320px] shadow-xl md:absolute'
+            className='fixed bottom-0 start-0 top-0 z-50 -ms-1 -mt-1 bg-white shadow-xl md:absolute md:bottom-auto md:end-0 md:min-w-[320px]'
             style={{ ...styles }}
           >
+            <div className='flex justify-end md:hidden'>
+              <CloseButton
+                size={'xl'}
+                onClick={() => setReturnLocationOpened(false)}
+              />
+            </div>
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
               <label htmlFor='location_select' className='sr-only'>
                 {label}
