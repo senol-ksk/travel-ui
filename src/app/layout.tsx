@@ -3,6 +3,8 @@ import '@/styles/global.css'
 import type { Metadata } from 'next'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
+import { Providers } from '@/app/providers'
+
 import Header from '@/components/header'
 import { theme } from '@/theme'
 
@@ -25,10 +27,12 @@ export default function RootLayout({
       </head>
 
       <body>
-        <MantineProvider theme={theme}>
-          <Header />
-          <main>{children}</main>
-        </MantineProvider>
+        <Providers>
+          <MantineProvider theme={theme}>
+            <Header />
+            <main>{children}</main>
+          </MantineProvider>
+        </Providers>
       </body>
     </html>
   )

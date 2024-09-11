@@ -4,30 +4,50 @@ import { zodResolver } from 'mantine-form-zod-resolver'
 import { useForm } from '@mantine/form'
 import { Button } from '@mantine/core'
 
+import { useQuery } from '@tanstack/react-query'
+
 import { Input } from '@/components/search-engine/input'
 import { Locations } from '@/components/search-engine/locations'
-
-const locationSchema = z.object({
-  code: z.string(),
-  iata: z.array(z.string()),
-  type: z.number(),
-  isDomestic: z.boolean(),
-  id: z.number(),
-})
+import { useState } from 'react'
+import { request } from '@/network'
 
 const schema = z.object({
   Origin: z.string().min(4),
   Destination: z.string().min(4),
 })
 
+import type { LocationsApiResults } from '@/components/search-engine/locations/locations'
+
 export const Flight = () => {
+  const [originLocationInputValue, setOriginLocationInputValue] = useState('')
+  const [destinationLocationInputValue, setDestinationLocationInputValue] =
+    useState('')
+
+  const { data: originLocations, isLoading: originLocationsIsLoading } =
+    useQuery<LocationsApiResults>({
+      queryKey: ['flight-locations', originLocationInputValue],
+      enabled:
+        !!originLocationInputValue && originLocationInputValue.length > 3,
+      queryFn: () =>
+        request({
+          url: `https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/search?s=${originLocationInputValue}&id=&scope=2d932774-a9d8-4df9-aae7-5ad2727da1c7`,
+        }),
+    })
+  const { data: destinationLocation, isLoading: destinationLocationLoading } =
+    useQuery<LocationsApiResults>({
+      queryKey: ['flight-locations', destinationLocationInputValue],
+      enabled:
+        !!destinationLocationInputValue &&
+        destinationLocationInputValue.length > 3,
+      queryFn: () =>
+        request({
+          url: `https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/search?s=${destinationLocationInputValue}&id=&scope=2d932774-a9d8-4df9-aae7-5ad2727da1c7`,
+        }),
+    })
+
   const form = useForm<typeof schema.shape>({
     mode: 'uncontrolled',
     validate: zodResolver(schema),
-    initialValues: {
-      //@ts-ignore-next-line
-      Origin: '',
-    },
   })
 
   return (
@@ -37,11 +57,15 @@ export const Flight = () => {
           <Locations
             label='Kalkış'
             inputProps={{ ...form.getInputProps('Origin') }}
-            onSelect={(params) => {
-              console.log(params)
+            data={originLocations?.Result}
+            isLoading={originLocationsIsLoading}
+            onChange={(value) => {
+              setOriginLocationInputValue(value)
+            }}
+            onSelect={(value) => {
               form.setValues({
                 //@ts-ignore-next-line
-                Origin: params,
+                Origin: value,
               })
             }}
           />
@@ -50,6 +74,11 @@ export const Flight = () => {
           <Locations
             label='Nereye'
             inputProps={{ ...form.getInputProps('Destination') }}
+            data={destinationLocation?.Result}
+            isLoading={destinationLocationLoading}
+            onChange={(value) => {
+              setDestinationLocationInputValue(value)
+            }}
             onSelect={(value) => {
               form.setValues({
                 //@ts-ignore-next-line
