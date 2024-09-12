@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
 
 import { useForm } from '@mantine/form'
-import { Button } from '@mantine/core'
+import { Button, NativeSelect } from '@mantine/core'
 
 import { request } from '@/network'
 import { Input } from '@/components/search-engine/input'
@@ -53,6 +53,17 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.onSubmit((event) => console.log(event))}>
+      <div>
+        <div hidden>
+          <NativeSelect
+            data={[
+              { label: 'Ekonomi', value: '0' },
+              { label: 'Business', value: '2' },
+              { label: 'First Class', value: '3' },
+            ]}
+          />
+        </div>
+      </div>
       <div className='grid grid-cols-12 gap-2 md:gap-4'>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <Locations

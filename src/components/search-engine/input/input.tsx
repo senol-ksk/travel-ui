@@ -9,7 +9,7 @@ import clsx from 'clsx'
 type Props = {
   label: string | React.ReactNode
   icon: 'location' | 'passenger' | 'calendar' | React.ReactElement
-  title?: string
+  title?: string | null
   onClick?: () => void
   error?: boolean
 }
