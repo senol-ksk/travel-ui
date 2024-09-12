@@ -215,9 +215,11 @@ const FlightCalendar: React.FC<Props> = () => {
         </Transition>
       </div>
 
-      <Portal>
-        <div className='fixed bottom-0 end-0 start-0 top-0 bg-black bg-opacity-50 md:hidden' />
-      </Portal>
+      {containerTransitionState && (
+        <Portal>
+          <div className='fixed bottom-0 end-0 start-0 top-0 bg-black bg-opacity-50 md:hidden' />
+        </Portal>
+      )}
     </Provider>
   )
 }
