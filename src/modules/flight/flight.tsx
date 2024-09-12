@@ -52,8 +52,8 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.onSubmit((event) => console.log(event))}>
-      <div className='grid gap-2 md:grid-cols-12 md:gap-4'>
-        <div className='col-span-6 md:col-span-3'>
+      <div className='grid grid-cols-12 gap-2 md:gap-4'>
+        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <Locations
             label='Kalkış'
             inputProps={{ ...form.getInputProps('Origin') }}
@@ -70,7 +70,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='col-span-6 md:col-span-3'>
+        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <Locations
             label='Nereye'
             inputProps={{ ...form.getInputProps('Destination') }}
