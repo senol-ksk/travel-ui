@@ -19,10 +19,12 @@
   },
   "dependencies": {
     "@mantine/core": "^7.12.2",
+    "@mantine/dates": "^7.12.2",
     "@mantine/hooks": "^7.12.2",
     "@tanstack/react-query": "^5.55.4",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "mantine-form-zod-resolver": "^1.1.0",
     "next": "14.2.9",
     "react": "^18.3.1",
