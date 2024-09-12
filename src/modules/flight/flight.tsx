@@ -1,22 +1,23 @@
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
 import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
 
 import { useForm } from '@mantine/form'
 import { Button } from '@mantine/core'
 
-import { useQuery } from '@tanstack/react-query'
-
+import { request } from '@/network'
 import { Input } from '@/components/search-engine/input'
 import { Locations } from '@/components/search-engine/locations'
-import { useState } from 'react'
-import { request } from '@/network'
+import { FlightCalendar } from '@/components/search-engine/calendar/flight'
+
+import type { LocationsApiResults } from '@/components/search-engine/locations/locations'
 
 const schema = z.object({
   Origin: z.string().min(4),
   Destination: z.string().min(4),
 })
-
-import type { LocationsApiResults } from '@/components/search-engine/locations/locations'
 
 export const Flight = () => {
   const [originLocationInputValue, setOriginLocationInputValue] = useState('')
@@ -88,7 +89,7 @@ export const Flight = () => {
           />
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>
-          <Input label='Tarihler' icon={'calendar'} />
+          <FlightCalendar />
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>
           <Input label={'Yolcular'} icon={'passenger'} />
