@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@/__test-utils__'
+import { fireEvent, render, screen, waitFor } from '@/__test-utils__'
 import { describe, expect, test } from 'vitest'
 import { Locations } from './location'
 
