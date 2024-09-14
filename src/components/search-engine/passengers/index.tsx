@@ -58,6 +58,7 @@ export const PassengerDropdown = () => {
             ref={clickOutsideRef}
             className='fixed bottom-0 end-0 start-0 top-0 z-50 sm:absolute sm:bottom-auto sm:start-auto md:-ms-1 md:-mt-1'
             style={{ ...styles }}
+            role='menu'
           >
             <Paper className='flex h-full flex-col rounded-lg shadow-xl'>
               <div className='grid min-w-[320px] gap-7 p-5'>
@@ -73,11 +74,11 @@ export const PassengerDropdown = () => {
                       }}
                       data-disabled={passengersState.adults.count === 1}
                       disabled={passengersState.adults.count === 1}
-                      aria-label='yetiskin yolcu ekle'
+                      aria-label='decrease-adult'
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm'>
+                    <div className='text-sm' aria-label='adult-count'>
                       {passengersState.adults.count}
                     </div>
                     <ActionIcon
@@ -97,7 +98,7 @@ export const PassengerDropdown = () => {
                           passengersState.children.count ===
                         7
                       }
-                      aria-label='yetiskin yolcu cikar'
+                      aria-label='increase-adult'
                     >
                       <FiPlus />
                     </ActionIcon>
@@ -120,10 +121,11 @@ export const PassengerDropdown = () => {
                       }}
                       data-disabled={passengersState.children.count === 0}
                       disabled={passengersState.children.count === 0}
+                      aria-label='decrease-children'
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm'>
+                    <div className='text-sm' aria-label='children-count'>
                       {passengersState.children.count}
                     </div>
                     <ActionIcon
@@ -143,6 +145,7 @@ export const PassengerDropdown = () => {
                           passengersState.children.count ===
                         7
                       }
+                      aria-label='increase-children'
                     >
                       <FiPlus />
                     </ActionIcon>
@@ -165,10 +168,11 @@ export const PassengerDropdown = () => {
                       }}
                       data-disabled={passengersState.infants.count === 0}
                       disabled={passengersState.infants.count === 0}
+                      aria-label='decrease-infants'
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm'>
+                    <div className='text-sm' aria-label='infants-count'>
                       {passengersState.infants.count}
                     </div>
                     <ActionIcon
@@ -186,6 +190,7 @@ export const PassengerDropdown = () => {
                         passengersState.infants.count ===
                         passengersState.adults.count
                       }
+                      aria-label='increase-infants'
                     >
                       <FiPlus />
                     </ActionIcon>
