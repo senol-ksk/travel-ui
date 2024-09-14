@@ -11,7 +11,7 @@ import { request } from '@/network'
 import { Input } from '@/components/search-engine/input'
 import { Locations } from '@/components/search-engine/locations'
 import { FlightCalendar } from '@/components/search-engine/calendar/flight'
-
+import { PassengerDropdown } from '@/components/search-engine/passengers'
 import type { LocationsApiResults } from '@/components/search-engine/locations/locations'
 
 const schema = z.object({
@@ -103,7 +103,7 @@ export const Flight = () => {
           <FlightCalendar />
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>
-          <Input label={'Yolcular'} icon={'passenger'} />
+          <PassengerDropdown />
         </div>
         <div className='sm:col-grid-2 col-span-12 flex grow-0 lg:col-span-2'>
           <Button
