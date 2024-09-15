@@ -29,14 +29,24 @@ const maxDate = today.add(1, 'year')
 type Props = {
   tripKind?: 'one-way' | 'round-trip' | string
 }
+const defaultFormat = 'DD MMM ddd'
 
 const FlightCalendar: React.FC<Props> = () => {
   const [tripKindState, setTripKindState] = useState<string>('one-way')
-  const [rangeValue, setRangeValue] = useState<DatesRangeValue>([null, null])
-  const [singValue, setSingleValue] = useState<DateValue>(null)
+  const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
+    today.toDate(),
+    today.add(2, 'day').toDate(),
+  ])
+
   const [formatedValues, setFormatedValues] = useState<
     [string | null, string | null]
-  >([null, null])
+  >([
+    today.format(defaultFormat),
+
+    tripKindState === 'round-trip'
+      ? today.add(2, 'day').format(defaultFormat)
+      : null,
+  ])
 
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
@@ -46,7 +56,6 @@ const FlightCalendar: React.FC<Props> = () => {
   )
 
   const handleDateSelections = (dates: DatesRangeValue | DateValue) => {
-    const defaultFormat = 'DD MMM ddd'
     let departurDate
     let returnDate
 
@@ -56,7 +65,7 @@ const FlightCalendar: React.FC<Props> = () => {
       setRangeValue(dates)
     } else if (dayjs(dates).isValid()) {
       departurDate = dates
-      setSingleValue(dates)
+      setRangeValue([dates, null])
     } else {
       console.error('Date type has some errors')
     }
@@ -158,45 +167,27 @@ const FlightCalendar: React.FC<Props> = () => {
                 </div>
                 <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
                   <div>
-                    {tripKindState === 'one-way' ? (
-                      <DatePicker
-                        value={singValue}
-                        onChange={handleDateSelections}
-                        numberOfColumns={matches ? 2 : 13}
-                        minDate={today.toDate()}
-                        maxDate={maxDate.toDate()}
-                        maxLevel='month'
-                        classNames={{
-                          levelsGroup: 'flex-col p-2 md:flex-row',
-                          month: 'w-full',
-                          day: 'text-sm w-full',
-                          monthCell: 'text-center',
-                          calendarHeader: 'mx-auto max-w-full',
-                          calendarHeaderLevel: 'text-base',
-                          weekday: 'text-black',
-                        }}
-                      />
-                    ) : (
-                      <DatePicker
-                        value={rangeValue}
-                        onChange={handleDateSelections}
-                        type={'range'}
-                        allowSingleDateInRange
-                        numberOfColumns={matches ? 2 : 13}
-                        minDate={today.toDate()}
-                        maxDate={maxDate.toDate()}
-                        maxLevel='month'
-                        classNames={{
-                          levelsGroup: 'flex-col p-2 md:flex-row',
-                          month: 'w-full',
-                          day: 'text-sm w-full',
-                          monthCell: 'text-center',
-                          calendarHeader: 'mx-auto max-w-full',
-                          calendarHeaderLevel: 'text-base',
-                          weekday: 'text-black',
-                        }}
-                      />
-                    )}
+                    <DatePicker
+                      value={
+                        tripKindState === 'one-way' ? rangeValue[0] : rangeValue
+                      }
+                      onChange={handleDateSelections}
+                      type={tripKindState === 'one-way' ? 'default' : 'range'}
+                      allowSingleDateInRange
+                      numberOfColumns={matches ? 2 : 13}
+                      minDate={today.toDate()}
+                      maxDate={maxDate.toDate()}
+                      maxLevel='month'
+                      classNames={{
+                        levelsGroup: 'flex-col p-2 md:flex-row',
+                        month: 'w-full',
+                        day: 'text-sm w-full',
+                        monthCell: 'text-center',
+                        calendarHeader: 'mx-auto max-w-full',
+                        calendarHeaderLevel: 'text-base',
+                        weekday: 'text-black',
+                      }}
+                    />
                   </div>
                 </div>
                 <div className='flex border-t p-2 md:justify-end md:p-3'>
