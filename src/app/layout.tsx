@@ -3,13 +3,11 @@ import '@/styles/global.css'
 import type { Metadata } from 'next'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
-import { DatesProvider } from '@mantine/dates'
 
 import { Providers } from '@/app/providers'
 
 import Header from '@/components/header'
 import { theme } from '@/theme'
-import 'dayjs/locale/tr'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',

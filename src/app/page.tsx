@@ -1,5 +1,3 @@
-import { Container } from '@mantine/core'
-
 import { SearchEngine } from '@/components/search-engine/'
 
 export default function Home() {
