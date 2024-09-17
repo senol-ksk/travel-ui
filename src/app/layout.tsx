@@ -3,18 +3,17 @@ import '@/styles/global.css'
 import type { Metadata } from 'next'
 
 import { MantineProvider, ColorSchemeScript } from '@mantine/core'
-import { DatesProvider } from '@mantine/dates'
 
 import { Providers } from '@/app/providers'
 
 import Header from '@/components/header'
 import { theme } from '@/theme'
-import 'dayjs/locale/tr'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
   description: `Seyahat planı yapmadan biraz ilham almaya ne dersiniz? Seyahatin En İyilerini sizin için topluyoruz.`,
 }
+const sessionToken_name = 'SessionToken'
 
 export default function RootLayout({
   children,

@@ -1,7 +1,7 @@
 type ID = string | number
 type arrayNumber = Array<[number]>
 
-type LocationResult = {
+export type LocationResult = {
   Id: ID
   ParentIds: arrayNumber
   Name: string
@@ -10,7 +10,7 @@ type LocationResult = {
   Location: arrayNumber
   Northeast: arrayNumber
   Southwest: arrayNumber
-  Iata: Array<[]>
+  Iata: string[]
   Type: number
   SubDestinations: Array<{
     Id: ID
@@ -21,7 +21,7 @@ type LocationResult = {
     Location: arrayNumber
     Northeast: arrayNumber
     Southwest: arrayNumber
-    Iata: Array<[]>
+    Iata: string[]
     Type: number
     SubDestinations: Array<[]>
     Slug: string
@@ -35,7 +35,7 @@ type LocationResult = {
   ExtentionData: object
 }
 
-export type LocationsApiResults = {
+export type LocationResults = {
   Succeeded: true
   Result: Array<LocationResult>
   Errors: Array<[]>
