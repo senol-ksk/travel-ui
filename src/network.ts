@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig, AxiosError } from 'axios'
 
 import axios from 'axios'
 
@@ -7,9 +7,28 @@ const client = axios.create({
 })
 
 const request = async (options: AxiosRequestConfig) => {
-  const response = await client(options)
+  try {
+    const response = await client({
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      ...options,
+    })
 
-  return response.data
+    return response.data
+  } catch (error) {
+    const err = error as Error | AxiosError
+
+    if (axios.isAxiosError(err)) {
+      return Promise.reject({
+        message: err.message,
+        code: err.code,
+        response: err.response,
+      })
+    }
+
+    return err
+  }
 }
 
 export { request }

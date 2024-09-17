@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: 'Fulltrip',
   description: `Seyahat planı yapmadan biraz ilham almaya ne dersiniz? Seyahatin En İyilerini sizin için topluyoruz.`,
 }
+const sessionToken_name = 'SessionToken'
 
 export default function RootLayout({
   children,

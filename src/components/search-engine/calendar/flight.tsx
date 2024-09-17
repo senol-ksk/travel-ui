@@ -1,17 +1,9 @@
 import { useState } from 'react'
+import dayjs from 'dayjs'
+import clsx from 'clsx'
+import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
-import {
-  NativeSelect,
-  Button,
-  CloseButton,
-  Paper,
-  Transition,
-  Portal,
-  Group,
-  Radio,
-} from '@mantine/core'
-
-import { useMediaQuery, useClickOutside, useSetState } from '@mantine/hooks'
+import { useMediaQuery, useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
 import type { DatesRangeValue, DateValue } from '@mantine/dates'
 
@@ -20,31 +12,34 @@ import { IoArrowForwardSharp } from 'react-icons/io5'
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 
-import dayjs from 'dayjs'
-import clsx from 'clsx'
-
 const today = dayjs()
 const maxDate = today.add(1, 'year')
+const defaultDepartureDate = today.add(3, 'day')
+const defaultReturnDate = defaultDepartureDate.add(3, 'day')
 
 type Props = {
-  tripKind?: 'one-way' | 'round-trip' | string
+  tripKind?: 'one-way' | 'round-trip'
+  onDateSelect?: (dates: DatesRangeValue) => void
+  defaultDates?: DatesRangeValue
 }
 const defaultFormat = 'DD MMM ddd'
 
-const FlightCalendar: React.FC<Props> = () => {
-  const [tripKindState, setTripKindState] = useState<string>('one-way')
+const FlightCalendar: React.FC<Props> = ({
+  onDateSelect = () => {},
+  tripKind = 'one-way',
+  defaultDates = [defaultDepartureDate.toDate(), defaultReturnDate.toDate()],
+}) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
-    today.toDate(),
-    today.add(2, 'day').toDate(),
+    defaultDates.at(0) || null,
+    defaultDates.at(1) || null,
   ])
 
   const [formatedValues, setFormatedValues] = useState<
     [string | null, string | null]
   >([
-    today.format(defaultFormat),
-
-    tripKindState === 'round-trip'
-      ? today.add(2, 'day').format(defaultFormat)
+    dayjs(defaultDates.at(0)).format(defaultFormat),
+    tripKind === 'round-trip'
+      ? dayjs(defaultDates.at(1)).format(defaultFormat)
       : null,
   ])
 
@@ -60,12 +55,14 @@ const FlightCalendar: React.FC<Props> = () => {
     let returnDate
 
     if (Array.isArray(dates)) {
-      departurDate = dates[0]
-      returnDate = dates[1]
+      departurDate = dates.at(0)
+      returnDate = dates.at(1)
       setRangeValue(dates)
+      onDateSelect(dates)
     } else if (dayjs(dates).isValid()) {
       departurDate = dates
       setRangeValue([dates, null])
+      onDateSelect([dates, null])
     } else {
       console.error('Date type has some errors')
     }
@@ -100,20 +97,6 @@ const FlightCalendar: React.FC<Props> = () => {
               style={{ ...styles }}
             >
               <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl'>
-                <div className='p-4'>
-                  <Radio.Group
-                    name='tripKind'
-                    defaultValue={tripKindState}
-                    onChange={(value) => {
-                      setTripKindState(value)
-                    }}
-                  >
-                    <Group gap={'2rem'}>
-                      <Radio value='one-way' label='Tek Yön' />
-                      <Radio value='round-trip' label='Gidiş-Dönüş' />
-                    </Group>
-                  </Radio.Group>
-                </div>
                 <div>
                   <div className='flex justify-end p-2 md:hidden'>
                     <CloseButton
@@ -139,7 +122,7 @@ const FlightCalendar: React.FC<Props> = () => {
                         )}
                       </button>
                     </div>
-                    {tripKindState === 'round-trip' && (
+                    {tripKind === 'round-trip' && (
                       <>
                         <div className='text-xl'>
                           <IoArrowForwardSharp />
@@ -168,11 +151,9 @@ const FlightCalendar: React.FC<Props> = () => {
                 <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
                   <div>
                     <DatePicker
-                      value={
-                        tripKindState === 'one-way' ? rangeValue[0] : rangeValue
-                      }
+                      highlightToday
                       onChange={handleDateSelections}
-                      type={tripKindState === 'one-way' ? 'default' : 'range'}
+                      type={tripKind === 'one-way' ? 'default' : 'range'}
                       allowSingleDateInRange
                       numberOfColumns={matches ? 2 : 13}
                       minDate={today.toDate()}
@@ -187,6 +168,9 @@ const FlightCalendar: React.FC<Props> = () => {
                         calendarHeaderLevel: 'text-base',
                         weekday: 'text-black',
                       }}
+                      value={
+                        tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
+                      }
                     />
                   </div>
                 </div>

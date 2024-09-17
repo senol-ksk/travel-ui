@@ -16,7 +16,13 @@ import { Input } from '@/components/search-engine/input'
 
 type PassengerTypes = 'adults' | 'children' | 'infants'
 
-export const PassengerDropdown = () => {
+type PassengerRequestModel = { Adult: number; Child: number; Infant: number }
+
+type Props = {
+  onChange?: (params: PassengerRequestModel) => void
+}
+
+export const PassengerDropdown: React.FC<Props> = ({ onChange = () => {} }) => {
   const [passengersState, setPassengersState] = useState({
     adults: {
       count: 1,
@@ -37,6 +43,11 @@ export const PassengerDropdown = () => {
     setPassengersState({
       ...passengersState,
       [type]: { count: passengersState[type].count + count },
+    })
+    onChange({
+      Adult: passengersState.adults.count,
+      Child: passengersState.children.count,
+      Infant: passengersState.infants.count,
     })
   }
 

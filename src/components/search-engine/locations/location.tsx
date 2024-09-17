@@ -14,15 +14,15 @@ import { IoAirplaneSharp } from 'react-icons/io5'
 import { MdOutlineSubdirectoryArrowRight } from 'react-icons/md'
 
 import { Input } from '@/components/search-engine/input'
-import { LocationsApiResults } from './locations'
+import type { LocationResults, LocationResult } from './locations'
 import { clsx } from 'clsx'
 
 type Props = {
   label: string
   inputProps?: TextInputProps
-  onSelect?: (params: string) => void
+  onSelect?: (params: LocationResult) => void
   onChange?: (params: string) => void
-  data?: LocationsApiResults['Result']
+  data?: LocationResults['Result']
   isLoading?: boolean
 }
 
@@ -110,58 +110,62 @@ export const Locations: React.FC<Props> = ({
               </div>
               {data?.length > 0 && (
                 <div>
-                  {data.map(({ Id, Name, SubDestinations }) => (
-                    <div key={Id}>
-                      <div className='relative'>
-                        <button
-                          type='button'
-                          className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-400 hover:bg-opacity-15'
-                          onClick={() => {
-                            setLocationName(Name)
-                            onSelect && onSelect(Name)
-                            setLocationContainerOpened(false)
-                          }}
-                        >
-                          <span className='sr-only'>{Name}</span>
-                        </button>
-                        <div className='flex items-center gap-3 p-4'>
-                          <div className='text-2xl'>
-                            <IoAirplaneSharp />
-                          </div>
-                          <div className='flex flex-col text-sm'>
-                            <strong>{Name}</strong>
+                  {data.map((location) => {
+                    const { Id, Name, SubDestinations } = location
+
+                    return (
+                      <div key={Id}>
+                        <div className='relative'>
+                          <button
+                            type='button'
+                            className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-400 hover:bg-opacity-15'
+                            onClick={() => {
+                              setLocationName(Name)
+                              onSelect && onSelect(location)
+                              setLocationContainerOpened(false)
+                            }}
+                          >
+                            <span className='sr-only'>{Name}</span>
+                          </button>
+                          <div className='flex items-center gap-3 p-4'>
+                            <div className='text-2xl'>
+                              <IoAirplaneSharp />
+                            </div>
+                            <div className='flex flex-col text-sm'>
+                              <strong>{Name}</strong>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      {SubDestinations.length > 0 && (
-                        <div className='grid'>
-                          {SubDestinations.map(
-                            ({ Id: subId, Name: subName }) => (
-                              <div key={subId} className='relative'>
-                                <button
-                                  type='button'
-                                  className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-400 hover:bg-opacity-15'
-                                  onClick={() => {
-                                    setLocationName(subName)
-                                    onSelect && onSelect(subName)
-                                    setLocationContainerOpened(false)
-                                  }}
-                                >
-                                  <span className='sr-only'>{subName}</span>
-                                </button>
-                                <div className='flex gap-2 py-2 pe-2 ps-12'>
-                                  <div className='text-2xl'>
-                                    <MdOutlineSubdirectoryArrowRight />
+                        {SubDestinations.length > 0 && (
+                          <div className='grid'>
+                            {SubDestinations.map(
+                              ({ Id: subId, Name: subName }) => (
+                                <div key={subId} className='relative'>
+                                  <button
+                                    type='button'
+                                    className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-400 hover:bg-opacity-15'
+                                    onClick={() => {
+                                      setLocationName(subName)
+                                      onSelect && onSelect(location)
+                                      setLocationContainerOpened(false)
+                                    }}
+                                  >
+                                    <span className='sr-only'>{subName}</span>
+                                  </button>
+                                  <div className='flex gap-2 py-2 pe-2 ps-12'>
+                                    <div className='text-2xl'>
+                                      <MdOutlineSubdirectoryArrowRight />
+                                    </div>
+                                    <div className='text-sm'>{subName}</div>
                                   </div>
-                                  <div className='text-sm'>{subName}</div>
                                 </div>
-                              </div>
-                            )
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                              )
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
               {!isLoading && data.length === 0 ? (
