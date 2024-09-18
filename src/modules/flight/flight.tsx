@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+
+import { useRouter } from 'next/navigation'
 
 import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
@@ -21,11 +23,7 @@ import type {
 } from '@/components/search-engine/locations/locations'
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'
-import {
-  createSearch,
-  flightApiRequest,
-  FlightApiRequestParams,
-} from './search.request'
+import { createSearch, FlightApiRequestParams } from './search.request'
 
 const formSchema = z.object({
   Destination: z.string().min(3),
@@ -53,6 +51,8 @@ const schema = formSchema
 type FlightRequestType = z.infer<typeof schema>
 
 export const Flight = () => {
+  const router = useRouter()
+
   const [selectedOriginLocation, setSelectedOriginLocation] =
     useState<LocationResult>()
   const [selectedDepartureLocation, setSelectedDeparturLocation] =
@@ -104,7 +104,7 @@ export const Flight = () => {
         CabinClassSelect: flightLocalObj.CabinClass?.value.toString(),
       })
     }
-  }, [flightLocalObj])
+  }, [])
 
   const { data: originLocations, isLoading: originLocationsIsLoading } =
     useQuery<LocationResults>({
@@ -168,6 +168,8 @@ export const Flight = () => {
       },
       PassengerCounts: form.getValues().PassengerCounts,
     }))
+
+    router.push('/flight-search')
   }
 
   return (
