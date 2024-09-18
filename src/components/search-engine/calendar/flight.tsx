@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
@@ -27,21 +27,16 @@ const defaultFormat = 'DD MMM ddd'
 const FlightCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
   tripKind = 'one-way',
-  defaultDates = [defaultDepartureDate.toDate(), defaultReturnDate.toDate()],
+  defaultDates,
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
-    defaultDates.at(0) || null,
-    defaultDates.at(1) || null,
+    defaultDates?.at(0) || null,
+    defaultDates?.at(1) || null,
   ])
 
   const [formatedValues, setFormatedValues] = useState<
     [string | null, string | null]
-  >([
-    dayjs(defaultDates.at(0)).format(defaultFormat),
-    tripKind === 'round-trip'
-      ? dayjs(defaultDates.at(1)).format(defaultFormat)
-      : null,
-  ])
+  >([null, null])
 
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
@@ -49,6 +44,16 @@ const FlightCalendar: React.FC<Props> = ({
   const clickOutsideRef = useClickOutside(() =>
     setContainerTransitionState(false)
   )
+
+  useEffect(() => {
+    if (defaultDates) {
+      setRangeValue(defaultDates)
+      setFormatedValues([
+        dayjs(defaultDates.at(0)).format(defaultFormat),
+        dayjs(defaultDates.at(1)).format(defaultFormat),
+      ])
+    }
+  }, [defaultDates])
 
   const handleDateSelections = (dates: DatesRangeValue | DateValue) => {
     let departurDate
@@ -59,18 +64,18 @@ const FlightCalendar: React.FC<Props> = ({
       returnDate = dates.at(1)
       setRangeValue(dates)
       onDateSelect(dates)
+      setFormatedValues([
+        dayjs(departurDate).format(defaultFormat),
+        dayjs(returnDate).format(defaultFormat),
+      ])
     } else if (dayjs(dates).isValid()) {
       departurDate = dates
       setRangeValue([dates, null])
       onDateSelect([dates, null])
+      setFormatedValues([dayjs(departurDate).format(defaultFormat), null])
     } else {
       console.error('Date type has some errors')
     }
-
-    setFormatedValues([
-      departurDate ? dayjs(departurDate).format(defaultFormat) : null,
-      returnDate ? dayjs(returnDate).format(defaultFormat) : null,
-    ])
   }
 
   return (
@@ -81,7 +86,7 @@ const FlightCalendar: React.FC<Props> = ({
           icon={'calendar'}
           onClick={() => setContainerTransitionState(true)}
           title={
-            formatedValues.filter(Boolean).length > 1
+            tripKind === 'round-trip'
               ? formatedValues.join(' - ')
               : formatedValues[0]
           }
@@ -137,7 +142,7 @@ const FlightCalendar: React.FC<Props> = ({
                               }
                             )}
                           >
-                            {formatedValues[1] ? (
+                            {rangeValue[1] ? (
                               formatedValues[1]
                             ) : (
                               <span className='text-gray-400'>Dönüş</span>

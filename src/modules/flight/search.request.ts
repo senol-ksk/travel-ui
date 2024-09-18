@@ -62,8 +62,8 @@ export type FlightSearchRequestPayload = {
   appName: 'fulltrip.prod.webapp.html'
   scopeName: 'FULLTRIP'
   scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
-  Device: 'Web'
-  LanguageCode: 'tr_TR'
+  // Device: 'Web'
+  // LanguageCode: 'tr_TR'
   requestType: 'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
 }
 
@@ -132,13 +132,17 @@ const processFlightSearchPanel = (
     })
   }
 
-  return {
+  const searchObj = {
     ActiveTripKind,
     PassengerCounts,
     CabinClass,
     Domestic: params.Destination.IsDomestic && params.Origin.IsDomestic,
     SearchLegs,
   }
+
+  // localStorage.setItem('flight', JSON.stringify(searchObj))
+
+  return searchObj
 }
 
 let appToken: string | null
@@ -196,8 +200,8 @@ export const getNewSearchSessionToken = async (): Promise<{
       appName: 'fulltrip.prod.webapp.html',
       scopeName: 'FULLTRIP',
       scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-      Device: 'Web',
-      LanguageCode: 'tr_TR',
+      // Device: 'Web',
+      // LanguageCode: 'tr_TR',
     },
   })
 
@@ -211,7 +215,7 @@ export const getNewSearchSessionToken = async (): Promise<{
 
 const getSessionToken = async () => {
   if (
-    !cookies.get(sessionToken_name) ||
+    cookies.get(sessionToken_name) &&
     cookies.get(sessionToken_name) !== 'global'
   ) {
     return cookies.get(sessionToken_name)
@@ -231,35 +235,55 @@ const getSessionToken = async () => {
   return response
 }
 
-export const flightApiRequest = async (params: FlightApiRequestParams) => {
-  const FlightSearchPanel = processFlightSearchPanel(params)
-  const tokens = await getNewSearchSessionToken()
-
-  if (!cookies.get(sessionToken_name)) {
-    cookies.set(sessionToken_name, 'global')
+export const flightApiRequest = async (
+  params: FlightApiRequestParams
+): Promise<{
+  code: number
+  message: null
+  data: {
+    status: boolean
+    message: null
+    hasMoreResponse: boolean
+    executionTime: '00:00:00.0065683'
+    searchResults: []
   }
+  token: null
+  clientIP: null
+  appName: null
+  sessionToken: string
+  userAuthenticationToken: null
+  eventMessageList: []
+}> => {
+  const FlightSearchPanel = processFlightSearchPanel(params)
 
-  const sessionToken = await getSessionToken()
-  console.log(sessionToken)
+  const sessionToken = cookies.get(sessionToken_name)
+  const searchToken = cookies.get(searchToken_name)
+
+  if (!(sessionToken || searchToken)) {
+    console.error('SessionToken or SearchToken are not correct', {
+      sessionToken: sessionToken,
+      searchToken: searchToken,
+    })
+  }
 
   const payload: FlightSearchRequestPayload = {
     apiAction: 'api/Flight/Search',
     apiRoute: 'FlightService',
     appName: 'fulltrip.prod.webapp.html',
-    sessionToken: sessionToken,
+    sessionToken: sessionToken!,
     scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
     scopeName: 'FULLTRIP',
     requestType:
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
       FlightSearchPanel,
-      searchToken: tokens.data,
+      searchToken: searchToken!,
       scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
       appName: 'fulltrip.prod.webapp.html',
       scopeName: 'FULLTRIP',
     },
-    Device: 'Web',
-    LanguageCode: 'tr_TR',
+    // Device: 'Web',
+    // LanguageCode: 'tr_TR',
   }
 
   const requestFlight = await request({
@@ -273,4 +297,15 @@ export const flightApiRequest = async (params: FlightApiRequestParams) => {
   })
 
   return requestFlight
+}
+
+export const createSearch = async (
+  params: FlightApiRequestParams
+): Promise<boolean> => {
+  await getNewSearchSessionToken()
+  await getSessionToken()
+
+  const flightServiceResponse = await flightApiRequest(params)
+
+  return flightServiceResponse.code === 1 && flightServiceResponse.data.status
 }

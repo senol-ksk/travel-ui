@@ -11,12 +11,28 @@ import { PassengerDropdown } from '@/components/search-engine/passengers'
 
 describe('Flight passengers dropdown', () => {
   test('search engine value should match', async () => {
-    render(<PassengerDropdown />)
+    render(
+      <PassengerDropdown
+        initialValues={{
+          Adult: 1,
+          Child: 0,
+          Infant: 0,
+        }}
+      />
+    )
     expect(screen.getByRole('button')).toHaveTextContent('1 Yolcu')
   })
 
   test('should open passenger dropdown', async () => {
-    render(<PassengerDropdown />)
+    render(
+      <PassengerDropdown
+        initialValues={{
+          Adult: 1,
+          Child: 0,
+          Infant: 0,
+        }}
+      />
+    )
     const dropdownButton = screen.getByRole('button', { name: /1 Yolcu/ })
 
     fireEvent.click(dropdownButton)
@@ -27,7 +43,15 @@ describe('Flight passengers dropdown', () => {
   })
 
   test('should passenger menu intials', async () => {
-    render(<PassengerDropdown />)
+    render(
+      <PassengerDropdown
+        initialValues={{
+          Adult: 1,
+          Child: 0,
+          Infant: 0,
+        }}
+      />
+    )
     const dropdownButton = screen.getByRole('button', { name: /1 Yolcu/ })
 
     fireEvent.click(dropdownButton)
@@ -48,7 +72,15 @@ describe('Flight passengers dropdown', () => {
   })
 
   test('increase and decrease buttons should work', async () => {
-    render(<PassengerDropdown />)
+    render(
+      <PassengerDropdown
+        initialValues={{
+          Adult: 1,
+          Child: 0,
+          Infant: 0,
+        }}
+      />
+    )
     const dropdownButton = screen.getByRole('button', { name: /1 Yolcu/ })
 
     fireEvent.click(dropdownButton)
