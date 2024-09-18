@@ -21,6 +21,7 @@ const getSessionTokenUrl =
   'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/GetSessionToken'
 
 const requestedDayFormat = 'YYYY-MM-DD'
+let appToken: string | null
 
 type FlightLocationLeg = {
   code: string
@@ -46,6 +47,7 @@ export type FlightSearchRequestFlightSearchPanel = {
     value: number
     title: 'Ekonomi' | 'Business' | 'First Class' | string
   }
+  ReceivedProviders?: string[] | []
 }
 
 export type FlightSearchRequestPayload = {
@@ -74,6 +76,8 @@ export type FlightApiRequestParams = {
   ActiveTripKind: FlightSearchRequestFlightSearchPanel['ActiveTripKind']
   PassengerCounts: FlightSearchRequestFlightSearchPanel['PassengerCounts']
   CabinClass: FlightSearchRequestFlightSearchPanel['CabinClass']
+  ReceivedProviders?: FlightSearchRequestFlightSearchPanel['ReceivedProviders']
+  SearchToken: string
 }
 
 const processFlightSearchPanel = (
@@ -87,6 +91,7 @@ const processFlightSearchPanel = (
     Dates,
     Destination,
     Origin,
+    ReceivedProviders,
   } = recievedData
   const SearchLegs: FlightSearchRequestFlightSearchPanel['SearchLegs'] = [
     {
@@ -138,14 +143,13 @@ const processFlightSearchPanel = (
     CabinClass,
     Domestic: params.Destination.IsDomestic && params.Origin.IsDomestic,
     SearchLegs,
+    ReceivedProviders,
   }
 
   // localStorage.setItem('flight', JSON.stringify(searchObj))
 
   return searchObj
 }
-
-let appToken: string | null
 
 const getsecuritytoken = async (): Promise<{
   succeeded: boolean
@@ -209,7 +213,7 @@ export const getNewSearchSessionToken = async (): Promise<{
   //   searchToken: response.data,
   //   sessionToken: response.sessionToken,
   // })
-  cookies.set(searchToken_name, response.data)
+  // cookies.set(searchToken_name, response.data)
   return response
 }
 
@@ -245,7 +249,7 @@ export const flightApiRequest = async (
     message: null
     hasMoreResponse: boolean
     executionTime: '00:00:00.0065683'
-    searchResults: []
+    searchResults: { diagnostics: { providerName: string } }[]
   }
   token: null
   clientIP: null
@@ -256,28 +260,30 @@ export const flightApiRequest = async (
 }> => {
   const FlightSearchPanel = processFlightSearchPanel(params)
 
-  const sessionToken = cookies.get(sessionToken_name)
-  const searchToken = cookies.get(searchToken_name)
+  if (!appToken) await getsecuritytoken()
 
-  if (!(sessionToken || searchToken)) {
-    console.error('SessionToken or SearchToken are not correct', {
-      sessionToken: sessionToken,
-      searchToken: searchToken,
-    })
-  }
+  // const sessionToken = cookies.get(sessionToken_name)
+  // const searchToken = cookies.get(searchToken_name)
+
+  // if (!(sessionToken || searchToken)) {
+  //   console.error('SessionToken or SearchToken are not correct', {
+  //     sessionToken: sessionToken,
+  //     searchToken: searchToken,
+  //   })
+  // }
 
   const payload: FlightSearchRequestPayload = {
     apiAction: 'api/Flight/Search',
     apiRoute: 'FlightService',
     appName: 'fulltrip.prod.webapp.html',
-    sessionToken: sessionToken!,
+    sessionToken: params.SearchToken,
     scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
     scopeName: 'FULLTRIP',
     requestType:
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
       FlightSearchPanel,
-      searchToken: searchToken!,
+      searchToken: params.SearchToken,
       scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
       appName: 'fulltrip.prod.webapp.html',
       scopeName: 'FULLTRIP',
@@ -300,12 +306,19 @@ export const flightApiRequest = async (
 }
 
 export const createSearch = async (
-  params: FlightApiRequestParams
-): Promise<boolean> => {
-  await getNewSearchSessionToken()
+  params: Omit<FlightApiRequestParams, 'SearchToken'>
+): Promise<{ status: boolean; searchToken: string }> => {
+  const searchToken = await getNewSearchSessionToken()
   await getSessionToken()
 
-  const flightServiceResponse = await flightApiRequest(params)
+  const flightServiceResponse = await flightApiRequest({
+    ...params,
+    SearchToken: searchToken.data,
+  })
 
-  return flightServiceResponse.code === 1 && flightServiceResponse.data.status
+  return {
+    status:
+      flightServiceResponse.code === 1 && flightServiceResponse.data.status,
+    searchToken: searchToken.data,
+  }
 }

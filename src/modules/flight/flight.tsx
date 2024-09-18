@@ -9,7 +9,7 @@ import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
 
 import { useForm } from '@mantine/form'
-import { Button, NativeSelect, Radio, Group } from '@mantine/core'
+import { Button, NativeSelect, Radio, Group, Skeleton } from '@mantine/core'
 import { useLocalStorage } from '@mantine/hooks'
 
 import { request } from '@/network'
@@ -50,8 +50,13 @@ const schema = formSchema
 
 type FlightRequestType = z.infer<typeof schema>
 
-export const Flight = () => {
+type Props = {
+  onRequestStarted?: (param: boolean) => void
+}
+
+export const Flight: React.FC<Props> = ({ onRequestStarted }) => {
   const router = useRouter()
+  const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
 
   const [selectedOriginLocation, setSelectedOriginLocation] =
     useState<LocationResult>()
@@ -65,10 +70,11 @@ export const Flight = () => {
     dayjs().add(6, 'days').toDate(),
     dayjs().add(8, 'days').toDate(),
   ])
-  const [flightLocalObj, setFlightLocalObj] =
-    useLocalStorage<FlightApiRequestParams>({
-      key: 'flight',
-    })
+  const [flightLocalObj, setFlightLocalObj] = useLocalStorage<
+    Omit<FlightApiRequestParams, 'SearchToken'>
+  >({
+    key: 'flight',
+  })
 
   const form = useForm<FlightRequestType>({
     mode: 'uncontrolled',
@@ -104,7 +110,10 @@ export const Flight = () => {
         CabinClassSelect: flightLocalObj.CabinClass?.value.toString(),
       })
     }
-  }, [])
+
+    setFormSkeletonVisibilty(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flightLocalObj])
 
   const { data: originLocations, isLoading: originLocationsIsLoading } =
     useQuery<LocationResults>({
@@ -144,8 +153,8 @@ export const Flight = () => {
       },
     })
 
-  const handleFormSubmit = (events: FlightRequestType) => {
-    createSearch({
+  const handleFormSubmit = async (events: FlightRequestType) => {
+    const searchStatus = await createSearch({
       Origin: selectedOriginLocation!,
       Destination: selectedDepartureLocation!,
       Dates: dates,
@@ -169,119 +178,123 @@ export const Flight = () => {
       PassengerCounts: form.getValues().PassengerCounts,
     }))
 
-    router.push('/flight-search')
+    // onRequestStarted && onRequestStarted(true)
+    if (searchStatus.status)
+      router.push(`/flight-search?SearchToken=${searchStatus.searchToken}`)
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleFormSubmit)}>
-      <div className='flex grow items-center justify-between gap-3 pb-4 sm:justify-start'>
-        <div>
-          <Radio.Group
-            key={form.key('ActiveTripKind')}
-            {...form.getInputProps('ActiveTripKind')}
-            onChange={(value) => {
-              form.setFieldValue('ActiveTripKind', +value)
-            }}
-          >
-            <Group gap={'md'}>
-              <Radio value={1} label='Tek Yön' />
-              <Radio value={2} label='Gidiş-Dönüş' />
-            </Group>
-          </Radio.Group>
+    <Skeleton visible={formSkeletonVisibilty}>
+      <form onSubmit={form.onSubmit(handleFormSubmit)}>
+        <div className='flex grow items-center justify-between gap-3 pb-4 sm:justify-start'>
+          <div>
+            <Radio.Group
+              key={form.key('ActiveTripKind')}
+              {...form.getInputProps('ActiveTripKind')}
+              onChange={(value) => {
+                form.setFieldValue('ActiveTripKind', +value)
+              }}
+            >
+              <Group gap={'md'}>
+                <Radio value={1} label='Tek Yön' />
+                <Radio value={2} label='Gidiş-Dönüş' />
+              </Group>
+            </Radio.Group>
+          </div>
+          <div className='flex'>
+            <NativeSelect
+              data={[
+                { label: 'Ekonomi', value: '0' },
+                { label: 'Business', value: '2' },
+                { label: 'First Class', value: '3' },
+              ]}
+              key={form.key('CabinClassSelect')}
+              {...form.getInputProps('CabinClassSelect')}
+              onChange={({ currentTarget }) => {
+                form.setFieldValue('CabinClass', {
+                  value: +currentTarget.value,
+                  title:
+                    currentTarget.options[currentTarget.options.selectedIndex]
+                      .innerText,
+                })
+              }}
+            />
+          </div>
         </div>
-        <div className='flex'>
-          <NativeSelect
-            data={[
-              { label: 'Ekonomi', value: '0' },
-              { label: 'Business', value: '2' },
-              { label: 'First Class', value: '3' },
-            ]}
-            key={form.key('CabinClassSelect')}
-            {...form.getInputProps('CabinClassSelect')}
-            onChange={({ currentTarget }) => {
-              form.setFieldValue('CabinClass', {
-                value: +currentTarget.value,
-                title:
-                  currentTarget.options[currentTarget.options.selectedIndex]
-                    .innerText,
-              })
-            }}
-          />
+        <div className='grid grid-cols-12 gap-2 md:gap-4'>
+          <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+            <Locations
+              label='Kalkış'
+              inputProps={{ ...form.getInputProps('Origin') }}
+              data={originLocations?.Result}
+              isLoading={originLocationsIsLoading}
+              defaultValue={flightLocalObj?.Origin?.Name || null}
+              onChange={(value) => {
+                setOriginLocationInputValue(value)
+              }}
+              onSelect={(value) => {
+                form.setFieldValue('Origin', value.Name)
+                setSelectedOriginLocation(value)
+              }}
+            />
+          </div>
+          <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+            <Locations
+              label='Nereye'
+              inputProps={{ ...form.getInputProps('Destination') }}
+              defaultValue={flightLocalObj?.Destination?.Name || null}
+              data={destinationLocation?.Result}
+              isLoading={destinationLocationLoading}
+              onChange={(value) => {
+                setDestinationLocationInputValue(value)
+              }}
+              onSelect={(value) => {
+                form.setFieldValue('Destination', value.Name)
+                setSelectedDeparturLocation(value)
+              }}
+            />
+          </div>
+          <div className='col-span-6 md:col-span-3 lg:col-span-2'>
+            <FlightCalendar
+              onDateSelect={(dates) => {
+                setDates(dates)
+              }}
+              tripKind={
+                form.getValues().ActiveTripKind === 1 ? 'one-way' : 'round-trip'
+              }
+              defaultDates={dates}
+            />
+          </div>
+          <div className='col-span-6 md:col-span-3 lg:col-span-2'>
+            <PassengerDropdown
+              initialValues={
+                flightLocalObj
+                  ? {
+                      Adult: flightLocalObj?.PassengerCounts.Adult,
+                      Child: flightLocalObj?.PassengerCounts.Child,
+                      Infant: flightLocalObj?.PassengerCounts.Infant,
+                    }
+                  : null
+              }
+              onChange={({ Adult, Child, Infant }) => {
+                form.setFieldValue('PassengerCounts', {
+                  Adult,
+                  Child,
+                  Infant,
+                })
+              }}
+            />
+          </div>
+          <div className='sm:col-grid-2 col-span-12 flex grow-0 lg:col-span-2'>
+            <Button
+              type='submit'
+              className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
+            >
+              Ara
+            </Button>
+          </div>
         </div>
-      </div>
-      <div className='grid grid-cols-12 gap-2 md:gap-4'>
-        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-          <Locations
-            label='Kalkış'
-            inputProps={{ ...form.getInputProps('Origin') }}
-            data={originLocations?.Result}
-            isLoading={originLocationsIsLoading}
-            defaultValue={flightLocalObj?.Origin?.Name || null}
-            onChange={(value) => {
-              setOriginLocationInputValue(value)
-            }}
-            onSelect={(value) => {
-              form.setFieldValue('Origin', value.Name)
-              setSelectedOriginLocation(value)
-            }}
-          />
-        </div>
-        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-          <Locations
-            label='Nereye'
-            inputProps={{ ...form.getInputProps('Destination') }}
-            defaultValue={flightLocalObj?.Destination?.Name || null}
-            data={destinationLocation?.Result}
-            isLoading={destinationLocationLoading}
-            onChange={(value) => {
-              setDestinationLocationInputValue(value)
-            }}
-            onSelect={(value) => {
-              form.setFieldValue('Destination', value.Name)
-              setSelectedDeparturLocation(value)
-            }}
-          />
-        </div>
-        <div className='col-span-6 md:col-span-3 lg:col-span-2'>
-          <FlightCalendar
-            onDateSelect={(dates) => {
-              setDates(dates)
-            }}
-            tripKind={
-              form.getValues().ActiveTripKind === 1 ? 'one-way' : 'round-trip'
-            }
-            defaultDates={dates}
-          />
-        </div>
-        <div className='col-span-6 md:col-span-3 lg:col-span-2'>
-          <PassengerDropdown
-            initialValues={
-              flightLocalObj
-                ? {
-                    Adult: flightLocalObj?.PassengerCounts.Adult,
-                    Child: flightLocalObj?.PassengerCounts.Child,
-                    Infant: flightLocalObj?.PassengerCounts.Infant,
-                  }
-                : null
-            }
-            onChange={({ Adult, Child, Infant }) => {
-              form.setFieldValue('PassengerCounts', {
-                Adult,
-                Child,
-                Infant,
-              })
-            }}
-          />
-        </div>
-        <div className='sm:col-grid-2 col-span-12 flex grow-0 lg:col-span-2'>
-          <Button
-            type='submit'
-            className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
-          >
-            Ara
-          </Button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </Skeleton>
   )
 }
