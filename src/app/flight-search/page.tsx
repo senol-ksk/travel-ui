@@ -1,23 +1,22 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { readLocalStorageValue } from '@mantine/hooks'
 
-// import Cookies from 'js-cookie'
+import type { FlightApiRequestParams } from '@/modules/flight/types'
 
 import { Flight } from '@/modules/flight'
+import { flightApiRequest } from '@/modules/flight/search.request'
 import {
-  flightApiRequest,
-  FlightApiRequestParams,
-} from '@/modules/flight/search.request'
+  collectFlightData,
+  generateFlightData,
+} from '@/modules/flight/search-results/generate'
 
 let ReceivedProviders: string[] = []
 
 const FlightSearch = () => {
-  // const queryClient = useQueryClient()
   const searchParams = useSearchParams()
   const searchToken = searchParams.get('SearchToken')
 
@@ -25,10 +24,7 @@ const FlightSearch = () => {
     key: 'flight',
   })
 
-  // const sessionToken = Cookies.get('SessionToken')
-  // const searchToken = Cookies.get('SearchToken')
-
-  const { data: flightSearchResultData, refetch } = useQuery({
+  const { data: flightSearchApiData } = useQuery({
     queryKey: ['flight-results', { searchToken, flightParams }],
     queryFn: async () => {
       const getFlightResults = await flightApiRequest({
@@ -44,21 +40,27 @@ const FlightSearch = () => {
         })
       }
 
-      console.log(getFlightResults)
-      return getFlightResults
+      if (getFlightResults.data.searchResults.length > 0) {
+        collectFlightData(getFlightResults.data.searchResults)
+      }
+
+      return getFlightResults.data
     },
     enabled(query) {
-      return !query.state.data || query.state.data?.data.hasMoreResponse
+      return !query.state.data || query.state.data.hasMoreResponse
     },
     // enabled: false,
     refetchInterval: 1000,
     retryOnMount: false,
   })
-
-  useEffect(() => {
-    // if (searchToken) queryClient.resetQueries()
-    console.log(searchToken)
-  }, [searchToken])
+  const { data: flightClientData } = useQuery({
+    queryKey: ['flighClientData', searchToken],
+    queryFn: async () => {
+      const flightData = await generateFlightData(0)
+      return flightData
+    },
+    enabled: !!flightSearchApiData?.hasMoreResponse,
+  })
 
   return (
     <div>
@@ -67,7 +69,14 @@ const FlightSearch = () => {
           <Flight />
         </div>
       </div>
-      {/* <button onClick={() => queryClient.resetQueries()}>refetch</button> */}
+
+      {flightClientData?.map((flight, count) => {
+        return (
+          <div key={flight.id}>
+            <textarea defaultValue={JSON.stringify(flight)} />
+          </div>
+        )
+      })}
     </div>
   )
 }

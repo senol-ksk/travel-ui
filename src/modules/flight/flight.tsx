@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { useRouter } from 'next/navigation'
@@ -23,7 +23,8 @@ import type {
 } from '@/components/search-engine/locations/locations'
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'
-import { createSearch, FlightApiRequestParams } from './search.request'
+import { createSearch } from './search.request'
+import { FlightApiRequestParams } from './types'
 
 const formSchema = z.object({
   Destination: z.string().min(3),
@@ -50,11 +51,7 @@ const schema = formSchema
 
 type FlightRequestType = z.infer<typeof schema>
 
-type Props = {
-  onRequestStarted?: (param: boolean) => void
-}
-
-export const Flight: React.FC<Props> = ({ onRequestStarted }) => {
+export const Flight = () => {
   const router = useRouter()
   const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
 
