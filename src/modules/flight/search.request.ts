@@ -1,12 +1,18 @@
+import dayjs from 'dayjs'
+import md5 from 'md5'
+
 import cookies from 'js-cookie'
 
-import type { LocationResult } from '@/components/search-engine/locations/locations'
 import { request } from '@/network'
-import type { DatesRangeValue } from '@mantine/dates'
-
-import dayjs from 'dayjs'
-
-import md5 from 'md5'
+import type {
+  FlightApiRequestParams,
+  FlightSearchApiResponse,
+  FlightSearchRequestFlightSearchPanel,
+  FlightSearchRequestPayload,
+  GetAirlineByCodeListResponse,
+  GetNewSearchSessionTokenResponse,
+  GetSecurityTokenResponse,
+} from '@/modules/flight/types'
 
 const executerestUrl =
   'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/executerest'
@@ -15,66 +21,12 @@ const authToken = md5(
     'A6A3F7B63F14EEB6EAFA8178ECA96497856206D1635211C7440C7751E534B551'
 ).toLocaleUpperCase()
 const sessionToken_name = 'SessionToken'
-const searchToken_name = 'SearchToken'
 
 const getSessionTokenUrl =
   'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/GetSessionToken'
 
 const requestedDayFormat = 'YYYY-MM-DD'
-
-type FlightLocationLeg = {
-  code: string
-  iata: string[]
-  type: number
-  isDomestic: boolean
-  id: string | number
-}
-
-export type FlightSearchRequestFlightSearchPanel = {
-  ActiveTripKind: number
-  SearchLegs: {
-    DepartureTime: string
-    CabinClass: number
-    MaxConnections: number
-    Origin: FlightLocationLeg
-    Destination: FlightLocationLeg
-  }[]
-
-  PassengerCounts: { Adult: number; Child: number; Infant: number }
-  Domestic: boolean
-  CabinClass: {
-    value: number
-    title: 'Ekonomi' | 'Business' | 'First Class' | string
-  }
-}
-
-export type FlightSearchRequestPayload = {
-  params: {
-    appName: 'fulltrip.prod.webapp.html'
-    scopeName: 'FULLTRIP'
-    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
-    searchToken: string
-    FlightSearchPanel: FlightSearchRequestFlightSearchPanel
-  }
-  apiRoute: 'FlightService'
-  apiAction: 'api/Flight/Search'
-  sessionToken: string
-  appName: 'fulltrip.prod.webapp.html'
-  scopeName: 'FULLTRIP'
-  scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
-  Device: 'Web'
-  LanguageCode: 'tr_TR'
-  requestType: 'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-}
-
-export type FlightApiRequestParams = {
-  Destination: LocationResult
-  Origin: LocationResult
-  Dates: DatesRangeValue
-  ActiveTripKind: FlightSearchRequestFlightSearchPanel['ActiveTripKind']
-  PassengerCounts: FlightSearchRequestFlightSearchPanel['PassengerCounts']
-  CabinClass: FlightSearchRequestFlightSearchPanel['CabinClass']
-}
+let appToken: string | null
 
 const processFlightSearchPanel = (
   params: FlightApiRequestParams
@@ -87,6 +39,7 @@ const processFlightSearchPanel = (
     Dates,
     Destination,
     Origin,
+    ReceivedProviders = [],
   } = recievedData
   const SearchLegs: FlightSearchRequestFlightSearchPanel['SearchLegs'] = [
     {
@@ -132,23 +85,21 @@ const processFlightSearchPanel = (
     })
   }
 
-  return {
+  const searchObj = {
     ActiveTripKind,
     PassengerCounts,
     CabinClass,
     Domestic: params.Destination.IsDomestic && params.Origin.IsDomestic,
     SearchLegs,
+    ReceivedProviders,
   }
+
+  // localStorage.setItem('flight', JSON.stringify(searchObj))
+
+  return searchObj
 }
 
-let appToken: string | null
-
-const getsecuritytoken = async (): Promise<{
-  succeeded: boolean
-  result: string
-  errors: []
-  messageEvents: []
-}> => {
+const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   const getToken = await request({
     url: 'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/device/getsecuritytoken',
     method: 'post',
@@ -163,55 +114,42 @@ const getsecuritytoken = async (): Promise<{
   return getToken
 }
 
-export const getNewSearchSessionToken = async (): Promise<{
-  code: number
-  message: null
-  data: string
-  token: null
-  clientIP: null
-  appName: null
-  sessionToken: string
-  userAuthenticationToken: null
-  eventMessageList: []
-}> => {
-  if (!appToken) await getsecuritytoken()
+export const getNewSearchSessionToken =
+  async (): Promise<GetNewSearchSessionTokenResponse> => {
+    if (!appToken) await getsecuritytoken()
 
-  const response = await request({
-    url: executerestUrl,
-    method: 'post',
-    headers: {
-      appToken: appToken,
-      appName: 'fulltrip.prod.webapp.html',
-    },
-    data: {
-      params: {
+    const response = await request({
+      url: executerestUrl,
+      method: 'post',
+      headers: {
+        appToken: appToken,
+        appName: 'fulltrip.prod.webapp.html',
+      },
+      data: {
+        params: {
+          appName: 'fulltrip.prod.webapp.html',
+          scopeName: 'FULLTRIP',
+          scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+        },
+        apiRoute: 'FlightService',
+        apiAction: 'api/Flight/GetNewSearchSessionToken',
         appName: 'fulltrip.prod.webapp.html',
         scopeName: 'FULLTRIP',
         scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-        // searchToken: '',
       },
-      apiRoute: 'FlightService',
-      apiAction: 'api/Flight/GetNewSearchSessionToken',
-      // sessionToken: cookies.get(sessionToken_name) || '',
-      appName: 'fulltrip.prod.webapp.html',
-      scopeName: 'FULLTRIP',
-      scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-      Device: 'Web',
-      LanguageCode: 'tr_TR',
-    },
-  })
+    })
 
-  // setTokens({
-  //   searchToken: response.data,
-  //   sessionToken: response.sessionToken,
-  // })
-  cookies.set(searchToken_name, response.data)
-  return response
-}
+    // setTokens({
+    //   searchToken: response.data,
+    //   sessionToken: response.sessionToken,
+    // })
+    // cookies.set(searchToken_name, response.data)
+    return response
+  }
 
-const getSessionToken = async () => {
+const getSessionToken = async (): Promise<string | undefined> => {
   if (
-    !cookies.get(sessionToken_name) ||
+    cookies.get(sessionToken_name) &&
     cookies.get(sessionToken_name) !== 'global'
   ) {
     return cookies.get(sessionToken_name)
@@ -231,35 +169,31 @@ const getSessionToken = async () => {
   return response
 }
 
-export const flightApiRequest = async (params: FlightApiRequestParams) => {
+export const flightApiRequest = async (
+  params: FlightApiRequestParams
+): Promise<FlightSearchApiResponse> => {
   const FlightSearchPanel = processFlightSearchPanel(params)
-  const tokens = await getNewSearchSessionToken()
 
-  if (!cookies.get(sessionToken_name)) {
-    cookies.set(sessionToken_name, 'global')
-  }
+  if (!appToken) await getsecuritytoken()
 
-  const sessionToken = await getSessionToken()
-  console.log(sessionToken)
+  const sessionToken = cookies.get(sessionToken_name)
 
   const payload: FlightSearchRequestPayload = {
     apiAction: 'api/Flight/Search',
     apiRoute: 'FlightService',
     appName: 'fulltrip.prod.webapp.html',
-    sessionToken: sessionToken,
+    sessionToken: sessionToken!,
     scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
     scopeName: 'FULLTRIP',
     requestType:
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
       FlightSearchPanel,
-      searchToken: tokens.data,
+      searchToken: params.SearchToken,
       scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
       appName: 'fulltrip.prod.webapp.html',
       scopeName: 'FULLTRIP',
     },
-    Device: 'Web',
-    LanguageCode: 'tr_TR',
   }
 
   const requestFlight = await request({
@@ -273,4 +207,44 @@ export const flightApiRequest = async (params: FlightApiRequestParams) => {
   })
 
   return requestFlight
+}
+
+export const createSearch = async (
+  params: Omit<FlightApiRequestParams, 'SearchToken'>
+): Promise<{ status: boolean; searchToken: string }> => {
+  const searchToken = await getNewSearchSessionToken()
+  await getSessionToken()
+
+  const flightServiceResponse = await flightApiRequest({
+    ...params,
+    SearchToken: searchToken.data,
+  })
+
+  return {
+    status:
+      flightServiceResponse.code === 1 && flightServiceResponse.data.status,
+    searchToken: searchToken.data,
+  }
+}
+
+export const getAirlineByCodeList = async (
+  codeList: string[]
+): Promise<GetAirlineByCodeListResponse> => {
+  const defaultObject = {
+    l: 'tr',
+    cl: codeList.toString(),
+    apiAction: 'd/v1.1/api/flight/getairlinebycodelist',
+  }
+
+  const airlines = await request({
+    method: 'get',
+    url: 'https://apisf-preprod.lidyatechnology.com/d/v1.1/api/flight/getairlinebycodelist',
+    params: defaultObject,
+    headers: {
+      'x-api-key': 'MqhX1CPpc38m10JjWaC9x3p2oirBAcMR9ANpdVMm',
+      'Content-Type': 'application/json',
+    },
+  })
+
+  return airlines
 }

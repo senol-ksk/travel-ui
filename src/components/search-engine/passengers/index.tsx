@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import {
   Transition,
@@ -20,18 +20,22 @@ type PassengerRequestModel = { Adult: number; Child: number; Infant: number }
 
 type Props = {
   onChange?: (params: PassengerRequestModel) => void
+  initialValues?: PassengerRequestModel | null
 }
 
-export const PassengerDropdown: React.FC<Props> = ({ onChange = () => {} }) => {
+export const PassengerDropdown: React.FC<Props> = ({
+  onChange = () => {},
+  initialValues = { Adult: 1, Child: 0, Infant: 0 },
+}) => {
   const [passengersState, setPassengersState] = useState({
     adults: {
-      count: 1,
+      count: initialValues?.Adult || 1,
     },
     children: {
-      count: 0,
+      count: initialValues?.Child || 0,
     },
     infants: {
-      count: 0,
+      count: initialValues?.Child || 0,
     },
   })
   const [containerTransitionState, setContainerTransitionState] =
@@ -50,6 +54,16 @@ export const PassengerDropdown: React.FC<Props> = ({ onChange = () => {} }) => {
       Infant: passengersState.infants.count,
     })
   }
+
+  useEffect(() => {
+    if (initialValues) {
+      setPassengersState({
+        adults: { count: initialValues.Adult },
+        children: { count: initialValues.Child },
+        infants: { count: initialValues.Infant },
+      })
+    }
+  }, [initialValues])
 
   return (
     <div className='relative'>

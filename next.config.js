@@ -7,6 +7,14 @@ const nextConfig = {
     remotePatterns: [{ hostname: '*' }],
     unoptimized: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/flight-search',
+        destination: '/ucak-arama',
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

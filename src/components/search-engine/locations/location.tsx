@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   TextInput,
   Transition,
@@ -24,6 +24,7 @@ type Props = {
   onChange?: (params: string) => void
   data?: LocationResults['Result']
   isLoading?: boolean
+  defaultValue?: string | null
 }
 
 export const Locations: React.FC<Props> = ({
@@ -33,16 +34,21 @@ export const Locations: React.FC<Props> = ({
   onChange = () => {},
   isLoading = false,
   data = [],
+  defaultValue = '',
 }) => {
   const [locationContainerOpened, setLocationContainerOpened] = useState(false)
   const clickOutsideRef = useClickOutside(() =>
     setLocationContainerOpened(false)
   )
   const [originValue, setOriginValue] = useState('')
-  const [locatioName, setLocationName] = useState('')
+  const [locatioName, setLocationName] = useState<null | string>(null)
 
   const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (defaultValue) setLocationName(defaultValue)
+  }, [defaultValue])
 
   return (
     <div className='relative'>
@@ -138,15 +144,17 @@ export const Locations: React.FC<Props> = ({
                         </div>
                         {SubDestinations.length > 0 && (
                           <div className='grid'>
-                            {SubDestinations.map(
-                              ({ Id: subId, Name: subName }) => (
+                            {SubDestinations.map((subLocation) => {
+                              const { Id: subId, Name: subName } = subLocation
+
+                              return (
                                 <div key={subId} className='relative'>
                                   <button
                                     type='button'
                                     className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-400 hover:bg-opacity-15'
                                     onClick={() => {
                                       setLocationName(subName)
-                                      onSelect && onSelect(location)
+                                      onSelect && onSelect(subLocation)
                                       setLocationContainerOpened(false)
                                     }}
                                   >
@@ -160,7 +168,7 @@ export const Locations: React.FC<Props> = ({
                                   </div>
                                 </div>
                               )
-                            )}
+                            })}
                           </div>
                         )}
                       </div>
