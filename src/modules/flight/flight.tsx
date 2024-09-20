@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { useRouter } from 'next/navigation'
 
@@ -52,6 +52,7 @@ const schema = formSchema
 type FlightRequestType = z.infer<typeof schema>
 
 export const Flight = () => {
+  const queryClient = useQueryClient()
   const router = useRouter()
   const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
 
@@ -176,9 +177,15 @@ export const Flight = () => {
     }))
 
     // onRequestStarted && onRequestStarted(true)
-    if (searchStatus.status)
+
+    queryClient.clear()
+
+    if (searchStatus.status) {
+      prevSearchToken = searchStatus.searchToken
       router.push(`/flight-search?SearchToken=${searchStatus.searchToken}`)
+    }
   }
+  let prevSearchToken = ''
 
   return (
     <Skeleton visible={formSkeletonVisibilty}>

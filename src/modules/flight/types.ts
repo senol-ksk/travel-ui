@@ -1,6 +1,13 @@
-import type { LocationResult } from '@/components/search-engine/locations/locations'
 import type { DatesRangeValue } from '@mantine/dates'
 
+import type { LocationResult } from '@/components/search-engine/locations/locations'
+
+export type GroupId = 0 | 1 | null
+export type OLPriceModel = {
+  value: number
+  currency: string
+  rateValue: null | number
+}
 export type FlightLocationLeg = {
   code: string
   iata: string[]
@@ -30,20 +37,18 @@ export type FlightSearchRequestFlightSearchPanel = {
 
 export type FlightSearchRequestPayload = {
   params: {
-    appName: 'fulltrip.prod.webapp.html'
-    scopeName: 'FULLTRIP'
-    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+    appName: string
+    scopeName: string
+    scopeCode: string
     searchToken: string
     FlightSearchPanel: FlightSearchRequestFlightSearchPanel
   }
-  apiRoute: 'FlightService'
-  apiAction: 'api/Flight/Search'
+  apiRoute: string
+  apiAction: string
   sessionToken: string
-  appName: 'fulltrip.prod.webapp.html'
-  scopeName: 'FULLTRIP'
-  scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
-  // Device: 'Web'
-  // LanguageCode: 'tr_TR'
+  appName: string
+  scopeName: string
+  scopeCode: string
   requestType: 'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
 }
 
@@ -80,24 +85,24 @@ export type GetNewSearchSessionTokenResponse = {
 export type FlightDetailSegment = {
   [key: string]: {
     key: string
-    groupId: 0
+    groupId: GroupId
     origin: {
-      code: 'SAW'
-      isDomestic: false
+      code: string
+      isDomestic: boolean
       iata: null
-      type: 7
-      id: 0
+      type: number | string
+      id: number | string
     }
     destination: {
-      code: 'ADB'
-      isDomestic: false
+      code: string
+      isDomestic: boolean
       iata: null
-      type: 7
-      id: 0
+      type: number | string
+      id: number | string
     }
-    departureTime: '2024-10-18T08:30:00'
-    arrivalTime: '2024-10-18T09:45:00'
-    flightTime: '01:15:00'
+    departureTime: string
+    arrivalTime: string
+    flightTime: string
     operatingAirline: {
       code: string
       value: null
@@ -108,32 +113,32 @@ export type FlightDetailSegment = {
       value: null
       countryCode: null
     }
-    flightNumber: '3074'
-    cabinClass: 0
-    bookingCode: 'T'
+    flightNumber: string
+    cabinClass: number
+    bookingCode: string
     equipment: null
-    isMeal: false
-    quota: 1
+    isMeal: boolean
+    quota: number
     baggageAllowance: {
       maxWeight: {
-        value: 15
-        unit: 0
+        value: number
+        unit: number
       }
       piece: {
-        pieceCount: 0
+        pieceCount: number
       }
     }
     freeVolatileData: {
-      OfferID: 'MDhlMzdmOWQ4ZmQ5NThkM2I3Mzc5YjFhMjVhMzdjM2RlY2IyYzIxZWE4NDM4NzRmZDg4MWFjMjY4MjQ3ZTg0NjUyMjM3MzA3NGI5NGJiZDVjMjU1ZTg1YWRmNDkxZGFhMzg3ZjNmYjEwNzJjZjlhMGNhMTQ2YmZiZjFlMDIwNWIwZTdhMjI3ZjViMWViMjY1ZDkzODJlMDY3ODk0MGExNTMyMDY4YWU1ZDFlMGM0MjcxY2Q3OTEyMzNiMWFmNWQxMTQ3MjRjZTdmMGI4ZDE4ZTUxMWM4NWFhMWI4N2FjMDg2NTA3ZjE5YWRjZWQwMDViNzJmNDAwMWJjNjE0ZTA0OWI3OGM2ZDViMzAwNWIwY2Q3OTlmYjA4MWJiMDUyYjY1MjFlMmJmYTg1YTc2OWE4YTliODQzOTQyOWMwMDMxZmQ5ZWQzZjllZTRhY2Q2MDRhYjFiZDNiNTFlMGQ1OGM3MTMzNDQxOWFiNjY3MjljMmRmZTJiMDEwMmNjZmViMWNiMDhjNGM4MjAzMjJhMDZmMzM3YTBiNmUxMmRiMjU4ZTE5NWIxY2NmMTgwNjZkYTk0MDQxOWZkOGM4NTU0MmZkOTZiZmFjYjAwMmMyYjExYzBmM2YzOTkzNmM4ZDY0ZGYyYTY0ZTg5YzQzZDVlNTA3NjRhODgyZmZlNWY0NzZkNTYxZTA4MTcxMmM4NTg2MzcyMTc5MDM4Y2FiMmE2Njc2NzM4Mjg1N2NiZDMyZWU5Yzk3YzI2YWUxN2Q4MmY1NTQ0MzBhMjRmNzE4ZDUxYmU1MGJmN2FiMmE5NTQ2NDY5NTliOTY0MjI2ODNhZDJmNjMyNWZiNzRiNzYzYzAwMTIzNDAyOTdlNTk0NTJhOTQ2YWRlMjk4YWVkYTMwM2FmY2JiZTc4YzE5OWU0ZWQ2MWU1MzY0MWMzNmRhNmM2NWVhMzQxN2U2NmFmZDgzMTFlMDdiODA1ZTQ0NDhjNTFjNGJiYTRmYTRjZGRlMmVkNjM5NDY2NGNjNTA1Y2ViNzZlYjUyNjA5MDc3ZjcyNGMyYjgxYmJjMjA1YTMzNjAxYmY1MTM2Y2NiM2ZiOGE1M2FhYjZhNjVlMTRiMWM0NGI2OWJmMjUwYjNlN2NiNzFmYjUwYTc3NjAyNWE0NTI1ODk1YjNlMzcwOWJjOGQ5MzE5NTgyYjFkMTQxZDYyYzU2MmQyZTY2ZDA4MjFlYTFkNTZjYWNkZDk0ZTQ0MDJmNmQxYzRkY2E3YmNmZWQxNzI4ZWNjYzgwNmM3ZmZiZDdiMWQ4ZGNmMzNiN2M3ZDQxOGU1MTRhOTM0NGFhMzczNWZmM2I5ODcyMGQ1YTdhNGU0YTM5M2Q4MDA5OTA1ZGJhZTc2ODY4ZTE5MjFiMDc4OTBlYjIzYjU+VD5FQ08+U0FXPkFEQj4yMDI0LTEwLTE4IDA4OjMwOjAwPjIwMjQtMTAtMTggMDk6NDU6MDA+VkY+MzA3ND5UPjg+RUNPTk9NWT5BMzIxLTIxOFk+TVRJek5EYzBPUT4tMT4tMQ==-'
-      Owner: 'VF'
-      ResponseID: 'a0797d19-9269-41aa-a3f1-fe1d5ca7f992'
-      BrandName: 'BASIC'
-      uniquecounter: 0
-      paxsegrefid: 'VF3074-18Oct-SAWADB-MTIzNDc0OQ'
-      direction: 0
+      OfferID: string
+      Owner: string
+      ResponseID: string
+      BrandName: string
+      uniquecounter: number
+      paxsegrefid: string
+      direction: number
       bundleservicelist: []
       bundleservicecodelist: []
-      Seq: 'VF3074_'
+      Seq: string
     }
   }
 }
@@ -141,28 +146,28 @@ export type FlightDetailSegment = {
 export type FlightDetails = {
   [key: string]: {
     key: string
-    groupId: 0
+    groupId: GroupId
     flightSegmentKeys: string[]
-    travelTime: '01:10:00'
-    direction: 1
-    isDomestic: true
-    isOWCCombinable: false
-    isPromotional: true
-    reservable: true
+    travelTime: string
+    direction: number
+    isDomestic: boolean
+    isOWCCombinable: boolean
+    isPromotional: boolean
+    reservable: boolean
     freeVolatileData: {
-      data: 'OFFERITEM8_1:SH1'
-      OfferID: 'NDI5MTM3NSo0MTk0ODUwOTY0NSo1MDY4NzAqU09XKlMqZmFsc2UqQTIwN0pINTgqMjQ4MTgqT1cqdHJ1ZSoxNDYyLjc4KlRSWSoyMDI0LTEwLTE2KmZjUUF5T0VMQ3I5TFY0Q05qaiUyRkhvWHFrMWRRcVZKY2klMkJ0Q1N4VDhmQzNUdDYlMkJ2UFJXa3lYWUlZdmU0SVVqRWpXa0pPOGVFQkFGWkExS2dtSVpmMkdnJTNEJTNE'
-      Owner: 'PC'
-      ResponseID: 'c5ad313a66a447ee8bd647c18b37aa43'
-      brandname: 'ADVANTAGE'
-      Seq: 'FL_SAWADB_3'
-      SegmentRefs: 'NDI5MTM3NQ=='
-      PassengerList: 'SH1'
-      StandartSeatSelection: true
-      AllSeatSelection: false
-      FreeSandwich: true
-      Entertainment: true
-      FlexibleReturnChangeRight: false
+      data: string
+      OfferID: string
+      Owner: string
+      ResponseID: string
+      brandname: string
+      Seq: string
+      SegmentRefs: string
+      PassengerList: string
+      StandartSeatSelection: boolean
+      AllSeatSelection: boolean
+      FreeSandwich: boolean
+      Entertainment: boolean
+      FlexibleReturnChangeRight: boolean
     }
   }
 }
@@ -170,91 +175,43 @@ export type FlightDetails = {
 export type FlightFareInfos = {
   [key: string | number]: {
     flightDetailKeys: string[]
-    groupId: 0
+    groupId: GroupId
     key: string
-    totalPrice: {
-      value: 1559.37
-      currency: 'TRY'
-      rateValue: null
-    }
-    basePrice: {
-      value: 1015.38
-      currency: 'TRY'
-      rateValue: null
-    }
-    taxes: {
-      value: 393.99
-      currency: 'TRY'
-      rateValue: null
-    }
-    discount: {
-      value: 0
-      currency: null
-      rateValue: null
-    }
+    totalPrice: OLPriceModel
+    basePrice: OLPriceModel
+    taxes: OLPriceModel
+    discount: OLPriceModel
     buyFee: {
       code: null
-      price: {
-        value: 0
-        currency: null
-        rateValue: null
-      }
+      price: OLPriceModel
     }
     fee: {
-      code: ''
-      price: {
-        value: 150
-        currency: 'TRY'
-        rateValue: null
-      }
+      code: string
+      price: OLPriceModel
     }
     passengerPrices: [
       {
-        unitPrice: {
-          value: 1559.37
-          currency: 'TRY'
-          rateValue: null
-        }
-        unitBasePrice: {
-          value: 1015.38
-          currency: 'TRY'
-          rateValue: null
-        }
+        unitPrice: OLPriceModel
+        unitBasePrice: OLPriceModel
         unitFee: {
-          code: ''
-          price: {
-            value: 150
-            currency: 'TRY'
-            rateValue: null
-          }
+          code: string
+          price: OLPriceModel
         }
-        unitTax: {
-          value: 393.99
-          currency: 'TRY'
-          rateValue: null
-        }
+        unitTax: OLPriceModel
         cancelPenalty: null
         changePenalty: null
-        passengers: [
-          {
-            key: string
-            name: null
-            passengerType: number
-            age: number
-            birthday: string
-            gender: 0
-          },
-        ]
-        taxInfos: [
-          {
-            key: 'YR'
-            value: '275.00'
-          },
-          {
-            key: 'VQ'
-            value: '118.99'
-          },
-        ]
+        passengers: {
+          key: string
+          name: null
+          passengerType: number
+          age: number
+          birthday: string
+          gender: number
+        }[]
+        taxInfos: {
+          key: string
+          value: string | number
+        }[]
         serviceCharges: null
       },
     ]
@@ -286,4 +243,31 @@ export type FlightSearchApiResponse = {
   sessionToken: string
   userAuthenticationToken: null
   eventMessageList: []
+}
+
+export type GetAirlineByCodeListResponse = {
+  Result: {
+    Id: string | number
+    Code: string
+    CountryCode: string
+    Country: null | string
+    City: null | string
+    Value: {
+      LangCode: string
+      Value: string
+    }[]
+  }[]
+}
+
+export type ClientFlightDataModel = {
+  flightFare: FlightFareInfos[0]
+  flightDetails: FlightDetails[string][]
+  flightDetailSegments: FlightDetailSegment[string][]
+  airLines: { value: string; code: string }[]
+  airportList: []
+  departureAirportList: []
+  returnAirportList: []
+  transferPoints: []
+  // groupId: GroupId
+  id: number | string
 }

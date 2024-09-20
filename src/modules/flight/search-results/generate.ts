@@ -1,11 +1,11 @@
 import type {
+  ClientFlightDataModel,
   FlightDetails,
   FlightDetailSegment,
   FlightFareInfos,
   FlightSearchApiResponse,
 } from '@/modules/flight/types'
 import { getAirlineByCodeList } from '../search.request'
-import dayjs from 'dayjs'
 
 const dataTypes: ['flightFareInfos', 'flightDetailSegments', 'flightDetails'] =
   ['flightFareInfos', 'flightDetailSegments', 'flightDetails']
@@ -56,106 +56,74 @@ export const collectFlightData = (
   })
 }
 
-const airlineCodes: {
-  [key: string]: {
-    tr_TR: string
-  }
-} = {}
-
-type ClientFlightDataModel =
-  | {
-      flightFare: FlightFareInfos
-      flightDetails: []
-      flightDetailSegments: []
-      minPrice: 0
-      maxPrice: 0
-      airLineList: []
-      airportList: []
-      departureAirportList: []
-      returnAirportList: []
-      transferPoints: []
-      groupId: 0
-      id: number | string
-    }[]
-  | null
-
-const searchResults: ClientFlightDataModel = []
-
-export const generateFlightData = async (
-  groupId: number | null
-): Promise<ClientFlightDataModel> => {
+let searchResults: ClientFlightDataModel[] = []
+const airLines: { value: string; code: string }[] = []
+export const generateFlightData = async (): Promise<
+  ClientFlightDataModel[]
+> => {
+  if (searchResults.length > 0) searchResults = []
   airlineList = [...new Set(airlineList)]
+
   if (airlineList.length > 0) {
     const airLinesServiceResponse = await getAirlineByCodeList(airlineList)
 
     airLinesServiceResponse.Result.forEach((element) => {
-      airlineCodes[element.Code] = {
-        tr_TR: element.Value[0].Value,
-      }
+      airLines.push({
+        value: element.Value[0].Value,
+        code: element.Code,
+      })
     })
+    airlineList = [...new Set(airlineList)]
   }
 
   flightData.flightFareInfos.forEach((flightItem, count) => {
-    if (groupId !== null) {
-      var flightObject = {
-        id: '',
-        flightFare: flightItem,
-        flightDetails: [],
-        flightDetailSegments: [],
-        minPrice: 0,
-        maxPrice: 0,
-        airLineList: [],
-        airportList: [],
-        departureAirportList: [],
-        returnAirportList: [],
-        transferPoints: [],
-        groupId: 0,
-      }
-      var totalFlightTime = '00:00:00'
-
-      flightItem.flightDetailKeys.forEach((detailKey, detailCount) => {
-        var detail = flightData.flightDetails.filter(
-          (det) =>
-            det.key.toLocaleLowerCase() == detailKey.toLocaleLowerCase() &&
-            det.groupId === groupId
-        )
-
-        if (detail.length > 0) {
-          // @ts-expect-error
-          flightObject.flightDetails.push(detail[0])
-          flightObject.groupId = groupId
-
-          detail
-            .at(0)
-            ?.flightSegmentKeys.forEach((segmentKey, segmentCount) => {
-              var segment = flightData.flightDetailSegments.filter(
-                (seg) => seg.key === segmentKey && seg.groupId === groupId
-              )
-
-              if (segment.length > 0) {
-                // if (segment[0].operatingAirline != null) {
-                // }
-                var flightHour = dayjs(
-                  segment[0].flightTime,
-                  'HH:mm:ss'
-                ).format('HH')
-                var flightMinute = dayjs(
-                  segment[0].flightTime,
-                  'HH:mm:ss'
-                ).format('mm')
-
-                // @ts-expect-error
-                flightObject.flightDetailSegments.push(segment[0])
-              }
-            })
-        }
-
-        flightObject.id = 'id' + Math.random().toString(16).slice(2)
-        // @ts-expect-error
-        searchResults.push(flightObject)
-      })
+    var flightObject: ClientFlightDataModel = {
+      flightFare: flightItem,
+      flightDetails: [],
+      flightDetailSegments: [],
+      airLines: airLines,
+      airportList: [],
+      departureAirportList: [],
+      returnAirportList: [],
+      transferPoints: [],
+      id: -1,
     }
+
+    flightItem.flightDetailKeys.forEach((detailKey, detailCount) => {
+      var detail = flightData.flightDetails.filter(
+        (det) => det.key.toLocaleLowerCase() == detailKey.toLocaleLowerCase()
+      )
+
+      if (detail.length > 0) {
+        flightObject?.flightDetails.push(detail[0])
+        // flightObject!.groupId = groupId
+
+        detail.at(0)?.flightSegmentKeys.forEach((segmentKey, segmentCount) => {
+          var segment = flightData.flightDetailSegments.filter(
+            (seg) => seg.key === segmentKey
+          )
+
+          if (segment.length > 0) {
+            flightObject?.flightDetailSegments.push(segment[0])
+          }
+        })
+      }
+
+      flightObject!.id = 'id' + Math.random().toString(16).slice(2)
+
+      searchResults.push(flightObject)
+    })
   })
 
+  if (flightData.flightDetailSegments.length > 0) {
+    flightData.flightDetailSegments = []
+    flightData.flightDetails = []
+    flightData.flightFareInfos = []
+  }
+
   return searchResults
+}
+
+const generatCompleted = () => {
+  searchResults = []
 }

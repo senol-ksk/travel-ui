@@ -9,6 +9,7 @@ import type {
   FlightSearchApiResponse,
   FlightSearchRequestFlightSearchPanel,
   FlightSearchRequestPayload,
+  GetAirlineByCodeListResponse,
   GetNewSearchSessionTokenResponse,
   GetSecurityTokenResponse,
 } from '@/modules/flight/types'
@@ -38,7 +39,7 @@ const processFlightSearchPanel = (
     Dates,
     Destination,
     Origin,
-    ReceivedProviders,
+    ReceivedProviders = [],
   } = recievedData
   const SearchLegs: FlightSearchRequestFlightSearchPanel['SearchLegs'] = [
     {
@@ -228,19 +229,7 @@ export const createSearch = async (
 
 export const getAirlineByCodeList = async (
   codeList: string[]
-): Promise<{
-  Result: {
-    Id: string | number
-    Code: string
-    Value: {
-      LangCode: string
-      Value: string
-    }[]
-    CountryCode: string
-    Country: null | string
-    City: null | string
-  }[]
-}> => {
+): Promise<GetAirlineByCodeListResponse> => {
   const defaultObject = {
     l: 'tr',
     cl: codeList.toString(),
