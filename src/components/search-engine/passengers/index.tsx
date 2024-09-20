@@ -44,26 +44,23 @@ export const PassengerDropdown: React.FC<Props> = ({
     setContainerTransitionState(false)
   )
   const handlePassengerSelect = (type: PassengerTypes, count: number): void => {
-    setPassengersState({
-      ...passengersState,
-      [type]: { count: passengersState[type].count + count },
+    setPassengersState((prev) => {
+      return {
+        ...passengersState,
+        [type]: {
+          count: passengersState[type].count + count,
+        },
+      }
     })
+  }
+
+  useEffect(() => {
     onChange({
       Adult: passengersState.adults.count,
       Child: passengersState.children.count,
       Infant: passengersState.infants.count,
     })
-  }
-
-  useEffect(() => {
-    if (initialValues) {
-      setPassengersState({
-        adults: { count: initialValues.Adult },
-        children: { count: initialValues.Child },
-        infants: { count: initialValues.Infant },
-      })
-    }
-  }, [initialValues])
+  }, [passengersState])
 
   return (
     <div className='relative'>
