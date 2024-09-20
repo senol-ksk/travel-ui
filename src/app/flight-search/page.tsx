@@ -114,63 +114,67 @@ const FlightSearch = () => {
             <Loader size={60} />
           </div>
         ) : null}
-
-        <div
-          className={clsx('container grid gap-3 py-5', {
-            'grid-cols-2': flightClientData?.filter(
-              (item) => item?.flightDetailSegments[0]?.groupId === 1
-            ).length,
-            hidden:
-              !flightSearchApiData ||
-              !flightClientData ||
-              isClientDataFetching ||
-              isClientDataPasused ||
-              isClientDataLoading ||
-              isServiceRequestFetching ||
-              isServiceRequestLoading,
-          })}
-        >
+        <Suspense fallback={<Loader />}>
           <div
-            className={clsx('flex flex-col gap-3', {
-              'col-span-1': flightClientData?.filter(
-                (item) => item?.flightDetailSegments[0].groupId === 1
+            className={clsx('container grid gap-3 py-5', {
+              'grid-cols-2': flightClientData?.filter(
+                (item) => item?.flightDetailSegments[0]?.groupId === 1
               ).length,
+              hidden:
+                !flightSearchApiData ||
+                !flightClientData ||
+                isClientDataFetching ||
+                isClientDataPasused ||
+                isClientDataLoading ||
+                isServiceRequestFetching ||
+                isServiceRequestLoading,
             })}
           >
-            <div>Gidiş Uçuşları</div>
-            {flightClientData
-              ?.sort(
-                (a, b) =>
-                  a!.flightFare.totalPrice.value -
-                  b!.flightFare.totalPrice.value
-              )
-              .filter((item) => item?.flightDetailSegments[0].groupId === 0)
-              .map((flight) => {
-                return <SearchResultCard key={flight.id} {...flight} />
+            <div
+              className={clsx('flex flex-col gap-3', {
+                'col-span-1': flightClientData?.filter(
+                  (item) => item?.flightDetailSegments[0].groupId === 1
+                ).length,
               })}
-          </div>
-
-          {flightClientData
-            ?.sort(
-              (a, b) =>
-                a!.flightFare.totalPrice.value - b!.flightFare.totalPrice.value
-            )
-            .filter((item) => item?.flightDetailSegments[0].groupId === 1) && (
-            <div className='col-span-1 flex flex-col gap-3'>
-              <div>Dönüş Uçuşları</div>
+            >
+              <div>Gidiş Uçuşları</div>
               {flightClientData
                 ?.sort(
                   (a, b) =>
                     a!.flightFare.totalPrice.value -
                     b!.flightFare.totalPrice.value
                 )
-                .filter((item) => item?.flightDetailSegments[0].groupId === 1)
+                .filter((item) => item?.flightDetailSegments[0].groupId === 0)
                 .map((flight) => {
                   return <SearchResultCard key={flight.id} {...flight} />
                 })}
             </div>
-          )}
-        </div>
+
+            {flightClientData
+              ?.sort(
+                (a, b) =>
+                  a!.flightFare.totalPrice.value -
+                  b!.flightFare.totalPrice.value
+              )
+              .filter(
+                (item) => item?.flightDetailSegments[0].groupId === 1
+              ) && (
+              <div className='col-span-1 flex flex-col gap-3'>
+                <div>Dönüş Uçuşları</div>
+                {flightClientData
+                  ?.sort(
+                    (a, b) =>
+                      a!.flightFare.totalPrice.value -
+                      b!.flightFare.totalPrice.value
+                  )
+                  .filter((item) => item?.flightDetailSegments[0].groupId === 1)
+                  .map((flight) => {
+                    return <SearchResultCard key={flight.id} {...flight} />
+                  })}
+              </div>
+            )}
+          </div>
+        </Suspense>
       </div>
     </Suspense>
   )
