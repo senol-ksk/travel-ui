@@ -61,13 +61,13 @@ describe('Flight passengers dropdown', () => {
       expect(screen.getByLabelText('increase-adult')).not.toBeDisabled()
       expect(screen.getByLabelText('adult-count')).toHaveTextContent('1')
 
-      expect(screen.getByLabelText('decrease-children')).toBeDisabled()
-      expect(screen.getByLabelText('increase-children')).not.toBeDisabled()
-      expect(screen.getByLabelText('children-count')).toHaveTextContent('0')
+      expect(screen.getByLabelText('decrease-child')).toBeDisabled()
+      expect(screen.getByLabelText('increase-child')).not.toBeDisabled()
+      expect(screen.getByLabelText('child-count')).toHaveTextContent('0')
 
-      expect(screen.getByLabelText('decrease-infants')).toBeDisabled()
-      expect(screen.getByLabelText('increase-infants')).not.toBeDisabled()
-      expect(screen.getByLabelText('infants-count')).toHaveTextContent('0')
+      expect(screen.getByLabelText('decrease-infant')).toBeDisabled()
+      expect(screen.getByLabelText('increase-infant')).not.toBeDisabled()
+      expect(screen.getByLabelText('infant-count')).toHaveTextContent('0')
     })
   })
 
