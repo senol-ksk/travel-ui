@@ -172,9 +172,17 @@ const getSessionToken = async (): Promise<string | undefined> => {
 export const flightApiRequest = async (
   params: FlightApiRequestParams
 ): Promise<FlightSearchApiResponse> => {
+  if (!appToken) await getsecuritytoken()
+
   const FlightSearchPanel = processFlightSearchPanel(params)
 
-  if (!appToken) await getsecuritytoken()
+  const searchParams = new URLSearchParams(window.location.search)
+  const searchToken = params.SearchToken
+    ? params.SearchToken
+    : searchParams.get('SearchToken') || ''
+
+  if (!searchToken)
+    console.warn('Search token is null or empty. Recived value is', searchToken)
 
   const sessionToken = cookies.get(sessionToken_name)
 
@@ -189,7 +197,7 @@ export const flightApiRequest = async (
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
       FlightSearchPanel,
-      searchToken: params.SearchToken,
+      searchToken,
       scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
       appName: 'fulltrip.prod.webapp.html',
       scopeName: 'FULLTRIP',

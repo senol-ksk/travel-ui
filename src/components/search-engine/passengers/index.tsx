@@ -31,7 +31,6 @@ export const PassengerDropdown: React.FC<Props> = ({
   onChange = () => {},
   initialValues,
 }) => {
-  console.log(initialValues)
   const [passengersState, setPassengersState] = useState({
     Adult: {
       count: initialValues?.Adult || 1,
