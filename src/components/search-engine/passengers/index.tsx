@@ -14,27 +14,31 @@ import { FiPlus, FiMinus } from 'react-icons/fi'
 
 import { Input } from '@/components/search-engine/input'
 
-type PassengerTypes = 'adults' | 'children' | 'infants'
+type PassengerTypes = 'Adult' | 'Child' | 'Infant'
 
 type PassengerRequestModel = { Adult: number; Child: number; Infant: number }
 
 type Props = {
-  onChange?: (params: PassengerRequestModel) => void
+  onChange?: (params: {
+    Adult?: number
+    Child?: number
+    Infant?: number
+  }) => void
   initialValues?: PassengerRequestModel | null
 }
 
 export const PassengerDropdown: React.FC<Props> = ({
   onChange = () => {},
-  initialValues = { Adult: 1, Child: 0, Infant: 0 },
+  initialValues,
 }) => {
   const [passengersState, setPassengersState] = useState({
-    adults: {
+    Adult: {
       count: initialValues?.Adult || 1,
     },
-    children: {
+    Child: {
       count: initialValues?.Child || 0,
     },
-    infants: {
+    Infant: {
       count: initialValues?.Child || 0,
     },
   })
@@ -44,23 +48,19 @@ export const PassengerDropdown: React.FC<Props> = ({
     setContainerTransitionState(false)
   )
   const handlePassengerSelect = (type: PassengerTypes, count: number): void => {
+    onChange({
+      [type]: passengersState[type].count + count,
+    })
+
     setPassengersState((prev) => {
       return {
-        ...passengersState,
+        ...prev,
         [type]: {
-          count: passengersState[type].count + count,
+          count: prev[type].count + count,
         },
       }
     })
   }
-
-  useEffect(() => {
-    onChange({
-      Adult: passengersState.adults.count,
-      Child: passengersState.children.count,
-      Infant: passengersState.infants.count,
-    })
-  }, [passengersState])
 
   return (
     <div className='relative'>
@@ -68,9 +68,9 @@ export const PassengerDropdown: React.FC<Props> = ({
         icon={'passenger'}
         label='Yolcular'
         title={`${
-          passengersState.adults.count +
-          passengersState.children.count +
-          passengersState.infants.count
+          passengersState.Adult.count +
+          passengersState.Child.count +
+          passengersState.Infant.count
         } Yolcu`}
         onClick={() => setContainerTransitionState(true)}
       />
@@ -92,32 +92,32 @@ export const PassengerDropdown: React.FC<Props> = ({
                       variant='outline'
                       size={'lg'}
                       onClick={() => {
-                        handlePassengerSelect('adults', -1)
+                        handlePassengerSelect('Adult', -1)
                       }}
-                      data-disabled={passengersState.adults.count === 1}
-                      disabled={passengersState.adults.count === 1}
+                      data-disabled={passengersState.Adult.count === 1}
+                      disabled={passengersState.Adult.count === 1}
                       aria-label='decrease-adult'
                     >
                       <FiMinus />
                     </ActionIcon>
                     <div className='text-sm' aria-label='adult-count'>
-                      {passengersState.adults.count}
+                      {passengersState.Adult.count}
                     </div>
                     <ActionIcon
                       radius='xl'
                       variant='outline'
                       size={'lg'}
                       onClick={() => {
-                        handlePassengerSelect('adults', 1)
+                        handlePassengerSelect('Adult', 1)
                       }}
                       data-disabled={
-                        passengersState.adults.count +
-                          passengersState.children.count ===
+                        passengersState.Adult.count +
+                          passengersState.Child.count ===
                         7
                       }
                       disabled={
-                        passengersState.adults.count +
-                          passengersState.children.count ===
+                        passengersState.Adult.count +
+                          passengersState.Child.count ===
                         7
                       }
                       aria-label='increase-adult'
@@ -139,35 +139,35 @@ export const PassengerDropdown: React.FC<Props> = ({
                       variant='outline'
                       size={'lg'}
                       onClick={() => {
-                        handlePassengerSelect('children', -1)
+                        handlePassengerSelect('Child', -1)
                       }}
-                      data-disabled={passengersState.children.count === 0}
-                      disabled={passengersState.children.count === 0}
-                      aria-label='decrease-children'
+                      data-disabled={passengersState.Child.count === 0}
+                      disabled={passengersState.Child.count === 0}
+                      aria-label='decrease-child'
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='children-count'>
-                      {passengersState.children.count}
+                    <div className='text-sm' aria-label='child-count'>
+                      {passengersState.Child.count}
                     </div>
                     <ActionIcon
                       radius='xl'
                       variant='outline'
                       size={'lg'}
                       onClick={() => {
-                        handlePassengerSelect('children', 1)
+                        handlePassengerSelect('Child', 1)
                       }}
                       data-disabled={
-                        passengersState.adults.count +
-                          passengersState.children.count ===
+                        passengersState.Adult.count +
+                          passengersState.Child.count ===
                         7
                       }
                       disabled={
-                        passengersState.adults.count +
-                          passengersState.children.count ===
+                        passengersState.Adult.count +
+                          passengersState.Child.count ===
                         7
                       }
-                      aria-label='increase-children'
+                      aria-label='increase-child'
                     >
                       <FiPlus />
                     </ActionIcon>
@@ -186,33 +186,33 @@ export const PassengerDropdown: React.FC<Props> = ({
                       variant='outline'
                       size={'lg'}
                       onClick={() => {
-                        handlePassengerSelect('infants', -1)
+                        handlePassengerSelect('Infant', -1)
                       }}
-                      data-disabled={passengersState.infants.count === 0}
-                      disabled={passengersState.infants.count === 0}
-                      aria-label='decrease-infants'
+                      data-disabled={passengersState.Infant.count === 0}
+                      disabled={passengersState.Infant.count === 0}
+                      aria-label='decrease-infant'
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='infants-count'>
-                      {passengersState.infants.count}
+                    <div className='text-sm' aria-label='infant-count'>
+                      {passengersState.Infant.count}
                     </div>
                     <ActionIcon
                       radius='xl'
                       variant='outline'
                       size={'lg'}
                       onClick={() => {
-                        handlePassengerSelect('infants', 1)
+                        handlePassengerSelect('Infant', 1)
                       }}
                       data-disabled={
-                        passengersState.infants.count ===
-                        passengersState.adults.count
+                        passengersState.Infant.count ===
+                        passengersState.Adult.count
                       }
                       disabled={
-                        passengersState.infants.count ===
-                        passengersState.adults.count
+                        passengersState.Infant.count ===
+                        passengersState.Adult.count
                       }
-                      aria-label='increase-infants'
+                      aria-label='increase-infant'
                     >
                       <FiPlus />
                     </ActionIcon>

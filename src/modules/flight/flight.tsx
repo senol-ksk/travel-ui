@@ -187,118 +187,114 @@ export const Flight = () => {
   }
   let prevSearchToken = ''
 
+  if (formSkeletonVisibilty) return <Skeleton height={80} />
+
   return (
-    <Skeleton visible={formSkeletonVisibilty}>
-      <form onSubmit={form.onSubmit(handleFormSubmit)}>
-        <div className='flex grow items-center justify-between gap-3 pb-4 sm:justify-start'>
-          <div>
-            <Radio.Group
-              key={form.key('ActiveTripKind')}
-              {...form.getInputProps('ActiveTripKind')}
-              onChange={(value) => {
-                form.setFieldValue('ActiveTripKind', +value)
-              }}
-            >
-              <Group gap={'md'}>
-                <Radio value={1} label='Tek Yön' />
-                <Radio value={2} label='Gidiş-Dönüş' />
-              </Group>
-            </Radio.Group>
-          </div>
-          <div className='flex'>
-            <NativeSelect
-              data={[
-                { label: 'Ekonomi', value: '0' },
-                { label: 'Business', value: '2' },
-                { label: 'First Class', value: '3' },
-              ]}
-              key={form.key('CabinClassSelect')}
-              {...form.getInputProps('CabinClassSelect')}
-              onChange={({ currentTarget }) => {
-                form.setFieldValue('CabinClass', {
-                  value: +currentTarget.value,
-                  title:
-                    currentTarget.options[currentTarget.options.selectedIndex]
-                      .innerText,
-                })
-              }}
-            />
-          </div>
+    <form onSubmit={form.onSubmit(handleFormSubmit)}>
+      <div className='flex grow items-center justify-between gap-3 pb-4 sm:justify-start'>
+        <div>
+          <Radio.Group
+            key={form.key('ActiveTripKind')}
+            {...form.getInputProps('ActiveTripKind')}
+            onChange={(value) => {
+              form.setFieldValue('ActiveTripKind', +value)
+            }}
+          >
+            <Group gap={'md'}>
+              <Radio value={1} label='Tek Yön' />
+              <Radio value={2} label='Gidiş-Dönüş' />
+            </Group>
+          </Radio.Group>
         </div>
-        <div className='grid grid-cols-12 gap-2 md:gap-4'>
-          <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-            <Locations
-              label='Kalkış'
-              inputProps={{ ...form.getInputProps('Origin') }}
-              data={originLocations?.Result}
-              isLoading={originLocationsIsLoading}
-              defaultValue={flightLocalObj?.Origin?.Name || null}
-              onChange={(value) => {
-                setOriginLocationInputValue(value)
-              }}
-              onSelect={(value) => {
-                form.setFieldValue('Origin', value.Name)
-                setSelectedOriginLocation(value)
-              }}
-            />
-          </div>
-          <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-            <Locations
-              label='Nereye'
-              inputProps={{ ...form.getInputProps('Destination') }}
-              defaultValue={flightLocalObj?.Destination?.Name || null}
-              data={destinationLocation?.Result}
-              isLoading={destinationLocationLoading}
-              onChange={(value) => {
-                setDestinationLocationInputValue(value)
-              }}
-              onSelect={(value) => {
-                form.setFieldValue('Destination', value.Name)
-                setSelectedDeparturLocation(value)
-              }}
-            />
-          </div>
-          <div className='col-span-6 md:col-span-3 lg:col-span-2'>
-            <FlightCalendar
-              onDateSelect={(dates) => {
-                setDates(dates)
-              }}
-              tripKind={
-                form.getValues().ActiveTripKind === 1 ? 'one-way' : 'round-trip'
-              }
-              defaultDates={dates}
-            />
-          </div>
-          <div className='col-span-6 md:col-span-3 lg:col-span-2'>
-            <PassengerDropdown
-              initialValues={
-                flightLocalObj
-                  ? {
-                      Adult: flightLocalObj?.PassengerCounts.Adult,
-                      Child: flightLocalObj?.PassengerCounts.Child,
-                      Infant: flightLocalObj?.PassengerCounts.Infant,
-                    }
-                  : null
-              }
-              onChange={({ Adult, Child, Infant }) => {
-                form.setFieldValue('PassengerCounts', {
-                  Adult,
-                  Child,
-                  Infant,
-                })
-              }}
-            />
-          </div>
-          <div className='sm:col-grid-2 col-span-12 flex grow-0 lg:col-span-2'>
-            <Button
-              type='submit'
-              className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
-            >
-              Ara
-            </Button>
-          </div>
+        <div className='flex'>
+          <NativeSelect
+            data={[
+              { label: 'Ekonomi', value: '0' },
+              { label: 'Business', value: '2' },
+              { label: 'First Class', value: '3' },
+            ]}
+            key={form.key('CabinClassSelect')}
+            {...form.getInputProps('CabinClassSelect')}
+            onChange={({ currentTarget }) => {
+              form.setFieldValue('CabinClass', {
+                value: +currentTarget.value,
+                title:
+                  currentTarget.options[currentTarget.options.selectedIndex]
+                    .innerText,
+              })
+            }}
+          />
         </div>
-      </form>
-    </Skeleton>
+      </div>
+      <div className='grid grid-cols-12 gap-2 md:gap-4'>
+        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+          <Locations
+            label='Kalkış'
+            inputProps={{ ...form.getInputProps('Origin') }}
+            data={originLocations?.Result}
+            isLoading={originLocationsIsLoading}
+            defaultValue={flightLocalObj?.Origin?.Name || null}
+            onChange={(value) => {
+              setOriginLocationInputValue(value)
+            }}
+            onSelect={(value) => {
+              form.setFieldValue('Origin', value.Name)
+              setSelectedOriginLocation(value)
+            }}
+          />
+        </div>
+        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+          <Locations
+            label='Nereye'
+            inputProps={{ ...form.getInputProps('Destination') }}
+            defaultValue={flightLocalObj?.Destination?.Name || null}
+            data={destinationLocation?.Result}
+            isLoading={destinationLocationLoading}
+            onChange={(value) => {
+              setDestinationLocationInputValue(value)
+            }}
+            onSelect={(value) => {
+              form.setFieldValue('Destination', value.Name)
+              setSelectedDeparturLocation(value)
+            }}
+          />
+        </div>
+        <div className='col-span-6 md:col-span-3 lg:col-span-2'>
+          <FlightCalendar
+            onDateSelect={(dates) => {
+              setDates(dates)
+            }}
+            tripKind={
+              form.getValues().ActiveTripKind === 1 ? 'one-way' : 'round-trip'
+            }
+            defaultDates={dates}
+          />
+        </div>
+        <div className='col-span-6 md:col-span-3 lg:col-span-2'>
+          <PassengerDropdown
+            initialValues={{
+              Adult: flightLocalObj?.PassengerCounts.Adult,
+              Child: flightLocalObj?.PassengerCounts.Child,
+              Infant: flightLocalObj?.PassengerCounts.Infant,
+            }}
+            onChange={({ Adult, Child, Infant }) => {
+              form.setFieldValue('PassengerCounts', {
+                Adult: Adult || 1,
+                Child: Child || 0,
+                Infant: Infant || 0,
+              })
+            }}
+          />
+        </div>
+        <div className='sm:col-grid-2 col-span-12 flex grow-0 lg:col-span-2'>
+          <Button
+            type='submit'
+            className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
+          >
+            Ara
+          </Button>
+        </div>
+      </div>
+    </form>
   )
 }

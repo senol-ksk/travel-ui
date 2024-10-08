@@ -9,7 +9,6 @@ export const SearchResultCard = (flight: ClientFlightDataModel) => {
       key={flight.id}
       className={clsx('rounded-lg border bg-white p-3 shadow')}
     >
-      <textarea defaultValue={JSON.stringify(flight)} hidden />
       <div>
         {flight.flightDetailSegments[0].groupId}
         {
