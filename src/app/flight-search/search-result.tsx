@@ -2,15 +2,21 @@ import dayjs from 'dayjs'
 import clsx from 'clsx'
 
 import type { ClientFlightDataModel } from '@/modules/flight/types'
+import { Button } from '@mantine/core'
+import { formatCurrency } from '@/libs/util'
 
-export const SearchResultCard = (flight: ClientFlightDataModel) => {
+type IProps = {
+  flight: ClientFlightDataModel
+  onSelect: (arg: ClientFlightDataModel) => void
+}
+
+export const SearchResultCard = ({ onSelect = () => {}, flight }: IProps) => {
   return (
     <div
       key={flight.id}
       className={clsx('rounded-lg border bg-white p-3 shadow')}
     >
       <div>
-        {flight.flightDetailSegments[0].groupId}
         {
           flight.airLines.find(
             (item) =>
@@ -44,10 +50,17 @@ export const SearchResultCard = (flight: ClientFlightDataModel) => {
         </div>
       </div>
       <div className='text-end text-lg font-bold'>
-        {new Intl.NumberFormat('tr', {
-          style: 'currency',
-          currency: 'TRY',
-        }).format(flight!.flightFare.totalPrice.value)}
+        {formatCurrency(flight!.flightFare.totalPrice.value)}
+      </div>
+      <div className='flex justify-end pt-3'>
+        <Button
+          type='button'
+          onClick={() => {
+            onSelect(flight)
+          }}
+        >
+          Sec
+        </Button>
       </div>
     </div>
   )

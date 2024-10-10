@@ -109,7 +109,8 @@ export const generateFlightData = async (): Promise<
         })
       }
 
-      flightObject!.id = 'id' + Math.random().toString(16).slice(2)
+      // flightObject!.id = 'id' + Math.random().toString(16).slice(2)
+      flightObject!.id = crypto.randomUUID()
 
       searchResults.push(flightObject)
     })
@@ -122,8 +123,4 @@ export const generateFlightData = async (): Promise<
   }
 
   return searchResults
-}
-
-const generatCompleted = () => {
-  searchResults = []
 }
