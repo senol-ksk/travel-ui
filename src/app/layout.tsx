@@ -12,8 +12,11 @@ import { theme } from '@/theme'
 export const metadata: Metadata = {
   title: 'Fulltrip',
   description: `Seyahat planı yapmadan biraz ilham almaya ne dersiniz? Seyahatin En İyilerini sizin için topluyoruz.`,
+  metadataBase: new URL('https://fulltrip.com'),
+  alternates: {
+    canonical: './',
+  },
 }
-const sessionToken_name = 'SessionToken'
 
 export default function RootLayout({
   children,
@@ -24,7 +27,6 @@ export default function RootLayout({
     <html lang='tr'>
       <head>
         <ColorSchemeScript />
-        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <link rel='icon' href='/favicon.ico' sizes='any' />
       </head>
 

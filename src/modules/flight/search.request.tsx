@@ -20,7 +20,8 @@ const authToken = md5(
   'WEB1D7CAEF28F75490DA6D3B874A6FBC926' +
     'A6A3F7B63F14EEB6EAFA8178ECA96497856206D1635211C7440C7751E534B551'
 ).toLocaleUpperCase()
-const sessionToken_name = 'SessionToken'
+const sessionToken_name = 'sessionToken'
+const searchToken_name = 'searchToken'
 
 const getSessionTokenUrl =
   'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/GetSessionToken'
@@ -29,7 +30,7 @@ const requestedDayFormat = 'YYYY-MM-DD'
 let appToken: string | null
 
 const processFlightSearchPanel = (
-  params: FlightApiRequestParams
+  params: Omit<FlightApiRequestParams, 'SearchToken'>
 ): FlightSearchRequestFlightSearchPanel => {
   const recievedData = params
   const {
@@ -139,11 +140,7 @@ export const getNewSearchSessionToken =
       },
     })
 
-    // setTokens({
-    //   searchToken: response.data,
-    //   sessionToken: response.sessionToken,
-    // })
-    // cookies.set(searchToken_name, response.data)
+    cookies.set(searchToken_name, response.data)
     return response
   }
 
@@ -170,16 +167,14 @@ const getSessionToken = async (): Promise<string | undefined> => {
 }
 
 export const flightApiRequest = async (
-  params: FlightApiRequestParams
+  params: Omit<FlightApiRequestParams, 'SearchToken'>
 ): Promise<FlightSearchApiResponse> => {
   if (!appToken) await getsecuritytoken()
 
   const FlightSearchPanel = processFlightSearchPanel(params)
 
-  const searchParams = new URLSearchParams(window.location.search)
-  const searchToken = params.SearchToken
-    ? params.SearchToken
-    : searchParams.get('SearchToken') || ''
+  const searchToken =
+    cookies.get(searchToken_name) || 'has no search token cookie'
 
   if (!searchToken)
     console.warn('Search token is null or empty. Recived value is', searchToken)
@@ -219,19 +214,17 @@ export const flightApiRequest = async (
 
 export const createSearch = async (
   params: Omit<FlightApiRequestParams, 'SearchToken'>
-): Promise<{ status: boolean; searchToken: string }> => {
-  const searchToken = await getNewSearchSessionToken()
+): Promise<{ status: boolean }> => {
+  await getNewSearchSessionToken()
   await getSessionToken()
 
   const flightServiceResponse = await flightApiRequest({
     ...params,
-    SearchToken: searchToken.data,
   })
 
   return {
     status:
       flightServiceResponse.code === 1 && flightServiceResponse.data.status,
-    searchToken: searchToken.data,
   }
 }
 

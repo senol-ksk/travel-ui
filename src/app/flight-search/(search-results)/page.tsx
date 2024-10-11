@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Drawer, List } from '@mantine/core'
+import { Button, Drawer, List, Textarea } from '@mantine/core'
 import {
   readLocalStorageValue,
   useDisclosure,
@@ -66,7 +66,11 @@ const FlightSearch = () => {
         })
       }
 
-      if (getFlightResults.data.searchResults.length > 0) {
+      if (
+        getFlightResults &&
+        typeof getFlightResults === 'object' &&
+        getFlightResults.data.searchResults.length > 0
+      ) {
         getFlightResults.data.searchResults.forEach((item) => {
           if (!ReceivedProviders.includes(item.diagnostics.providerName))
             ReceivedProviders?.push(item.diagnostics.providerName)
@@ -87,13 +91,17 @@ const FlightSearch = () => {
   })
   const seqKeys_origin: string[] = []
   const seqKeys_destination: string[] = []
-  const [isDomesticSearch, setIsDomesticSearch] = useState(false)
 
-  // useEffect(() => {
-  //   setIsDomesticSearch(
-  //     flightParams.Destination.IsDomestic && flightParams.Origin.IsDomestic
-  //   )
-  // }, [flightParams])
+  useEffect(() => {
+    if (
+      (selectedFlightPackage && selectedFlightPackage?.length > 1) ||
+      (selectedFlightPackage && flightParams.ActiveTripKind === 1) ||
+      (selectedFlightPackage &&
+        !selectedFlightPackage.at(0)?.flightDetails.at(0)?.isDomestic)
+    ) {
+      router.push('/checkout')
+    }
+  }, [flightParams, router, selectedFlightPackage])
 
   const { data: flightClientData, isFetching: isClientDataFetching } = useQuery(
     {
@@ -108,28 +116,27 @@ const FlightSearch = () => {
         !!flightService?.data &&
         flightService.data.status &&
         !flightService.data.hasMoreResponse,
+      refetchOnMount: false,
     }
   )
 
   const handleResultSelect = (flight: ClientFlightDataModel) => {
     openPackageDrawer()
 
-    const withPackages = flightClientData?.filter(
-      (item) =>
-        item.flightDetailSegments.at(0)?.groupId ===
-          flight.flightDetailSegments.at(0)?.groupId &&
-        item.flightDetailSegments?.at(0)?.flightNumber ===
-          flight.flightDetailSegments.at(0)?.flightNumber
+    const withPackages = flightClientData?.filter((item) =>
+      flightParams.Destination.IsDomestic && flightParams.Origin.IsDomestic
+        ? item.flightDetailSegments.at(0)?.groupId ===
+            flight.flightDetailSegments.at(0)?.groupId &&
+          item.flightDetailSegments?.at(0)?.flightNumber ===
+            flight.flightDetailSegments.at(0)?.flightNumber
+        : item.flightDetailSegments.at(0)?.groupId ===
+            flight.flightDetailSegments.at(0)?.groupId &&
+          item.flightDetailSegments.at(0)?.freeVolatileData.Seq ===
+            flight.flightDetailSegments.at(0)?.freeVolatileData.Seq
     )
 
-    setSelectedFlightData(withPackages)
+    setSelectedFlightData([...new Set(withPackages)])
   }
-
-  useEffect(() => {
-    if (selectedFlightPackage && selectedFlightPackage?.length > 1) {
-      router.push('/checkout')
-    }
-  }, [router, selectedFlightPackage])
 
   const handlePackageSelect = (flight: ClientFlightDataModel) => {
     closePackageDrawer()
@@ -171,6 +178,7 @@ const FlightSearch = () => {
           <div className='grid md:grid-cols-4 md:gap-3'>
             <div className='md:col-span-1'>Filter section</div>
             <div className='relative md:col-span-3'>
+              <Textarea defaultValue={JSON.stringify(flightClientData)} />
               {selectedFlightPackage ? (
                 <div className='border-b pb-3'>
                   {selectedFlightPackage.map((flight) => {
@@ -220,8 +228,11 @@ const FlightSearch = () => {
                             a!.flightFare.totalPrice.value -
                             b!.flightFare.totalPrice.value
                         )
-                        .filter(
-                          (item) => item?.flightDetailSegments[0].groupId === 0
+                        .filter((item) =>
+                          flightParams.Destination.IsDomestic &&
+                          flightParams.Origin.IsDomestic
+                            ? item?.flightDetailSegments[0].groupId === 0
+                            : item?.flightDetailSegments[0].groupId === 0
                         )
                         .map((flight) => {
                           if (
@@ -236,11 +247,13 @@ const FlightSearch = () => {
                           )
 
                           return (
-                            <SearchResultCard
-                              key={flight.id}
-                              flight={flight}
-                              onSelect={handleResultSelect}
-                            />
+                            <div key={flight.id}>
+                              <input defaultValue={JSON.stringify(flight)} />
+                              <SearchResultCard
+                                flight={flight}
+                                onSelect={handleResultSelect}
+                              />
+                            </div>
                           )
                         })}
                   </div>
@@ -319,8 +332,11 @@ const FlightSearch = () => {
           {selectedFlightData && Array.isArray(selectedFlightData)
             ? selectedFlightData.map((selectedFlight) => {
                 return (
-                  <div key={selectedFlight.id}>
-                    <div className='flex flex-col gap-3 rounded border p-2 md:p-3'>
+                  <div
+                    key={selectedFlight.id}
+                    className='flex flex-col rounded border p-2 md:p-3'
+                  >
+                    <div className='flex h-full flex-col gap-3'>
                       <div>
                         <div className='text-lg font-semibold'>
                           {formatCurrency(
@@ -330,9 +346,25 @@ const FlightSearch = () => {
                       </div>
                       <div>
                         <div className='pb-2 font-semibold capitalize'>
-                          {selectedFlight.flightDetailSegments
-                            .at(0)
-                            ?.freeVolatileData.BrandName.toLocaleLowerCase()}
+                          {(() => {
+                            switch (
+                              selectedFlight.flightDetailSegments.at(0)
+                                ?.freeVolatileData.BrandName
+                            ) {
+                              case 'SUPER_ECO':
+                                return 'Light'
+                              case 'ECO':
+                                return 'Süper Eko'
+                              case 'ADVANTAGE':
+                                return 'Avantaj'
+                              case 'EXTRA':
+                                return 'Comfort Flex'
+                              default:
+                                return selectedFlight.flightDetailSegments
+                                  .at(0)
+                                  ?.freeVolatileData.BrandName.toLocaleLowerCase()
+                            }
+                          })()}
                         </div>
                         <List className='text-sm'>
                           {selectedFlight.flightDetailSegments.at(0)
@@ -374,7 +406,7 @@ const FlightSearch = () => {
                           ) : null}
                         </List>
                       </div>
-                      <div>
+                      <div className='mt-auto'>
                         <Button
                           type='button'
                           onClick={() => handlePackageSelect(selectedFlight)}
