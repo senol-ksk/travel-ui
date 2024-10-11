@@ -176,13 +176,10 @@ export const Flight = () => {
       PassengerCounts: form.getValues().PassengerCounts,
     }))
 
-    // onRequestStarted && onRequestStarted(true)
-
     queryClient.clear()
 
     if (searchStatus.status) {
-      prevSearchToken = searchStatus.searchToken
-      router.push(`/flight-search?SearchToken=${searchStatus.searchToken}`)
+      router.push(`/flight-search`)
     }
   }
   let prevSearchToken = ''
