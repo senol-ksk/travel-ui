@@ -178,7 +178,6 @@ const FlightSearch = () => {
           <div className='grid md:grid-cols-4 md:gap-3'>
             <div className='md:col-span-1'>Filter section</div>
             <div className='relative md:col-span-3'>
-              <Textarea defaultValue={JSON.stringify(flightClientData)} />
               {selectedFlightPackage ? (
                 <div className='border-b pb-3'>
                   {selectedFlightPackage.map((flight) => {
@@ -248,7 +247,6 @@ const FlightSearch = () => {
 
                           return (
                             <div key={flight.id}>
-                              <input defaultValue={JSON.stringify(flight)} />
                               <SearchResultCard
                                 flight={flight}
                                 onSelect={handleResultSelect}
