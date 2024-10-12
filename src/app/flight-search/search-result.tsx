@@ -64,12 +64,20 @@ export const SearchResultCard = ({ onSelect = () => {}, flight }: IProps) => {
         <div>
           <div>
             <div>{flightDetailSegments.at(0)?.marketingAirline.code}</div>
+            <div>
+              {dayjs(flightDetailSegments.at(0)?.departureTime).format('HH:mm')}
+            </div>
             {flightDetailSegments.filter((item) => (item.groupId = 0)).length >
             1
               ? 'Aktarma var'
               : 'aktarma yok'}
             <hr />
             <div>{flightDetailSegments.at(-1)?.marketingAirline.code}</div>
+            <div>
+              {dayjs(flightDetailSegments.at(-1)?.departureTime).format(
+                'HH:mm'
+              )}
+            </div>
           </div>
           <div className='text-end text-lg font-bold'>
             {formatCurrency(flight!.flightFare.totalPrice.value)}
