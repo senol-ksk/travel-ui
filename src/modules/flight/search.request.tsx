@@ -10,7 +10,6 @@ import type {
   FlightSearchRequestFlightSearchPanel,
   FlightSearchRequestPayload,
   GetAirlineByCodeListResponse,
-  GetNewSearchSessionTokenResponse,
   GetSecurityTokenResponse,
 } from '@/modules/flight/types'
 
@@ -115,15 +114,15 @@ const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   return getToken
 }
 
-export const getNewSearchSessionToken =
-  async (): Promise<GetNewSearchSessionTokenResponse> => {
+const getNewSearchSessionToken = async (): Promise<void> => {
+  if (!cookies.get(searchToken_name)) {
     if (!appToken) await getsecuritytoken()
 
     const response = await request({
       url: executerestUrl,
       method: 'post',
       headers: {
-        appToken: appToken,
+        appToken,
         appName: 'fulltrip.prod.webapp.html',
       },
       data: {
@@ -140,9 +139,11 @@ export const getNewSearchSessionToken =
       },
     })
 
-    cookies.set(searchToken_name, response.data)
-    return response
+    cookies.set(searchToken_name, response.data, {
+      expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30mins
+    })
   }
+}
 
 const getSessionToken = async (): Promise<string | undefined> => {
   if (
@@ -156,7 +157,7 @@ const getSessionToken = async (): Promise<string | undefined> => {
     url: getSessionTokenUrl,
     method: 'post',
     headers: {
-      appToken: appToken,
+      appToken,
       appName: 'fulltrip.prod.webapp.html',
     },
   })
@@ -165,13 +166,19 @@ const getSessionToken = async (): Promise<string | undefined> => {
 
   return response
 }
+let ReceivedProviders: string[] = []
 
-export const flightApiRequest = async (
-  params: Omit<FlightApiRequestParams, 'SearchToken'>
-): Promise<FlightSearchApiResponse> => {
+export const flightApiRequest = async (): Promise<FlightSearchApiResponse> => {
+  const localFlightData = JSON.parse(
+    localStorage.getItem('flight')!
+  ) as FlightApiRequestParams
+
+  await getNewSearchSessionToken()
+  await getSessionToken()
+
   if (!appToken) await getsecuritytoken()
 
-  const FlightSearchPanel = processFlightSearchPanel(params)
+  const FlightSearchPanel = processFlightSearchPanel(localFlightData)
 
   const searchToken =
     cookies.get(searchToken_name) || 'has no search token cookie'
@@ -191,7 +198,7 @@ export const flightApiRequest = async (
     requestType:
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
-      FlightSearchPanel,
+      FlightSearchPanel: { ...FlightSearchPanel, ReceivedProviders },
       searchToken,
       scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
       appName: 'fulltrip.prod.webapp.html',
@@ -199,33 +206,21 @@ export const flightApiRequest = async (
     },
   }
 
-  const requestFlight = await request({
+  const requestFlight = (await request({
     url: executerestUrl,
     data: payload,
     method: 'post',
     headers: {
-      appToken: appToken,
+      appToken,
       appName: 'fulltrip.prod.webapp.html',
     },
+  })) as FlightSearchApiResponse
+
+  requestFlight.data.searchResults.forEach((item) => {
+    ReceivedProviders.push(item.diagnostics.providerName)
   })
 
   return requestFlight
-}
-
-export const createSearch = async (
-  params: Omit<FlightApiRequestParams, 'SearchToken'>
-): Promise<{ status: boolean }> => {
-  await getNewSearchSessionToken()
-  await getSessionToken()
-
-  const flightServiceResponse = await flightApiRequest({
-    ...params,
-  })
-
-  return {
-    status:
-      flightServiceResponse.code === 1 && flightServiceResponse.data.status,
-  }
 }
 
 export const getAirlineByCodeList = async (

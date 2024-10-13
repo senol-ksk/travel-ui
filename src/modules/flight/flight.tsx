@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-
+import cookies from 'js-cookie'
 import { useRouter } from 'next/navigation'
 
 import { z } from 'zod'
@@ -23,7 +23,7 @@ import type {
 } from '@/components/search-engine/locations/locations'
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'
-import { createSearch } from './search.request'
+// import { createSearch } from './search.request'
 import { FlightApiRequestParams } from './types'
 
 const formSchema = z.object({
@@ -152,17 +152,7 @@ export const Flight = () => {
     })
 
   const handleFormSubmit = async (events: FlightRequestType) => {
-    const searchStatus = await createSearch({
-      Origin: selectedOriginLocation!,
-      Destination: selectedDepartureLocation!,
-      Dates: dates,
-      ActiveTripKind: form.getValues().ActiveTripKind,
-      CabinClass: {
-        value: form.getValues().CabinClass.value,
-        title: form.getValues().CabinClass.title,
-      },
-      PassengerCounts: form.getValues().PassengerCounts,
-    })
+    cookies.remove('searchToken')
 
     setFlightLocalObj(() => ({
       Origin: selectedOriginLocation!,
@@ -178,11 +168,10 @@ export const Flight = () => {
 
     queryClient.clear()
 
-    if (searchStatus.status) {
-      router.push(`/flight-search`)
-    }
+    window.location.href = `/flight-search`
+    // router.push(`/flight-search?searchId=${searchId}`)
+    // router.refresh()
   }
-  let prevSearchToken = ''
 
   if (formSkeletonVisibilty) return <Skeleton height={80} />
 

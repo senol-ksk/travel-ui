@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Drawer, List, Textarea } from '@mantine/core'
+import { Button, Drawer, List } from '@mantine/core'
 import {
   readLocalStorageValue,
   useDisclosure,
   useWindowScroll,
+  useTimeout,
 } from '@mantine/hooks'
 import { IoIosCheckmarkCircle } from 'react-icons/io'
 
@@ -27,7 +28,7 @@ import { SearchResultCard } from '@/app/flight-search/search-result'
 import { Loader } from '@mantine/core'
 import { formatCurrency } from '@/libs/util'
 
-let ReceivedProviders: string[] = []
+// let ReceivedProviders: string[] = []
 
 const FlightSearch = () => {
   const queryClient = useQueryClient()
@@ -51,29 +52,17 @@ const FlightSearch = () => {
     key: 'flight',
   })
 
+  // const createSearch = useQuery(['create-searcg', ])
+
   const flightService = useQuery({
     queryKey: ['flight-results', flightParams],
     queryFn: async () => {
-      const getFlightResults = await flightApiRequest({
-        ...flightParams,
-        ReceivedProviders,
-      })
+      const getFlightResults = await flightApiRequest()
 
       if (queryClient.getQueryData(['flighClientData'])) {
         queryClient.invalidateQueries({
           queryKey: ['flighClientData'],
           exact: true,
-        })
-      }
-
-      if (
-        getFlightResults &&
-        typeof getFlightResults === 'object' &&
-        getFlightResults.data.searchResults.length > 0
-      ) {
-        getFlightResults.data.searchResults.forEach((item) => {
-          if (!ReceivedProviders.includes(item.diagnostics.providerName))
-            ReceivedProviders?.push(item.diagnostics.providerName)
         })
       }
 
@@ -89,6 +78,24 @@ const FlightSearch = () => {
     refetchInterval: 1000,
     retryOnMount: false,
   })
+
+  const { data: flightClientData, isFetching: isClientDataFetching } = useQuery(
+    {
+      queryKey: ['flighClientData'],
+      queryFn: async () => {
+        const flightData = await generateFlightData()
+        // ReceivedProviders = []
+
+        return flightData
+      },
+      enabled:
+        !!flightService?.data &&
+        flightService.data.status &&
+        !flightService.data.hasMoreResponse,
+      refetchOnMount: false,
+    }
+  )
+
   const seqKeys_origin: string[] = []
   const seqKeys_destination: string[] = []
 
@@ -102,23 +109,6 @@ const FlightSearch = () => {
       router.push('/checkout')
     }
   }, [flightParams, router, selectedFlightPackage])
-
-  const { data: flightClientData, isFetching: isClientDataFetching } = useQuery(
-    {
-      queryKey: ['flighClientData'],
-      queryFn: async () => {
-        const flightData = await generateFlightData()
-        ReceivedProviders = []
-
-        return flightData
-      },
-      enabled:
-        !!flightService?.data &&
-        flightService.data.status &&
-        !flightService.data.hasMoreResponse,
-      refetchOnMount: false,
-    }
-  )
 
   const handleResultSelect = (flight: ClientFlightDataModel) => {
     openPackageDrawer()
