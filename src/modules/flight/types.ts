@@ -20,7 +20,7 @@ export type FlightSearchRequestFlightSearchPanel = {
   ActiveTripKind: number
   SearchLegs: {
     DepartureTime: string
-    CabinClass: number
+    CabinClass: number | string
     MaxConnections: number
     Origin: FlightLocationLeg
     Destination: FlightLocationLeg
@@ -29,7 +29,7 @@ export type FlightSearchRequestFlightSearchPanel = {
   PassengerCounts: { Adult: number; Child: number; Infant: number }
   Domestic: boolean
   CabinClass: {
-    value: number
+    value: number | string
     title: 'Ekonomi' | 'Business' | 'First Class' | string
   }
   ReceivedProviders?: string[] | []

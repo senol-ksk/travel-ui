@@ -32,7 +32,7 @@ const formSchema = z.object({
   ActiveTripKind: z.number(),
   CabinClassSelect: z.string(),
   CabinClass: z.object({
-    value: z.number(),
+    value: z.number().or(z.string()),
     title: z.union([
       z.literal('Ekonomi'),
       z.literal('Business'),
@@ -160,7 +160,7 @@ export const Flight = () => {
       Dates: dates,
       ActiveTripKind: form.getValues().ActiveTripKind,
       CabinClass: {
-        value: form.getValues().CabinClass.value,
+        value: form.getValues().CabinClass.value + '',
         title: form.getValues().CabinClass.title,
       },
       PassengerCounts: form.getValues().PassengerCounts,
