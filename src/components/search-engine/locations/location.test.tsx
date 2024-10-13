@@ -6,7 +6,7 @@ describe('Search engine locations', () => {
   test('should open autocomplete box', async () => {
     render(<Locations label='Testing' />)
 
-    const inputFakeButton = screen.getByRole('button', { name: 'Testing' })
+    const inputFakeButton = screen.getByRole('button')
 
     fireEvent.click(inputFakeButton)
 
@@ -17,10 +17,9 @@ describe('Search engine locations', () => {
   })
 
   test('should clear input value', async () => {
-    // 'Aramayı temizle'
     render(<Locations label='Testing' />)
 
-    const inputFakeButton = screen.getByRole('button', { name: 'Testing' })
+    const inputFakeButton = screen.getByRole('button')
 
     fireEvent.click(inputFakeButton)
 

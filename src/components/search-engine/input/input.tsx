@@ -40,40 +40,47 @@ export const Input: React.FC<Props> = ({
 
   return (
     <div
-      className={clsx('grid rounded border', {
-        'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
-        'border-slate-300': !error,
-      })}
+      className={clsx(
+        'relative flex h-[54px] items-center overflow-hidden text-ellipsis text-nowrap rounded border p-1 leading-none',
+        {
+          'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
+          'border-slate-300': !error,
+        }
+      )}
     >
-      <label
-        id={labelId}
-        aria-labelledby={labelId}
-        className={clsx(
-          {
-            'sr-only': !title,
-          },
-          'absolute start-12 top-1 ps-1 text-xs text-gray-800'
-        )}
-      >
-        {label}
-      </label>
-      <button
-        type='button'
-        className='relative flex items-center justify-start gap-2 overflow-hidden text-ellipsis border-0 p-3 text-start leading-none md:gap-4 md:p-4'
-        onClick={onClick}
-        id={labelId}
-      >
+      <div className='flex h-full w-full items-center gap-2'>
         <div
-          className={clsx('text-lg', {
+          className={clsx('ps-1 text-lg', {
             'text-red-500': error,
           })}
         >
           {iconComponent}
         </div>
-        <div className='overflow-hidden text-ellipsis text-nowrap'>
-          {!!title ? title : label}
+        <div className='overflow-hidden overflow-ellipsis'>
+          <label
+            id={labelId}
+            aria-labelledby={labelId}
+            className={clsx(
+              {
+                'sr-only': !title,
+              },
+              'relative block pb-1 text-xs text-gray-500'
+            )}
+          >
+            {label}
+          </label>
+          <div className='overflow-hidden overflow-ellipsis'>
+            {!!title ? title : label}
+          </div>
         </div>
-      </button>
+      </div>
+
+      <button
+        type='button'
+        className='absolute bottom-0 end-0 start-0 top-0 z-10 flex h-full w-full'
+        onClick={onClick}
+        id={labelId}
+      />
     </div>
   )
 }

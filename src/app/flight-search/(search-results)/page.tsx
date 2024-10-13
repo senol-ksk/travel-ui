@@ -75,7 +75,7 @@ const FlightSearch = () => {
     enabled(query) {
       return !query.state.data || query.state.data.hasMoreResponse
     },
-    refetchInterval: 1000,
+    refetchInterval: 2000,
     retryOnMount: false,
   })
 
