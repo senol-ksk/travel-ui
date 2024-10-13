@@ -247,9 +247,7 @@ export const Flight = () => {
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>
           <FlightCalendar
-            onDateSelect={(dates) => {
-              setDates(dates)
-            }}
+            onDateSelect={setDates}
             tripKind={
               form.getValues().ActiveTripKind === 1 ? 'one-way' : 'round-trip'
             }

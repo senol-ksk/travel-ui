@@ -71,7 +71,7 @@ const FlightCalendar: React.FC<Props> = ({
     } else if (dayjs(dates).isValid()) {
       departurDate = dates
       setRangeValue([dates, null])
-      onDateSelect([dates, null])
+      onDateSelect([dates, dates])
       setFormatedValues([dayjs(departurDate).format(defaultFormat), null])
     } else {
       console.error('Date type has some errors')
