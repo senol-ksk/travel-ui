@@ -49,6 +49,10 @@ export const PassengerDropdown: React.FC<Props> = ({
   )
   const handlePassengerSelect = (type: PassengerTypes, count: number): void => {
     onChange({
+      Adult: passengersState.Adult.count,
+      Child: passengersState.Child.count,
+      Infant: passengersState.Infant.count,
+
       [type]: passengersState[type].count + count,
     })
 

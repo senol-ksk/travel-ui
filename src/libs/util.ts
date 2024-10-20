@@ -1,9 +1,7 @@
 export const formatCurrency = (
   amount: number,
-  currency?: 'TRY' | 'USD' | 'EUR'
+  currency: 'TRY' | 'USD' | 'EUR' = 'TRY'
 ) => {
-  if (!currency) currency = 'TRY'
-
   return new Intl.NumberFormat('tr', {
     style: 'currency',
     currency,
