@@ -6,7 +6,7 @@ import Header from '@/components/header'
 describe('Logo', () => {
   test('should be defined', () => {
     render(<Header />)
-    var logo = screen.getByRole('img', { name: /Fulltrip/i })
+    const logo = screen.getByRole('img', { name: /Fulltrip/i })
     expect(logo).toBeInTheDocument()
   })
 })
