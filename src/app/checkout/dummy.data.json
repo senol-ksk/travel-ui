@@ -1,0 +1,81 @@
+{
+  "treeContainer": {
+    "id": null,
+    "orderId": 1,
+    "key": "PRODUCT",
+    "childNodes": [
+      {
+        "id": null,
+        "orderId": 1,
+        "key": "Adult",
+        "items": [
+          {
+            "valueType": "TravelAccess.Core.Models.Product.OrderPassengerModel, Core.Models, Version=1.1.75.0, Culture=neutral, PublicKeyToken=null",
+            "key": "Data",
+            "value": {
+              "_passengerId": 0,
+              "model_PassengerId": 1,
+              "declaredAge": 0,
+              "productType": 1,
+              "checkinDate": "2024-11-24T15:10:00",
+              "calculationYearBased": false,
+              "calculationYearType": 1,
+              "passengerId": 0,
+              "sequenceNo": 1,
+              "type": 0,
+              "gender": 0,
+              "firstName": null,
+              "lastName": null,
+              "middleName": null,
+              "birthDate": "0001-01-01T00:00:00",
+              "nationality": "tr",
+              "nationality_Check": null,
+              "citizenNo": null,
+              "passportNo": null,
+              "mobilePhoneNumber": null,
+              "email": null,
+              "isContact": false,
+              "flightFrequencyNo": null,
+              "notes": null,
+              "passportValidityDate": null,
+              "webUserId": 0,
+              "passportCountry": null,
+              "groupOrderIndex": 0,
+              "passengerKey": "7B68A8E3D2B29D249619CA396F2ACD1B2491257F68E56A8EE90786A2BE1646FF",
+              "isRecord": false,
+              "listFlightFrequencyAirline": null,
+              "listFlightFrequencyNo": null,
+              "registeredPassengerId": 0,
+              "isDontValidate": false,
+              "hesCode": null
+            },
+            "orderId": 1
+          },
+          {
+            "valueType": "System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e",
+            "key": "IsDomestic",
+            "value": true,
+            "orderId": 2
+          },
+          {
+            "valueType": "TravelAccess.Business.Models.Flight.FlightDetailWebRequest, Business.Models, Version=1.5.6.0, Culture=neutral, PublicKeyToken=null",
+            "key": "SummaryRequest",
+            "value": {
+              "selectedProductKeys": "NYz22rUtFN4HAvlzCFA62j4QOtTAg3B3J3fp1P1omd8aEsDiVNIMjL/8vUGjB5Ha0BwB14Z1TknUpQ3Na7KCg4InYk4+04wJNytcKzlCTL64hegmQI3QRsHEE5YCJ23+0Mq80EGqxTBgtqYDWCK4zCoxCYAg4fQi9lkTXkAQEhCL0DAdf8oocR09TlSot7TUHrL5+ME0r0HqO3QWnfNle4p2X9SPPEcOktnAjmGrC+UFkUt/TwuvppbtzAbwdd1WEBNUmabDNC+egWQTLU/bw4TSo0o50GN+B5G5Mk8qobEmSvmCe5BE9PIdJNgoiPYngtYC+CyM/8dyb/tz/KEqUTbCrI+fHMer/8HrnmiML9PQpYqfuHgsGLyXFlb0wikiy/ZtTtesXDX/RHmGCAqTzUbKSi91i7zUC9uo/c1RApxA5OSHZXOpWDvqrUxN356eqhyyyhXzv505Dcm/ItoqtxPrx9IOOBsx2v7XtfWJwMw=",
+              "flightDetailToSearchReturnPath": null,
+              "searchToken": "7DB000D5FD5015A7095D2BC584635E414C7369D1DC51997A306406CF860FDEA4",
+              "sessionToken": "E3BC48B3B4CF7C2072D923532A9619201186CA969F4B8C56BC5EF9A63031A6F1",
+              "apiRoute": null,
+              "apiAction": null,
+              "appName": "fulltrip.prod.webapp.html",
+              "scopeCode": "2d932774-a9d8-4df9-aae7-5ad2727da1c7",
+              "customerId": 2,
+              "customerUserId": 3
+            },
+            "orderId": 3
+          }
+        ]
+      }
+    ]
+  }
+}

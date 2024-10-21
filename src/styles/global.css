@@ -1,5 +1,6 @@
 @import '@mantine/core/styles.css';
 @import '@mantine/dates/styles.css';
+@import 'intl-tel-input/styles';
 
 @layer tailwind {
   @tailwind base;
@@ -9,4 +10,17 @@
 
 body {
   background: hsl(210deg 10% 96.08%);
+}
+
+.iti {
+  @apply block;
+}
+
+.iti__search-input {
+  @apply p-2;
+}
+
+.iti__selected-dial-code {
+  @apply text-sm;
+  /* @apply text-gray-500; */
 }

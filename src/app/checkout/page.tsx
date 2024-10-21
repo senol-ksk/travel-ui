@@ -5,18 +5,22 @@ import {
   UseFormProps,
   useFieldArray,
   FormProvider,
+  Controller,
 } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import IntlTelInput from 'intl-tel-input/react'
+
+import data from './dummy.data.json'
 
 import FlightPassengers from '@/components/checkout/flight/passengers'
-import { Button, Title } from '@mantine/core'
+import { Button, Checkbox, Input, TextInput, Title } from '@mantine/core'
 import { validTCKN } from '@/libs/tckn-validate'
 import { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
 import { request } from '@/network'
 import { useQuery } from '@tanstack/react-query'
 import cookies from 'js-cookie'
+import clsx from 'clsx'
 
 enum PassengerTypesEnum {
   Adult,
@@ -39,6 +43,11 @@ export type PassengerValidationType = {
   birthDate_year: z.ZodString
   citizenNo: z.ZodOptional<z.ZodString>
   nationality_Check: z.ZodBoolean
+}
+
+export type ContactFieldSchemaTypes = {
+  ContactEmail: z.ZodString
+  ContactGSM: z.ZodEffects<z.ZodOptional<z.ZodString>>
 }
 
 const passengerValidation = z.object({
@@ -70,10 +79,25 @@ const passengerValidation = z.object({
   ),
 })
 
+let isPhoneNumberValid = false
+const contactFieldSchema = z.object<ContactFieldSchemaTypes>({
+  ContactEmail: z.string().email(),
+  ContactGSM: z
+    .string()
+    .optional()
+    .refine(() => {
+      return isPhoneNumberValid
+    }),
+})
+
 export type PassengerSchemaType = z.infer<typeof passengerValidation>
-export type Passenger = z.infer<
-  typeof passengerValidation
->['passengers'][number]
+// export type PassengerFieldsSchemaTypes = z.infer<
+//   typeof passengerValidation
+// >['passengers'][number]
+
+const checkoutSchemaMerged = contactFieldSchema.merge(passengerValidation)
+
+type CheckoutSchemaMergedFieldTypes = z.infer<typeof checkoutSchemaMerged>
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -92,9 +116,9 @@ function useZodForm<TSchema extends z.ZodType>(
 
 export default function CheckoutPage() {
   const formMethods = useZodForm({
-    schema: passengerValidation,
+    schema: checkoutSchemaMerged,
     // defaultValues: {
-    //   passengers: passengersData,
+    //   passengers: data.treeContainer.childNodes,
     // },
     // mode: 'onChange',
   })
@@ -104,8 +128,8 @@ export default function CheckoutPage() {
     control: formMethods.control,
   })
 
-  const isSubmittable =
-    !!formMethods.formState.isDirty && !!formMethods.formState.isValid
+  // const isSubmittable =
+  //   !!formMethods.formState.isDirty && !!formMethods.formState.isValid
 
   const checkoutQuery = useQuery({
     queryKey: ['checkout', cookies.get('searchToken')],
@@ -141,56 +165,148 @@ export default function CheckoutPage() {
         })
       })
 
+      formMethods.setValue('ContactEmail', response.contactEmail || '')
+      formMethods.setValue('ContactEmail', response.contactGSM || '')
+
       return response
     },
     enabled: !!cookies.get('searchToken'),
   })
 
   return (
-    <div className=''>
-      <FormProvider {...formMethods}>
-        <form
-          onSubmit={formMethods.handleSubmit((data) => {
-            console.log('Data submitted:', data)
-          })}
-        >
-          <CheckoutCard>
-            {fields.map((field, index) => {
-              let fieldErrors
-              if (formMethods.formState.errors.passengers?.length) {
-                fieldErrors = formMethods.formState?.errors?.passengers[index]
-              }
-              return (
-                <div key={field.id}>
-                  <Title order={3} size={'lg'} pb={10}>
-                    {PassengerTypesEnum[field.type]}
-                  </Title>
-                  <FlightPassengers
-                    field={field}
-                    index={index}
-                    error={fieldErrors}
+    <FormProvider {...formMethods}>
+      <form
+        onSubmit={formMethods.handleSubmit((data) => {
+          console.log('Data submitted:', data)
+        })}
+        className='grid gap-3 md:gap-5'
+      >
+        <CheckoutCard>
+          <Title order={3} size={'lg'}>
+            İletişim Bilgileri
+          </Title>
+          <div className='grid grid-cols-2 gap-3'>
+            <div>
+              <Input.Wrapper label='E-Posta'>
+                <TextInput
+                  type='email'
+                  {...formMethods.register('ContactEmail')}
+                  error={
+                    !!formMethods.formState?.errors?.ContactEmail
+                      ? formMethods.formState?.errors?.ContactEmail?.message
+                      : null
+                  }
+                />
+              </Input.Wrapper>
+            </div>
+            <div>
+              <Input.Wrapper label='GSM No'>
+                <div
+                  className='m_6c018570 mantine-Input-wrapper'
+                  data-variant='default'
+                >
+                  <Controller
+                    control={formMethods.control}
+                    name='ContactGSM'
+                    render={({ field }) => {
+                      return (
+                        <IntlTelInput
+                          {...field}
+                          initialValue={''}
+                          onChangeValidity={(isValid) => {
+                            isPhoneNumberValid = isValid
+                          }}
+                          usePreciseValidation
+                          ref={(ref) => {
+                            field.ref({
+                              focus: ref?.getInput,
+                            })
+                          }}
+                          onChangeNumber={field.onChange}
+                          inputProps={{
+                            className: clsx('m_8fb7ebe7 mantine-Input-input', {
+                              'border-rose-500':
+                                !!formMethods.formState?.errors?.ContactGSM,
+                            }),
+                            'data-variant': 'default',
+                            name: field.name,
+                          }}
+                          initOptions={{
+                            containerClass: 'w-full',
+                            separateDialCode: true,
+                            initialCountry: 'auto',
+                            i18n: {
+                              tr: 'Türkiye',
+                              searchPlaceholder: 'Ülke adı giriniz',
+                            },
+                            loadUtilsOnInit: '/intl-tel-input/utils.js',
+                            geoIpLookup: (callback) => {
+                              fetch('https://ipapi.co/json')
+                                .then((res) => res.json())
+                                .then((data) => callback(data.country_code))
+                                .catch(() => callback('tr'))
+                            },
+                          }}
+                        />
+                      )
+                    }}
                   />
                 </div>
-              )
-            })}
-          </CheckoutCard>
+                <Input.Error className={'pt-1'}>
+                  {!!formMethods.formState?.errors?.ContactGSM
+                    ? formMethods.formState?.errors?.ContactGSM?.message
+                    : null}
+                </Input.Error>
+              </Input.Wrapper>
+            </div>
+            <div className='col-span-2 pt-2'>
+              <Checkbox
+                label='Fırsat ve kampanyalardan haberdar olmak istiyorum.'
+                name='IsInPromoList'
+              />
+            </div>
+          </div>
+        </CheckoutCard>
+        <CheckoutCard>
+          {fields.map((field, index) => {
+            let fieldErrors
+            if (formMethods.formState.errors.passengers?.length) {
+              fieldErrors = formMethods.formState?.errors?.passengers[index]
+            }
+            return (
+              <div key={field.id}>
+                <Title order={3} size={'lg'} pb={10}>
+                  {PassengerTypesEnum[field.type]}
+                </Title>
+                <FlightPassengers
+                  field={field}
+                  index={index}
+                  error={fieldErrors}
+                />
+              </div>
+            )
+          })}
+        </CheckoutCard>
 
-          <Button
-            type='submit'
-            // disabled={!isSubmittable}
-          >
-            Devam et
-          </Button>
-        </form>
-      </FormProvider>
-    </div>
+        <CheckoutCard>
+          <div className='flex justify-end'>
+            <Button
+              type='submit'
+              // disabled={!isSubmittable}
+            >
+              Devam et
+            </Button>
+          </div>
+        </CheckoutCard>
+      </form>
+    </FormProvider>
   )
 }
 
 const CheckoutCard: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => (
-  <div className='gap:3 grid rounded-md border bg-white p-2 shadow-sm md:gap-6 md:p-6'>
+  <div className='grid gap-3 rounded-md border bg-white p-2 shadow-sm md:gap-6 md:p-6'>
     {children}
   </div>
 )
