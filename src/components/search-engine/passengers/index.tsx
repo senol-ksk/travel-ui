@@ -209,11 +209,11 @@ export const PassengerDropdown: React.FC<Props> = ({
                         handlePassengerSelect('Infant', 1)
                       }}
                       data-disabled={
-                        passengersState.Infant.count ===
-                        passengersState.Adult.count
+                        passengersState.Adult.count <
+                        passengersState.Infant.count
                       }
                       disabled={
-                        passengersState.Infant.count ===
+                        passengersState.Infant.count <
                         passengersState.Adult.count
                       }
                       aria-label='increase-infant'
