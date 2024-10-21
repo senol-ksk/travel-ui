@@ -48,15 +48,37 @@ export const PassengerDropdown: React.FC<Props> = ({
     setContainerTransitionState(false)
   )
   const handlePassengerSelect = (type: PassengerTypes, count: number): void => {
-    onChange({
-      Adult: passengersState.Adult.count,
-      Child: passengersState.Child.count,
-      Infant: passengersState.Infant.count,
-
-      [type]: passengersState[type].count + count,
-    })
+    const currentState = passengersState
+    const shouldInfantDecrement =
+      currentState.Adult.count === currentState.Infant.count &&
+      type === 'Adult' &&
+      count === -1
+    if (shouldInfantDecrement) {
+      onChange({
+        Infant: currentState.Infant.count - 1,
+        Child: currentState.Child.count,
+        [type]: currentState[type].count + count,
+      })
+    } else {
+      onChange({
+        Adult: currentState.Adult.count,
+        Infant: currentState.Infant.count,
+        Child: currentState.Child.count,
+        [type]: currentState[type].count + count,
+      })
+    }
 
     setPassengersState((prev) => {
+      if (shouldInfantDecrement) {
+        return {
+          ...currentState,
+          Infant: { count: currentState.Infant.count - 1 },
+          [type]: {
+            count: currentState[type].count + count,
+          },
+        }
+      }
+
       return {
         ...prev,
         [type]: {
@@ -208,13 +230,13 @@ export const PassengerDropdown: React.FC<Props> = ({
                       onClick={() => {
                         handlePassengerSelect('Infant', 1)
                       }}
-                      data-disabled={
-                        passengersState.Adult.count <
-                        passengersState.Infant.count
-                      }
+                      // data-disabled={
+                      //   passengersState.Adult.count ==
+                      //   passengersState.Infant.count
+                      // }
                       disabled={
-                        passengersState.Infant.count <
-                        passengersState.Adult.count
+                        passengersState.Adult.count ===
+                        passengersState.Infant.count
                       }
                       aria-label='increase-infant'
                     >
