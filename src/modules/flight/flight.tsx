@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import cookies from 'js-cookie'
-import { useRouter } from 'next/navigation'
 
 import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
@@ -23,7 +22,6 @@ import type {
 } from '@/components/search-engine/locations/locations'
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'
-// import { createSearch } from './search.request'
 import { FlightApiRequestParams } from './types'
 
 const formSchema = z.object({
@@ -53,7 +51,6 @@ type FlightRequestType = z.infer<typeof schema>
 
 export const Flight = () => {
   const queryClient = useQueryClient()
-  const router = useRouter()
   const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
 
   const [selectedOriginLocation, setSelectedOriginLocation] =
@@ -151,7 +148,7 @@ export const Flight = () => {
       },
     })
 
-  const handleFormSubmit = async (events: FlightRequestType) => {
+  const handleFormSubmit = async () => {
     cookies.remove('searchToken')
 
     setFlightLocalObj(() => ({
@@ -262,6 +259,7 @@ export const Flight = () => {
               Infant: flightLocalObj?.PassengerCounts.Infant,
             }}
             onChange={({ Adult, Child, Infant }) => {
+              console.log('passengers onChange', Adult, Child, Infant)
               form.setFieldValue('PassengerCounts', {
                 Adult: Adult || 1,
                 Child: Child || 0,

@@ -11,9 +11,9 @@ const dataTypes: ['flightFareInfos', 'flightDetailSegments', 'flightDetails'] =
   ['flightFareInfos', 'flightDetailSegments', 'flightDetails']
 
 const flightData: {
-  flightFareInfos: FlightFareInfos[string][]
-  flightDetailSegments: FlightDetailSegment[string][]
-  flightDetails: FlightDetails[string][]
+  flightFareInfos: FlightSearchApiResponse['data']['searchResults'][0]['flightFareInfos'][string][]
+  flightDetailSegments: FlightSearchApiResponse['data']['searchResults'][0]['flightDetailSegments'][string][]
+  flightDetails: FlightSearchApiResponse['data']['searchResults'][0]['flightDetails'][string][]
 } = {
   flightFareInfos: [],
   flightDetailSegments: [],
