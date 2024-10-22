@@ -259,7 +259,6 @@ export const Flight = () => {
               Infant: flightLocalObj?.PassengerCounts.Infant,
             }}
             onChange={({ Adult, Child, Infant }) => {
-              console.log('passengers onChange', Adult, Child, Infant)
               form.setFieldValue('PassengerCounts', {
                 Adult: Adult || 1,
                 Child: Child || 0,

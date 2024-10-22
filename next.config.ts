@@ -2,7 +2,6 @@
 const nextConfig = {
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
-    // missingSuspenseWithCSRBailout: false,
   },
   images: {
     remotePatterns: [{ hostname: '*' }],
