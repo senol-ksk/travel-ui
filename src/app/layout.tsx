@@ -9,11 +9,6 @@ import { Providers } from '@/app/providers'
 import Header from '@/components/header'
 import { theme } from '@/theme'
 
-import dayjs from 'dayjs'
-
-import 'dayjs/locale/tr'
-dayjs.locale('tr')
-
 export const metadata: Metadata = {
   title: 'Fulltrip',
   description: `Seyahat planı yapmadan biraz ilham almaya ne dersiniz? Seyahatin En İyilerini sizin için topluyoruz.`,
@@ -29,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='tr'>
+    <html lang='tr' data-mantine-color-scheme='light'>
       <head>
         <ColorSchemeScript />
         <link rel='icon' href='/favicon.ico' sizes='any' />

@@ -8,7 +8,7 @@ env:
 on:
   workflow_run:
     workflows: [CI for Pull Request]
-    branches: [main]
+    branches: [production]
     types:
       - completed
 
