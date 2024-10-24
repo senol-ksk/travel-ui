@@ -36,7 +36,7 @@ const selectedFlightState:
   | ClientFlightDataModel[]
   | null
   | undefined = []
-const FlightSearch = () => {
+const FlightSearchPage = () => {
   const queryClient = useQueryClient()
   const [, scrollTo] = useWindowScroll()
   const router = useRouter()
@@ -250,13 +250,15 @@ const FlightSearch = () => {
                           .map((flight) => {
                             if (
                               seqKeys_origin.includes(
-                                flight.flightDetailSegments.at(0)?.flightNumber!
+                                flight.flightDetailSegments.at(0)
+                                  ?.flightNumber || ''
                               )
                             )
                               return null
 
                             seqKeys_origin.push(
-                              flight.flightDetailSegments.at(0)?.flightNumber!
+                              flight.flightDetailSegments.at(0)?.flightNumber ||
+                                ''
                             )
 
                             return (
@@ -298,13 +300,14 @@ const FlightSearch = () => {
                               if (
                                 seqKeys_destination.includes(
                                   flight.flightDetailSegments.at(0)
-                                    ?.flightNumber!
+                                    ?.flightNumber || ''
                                 )
                               )
                                 return null
 
                               seqKeys_destination.push(
-                                flight.flightDetailSegments.at(0)?.flightNumber!
+                                flight.flightDetailSegments.at(0)
+                                  ?.flightNumber || ''
                               )
 
                               return (
@@ -338,99 +341,110 @@ const FlightSearch = () => {
               }
             >
               <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
-                {selectedFlightData && Array.isArray(selectedFlightData)
-                  ? selectedFlightData.map((selectedFlight) => {
-                      return (
-                        <div
-                          key={selectedFlight.id}
-                          className='flex flex-col rounded border p-2 md:p-3'
-                        >
-                          <div className='flex h-full flex-col gap-3'>
-                            <div>
-                              <div className='text-lg font-semibold'>
-                                {formatCurrency(
-                                  selectedFlight.flightFare.totalPrice.value
-                                )}
+                {!!selectedFlightData && Array.isArray(selectedFlightData)
+                  ? selectedFlightData.map(
+                      ({ flightDetailSegments, ...selectedFlight }) => {
+                        const flightDetailSegmentsArray =
+                          flightDetailSegments &&
+                          Array.isArray(flightDetailSegments)
+                            ? flightDetailSegments.at(0)
+                            : false
+                        return (
+                          <div
+                            key={selectedFlight.id}
+                            className='flex flex-col rounded border p-2 md:p-3'
+                          >
+                            <div className='flex h-full flex-col gap-3'>
+                              <div>
+                                <div className='text-lg font-semibold'>
+                                  {formatCurrency(
+                                    selectedFlight.flightFare.totalPrice.value
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <div className='pb-2 font-semibold capitalize'>
-                                {(() => {
-                                  switch (
-                                    selectedFlight.flightDetailSegments.at(0)
-                                      ?.freeVolatileData.BrandName
-                                  ) {
-                                    case 'SUPER_ECO':
-                                      return 'Light'
-                                    case 'ECO':
-                                      return 'Süper Eko'
-                                    case 'ADVANTAGE':
-                                      return 'Avantaj'
-                                    case 'EXTRA':
-                                      return 'Comfort Flex'
-                                    default:
-                                      return selectedFlight.flightDetailSegments
-                                        .at(0)
-                                        ?.freeVolatileData.BrandName.toLocaleLowerCase()
-                                  }
-                                })()}
-                              </div>
-                              <List className='text-sm'>
-                                {selectedFlight.flightDetailSegments.at(0)
-                                  ?.marketingAirline?.code === 'PC' ? (
-                                  <List.Item
-                                    icon={
-                                      <IoIosCheckmarkCircle className='text-green-500' />
+                              <div>
+                                <div className='pb-2 font-semibold capitalize'>
+                                  {(() => {
+                                    switch (
+                                      flightDetailSegments.at(0)
+                                        ?.freeVolatileData.BrandName
+                                    ) {
+                                      case 'SUPER_ECO':
+                                        return 'Light'
+                                      case 'ECO':
+                                        return 'Süper Eko'
+                                      case 'ADVANTAGE':
+                                        return 'Avantaj'
+                                      case 'EXTRA':
+                                        return 'Comfort Flex'
+                                      default:
+                                        return flightDetailSegments
+                                          .at(0)
+                                          ?.freeVolatileData.BrandName.toLocaleLowerCase()
                                     }
-                                  >
-                                    1 Adet Koltuk Altına Sığacak Çanta
-                                    (40x30x15)
-                                  </List.Item>
-                                ) : null}
-                                {selectedFlight.flightDetailSegments.at(0)
-                                  ?.baggageAllowance?.maxWeight?.value! > 0 && (
-                                  <List.Item
-                                    icon={
-                                      <IoIosCheckmarkCircle className='text-green-500' />
-                                    }
-                                  >
-                                    {
-                                      selectedFlight.flightDetailSegments.at(0)
-                                        ?.baggageAllowance.maxWeight.value
-                                    }{' '}
-                                    kg bagaj
-                                  </List.Item>
-                                )}
+                                  })()}
+                                </div>
+                                <List className='text-sm'>
+                                  {flightDetailSegments.at(0)?.marketingAirline
+                                    ?.code === 'PC' ? (
+                                    <List.Item
+                                      icon={
+                                        <IoIosCheckmarkCircle className='text-green-500' />
+                                      }
+                                    >
+                                      1 Adet Koltuk Altına Sığacak Çanta
+                                      (40x30x15)
+                                    </List.Item>
+                                  ) : null}
+                                  {flightDetailSegmentsArray &&
+                                    flightDetailSegmentsArray?.baggageAllowance
+                                      .maxWeight.value > 0 && (
+                                      <List.Item
+                                        icon={
+                                          <IoIosCheckmarkCircle className='text-green-500' />
+                                        }
+                                      >
+                                        {
+                                          flightDetailSegments.at(0)
+                                            ?.baggageAllowance.maxWeight.value
+                                        }{' '}
+                                        kg bagaj
+                                      </List.Item>
+                                    )}
 
-                                {selectedFlight.flightDetailSegments.at(0)
-                                  ?.freeVolatileData.Owner !== 'EF' &&
-                                selectedFlight.flightDetailSegments.at(0)
-                                  ?.marketingAirline.code !== 'PC' ? (
-                                  <List.Item
-                                    icon={
-                                      <IoIosCheckmarkCircle className='text-green-500' />
-                                    }
-                                  >
-                                    Ücretli Değişiklik
-                                  </List.Item>
-                                ) : null}
-                              </List>
-                            </div>
-                            <div className='mt-auto'>
-                              <Button
-                                type='button'
-                                onClick={() =>
-                                  handlePackageSelect(selectedFlight)
-                                }
-                                fullWidth
-                              >
-                                Select
-                              </Button>
+                                  {flightDetailSegments.at(0)?.freeVolatileData
+                                    .Owner !== 'EF' &&
+                                  flightDetailSegments.at(0)?.marketingAirline
+                                    .code !== 'PC' ? (
+                                    <List.Item
+                                      icon={
+                                        <IoIosCheckmarkCircle className='text-green-500' />
+                                      }
+                                    >
+                                      Ücretli Değişiklik
+                                    </List.Item>
+                                  ) : null}
+                                </List>
+                              </div>
+                              <div className='mt-auto'>
+                                <Button
+                                  type='button'
+                                  onClick={() =>
+                                    handlePackageSelect({
+                                      flightDetailSegments,
+                                      ...selectedFlight,
+                                    })
+                                  }
+                                  fullWidth
+                                >
+                                  Select
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })
+                        )
+                      }
+                    )
                   : null}
               </div>
             </Drawer>
@@ -450,7 +464,7 @@ const FlightSearch = () => {
   )
 }
 
-export default FlightSearch
+export default FlightSearchPage
 
 const DefaultLoader = () => (
   <div className='flex flex-col items-center p-7'>

@@ -1,12 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import { NextConfig } from 'next'
+const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
-  images: {
-    remotePatterns: [{ hostname: '*' }],
-    unoptimized: true,
-  },
+  reactStrictMode: true,
 }
 
-module.exports = nextConfig
+export default nextConfig

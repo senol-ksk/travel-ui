@@ -13,17 +13,14 @@ import type {
   GetSecurityTokenResponse,
 } from '@/modules/flight/types'
 
-const executerestUrl =
-  'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/executerest'
+const executerestUrl = process.env.NEXT_PUBLIC_OL_ROUTE
 const authToken = md5(
-  'WEB1D7CAEF28F75490DA6D3B874A6FBC926' +
-    'A6A3F7B63F14EEB6EAFA8178ECA96497856206D1635211C7440C7751E534B551'
+  process.env.NEXT_PUBLIC_DEVICE_ID + process.env.NEXT_PUBLIC_SECURE_STRING
 ).toLocaleUpperCase()
 const sessionToken_name = 'sessionToken'
 const searchToken_name = 'searchToken'
 
-const getSessionTokenUrl =
-  'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/GetSessionToken'
+const getSessionTokenUrl = process.env.NEXT_PUBLIC_GET_SESSION_TOKEN
 
 const requestedDayFormat = 'YYYY-MM-DD'
 let appToken: string | null
@@ -101,11 +98,11 @@ const processFlightSearchPanel = (
 
 const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   const getToken = await request({
-    url: 'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/device/getsecuritytoken',
+    url: process.env.NEXT_PUBLIC_SECURITY_ROUTE,
     method: 'post',
     data: {
       authToken,
-      envName: 'fulltrip.prod.webapp.html',
+      envName: process.env.NEXT_PUBLIC_APP_NAME,
     },
   })
 
@@ -123,19 +120,19 @@ const getNewSearchSessionToken = async (): Promise<void> => {
       method: 'post',
       headers: {
         appToken,
-        appName: 'fulltrip.prod.webapp.html',
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
       },
       data: {
         params: {
-          appName: 'fulltrip.prod.webapp.html',
-          scopeName: 'FULLTRIP',
-          scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
         },
         apiRoute: 'FlightService',
         apiAction: 'api/Flight/GetNewSearchSessionToken',
-        appName: 'fulltrip.prod.webapp.html',
-        scopeName: 'FULLTRIP',
-        scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
+        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
       },
     })
 
@@ -158,7 +155,7 @@ const getSessionToken = async (): Promise<string | undefined> => {
     method: 'post',
     headers: {
       appToken,
-      appName: 'fulltrip.prod.webapp.html',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
     },
   })
 
@@ -166,7 +163,7 @@ const getSessionToken = async (): Promise<string | undefined> => {
 
   return response
 }
-let ReceivedProviders: string[] = []
+const ReceivedProviders: string[] = []
 
 export const flightApiRequest = async (): Promise<FlightSearchApiResponse> => {
   const localFlightData = JSON.parse(
@@ -191,18 +188,18 @@ export const flightApiRequest = async (): Promise<FlightSearchApiResponse> => {
   const payload: FlightSearchRequestPayload = {
     apiAction: 'api/Flight/Search',
     apiRoute: 'FlightService',
-    appName: 'fulltrip.prod.webapp.html',
+    appName: process.env.NEXT_PUBLIC_APP_NAME,
     sessionToken: sessionToken!,
-    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-    scopeName: 'FULLTRIP',
+    scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+    scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
     requestType:
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
       FlightSearchPanel: { ...FlightSearchPanel, ReceivedProviders },
       searchToken,
-      scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-      appName: 'fulltrip.prod.webapp.html',
-      scopeName: 'FULLTRIP',
+      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
     },
   }
 
@@ -212,7 +209,7 @@ export const flightApiRequest = async (): Promise<FlightSearchApiResponse> => {
     method: 'post',
     headers: {
       appToken,
-      appName: 'fulltrip.prod.webapp.html',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
     },
   })) as FlightSearchApiResponse
 
@@ -234,10 +231,10 @@ export const getAirlineByCodeList = async (
 
   const airlines = await request({
     method: 'get',
-    url: 'https://apisf-preprod.lidyatechnology.com/d/v1.1/api/flight/getairlinebycodelist',
+    url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/getairlinebycodelist`,
     params: defaultObject,
     headers: {
-      'x-api-key': 'MqhX1CPpc38m10JjWaC9x3p2oirBAcMR9ANpdVMm',
+      'x-api-key': process.env.NEXT_PUBLIC_API_GW_KEY,
       'Content-Type': 'application/json',
     },
   })

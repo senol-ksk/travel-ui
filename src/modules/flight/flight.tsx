@@ -117,11 +117,11 @@ export const Flight = () => {
         !!originLocationInputValue && originLocationInputValue.length > 3,
       queryFn: async () => {
         const getLocations = await request({
-          url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/search',
+          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
           params: {
             s: originLocationInputValue,
             id: null,
-            scope: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+            scope: process.env.NEXT_PUBLIC_SCOPE_CODE,
           },
         })
 
@@ -136,11 +136,11 @@ export const Flight = () => {
         destinationLocationInputValue.length > 3,
       queryFn: async () => {
         const getLocations = await request({
-          url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/search',
+          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
           params: {
             s: destinationLocationInputValue,
             id: null,
-            scope: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+            scope: process.env.NEXT_PUBLIC_SCOPE_CODE,
           },
         })
 

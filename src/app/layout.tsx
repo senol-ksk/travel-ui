@@ -1,13 +1,18 @@
 import '@/styles/global.css'
 
 import type { Metadata } from 'next'
-
-import { MantineProvider, ColorSchemeScript } from '@mantine/core'
+import Head from 'next/head'
+import { MantineProvider } from '@mantine/core'
 
 import { Providers } from '@/app/providers'
 
 import Header from '@/components/header'
 import { theme } from '@/theme'
+
+import dayjs from 'dayjs'
+
+import 'dayjs/locale/tr'
+dayjs.locale('tr')
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
@@ -24,15 +29,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='tr' data-mantine-color-scheme='light'>
-      <head>
-        <ColorSchemeScript />
+    <html lang='tr'>
+      <Head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
-      </head>
+      </Head>
 
       <body className='antialiased'>
         <Providers>
-          <MantineProvider theme={theme}>
+          <MantineProvider theme={theme} defaultColorScheme='light'>
             <Header />
             <main>{children}</main>
           </MantineProvider>

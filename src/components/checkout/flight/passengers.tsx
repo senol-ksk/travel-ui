@@ -29,6 +29,11 @@ type IProps = {
   index: number
 }
 
+import 'dayjs/locale/tr'
+import { ChangeEvent } from 'react'
+dayjs.locale('tr')
+dayjs.extend(localeDate)
+
 const years = (
   startYear: number,
   currentYear: number = new Date().getFullYear()
@@ -39,11 +44,6 @@ const years = (
   }
   return years
 }
-
-import 'dayjs/locale/tr'
-import { ChangeEvent } from 'react'
-dayjs.locale('tr')
-dayjs.extend(localeDate)
 
 const years_18_selectData: NativeSelectProps['data'] = years(1930).map(
   (year) => ({

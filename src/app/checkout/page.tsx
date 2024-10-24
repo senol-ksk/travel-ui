@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   useForm,
   UseFormProps,
@@ -7,22 +8,34 @@ import {
   FormProvider,
   Controller,
 } from 'react-hook-form'
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import cardValidation from 'card-validator'
+
+import {
+  Button,
+  Checkbox,
+  Input,
+  NativeSelect,
+  TextInput,
+  Title,
+} from '@mantine/core'
 import IntlTelInput from 'intl-tel-input/react'
-
-import data from './dummy.data.json'
-
-import FlightPassengers from '@/components/checkout/flight/passengers'
-import { Button, Checkbox, Input, TextInput, Title } from '@mantine/core'
-import { validTCKN } from '@/libs/tckn-validate'
-import { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
-import { request } from '@/network'
 import { useQuery } from '@tanstack/react-query'
 import cookies from 'js-cookie'
 import clsx from 'clsx'
+import { formatCreditCard } from 'cleave-zen'
+
+import FlightPassengers from '@/components/checkout/flight/passengers'
+import { validTCKN } from '@/libs/tckn-validate'
+import { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
+import { request } from '@/network'
+
+// import data from './dummy.data.json'
+import { monthsShortList, yearList } from '@/libs/util'
 
 enum PassengerTypesEnum {
+  // The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
   Adult,
   Child,
   Infant,
@@ -30,7 +43,22 @@ enum PassengerTypesEnum {
   Soldier,
 }
 
-// The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
+const cardMonths = monthsShortList().map((month) => {
+  return {
+    label: month?.value,
+    value: month?.value,
+  }
+})
+
+cardMonths.unshift({
+  label: 'Ay',
+  value: '',
+})
+
+const cardExpiredYearList = yearList(2024, 2034).map((year) => ({
+  label: '' + year,
+  value: '' + year,
+}))
 
 export type PassengerValidationType = {
   type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
@@ -90,14 +118,33 @@ const contactFieldSchema = z.object<ContactFieldSchemaTypes>({
     }),
 })
 
+let cardCvvLength = 3
+const cardValidationSchema = z.object({
+  CardOwner: z.string().min(3).max(50),
+  CardNumber: z
+    .string()
+    .optional()
+    .refine((value) => {
+      cardCvvLength = cardValidation.number(value).card?.code.size || 3
+
+      return cardValidation.number(value).isValid
+    }, 'Gecersiz Kart Numarası'),
+  CardExpiredMonth: z.string(),
+  CardExpiredYear: z.string(),
+  CardCvv: z.string().refine((val) => {
+    return val.length === cardCvvLength
+  }),
+})
+
+const checkoutSchemaMerged = contactFieldSchema
+  .merge(passengerValidation)
+  .merge(cardValidationSchema)
+
 export type PassengerSchemaType = z.infer<typeof passengerValidation>
-// export type PassengerFieldsSchemaTypes = z.infer<
-//   typeof passengerValidation
-// >['passengers'][number]
-
-const checkoutSchemaMerged = contactFieldSchema.merge(passengerValidation)
-
-type CheckoutSchemaMergedFieldTypes = z.infer<typeof checkoutSchemaMerged>
+export type CheckoutSchemaMergedFieldTypes = z.infer<
+  typeof checkoutSchemaMerged
+>
+export type CardValidationSchemaTypes = z.infer<typeof cardValidationSchema>
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -115,6 +162,7 @@ function useZodForm<TSchema extends z.ZodType>(
 }
 
 export default function CheckoutPage() {
+  const [creditCardNumber, setCreditCardNumber] = useState('')
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
     // defaultValues: {
@@ -171,6 +219,7 @@ export default function CheckoutPage() {
       return response
     },
     enabled: !!cookies.get('searchToken'),
+    retry: false,
   })
 
   return (
@@ -287,10 +336,124 @@ export default function CheckoutPage() {
             )
           })}
         </CheckoutCard>
-
         <CheckoutCard>
+          <div className='grid w-full gap-3 md:w-72'>
+            <Controller
+              control={formMethods.control}
+              name='CardOwner'
+              defaultValue={''}
+              render={({ field }) => {
+                return (
+                  <TextInput
+                    {...field}
+                    label='Kart Üzerindeki İsim'
+                    placeholder='Kart Üzerindeki İsim'
+                    error={
+                      !!formMethods.formState.errors.CardOwner
+                        ? formMethods.formState.errors.CardOwner.message
+                        : null
+                    }
+                  />
+                )
+              }}
+            />
+            <Controller
+              control={formMethods.control}
+              name='CardNumber'
+              defaultValue=''
+              render={({ field }) => (
+                <TextInput
+                  {...field}
+                  label='Kart Numarası'
+                  type='tel'
+                  error={
+                    !!formMethods.formState.errors.CardNumber
+                      ? formMethods.formState.errors.CardNumber.message
+                      : null
+                  }
+                  // value={creditCardNumber}
+                  onChange={({ currentTarget: { value } }) => {
+                    const formatedValue = formatCreditCard(value).trim()
+                    field.onChange(formatedValue)
+                  }}
+                />
+              )}
+            />
+            <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+              <Controller
+                control={formMethods.control}
+                name='CardExpiredMonth'
+                render={({ field }) => (
+                  <NativeSelect
+                    {...field}
+                    label='Ay'
+                    data={cardMonths}
+                    error={
+                      !!formMethods.formState.errors.CardExpiredMonth
+                        ? formMethods.formState.errors.CardExpiredMonth.message
+                        : null
+                    }
+                  />
+                )}
+              />
+              <Controller
+                control={formMethods.control}
+                name='CardExpiredYear'
+                render={({ field }) => (
+                  <NativeSelect
+                    {...field}
+                    label='Yıl'
+                    data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList]}
+                    error={
+                      !!formMethods.formState.errors.CardExpiredYear
+                        ? formMethods.formState.errors.CardExpiredYear.message
+                        : null
+                    }
+                  />
+                )}
+              />
+
+              <Controller
+                control={formMethods.control}
+                name='CardCvv'
+                defaultValue=''
+                render={({ field }) => (
+                  <TextInput
+                    {...field}
+                    maxLength={
+                      cardValidation.number(formMethods.watch('CardNumber'))
+                        .card?.code.size || 3
+                    }
+                    label='CVV'
+                    placeholder='CVV'
+                    error={
+                      !!formMethods.formState.errors.CardCvv
+                        ? formMethods.formState.errors.CardCvv.message
+                        : null
+                    }
+                  />
+                )}
+              />
+            </div>
+          </div>
+        </CheckoutCard>
+        <CheckoutCard>
+          <div className='text-sm text-gray-800'>
+            <Title order={5}>Seyahatinizi inceleyin ve rezervasyon yapın</Title>
+            <ul className='grid list-decimal gap-2 pt-4'>
+              <li className='list-item list-inside'>
+                Tarihlerin ve saatlerin doğru olduğundan emin olmak için seyahat
+                bilgilerinizi inceleyin.
+              </li>
+              <li className='list-item list-inside'>
+                Yazımınızı kontrol edin. Uçuş yolcularının isimleri, devlet
+                tarafından verilen fotoğraflı kimlikle tam olarak eşleşmelidir.
+              </li>
+            </ul>
+          </div>
           <div className='flex justify-end'>
             <Button
+              size='lg'
               type='submit'
               // disabled={!isSubmittable}
             >

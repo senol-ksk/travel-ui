@@ -66,18 +66,18 @@ export type ChildNode = {
         },
         {
           valueType: 'TravelAccess.Business.Models.Flight.FlightDetailWebRequest, Business.Models, Version=1.5.6.0, Culture=neutral, PublicKeyToken=null'
-          key: 'SummaryRequest'
+          key: string
           value: {
-            selectedProductKeys: 'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmXBblb5zIEGfj+b2gA0A+oBo2t57oB+I09CdD4aEclgcBV0ybAQpPxkLVw75FvdSfjyezzS4WaQacpTOxjvPPzTyR2qLik7bAH+W5Prt3itmcYdva1xBPe89v+e4KzzC09HkH6lYvBgbYJexX3JhvbBj3eKg8jz3C6u7OpHOhHVbDPFkxkzP1UVX4SuzObEuqVWtye4VnKHABp3Mbr1ogemX8jJ6fGyuRmIyZXs6qxfNTvRejvNp0t8xx6HPPjbrpwQKelaKOvHI1nqqWtMIjO4/7KQkJangWc2NfqQe+YWwXmvdBmiFucgxpPQ8iEBGExjRpPGFWLSU/E2MgJBRB5Y+WGVoyM0TiQO4Dw0Ql3LJXvG4sH3SHRgADs9hDDB5kA='
+            selectedProductKeys: string
             flightDetailToSearchReturnPath: null
-            searchToken: 'D22E49E388510760F43DF668F9FD3D4E10D74CECF3438FC4C14CA396624BAD70'
-            sessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
+            searchToken: string
+            sessionToken: string
             apiRoute: null
             apiAction: null
-            appName: 'fulltrip.prod.webapp.html'
-            scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
-            customerId: 2
-            customerUserId: 3
+            appName: string
+            scopeCode: string
+            customerId: ID
+            customerUserId: ID
           }
           orderId: 3
         },
@@ -702,7 +702,7 @@ export type ProductPassengerApiResponseModel = {
         }
       }
     }
-    PassengerInfoBackUrl: 'https://localhost:44363/Product/ProductPassengerViewWebApi?sessionToken=BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677&searchToken=D22E49E388510760F43DF668F9FD3D4E10D74CECF3438FC4C14CA396624BAD70'
+    PassengerInfoBackUrl: string
     FlightDetailToSearchReturnPath: null
     ViewIsPassengerInfo: boolean
     IsPassengerViewDataCached: boolean
@@ -759,8 +759,8 @@ export type ProductPassengerApiResponseModel = {
           traceId: null
         }
         eventMessages: []
-        appName: 'fulltrip.prod.webapp.html'
-        scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+        appName: string
+        scopeCode: string
         logSessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
         logSearchToken: '738D00E2996563489F52CB7A25F1AAC938B757BA721C61028E77EC1BA4E54B26'
       },
@@ -1168,26 +1168,26 @@ export type ProductPassengerApiResponseModel = {
               isDontValidate: boolean
               hesCode: string | null
             }
-            orderId: 1
+            orderId: ID
           },
           {
             valueType: 'System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e'
-            key: 'IsDomestic'
+            key: string
             value: boolean
-            orderId: 2
+            orderId: ID
           },
           {
             valueType: 'TravelAccess.Business.Models.Flight.FlightDetailWebRequest, Business.Models, Version=1.5.6.0, Culture=neutral, PublicKeyToken=null'
             key: 'SummaryRequest'
             value: {
-              selectedProductKeys: 'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmXBblb5zIEGfj+b2gA0A+oBo2t57oB+I09CdD4aEclgcBV0ybAQpPxkLVw75FvdSfjyezzS4WaQacpTOxjvPPzTyR2qLik7bAH+W5Prt3itmcYdva1xBPe89v+e4KzzC09HkH6lYvBgbYJexX3JhvbBj3eKg8jz3C6u7OpHOhHVbDPFkxkzP1UVX4SuzObEuqVWtye4VnKHABp3Mbr1ogemX8jJ6fGyuRmIyZXs6qxfNTvRejvNp0t8xx6HPPjbrpwQKelaKOvHI1nqqWtMIjO4/7KQkJangWc2NfqQe+YWwXmvdBmiFucgxpPQ8iEBGExjRpPGFWLSU/E2MgJBRB5Y+WGVoyM0TiQO4Dw0Ql3LJXvG4sH3SHRgADs9hDDB5kA='
+              selectedProductKeys: string
               flightDetailToSearchReturnPath: null
-              searchToken: 'D22E49E388510760F43DF668F9FD3D4E10D74CECF3438FC4C14CA396624BAD70'
-              sessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
+              searchToken: string
+              sessionToken: string
               apiRoute: null
               apiAction: null
-              appName: 'fulltrip.prod.webapp.html'
-              scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+              appName: string
+              scopeCode: string
               customerId: 2
               customerUserId: 3
             }
@@ -1902,6 +1902,6 @@ export type ProductPassengerApiResponseModel = {
   contactEmail: string | null
   contactGSM: string | null
   isInPromoList: boolean
-  sessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
-  searchToken: 'D22E49E388510760F43DF668F9FD3D4E10D74CECF3438FC4C14CA396624BAD70'
+  sessionToken: string
+  searchToken: string
 }

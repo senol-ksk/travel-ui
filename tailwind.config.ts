@@ -1,4 +1,4 @@
-import { rem } from '@mantine/core'
+import tailwindPresetMantine from 'tailwind-preset-mantine'
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -11,11 +11,9 @@ const config: Config = {
     extend: {
       container: {
         center: true,
-        screens: {
-          raw: '75rem',
-        },
       },
     },
   },
+  // presets: [tailwindPresetMantine()],
 }
 export default config

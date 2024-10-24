@@ -1,11 +1,8 @@
 import type {
   ClientFlightDataModel,
-  FlightDetails,
-  FlightDetailSegment,
-  FlightFareInfos,
   FlightSearchApiResponse,
 } from '@/modules/flight/types'
-import { getAirlineByCodeList } from '../search.request'
+import { getAirlineByCodeList } from '@/modules/flight/search.request'
 
 const dataTypes: ['flightFareInfos', 'flightDetailSegments', 'flightDetails'] =
   ['flightFareInfos', 'flightDetailSegments', 'flightDetails']
@@ -28,7 +25,7 @@ export const collectFlightData = (
 
   recivedData.forEach((flight) => {
     Object.keys(flight.flightDetailSegments).forEach((segment) => {
-      var item = flight.flightDetailSegments[segment]
+      const item = flight.flightDetailSegments[segment]
       airlineList.push(item.marketingAirline.code)
 
       if (item.operatingAirline != null) {
@@ -49,7 +46,7 @@ export const collectFlightData = (
           flightItem[type][item].providerName = providerName
         }
 
-        // @ts-expect-error
+        // @ts-expect-error we should improve the type section
         flightData[type].push(flightItem[type][item])
       })
     })
@@ -77,7 +74,7 @@ export const generateFlightData = async (): Promise<
   }
 
   flightData.flightFareInfos.forEach((flightItem, count) => {
-    var flightObject: ClientFlightDataModel = {
+    const flightObject: ClientFlightDataModel = {
       flightFare: flightItem,
       flightDetails: [],
       flightDetailSegments: [],
@@ -90,7 +87,7 @@ export const generateFlightData = async (): Promise<
     }
 
     flightItem.flightDetailKeys.forEach((detailKey, detailCount) => {
-      var detail = flightData.flightDetails.filter(
+      const detail = flightData.flightDetails.filter(
         (det) => det.key.toLocaleLowerCase() == detailKey.toLocaleLowerCase()
       )
 
@@ -99,7 +96,7 @@ export const generateFlightData = async (): Promise<
         // flightObject!.groupId = groupId
 
         detail.at(0)?.flightSegmentKeys.forEach((segmentKey, segmentCount) => {
-          var segment = flightData.flightDetailSegments.filter(
+          const segment = flightData.flightDetailSegments.filter(
             (seg) => seg.key === segmentKey
           )
 
