@@ -15,5 +15,6 @@ const config: Config = {
     },
   },
   // presets: [tailwindPresetMantine()],
+  plugins: [],
 }
 export default config

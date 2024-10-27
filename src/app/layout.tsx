@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='tr'>
+    <html lang='tr' suppressHydrationWarning data-mantine-color-scheme='light'>
       <Head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
       </Head>

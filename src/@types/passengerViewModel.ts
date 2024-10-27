@@ -1133,40 +1133,40 @@ export type ProductPassengerApiResponseModel = {
             key: 'Data'
             value: {
               _passengerId: ID
-              model_PassengerId: ID
-              declaredAge: number
-              productType: number
-              checkinDate: string
+              birthDate: string
               calculationYearBased: boolean
               calculationYearType: number
-              passengerId: ID
-              sequenceNo: number
-              type: number
-              gender: number
-              firstName: string
-              lastName: string
-              middleName: string
-              birthDate: string
-              nationality: string
-              nationality_Check: boolean
+              checkinDate: string
               citizenNo: string
-              passportNo: string
-              mobilePhoneNumber: string
+              declaredAge: number
               email: string
-              isContact: boolean
+              firstName: string
               flightFrequencyNo: string | null
-              notes: null
-              passportValidityDate: string
-              webUserId: ID
-              passportCountry: string | null
+              gender: number
               groupOrderIndex: number
-              passengerKey: string
+              hesCode: string | null
+              isContact: boolean
+              isDontValidate: boolean
               isRecord: boolean
+              lastName: string
               listFlightFrequencyAirline: string | null
               listFlightFrequencyNo: string | null
+              middleName: string
+              mobilePhoneNumber: string
+              model_PassengerId: ID
+              nationality_Check: boolean
+              nationality: string
+              notes: null
+              passengerId: ID
+              passengerKey: string
+              passportCountry: string | null
+              passportNo: string
+              passportValidityDate: string
+              productType: number
               registeredPassengerId: ID
-              isDontValidate: boolean
-              hesCode: string | null
+              sequenceNo: number
+              type: number
+              webUserId: ID
             }
             orderId: ID
           },

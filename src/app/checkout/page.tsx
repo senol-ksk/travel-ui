@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import dayjs from 'dayjs'
 import {
   useForm,
   UseFormProps,
@@ -31,8 +31,7 @@ import { validTCKN } from '@/libs/tckn-validate'
 import { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
 import { request } from '@/network'
 
-// import data from './dummy.data.json'
-import { monthsShortList, yearList } from '@/libs/util'
+import { formatCurrency, monthsShortList, yearList } from '@/libs/util'
 
 enum PassengerTypesEnum {
   // The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
@@ -43,41 +42,51 @@ enum PassengerTypesEnum {
   Soldier,
 }
 
-const cardMonths = monthsShortList().map((month) => {
-  return {
-    label: month?.value,
-    value: month?.value,
-  }
-})
+const cardMonths = () =>
+  monthsShortList().map((month) => {
+    return {
+      label: month?.value,
+      value: month?.value,
+    }
+  })
 
-cardMonths.unshift({
-  label: 'Ay',
-  value: '',
-})
-
-const cardExpiredYearList = yearList(2024, 2034).map((year) => ({
-  label: '' + year,
-  value: '' + year,
-}))
+const cardExpiredYearList = () =>
+  yearList(dayjs().get('year'), dayjs().get('year') + 10).map((year) => ({
+    label: '' + year,
+    value: '' + year,
+  }))
 
 export type PassengerValidationType = {
-  type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
-  firstName: z.ZodString
-  lastName: z.ZodString
-  gender: z.ZodString
-  birthDate: z.ZodString
   birthDate_day: z.ZodString
   birthDate_month: z.ZodString
   birthDate_year: z.ZodString
+  birthDate: z.ZodString
   citizenNo: z.ZodOptional<z.ZodString>
+  firstName: z.ZodString
+  gender: z.ZodString
+  lastName: z.ZodString
+  model_PassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
   nationality_Check: z.ZodBoolean
+  PassengerKey: z.ZodString
+  PassportCountry: z.ZodOptional<z.ZodString>
+  PassportNo: z.ZodOptional<z.ZodString>
+  PassportValidityDate: z.ZodOptional<z.ZodString>
+  passportValidity_1: z.ZodOptional<z.ZodString>
+  passportValidity_2: z.ZodOptional<z.ZodString>
+  passportValidity_3: z.ZodOptional<z.ZodString>
+  RegisteredPassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
+  type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
 }
 
-export type ContactFieldSchemaTypes = {
+export type GeneralFormFieldSchemaTypes = {
   ContactEmail: z.ZodString
   ContactGSM: z.ZodEffects<z.ZodOptional<z.ZodString>>
+  ModuleName: z.ZodString
 }
 
+let isPhoneNumberValid = false
+const baseDateSchema = z.string().date()
+let checkinDate: string | undefined
 const passengerValidation = z.object({
   passengers: z.array(
     z
@@ -92,6 +101,15 @@ const passengerValidation = z.object({
         type: z.nativeEnum(PassengerTypesEnum).readonly(),
         citizenNo: z.string().optional(),
         nationality_Check: z.boolean(),
+        model_PassengerId: z.string().or(z.number()),
+        RegisteredPassengerId: z.string().or(z.number()),
+        PassengerKey: z.string().min(2),
+        PassportCountry: z.string().optional(),
+        PassportNo: z.string().optional(),
+        passportValidity_1: z.string().optional(),
+        passportValidity_2: z.string().optional(),
+        passportValidity_3: z.string().optional(),
+        PassportValidityDate: z.string().optional(),
       })
       .superRefine((value, ctx) => {
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {
@@ -101,14 +119,81 @@ const passengerValidation = z.object({
             message: 'Gecerli tc giriniz',
           })
         }
+        const passportCountry = value.PassportCountry!
+        const passportNo = value.PassportNo!
+        const passportDate = value.PassportValidityDate!
+        if (value.nationality_Check) {
+          if (passportCountry?.length < 2) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.too_small,
+              minimum: 2,
+              inclusive: true,
+              type: 'string',
+              path: ['PassportCountry'],
+            })
+          }
+          if (passportNo.length < 3) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.too_small,
+              path: ['PassportNo'],
+              minimum: 3,
+              inclusive: true,
+              type: 'string',
+            })
+          }
+          if (!baseDateSchema.safeParse(passportDate).success) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.invalid_date,
+              path: ['PassportValidityDate'],
+            })
+          }
+        }
+
+        const birthDayVal = value.birthDate
+        if (baseDateSchema.safeParse(birthDayVal).success) {
+          const dayjsBirthDay = dayjs(birthDayVal)
+          const dayjsToday = dayjs()
+          const dateDiff = dayjsToday.diff(dayjsBirthDay, 'day')
+          console.log(checkinDate)
+          switch (value.type) {
+            case PassengerTypesEnum.Adult:
+              if (dateDiff < 4380) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: 'yetiskin icin kucuk yas',
+                  path: ['birthDate'],
+                })
+              }
+              break
+            case PassengerTypesEnum.Child:
+              if (!(dateDiff >= 730 && dateDiff <= 4380)) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: 'cocuk yasi hatali',
+                  path: ['birthDate'],
+                })
+              }
+              break
+            case PassengerTypesEnum.Infant:
+              if (!(dateDiff >= 0 && dateDiff < 730)) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: 'bebek yasi hatali ',
+                  path: ['birthDate'],
+                })
+              }
+              break
+            default:
+              break
+          }
+        }
 
         return z.NEVER
       })
   ),
 })
 
-let isPhoneNumberValid = false
-const contactFieldSchema = z.object<ContactFieldSchemaTypes>({
+const generalFormSchema = z.object<GeneralFormFieldSchemaTypes>({
   ContactEmail: z.string().email(),
   ContactGSM: z
     .string()
@@ -116,6 +201,7 @@ const contactFieldSchema = z.object<ContactFieldSchemaTypes>({
     .refine(() => {
       return isPhoneNumberValid
     }),
+  ModuleName: z.string(),
 })
 
 let cardCvvLength = 3
@@ -136,7 +222,7 @@ const cardValidationSchema = z.object({
   }),
 })
 
-const checkoutSchemaMerged = contactFieldSchema
+const checkoutSchemaMerged = generalFormSchema
   .merge(passengerValidation)
   .merge(cardValidationSchema)
 
@@ -161,12 +247,14 @@ function useZodForm<TSchema extends z.ZodType>(
   return form
 }
 
+import data from '@/app/checkout/dummy.data.json'
+
 export default function CheckoutPage() {
-  const [creditCardNumber, setCreditCardNumber] = useState('')
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
     // defaultValues: {
-    //   passengers: data.treeContainer.childNodes,
+    //   passengers: data.treeContainer.childNodes.at(0),
+    //   ModuleName: data.viewBag.ModuleName,
     // },
     // mode: 'onChange',
   })
@@ -210,11 +298,20 @@ export default function CheckoutPage() {
           nationality_Check: passenger.nationality_Check || false,
           type: passenger.type || 0,
           citizenNo: passenger.citizenNo || '',
+          model_PassengerId: passenger.model_PassengerId,
+          RegisteredPassengerId: passenger.registeredPassengerId,
+          PassportCountry: passenger.passportCountry || '',
+          PassengerKey: passenger.passengerKey || '',
+          PassportNo: passenger.passportNo || '',
+          PassportValidityDate: passenger.passportValidityDate || '',
         })
       })
 
+      formMethods.setValue('ModuleName', response.viewBag.ModuleName)
       formMethods.setValue('ContactEmail', response.contactEmail || '')
       formMethods.setValue('ContactEmail', response.contactGSM || '')
+      checkinDate =
+        response.treeContainer.childNodes.at(0)?.items[0].value.checkinDate
 
       return response
     },
@@ -230,6 +327,7 @@ export default function CheckoutPage() {
         })}
         className='grid gap-3 md:gap-5'
       >
+        <input {...formMethods.register('ModuleName')} type='hidden' />
         <CheckoutCard>
           <Title order={3} size={'lg'}>
             İletişim Bilgileri
@@ -346,6 +444,7 @@ export default function CheckoutPage() {
                 return (
                   <TextInput
                     {...field}
+                    autoComplete='cc-name'
                     label='Kart Üzerindeki İsim'
                     placeholder='Kart Üzerindeki İsim'
                     error={
@@ -364,6 +463,7 @@ export default function CheckoutPage() {
               render={({ field }) => (
                 <TextInput
                   {...field}
+                  autoComplete='cc-number'
                   label='Kart Numarası'
                   type='tel'
                   error={
@@ -387,7 +487,8 @@ export default function CheckoutPage() {
                   <NativeSelect
                     {...field}
                     label='Ay'
-                    data={cardMonths}
+                    autoComplete='cc-exp-month'
+                    data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
                     error={
                       !!formMethods.formState.errors.CardExpiredMonth
                         ? formMethods.formState.errors.CardExpiredMonth.message
@@ -402,8 +503,12 @@ export default function CheckoutPage() {
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    autoComplete='cc-exp-year'
                     label='Yıl'
-                    data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList]}
+                    data={[
+                      { label: 'Yıl', value: '' },
+                      ...cardExpiredYearList(),
+                    ]}
                     error={
                       !!formMethods.formState.errors.CardExpiredYear
                         ? formMethods.formState.errors.CardExpiredYear.message
@@ -440,25 +545,38 @@ export default function CheckoutPage() {
         <CheckoutCard>
           <div className='text-sm text-gray-800'>
             <Title order={5}>Seyahatinizi inceleyin ve rezervasyon yapın</Title>
-            <ul className='grid list-decimal gap-2 pt-4'>
-              <li className='list-item list-inside'>
+            <ul className='grid list-inside list-decimal gap-2 pt-4'>
+              <li className='list-item'>
                 Tarihlerin ve saatlerin doğru olduğundan emin olmak için seyahat
                 bilgilerinizi inceleyin.
               </li>
-              <li className='list-item list-inside'>
+              <li className='list-item'>
                 Yazımınızı kontrol edin. Uçuş yolcularının isimleri, devlet
                 tarafından verilen fotoğraflı kimlikle tam olarak eşleşmelidir.
               </li>
             </ul>
           </div>
-          <div className='flex justify-end'>
-            <Button
-              size='lg'
-              type='submit'
-              // disabled={!isSubmittable}
-            >
-              Devam et
-            </Button>
+          <div className='flex justify-center'>
+            {checkoutQuery.data ? (
+              <div className='flex gap-3'>
+                <div>
+                  <div className='text-sm'>Toplam Tutar</div>
+                  <div className='pt-1 text-lg font-semibold'>
+                    {formatCurrency(
+                      checkoutQuery.data?.viewBag.SummaryViewDataResponser
+                        .summaryResponse.totalPrice
+                    )}
+                  </div>
+                </div>
+                <Button
+                  size='lg'
+                  type='submit'
+                  // disabled={!isSubmittable}
+                >
+                  Devam et
+                </Button>
+              </div>
+            ) : null}
           </div>
         </CheckoutCard>
       </form>
@@ -466,9 +584,9 @@ export default function CheckoutPage() {
   )
 }
 
-const CheckoutCard: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => (
+const CheckoutCard: React.FC<{
+  children: React.ReactNode
+}> = ({ children }) => (
   <div className='grid gap-3 rounded-md border bg-white p-2 shadow-sm md:gap-6 md:p-6'>
     {children}
   </div>
