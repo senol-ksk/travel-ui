@@ -124,7 +124,7 @@ export const Locations: React.FC<Props> = ({
                         <div className='relative'>
                           <button
                             type='button'
-                            className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-400 hover:bg-opacity-15'
+                            className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
                             onClick={() => {
                               setLocationName(Name)
                               onSelect(location)
@@ -151,7 +151,7 @@ export const Locations: React.FC<Props> = ({
                                 <div key={subId} className='relative'>
                                   <button
                                     type='button'
-                                    className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-200 hover:bg-opacity-15'
+                                    className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
                                     onClick={() => {
                                       setLocationName(subName)
                                       onSelect(subLocation)

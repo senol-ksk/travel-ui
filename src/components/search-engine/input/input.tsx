@@ -5,6 +5,7 @@ import { IoIosCalendar } from 'react-icons/io'
 import { useId } from '@mantine/hooks'
 
 import clsx from 'clsx'
+import { UnstyledButton } from '@mantine/core'
 
 type Props = {
   label: string | React.ReactNode
@@ -75,9 +76,9 @@ export const Input: React.FC<Props> = ({
         </div>
       </div>
 
-      <button
+      <UnstyledButton
         type='button'
-        className='absolute bottom-0 end-0 start-0 top-0 z-10 flex h-full w-full'
+        className='absolute bottom-0 end-0 start-0 top-0 z-10 h-full w-full'
         onClick={onClick}
         id={labelId}
       />

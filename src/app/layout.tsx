@@ -1,7 +1,7 @@
 import '@/styles/global.css'
 
 import type { Metadata } from 'next'
-import Head from 'next/head'
+
 import { MantineProvider } from '@mantine/core'
 
 import { Providers } from '@/app/providers'
@@ -29,12 +29,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='tr' suppressHydrationWarning data-mantine-color-scheme='light'>
-      <Head>
+    <html lang='tr' suppressHydrationWarning>
+      <head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
-      </Head>
+      </head>
 
-      <body className='antialiased'>
+      <body>
         <Providers>
           <MantineProvider theme={theme} defaultColorScheme='light'>
             <Header />

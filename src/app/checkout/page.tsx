@@ -16,6 +16,7 @@ import {
   Button,
   Checkbox,
   Input,
+  List,
   NativeSelect,
   TextInput,
   Title,
@@ -91,8 +92,16 @@ const passengerValidation = z.object({
   passengers: z.array(
     z
       .object<PassengerValidationType>({
-        firstName: z.string().min(3).max(50),
-        lastName: z.string().min(3).max(50),
+        firstName: z
+          .string()
+          .min(3)
+          .max(50)
+          .regex(/^[a-zA-Z a-z A-Z\-]+$/),
+        lastName: z
+          .string()
+          .min(3)
+          .max(50)
+          .regex(/^[a-zA-Z a-z A-Z\-]+$/),
         birthDate: z.string().date(),
         gender: z.string().min(1),
         birthDate_day: z.string().min(1).max(2),
@@ -253,7 +262,7 @@ export default function CheckoutPage() {
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
     // defaultValues: {
-    //   passengers: data.treeContainer.childNodes.at(0),
+    //   passengers: data.treeContainer.childNodes,
     //   ModuleName: data.viewBag.ModuleName,
     // },
     // mode: 'onChange',
@@ -543,18 +552,20 @@ export default function CheckoutPage() {
           </div>
         </CheckoutCard>
         <CheckoutCard>
-          <div className='text-sm text-gray-800'>
-            <Title order={5}>Seyahatinizi inceleyin ve rezervasyon yapın</Title>
-            <ul className='grid list-inside list-decimal gap-2 pt-4'>
-              <li className='list-item'>
+          <div className='text-sm'>
+            <Title order={4} pb='md'>
+              Seyahatinizi inceleyin ve rezervasyon yapın
+            </Title>
+            <List type='ordered'>
+              <List.Item>
                 Tarihlerin ve saatlerin doğru olduğundan emin olmak için seyahat
                 bilgilerinizi inceleyin.
-              </li>
-              <li className='list-item'>
+              </List.Item>
+              <List.Item>
                 Yazımınızı kontrol edin. Uçuş yolcularının isimleri, devlet
                 tarafından verilen fotoğraflı kimlikle tam olarak eşleşmelidir.
-              </li>
-            </ul>
+              </List.Item>
+            </List>
           </div>
           <div className='flex justify-center'>
             {checkoutQuery.data ? (
@@ -578,6 +589,9 @@ export default function CheckoutPage() {
               </div>
             ) : null}
           </div>
+          {process.env.NODE_ENV === 'development' ? (
+            <Button type='submit'>test button</Button>
+          ) : null}
         </CheckoutCard>
       </form>
     </FormProvider>

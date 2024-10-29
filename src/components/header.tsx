@@ -4,15 +4,24 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Button, Drawer, Burger } from '@mantine/core'
+import { Button, Drawer, Burger, NavLink, Box, Anchor } from '@mantine/core'
 import { FaRegUserCircle } from 'react-icons/fa'
+
+const links = [
+  { href: '/', label: 'Ucak' },
+  { href: '/', label: 'Otel' },
+  { href: '/', label: 'Arac' },
+  { href: '/', label: 'Otobus' },
+  { href: '/', label: 'Transfer' },
+  { href: '/', label: 'Tur' },
+]
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
   const toggleDrawer = () => setDrawerOpened((prev) => !prev)
   return (
     <header className='bg-white'>
-      <div className='container mx-auto flex items-center p-2'>
+      <div className='container mx-auto flex items-center py-4'>
         <Link href='/'>
           <Image
             src='/logo.png'
@@ -34,15 +43,16 @@ export const Header = () => {
 
         <div className='hidden flex-1 items-center md:flex'>
           <div className='flex gap-2 px-3 md:gap-4 md:px-5'>
-            <Link href='/'>Otel</Link>
-            <Link href='/'>Uçak</Link>
-            <Link href='/'>Araç</Link>
-            <Link href='/'>Otobüs</Link>
-            <Link href='/'>Transfer</Link>
-            <Link href='/'>Tur</Link>
+            {links.map((item, index) => (
+              <Anchor component={Link} href={item.href} key={index}>
+                {item.label}
+              </Anchor>
+            ))}
           </div>
           <div className='ms-auto flex items-center gap-2'>
-            <Link href='/'>Kampanyalar</Link>
+            <Anchor component={Link} href={'/'}>
+              Kampanyalar
+            </Anchor>
             <Button
               type='button'
               variant='outline'
@@ -73,44 +83,13 @@ export const Header = () => {
           </Button>
 
           <div className='flex flex-col gap-4'>
-            <div className='w-full'>
-              <Link href='/' className='border-gray block rounded border p-3'>
-                Otel
-              </Link>
-            </div>
-            <div className='w-full'>
-              <Link
-                href='/'
-                className='border-gray selection: block rounded border p-3'
-              >
-                Uçak
-              </Link>
-            </div>
-            <div className='w-full'>
-              <Link href='/' className='border-gray block rounded border p-3'>
-                Araç
-              </Link>
-            </div>
-            <div className='w-full'>
-              <Link href='/' className='border-gray block rounded border p-3'>
-                Otobüs
-              </Link>
-            </div>
-            <div className='w-full'>
-              <Link href='/' className='border-gray block rounded border p-3'>
-                Transfer
-              </Link>
-            </div>
-            <div className='w-full'>
-              <Link href='/' className='border-gray block rounded border p-3'>
-                Tur
-              </Link>
-            </div>
-            <div className='w-full'>
-              <Link href='/' className='border-gray block rounded border p-3'>
-                Kampanyalar
-              </Link>
-            </div>
+            {links.map((item, index) => (
+              <div key={index}>
+                <Anchor component={Link} href={item.href}>
+                  {item.label}
+                </Anchor>
+              </div>
+            ))}
           </div>
         </Drawer>
       </div>

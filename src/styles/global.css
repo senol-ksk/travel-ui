@@ -7,8 +7,35 @@
 @tailwind components;
 @tailwind utilities;
 
+*,
+::before,
+::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--mantine-color-gray-2);
+}
+
+img,
+svg {
+  display: block;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+::before,
+::after {
+  --tw-content: '';
+}
 body {
-  background: hsl(210deg 10% 96.08%);
+  /* background: hsl(210deg 10% 96.08%); */
+  /* background-color: var(--mantine-color-gray-2); */
+  @apply bg-gray-100;
+  @apply antialiased;
+  @apply text-gray-600;
 }
 
 /*.iti {
