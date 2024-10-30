@@ -1,9 +1,9 @@
 @import '@mantine/core/styles.css';
 @import '@mantine/dates/styles.css';
 
-@layer tailwind {
+/* @layer tailwind {
   @tailwind base;
-}
+} */
 @tailwind components;
 @tailwind utilities;
 
@@ -35,7 +35,7 @@ body {
   /* background-color: var(--mantine-color-gray-2); */
   @apply bg-gray-100;
   @apply antialiased;
-  @apply text-gray-600;
+  @apply text-gray-700;
 }
 
 /*.iti {

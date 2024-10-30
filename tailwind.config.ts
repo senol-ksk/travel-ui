@@ -1,5 +1,7 @@
-import tailwindPresetMantine from 'tailwind-preset-mantine'
+// import tailwindPresetMantine from 'tailwind-preset-mantine'
+
 import type { Config } from 'tailwindcss'
+import tailwindContainer from '@tailwindcss/container-queries'
 
 const config: Config = {
   corePlugins: {
@@ -18,6 +20,6 @@ const config: Config = {
     },
   },
   // presets: [tailwindPresetMantine()],
-  plugins: [],
+  plugins: [tailwindContainer],
 }
 export default config

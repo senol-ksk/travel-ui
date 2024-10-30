@@ -258,11 +258,34 @@ function useZodForm<TSchema extends z.ZodType>(
 
 import data from '@/app/checkout/dummy.data.json'
 
+// const passengerFormFields = data.treeContainer.childNodes.map((item) => {
+//   const passenger = item.items.at(0)?.value!
+
+//   return {
+//     firstName: passenger.firstName || '',
+//     lastName: passenger.lastName || '',
+//     birthDate: passenger.birthDate || '',
+//     birthDate_day: passenger.birthDate || '',
+//     birthDate_month: passenger.birthDate || '',
+//     birthDate_year: passenger.birthDate || '',
+//     gender: passenger.gender ? '' + passenger.gender : '',
+//     nationality_Check: passenger.nationality_Check || false,
+//     type: passenger.type || 0,
+//     citizenNo: passenger.citizenNo || '',
+//     model_PassengerId: passenger.model_PassengerId,
+//     RegisteredPassengerId: passenger.registeredPassengerId,
+//     PassportCountry: passenger.passportCountry || '',
+//     PassengerKey: passenger.passengerKey || '',
+//     PassportNo: passenger.passportNo || '',
+//     PassportValidityDate: passenger.passportValidityDate || '',
+//   }
+// })
+
 export default function CheckoutPage() {
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
     // defaultValues: {
-    //   passengers: data.treeContainer.childNodes,
+    //   passengers: passengerFormFields,
     //   ModuleName: data.viewBag.ModuleName,
     // },
     // mode: 'onChange',

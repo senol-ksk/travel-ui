@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -19,7 +19,11 @@ import type {
   FlightApiRequestParams,
 } from '@/modules/flight/types'
 
-import { flightApiRequest } from '@/modules/flight/search.request'
+import {
+  clearSearchRequest,
+  flightApiRequest,
+  refetchFlightRequest,
+} from '@/modules/flight/search.request'
 import {
   collectFlightData,
   generateFlightData,
@@ -45,6 +49,10 @@ const FlightSearchPage = () => {
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
 
+  useEffect(() => {
+    return () => clearSearchRequest()
+  }, [])
+
   const [roundTicketsIsVisible, setRoundTicketsIsVisible] = useState(false)
   const [selectedFlightData, setSelectedFlightData] = useState<
     ClientFlightDataModel | ClientFlightDataModel[] | null | undefined
@@ -58,49 +66,17 @@ const FlightSearchPage = () => {
     key: 'flight',
   })
 
-  // const createSearch = useQuery(['create-searcg', ])
-
   const flightService = useQuery({
     queryKey: ['flight-results', flightParams],
     queryFn: async () => {
-      const getFlightResults = await flightApiRequest()
+      const getFlightResults = await refetchFlightRequest()
 
-      if (queryClient.getQueryData(['flighClientData'])) {
-        queryClient.invalidateQueries({
-          queryKey: ['flighClientData'],
-          exact: true,
-        })
-      }
+      console.log(getFlightResults)
 
-      if (getFlightResults.data.searchResults.length > 0) {
-        collectFlightData(getFlightResults.data.searchResults)
-      }
-
-      return getFlightResults.data
+      return getFlightResults
     },
-    enabled(query) {
-      return !query.state.data || query.state.data.hasMoreResponse
-    },
-    refetchInterval: 2000,
     retryOnMount: false,
   })
-
-  const { data: flightClientData, isFetching: isClientDataFetching } = useQuery(
-    {
-      queryKey: ['flighClientData'],
-      queryFn: async () => {
-        const flightData = await generateFlightData()
-        // ReceivedProviders = []
-
-        return flightData
-      },
-      enabled:
-        !!flightService?.data &&
-        flightService.data.status &&
-        !flightService.data.hasMoreResponse,
-      refetchOnMount: false,
-    }
-  )
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
@@ -125,7 +101,7 @@ const FlightSearchPage = () => {
   const handleResultSelect = (flight: ClientFlightDataModel) => {
     openPackageDrawer()
 
-    const withPackages = flightClientData?.filter((item) =>
+    const withPackages = flightService.data?.filter((item) =>
       flightParams.Destination.IsDomestic && flightParams.Origin.IsDomestic
         ? item.flightDetailSegments.at(0)?.groupId ===
             flight.flightDetailSegments.at(0)?.groupId &&
@@ -182,12 +158,9 @@ const FlightSearchPage = () => {
   return (
     <>
       <div className='container pt-3 md:pt-8'>
-        {(!flightService.data && !flightClientData) ||
-        flightService.isRefetching ||
-        isClientDataFetching ||
-        flightService.data?.hasMoreResponse ? (
+        {flightService.isLoading ? (
           <DefaultLoader />
-        ) : flightClientData?.length ? (
+        ) : flightService.data?.length ? (
           <>
             <div className='grid md:grid-cols-4 md:gap-3'>
               <div className='md:col-span-1'>Filter section</div>
@@ -234,42 +207,41 @@ const FlightSearchPage = () => {
                   >
                     <div>Gidiş uçuşunuzu seçiniz</div>
                     <div className='grid gap-3'>
-                      {flightClientData &&
-                        flightClientData
-                          ?.sort(
-                            (a, b) =>
-                              a!.flightFare.totalPrice.value -
-                              b!.flightFare.totalPrice.value
-                          )
-                          .filter((item) =>
-                            flightParams.Destination.IsDomestic &&
-                            flightParams.Origin.IsDomestic
-                              ? item?.flightDetailSegments[0].groupId === 0
-                              : item?.flightDetailSegments[0].groupId === 0
-                          )
-                          .map((flight) => {
-                            if (
-                              seqKeys_origin.includes(
-                                flight.flightDetailSegments.at(0)
-                                  ?.flightNumber || ''
-                              )
-                            )
-                              return null
-
-                            seqKeys_origin.push(
+                      {flightService.data
+                        ?.sort(
+                          (a, b) =>
+                            a!.flightFare.totalPrice.value -
+                            b!.flightFare.totalPrice.value
+                        )
+                        .filter((item) =>
+                          flightParams.Destination.IsDomestic &&
+                          flightParams.Origin.IsDomestic
+                            ? item?.flightDetailSegments[0].groupId === 0
+                            : item?.flightDetailSegments[0].groupId === 0
+                        )
+                        .map((flight) => {
+                          if (
+                            seqKeys_origin.includes(
                               flight.flightDetailSegments.at(0)?.flightNumber ||
                                 ''
                             )
+                          )
+                            return null
 
-                            return (
-                              <div key={flight.id}>
-                                <SearchResultCard
-                                  flight={flight}
-                                  onSelect={handleResultSelect}
-                                />
-                              </div>
-                            )
-                          })}
+                          seqKeys_origin.push(
+                            flight.flightDetailSegments.at(0)?.flightNumber ||
+                              ''
+                          )
+
+                          return (
+                            <div key={flight.id}>
+                              <SearchResultCard
+                                flight={flight}
+                                onSelect={handleResultSelect}
+                              />
+                            </div>
+                          )
+                        })}
                     </div>
                   </div>
 
@@ -279,14 +251,14 @@ const FlightSearchPage = () => {
                       'opacity-1 top-0 z-10': roundTicketsIsVisible,
                     })}`}
                   >
-                    {flightClientData &&
-                    flightClientData?.filter(
+                    {flightService.data &&
+                    flightService.data?.filter(
                       (item) => item?.flightDetailSegments[0].groupId === 1
                     ).length > 0 ? (
                       <>
                         <div>Dönüş uçuşunuzu seçiniz</div>
                         <div className='grid gap-3'>
-                          {flightClientData
+                          {flightService.data
                             ?.sort(
                               (a, b) =>
                                 a!.flightFare.totalPrice.value -

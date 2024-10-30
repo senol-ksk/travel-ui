@@ -41,14 +41,16 @@ export const collectFlightData = (
   dataTypes.forEach((type) => {
     recivedData.forEach((flightItem) => {
       const providerName = flightItem.diagnostics.providerName
-      Object.keys(flightItem[type]).forEach((item) => {
-        if (type === 'flightFareInfos') {
-          flightItem[type][item].providerName = providerName
-        }
+      if (flightItem[type]) {
+        Object.keys(flightItem[type]).forEach((item) => {
+          if (type === 'flightFareInfos') {
+            flightItem[type][item].providerName = providerName
+          }
 
-        // @ts-expect-error we should improve the type section
-        flightData[type].push(flightItem[type][item])
-      })
+          // @ts-expect-error we should improve the type section
+          flightData[type].push(flightItem[type][item])
+        })
+      }
     })
   })
 }

@@ -44,13 +44,13 @@ export const Header = () => {
         <div className='hidden flex-1 items-center md:flex'>
           <div className='flex gap-2 px-3 md:gap-4 md:px-5'>
             {links.map((item, index) => (
-              <Anchor component={Link} href={item.href} key={index}>
+              <Anchor component={Link} href={item.href} key={index} c={'dark'}>
                 {item.label}
               </Anchor>
             ))}
           </div>
           <div className='ms-auto flex items-center gap-2'>
-            <Anchor component={Link} href={'/'}>
+            <Anchor component={Link} href='/' c={'dark'}>
               Kampanyalar
             </Anchor>
             <Button
@@ -85,7 +85,7 @@ export const Header = () => {
           <div className='flex flex-col gap-4'>
             {links.map((item, index) => (
               <div key={index}>
-                <Anchor component={Link} href={item.href}>
+                <Anchor component={Link} href={item.href} c={'dark'}>
                   {item.label}
                 </Anchor>
               </div>

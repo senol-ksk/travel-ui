@@ -7,7 +7,7 @@ import { MantineProvider } from '@mantine/core'
 import { Providers } from '@/app/providers'
 
 import Header from '@/components/header'
-import { theme } from '@/theme'
+import { theme } from '../theme'
 
 import dayjs from 'dayjs'
 
