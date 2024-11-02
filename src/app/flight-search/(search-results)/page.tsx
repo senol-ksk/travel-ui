@@ -10,7 +10,6 @@ import {
   readLocalStorageValue,
   useDisclosure,
   useWindowScroll,
-  useTimeout,
 } from '@mantine/hooks'
 import { IoIosCheckmarkCircle } from 'react-icons/io'
 
@@ -21,13 +20,8 @@ import type {
 
 import {
   clearSearchRequest,
-  flightApiRequest,
   refetchFlightRequest,
 } from '@/modules/flight/search.request'
-import {
-  collectFlightData,
-  generateFlightData,
-} from '@/modules/flight/search-results/generate'
 
 import { SearchResultCard } from '@/app/flight-search/search-result'
 import { Loader } from '@mantine/core'
@@ -91,7 +85,8 @@ const FlightSearchPage = () => {
       }) as Promise<boolean>
     },
     onSuccess(query) {
-      if (query) router.push(`/checkout`)
+      const orderId = crypto.randomUUID()
+      if (query) router.push(`/checkout?orderId=${orderId}`)
     },
   })
 

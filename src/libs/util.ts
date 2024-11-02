@@ -25,12 +25,3 @@ export const yearList = (
   }
   return years
 }
-
-export const monthsShortList = () =>
-  Array.from(Array(31).keys()).map((month, index) => {
-    const currentIndex = index + 1
-    const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
-    const label = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex} ${dayjs.monthsShort()[month]}`
-
-    return { label, value }
-  })

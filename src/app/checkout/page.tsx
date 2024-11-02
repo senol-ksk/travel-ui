@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import dayjs from 'dayjs'
 import {
   useForm,
@@ -8,54 +9,27 @@ import {
   FormProvider,
   Controller,
 } from 'react-hook-form'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import cardValidation from 'card-validator'
 
-import {
-  Button,
-  Checkbox,
-  Input,
-  List,
-  NativeSelect,
-  TextInput,
-  Title,
-} from '@mantine/core'
+import { Button, Checkbox, Input, List, TextInput, Title } from '@mantine/core'
 import IntlTelInput from 'intl-tel-input/react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import cookies from 'js-cookie'
 import clsx from 'clsx'
-import { formatCreditCard } from 'cleave-zen'
 
 import FlightPassengers from '@/components/checkout/flight/passengers'
 import { validTCKN } from '@/libs/tckn-validate'
-import { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
+import {
+  GenderEnums,
+  PassengerTypesEnum,
+  PassengerTypesIndexEnum,
+  ProductPassengerApiResponseModel,
+} from '@/@types/passengerViewModel'
 import { request } from '@/network'
 
-import { formatCurrency, monthsShortList, yearList } from '@/libs/util'
-
-enum PassengerTypesEnum {
-  // The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
-  Adult,
-  Child,
-  Infant,
-  Senior,
-  Soldier,
-}
-
-const cardMonths = () =>
-  monthsShortList().map((month) => {
-    return {
-      label: month?.value,
-      value: month?.value,
-    }
-  })
-
-const cardExpiredYearList = () =>
-  yearList(dayjs().get('year'), dayjs().get('year') + 10).map((year) => ({
-    label: '' + year,
-    value: '' + year,
-  }))
+import { formatCurrency } from '@/libs/util'
 
 export type PassengerValidationType = {
   birthDate_day: z.ZodString
@@ -64,25 +38,27 @@ export type PassengerValidationType = {
   birthDate: z.ZodString
   citizenNo: z.ZodOptional<z.ZodString>
   firstName: z.ZodString
-  gender: z.ZodString
+  gender: z.ZodNativeEnum<typeof GenderEnums>
   lastName: z.ZodString
-  model_PassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
-  nationality_Check: z.ZodBoolean
-  PassengerKey: z.ZodString
-  PassportCountry: z.ZodOptional<z.ZodString>
-  PassportNo: z.ZodOptional<z.ZodString>
-  PassportValidityDate: z.ZodOptional<z.ZodString>
+  passengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
+  nationality_Check: z.ZodOptional<z.ZodBoolean>
+  passengerKey: z.ZodString
+  passportCountry: z.ZodOptional<z.ZodString>
+  passportNo: z.ZodOptional<z.ZodString>
+  passportValidityDate: z.ZodNullable<z.ZodOptional<z.ZodString>>
   passportValidity_1: z.ZodOptional<z.ZodString>
   passportValidity_2: z.ZodOptional<z.ZodString>
   passportValidity_3: z.ZodOptional<z.ZodString>
-  RegisteredPassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
+  registeredPassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
   type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
+  hesCode: z.ZodString
 }
 
 export type GeneralFormFieldSchemaTypes = {
-  ContactEmail: z.ZodString
-  ContactGSM: z.ZodEffects<z.ZodOptional<z.ZodString>>
-  ModuleName: z.ZodString
+  contactEmail: z.ZodString
+  contactGSM: z.ZodEffects<z.ZodOptional<z.ZodString>>
+  moduleName: z.ZodString
+  isInPromoList: z.ZodBoolean
 }
 
 let isPhoneNumberValid = false
@@ -103,22 +79,23 @@ const passengerValidation = z.object({
           .max(50)
           .regex(/^[a-zA-Z a-z A-Z\-]+$/),
         birthDate: z.string().date(),
-        gender: z.string().min(1),
+        gender: z.nativeEnum(GenderEnums),
         birthDate_day: z.string().min(1).max(2),
         birthDate_month: z.string().min(2).max(2),
         birthDate_year: z.string().min(4).max(4),
         type: z.nativeEnum(PassengerTypesEnum).readonly(),
         citizenNo: z.string().optional(),
-        nationality_Check: z.boolean(),
-        model_PassengerId: z.string().or(z.number()),
-        RegisteredPassengerId: z.string().or(z.number()),
-        PassengerKey: z.string().min(2),
-        PassportCountry: z.string().optional(),
-        PassportNo: z.string().optional(),
+        nationality_Check: z.boolean().optional(),
+        passengerId: z.string().or(z.number()),
+        registeredPassengerId: z.string().or(z.number()),
+        passengerKey: z.string().min(2),
+        passportCountry: z.string().optional(),
+        passportNo: z.string().optional(),
         passportValidity_1: z.string().optional(),
         passportValidity_2: z.string().optional(),
         passportValidity_3: z.string().optional(),
-        PassportValidityDate: z.string().optional(),
+        passportValidityDate: z.string().optional().nullable(),
+        hesCode: z.string(),
       })
       .superRefine((value, ctx) => {
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {
@@ -128,9 +105,9 @@ const passengerValidation = z.object({
             message: 'Gecerli tc giriniz',
           })
         }
-        const passportCountry = value.PassportCountry!
-        const passportNo = value.PassportNo!
-        const passportDate = value.PassportValidityDate!
+        const passportCountry = value.passportCountry!
+        const passportNo = value.passportNo!
+        const passportDate = value.passportValidityDate!
         if (value.nationality_Check) {
           if (passportCountry?.length < 2) {
             ctx.addIssue({
@@ -163,7 +140,7 @@ const passengerValidation = z.object({
           const dayjsBirthDay = dayjs(birthDayVal)
           const dayjsToday = dayjs()
           const dateDiff = dayjsToday.diff(dayjsBirthDay, 'day')
-          console.log(checkinDate)
+
           switch (value.type) {
             case PassengerTypesEnum.Adult:
               if (dateDiff < 4380) {
@@ -203,43 +180,23 @@ const passengerValidation = z.object({
 })
 
 const generalFormSchema = z.object<GeneralFormFieldSchemaTypes>({
-  ContactEmail: z.string().email(),
-  ContactGSM: z
+  contactEmail: z.string().email(),
+  contactGSM: z
     .string()
     .optional()
     .refine(() => {
       return isPhoneNumberValid
     }),
-  ModuleName: z.string(),
+  moduleName: z.string(),
+  isInPromoList: z.boolean(),
 })
 
-let cardCvvLength = 3
-const cardValidationSchema = z.object({
-  CardOwner: z.string().min(3).max(50),
-  CardNumber: z
-    .string()
-    .optional()
-    .refine((value) => {
-      cardCvvLength = cardValidation.number(value).card?.code.size || 3
-
-      return cardValidation.number(value).isValid
-    }, 'Gecersiz Kart Numarası'),
-  CardExpiredMonth: z.string(),
-  CardExpiredYear: z.string(),
-  CardCvv: z.string().refine((val) => {
-    return val.length === cardCvvLength
-  }),
-})
-
-const checkoutSchemaMerged = generalFormSchema
-  .merge(passengerValidation)
-  .merge(cardValidationSchema)
+const checkoutSchemaMerged = generalFormSchema.merge(passengerValidation)
 
 export type PassengerSchemaType = z.infer<typeof passengerValidation>
 export type CheckoutSchemaMergedFieldTypes = z.infer<
   typeof checkoutSchemaMerged
 >
-export type CardValidationSchemaTypes = z.infer<typeof cardValidationSchema>
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -256,51 +213,26 @@ function useZodForm<TSchema extends z.ZodType>(
   return form
 }
 
-import data from '@/app/checkout/dummy.data.json'
+// import data from '@/app/checkout/dummy.data.json'
 
-// const passengerFormFields = data.treeContainer.childNodes.map((item) => {
-//   const passenger = item.items.at(0)?.value!
+import { use } from 'react'
 
-//   return {
-//     firstName: passenger.firstName || '',
-//     lastName: passenger.lastName || '',
-//     birthDate: passenger.birthDate || '',
-//     birthDate_day: passenger.birthDate || '',
-//     birthDate_month: passenger.birthDate || '',
-//     birthDate_year: passenger.birthDate || '',
-//     gender: passenger.gender ? '' + passenger.gender : '',
-//     nationality_Check: passenger.nationality_Check || false,
-//     type: passenger.type || 0,
-//     citizenNo: passenger.citizenNo || '',
-//     model_PassengerId: passenger.model_PassengerId,
-//     RegisteredPassengerId: passenger.registeredPassengerId,
-//     PassportCountry: passenger.passportCountry || '',
-//     PassengerKey: passenger.passengerKey || '',
-//     PassportNo: passenger.passportNo || '',
-//     PassportValidityDate: passenger.passportValidityDate || '',
-//   }
-// })
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ orderId: string }>
 
-export default function CheckoutPage() {
-  const formMethods = useZodForm({
-    schema: checkoutSchemaMerged,
-    // defaultValues: {
-    //   passengers: passengerFormFields,
-    //   ModuleName: data.viewBag.ModuleName,
-    // },
-    // mode: 'onChange',
-  })
+export default function CheckoutPage(props: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const searchParams = use(props.searchParams)
 
-  const { fields, append } = useFieldArray({
-    name: 'passengers',
-    control: formMethods.control,
-  })
+  const router = useRouter()
 
   // const isSubmittable =
   //   !!formMethods.formState.isDirty && !!formMethods.formState.isValid
 
   const checkoutQuery = useQuery({
-    queryKey: ['checkout', cookies.get('searchToken')],
+    queryKey: ['checkout', searchParams.orderId, cookies.get('searchToken')],
     queryFn: async () => {
       const response = (await request({
         url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/Product/ProductPassengerViewWebApi`,
@@ -310,56 +242,65 @@ export default function CheckoutPage() {
           searchToken: cookies.get('searchToken'),
         },
       })) as ProductPassengerApiResponseModel
-      const passengerFormValue = response.treeContainer.childNodes.map(
-        (child) => {
-          return child.items.at(0)?.value
-        }
-      ) as
-        | ProductPassengerApiResponseModel['treeContainer']['childNodes']['0']['items']['0']['value'][]
-        | null
 
-      passengerFormValue?.forEach((passenger, item) => {
-        append({
-          firstName: passenger.firstName || '',
-          lastName: passenger.lastName || '',
-          birthDate: passenger.birthDate || '',
-          birthDate_day: passenger.birthDate || '',
-          birthDate_month: passenger.birthDate || '',
-          birthDate_year: passenger.birthDate || '',
-          gender: passenger.gender ? '' + passenger.gender : '',
-          nationality_Check: passenger.nationality_Check || false,
-          type: passenger.type || 0,
-          citizenNo: passenger.citizenNo || '',
-          model_PassengerId: passenger.model_PassengerId,
-          RegisteredPassengerId: passenger.registeredPassengerId,
-          PassportCountry: passenger.passportCountry || '',
-          PassengerKey: passenger.passengerKey || '',
-          PassportNo: passenger.passportNo || '',
-          PassportValidityDate: passenger.passportValidityDate || '',
-        })
-      })
-
-      formMethods.setValue('ModuleName', response.viewBag.ModuleName)
-      formMethods.setValue('ContactEmail', response.contactEmail || '')
-      formMethods.setValue('ContactEmail', response.contactGSM || '')
       checkinDate =
         response.treeContainer.childNodes.at(0)?.items[0].value.checkinDate
 
       return response
     },
     enabled: !!cookies.get('searchToken'),
-    retry: false,
+  })
+
+  const formMethods = useZodForm({
+    schema: checkoutSchemaMerged,
+    // defaultValues: {
+    //   passengers: checkoutQuery.data?.treeContainer.childNodes.at(0),
+    //   ModuleName: checkoutQuery?.data?.viewBag.ModuleName,
+    // },
+    // mode: 'onChange',
+  })
+  const { fields, append } = useFieldArray({
+    name: 'passengers',
+    control: formMethods.control,
+  })
+
+  const checkoutPassengersMutation = useMutation({
+    mutationFn: (data: CheckoutSchemaMergedFieldTypes) => {
+      return request({
+        url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/api/payment/checkoutAssests`,
+        method: 'POST',
+        data: {
+          ...data,
+          searchToken: cookies.get('searchToken'),
+          sessionToken: cookies.get('sessionToken'),
+        },
+      })
+    },
   })
 
   return (
     <FormProvider {...formMethods}>
       <form
-        onSubmit={formMethods.handleSubmit((data) => {
+        onSubmit={formMethods.handleSubmit(async (data) => {
           console.log('Data submitted:', data)
+          const requestCheckout = (await checkoutPassengersMutation.mutateAsync(
+            data
+          )) as { status: boolean }
+
+          if (requestCheckout.status) {
+            router.push(`/checkout/payment?key=${searchParams.orderId}`)
+          }
         })}
         className='grid gap-3 md:gap-5'
       >
-        <input {...formMethods.register('ModuleName')} type='hidden' />
+        {checkoutQuery.data ? (
+          <input
+            {...formMethods.register('moduleName', {
+              value: checkoutQuery.data?.viewBag.ModuleName,
+            })}
+            type='hidden'
+          />
+        ) : null}
         <CheckoutCard>
           <Title order={3} size={'lg'}>
             İletişim Bilgileri
@@ -369,10 +310,10 @@ export default function CheckoutPage() {
               <Input.Wrapper label='E-Posta'>
                 <TextInput
                   type='email'
-                  {...formMethods.register('ContactEmail')}
+                  {...formMethods.register('contactEmail')}
                   error={
-                    !!formMethods.formState?.errors?.ContactEmail
-                      ? formMethods.formState?.errors?.ContactEmail?.message
+                    !!formMethods.formState?.errors?.contactEmail
+                      ? formMethods.formState?.errors?.contactEmail?.message
                       : null
                   }
                 />
@@ -386,54 +327,52 @@ export default function CheckoutPage() {
                 >
                   <Controller
                     control={formMethods.control}
-                    name='ContactGSM'
-                    render={({ field }) => {
-                      return (
-                        <IntlTelInput
-                          {...field}
-                          initialValue={''}
-                          onChangeValidity={(isValid) => {
-                            isPhoneNumberValid = isValid
-                          }}
-                          usePreciseValidation
-                          ref={(ref) => {
-                            field.ref({
-                              focus: ref?.getInput,
-                            })
-                          }}
-                          onChangeNumber={field.onChange}
-                          inputProps={{
-                            className: clsx('m_8fb7ebe7 mantine-Input-input', {
-                              'border-rose-500':
-                                !!formMethods.formState?.errors?.ContactGSM,
-                            }),
-                            'data-variant': 'default',
-                            name: field.name,
-                          }}
-                          initOptions={{
-                            containerClass: 'w-full',
-                            separateDialCode: true,
-                            initialCountry: 'auto',
-                            i18n: {
-                              tr: 'Türkiye',
-                              searchPlaceholder: 'Ülke adı giriniz',
-                            },
-                            loadUtilsOnInit: '/intl-tel-input/utils.js',
-                            geoIpLookup: (callback) => {
-                              fetch('https://ipapi.co/json')
-                                .then((res) => res.json())
-                                .then((data) => callback(data.country_code))
-                                .catch(() => callback('tr'))
-                            },
-                          }}
-                        />
-                      )
-                    }}
+                    name='contactGSM'
+                    render={({ field }) => (
+                      <IntlTelInput
+                        {...field}
+                        initialValue={''}
+                        onChangeValidity={(isValid) => {
+                          isPhoneNumberValid = isValid
+                        }}
+                        usePreciseValidation
+                        ref={(ref) => {
+                          field.ref({
+                            focus: ref?.getInput,
+                          })
+                        }}
+                        onChangeNumber={field.onChange}
+                        inputProps={{
+                          className: clsx('m_8fb7ebe7 mantine-Input-input', {
+                            'border-rose-500':
+                              !!formMethods.formState?.errors?.contactGSM,
+                          }),
+                          'data-variant': 'default',
+                          name: field.name,
+                        }}
+                        initOptions={{
+                          containerClass: 'w-full',
+                          separateDialCode: true,
+                          initialCountry: 'auto',
+                          i18n: {
+                            tr: 'Türkiye',
+                            searchPlaceholder: 'Ülke adı giriniz',
+                          },
+                          loadUtilsOnInit: '/intl-tel-input/utils.js',
+                          geoIpLookup: (callback) => {
+                            fetch('https://ipapi.co/json')
+                              .then((res) => res.json())
+                              .then((data) => callback(data.country_code))
+                              .catch(() => callback('tr'))
+                          },
+                        }}
+                      />
+                    )}
                   />
                 </div>
                 <Input.Error className={'pt-1'}>
-                  {!!formMethods.formState?.errors?.ContactGSM
-                    ? formMethods.formState?.errors?.ContactGSM?.message
+                  {!!formMethods.formState?.errors?.contactGSM
+                    ? formMethods.formState?.errors?.contactGSM?.message
                     : null}
                 </Input.Error>
               </Input.Wrapper>
@@ -441,138 +380,63 @@ export default function CheckoutPage() {
             <div className='col-span-2 pt-2'>
               <Checkbox
                 label='Fırsat ve kampanyalardan haberdar olmak istiyorum.'
-                name='IsInPromoList'
+                {...formMethods.register('isInPromoList', {
+                  value: !!checkoutQuery.data?.isInPromoList,
+                })}
               />
             </div>
           </div>
         </CheckoutCard>
         <CheckoutCard>
-          {fields.map((field, index) => {
-            let fieldErrors
-            if (formMethods.formState.errors.passengers?.length) {
-              fieldErrors = formMethods.formState?.errors?.passengers[index]
-            }
-            return (
-              <div key={field.id}>
-                <Title order={3} size={'lg'} pb={10}>
-                  {PassengerTypesEnum[field.type]}
-                </Title>
-                <FlightPassengers
-                  field={field}
-                  index={index}
-                  error={fieldErrors}
-                />
-              </div>
-            )
-          })}
-        </CheckoutCard>
-        <CheckoutCard>
-          <div className='grid w-full gap-3 md:w-72'>
-            <Controller
-              control={formMethods.control}
-              name='CardOwner'
-              defaultValue={''}
-              render={({ field }) => {
-                return (
-                  <TextInput
-                    {...field}
-                    autoComplete='cc-name'
-                    label='Kart Üzerindeki İsim'
-                    placeholder='Kart Üzerindeki İsim'
-                    error={
-                      !!formMethods.formState.errors.CardOwner
-                        ? formMethods.formState.errors.CardOwner.message
-                        : null
-                    }
-                  />
-                )
-              }}
-            />
-            <Controller
-              control={formMethods.control}
-              name='CardNumber'
-              defaultValue=''
-              render={({ field }) => (
-                <TextInput
-                  {...field}
-                  autoComplete='cc-number'
-                  label='Kart Numarası'
-                  type='tel'
-                  error={
-                    !!formMethods.formState.errors.CardNumber
-                      ? formMethods.formState.errors.CardNumber.message
-                      : null
-                  }
-                  // value={creditCardNumber}
-                  onChange={({ currentTarget: { value } }) => {
-                    const formatedValue = formatCreditCard(value).trim()
-                    field.onChange(formatedValue)
-                  }}
-                />
-              )}
-            />
-            <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
-              <Controller
-                control={formMethods.control}
-                name='CardExpiredMonth'
-                render={({ field }) => (
-                  <NativeSelect
-                    {...field}
-                    label='Ay'
-                    autoComplete='cc-exp-month'
-                    data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-                    error={
-                      !!formMethods.formState.errors.CardExpiredMonth
-                        ? formMethods.formState.errors.CardExpiredMonth.message
-                        : null
-                    }
-                  />
-                )}
-              />
-              <Controller
-                control={formMethods.control}
-                name='CardExpiredYear'
-                render={({ field }) => (
-                  <NativeSelect
-                    {...field}
-                    autoComplete='cc-exp-year'
-                    label='Yıl'
-                    data={[
-                      { label: 'Yıl', value: '' },
-                      ...cardExpiredYearList(),
-                    ]}
-                    error={
-                      !!formMethods.formState.errors.CardExpiredYear
-                        ? formMethods.formState.errors.CardExpiredYear.message
-                        : null
-                    }
-                  />
-                )}
-              />
+          {checkoutQuery.data &&
+            checkoutQuery.data?.treeContainer.childNodes.length &&
+            checkoutQuery.data?.treeContainer.childNodes.map((item, index) => {
+              const field = item.items[0].value
+              checkinDate = field.checkinDate
+              const passengerType = field.type
+              let fieldErrors
+              if (formMethods.formState.errors.passengers?.length) {
+                fieldErrors = formMethods.formState?.errors?.passengers[index]
+              }
 
-              <Controller
-                control={formMethods.control}
-                name='CardCvv'
-                defaultValue=''
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    maxLength={
-                      cardValidation.number(formMethods.watch('CardNumber'))
-                        .card?.code.size || 3
-                    }
-                    label='CVV'
-                    placeholder='CVV'
-                    error={
-                      !!formMethods.formState.errors.CardCvv
-                        ? formMethods.formState.errors.CardCvv.message
-                        : null
-                    }
+              return (
+                <div key={index}>
+                  <Title order={3} size={'lg'} pb={10}>
+                    {PassengerTypesIndexEnum[passengerType]}
+                  </Title>
+                  <FlightPassengers
+                    fieldProps={{
+                      firstName: field.firstName || '',
+                      birthDate: field.birthDate || '',
+                      birthDate_day: '',
+                      birthDate_month: '',
+                      birthDate_year: '',
+                      gender: field.gender,
+                      lastName: field.lastName || '',
+                      id:
+                        typeof field._passengerId === 'string'
+                          ? field._passengerId
+                          : '',
+                      passengerId: field.model_PassengerId,
+                      nationality_Check: !!field.nationality_Check,
+                      passengerKey: field.passengerKey || '',
+                      registeredPassengerId: field.registeredPassengerId || '',
+                      type: field.type,
+                      citizenNo: field.citizenNo || '',
+                      passportCountry: field.passportCountry || 'tr',
+                      passportNo: field.passportNo || '',
+                      passportValidity_1: '',
+                      passportValidity_2: '',
+                      passportValidity_3: '',
+                      passportValidityDate: field.passportValidityDate,
+                      hesCode: field.hesCode || '',
+                    }}
+                    index={index}
+                    error={fieldErrors}
                   />
-                )}
-              />
-            </div>
-          </div>
+                </div>
+              )
+            })}
         </CheckoutCard>
         <CheckoutCard>
           <div className='text-sm'>
@@ -612,9 +476,9 @@ export default function CheckoutPage() {
               </div>
             ) : null}
           </div>
-          {process.env.NODE_ENV === 'development' ? (
+          {/* {process.env.NODE_ENV === 'development' ? (
             <Button type='submit'>test button</Button>
-          ) : null}
+          ) : null} */}
         </CheckoutCard>
       </form>
     </FormProvider>
@@ -624,7 +488,7 @@ export default function CheckoutPage() {
 const CheckoutCard: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => (
-  <div className='grid gap-3 rounded-md border bg-white p-2 shadow-sm md:gap-6 md:p-6'>
+  <div className='grid gap-3 rounded-md border bg-white p-2 shadow md:gap-6 md:p-6'>
     {children}
   </div>
 )

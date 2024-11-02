@@ -1,3 +1,26 @@
+export enum GenderEnums {
+  Male = '0',
+  Female = '1',
+}
+
+export enum PassengerTypesEnum {
+  // The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
+  Adult = '0',
+  Child = '1',
+  Infant = '2',
+  Senior = '3',
+  Soldier = '4',
+}
+
+export enum PassengerTypesIndexEnum {
+  // The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
+  Adult,
+  Child,
+  Infant,
+  Senior,
+  Soldier,
+}
+
 export type ChildNode = {
   id: null
   orderId: 1
@@ -30,7 +53,7 @@ export type ChildNode = {
             passengerId: 0
             sequenceNo: 1
             type: 0
-            gender: 0
+            gender: GenderEnums
             firstName: null
             lastName: null
             middleName: null
@@ -453,7 +476,7 @@ export type ProductPassengerApiResponseModel = {
                       passengerType: 0
                       age: 0
                       birthday: '0001-01-01T00:00:00'
-                      gender: 0
+                      gender: GenderEnums
                     },
                   ]
                   taxInfos: [
@@ -640,7 +663,7 @@ export type ProductPassengerApiResponseModel = {
                   passengerType: 0
                   age: 0
                   birthday: '0001-01-01T00:00:00'
-                  gender: 0
+                  gender: GenderEnums
                 },
               ]
               taxInfos: [
@@ -845,7 +868,7 @@ export type ProductPassengerApiResponseModel = {
                       passengerType: 0
                       age: 0
                       birthday: '0001-01-01T00:00:00'
-                      gender: 0
+                      gender: GenderEnums
                     },
                   ]
                   taxInfos: [
@@ -1032,7 +1055,7 @@ export type ProductPassengerApiResponseModel = {
                   passengerType: 0
                   age: 0
                   birthday: '0001-01-01T00:00:00'
-                  gender: 0
+                  gender: GenderEnums
                 },
               ]
               taxInfos: [
@@ -1142,7 +1165,7 @@ export type ProductPassengerApiResponseModel = {
               email: string
               firstName: string
               flightFrequencyNo: string | null
-              gender: number
+              gender: GenderEnums
               groupOrderIndex: number
               hesCode: string | null
               isContact: boolean
@@ -1165,7 +1188,7 @@ export type ProductPassengerApiResponseModel = {
               productType: number
               registeredPassengerId: ID
               sequenceNo: number
-              type: number
+              type: PassengerTypesEnum
               webUserId: ID
             }
             orderId: ID

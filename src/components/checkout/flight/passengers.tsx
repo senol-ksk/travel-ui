@@ -1,6 +1,5 @@
 import { ChangeEvent } from 'react'
 import {
-  type NativeSelectProps,
   Input,
   NativeSelect,
   Radio,
@@ -25,7 +24,7 @@ import type {
 } from '@/app/checkout/page'
 
 type IProps = {
-  field: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
+  fieldProps: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
   error: Merge<FieldError, FieldErrorsImpl<PassengerValidationType>> | undefined
   index: number
 }
@@ -33,6 +32,7 @@ type IProps = {
 import 'dayjs/locale/tr'
 import { range } from '@mantine/hooks'
 import clsx from 'clsx'
+import { GenderEnums } from '@/@types/passengerViewModel'
 dayjs.locale('tr')
 dayjs.extend(localeDate)
 
@@ -93,14 +93,18 @@ const days = () =>
 
 const pasportDateValue = ['', '', '']
 
-export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
+export const FlightPassengers: React.FC<IProps> = ({
+  fieldProps,
+  index,
+  error,
+}) => {
   const methods = useFormContext()
   const namePrefix = `passengers.[${index}]`
   const name_birthDate = `${namePrefix}.birthDate`
   const name_birthDate_day = `${namePrefix}.birthDate_day`
   const name_birthDate_month = `${namePrefix}.birthDate_month`
   const name_birthDate_year = `${namePrefix}.birthDate_year`
-  const name_passsportValidDate = `${namePrefix}.PassportValidityDate`
+  const name_passsportValidDate = `${namePrefix}.passportValidityDate`
 
   const name_passsportValid_day = `${namePrefix}.passportValidity_1`
   const name_passsportValid_month = `${namePrefix}.passportValidity_2`
@@ -146,21 +150,33 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
     <div className='grid gap-3 md:gap-4'>
       <input
         {...methods.register(`${namePrefix}.type`)}
-        value={field.type}
+        defaultValue={fieldProps.type}
         type='hidden'
       />
       <input
-        {...methods.register(`${namePrefix}.model_PassengerId`)}
+        {...methods.register(`${namePrefix}.passengerId`, {
+          value: fieldProps.passengerId,
+        })}
         type='hidden'
       />
       <input
-        {...methods.register(`${namePrefix}.RegisteredPassengerId`)}
+        {...methods.register(`${namePrefix}.registeredPassengerId`, {
+          value: fieldProps.passengerId,
+        })}
         type='hidden'
       />
       <input
-        {...methods.register(`${namePrefix}.PassengerKey`)}
+        {...methods.register(`${namePrefix}.passengerKey`, {
+          value: fieldProps.passengerKey,
+        })}
         type='hidden'
       />
+      <input
+        {...methods.register(`${namePrefix}.hesCode`)}
+        defaultValue={fieldProps.hesCode}
+        type='hidden'
+      />
+
       <div className='grid grid-cols-2 gap-3'>
         <div className='col-span-2'>
           <Input.Wrapper error={!!error?.gender}>
@@ -174,8 +190,8 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
                   error={!!error?.gender ? error.gender.message : null}
                 >
                   <Group>
-                    <Radio value={'1'} label='Kadın' />
-                    <Radio value={'0'} label='Erkek' />
+                    <Radio value={'' + GenderEnums.Female} label='Kadın' />
+                    <Radio value={'' + GenderEnums.Male} label='Erkek' />
                   </Group>
                 </Radio.Group>
               )}
@@ -187,7 +203,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
             <Controller
               control={methods.control}
               name={`${namePrefix}.firstName`}
-              defaultValue={field.firstName ? field.firstName : ''}
+              defaultValue={fieldProps.firstName ? fieldProps.firstName : ''}
               render={({ field }) => {
                 return (
                   <TextInput
@@ -205,7 +221,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
             <Controller
               control={methods.control}
               name={`${namePrefix}.lastName`}
-              defaultValue={field.lastName}
+              defaultValue={fieldProps.lastName}
               render={({ field }) => (
                 <TextInput
                   {...field}
@@ -282,6 +298,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
             <Controller
               control={methods.control}
               name={`${namePrefix}.citizenNo`}
+              defaultValue={fieldProps.citizenNo}
               render={({ field }) => (
                 <TextInput
                   {...field}
@@ -301,6 +318,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
               <Controller
                 control={methods.control}
                 name={`${namePrefix}.nationality_Check`}
+                defaultValue={false}
                 render={({ field }) => (
                   <Switch
                     {...field}
@@ -309,7 +327,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
                       methods.setValue(`${namePrefix}.citizenNo`, '')
                       methods.setValue(`${namePrefix}.PassportCountry`, '')
                       methods.setValue(`${namePrefix}.PassportNo`, '')
-                      methods.setValue(`${namePrefix}.PassportValidityDate`, '')
+                      methods.setValue(`${namePrefix}.passportValidityDate`, '')
                       methods.setValue(name_passsportValid_day, '')
                       methods.setValue(name_passsportValid_month, '')
                       methods.setValue(name_passsportValid_year, '')
@@ -330,15 +348,15 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
           <div>
             <Controller
               control={methods.control}
-              name={`${namePrefix}.PassportCountry`}
+              name={`${namePrefix}.passportCountry`}
               defaultValue={''}
               render={({ field }) => (
                 <NativeSelect
                   {...field}
                   label='Pasaportu Veren Ülke'
                   error={
-                    !!error?.PassportCountry
-                      ? error?.PassportCountry.message
+                    !!error?.passportCountry
+                      ? error?.passportCountry.message
                       : null
                   }
                   data={[
@@ -352,12 +370,13 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
           <div>
             <Controller
               control={methods.control}
-              name={`${namePrefix}.PassportNo`}
+              name={`${namePrefix}.passportNo`}
+              defaultValue={''}
               render={({ field }) => (
                 <TextInput
                   {...field}
                   label='Pasaport No'
-                  error={!!error?.PassportNo ? error?.PassportNo.message : null}
+                  error={!!error?.passportNo ? error?.passportNo.message : null}
                 />
               )}
             />
@@ -376,7 +395,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
                       field.onChange(event)
                       handlePassportdateSelect(event, 'day')
                     }}
-                    error={!!error?.PassportValidityDate}
+                    error={!!error?.passportValidityDate}
                     data={[{ label: 'Gün', value: '' }, ...days()]}
                     autoComplete='off'
                   />
@@ -394,7 +413,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
                       field.onChange(event)
                       handlePassportdateSelect(event, 'month')
                     }}
-                    error={!!error?.PassportValidityDate}
+                    error={!!error?.passportValidityDate}
                     data={[{ label: 'Ay', value: '' }, ...passportMonths()]}
                     autoComplete='off'
                   />
@@ -411,7 +430,7 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
                       field.onChange(event)
                       handlePassportdateSelect(event, 'year')
                     }}
-                    error={!!error?.PassportValidityDate}
+                    error={!!error?.passportValidityDate}
                     data={[{ label: 'Yıl', value: '' }, ...passportYears()]}
                     autoComplete='off'
                   />
@@ -419,14 +438,16 @@ export const FlightPassengers: React.FC<IProps> = ({ field, index, error }) => {
               />
             </Input.Wrapper>
             <Input.Error className='pt-1'>
-              {!!error?.PassportValidityDate
-                ? error?.PassportValidityDate.message
+              {!!error?.passportValidityDate
+                ? error?.passportValidityDate.message
                 : null}
             </Input.Error>
 
             <input
-              type='text'
-              {...methods.register(name_passsportValidDate)}
+              type='hidden'
+              {...methods.register(name_passsportValidDate, {
+                value: fieldProps.passportValidityDate,
+              })}
               autoComplete='off'
             />
           </div>
