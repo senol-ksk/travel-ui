@@ -116,8 +116,11 @@ const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   return getToken
 }
 
-const getNewSearchSessionToken = async (): Promise<void> => {
-  if (!cookies.get(searchToken_name)) {
+export const getNewSearchSessionToken = async (): Promise<
+  string | undefined
+> => {
+  const searchToken = cookies.get(searchToken_name)
+  if (!searchToken) {
     if (!appToken) await getsecuritytoken()
 
     const response = await request({
@@ -141,10 +144,18 @@ const getNewSearchSessionToken = async (): Promise<void> => {
       },
     })
 
+    const cookieTimeout = new Date(new Date().getTime() + 30 * 60 * 1000) // 30mins
     cookies.set(searchToken_name, response.data, {
-      expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30mins
+      expires: cookieTimeout,
     })
+    cookies.set('searchtoken_timeout', cookieTimeout.toISOString(), {
+      expires: cookieTimeout,
+    })
+
+    return response.data
   }
+
+  return cookies.get(searchToken_name)
 }
 
 const getSessionToken = async (): Promise<string | undefined> => {
@@ -170,106 +181,96 @@ const getSessionToken = async (): Promise<string | undefined> => {
 }
 const ReceivedProviders: string[] = []
 
-export const flightApiRequest = (): Promise<ClientFlightDataModel[] | void> =>
-  new Promise(async (resolve, reject) => {
-    try {
-      const localFlightData = JSON.parse(
-        localStorage.getItem('flight')!
-      ) as FlightApiRequestParams
+const requestFlightData = async (
+  params: FlightSearchRequestFlightSearchPanel
+): Promise<FlightSearchApiResponse> => {
+  const searchToken = await getNewSearchSessionToken()
+  const sessionToken = await getSessionToken()
 
-      await getNewSearchSessionToken()
-      await getSessionToken()
+  // const searchToken = cookies.get(searchToken_name)!
+  // const sessionToken = cookies.get(sessionToken_name)!
 
-      if (!appToken) await getsecuritytoken()
-
-      const FlightSearchPanel = processFlightSearchPanel(localFlightData)
-
-      const searchToken =
-        cookies.get(searchToken_name) || 'has no search token cookie'
-
-      if (!searchToken)
-        console.warn(
-          'Search token is null or empty. Recived value is',
-          searchToken
-        )
-
-      const sessionToken = cookies.get(sessionToken_name)
-
-      const payload: FlightSearchRequestPayload = {
-        apiAction: 'api/Flight/Search',
-        apiRoute: 'FlightService',
-        appName: process.env.NEXT_PUBLIC_APP_NAME,
-        sessionToken: sessionToken!,
-        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-        requestType:
-          'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-        params: {
-          FlightSearchPanel: { ...FlightSearchPanel, ReceivedProviders },
-          searchToken,
-          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-          appName: process.env.NEXT_PUBLIC_APP_NAME,
-          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-        },
-      }
-
-      const requestFlight = (await request({
-        url: executerestUrl,
-        data: payload,
-        method: 'post',
-        headers: {
-          appToken,
-          appName: process.env.NEXT_PUBLIC_APP_NAME,
-        },
-        signal: controller.signal,
-      })) as FlightSearchApiResponse
-
-      requestFlight.data.searchResults.forEach((item) => {
-        ReceivedProviders.push(item.diagnostics.providerName)
-      })
-
-      collectFlightData(requestFlight.data.searchResults)
-
-      if (!requestFlight.data.hasMoreResponse) {
-        resolve()
-        clearTimeout(timer)
-        return
-      }
-
-      if (!timeisfinished) {
-        setTimeout(() => {
-          resolve(flightApiRequest())
-        }, 2000)
-      } else {
-        resolve()
-        clearTimeout(timer)
-        return
-      }
-    } catch (error) {
-      console.log(error)
-    }
+  const payload = {
+    apiAction: 'api/Flight/Search',
+    apiRoute: 'FlightService',
+    appName: process.env.NEXT_PUBLIC_APP_NAME,
+    sessionToken: sessionToken,
+    scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+    scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+    requestType:
+      'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+    params: {
+      FlightSearchPanel: { ...params, ReceivedProviders },
+      searchToken,
+      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+    },
+  }
+  const response = await request({
+    url: executerestUrl,
+    data: payload,
+    method: 'post',
+    headers: {
+      appToken,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+    },
   })
+  return response
+}
+
+export const flightApiRequest = (): Promise<boolean> =>
+  new Promise(async (resolve, reject) => {
+    const localFlightData = JSON.parse(
+      localStorage.getItem('flight')!
+    ) as FlightApiRequestParams
+
+    if (!appToken) await getsecuritytoken()
+
+    const flightSearchPanel = processFlightSearchPanel(localFlightData)
+
+    const flightApiResponse = async () =>
+      await requestFlightData(flightSearchPanel)
+
+    const flightData = await flightApiResponse()
+
+    flightData.data.searchResults.forEach((item) => {
+      ReceivedProviders.push(item.diagnostics.providerName)
+    })
+
+    collectFlightData(flightData.data.searchResults)
+    if (flightData.data.hasMoreResponse && timer) {
+      setTimeout(() => {
+        resolve(flightApiRequest())
+      }, 1500)
+      return
+    }
+
+    resolve(true)
+  })
+
+let timer: NodeJS.Timeout | null
 
 export const refetchFlightRequest = async (): Promise<
   ClientFlightDataModel[]
 > => {
+  timer = setTimeout(() => {
+    timer = null
+  }, 20000)
+
   await flightApiRequest()
-  const flightData = await generateFlightData()
-  return flightData
+  const generatServerResponse = await generateFlightData()
+  ReceivedProviders.splice(0, ReceivedProviders.length)
+  clearTimeout(timer)
+  timer = null
+  return generatServerResponse
 }
 export const clearSearchRequest = () => {
-  controller.abort()
-  clearTimeout(timer)
-  timeisfinished = true
+  // if (timer) {
+  //   clearTimeout(timer)
+  //   timer = null
+  // }
 }
-
-const controller = new AbortController()
-
-let timeisfinished = false
-
-const timer = setTimeout(() => {
-  timeisfinished = true
-}, 15000)
 
 export const getAirlineByCodeList = async (
   codeList: string[]

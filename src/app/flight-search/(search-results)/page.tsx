@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -34,18 +34,21 @@ const selectedFlightState:
   | ClientFlightDataModel[]
   | null
   | undefined = []
-const FlightSearchPage = () => {
-  const queryClient = useQueryClient()
+
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ searchId: string }>
+
+const FlightSearchPage = (props: {
+  params: Params
+  searchParams: SearchParams
+}) => {
+  const searchParams = use(props.searchParams)
   const [, scrollTo] = useWindowScroll()
   const router = useRouter()
   const [
     pacakgeDrawerOpened,
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
-
-  useEffect(() => {
-    return () => clearSearchRequest()
-  }, [])
 
   const [roundTicketsIsVisible, setRoundTicketsIsVisible] = useState(false)
   const [selectedFlightData, setSelectedFlightData] = useState<
@@ -61,15 +64,10 @@ const FlightSearchPage = () => {
   })
 
   const flightService = useQuery({
-    queryKey: ['flight-results', flightParams],
-    queryFn: async () => {
-      const getFlightResults = await refetchFlightRequest()
-
-      console.log(getFlightResults)
-
-      return getFlightResults
-    },
+    queryKey: ['flight-results', searchParams.searchId],
+    queryFn: refetchFlightRequest,
     retryOnMount: false,
+    enabled: !!searchParams.searchId,
   })
 
   const submitFlightData = useMutation({

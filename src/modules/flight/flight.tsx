@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import cookies from 'js-cookie'
+import { useRouter } from 'next/navigation'
 
 import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
@@ -50,6 +51,7 @@ const schema = formSchema
 type FlightRequestType = z.infer<typeof schema>
 
 export const Flight = () => {
+  const router = useRouter()
   const queryClient = useQueryClient()
   const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
 
@@ -165,8 +167,9 @@ export const Flight = () => {
 
     queryClient.clear()
 
-    window.location.href = `/flight-search`
-    // router.push(`/flight-search?searchId=${searchId}`)
+    // window.location.href = `/flight-search`
+    const searchId = crypto.randomUUID()
+    router.push(`/flight-search?searchId=${searchId}`)
     // router.refresh()
   }
 
