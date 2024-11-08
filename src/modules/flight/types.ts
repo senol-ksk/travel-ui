@@ -234,7 +234,7 @@ export type FlightSearchApiResponse = {
       flightDetails: FlightDetails
       flightDetailSegments: FlightDetailSegment
       flightFareInfos: FlightFareInfos
-      flightPackageInfos: {}
+      flightPackageInfos: null
     }[]
   }
   token: null

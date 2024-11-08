@@ -1,10 +1,8 @@
-/** @type {import('postcss-load-config').Config} */
+// postcss.config.mjs
 const config = {
   plugins: {
-    tailwindcss: {},
-    'postcss-preset-mantine': {
-      'mantine-color-body': '210 10% 96.08%',
-    },
+    'postcss-import': {},
+    'postcss-preset-mantine': {},
     'postcss-simple-vars': {
       variables: {
         'mantine-breakpoint-xs': '36em',
@@ -14,6 +12,9 @@ const config = {
         'mantine-breakpoint-xl': '88em',
       },
     },
+    autoprefixer: {},
+    'tailwindcss/nesting': {},
+    tailwindcss: {},
   },
 }
 

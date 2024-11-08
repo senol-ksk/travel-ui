@@ -9,8 +9,10 @@ export default function Home() {
           'url(https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg)',
       }}
     >
-      <div className='container rounded-lg border bg-white'>
-        <SearchEngine />
+      <div className='container'>
+        <div className='rounded-lg border bg-white'>
+          <SearchEngine />
+        </div>
       </div>
     </div>
   )

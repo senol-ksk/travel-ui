@@ -1,26 +1,42 @@
-@import '@mantine/core/styles.css';
-@import '@mantine/dates/styles.css';
-@import 'intl-tel-input/styles';
+@layer tw_base, mantine, tw_components, tw_utilities;
 
-@layer tailwind {
-  @tailwind base;
+/* import tailwind */
+/* @import 'tailwindcss/base' layer(tw_base); */
+@import 'tailwindcss/components' layer(tw_components);
+@import 'tailwindcss/utilities' layer(tw_utilities);
+
+/* import mantine */
+@import '@mantine/core/styles.layer.css';
+@import '@mantine/dates/styles.layer.css';
+
+@layer mantine {
+  *,
+  *::before,
+  *::after {
+    /* box-sizing: border-box; */
+    @apply border-0;
+    @apply border-solid;
+    @apply border-gray-100;
+  }
 }
-@tailwind components;
-@tailwind utilities;
 
-body {
-  background: hsl(210deg 10% 96.08%);
-}
-
-.iti {
+img,
+svg {
   @apply block;
 }
 
-.iti__search-input {
-  @apply p-2;
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+body {
+  @apply bg-gray-100;
+  @apply antialiased;
+  @apply text-gray-800;
 }
 
 .iti__selected-dial-code {
   @apply text-sm;
-  /* @apply text-gray-500; */
 }

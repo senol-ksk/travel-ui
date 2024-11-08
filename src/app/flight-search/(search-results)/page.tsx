@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -10,7 +10,6 @@ import {
   readLocalStorageValue,
   useDisclosure,
   useWindowScroll,
-  useTimeout,
 } from '@mantine/hooks'
 import { IoIosCheckmarkCircle } from 'react-icons/io'
 
@@ -19,11 +18,10 @@ import type {
   FlightApiRequestParams,
 } from '@/modules/flight/types'
 
-import { flightApiRequest } from '@/modules/flight/search.request'
 import {
-  collectFlightData,
-  generateFlightData,
-} from '@/modules/flight/search-results/generate'
+  clearSearchRequest,
+  refetchFlightRequest,
+} from '@/modules/flight/search.request'
 
 import { SearchResultCard } from '@/app/flight-search/search-result'
 import { Loader } from '@mantine/core'
@@ -36,8 +34,15 @@ const selectedFlightState:
   | ClientFlightDataModel[]
   | null
   | undefined = []
-const FlightSearch = () => {
-  const queryClient = useQueryClient()
+
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ searchId: string }>
+
+const FlightSearchPage = (props: {
+  params: Params
+  searchParams: SearchParams
+}) => {
+  const searchParams = use(props.searchParams)
   const [, scrollTo] = useWindowScroll()
   const router = useRouter()
   const [
@@ -58,49 +63,12 @@ const FlightSearch = () => {
     key: 'flight',
   })
 
-  // const createSearch = useQuery(['create-searcg', ])
-
   const flightService = useQuery({
-    queryKey: ['flight-results', flightParams],
-    queryFn: async () => {
-      const getFlightResults = await flightApiRequest()
-
-      if (queryClient.getQueryData(['flighClientData'])) {
-        queryClient.invalidateQueries({
-          queryKey: ['flighClientData'],
-          exact: true,
-        })
-      }
-
-      if (getFlightResults.data.searchResults.length > 0) {
-        collectFlightData(getFlightResults.data.searchResults)
-      }
-
-      return getFlightResults.data
-    },
-    enabled(query) {
-      return !query.state.data || query.state.data.hasMoreResponse
-    },
-    refetchInterval: 2000,
+    queryKey: ['flight-results', searchParams.searchId],
+    queryFn: refetchFlightRequest,
     retryOnMount: false,
+    enabled: !!searchParams.searchId,
   })
-
-  const { data: flightClientData, isFetching: isClientDataFetching } = useQuery(
-    {
-      queryKey: ['flighClientData'],
-      queryFn: async () => {
-        const flightData = await generateFlightData()
-        // ReceivedProviders = []
-
-        return flightData
-      },
-      enabled:
-        !!flightService?.data &&
-        flightService.data.status &&
-        !flightService.data.hasMoreResponse,
-      refetchOnMount: false,
-    }
-  )
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
@@ -115,7 +83,8 @@ const FlightSearch = () => {
       }) as Promise<boolean>
     },
     onSuccess(query) {
-      if (query) router.push(`/checkout`)
+      const orderId = crypto.randomUUID()
+      if (query) router.push(`/reservation`)
     },
   })
 
@@ -125,7 +94,7 @@ const FlightSearch = () => {
   const handleResultSelect = (flight: ClientFlightDataModel) => {
     openPackageDrawer()
 
-    const withPackages = flightClientData?.filter((item) =>
+    const withPackages = flightService.data?.filter((item) =>
       flightParams.Destination.IsDomestic && flightParams.Origin.IsDomestic
         ? item.flightDetailSegments.at(0)?.groupId ===
             flight.flightDetailSegments.at(0)?.groupId &&
@@ -182,12 +151,9 @@ const FlightSearch = () => {
   return (
     <>
       <div className='container pt-3 md:pt-8'>
-        {(!flightService.data && !flightClientData) ||
-        flightService.isRefetching ||
-        isClientDataFetching ||
-        flightService.data?.hasMoreResponse ? (
+        {flightService.isLoading ? (
           <DefaultLoader />
-        ) : flightClientData?.length ? (
+        ) : flightService.data?.length ? (
           <>
             <div className='grid md:grid-cols-4 md:gap-3'>
               <div className='md:col-span-1'>Filter section</div>
@@ -234,40 +200,41 @@ const FlightSearch = () => {
                   >
                     <div>Gidiş uçuşunuzu seçiniz</div>
                     <div className='grid gap-3'>
-                      {flightClientData &&
-                        flightClientData
-                          ?.sort(
-                            (a, b) =>
-                              a!.flightFare.totalPrice.value -
-                              b!.flightFare.totalPrice.value
+                      {flightService.data
+                        ?.sort(
+                          (a, b) =>
+                            a!.flightFare.totalPrice.value -
+                            b!.flightFare.totalPrice.value
+                        )
+                        .filter((item) =>
+                          flightParams.Destination.IsDomestic &&
+                          flightParams.Origin.IsDomestic
+                            ? item?.flightDetailSegments[0].groupId === 0
+                            : item?.flightDetailSegments[0].groupId === 0
+                        )
+                        .map((flight) => {
+                          if (
+                            seqKeys_origin.includes(
+                              flight.flightDetailSegments.at(0)?.flightNumber ||
+                                ''
+                            )
                           )
-                          .filter((item) =>
-                            flightParams.Destination.IsDomestic &&
-                            flightParams.Origin.IsDomestic
-                              ? item?.flightDetailSegments[0].groupId === 0
-                              : item?.flightDetailSegments[0].groupId === 0
+                            return null
+
+                          seqKeys_origin.push(
+                            flight.flightDetailSegments.at(0)?.flightNumber ||
+                              ''
                           )
-                          .map((flight) => {
-                            if (
-                              seqKeys_origin.includes(
-                                flight.flightDetailSegments.at(0)?.flightNumber!
-                              )
-                            )
-                              return null
 
-                            seqKeys_origin.push(
-                              flight.flightDetailSegments.at(0)?.flightNumber!
-                            )
-
-                            return (
-                              <div key={flight.id}>
-                                <SearchResultCard
-                                  flight={flight}
-                                  onSelect={handleResultSelect}
-                                />
-                              </div>
-                            )
-                          })}
+                          return (
+                            <div key={flight.id}>
+                              <SearchResultCard
+                                flight={flight}
+                                onSelect={handleResultSelect}
+                              />
+                            </div>
+                          )
+                        })}
                     </div>
                   </div>
 
@@ -277,14 +244,14 @@ const FlightSearch = () => {
                       'opacity-1 top-0 z-10': roundTicketsIsVisible,
                     })}`}
                   >
-                    {flightClientData &&
-                    flightClientData?.filter(
+                    {flightService.data &&
+                    flightService.data?.filter(
                       (item) => item?.flightDetailSegments[0].groupId === 1
                     ).length > 0 ? (
                       <>
                         <div>Dönüş uçuşunuzu seçiniz</div>
                         <div className='grid gap-3'>
-                          {flightClientData
+                          {flightService.data
                             ?.sort(
                               (a, b) =>
                                 a!.flightFare.totalPrice.value -
@@ -298,13 +265,14 @@ const FlightSearch = () => {
                               if (
                                 seqKeys_destination.includes(
                                   flight.flightDetailSegments.at(0)
-                                    ?.flightNumber!
+                                    ?.flightNumber || ''
                                 )
                               )
                                 return null
 
                               seqKeys_destination.push(
-                                flight.flightDetailSegments.at(0)?.flightNumber!
+                                flight.flightDetailSegments.at(0)
+                                  ?.flightNumber || ''
                               )
 
                               return (
@@ -338,99 +306,110 @@ const FlightSearch = () => {
               }
             >
               <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
-                {selectedFlightData && Array.isArray(selectedFlightData)
-                  ? selectedFlightData.map((selectedFlight) => {
-                      return (
-                        <div
-                          key={selectedFlight.id}
-                          className='flex flex-col rounded border p-2 md:p-3'
-                        >
-                          <div className='flex h-full flex-col gap-3'>
-                            <div>
-                              <div className='text-lg font-semibold'>
-                                {formatCurrency(
-                                  selectedFlight.flightFare.totalPrice.value
-                                )}
+                {!!selectedFlightData && Array.isArray(selectedFlightData)
+                  ? selectedFlightData.map(
+                      ({ flightDetailSegments, ...selectedFlight }) => {
+                        const flightDetailSegmentsArray =
+                          flightDetailSegments &&
+                          Array.isArray(flightDetailSegments)
+                            ? flightDetailSegments.at(0)
+                            : false
+                        return (
+                          <div
+                            key={selectedFlight.id}
+                            className='flex flex-col rounded border p-2 md:p-3'
+                          >
+                            <div className='flex h-full flex-col gap-3'>
+                              <div>
+                                <div className='text-lg font-semibold'>
+                                  {formatCurrency(
+                                    selectedFlight.flightFare.totalPrice.value
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <div className='pb-2 font-semibold capitalize'>
-                                {(() => {
-                                  switch (
-                                    selectedFlight.flightDetailSegments.at(0)
-                                      ?.freeVolatileData.BrandName
-                                  ) {
-                                    case 'SUPER_ECO':
-                                      return 'Light'
-                                    case 'ECO':
-                                      return 'Süper Eko'
-                                    case 'ADVANTAGE':
-                                      return 'Avantaj'
-                                    case 'EXTRA':
-                                      return 'Comfort Flex'
-                                    default:
-                                      return selectedFlight.flightDetailSegments
-                                        .at(0)
-                                        ?.freeVolatileData.BrandName.toLocaleLowerCase()
-                                  }
-                                })()}
-                              </div>
-                              <List className='text-sm'>
-                                {selectedFlight.flightDetailSegments.at(0)
-                                  ?.marketingAirline?.code === 'PC' ? (
-                                  <List.Item
-                                    icon={
-                                      <IoIosCheckmarkCircle className='text-green-500' />
+                              <div>
+                                <div className='pb-2 font-semibold capitalize'>
+                                  {(() => {
+                                    switch (
+                                      flightDetailSegments.at(0)
+                                        ?.freeVolatileData.BrandName
+                                    ) {
+                                      case 'SUPER_ECO':
+                                        return 'Light'
+                                      case 'ECO':
+                                        return 'Süper Eko'
+                                      case 'ADVANTAGE':
+                                        return 'Avantaj'
+                                      case 'EXTRA':
+                                        return 'Comfort Flex'
+                                      default:
+                                        return flightDetailSegments
+                                          .at(0)
+                                          ?.freeVolatileData.BrandName.toLocaleLowerCase()
                                     }
-                                  >
-                                    1 Adet Koltuk Altına Sığacak Çanta
-                                    (40x30x15)
-                                  </List.Item>
-                                ) : null}
-                                {selectedFlight.flightDetailSegments.at(0)
-                                  ?.baggageAllowance?.maxWeight?.value! > 0 && (
-                                  <List.Item
-                                    icon={
-                                      <IoIosCheckmarkCircle className='text-green-500' />
-                                    }
-                                  >
-                                    {
-                                      selectedFlight.flightDetailSegments.at(0)
-                                        ?.baggageAllowance.maxWeight.value
-                                    }{' '}
-                                    kg bagaj
-                                  </List.Item>
-                                )}
+                                  })()}
+                                </div>
+                                <List className='text-sm'>
+                                  {flightDetailSegments.at(0)?.marketingAirline
+                                    ?.code === 'PC' ? (
+                                    <List.Item
+                                      icon={
+                                        <IoIosCheckmarkCircle className='text-green-500' />
+                                      }
+                                    >
+                                      1 Adet Koltuk Altına Sığacak Çanta
+                                      (40x30x15)
+                                    </List.Item>
+                                  ) : null}
+                                  {flightDetailSegmentsArray &&
+                                    flightDetailSegmentsArray?.baggageAllowance
+                                      .maxWeight.value > 0 && (
+                                      <List.Item
+                                        icon={
+                                          <IoIosCheckmarkCircle className='text-green-500' />
+                                        }
+                                      >
+                                        {
+                                          flightDetailSegments.at(0)
+                                            ?.baggageAllowance.maxWeight.value
+                                        }{' '}
+                                        kg bagaj
+                                      </List.Item>
+                                    )}
 
-                                {selectedFlight.flightDetailSegments.at(0)
-                                  ?.freeVolatileData.Owner !== 'EF' &&
-                                selectedFlight.flightDetailSegments.at(0)
-                                  ?.marketingAirline.code !== 'PC' ? (
-                                  <List.Item
-                                    icon={
-                                      <IoIosCheckmarkCircle className='text-green-500' />
-                                    }
-                                  >
-                                    Ücretli Değişiklik
-                                  </List.Item>
-                                ) : null}
-                              </List>
-                            </div>
-                            <div className='mt-auto'>
-                              <Button
-                                type='button'
-                                onClick={() =>
-                                  handlePackageSelect(selectedFlight)
-                                }
-                                fullWidth
-                              >
-                                Select
-                              </Button>
+                                  {flightDetailSegments.at(0)?.freeVolatileData
+                                    .Owner !== 'EF' &&
+                                  flightDetailSegments.at(0)?.marketingAirline
+                                    .code !== 'PC' ? (
+                                    <List.Item
+                                      icon={
+                                        <IoIosCheckmarkCircle className='text-green-500' />
+                                      }
+                                    >
+                                      Ücretli Değişiklik
+                                    </List.Item>
+                                  ) : null}
+                                </List>
+                              </div>
+                              <div className='mt-auto'>
+                                <Button
+                                  type='button'
+                                  onClick={() =>
+                                    handlePackageSelect({
+                                      flightDetailSegments,
+                                      ...selectedFlight,
+                                    })
+                                  }
+                                  fullWidth
+                                >
+                                  Select
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })
+                        )
+                      }
+                    )
                   : null}
               </div>
             </Drawer>
@@ -450,7 +429,7 @@ const FlightSearch = () => {
   )
 }
 
-export default FlightSearch
+export default FlightSearchPage
 
 const DefaultLoader = () => (
   <div className='flex flex-col items-center p-7'>

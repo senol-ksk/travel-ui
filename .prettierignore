@@ -1,8 +1,10 @@
-.next
-.cache
+.next/
+.cache/
 package-lock.json
-public
-node_modules
+public/
+node_modules/
 next-env.d.ts
 next.config.ts
 yarn.lock
+
+!next.config.ts

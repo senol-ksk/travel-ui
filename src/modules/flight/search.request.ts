@@ -5,6 +5,7 @@ import cookies from 'js-cookie'
 
 import { request } from '@/network'
 import type {
+  ClientFlightDataModel,
   FlightApiRequestParams,
   FlightSearchApiResponse,
   FlightSearchRequestFlightSearchPanel,
@@ -12,18 +13,19 @@ import type {
   GetAirlineByCodeListResponse,
   GetSecurityTokenResponse,
 } from '@/modules/flight/types'
+import {
+  collectFlightData,
+  generateFlightData,
+} from './search-results/generate'
 
-const executerestUrl =
-  'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/executerest'
+const executerestUrl = process.env.NEXT_PUBLIC_OL_ROUTE
 const authToken = md5(
-  'WEB1D7CAEF28F75490DA6D3B874A6FBC926' +
-    'A6A3F7B63F14EEB6EAFA8178ECA96497856206D1635211C7440C7751E534B551'
+  process.env.NEXT_PUBLIC_DEVICE_ID + process.env.NEXT_PUBLIC_SECURE_STRING
 ).toLocaleUpperCase()
 const sessionToken_name = 'sessionToken'
 const searchToken_name = 'searchToken'
 
-const getSessionTokenUrl =
-  'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/ol/GetSessionToken'
+const getSessionTokenUrl = process.env.NEXT_PUBLIC_GET_SESSION_TOKEN
 
 const requestedDayFormat = 'YYYY-MM-DD'
 let appToken: string | null
@@ -101,11 +103,11 @@ const processFlightSearchPanel = (
 
 const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   const getToken = await request({
-    url: 'https://lidyaolserviceg.lidyateknoloji.com/v1.1/api/device/getsecuritytoken',
+    url: process.env.NEXT_PUBLIC_SECURITY_ROUTE,
     method: 'post',
     data: {
       authToken,
-      envName: 'fulltrip.prod.webapp.html',
+      envName: process.env.NEXT_PUBLIC_APP_NAME,
     },
   })
 
@@ -114,8 +116,11 @@ const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   return getToken
 }
 
-const getNewSearchSessionToken = async (): Promise<void> => {
-  if (!cookies.get(searchToken_name)) {
+export const getNewSearchSessionToken = async (): Promise<
+  string | undefined
+> => {
+  const searchToken = cookies.get(searchToken_name)
+  if (!searchToken) {
     if (!appToken) await getsecuritytoken()
 
     const response = await request({
@@ -123,26 +128,38 @@ const getNewSearchSessionToken = async (): Promise<void> => {
       method: 'post',
       headers: {
         appToken,
-        appName: 'fulltrip.prod.webapp.html',
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
       },
       data: {
         params: {
-          appName: 'fulltrip.prod.webapp.html',
-          scopeName: 'FULLTRIP',
-          scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
         },
         apiRoute: 'FlightService',
         apiAction: 'api/Flight/GetNewSearchSessionToken',
-        appName: 'fulltrip.prod.webapp.html',
-        scopeName: 'FULLTRIP',
-        scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
+        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
       },
     })
 
+    const cookieTimeout =
+      process.env.NODE_ENV === 'development'
+        ? new Date(new Date().getTime() + 60 * 60 * 1000) // 60mins in dev env
+        : new Date(new Date().getTime() + 30 * 60 * 1000) // default 30mins
+
     cookies.set(searchToken_name, response.data, {
-      expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30mins
+      expires: cookieTimeout,
     })
+    cookies.set('searchtoken_timeout', cookieTimeout.toISOString(), {
+      expires: cookieTimeout,
+    })
+
+    return response.data
   }
+
+  return cookies.get(searchToken_name)
 }
 
 const getSessionToken = async (): Promise<string | undefined> => {
@@ -158,7 +175,7 @@ const getSessionToken = async (): Promise<string | undefined> => {
     method: 'post',
     headers: {
       appToken,
-      appName: 'fulltrip.prod.webapp.html',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
     },
   })
 
@@ -166,61 +183,97 @@ const getSessionToken = async (): Promise<string | undefined> => {
 
   return response
 }
-let ReceivedProviders: string[] = []
+const ReceivedProviders: string[] = []
 
-export const flightApiRequest = async (): Promise<FlightSearchApiResponse> => {
-  const localFlightData = JSON.parse(
-    localStorage.getItem('flight')!
-  ) as FlightApiRequestParams
+const requestFlightData = async (
+  params: FlightSearchRequestFlightSearchPanel
+): Promise<FlightSearchApiResponse> => {
+  const searchToken = await getNewSearchSessionToken()
+  const sessionToken = await getSessionToken()
 
-  await getNewSearchSessionToken()
-  await getSessionToken()
+  // const searchToken = cookies.get(searchToken_name)!
+  // const sessionToken = cookies.get(sessionToken_name)!
 
-  if (!appToken) await getsecuritytoken()
-
-  const FlightSearchPanel = processFlightSearchPanel(localFlightData)
-
-  const searchToken =
-    cookies.get(searchToken_name) || 'has no search token cookie'
-
-  if (!searchToken)
-    console.warn('Search token is null or empty. Recived value is', searchToken)
-
-  const sessionToken = cookies.get(sessionToken_name)
-
-  const payload: FlightSearchRequestPayload = {
+  const payload = {
     apiAction: 'api/Flight/Search',
     apiRoute: 'FlightService',
-    appName: 'fulltrip.prod.webapp.html',
-    sessionToken: sessionToken!,
-    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-    scopeName: 'FULLTRIP',
+    appName: process.env.NEXT_PUBLIC_APP_NAME,
+    sessionToken: sessionToken,
+    scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+    scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
     requestType:
       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
     params: {
-      FlightSearchPanel: { ...FlightSearchPanel, ReceivedProviders },
+      FlightSearchPanel: { ...params, ReceivedProviders },
       searchToken,
-      scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-      appName: 'fulltrip.prod.webapp.html',
-      scopeName: 'FULLTRIP',
+      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
     },
   }
-
-  const requestFlight = (await request({
+  const response = await request({
     url: executerestUrl,
     data: payload,
     method: 'post',
     headers: {
       appToken,
-      appName: 'fulltrip.prod.webapp.html',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
     },
-  })) as FlightSearchApiResponse
+  })
+  return response
+}
 
-  requestFlight.data.searchResults.forEach((item) => {
-    ReceivedProviders.push(item.diagnostics.providerName)
+export const flightApiRequest = (): Promise<boolean> =>
+  new Promise(async (resolve, reject) => {
+    const localFlightData = JSON.parse(
+      localStorage.getItem('flight')!
+    ) as FlightApiRequestParams
+
+    if (!appToken) await getsecuritytoken()
+
+    const flightSearchPanel = processFlightSearchPanel(localFlightData)
+
+    const flightApiResponse = async () =>
+      await requestFlightData(flightSearchPanel)
+
+    const flightData = await flightApiResponse()
+
+    flightData.data.searchResults.forEach((item) => {
+      ReceivedProviders.push(item.diagnostics.providerName)
+    })
+
+    collectFlightData(flightData.data.searchResults)
+    if (flightData.data.hasMoreResponse && timer) {
+      setTimeout(() => {
+        resolve(flightApiRequest())
+      }, 1500)
+      return
+    }
+
+    resolve(true)
   })
 
-  return requestFlight
+let timer: NodeJS.Timeout | null
+
+export const refetchFlightRequest = async (): Promise<
+  ClientFlightDataModel[]
+> => {
+  timer = setTimeout(() => {
+    timer = null
+  }, 20000)
+
+  await flightApiRequest()
+  const generatServerResponse = await generateFlightData()
+  ReceivedProviders.splice(0, ReceivedProviders.length)
+  clearTimeout(timer)
+  timer = null
+  return generatServerResponse
+}
+export const clearSearchRequest = () => {
+  // if (timer) {
+  //   clearTimeout(timer)
+  //   timer = null
+  // }
 }
 
 export const getAirlineByCodeList = async (
@@ -234,10 +287,10 @@ export const getAirlineByCodeList = async (
 
   const airlines = await request({
     method: 'get',
-    url: 'https://apisf-preprod.lidyatechnology.com/d/v1.1/api/flight/getairlinebycodelist',
+    url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/getairlinebycodelist`,
     params: defaultObject,
     headers: {
-      'x-api-key': 'MqhX1CPpc38m10JjWaC9x3p2oirBAcMR9ANpdVMm',
+      'x-api-key': process.env.NEXT_PUBLIC_API_GW_KEY,
       'Content-Type': 'application/json',
     },
   })
