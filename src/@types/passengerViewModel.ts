@@ -124,7 +124,40 @@ export type Airport = {
 }
 
 export type ProductPassengerApiResponseModel = {
-  exceptionAction: null
+  exceptionAction: {
+    message: 'Serviste Product Passenger oluşturulurken gelen cevap yanlış alındı- ProductController'
+    serviceName: 'OrderService'
+    serviceAction: 'GetProductPassengerViewDataModel'
+    actionParameterModel: {
+      sessionToken: 'AC7EE55DC56EFF96D3DCA554781ADFB8F76395657E8CDACAD38C39E1C067A051'
+      searchToken: 'BA82B8845C3CD3DC4A755DF485B2E2276E549ACFE5B8AE2A7FA714D63D847B13'
+      detailViewBackUrl: 'https://localhost:44363/Product/ProductPassengerViewWebApi?searchToken=BA82B8845C3CD3DC4A755DF485B2E2276E549ACFE5B8AE2A7FA714D63D847B13&sessionToken=AC7EE55DC56EFF96D3DCA554781ADFB8F76395657E8CDACAD38C39E1C067A051'
+      flightDetailToSearchReturnPath: null
+      tourExtraServiceToDetailReturnPath: null
+      adultCount: null
+      childAges: null
+      package: null
+      selectedProductKey: null
+      mainSelectedProductKey: null
+      carRentalDetailToSearchReturnPath: null
+      carRentalExtraToDetailReturnPath: null
+      carRentalSummaryToExtraReturnPath: null
+      extraOptions: null
+      insuranceOptions: null
+      hotelProductKey: null
+      apiRoute: null
+      apiAction: null
+      appName: 'fulltrip.preprod.webapp.html'
+      scopeName: 'FULLTRIP'
+      scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+      userAuthToken: 'gSvs30fZ/Nlb6iAZ4z/86IdCSIk2aGrNDqBvCCKo04x5MGfT/YCbXfUYqwWO8qWlvbGW2ExAGtKIvp/UzuZkxg57dXSTEQrDqV4EMmTcBDU='
+      userId: 32812758
+      ipAddress: null
+      isPassengerViewDataCached: false
+      customerId: 0
+      customerUserId: 0
+    }
+  } | null
   viewBag: {
     SessionToken: string
     SearchToken: string
@@ -1131,7 +1164,7 @@ export type ProductPassengerApiResponseModel = {
         }
       }
     }
-    Reservable: 1
+    Reservable: 1 | 0
   }
   treeContainer: {
     id: null

@@ -144,7 +144,11 @@ export const getNewSearchSessionToken = async (): Promise<
       },
     })
 
-    const cookieTimeout = new Date(new Date().getTime() + 30 * 60 * 1000) // 30mins
+    const cookieTimeout =
+      process.env.NODE_ENV === 'development'
+        ? new Date(new Date().getTime() + 60 * 60 * 1000) // 60mins in dev env
+        : new Date(new Date().getTime() + 30 * 60 * 1000) // default 30mins
+
     cookies.set(searchToken_name, response.data, {
       expires: cookieTimeout,
     })

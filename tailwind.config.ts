@@ -1,12 +1,12 @@
-// import tailwindPresetMantine from 'tailwind-preset-mantine'
+import tailwindPresetMantine from 'tailwind-preset-mantine'
 
 import type { Config } from 'tailwindcss'
 import tailwindContainer from '@tailwindcss/container-queries'
 
 const config: Config = {
-  corePlugins: {
-    preflight: false,
-  },
+  // corePlugins: {
+  //   preflight: false,
+  // },
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
@@ -19,7 +19,7 @@ const config: Config = {
       },
     },
   },
-  // presets: [tailwindPresetMantine()],
+  presets: [tailwindPresetMantine()],
   plugins: [tailwindContainer],
 }
 export default config

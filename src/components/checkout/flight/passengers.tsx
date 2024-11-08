@@ -17,22 +17,23 @@ import {
 } from 'react-hook-form'
 import dayjs from 'dayjs'
 import localeDate from 'dayjs/plugin/localeData'
+import 'dayjs/locale/tr'
+import { range } from '@mantine/hooks'
+import clsx from 'clsx'
+import { GenderEnums } from '@/@types/passengerViewModel'
+import { PassengerSchemaType } from '@/app/reservation/(index)/page'
+import { PassengerValidationType } from '@/app/reservation/types'
 
-import type {
-  PassengerSchemaType,
-  PassengerValidationType,
-} from '@/app/checkout/page'
+// import type { PassengerValidationType } from '@/app/checkout/types'
+// import { PassengerSchemaType } from '@/app/checkout/(reservation)/page'
 
+// PassengerSchemaType
 type IProps = {
   fieldProps: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
   error: Merge<FieldError, FieldErrorsImpl<PassengerValidationType>> | undefined
   index: number
 }
 
-import 'dayjs/locale/tr'
-import { range } from '@mantine/hooks'
-import clsx from 'clsx'
-import { GenderEnums } from '@/@types/passengerViewModel'
 dayjs.locale('tr')
 dayjs.extend(localeDate)
 
@@ -145,6 +146,8 @@ export const FlightPassengers: React.FC<IProps> = ({
       shouldValidate: true,
     })
   }
+
+  console.log(methods.formState.errors)
 
   return (
     <div className='grid gap-3 md:gap-4'>
@@ -325,7 +328,7 @@ export const FlightPassengers: React.FC<IProps> = ({
                     onChange={(event) => {
                       field.onChange(event)
                       methods.setValue(`${namePrefix}.citizenNo`, '')
-                      methods.setValue(`${namePrefix}.PassportCountry`, '')
+                      methods.setValue(`${namePrefix}.passportCountry`, '')
                       methods.setValue(`${namePrefix}.PassportNo`, '')
                       methods.setValue(`${namePrefix}.passportValidityDate`, '')
                       methods.setValue(name_passsportValid_day, '')

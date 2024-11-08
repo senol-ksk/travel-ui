@@ -84,7 +84,7 @@ const FlightSearchPage = (props: {
     },
     onSuccess(query) {
       const orderId = crypto.randomUUID()
-      if (query) router.push(`/checkout?orderId=${orderId}`)
+      if (query) router.push(`/reservation`)
     },
   })
 
