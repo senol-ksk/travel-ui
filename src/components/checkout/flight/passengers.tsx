@@ -21,13 +21,9 @@ import 'dayjs/locale/tr'
 import { range } from '@mantine/hooks'
 import clsx from 'clsx'
 import { GenderEnums } from '@/@types/passengerViewModel'
-import { PassengerSchemaType } from '@/app/reservation/(index)/page'
 import { PassengerValidationType } from '@/app/reservation/types'
+import { PassengerSchemaType } from '@/app/reservation/(index)/validations'
 
-// import type { PassengerValidationType } from '@/app/checkout/types'
-// import { PassengerSchemaType } from '@/app/checkout/(reservation)/page'
-
-// PassengerSchemaType
 type IProps = {
   fieldProps: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
   error: Merge<FieldError, FieldErrorsImpl<PassengerValidationType>> | undefined
