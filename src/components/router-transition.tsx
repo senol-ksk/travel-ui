@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { nprogress, NavigationProgress } from '@mantine/nprogress'
 
@@ -16,5 +16,9 @@ export function RouterTransition() {
     }
   }, [pathname, searchParams])
 
-  return <NavigationProgress />
+  return (
+    <Suspense>
+      <NavigationProgress />
+    </Suspense>
+  )
 }
