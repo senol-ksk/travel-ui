@@ -17,7 +17,7 @@ export function RouterTransition() {
   }, [pathname, searchParams])
 
   return (
-    <Suspense>
+    <Suspense fallback={''}>
       <NavigationProgress />
     </Suspense>
   )
