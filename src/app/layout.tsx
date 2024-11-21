@@ -12,6 +12,7 @@ import { theme } from '../theme'
 import dayjs from 'dayjs'
 
 import 'dayjs/locale/tr'
+
 dayjs.locale('tr')
 
 export const metadata: Metadata = {

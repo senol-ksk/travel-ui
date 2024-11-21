@@ -19,7 +19,7 @@ export const SearchResultCard = ({ onSelect = () => {}, flight }: IProps) => {
   return (
     <div
       key={flight.id}
-      className={clsx('rounded-lg border bg-white p-3 shadow')}
+      className={clsx('rounded-lg border border-gray-300 p-3')}
     >
       {isDomestic ? (
         <div>

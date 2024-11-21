@@ -78,14 +78,14 @@ export const generateFlightData = async (): Promise<
   flightData.flightFareInfos.forEach((flightItem, count) => {
     const flightObject: ClientFlightDataModel = {
       flightFare: flightItem,
+      id: -1,
       flightDetails: [],
       flightDetailSegments: [],
       airLines: airLines,
-      airportList: [],
-      departureAirportList: [],
-      returnAirportList: [],
-      transferPoints: [],
-      id: -1,
+      // airportList: [],
+      // departureAirportList: [],
+      // returnAirportList: [],
+      // transferPoints: [],
     }
 
     flightItem.flightDetailKeys.forEach((detailKey, detailCount) => {

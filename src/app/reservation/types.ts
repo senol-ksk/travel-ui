@@ -29,3 +29,46 @@ export type PassengerValidationType = {
   type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
   hesCode: z.ZodString
 }
+
+export enum ResponseStatus {
+  Success,
+  Warning,
+  Fatal,
+  Error,
+  BadRequest,
+  NotFound,
+  Unauthorized,
+  Forbidden,
+}
+
+export type PaymentResponeType = {
+  statusCode: ResponseStatus
+  success: boolean
+  data: {
+    okUrl: string
+    callbackUrl: string
+    failUrl: string
+    mode: string
+    secure3dsecuritylevel: string
+    apiversion: string
+    terminalprovuserid: string
+    terminaluserid: string
+    terminalmerchantid: string
+    txntype: string
+    txnamount: string
+    txncurrencycode: string
+    txninstallmentcount: string
+    orderid: string
+    terminalid: string
+    successurl: string
+    errorurl: string
+    customeremailaddress: string
+    customeripaddress: string
+    secure3dhash: string
+    cardnumber: string
+    cardexpiredatemonth: string
+    cardexpiredateyear: string
+    cardcvv2: string
+    action: string
+  }
+}

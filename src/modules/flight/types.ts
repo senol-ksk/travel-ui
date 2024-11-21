@@ -260,14 +260,14 @@ export type GetAirlineByCodeListResponse = {
 }
 
 export type ClientFlightDataModel = {
+  id: number | string
   flightFare: FlightFareInfos[0]
   flightDetails: FlightDetails[string][]
   flightDetailSegments: FlightDetailSegment[string][]
   airLines: { value: string; code: string }[]
-  airportList: []
-  departureAirportList: []
-  returnAirportList: []
-  transferPoints: []
+  // airportList: []
+  // departureAirportList: []
+  // returnAirportList: []
+  // transferPoints: []
   // groupId: GroupId
-  id: number | string
 }

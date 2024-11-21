@@ -20,7 +20,7 @@ export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
   const toggleDrawer = () => setDrawerOpened((prev) => !prev)
   return (
-    <header className='bg-white'>
+    <header className='border-b bg-white shadow-xs'>
       <div className='container mx-auto flex items-center py-4'>
         <Link href='/'>
           <Image
@@ -29,6 +29,7 @@ export const Header = () => {
             height={41}
             alt='Fulltrip'
             priority
+            style={{ width: 152, height: 41 }}
           />
         </Link>
 

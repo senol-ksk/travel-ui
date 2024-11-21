@@ -116,7 +116,7 @@ export const Flight = () => {
     useQuery<LocationResults>({
       queryKey: ['flight-locations', originLocationInputValue],
       enabled:
-        !!originLocationInputValue && originLocationInputValue.length > 3,
+        !!originLocationInputValue && originLocationInputValue.length > 2,
       queryFn: async () => {
         const getLocations = await request({
           url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
@@ -135,7 +135,7 @@ export const Flight = () => {
       queryKey: ['flight-locations', destinationLocationInputValue],
       enabled:
         !!destinationLocationInputValue &&
-        destinationLocationInputValue.length > 3,
+        destinationLocationInputValue.length > 2,
       queryFn: async () => {
         const getLocations = await request({
           url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,

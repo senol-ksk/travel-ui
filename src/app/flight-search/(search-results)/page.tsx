@@ -1,10 +1,18 @@
 'use client'
 
-import { use, useEffect, useRef, useState } from 'react'
+import { use, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Drawer, List, LoadingOverlay } from '@mantine/core'
+import {
+  Button,
+  Checkbox,
+  Drawer,
+  List,
+  LoadingOverlay,
+  Stack,
+  Title,
+} from '@mantine/core'
 import cookies from 'js-cookie'
 import {
   readLocalStorageValue,
@@ -18,17 +26,14 @@ import type {
   FlightApiRequestParams,
 } from '@/modules/flight/types'
 
-import {
-  clearSearchRequest,
-  refetchFlightRequest,
-} from '@/modules/flight/search.request'
+import { refetchFlightRequest } from '@/modules/flight/search.request'
 
 import { SearchResultCard } from '@/app/flight-search/search-result'
 import { Loader } from '@mantine/core'
 import { formatCurrency } from '@/libs/util'
 import { request } from '@/network'
+import { flightFilter } from '@/app/flight-search/filters'
 
-// let ReceivedProviders: string[] = []
 const selectedFlightState:
   | ClientFlightDataModel
   | ClientFlightDataModel[]
@@ -52,12 +57,12 @@ const FlightSearchPage = (props: {
 
   const [roundTicketsIsVisible, setRoundTicketsIsVisible] = useState(false)
   const [selectedFlightData, setSelectedFlightData] = useState<
-    ClientFlightDataModel | ClientFlightDataModel[] | null | undefined
+    ClientFlightDataModel | ClientFlightDataModel[] | null
   >(null)
 
   const [selectedFlightPackage, setSelectedFlightPackage] = useState<
-    ClientFlightDataModel[] | null | undefined
-  >()
+    ClientFlightDataModel[] | null
+  >(null)
 
   const flightParams = readLocalStorageValue<FlightApiRequestParams>({
     key: 'flight',
@@ -83,10 +88,12 @@ const FlightSearchPage = (props: {
       }) as Promise<boolean>
     },
     onSuccess(query) {
-      const orderId = crypto.randomUUID()
       if (query) router.push(`/reservation`)
     },
   })
+  const filteredResults = useMemo(() => {
+    return flightService.data
+  }, [flightService.data])
 
   const seqKeys_origin: string[] = []
   const seqKeys_destination: string[] = []
@@ -153,10 +160,19 @@ const FlightSearchPage = (props: {
       <div className='container pt-3 md:pt-8'>
         {flightService.isLoading ? (
           <DefaultLoader />
-        ) : flightService.data?.length ? (
+        ) : filteredResults?.length ? (
           <>
             <div className='grid md:grid-cols-4 md:gap-3'>
-              <div className='md:col-span-1'>Filter section</div>
+              <div className='md:col-span-1'>
+                Filter section
+                <div className='rounded-md border border-gray-300 p-3'>
+                  <div className='pb-3'>Aktarma</div>
+                  <Stack>
+                    <Checkbox label='Aktarmasız' />
+                    <Checkbox label='1 Aktarma' />
+                  </Stack>
+                </div>
+              </div>
               <div className='relative md:col-span-3'>
                 {selectedFlightPackage ? (
                   <div className='border-b pb-3'>
@@ -173,7 +189,7 @@ const FlightSearchPage = (props: {
                                 flight.flightDetailSegments.at(0)
                                   ?.marketingAirline.code
                             )?.value
-                          }{' '}
+                          }
                           {flight?.flightDetailSegments.map((item) => {
                             return `${item.origin.code}  -> ${item.destination.code}`
                           })}
@@ -200,7 +216,7 @@ const FlightSearchPage = (props: {
                   >
                     <div>Gidiş uçuşunuzu seçiniz</div>
                     <div className='grid gap-3'>
-                      {flightService.data
+                      {filteredResults
                         ?.sort(
                           (a, b) =>
                             a!.flightFare.totalPrice.value -
