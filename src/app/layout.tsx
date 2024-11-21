@@ -12,7 +12,7 @@ import { theme } from '../theme'
 import dayjs from 'dayjs'
 
 import 'dayjs/locale/tr'
-import { RouterTransition } from '@/components/router-transition'
+import { RouterTransition } from '@/app/router-transition'
 dayjs.locale('tr')
 
 export const metadata: Metadata = {
