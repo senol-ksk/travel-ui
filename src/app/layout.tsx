@@ -12,6 +12,7 @@ import { theme } from '../theme'
 import dayjs from 'dayjs'
 
 import 'dayjs/locale/tr'
+import { RouterTransition } from '@/components/router-transition'
 dayjs.locale('tr')
 
 export const metadata: Metadata = {
@@ -37,6 +38,8 @@ export default function RootLayout({
       <body>
         <Providers>
           <MantineProvider theme={theme} defaultColorScheme='light'>
+            <RouterTransition />
+
             <Header />
             <main>{children}</main>
           </MantineProvider>

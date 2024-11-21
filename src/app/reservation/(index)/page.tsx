@@ -89,9 +89,9 @@ export default function CheckoutPage() {
           console.log('Data submitted:', data)
           const requestCheckout = (await checkoutPassengersMutation.mutateAsync(
             data
-          )) as { status: boolean }
+          )) as { status: 'error' | 'success'; success: boolean }
 
-          if (requestCheckout.status) {
+          if (requestCheckout.success) {
             router.push(`/reservation/payment`)
           }
         })}

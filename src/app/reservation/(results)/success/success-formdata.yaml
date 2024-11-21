@@ -1,0 +1,58 @@
+txnCode: 1000
+responseCode: VPS-0000
+responseMessage: BA%C5%9EARILI
+hostResponseCode: 00
+hostMessage: 000+ONAY+KODU+XXXXXX
+txnDateTime: 2024-11-14T17%3A49%3A47.000
+merchantSafeId: 2023090417500272654BD9A49CF07574
+terminalSafeId: 2023090417500284633D137A249DBBEB
+cardHolderName: EK***+AK***
+orderId: 5a5bb508-389a-46c4-9ec2-968af3ebac33
+authCode: 067507
+rrn: 432024591615
+batchNumber: 290
+stan: 45
+additionalInstallCount: 0
+deferingMonth: 2
+ccbEarnedRewardAmount: 8.00
+ccbBalanceRewardAmount: 659134.84
+ccbRewardDesc: CHIP+PARA
+pcbEarnedRewardAmount: 0.00
+pcbBalanceRewardAmount: 0.00
+pcbRewardDesc: 
+xcbEarnedRewardAmount: 0.00
+xcbBalanceRewardAmount: 0.00
+xcbRewardDesc: 
+hashParams: txnCode%2BresponseCode%2BresponseMessage%2BhostResponseCode%2BhostMessage%2BtxnDateTime%2BmerchantSafeId%2BterminalSafeId%2BorderId%2BcardHolderName%2BauthCode%2Brrn%2BbatchNumber%2Bstan%2BadditionalInstallCount%2BdeferingMonth%2BccbEarnedRewardAmount%2BccbBalanceRewardAmount%2BccbRewardDesc%2BpcbEarnedRewardAmount%2BpcbBalanceRewardAmount%2BxcbEarnedRewardAmount%2BxcbBalanceRewardAmount
+hash: etRF1OgSP0dlGsVLQac%2BPYLHoYiVrtwPqKdQKgRYsnYus9u8dT%2FfUMLKCG9V%2FQ2x%2F4aDOABCtfzka1Zq3xr60A%3D%3D
+
+
+/// encoded
+
+txnCode: 1000
+responseCode: VPS-0000
+responseMessage: BAŞARILI
+hostResponseCode: 00
+hostMessage: 000 ONAY KODU XXXXXX
+txnDateTime: 2024-11-14T17:49:47.000
+merchantSafeId: 2023090417500272654BD9A49CF07574
+terminalSafeId: 2023090417500284633D137A249DBBEB
+cardHolderName: EK*** AK***
+orderId: 5a5bb508-389a-46c4-9ec2-968af3ebac33
+authCode: 067507
+rrn: 432024591615
+batchNumber: 290
+stan: 45
+additionalInstallCount: 0
+deferingMonth: 2
+ccbEarnedRewardAmount: 8.00
+ccbBalanceRewardAmount: 659134.84
+ccbRewardDesc: CHIP PARA
+pcbEarnedRewardAmount: 0.00
+pcbBalanceRewardAmount: 0.00
+pcbRewardDesc: 
+xcbEarnedRewardAmount: 0.00
+xcbBalanceRewardAmount: 0.00
+xcbRewardDesc: 
+hashParams: txnCode+responseCode+responseMessage+hostResponseCode+hostMessage+txnDateTime+merchantSafeId+terminalSafeId+orderId+cardHolderName+authCode+rrn+batchNumber+stan+additionalInstallCount+deferingMonth+ccbEarnedRewardAmount+ccbBalanceRewardAmount+ccbRewardDesc+pcbEarnedRewardAmount+pcbBalanceRewardAmount+xcbEarnedRewardAmount+xcbBalanceRewardAmount
+hash: etRF1OgSP0dlGsVLQac+PYLHoYiVrtwPqKdQKgRYsnYus9u8dT/fUMLKCG9V/Q2x/4aDOABCtfzka1Zq3xr60A==

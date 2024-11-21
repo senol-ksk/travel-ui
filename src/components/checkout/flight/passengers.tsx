@@ -143,8 +143,6 @@ export const FlightPassengers: React.FC<IProps> = ({
     })
   }
 
-  console.log(methods.formState.errors)
-
   return (
     <div className='grid gap-3 md:gap-4'>
       <input

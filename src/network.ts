@@ -1,6 +1,7 @@
-import type { AxiosRequestConfig, AxiosError } from 'axios'
+import type { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
 
 import axios from 'axios'
+import { ResponseStatus } from './app/reservation/types'
 
 const client = axios.create({
   baseURL: '/',
@@ -31,4 +32,42 @@ const request = async (options: AxiosRequestConfig) => {
   }
 }
 
-export { request }
+type ServiceRequestParams = {
+  axiosOptions: AxiosRequestConfig
+}
+
+type ServiceResponse<T> = {
+  success: boolean
+  statusCode: ResponseStatus
+  message: string | null
+  errors: string | null
+  validModelState: string | null
+  data: T
+}
+
+async function serviceRequest<DataType>({
+  axiosOptions,
+}: ServiceRequestParams): Promise<ServiceResponse<DataType>> {
+  const url =
+    typeof window === 'undefined'
+      ? `${process.env.SERVICE_PATH}/${axiosOptions.url}`.replace(
+          /([^:])(\/{2,})/g,
+          '$1/'
+        )
+      : `${process.env.NEXT_PUBLIC_SERVICE_PATH}}/${axiosOptions.url}`.replace(
+          /([^:])(\/{2,})/g,
+          '$1/'
+        )
+
+  const response = await client<ServiceResponse<DataType>>({
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    ...axiosOptions,
+    url,
+  })
+
+  return response.data
+}
+
+export { request, serviceRequest }
