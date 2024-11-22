@@ -40,7 +40,7 @@ import {
   CheckoutSchemaMergedFieldTypes,
   checkPhoneNumberIsValid,
 } from './validations'
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -57,12 +57,18 @@ function useZodForm<TSchema extends z.ZodType>(
   return form
 }
 
-export default function CheckoutPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ id: string }>
 
-  const resId = searchParams.get('id')
-  const checkoutQuery = useCheckoutQuery(resId || '-1')
+export default function CheckoutPage(props: {
+  params: Params
+  searchParams: SearchParams
+}) {
+  const router = useRouter()
+  // const searchParams = useSearchParams()
+  const searchParams = use(props.searchParams)
+  const resId = searchParams.id
+  const checkoutQuery = useCheckoutQuery(resId)
 
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
