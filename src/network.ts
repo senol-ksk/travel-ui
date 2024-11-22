@@ -42,7 +42,7 @@ type ServiceResponse<T> = {
   message: string | null
   errors: string | null
   validModelState: string | null
-  data: T
+  data: T | null
 }
 
 async function serviceRequest<DataType>({
@@ -54,7 +54,7 @@ async function serviceRequest<DataType>({
           /([^:])(\/{2,})/g,
           '$1/'
         )
-      : `${process.env.NEXT_PUBLIC_SERVICE_PATH}}/${axiosOptions.url}`.replace(
+      : `${process.env.NEXT_PUBLIC_SERVICE_PATH}/${axiosOptions.url}`.replace(
           /([^:])(\/{2,})/g,
           '$1/'
         )
