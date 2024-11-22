@@ -76,7 +76,7 @@ const PaymentPage = () => {
           billingInfo: checkoutQuery.data?.paymentIndexModel.billingInfo,
           threeDCallbackUrl: threedCallbackURL,
           threeDSuccessURL: threedCallbackURL,
-          threeDFailureURL: `${window.location.origin}/reservation/error/api?userAuthToken=${cookies.get('UserAuthenticationToken')}`,
+          threeDFailureURL: `${window.location.origin}/reservation/error/api`,
           searchToken: cookies.get('searchToken'),
           sessionToken: cookies.get('sessionToken'),
         },
