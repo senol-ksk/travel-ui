@@ -31,7 +31,7 @@ import { refetchFlightRequest } from '@/modules/flight/search.request'
 import { SearchResultCard } from '@/app/flight-search/search-result'
 import { Loader } from '@mantine/core'
 import { formatCurrency } from '@/libs/util'
-import { request } from '@/network'
+import { serviceRequest } from '@/network'
 import { flightFilter } from '@/app/flight-search/filters'
 
 const selectedFlightState:
@@ -77,18 +77,24 @@ const FlightSearchPage = (props: {
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
-      return request({
-        url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/Flight/GetDetailApi`,
-        method: 'post',
-        params: {
-          key,
-          session: cookies.get('sessionToken'),
-          search: cookies.get('searchToken'),
+      return serviceRequest<boolean>({
+        axiosOptions: {
+          url: `/api/flight/postKey`,
+          method: 'post',
+          params: {
+            key,
+            session: cookies.get('sessionToken'),
+            search: cookies.get('searchToken'),
+          },
         },
-      }) as Promise<boolean>
+      })
+    },
+    onMutate(query) {
+      selectedFlightState.splice(0, selectedFlightState.length)
     },
     onSuccess(query) {
-      if (query) router.push(`/reservation`)
+      const uuid = crypto.randomUUID()
+      if (query) router.push(`/reservation?id=${uuid}`)
     },
   })
   const filteredResults = useMemo(() => {

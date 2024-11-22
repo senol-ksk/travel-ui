@@ -17,7 +17,7 @@ import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useMutation } from '@tanstack/react-query'
 import { request } from '@/network'
 import { PaymentResponeType, ResponseStatus } from '@/app/reservation/types'
-import { useEffect, useRef } from 'react'
+import { use, useEffect, useRef } from 'react'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -55,11 +55,15 @@ const cardMonths = () =>
     }
   })
 
-const PaymentPage = () => {
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ id: string }>
+
+const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
+  const searchParams = use(props.searchParams)
   const formMethods = useForm<CardValidationSchemaTypes>({
     resolver: zodResolver(paymentValidationSchema),
   })
-  const checkoutQuery = useCheckoutQuery()
+  const checkoutQuery = useCheckoutQuery(searchParams.id)
   const threeDformRef = useRef<HTMLFormElement>(null)
 
   const paymentMutation = useMutation({
@@ -76,7 +80,7 @@ const PaymentPage = () => {
           billingInfo: checkoutQuery.data?.paymentIndexModel.billingInfo,
           threeDCallbackUrl: threedCallbackURL,
           threeDSuccessURL: threedCallbackURL,
-          threeDFailureURL: `${window.location.origin}/reservation/error/api?userAuthToken=${cookies.get('UserAuthenticationToken')}`,
+          threeDFailureURL: `${window.location.origin}/reservation/error/api`,
           searchToken: cookies.get('searchToken'),
           sessionToken: cookies.get('sessionToken'),
         },

@@ -1,29 +1,34 @@
-import { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
+import type { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import cookies from 'js-cookie'
 
-import { request } from '@/network'
+import { serviceRequest } from '@/network'
 
-type CheckoutQueryFnType =
-  () => UseQueryResult<ProductPassengerApiResponseModel>
+type CheckoutQueryFnType = (
+  id: string
+) => UseQueryResult<ProductPassengerApiResponseModel>
 
-export const useCheckoutQuery: CheckoutQueryFnType = () => {
+export const useCheckoutQuery: CheckoutQueryFnType = (id) => {
   const searchToken = cookies.get('searchToken')
   const sessionToken = cookies.get('sessionToken')
 
+  console.log(id)
+
   return useQuery({
-    queryKey: ['checkout', searchToken, sessionToken],
+    queryKey: ['checkout', searchToken, sessionToken, id],
     queryFn: async () => {
-      const response = await request({
-        url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/Product/ProductPassengerViewWebApi`,
-        withCredentials: true,
-        method: 'get',
-        params: {
-          searchToken,
-          sessionToken,
-        },
-        headers: {
-          'Access-Control-Allow-Credentials': true,
+      const response = await serviceRequest<ProductPassengerApiResponseModel>({
+        axiosOptions: {
+          url: `api/product/reservationData`,
+          withCredentials: true,
+          method: 'get',
+          params: {
+            searchToken,
+            sessionToken,
+          },
+          headers: {
+            'Access-Control-Allow-Credentials': true,
+          },
         },
       })
 
