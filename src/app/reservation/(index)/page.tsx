@@ -3,7 +3,6 @@
 import { PassengerTypesIndexEnum } from '@/@types/passengerViewModel'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
-import { useSearchParams } from 'next/navigation'
 
 import {
   useForm,
@@ -65,7 +64,6 @@ export default function CheckoutPage(props: {
   searchParams: SearchParams
 }) {
   const router = useRouter()
-  // const searchParams = useSearchParams()
   const searchParams = use(props.searchParams)
   const resId = searchParams.id
   const checkoutQuery = useCheckoutQuery(resId)
