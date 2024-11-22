@@ -16,7 +16,7 @@ export const useCheckoutQuery: CheckoutQueryFnType = () => {
     queryFn: async () => {
       const response = await serviceRequest<ProductPassengerApiResponseModel>({
         axiosOptions: {
-          url: `/Product/ProductPassengerViewWebApi`,
+          url: `api/product/reservationData`,
           withCredentials: true,
           method: 'get',
           params: {
