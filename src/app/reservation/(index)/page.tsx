@@ -3,6 +3,7 @@
 import { PassengerTypesIndexEnum } from '@/@types/passengerViewModel'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 
 import {
   useForm,
@@ -58,7 +59,10 @@ function useZodForm<TSchema extends z.ZodType>(
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const checkoutQuery = useCheckoutQuery()
+  const searchParams = useSearchParams()
+
+  const resId = searchParams.get('id')
+  const checkoutQuery = useCheckoutQuery(resId || '-1')
 
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
@@ -111,7 +115,7 @@ export default function CheckoutPage() {
               }
 
             if (requestCheckout.success) {
-              router.push(`/reservation/payment`)
+              router.push(`/reservation/payment?id=${resId}`)
             }
           })}
           className='relative grid gap-3 md:gap-5'

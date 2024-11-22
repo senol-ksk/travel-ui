@@ -4,15 +4,18 @@ import cookies from 'js-cookie'
 
 import { serviceRequest } from '@/network'
 
-type CheckoutQueryFnType =
-  () => UseQueryResult<ProductPassengerApiResponseModel>
+type CheckoutQueryFnType = (
+  id: string
+) => UseQueryResult<ProductPassengerApiResponseModel>
 
-export const useCheckoutQuery: CheckoutQueryFnType = () => {
+export const useCheckoutQuery: CheckoutQueryFnType = (id) => {
   const searchToken = cookies.get('searchToken')
   const sessionToken = cookies.get('sessionToken')
 
+  console.log(id)
+
   return useQuery({
-    queryKey: ['checkout', searchToken, sessionToken],
+    queryKey: ['checkout', searchToken, sessionToken, id],
     queryFn: async () => {
       const response = await serviceRequest<ProductPassengerApiResponseModel>({
         axiosOptions: {

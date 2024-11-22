@@ -89,8 +89,12 @@ const FlightSearchPage = (props: {
         },
       })
     },
+    onMutate(query) {
+      selectedFlightState.splice(0, selectedFlightState.length)
+    },
     onSuccess(query) {
-      if (query) router.push(`/reservation`)
+      const uuid = crypto.randomUUID()
+      if (query) router.push(`/reservation?id=${uuid}`)
     },
   })
   const filteredResults = useMemo(() => {
