@@ -77,7 +77,7 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
         withCredentials: true,
         data: {
           ...data,
-          billingInfo: checkoutQuery.data?.paymentIndexModel.billingInfo,
+          billingInfo: checkoutQuery.data?.data?.paymentIndexModel.billingInfo,
           threeDCallbackUrl: threedCallbackURL,
           threeDSuccessURL: threedCallbackURL,
           threeDFailureURL: `${window.location.origin}/reservation/error/api`,
@@ -110,13 +110,13 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
           <>
             <input
               {...formMethods.register('moduleName', {
-                value: checkoutQuery.data?.viewBag.ModuleName,
+                value: checkoutQuery.data?.data?.viewBag.ModuleName,
               })}
               type='hidden'
             />
             <input
               {...formMethods.register('reservable', {
-                value: checkoutQuery.data?.viewBag.Reservable,
+                value: checkoutQuery.data?.data?.viewBag.Reservable,
               })}
               type='hidden'
             />
@@ -233,13 +233,13 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
 
         <CheckoutCard>
           <div className='flex justify-center'>
-            {checkoutQuery.data ? (
+            {checkoutQuery.data?.data ? (
               <div className='flex gap-3'>
                 <div>
                   <div className='text-sm'>Toplam Tutar</div>
                   <div className='pt-1 text-lg font-semibold'>
                     {formatCurrency(
-                      checkoutQuery.data?.viewBag.SummaryViewDataResponser
+                      checkoutQuery.data?.data.viewBag.SummaryViewDataResponser
                         .summaryResponse.totalPrice
                     )}
                   </div>

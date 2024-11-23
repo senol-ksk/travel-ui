@@ -36,7 +36,7 @@ type ServiceRequestParams = {
   axiosOptions: AxiosRequestConfig
 }
 
-type ServiceResponse<T> = {
+export type ServiceResponse<T> = {
   success: boolean
   statusCode: ResponseStatus
   message: string | null
