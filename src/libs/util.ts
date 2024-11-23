@@ -25,3 +25,5 @@ export const yearList = (
   }
   return years
 }
+
+export const generateUUID = () => crypto.randomUUID()

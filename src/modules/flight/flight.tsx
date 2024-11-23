@@ -24,6 +24,7 @@ import type {
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'
 import { FlightApiRequestParams } from './types'
+import { generateUUID } from '@/libs/util'
 
 const formSchema = z.object({
   Destination: z.string().min(3),
@@ -54,6 +55,7 @@ export const Flight = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   const [selectedOriginLocation, setSelectedOriginLocation] =
     useState<LocationResult>()
@@ -168,8 +170,9 @@ export const Flight = () => {
     queryClient.clear()
 
     // window.location.href = `/flight-search`
-    const searchId = crypto.randomUUID()
-    router.push(`/flight-search?searchId=${searchId}`)
+
+    setIsRedirecting(true)
+    router.push(`/flight-search?searchId=${generateUUID()}`)
     // router.refresh()
   }
 
@@ -274,6 +277,7 @@ export const Flight = () => {
           <Button
             type='submit'
             className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
+            loading={isRedirecting}
           >
             Ara
           </Button>
