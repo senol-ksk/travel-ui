@@ -2,17 +2,17 @@ import type { ProductPassengerApiResponseModel } from '@/@types/passengerViewMod
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import cookies from 'js-cookie'
 
-import { serviceRequest } from '@/network'
+import { serviceRequest, ServiceResponse } from '@/network'
 
 type CheckoutQueryFnType = (
-  id: string
-) => UseQueryResult<ProductPassengerApiResponseModel>
+  id: ID
+) => UseQueryResult<
+  ServiceResponse<ProductPassengerApiResponseModel | undefined>
+>
 
 export const useCheckoutQuery: CheckoutQueryFnType = (id) => {
   const searchToken = cookies.get('searchToken')
   const sessionToken = cookies.get('sessionToken')
-
-  console.log(id)
 
   return useQuery({
     queryKey: ['checkout', searchToken, sessionToken, id],
@@ -34,6 +34,6 @@ export const useCheckoutQuery: CheckoutQueryFnType = (id) => {
 
       return response
     },
-    enabled: !!searchToken,
+    enabled: !!id,
   })
 }

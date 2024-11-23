@@ -1,6 +1,7 @@
 'use client'
 
-import { use, useEffect, useMemo, useRef, useState } from 'react'
+import { use, useMemo, useState } from 'react'
+import { NavigationProgress, nprogress } from '@mantine/nprogress'
 import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -11,7 +12,6 @@ import {
   List,
   LoadingOverlay,
   Stack,
-  Title,
 } from '@mantine/core'
 import cookies from 'js-cookie'
 import {
@@ -34,14 +34,14 @@ import { formatCurrency } from '@/libs/util'
 import { serviceRequest } from '@/network'
 import { flightFilter } from '@/app/flight-search/filters'
 
+type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ searchId: string }>
+
 const selectedFlightState:
   | ClientFlightDataModel
   | ClientFlightDataModel[]
   | null
   | undefined = []
-
-type Params = Promise<{ slug: string }>
-type SearchParams = Promise<{ searchId: string }>
 
 const FlightSearchPage = (props: {
   params: Params
@@ -77,6 +77,7 @@ const FlightSearchPage = (props: {
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
+      nprogress.start()
       return serviceRequest<boolean>({
         axiosOptions: {
           url: `/api/flight/postKey`,
@@ -93,6 +94,7 @@ const FlightSearchPage = (props: {
       selectedFlightState.splice(0, selectedFlightState.length)
     },
     onSuccess(query) {
+      nprogress.complete()
       const uuid = crypto.randomUUID()
       if (query) router.push(`/reservation?id=${uuid}`)
     },
@@ -137,12 +139,6 @@ const FlightSearchPage = (props: {
         selectedFlightState.map((item) => item.flightFare.key).join(',')
       )
 
-      // router.push(
-      //   `/checkout?searchToken=${cookies.get('sessionToken')}&searchToken=${cookies.get('sessionToken')}`
-      // )
-
-      // https://localhost:44363/Flight/GetDetail
-
       return
     }
 
@@ -162,8 +158,19 @@ const FlightSearchPage = (props: {
   }
 
   return (
-    <>
-      <div className='container pt-3 md:pt-8'>
+    <div className='relative'>
+      <div className='absolute h-[5px] w-full overflow-hidden'>
+        <NavigationProgress
+          className='absolute end-0 start-0'
+          withinPortal={false}
+        />
+      </div>
+      <div
+        className={clsx('container grid h-fit pt-3 md:pt-8', {
+          hidden: submitFlightData.isPending,
+          grid: !submitFlightData.isPending,
+        })}
+      >
         {flightService.isLoading ? (
           <DefaultLoader />
         ) : filteredResults?.length ? (
@@ -440,14 +447,13 @@ const FlightSearchPage = (props: {
           <div>no data</div>
         )}
       </div>
-      {submitFlightData && submitFlightData.isPending ? (
-        <LoadingOverlay
-          visible
-          zIndex={1000}
-          overlayProps={{ radius: 'sm', blur: 2 }}
-        />
-      ) : null}
-    </>
+
+      <LoadingOverlay
+        visible={submitFlightData && submitFlightData.isPending}
+        overlayProps={{ blur: 2 }}
+        className='min-h-[200px]'
+      />
+    </div>
   )
 }
 

@@ -21,6 +21,8 @@ import {
   Input,
   List,
   LoadingOverlay,
+  Skeleton,
+  Stack,
   TextInput,
   Title,
 } from '@mantine/core'
@@ -56,17 +58,13 @@ function useZodForm<TSchema extends z.ZodType>(
   return form
 }
 
-type Params = Promise<{ slug: string }>
 type SearchParams = Promise<{ id: string }>
 
-export default function CheckoutPage(props: {
-  params: Params
-  searchParams: SearchParams
-}) {
-  const router = useRouter()
+export default function CheckoutPage(props: { searchParams: SearchParams }) {
   const searchParams = use(props.searchParams)
-  const resId = searchParams.id
-  const checkoutQuery = useCheckoutQuery(resId)
+  const router = useRouter()
+  const reservationId = searchParams.id
+  const checkoutQuery = useCheckoutQuery(reservationId)
 
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
@@ -97,17 +95,27 @@ export default function CheckoutPage(props: {
   }, [])
   //#endregion
 
-  if (checkoutQuery.data?.exceptionAction) {
+  if (!checkoutQuery.data || checkoutQuery.isLoading) {
+    return (
+      <Stack gap={12} className='max-w-[600px]'>
+        <Skeleton height={20} radius='xl' />
+        <Skeleton height={20} w={'80%'} radius='xl' />
+        <Skeleton height={16} radius='xl' w={'75%'} />
+        <Skeleton height={10} width='60%' radius='xl' />
+      </Stack>
+    )
+  }
+
+  if (!checkoutQuery.data?.data && !checkoutQuery.data?.success) {
     return (
       <CheckoutCard>
         <Title>Bir hata olustu</Title>
-        <div>{checkoutQuery.data.exceptionAction.message}</div>
       </CheckoutCard>
     )
   }
 
   return (
-    <>
+    <div className='relative'>
       <FormProvider {...formMethods}>
         <form
           onSubmit={formMethods.handleSubmit(async (data) => {
@@ -119,16 +127,16 @@ export default function CheckoutPage(props: {
               }
 
             if (requestCheckout.success) {
-              router.push(`/reservation/payment?id=${resId}`)
+              router.push(`/reservation/payment?id=${reservationId}`)
             }
           })}
           className='relative grid gap-3 md:gap-5'
         >
-          {checkoutQuery.data ? (
+          {checkoutQuery.data && checkoutQuery.data.success ? (
             <>
               <input
                 {...formMethods.register('moduleName', {
-                  value: checkoutQuery.data?.viewBag.ModuleName,
+                  value: checkoutQuery.data?.data?.viewBag.ModuleName,
                 })}
                 type='hidden'
               />
@@ -220,16 +228,16 @@ export default function CheckoutPage(props: {
                 <Checkbox
                   label='Fırsat ve kampanyalardan haberdar olmak istiyorum.'
                   {...formMethods.register('isInPromoList', {
-                    value: !!checkoutQuery.data?.isInPromoList,
+                    value: !!checkoutQuery.data?.data?.isInPromoList,
                   })}
                 />
               </div>
             </div>
           </CheckoutCard>
           <CheckoutCard>
-            {checkoutQuery.data &&
-              checkoutQuery.data?.treeContainer.childNodes.length &&
-              checkoutQuery.data?.treeContainer.childNodes.map(
+            {checkoutQuery?.data?.data &&
+              checkoutQuery.data.data?.treeContainer.childNodes.length &&
+              checkoutQuery.data.data?.treeContainer.childNodes.map(
                 (item, index) => {
                   const field = item.items[0].value
                   const passengerType = field.type
@@ -299,14 +307,14 @@ export default function CheckoutPage(props: {
               </List>
             </div>
             <div className='flex justify-center'>
-              {checkoutQuery.data ? (
+              {checkoutQuery.data.data ? (
                 <div className='flex gap-3'>
                   <div>
                     <div className='text-sm'>Toplam Tutar</div>
                     <div className='pt-1 text-lg font-semibold'>
                       {formatCurrency(
-                        checkoutQuery.data?.viewBag.SummaryViewDataResponser
-                          .summaryResponse.totalPrice
+                        checkoutQuery.data.data?.viewBag
+                          .SummaryViewDataResponser.summaryResponse.totalPrice
                       )}
                     </div>
                   </div>
@@ -321,10 +329,10 @@ export default function CheckoutPage(props: {
               ) : null}
             </div>
           </CheckoutCard>
-          {isHydrated && <LoadingOverlay visible={checkoutQuery.isLoading} />}
         </form>
       </FormProvider>
-    </>
+      <LoadingOverlay visible={checkoutPassengersMutation.isPending} />
+    </div>
   )
 }
 

@@ -31,7 +31,10 @@ video {
   max-width: 100%;
   height: auto;
 }
-
+html,
+body {
+  @apply h-full;
+}
 body {
   /* @apply bg-gray-50; */
   @apply antialiased;
