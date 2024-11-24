@@ -1,8 +1,8 @@
 'use client'
 
-import { use, useMemo, useState } from 'react'
+import { use, useEffect, useMemo, useState } from 'react'
 import { NavigationProgress, nprogress } from '@mantine/nprogress'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -26,7 +26,10 @@ import type {
   FlightApiRequestParams,
 } from '@/modules/flight/types'
 
-import { refetchFlightRequest } from '@/modules/flight/search.request'
+import {
+  clearSearchRequest,
+  refetchFlightRequest,
+} from '@/modules/flight/search.request'
 
 import { SearchResultCard } from '@/app/flight-search/search-result'
 import { Loader } from '@mantine/core'
@@ -67,13 +70,27 @@ const FlightSearchPage = (props: {
   const flightParams = readLocalStorageValue<FlightApiRequestParams>({
     key: 'flight',
   })
+  const queryKey = useMemo(
+    () => ['flight-results', searchParams.searchId],
+    [searchParams.searchId]
+  )
 
   const flightService = useQuery({
-    queryKey: ['flight-results', searchParams.searchId],
-    queryFn: refetchFlightRequest,
+    queryKey,
+    queryFn: ({ signal }) => refetchFlightRequest({ signal }),
     retryOnMount: false,
     enabled: !!searchParams.searchId,
   })
+
+  const pathname = usePathname()
+  // const searchparams = useSearchParams()
+  const queryClient = useQueryClient()
+  useEffect(() => {
+    return () => {
+      clearSearchRequest()
+      queryClient.cancelQueries({ queryKey })
+    }
+  }, [queryClient, queryKey, pathname, searchParams.searchId])
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
