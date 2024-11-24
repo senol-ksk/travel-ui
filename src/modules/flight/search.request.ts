@@ -186,13 +186,11 @@ const getSessionToken = async (): Promise<string | undefined> => {
 const ReceivedProviders: string[] = []
 
 const requestFlightData = async (
-  params: FlightSearchRequestFlightSearchPanel
+  params: FlightSearchRequestFlightSearchPanel,
+  signal: AbortSignal
 ): Promise<FlightSearchApiResponse> => {
   const searchToken = await getNewSearchSessionToken()
   const sessionToken = await getSessionToken()
-
-  // const searchToken = cookies.get(searchToken_name)!
-  // const sessionToken = cookies.get(sessionToken_name)!
 
   const payload = {
     apiAction: 'api/Flight/Search',
@@ -211,19 +209,32 @@ const requestFlightData = async (
       scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
     },
   }
-  const response = await request({
-    url: executerestUrl,
-    data: payload,
-    method: 'post',
-    headers: {
-      appToken,
-      appName: process.env.NEXT_PUBLIC_APP_NAME,
-    },
-  })
+
+  let response
+  try {
+    response = await request({
+      url: executerestUrl,
+      data: payload,
+      method: 'post',
+      headers: {
+        appToken,
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
+      },
+      signal,
+    })
+    return response
+  } catch (error) {
+    console.log(error)
+  }
+
   return response
 }
 
-export const flightApiRequest = (): Promise<boolean> =>
+export const flightApiRequest = ({
+  signal,
+}: {
+  signal: AbortSignal
+}): Promise<boolean> =>
   new Promise(async (resolve, reject) => {
     const localFlightData = JSON.parse(
       localStorage.getItem('flight')!
@@ -234,18 +245,33 @@ export const flightApiRequest = (): Promise<boolean> =>
     const flightSearchPanel = processFlightSearchPanel(localFlightData)
 
     const flightApiResponse = async () =>
-      await requestFlightData(flightSearchPanel)
+      await requestFlightData(flightSearchPanel, signal)
 
     const flightData = await flightApiResponse()
 
-    flightData.data.searchResults.forEach((item) => {
-      ReceivedProviders.push(item.diagnostics.providerName)
-    })
+    if (
+      flightData &&
+      flightData.data &&
+      Array.isArray(flightData.data.searchResults)
+    ) {
+      flightData.data.searchResults.forEach((item) => {
+        ReceivedProviders.push(item.diagnostics.providerName)
+      })
 
-    collectFlightData(flightData.data.searchResults)
-    if (flightData.data.hasMoreResponse && timer) {
+      collectFlightData(flightData.data.searchResults)
+    }
+
+    if (signal.aborted) return
+    if (!flightData) {
       setTimeout(() => {
-        resolve(flightApiRequest())
+        resolve(flightApiRequest({ signal }))
+      }, 1500)
+      return
+    }
+
+    if (flightData.data.hasMoreResponse && !!timer) {
+      setTimeout(() => {
+        resolve(flightApiRequest({ signal }))
       }, 1500)
       return
     }
@@ -255,17 +281,20 @@ export const flightApiRequest = (): Promise<boolean> =>
 
 let timer: NodeJS.Timeout | null
 
-export const refetchFlightRequest = async (): Promise<
-  ClientFlightDataModel[]
-> => {
+export const refetchFlightRequest = async ({
+  signal,
+}: {
+  signal: AbortSignal
+}): Promise<ClientFlightDataModel[]> => {
   timer = setTimeout(() => {
     timer = null
   }, 20000)
 
-  await flightApiRequest()
+  await flightApiRequest({ signal })
   const generatServerResponse = await generateFlightData()
   ReceivedProviders.splice(0, ReceivedProviders.length)
   clearTimeout(timer)
+
   timer = null
   return generatServerResponse
   //#region flight dummy data
@@ -859,9 +888,12 @@ export const refetchFlightRequest = async (): Promise<
   //#endregion
 }
 export const clearSearchRequest = () => {
+  console.log('clearSearchRequest is called')
+  if (timer) {
+    clearTimeout(timer || 0)
+    timer = null
+  }
   // if (timer) {
-  //   clearTimeout(timer)
-  //   timer = null
   // }
 }
 
