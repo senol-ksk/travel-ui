@@ -39,9 +39,10 @@ export const PassengerDropdown: React.FC<Props> = ({
       count: initialValues?.Child || 0,
     },
     Infant: {
-      count: initialValues?.Child || 0,
+      count: initialValues?.Infant || 0,
     },
   })
+
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
   const clickOutsideRef = useClickOutside(() =>
