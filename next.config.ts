@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fulltripstatic.mncdn.com',
+      },
+    ],
+  },
 }
 
 export default nextConfig

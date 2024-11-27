@@ -47,7 +47,7 @@ export type ServiceResponse<T> = {
 
 async function serviceRequest<DataType>({
   axiosOptions,
-}: ServiceRequestParams): Promise<ServiceResponse<DataType>> {
+}: ServiceRequestParams): Promise<ServiceResponse<DataType> | undefined> {
   const url =
     typeof window === 'undefined'
       ? `${process.env.SERVICE_PATH}/${axiosOptions.url}`.replace(
@@ -59,15 +59,17 @@ async function serviceRequest<DataType>({
           '$1/'
         )
 
-  const response = await client<ServiceResponse<DataType>>({
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    ...axiosOptions,
-    url,
-  })
+  try {
+    const response = await client<ServiceResponse<DataType>>({
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      ...axiosOptions,
+      url,
+    })
 
-  return response.data
+    return response.data
+  } catch (error) {}
 }
 
 export { request, serviceRequest }

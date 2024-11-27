@@ -5,7 +5,6 @@ import { ResponseStatus } from '@/app/reservation/types'
 
 export async function POST(request: NextRequest) {
   const data = await request.formData()
-  const url = `${process.env.SERVICE_PATH}/api/payment/complete?paymenttoken=${request.nextUrl.searchParams.get('paymenttoken')}`
 
   const bookResult = await serviceRequest<{
     moduleName: string
@@ -14,7 +13,7 @@ export async function POST(request: NextRequest) {
     sessionToken: string
   }>({
     axiosOptions: {
-      url,
+      url: `/api/payment/complete?paymenttoken=${request.nextUrl.searchParams.get('paymenttoken')}`,
       withCredentials: true,
       method: 'POST',
       data,
@@ -24,7 +23,7 @@ export async function POST(request: NextRequest) {
     },
   })
 
-  if (bookResult.success) {
+  if (bookResult && bookResult?.success) {
     const bookResultParams = new URLSearchParams(bookResult.data || '')
 
     await serviceRequest({
