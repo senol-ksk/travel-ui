@@ -1,3 +1,7 @@
+export enum GenderEnumIndex {
+  Male,
+  Female,
+}
 export enum GenderEnums {
   Male = '0',
   Female = '1',

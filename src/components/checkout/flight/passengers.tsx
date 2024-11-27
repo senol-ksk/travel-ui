@@ -20,7 +20,7 @@ import localeDate from 'dayjs/plugin/localeData'
 import 'dayjs/locale/tr'
 import { range } from '@mantine/hooks'
 import clsx from 'clsx'
-import { GenderEnums } from '@/@types/passengerViewModel'
+import { GenderEnums } from '@/types/passengerViewModel'
 import { PassengerValidationType } from '@/app/reservation/types'
 import { PassengerSchemaType } from '@/app/reservation/(index)/validations'
 

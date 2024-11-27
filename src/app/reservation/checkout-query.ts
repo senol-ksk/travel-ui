@@ -1,4 +1,4 @@
-import type { ProductPassengerApiResponseModel } from '@/@types/passengerViewModel'
+import type { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import cookies from 'js-cookie'
 

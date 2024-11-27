@@ -3,7 +3,15 @@
 import dayjs from 'dayjs'
 import cookies from 'js-cookie'
 import { useForm, Controller } from 'react-hook-form'
-import { Button, LoadingOverlay, NativeSelect, TextInput } from '@mantine/core'
+import {
+  Button,
+  Loader,
+  LoadingOverlay,
+  NativeSelect,
+  Skeleton,
+  Stack,
+  TextInput,
+} from '@mantine/core'
 import { useRouter } from 'next/navigation'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -63,7 +71,7 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
   const formMethods = useForm<CardValidationSchemaTypes>({
     resolver: zodResolver(paymentValidationSchema),
   })
-  const checkoutQuery = useCheckoutQuery(searchParams.id)
+  const checkoutQuery = useCheckoutQuery(searchParams.id + 'payment')
   const threeDformRef = useRef<HTMLFormElement>(null)
 
   const paymentMutation = useMutation({
@@ -96,6 +104,17 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
     }
   }, [paymentMutation.data])
 
+  if (checkoutQuery.isLoading) {
+    return (
+      <Stack gap={12} className='max-w-[600px]'>
+        <Skeleton height={20} radius='xl' />
+        <Skeleton height={20} w={'80%'} radius='xl' />
+        <Skeleton height={16} radius='xl' w={'75%'} />
+        <Skeleton height={10} width='60%' radius='xl' />
+      </Stack>
+    )
+  }
+
   return (
     <>
       <form
@@ -127,7 +146,13 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
             <Controller
               control={formMethods.control}
               name='cardOwner'
-              defaultValue={''}
+              defaultValue={`${
+                checkoutQuery.data?.data?.treeContainer.childNodes[0].items[0]
+                  .value.firstName
+              } ${
+                checkoutQuery.data?.data?.treeContainer.childNodes[0].items[0]
+                  .value.lastName
+              }`}
               render={({ field }) => {
                 return (
                   <TextInput

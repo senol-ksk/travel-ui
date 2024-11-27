@@ -1,6 +1,6 @@
 'use client'
 
-import { PassengerTypesIndexEnum } from '@/@types/passengerViewModel'
+import { PassengerTypesIndexEnum } from '@/types/passengerViewModel'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
 
@@ -42,6 +42,7 @@ import {
   checkPhoneNumberIsValid,
 } from './validations'
 import { use, useEffect, useState } from 'react'
+import { CheckoutCard } from '@/components/card'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -88,13 +89,6 @@ export default function CheckoutPage(props: { searchParams: SearchParams }) {
     },
   })
 
-  //#region  ToDo try to remove this section. we may not need this for hydration errors
-  const [isHydrated, setIsIsHydrated] = useState(false)
-  useEffect(() => {
-    setIsIsHydrated(true)
-  }, [])
-  //#endregion
-
   if (!checkoutQuery.data || checkoutQuery.isLoading) {
     return (
       <Stack gap={12} className='max-w-[600px]'>
@@ -106,10 +100,11 @@ export default function CheckoutPage(props: { searchParams: SearchParams }) {
     )
   }
 
-  if (!checkoutQuery.data?.data && !checkoutQuery.data?.success) {
+  if (!checkoutQuery.data?.data || !checkoutQuery.data?.success) {
     return (
       <CheckoutCard>
         <Title>Bir hata olustu</Title>
+        <div>{checkoutQuery.data?.data?.exceptionAction?.message}</div>
       </CheckoutCard>
     )
   }
@@ -335,11 +330,3 @@ export default function CheckoutPage(props: { searchParams: SearchParams }) {
     </div>
   )
 }
-
-const CheckoutCard: React.FC<{
-  children: React.ReactNode
-}> = ({ children }) => (
-  <div className='grid gap-3 rounded-md border bg-white p-2 shadow md:gap-6 md:p-6'>
-    {children}
-  </div>
-)

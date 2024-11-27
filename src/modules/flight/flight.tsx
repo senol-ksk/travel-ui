@@ -187,7 +187,7 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.onSubmit(handleFormSubmit)}>
-      <div className='flex grow items-center justify-between gap-3 pb-4 sm:justify-start'>
+      <div className='grid grow items-center justify-between gap-3 pb-4 sm:flex xs:justify-start'>
         <div>
           <Radio.Group
             key={form.key('ActiveTripKind')}

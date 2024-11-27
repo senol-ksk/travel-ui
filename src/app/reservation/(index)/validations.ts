@@ -1,6 +1,6 @@
 import { boolean, z } from 'zod'
 import { PassengerValidationType } from '@/app/reservation/types'
-import { GenderEnums, PassengerTypesEnum } from '@/@types/passengerViewModel'
+import { GenderEnums, PassengerTypesEnum } from '@/types/passengerViewModel'
 import { validTCKN } from '@/libs/tckn-validate'
 import dayjs from 'dayjs'
 

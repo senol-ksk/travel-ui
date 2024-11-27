@@ -5,7 +5,7 @@ import type {
   PassengerTypesEnum,
   PassengerTypesIndexEnum,
   ProductPassengerApiResponseModel,
-} from '@/@types/passengerViewModel'
+} from '@/types/passengerViewModel'
 
 export type PassengerValidationType = {
   birthDate_day: z.ZodString

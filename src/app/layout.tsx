@@ -2,7 +2,7 @@ import '@/styles/global.css'
 
 import type { Metadata } from 'next'
 
-import { MantineProvider } from '@mantine/core'
+import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 
 import { Providers } from '@/app/providers'
 
@@ -33,6 +33,7 @@ export default function RootLayout({
     <html lang='tr' suppressHydrationWarning>
       <head>
         <link rel='icon' href='/favicon.ico' sizes='any' />
+        <ColorSchemeScript />
       </head>
 
       <body>
