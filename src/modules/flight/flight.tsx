@@ -16,11 +16,11 @@ import { request } from '@/network'
 
 import { Locations } from '@/components/search-engine/locations'
 import { FlightCalendar } from '@/components/search-engine/calendar/flight'
-import { PassengerDropdown } from '@/components/search-engine/passengers'
+import { PassengerDropdown } from '@/components/search-engine/passengers/flight'
 import type {
   LocationResult,
-  LocationResults,
-} from '@/components/search-engine/locations/locations'
+  FlightLocationResults as LocationResults,
+} from '@/components/search-engine/locations/type'
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'
 import { FlightApiRequestParams } from './types'

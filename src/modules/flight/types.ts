@@ -1,6 +1,6 @@
 import type { DatesRangeValue } from '@mantine/dates'
 
-import type { LocationResult } from '@/components/search-engine/locations/locations'
+import type { LocationResult } from '@/components/search-engine/locations/type'
 
 export type GroupId = 0 | 1 | null
 export type OLPriceModel = {

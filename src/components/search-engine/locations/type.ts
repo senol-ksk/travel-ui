@@ -19,7 +19,7 @@ export type LocationResult = {
   ExtentionData: object
 }
 
-export type LocationResults = {
+export type FlightLocationResults = {
   Succeeded: true
   Result: Array<LocationResult>
   Errors: Array<[]>

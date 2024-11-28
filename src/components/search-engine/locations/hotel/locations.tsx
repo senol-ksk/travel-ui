@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   TextInput,
   Transition,
@@ -8,24 +8,21 @@ import {
   Skeleton,
 } from '@mantine/core'
 import { useClickOutside, useFocusTrap } from '@mantine/hooks'
+import { clsx } from 'clsx'
 
 import { IoSearch } from 'react-icons/io5'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { MdOutlineSubdirectoryArrowRight } from 'react-icons/md'
 
 import { Input } from '@/components/search-engine/input'
-import type {
-  FlightLocationResults as LocationResults,
-  LocationResult,
-} from './type'
-import { clsx } from 'clsx'
+import type { HotelLocationResults, HotelLocationResult } from './type'
 
 type Props = {
   label: string
   inputProps?: TextInputProps
-  onSelect?: (params: LocationResult) => void
+  onSelect?: (params: HotelLocationResult) => void
   onChange?: (params: string) => void
-  data?: LocationResults['Result']
+  data?: HotelLocationResults['Result']
   isLoading?: boolean
   defaultValue?: string | null
 }
@@ -37,7 +34,6 @@ export const Locations: React.FC<Props> = ({
   onChange = () => {},
   isLoading = false,
   data = [],
-  defaultValue = '',
 }) => {
   const [locationContainerOpened, setLocationContainerOpened] = useState(false)
   const clickOutsideRef = useClickOutside(() =>
@@ -48,10 +44,6 @@ export const Locations: React.FC<Props> = ({
 
   const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (defaultValue) setLocationName(defaultValue)
-  }, [defaultValue])
 
   return (
     <div className='relative'>
@@ -157,7 +149,7 @@ export const Locations: React.FC<Props> = ({
                                     className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
                                     onClick={() => {
                                       setLocationName(subName)
-                                      onSelect(subLocation)
+                                      // onSelect(subLocation)
                                       setLocationContainerOpened(false)
                                     }}
                                   >
