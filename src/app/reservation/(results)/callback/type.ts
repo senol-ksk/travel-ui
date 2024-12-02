@@ -1,4 +1,3 @@
-import { CabinTypes } from '@/types/flight'
 import {
   GenderEnumIndex,
   PassengerTypesIndexEnum,
@@ -6,7 +5,7 @@ import {
 
 type FlightGroupID = 1 | 0
 
-export type FlightSummaryResponse = {
+export interface FlightSummaryResponse {
   flightList: {
     flightFareInfo: {
       flightDetailKeys: string[]
@@ -229,7 +228,11 @@ export type FlightSummaryResponse = {
   moduleName: string
 }
 
-export type OperationSuccessResultType = {
+export interface HotelSummaryResponse {
+  price: number
+}
+
+export type OperationResultType = {
   passenger: {
     modules: [1]
     passengers: {
@@ -289,226 +292,7 @@ export type OperationSuccessResultType = {
   }
   product: {
     summaryResponse: {
-      moduleName: string
-      flightList: {
-        flightFareInfo: {
-          flightDetailKeys: string[]
-          groupId: FlightGroupID
-          key: string
-          totalPrice: ServicePriceType
-          basePrice: ServicePriceType
-          taxes: ServicePriceType
-          discount: ServicePriceType
-          buyFee: {
-            code: 'TRY'
-            price: ServicePriceType
-          }
-          fee: {
-            code: 'TRY'
-            price: ServicePriceType
-          }
-          passengerPrices: {
-            unitPrice: ServicePriceType
-            unitBasePrice: ServicePriceType
-            unitFee: {
-              code: 'TRY'
-              price: ServicePriceType
-            }
-            unitTax: ServicePriceType
-            cancelPenalty: null
-            changePenalty: null
-            passengers: [
-              {
-                key: null
-                name: null
-                passengerType: 0
-                age: 0
-                birthday: string
-                gender: 0
-              },
-            ]
-            taxInfos: [
-              {
-                key: string
-                value: string
-              },
-              {
-                key: string
-                value: string
-              },
-            ]
-            serviceCharges: [
-              {
-                code: string
-                canApplyAmount: boolean
-                confirmPassenger: boolean
-                price: ServicePriceType
-                desciption: null
-              },
-            ]
-          }[]
-          taxInfos: null
-          serviceCharges: {
-            code: string
-            canApplyAmount: boolean
-            confirmPassenger: boolean
-            price: ServicePriceType
-            desciption: null
-          }[]
-        }
-        flightDetail: {
-          key: string
-          groupId: FlightGroupID
-          flightSegmentKeys: string[]
-          travelTime: string
-          direction: 1 | 0
-          isDomestic: boolean
-          isOWCCombinable: boolean
-          isPromotional: boolean
-          reservable: boolean
-          freeVolatileData: object
-        }
-        flightSegments: [
-          {
-            key: string
-            groupId: FlightGroupID
-            origin: {
-              code: string
-              isDomestic: boolean
-              iata: string[]
-              type: number
-              id: ID
-            }
-            destination: {
-              code: string
-              isDomestic: boolean
-              iata: string[]
-              type: number
-              id: ID
-            }
-            departureTime: string
-            arrivalTime: string
-            flightTime: string
-            operatingAirline: {
-              code: string
-              value: string
-              countryCode: string
-            }
-            marketingAirline: {
-              code: string
-              value: string
-              countryCode: string
-            }
-            flightNumber: string
-            cabinClass: number
-            bookingCode: string
-            equipment: string
-            isMeal: boolean
-            quota: number
-            baggageAllowance: {
-              maxWeight: {
-                value: number
-                unit: number
-              }
-              piece: {
-                pieceCount: number
-              }
-            }
-            freeVolatileData: object
-          },
-        ]
-        flightPackageInfos: []
-      }[]
-      flightFareInfo: {
-        flightDetailKeys: string[]
-        groupId: FlightGroupID
-        key: string
-        totalPrice: ServicePriceType
-        basePrice: ServicePriceType
-        taxes: ServicePriceType
-        discount: ServicePriceType
-        buyFee: {
-          code: 'TRY'
-          price: ServicePriceType
-        }
-        fee: {
-          code: 'TRY'
-          price: ServicePriceType
-        }
-        passengerPrices: [
-          {
-            unitPrice: ServicePriceType
-            unitBasePrice: ServicePriceType
-            unitFee: {
-              code: 'TRY'
-              price: ServicePriceType
-            }
-            unitTax: ServicePriceType
-            cancelPenalty: null
-            changePenalty: null
-            passengers: {
-              key: null
-              name: null
-              passengerType: 0
-              age: 0
-              birthday: '0001-01-01T00:00:00'
-              gender: 0
-            }[]
-            taxInfos: {
-              key: string
-              value: string
-            }[]
-            serviceCharges: {
-              code: string
-              canApplyAmount: boolean
-              confirmPassenger: boolean
-              price: ServicePriceType
-              desciption: null
-            }[]
-          },
-        ]
-        taxInfos: null
-        serviceCharges: {
-          code: string
-          canApplyAmount: boolean
-          confirmPassenger: boolean
-          price: ServicePriceType
-          desciption: null
-        }[]
-      }
-      flightPackageInfos: []
-      isReservable: boolean
-      hasOwc: boolean
-      activeFlightTripKind: number
-      sessionToken: string
-      airportList: {
-        [key: string]: {
-          id: ID
-          code: string
-          value: {
-            langCode: string
-            value: string
-          }[]
-          countryCode: string
-          country: string
-          city: string
-        }
-      }
-      airlineList: {
-        [key: string]: string
-      }
-      applyCancelationInsurance: boolean
-      buyInsurancePrice: number
-      sellInsurancePrice: number
-      showOnlyInsurancePrice: number
-      totalPrice: number
-      priceCurrency: 'TRY'
-      loyaltyMultiple: number
-      couponDiscountList: null
-      extraCharges: {
-        [key: string]: ServicePriceType
-      }
-      financellDiscount: ServicePriceType
+      moduleName: 'Flight' | 'Hotel'
     }
   }
 }
