@@ -17,6 +17,7 @@ import type {
   LocationResult,
   LocationResults,
 } from '@/components/search-engine/locations/type'
+import { FieldError } from 'react-hook-form'
 
 type Props = {
   label: string
