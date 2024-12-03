@@ -888,13 +888,10 @@ export const refetchFlightRequest = async ({
   //#endregion
 }
 export const clearSearchRequest = () => {
-  console.log('clearSearchRequest is called')
   if (timer) {
     clearTimeout(timer || 0)
     timer = null
   }
-  // if (timer) {
-  // }
 }
 
 export const getAirlineByCodeList = async (

@@ -15,7 +15,7 @@ const maxDate = today.add(1, 'year')
 
 type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
-  defaultDates?: DatesRangeValue
+  defaultDates: DatesRangeValue
 }
 const defaultFormat = 'DD MMM ddd'
 
@@ -26,13 +26,16 @@ const HotelCalendar: React.FC<Props> = ({
   defaultDates,
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
-    defaultDates?.at(0) || dayjs().add(10, 'd').toDate(),
-    defaultDates?.at(1) || dayjs().add(17, 'd').toDate(),
+    defaultDates[0],
+    defaultDates[1],
   ])
 
   const [formatedValues, setFormatedValues] = useState<
     [string | null, string | null]
-  >(['Giriş Tarihi', 'Çıkış Tarihi'])
+  >([
+    rangeValue[0] ? dayjs(rangeValue[0]).format(defaultFormat) : 'Giriş Tarihi',
+    rangeValue[1] ? dayjs(rangeValue[1]).format(defaultFormat) : 'Çıkış Tarihi',
+  ])
 
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
