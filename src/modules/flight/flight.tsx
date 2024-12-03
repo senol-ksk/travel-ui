@@ -19,7 +19,7 @@ import { FlightCalendar } from '@/components/search-engine/calendar/flight'
 import { PassengerDropdown } from '@/components/search-engine/passengers/flight'
 import type {
   LocationResult,
-  FlightLocationResults as LocationResults,
+  LocationResults as LocationResults,
 } from '@/components/search-engine/locations/type'
 import dayjs from 'dayjs'
 import { DatesRangeValue } from '@mantine/dates'

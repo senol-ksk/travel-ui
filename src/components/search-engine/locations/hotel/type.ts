@@ -1,49 +1,26 @@
-type ID = string | number
 type arrayNumber = Array<[number]>
 
-export type HotelLocationResult = {
+export type LocationResult = {
   Id: ID
-  ParentIds: ID | null
+  ParentIds: arrayNumber
   Name: string
   Code: string
   CountryCode: string
-  Continent: null
-  Location: null
-  Northeast: null
-  Southwest: null
-  Iata: []
-  Type: 1
-  SubDestinations: [
-    {
-      Id: ID
-      ParentIds: ID[]
-      Name: string
-      Code: string
-      CountryCode: string
-      Continent: null
-      Location: [number, number]
-      Northeast: null
-      Southwest: null
-      Iata: []
-      Type: number
-      SubDestinations: []
-      Slug: string
-      Select: true
-      IsDomestic: true
-      ExtentionData: {
-        [key: string]: string
-      } | null
-    },
-  ]
-  Slug: null | string
+  Location: arrayNumber
+  Northeast: arrayNumber
+  Southwest: arrayNumber
+  Iata: string[]
+  Type: number
+  SubDestinations: LocationResult[]
+  Slug: string
   Select: boolean
   IsDomestic: boolean
-  ExtentionData: { [key: string]: string } | null
+  ExtentionData: object
 }
 
-export type HotelLocationResults = {
+export type LocationResults = {
   Succeeded: boolean
-  Result: Array<HotelLocationResult>
+  Result: Array<LocationResult>
   Errors: Array<[]>
   MessageEvents: Array<[]>
 }

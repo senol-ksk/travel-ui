@@ -8,17 +8,16 @@ import {
   Skeleton,
 } from '@mantine/core'
 import { useClickOutside, useFocusTrap } from '@mantine/hooks'
-
+import { clsx } from 'clsx'
 import { IoSearch } from 'react-icons/io5'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { MdOutlineSubdirectoryArrowRight } from 'react-icons/md'
 
 import { Input } from '@/components/search-engine/input'
 import type {
-  FlightLocationResults as LocationResults,
   LocationResult,
-} from './type'
-import { clsx } from 'clsx'
+  LocationResults,
+} from '@/components/search-engine/locations/type'
 
 type Props = {
   label: string

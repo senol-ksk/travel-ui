@@ -11,7 +11,7 @@ const searchModules = {
 }
 
 export const SearchEngine = () => (
-  <Tabs defaultValue={searchModules.flight.value}>
+  <Tabs defaultValue={searchModules.hotel.value}>
     <Tabs.List className='px-2 pt-2 md:px-4 md:pt-4'>
       <TabsTab value={searchModules.flight.value}>
         {searchModules.flight.title}

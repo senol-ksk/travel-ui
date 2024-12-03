@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
@@ -26,8 +26,8 @@ const HotelCalendar: React.FC<Props> = ({
   defaultDates,
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
-    defaultDates?.at(0) || null,
-    defaultDates?.at(1) || null,
+    defaultDates?.at(0) || dayjs().add(10, 'd').toDate(),
+    defaultDates?.at(1) || dayjs().add(17, 'd').toDate(),
   ])
 
   const [formatedValues, setFormatedValues] = useState<
@@ -40,16 +40,6 @@ const HotelCalendar: React.FC<Props> = ({
   const clickOutsideRef = useClickOutside(() =>
     setContainerTransitionState(false)
   )
-
-  useEffect(() => {
-    if (defaultDates) {
-      setRangeValue(defaultDates)
-      setFormatedValues([
-        dayjs(defaultDates.at(0)).format(defaultFormat),
-        dayjs(defaultDates.at(1)).format(defaultFormat),
-      ])
-    }
-  }, [defaultDates])
 
   const handleDateSelections = (dates: DatesRangeValue) => {
     setRangeValue(dates)
@@ -68,6 +58,8 @@ const HotelCalendar: React.FC<Props> = ({
           label='Tarihler'
           icon={'calendar'}
           onClick={() => setContainerTransitionState(true)}
+          title={`${dayjs(rangeValue[0]).format('DD MMM')} -
+            ${dayjs(rangeValue[1]).format('DD MMM')}`}
         />
         <Transition
           mounted={containerTransitionState}

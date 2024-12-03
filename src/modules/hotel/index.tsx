@@ -1,18 +1,18 @@
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { Locations } from '@/components/search-engine/locations/hotel/locations'
-import { type HotelLocationResults } from '@/components/search-engine/locations/hotel/type'
+import { type LocationResults } from '@/components/search-engine/locations/hotel/type'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { request } from '@/network'
 import { Button } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { useState } from 'react'
 
 export const HotelSearchEngine = () => {
-  // https://apipfn.lidyateknoloji.com/d/v1.1/api/hotel/search?s=istan&id=&scope=2d932774-a9d8-4df9-aae7-5ad2727da1c7
   const [destinationLocationInputValue, setDestinationLocationInputValue] =
     useState('')
   const { data: destinationLocation, isLoading: destinationLocationLoading } =
-    useQuery<HotelLocationResults>({
+    useQuery<LocationResults>({
       queryKey: ['flight-locations', destinationLocationInputValue],
       enabled:
         !!destinationLocationInputValue &&
@@ -45,10 +45,29 @@ export const HotelSearchEngine = () => {
           />
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-          <HotelCalendar />
+          <HotelCalendar
+            defaultDates={[
+              dayjs().add(3, 'd').toDate(),
+              dayjs().add(7, 'd').toDate(),
+            ]}
+            onDateSelect={(dates) => {
+              console.log(dates)
+            }}
+          />
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-          <HotelPassengerDropdown />
+          <HotelPassengerDropdown
+            initialValues={[
+              {
+                adult: 2,
+                child: 0,
+                childAges: [],
+              },
+            ]}
+            onChange={(params) => {
+              // console.log('search engine', params)
+            }}
+          />
         </div>
         <div className='col-span-12 flex grow-0 md:col-span-2'>
           <Button

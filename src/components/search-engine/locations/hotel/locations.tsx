@@ -11,18 +11,19 @@ import { useClickOutside, useFocusTrap } from '@mantine/hooks'
 import { clsx } from 'clsx'
 
 import { IoSearch } from 'react-icons/io5'
-import { IoAirplaneSharp } from 'react-icons/io5'
-import { MdOutlineSubdirectoryArrowRight } from 'react-icons/md'
 
 import { Input } from '@/components/search-engine/input'
-import type { HotelLocationResults, HotelLocationResult } from './type'
+import type {
+  LocationResult,
+  LocationResults,
+} from '@/components/search-engine/locations/type'
 
 type Props = {
   label: string
   inputProps?: TextInputProps
-  onSelect?: (params: HotelLocationResult) => void
+  onSelect?: (params: LocationResult) => void
   onChange?: (params: string) => void
-  data?: HotelLocationResults['Result']
+  data?: LocationResults['Result']
   isLoading?: boolean
   defaultValue?: string | null
 }
@@ -112,62 +113,57 @@ export const Locations: React.FC<Props> = ({
               {data?.length > 0 && (
                 <div>
                   {data.map((location) => {
-                    const { Id, Name, SubDestinations } = location
+                    const { Name, SubDestinations, Id } = location
 
-                    return (
-                      <div key={Id}>
+                    if (!SubDestinations.length) {
+                      return (
+                        <div key={Id}>
+                          <div className='relative'>
+                            <button
+                              type='button'
+                              className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
+                              onClick={() => {
+                                setLocationName(Name)
+                                onSelect(location)
+                                setLocationContainerOpened(false)
+                              }}
+                            >
+                              <span className='sr-only'>{Name}</span>
+                            </button>
+                            <div className='flex items-center gap-2 px-4 py-2'>
+                              <div className='flex flex-col text-sm'>
+                                <strong>{Name}</strong>
+                                {/* <small>{Name}</small> */}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+
+                    return SubDestinations.map((destination) => (
+                      <div key={destination.Id}>
                         <div className='relative'>
                           <button
                             type='button'
                             className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
                             onClick={() => {
-                              setLocationName(Name)
-                              onSelect(location)
+                              setLocationName(destination.Name)
+                              onSelect(destination)
                               setLocationContainerOpened(false)
                             }}
                           >
-                            <span className='sr-only'>{Name}</span>
+                            <span className='sr-only'>{destination.Name}</span>
                           </button>
-                          <div className='flex items-center gap-3 p-4'>
-                            <div className='text-2xl'>
-                              <IoAirplaneSharp />
-                            </div>
+                          <div className='flex items-center gap-2 px-4 py-2'>
                             <div className='flex flex-col text-sm'>
-                              <strong>{Name}</strong>
+                              <strong>{destination.Name}</strong>
+                              <small>{Name}</small>
                             </div>
                           </div>
                         </div>
-                        {SubDestinations.length > 0 && (
-                          <div className='grid'>
-                            {SubDestinations.map((subLocation) => {
-                              const { Id: subId, Name: subName } = subLocation
-
-                              return (
-                                <div key={subId} className='relative'>
-                                  <button
-                                    type='button'
-                                    className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
-                                    onClick={() => {
-                                      setLocationName(subName)
-                                      // onSelect(subLocation)
-                                      setLocationContainerOpened(false)
-                                    }}
-                                  >
-                                    <span className='sr-only'>{subName}</span>
-                                  </button>
-                                  <div className='flex gap-2 py-2 pe-2 ps-12'>
-                                    <div className='text-2xl'>
-                                      <MdOutlineSubdirectoryArrowRight />
-                                    </div>
-                                    <div className='text-sm'>{subName}</div>
-                                  </div>
-                                </div>
-                              )
-                            })}
-                          </div>
-                        )}
                       </div>
-                    )
+                    ))
                   })}
                 </div>
               )}
@@ -176,7 +172,7 @@ export const Locations: React.FC<Props> = ({
                   <div className='text-4xl'>
                     <IoSearch />
                   </div>
-                  <div className='text-sm'>Hava yolu veya Şehir arayın.</div>
+                  <div className='text-sm'>Otel veya Şehir arayın.</div>
                 </div>
               ) : null}
             </div>

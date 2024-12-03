@@ -1,4 +1,3 @@
-type ID = string | number
 type arrayNumber = Array<[number]>
 
 export type LocationResult = {
@@ -19,7 +18,7 @@ export type LocationResult = {
   ExtentionData: object
 }
 
-export type FlightLocationResults = {
+export type LocationResults = {
   Succeeded: true
   Result: Array<LocationResult>
   Errors: Array<[]>
