@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import clsx from 'clsx'
+import { FaArrowRightLong } from 'react-icons/fa6'
 
 import type { ClientFlightDataModel } from '@/modules/flight/types'
 import { Button } from '@mantine/core'
@@ -11,16 +11,12 @@ type IProps = {
 }
 
 export const SearchResultCard = ({ onSelect = () => {}, flight }: IProps) => {
-  const isDomestic =
-    flight.flightDetails.filter((item) => item.isDomestic).length > 0
-
-  const flightDetailSegments = flight.flightDetailSegments
+  const isDomestic = flight.flightDetails.every((item) => item.isDomestic)
+  // const flightDetailSegments = flight.flightDetailSegments
+  const { flightDetails, flightDetailSegments } = flight
 
   return (
-    <div
-      key={flight.id}
-      className={clsx('rounded-lg border border-gray-300 p-3')}
-    >
+    <div className={'rounded-lg border border-gray-300 p-3'}>
       {isDomestic ? (
         <div>
           <div>
@@ -56,35 +52,70 @@ export const SearchResultCard = ({ onSelect = () => {}, flight }: IProps) => {
               )}
             </div>
           </div>
-          <div className='text-end text-lg font-bold'>
-            {formatCurrency(flight!.flightFare.totalPrice.value)}
-          </div>
         </div>
       ) : (
         <div>
-          <div>
-            <div>{flightDetailSegments.at(0)?.marketingAirline.code}</div>
-            <div>
-              {dayjs(flightDetailSegments.at(0)?.departureTime).format('HH:mm')}
-            </div>
-            {flightDetailSegments.filter((item) => (item.groupId = 0)).length >
-            1
-              ? 'Aktarma var'
-              : 'aktarma yok'}
-            <hr />
-            <div>{flightDetailSegments.at(-1)?.marketingAirline.code}</div>
-            <div>
-              {dayjs(flightDetailSegments.at(-1)?.departureTime).format(
-                'HH:mm'
-              )}
-            </div>
-          </div>
-          <div className='text-end text-lg font-bold'>
-            {formatCurrency(flight!.flightFare.totalPrice.value)}
+          {/* <textarea defaultValue={JSON.stringify(flight)}></textarea> */}
+          <div className='grid grid-cols-2 gap-2'>
+            {flightDetails.map((detail, index) => {
+              // const detailSegment = flightDetailSegments.find(
+              //   (segment) => segment.key === detail.flightSegmentKeys[index]
+              // )
+
+              const detailSegments = detail.flightSegmentKeys.map(
+                (segmentKey) => {
+                  return flightDetailSegments.find((segment) => {
+                    return segmentKey === segment.key
+                  })
+                }
+              )
+
+              return (
+                <div key={detail.key}>
+                  {/* <textarea
+                    defaultValue={JSON.stringify(detailSegments)}
+                  ></textarea> */}
+                  <div>
+                    {
+                      flight.airLines.find(
+                        (airline) =>
+                          airline.code ===
+                          detailSegments.at(0)?.marketingAirline.code
+                      )?.value
+                    }
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <div>
+                      {}
+                      {dayjs(detailSegments?.at(0)?.departureTime).format(
+                        'HH:mm'
+                      )}
+                    </div>
+                    <div>
+                      <FaArrowRightLong />
+                    </div>
+                    <div>
+                      {dayjs(detailSegments.at(-1)?.arrivalTime).format(
+                        'HH:mm'
+                      )}
+                    </div>
+                  </div>
+                  <div>{detail.travelTime}</div>
+                  <div>
+                    {detail.flightSegmentKeys.length > 1
+                      ? 'Aktarma var'
+                      : 'Aktarma yok'}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       )}
 
+      <div className='text-end text-lg font-bold'>
+        {formatCurrency(flight.flightFare.totalPrice.value)}
+      </div>
       <div className='flex justify-end pt-3'>
         <Button
           type='button'

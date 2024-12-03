@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     await serviceRequest({
       axiosOptions: {
-        url: `${process.env.SERVICE_PATH}/api/book/complete`,
+        url: `/api/book/complete`,
         method: 'POST',
         data: bookResult.data,
       },

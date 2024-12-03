@@ -1,649 +1,105 @@
 {
-  "data": {
-    "dataViewResponsers": [
+  "passenger": {
+    "modules": [1],
+    "passengers": [
       {
-        "summaryResponse": {
-          "flightList": [
-            {
-              "flightFareInfo": {
-                "flightDetailKeys": ["61418"],
-                "groupId": 0,
-                "key": "53852",
-                "totalPrice": {
-                  "value": 1112.56,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "basePrice": {
-                  "value": 643.26,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "taxes": {
-                  "value": 469.3,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "discount": {
-                  "value": 0,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "buyFee": {
-                  "code": "TRY",
-                  "price": {
-                    "value": 0,
-                    "currency": "TRY",
-                    "rateValue": null
-                  }
-                },
-                "fee": {
-                  "code": "TRY",
-                  "price": {
-                    "value": 0,
-                    "currency": "TRY",
-                    "rateValue": null
-                  }
-                },
-                "passengerPrices": [
-                  {
-                    "unitPrice": {
-                      "value": 1112.56,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "unitBasePrice": {
-                      "value": 643.26,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "unitFee": {
-                      "code": "TRY",
-                      "price": {
-                        "value": 0,
-                        "currency": "TRY",
-                        "rateValue": null
-                      }
-                    },
-                    "unitTax": {
-                      "value": 469.3,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "cancelPenalty": null,
-                    "changePenalty": null,
-                    "passengers": [
-                      {
-                        "key": null,
-                        "name": null,
-                        "passengerType": 0,
-                        "age": 0,
-                        "birthday": "0001-01-01T00:00:00",
-                        "gender": 0
-                      }
-                    ],
-                    "taxInfos": [
-                      {
-                        "key": "YR",
-                        "value": "350.0000"
-                      },
-                      {
-                        "key": "VQ",
-                        "value": "119.3000"
-                      }
-                    ],
-                    "serviceCharges": [
-                      {
-                        "code": "Fee",
-                        "canApplyAmount": false,
-                        "confirmPassenger": false,
-                        "price": {
-                          "value": 0,
-                          "currency": "TRY",
-                          "rateValue": null
-                        },
-                        "desciption": null
-                      }
-                    ]
-                  }
-                ],
-                "taxInfos": null,
-                "serviceCharges": [
-                  {
-                    "code": "Fee",
-                    "canApplyAmount": false,
-                    "confirmPassenger": false,
-                    "price": {
-                      "value": 0,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "desciption": null
-                  }
-                ]
-              },
-              "flightDetail": {
-                "key": "53852",
-                "groupId": 0,
-                "flightSegmentKeys": ["61418"],
-                "travelTime": "00:00:00",
-                "direction": 1,
-                "isDomestic": true,
-                "isOWCCombinable": false,
-                "isPromotional": false,
-                "reservable": false,
-                "freeVolatileData": {}
-              },
-              "flightSegments": [
-                {
-                  "key": "61418",
-                  "groupId": 0,
-                  "origin": {
-                    "code": "SAW",
-                    "isDomestic": true,
-                    "iata": [],
-                    "type": 7,
-                    "id": 90073
-                  },
-                  "destination": {
-                    "code": "OGU",
-                    "isDomestic": true,
-                    "iata": ["OGU"],
-                    "type": 1,
-                    "id": 309
-                  },
-                  "departureTime": "2024-12-13T06:20:00",
-                  "arrivalTime": "2024-12-13T07:55:00",
-                  "flightTime": "01:35:00",
-                  "operatingAirline": {
-                    "code": "PC",
-                    "value": "Pegasus  Havayolları",
-                    "countryCode": "TR"
-                  },
-                  "marketingAirline": {
-                    "code": "PC",
-                    "value": "Pegasus  Havayolları",
-                    "countryCode": "TR"
-                  },
-                  "flightNumber": "2860",
-                  "cabinClass": 0,
-                  "bookingCode": "1UYMV3",
-                  "equipment": "",
-                  "isMeal": false,
-                  "quota": 9,
-                  "baggageAllowance": {
-                    "maxWeight": {
-                      "value": 15,
-                      "unit": 0
-                    },
-                    "piece": {
-                      "pieceCount": 0
-                    }
-                  },
-                  "freeVolatileData": {}
-                }
-              ],
-              "flightPackageInfos": []
-            }
-          ],
+        "type": 0,
+        "gender": 0,
+        "fullName": "SENOL  YAMAN",
+        "birthday": "1947-04-03T00:00:00",
+        "identityNumber": "65*******94",
+        "bookingCode": "",
+        "campaignCode": null,
+        "eTicketNumber": null,
+        "firstName": "SENOL",
+        "lastName": "YAMAN",
+        "mobilePhoneNumber": "+90532*****34",
+        "email": "SENOLK@LIDYATEKNOLOJI.COM",
+        "marketingAirlineCode": "PC",
+        "isRoundedTrip": true,
+        "module": 1,
+        "groupOrderIndex": 1,
+        "localPassengerSequenceNo": 1,
+        "localRelatedPassengerSequenceNo": null,
+        "discount": {
+          "value": 0,
+          "currency": null,
+          "rateValue": null
+        },
+        "productItemId": 57481
+      }
+    ],
+    "billingInformation": [
+      {
+        "billingName": "react test",
+        "isCompany": false,
+        "address": "Kadikoy Kadikoy Istanbul",
+        "taxNo": "10*******00"
+      }
+    ],
+    "paymentInformation": {
+      "basketTotal": 4071.26,
+      "basketDiscountTotal": 0,
+      "collectingTotal": 4071.26,
+      "financellTotal": 0,
+      "mlTotal": null,
+      "rateOfInterest": 1,
+      "installmentCount": 1,
+      "bankName": "AKBANK",
+      "encryptedCardHolder": "S**** Y****",
+      "encryptedCardNumber": "435509******5232",
+      "sellingCurrency": "TRY"
+    },
+    "ssrList": [],
+    "passengerCargoAddress": [],
+    "bookingDateTime": "2024-12-02T07:08:56.2886605",
+    "fromSession": true,
+    "authorizeKey": null,
+    "shoppingFileId": 52771,
+    "taxAmount": 839.6,
+    "shippingAmount": 0,
+    "operationResultPromotionUsageList": null
+  },
+  "product": {
+    "summaryResponse": {
+      "flightList": [
+        {
           "flightFareInfo": {
-            "flightDetailKeys": ["57444"],
+            "flightDetailKeys": [
+              "2tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi3CTvZuoPU6nnjMsaClsEhjJh1pe3wBZTcALSRXrlnQnCpfwQZ/f2Sam7S3OxRgu/0CBuOyHOqCknBub6JUTkxh21FiY4m3zim85ScO036O+RzPmUcyjjKj3VkIxPOOdkgo2Z1+3vha9kila/vKl+mMKsXO9I0Ruyp2MFykEteZzNFzmLFBZ+7JJGy7mCbHgPblJRxCr4FCxS5PgdRNMdwoF4vDcK4CINcZDvsattMsyGlKrlnNLqHTjoKL97dX/P+ynu+UNSYLamT1Tx2yZRTe4/WIvrGJetzdR1JzxImarc6nUv7Bs7UrYjhfotPlo10fdYirrXRLYEWLQ0HNKP4iiZRpgWOaRL0jorpmi6y5IsFvZ+LB7XgjRT/6UemKKii+NsHAvAv+m2egk3btN8f+SnjDSsfdTvp+93tDdiFQhVykHhNqqCZIft7eWt1IdZW/SZSS43jm9AD8bq6Xyj4qf/2aJ/GQLe7SA9OG7iXeQ"
+            ],
             "groupId": 0,
-            "key": "53852",
+            "key": "2tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi4SQ/Tpba6/zn8Tmem9wPW8PlaqVZCiJ4mfPq8pYgVTg/ygzUTFqg1Kqqg75S/l1VHguGsD/EJy6i4GLYmAMBCjATpBitL0Bho6IgeQ+kABSUbIptZAjWA2b5/mJ4efERZVXiUOT6o5gPM9f8laAfC6KAKGrWJzbz0p9/7sRlEVspuvVx2e8je4xa/ZWQgdGQ8B9g+3r081rfGHn9ofeYOPKxzvQ0GEu3H+mx2/oQweY8lcd1mbvgVE93GCtJVsv5d9ZQMXQBrWnfOCSuMeKHo8ghyNbDMcJnbhOohYE3lnS7/9p4UUbyfzjiQXEMoco8JjqRgFWOS48Wq728Ycmdx0yerHKKkk+a3tdsSjEgfEGKbHXAqWfXrFy4Gji377Wz8ZPsJwnfpMGZzMx7feJqCc=",
             "totalPrice": {
-              "value": 1112.56,
+              "value": 2124.26,
               "currency": "TRY",
               "rateValue": null
             },
             "basePrice": {
-              "value": 643.26,
+              "value": 1754.96,
               "currency": "TRY",
               "rateValue": null
             },
             "taxes": {
-              "value": 469.3,
+              "value": 369.3,
               "currency": "TRY",
               "rateValue": null
             },
             "discount": {
               "value": 0,
-              "currency": "TRY",
+              "currency": null,
               "rateValue": null
             },
             "buyFee": {
-              "code": "TRY",
+              "code": null,
               "price": {
-                "value": 0,
-                "currency": "TRY",
-                "rateValue": null
-              }
-            },
-            "fee": {
-              "code": "TRY",
-              "price": {
-                "value": 0,
-                "currency": "TRY",
-                "rateValue": null
-              }
-            },
-            "passengerPrices": [
-              {
-                "unitPrice": {
-                  "value": 1112.56,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "unitBasePrice": {
-                  "value": 643.26,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "unitFee": {
-                  "code": "TRY",
-                  "price": {
-                    "value": 0,
-                    "currency": "TRY",
-                    "rateValue": null
-                  }
-                },
-                "unitTax": {
-                  "value": 469.3,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "cancelPenalty": null,
-                "changePenalty": null,
-                "passengers": [
-                  {
-                    "key": null,
-                    "name": null,
-                    "passengerType": 0,
-                    "age": 0,
-                    "birthday": "0001-01-01T00:00:00",
-                    "gender": 0
-                  }
-                ],
-                "taxInfos": [
-                  {
-                    "key": "YR",
-                    "value": "350.0000"
-                  },
-                  {
-                    "key": "VQ",
-                    "value": "119.3000"
-                  }
-                ],
-                "serviceCharges": [
-                  {
-                    "code": "Fee",
-                    "canApplyAmount": false,
-                    "confirmPassenger": false,
-                    "price": {
-                      "value": 0,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "desciption": null
-                  }
-                ]
-              }
-            ],
-            "taxInfos": null,
-            "serviceCharges": [
-              {
-                "code": "Fee",
-                "canApplyAmount": false,
-                "confirmPassenger": false,
-                "price": {
-                  "value": 0,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "desciption": null
-              }
-            ]
-          },
-          "flightPackageInfos": [],
-          "isReservable": false,
-          "hasOwc": false,
-          "activeFlightTripKind": 1,
-          "sessionToken": "B677693245E6E70AE24F818F1E6C3FD8EC097FAE55723BF57C05E865542675D3",
-          "airportList": {
-            "SAW": {
-              "id": 90073,
-              "code": "SAW",
-              "value": [
-                {
-                  "langCode": "tr_TR",
-                  "value": "Sabiha Gökçen Uluslararası Havalimanı"
-                }
-              ],
-              "countryCode": "tr",
-              "country": "Türkiye",
-              "city": "İstanbul"
-            },
-            "OGU": {
-              "id": 90099,
-              "code": "OGU",
-              "value": [
-                {
-                  "langCode": "tr_TR",
-                  "value": "Ordu-Giresun Havalimanı"
-                }
-              ],
-              "countryCode": "tr",
-              "country": "Türkiye",
-              "city": "Ordu"
-            }
-          },
-          "airlineList": {
-            "PC": "Pegasus  Havayolları"
-          },
-          "applyCancelationInsurance": true,
-          "buyInsurancePrice": 0,
-          "sellInsurancePrice": 0,
-          "showOnlyInsurancePrice": 0,
-          "moduleName": "Flight",
-          "totalPrice": 1112.56,
-          "priceCurrency": "TRY",
-          "loyaltyMultiple": 0,
-          "couponDiscountList": null,
-          "extraCharges": {
-            "CIP": {
-              "value": 0,
-              "currency": "TRY",
-              "rateValue": null
-            }
-          },
-          "financellDiscount": {
-            "value": 0,
-            "currency": null,
-            "rateValue": null
-          }
-        }
-      },
-      {
-        "operationResultViewData": {
-          "modules": [1],
-          "passengers": [
-            {
-              "type": 0,
-              "gender": 0,
-              "fullName": "SENOL  KESKIN",
-              "birthday": "2000-02-20T00:00:00",
-              "identityNumber": "29*******80",
-              "bookingCode": "1UYMV3",
-              "campaignCode": null,
-              "eTicketNumber": "6242444089573",
-              "firstName": "SENOL",
-              "lastName": "KESKIN",
-              "mobilePhoneNumber": "+90532*****23",
-              "email": "SENOLK@LIDYATEKNOLOJI.COM",
-              "marketingAirlineCode": "PC",
-              "isRoundedTrip": false,
-              "module": 1,
-              "groupOrderIndex": 1,
-              "localPassengerSequenceNo": 1,
-              "localRelatedPassengerSequenceNo": null,
-              "discount": {
                 "value": 0,
                 "currency": null,
                 "rateValue": null
-              },
-              "productItemId": 57444
-            }
-          ],
-          "billingInformation": [
-            {
-              "billingName": "senol keskin",
-              "isCompany": false,
-              "address": "Kadikoy Kadikoy Istanbul",
-              "taxNo": "29*******80"
-            }
-          ],
-          "paymentInformation": {
-            "basketTotal": 1112.56,
-            "basketDiscountTotal": 0,
-            "collectingTotal": 1112.56,
-            "financellTotal": 0,
-            "mlTotal": null,
-            "rateOfInterest": 1,
-            "installmentCount": 1,
-            "bankName": "AKBANK",
-            "encryptedCardHolder": "t*** t***",
-            "encryptedCardNumber": "435509******5232",
-            "sellingCurrency": "TRY"
-          },
-          "ssrList": [],
-          "passengerCargoAddress": [],
-          "bookingDateTime": "2024-11-18T08:13:55.41445",
-          "fromSession": false,
-          "authorizeKey": null,
-          "shoppingFileId": 52710,
-          "taxAmount": 469.3,
-          "shippingAmount": 0,
-          "operationResultPromotionUsageList": null
-        }
-      },
-      {
-        "summaryResponse": {
-          "flightList": [
-            {
-              "flightFareInfo": {
-                "flightDetailKeys": ["61418"],
-                "groupId": 0,
-                "key": "53852",
-                "totalPrice": {
-                  "value": 1112.56,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "basePrice": {
-                  "value": 643.26,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "taxes": {
-                  "value": 469.3,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "discount": {
-                  "value": 0,
-                  "currency": "TRY",
-                  "rateValue": null
-                },
-                "buyFee": {
-                  "code": "TRY",
-                  "price": {
-                    "value": 0,
-                    "currency": "TRY",
-                    "rateValue": null
-                  }
-                },
-                "fee": {
-                  "code": "TRY",
-                  "price": {
-                    "value": 0,
-                    "currency": "TRY",
-                    "rateValue": null
-                  }
-                },
-                "passengerPrices": [
-                  {
-                    "unitPrice": {
-                      "value": 1112.56,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "unitBasePrice": {
-                      "value": 643.26,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "unitFee": {
-                      "code": "TRY",
-                      "price": {
-                        "value": 0,
-                        "currency": "TRY",
-                        "rateValue": null
-                      }
-                    },
-                    "unitTax": {
-                      "value": 469.3,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "cancelPenalty": null,
-                    "changePenalty": null,
-                    "passengers": [
-                      {
-                        "key": null,
-                        "name": null,
-                        "passengerType": 0,
-                        "age": 0,
-                        "birthday": "0001-01-01T00:00:00",
-                        "gender": 0
-                      }
-                    ],
-                    "taxInfos": [
-                      {
-                        "key": "YR",
-                        "value": "350.0000"
-                      },
-                      {
-                        "key": "VQ",
-                        "value": "119.3000"
-                      }
-                    ],
-                    "serviceCharges": [
-                      {
-                        "code": "Fee",
-                        "canApplyAmount": false,
-                        "confirmPassenger": false,
-                        "price": {
-                          "value": 0,
-                          "currency": "TRY",
-                          "rateValue": null
-                        },
-                        "desciption": null
-                      }
-                    ]
-                  }
-                ],
-                "taxInfos": null,
-                "serviceCharges": [
-                  {
-                    "code": "Fee",
-                    "canApplyAmount": false,
-                    "confirmPassenger": false,
-                    "price": {
-                      "value": 0,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "desciption": null
-                  }
-                ]
-              },
-              "flightDetail": {
-                "key": "53852",
-                "groupId": 0,
-                "flightSegmentKeys": ["61418"],
-                "travelTime": "00:00:00",
-                "direction": 1,
-                "isDomestic": true,
-                "isOWCCombinable": false,
-                "isPromotional": false,
-                "reservable": false,
-                "freeVolatileData": {}
-              },
-              "flightSegments": [
-                {
-                  "key": "61418",
-                  "groupId": 0,
-                  "origin": {
-                    "code": "SAW",
-                    "isDomestic": true,
-                    "iata": [],
-                    "type": 7,
-                    "id": 90073
-                  },
-                  "destination": {
-                    "code": "OGU",
-                    "isDomestic": true,
-                    "iata": ["OGU"],
-                    "type": 1,
-                    "id": 309
-                  },
-                  "departureTime": "2024-12-13T06:20:00",
-                  "arrivalTime": "2024-12-13T07:55:00",
-                  "flightTime": "01:35:00",
-                  "operatingAirline": {
-                    "code": "PC",
-                    "value": "Pegasus  Havayolları",
-                    "countryCode": "TR"
-                  },
-                  "marketingAirline": {
-                    "code": "PC",
-                    "value": "Pegasus  Havayolları",
-                    "countryCode": "TR"
-                  },
-                  "flightNumber": "2860",
-                  "cabinClass": 0,
-                  "bookingCode": "1UYMV3",
-                  "equipment": "",
-                  "isMeal": false,
-                  "quota": 9,
-                  "baggageAllowance": {
-                    "maxWeight": {
-                      "value": 15,
-                      "unit": 0
-                    },
-                    "piece": {
-                      "pieceCount": 0
-                    }
-                  },
-                  "freeVolatileData": {}
-                }
-              ],
-              "flightPackageInfos": []
-            }
-          ],
-          "flightFareInfo": {
-            "flightDetailKeys": ["57444"],
-            "groupId": 0,
-            "key": "53852",
-            "totalPrice": {
-              "value": 1112.56,
-              "currency": "TRY",
-              "rateValue": null
-            },
-            "basePrice": {
-              "value": 643.26,
-              "currency": "TRY",
-              "rateValue": null
-            },
-            "taxes": {
-              "value": 469.3,
-              "currency": "TRY",
-              "rateValue": null
-            },
-            "discount": {
-              "value": 0,
-              "currency": "TRY",
-              "rateValue": null
-            },
-            "buyFee": {
-              "code": "TRY",
-              "price": {
-                "value": 0,
-                "currency": "TRY",
-                "rateValue": null
               }
             },
             "fee": {
-              "code": "TRY",
+              "code": "",
               "price": {
                 "value": 0,
                 "currency": "TRY",
@@ -653,17 +109,17 @@
             "passengerPrices": [
               {
                 "unitPrice": {
-                  "value": 1112.56,
+                  "value": 2124.26,
                   "currency": "TRY",
                   "rateValue": null
                 },
                 "unitBasePrice": {
-                  "value": 643.26,
+                  "value": 1754.96,
                   "currency": "TRY",
                   "rateValue": null
                 },
                 "unitFee": {
-                  "code": "TRY",
+                  "code": "",
                   "price": {
                     "value": 0,
                     "currency": "TRY",
@@ -671,7 +127,7 @@
                   }
                 },
                 "unitTax": {
-                  "value": 469.3,
+                  "value": 369.3,
                   "currency": "TRY",
                   "rateValue": null
                 },
@@ -679,7 +135,7 @@
                 "changePenalty": null,
                 "passengers": [
                   {
-                    "key": null,
+                    "key": "A0161426FFD4E5B745CDE08A835E8076E7802168059FDD041EB00F518D4298EC",
                     "name": null,
                     "passengerType": 0,
                     "age": 0,
@@ -689,110 +145,455 @@
                 ],
                 "taxInfos": [
                   {
-                    "key": "YR",
-                    "value": "350.0000"
+                    "key": "VQ",
+                    "value": "19.30"
                   },
                   {
-                    "key": "VQ",
-                    "value": "119.3000"
+                    "key": "YR",
+                    "value": "350.00"
+                  },
+                  {
+                    "key": "||",
+                    "value": "0"
                   }
                 ],
-                "serviceCharges": [
-                  {
-                    "code": "Fee",
-                    "canApplyAmount": false,
-                    "confirmPassenger": false,
-                    "price": {
-                      "value": 0,
-                      "currency": "TRY",
-                      "rateValue": null
-                    },
-                    "desciption": null
-                  }
-                ]
+                "serviceCharges": null
               }
             ],
             "taxInfos": null,
-            "serviceCharges": [
+            "serviceCharges": null
+          },
+          "flightDetail": {
+            "key": "2tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi3CTvZuoPU6nnjMsaClsEhjJh1pe3wBZTcALSRXrlnQnCpfwQZ/f2Sam7S3OxRgu/0CBuOyHOqCknBub6JUTkxh21FiY4m3zim85ScO036O+RzPmUcyjjKj3VkIxPOOdkgo2Z1+3vha9kila/vKl+mMKsXO9I0Ruyp2MFykEteZzNFzmLFBZ+7JJGy7mCbHgPblJRxCr4FCxS5PgdRNMdwoF4vDcK4CINcZDvsattMsyGlKrlnNLqHTjoKL97dX/P+ynu+UNSYLamT1Tx2yZRTe4/WIvrGJetzdR1JzxImarc6nUv7Bs7UrYjhfotPlo10fdYirrXRLYEWLQ0HNKP4iiZRpgWOaRL0jorpmi6y5IsFvZ+LB7XgjRT/6UemKKii+NsHAvAv+m2egk3btN8f+SnjDSsfdTvp+93tDdiFQhVykHhNqqCZIft7eWt1IdZW/SZSS43jm9AD8bq6Xyj4qf/2aJ/GQLe7SA9OG7iXeQ",
+            "groupId": 0,
+            "flightSegmentKeys": [
+              "12tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi4SQ/Tpba6/zn8Tmem9wPW9+VXm0tOydCT56EJn6SeeX4lgb+zMAc0pFCVBiZuyjPm4l8T2l5Ue7yUcreedC0dirdJ0OU32PvuptoVD54SM0"
+            ],
+            "travelTime": "01:45:00",
+            "direction": 2,
+            "isDomestic": true,
+            "isOWCCombinable": false,
+            "isPromotional": true,
+            "reservable": true,
+            "freeVolatileData": {
+              "data": "OFFERITEM1_1:SH1",
+              "OfferID": "NDU5MjU2MSo0MjAxNzgwNjU0NyotMSpLT1cqSypmYWxzZSpBMjA3Skg1OCotMSpOT05fT1cqdHJ1ZSoyMTI0LjI2KlRSWSoyMDI1LTAxLTIwKm82eEpiR05JMnBSV2RGMURObXolMkZ3NEdaZTZjTDNucWhZUVUxSnFnb1JiZ05UT0RWZiUyRnpLalFXNGNlaUJRZEhxU3RIbTNlbDhteE9vc1dIbDJZa1pVUSUzRCUzRA==",
+              "Owner": "PC",
+              "ResponseID": "2bd86df15a7c4ca79f6289651dd38310",
+              "brandname": "ECO",
+              "Seq": "FL_VASADB_1",
+              "SegmentRefs": "NDU5MjU2MQ==",
+              "PassengerList": "SH1",
+              "StandartSeatSelection": false,
+              "AllSeatSelection": false,
+              "FreeSandwich": false,
+              "Entertainment": false,
+              "FlexibleReturnChangeRight": false
+            }
+          },
+          "flightSegments": [
+            {
+              "key": "12tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi4SQ/Tpba6/zn8Tmem9wPW9+VXm0tOydCT56EJn6SeeX4lgb+zMAc0pFCVBiZuyjPm4l8T2l5Ue7yUcreedC0dirdJ0OU32PvuptoVD54SM0",
+              "groupId": 0,
+              "origin": {
+                "code": "VAS",
+                "isDomestic": false,
+                "iata": null,
+                "type": 7,
+                "id": 0
+              },
+              "destination": {
+                "code": "ADB",
+                "isDomestic": false,
+                "iata": null,
+                "type": 7,
+                "id": 0
+              },
+              "departureTime": "2025-01-20T09:20:00",
+              "arrivalTime": "2025-01-20T11:05:00",
+              "flightTime": "01:45:00",
+              "operatingAirline": {
+                "code": "PC",
+                "value": null,
+                "countryCode": null
+              },
+              "marketingAirline": {
+                "code": "PC",
+                "value": null,
+                "countryCode": null
+              },
+              "flightNumber": "3201",
+              "cabinClass": 0,
+              "bookingCode": "KOW",
+              "equipment": null,
+              "isMeal": false,
+              "quota": 9,
+              "baggageAllowance": {
+                "maxWeight": {
+                  "value": 15,
+                  "unit": 0
+                },
+                "piece": {
+                  "pieceCount": 0
+                }
+              },
+              "freeVolatileData": {
+                "ResBookDesigID": {
+                  "SeatsLeft": 9,
+                  "SeatsLeftSpecified": true,
+                  "Value": "K"
+                },
+                "ResBookDesigCode": "KOW",
+                "Baggage": "BaggageAllowance1",
+                "BrandName": "ECO",
+                "Seq": "FL_VASADB_1"
+              }
+            }
+          ],
+          "flightPackageInfos": []
+        },
+        {
+          "flightFareInfo": {
+            "flightDetailKeys": [
+              "2tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi7UYjkcDyuMvpmbiSNLLg4qVVbOV/0dgCv6TyJe6AKoi9uQ+PMs/qVFmUJEAV+WHesoiXDCdca17cE5/5zDlSCgeUmhuHgoaFxPIgICmIxDStMpHpoXiQNq9xQiLlZhoEKQO2qnoujYpPrw86NbT+4vcn9Qv0zGpvrlfFbJKItbuOUgXpOjhha/8nUhOI4fDPsQQuk2d/ZHcJ2tMqaN8aOQMH7P2zTfLw1lU5DJApo+R4scs3AEc4WqFTj0JWhuGz3Kwc9CgHIUWUxcmSIfnzveqBBNMSedlC8833UwB8U/4hIMxz44MaSOr/k7egmIrx+2uQ70HUm8w+Z1eQ27i6kv2epQsdtG5yGwr6/UfdS7xbtYWpMWVqoHRzZdGwja0qOWCmMBCd09jIqj/lVhyphA08xQwrARGA/xevXtSL4OY5U+JChvwA2s/+tDucYFY9PdJIKOCijXWNrYXWIMbeVX4ziMQm/4ikrlYS7SucCLY"
+            ],
+            "groupId": 1,
+            "key": "2tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi4SQ/Tpba6/zn8Tmem9wPW958FH6aqYgmHqB1GGP4WZLVZXksNuEnxEEe+7b56+h7qihRK5elIbBdu1bWzuvSI4h1G8QnLTKZrMgN24qosPI+vFKB9aK6Sd1dQ6Q7AHrxpIJfeW1iCeEjpWLv2AFORk6TGPeHA1kViBLXhVfRKYH1SeJOccP8A2fU8v+yBMn7lGSgKWtbv1RXhrWZ3Y5FFd0GMiTiD+ClQ0Y9E8ZgVnT/l8sj29x7KCWBL5kpa/n5eCuxPWvFe7MJ+LpAe1j55+f5loF44DhnT0ApIlQWUHvPQ9SGngh84ovtFT06oAKlQ+x5idcbyTJI0WcxRNvFnJsjbecKSRJRFeGgM4CY2l6XtxbcKZQeuY2rzGMfdCnRaydXCooNuGnbO7R8oikSzU=",
+            "totalPrice": {
+              "value": 1947,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "basePrice": {
+              "value": 1476.7,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "taxes": {
+              "value": 470.3,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "discount": {
+              "value": 0,
+              "currency": null,
+              "rateValue": null
+            },
+            "buyFee": {
+              "code": null,
+              "price": {
+                "value": 0,
+                "currency": null,
+                "rateValue": null
+              }
+            },
+            "fee": {
+              "code": "",
+              "price": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              }
+            },
+            "passengerPrices": [
               {
-                "code": "Fee",
-                "canApplyAmount": false,
-                "confirmPassenger": false,
-                "price": {
-                  "value": 0,
+                "unitPrice": {
+                  "value": 1947,
                   "currency": "TRY",
                   "rateValue": null
                 },
-                "desciption": null
+                "unitBasePrice": {
+                  "value": 1476.7,
+                  "currency": "TRY",
+                  "rateValue": null
+                },
+                "unitFee": {
+                  "code": "",
+                  "price": {
+                    "value": 0,
+                    "currency": "TRY",
+                    "rateValue": null
+                  }
+                },
+                "unitTax": {
+                  "value": 470.3,
+                  "currency": "TRY",
+                  "rateValue": null
+                },
+                "cancelPenalty": null,
+                "changePenalty": null,
+                "passengers": [
+                  {
+                    "key": "A0161426FFD4E5B745CDE08A835E8076E7802168059FDD041EB00F518D4298EC",
+                    "name": null,
+                    "passengerType": 0,
+                    "age": 0,
+                    "birthday": "0001-01-01T00:00:00",
+                    "gender": 0
+                  }
+                ],
+                "taxInfos": [
+                  {
+                    "key": "VQ",
+                    "value": "120.30"
+                  },
+                  {
+                    "key": "YR",
+                    "value": "350.00"
+                  }
+                ],
+                "serviceCharges": null
               }
-            ]
+            ],
+            "taxInfos": null,
+            "serviceCharges": null
           },
-          "flightPackageInfos": [],
-          "isReservable": false,
-          "hasOwc": false,
-          "activeFlightTripKind": 1,
-          "sessionToken": "B677693245E6E70AE24F818F1E6C3FD8EC097FAE55723BF57C05E865542675D3",
-          "airportList": {
-            "SAW": {
-              "id": 90073,
-              "code": "SAW",
-              "value": [
-                {
-                  "langCode": "tr_TR",
-                  "value": "Sabiha Gökçen Uluslararası Havalimanı"
-                }
-              ],
-              "countryCode": "tr",
-              "country": "Türkiye",
-              "city": "İstanbul"
-            },
-            "OGU": {
-              "id": 90099,
-              "code": "OGU",
-              "value": [
-                {
-                  "langCode": "tr_TR",
-                  "value": "Ordu-Giresun Havalimanı"
-                }
-              ],
-              "countryCode": "tr",
-              "country": "Türkiye",
-              "city": "Ordu"
+          "flightDetail": {
+            "key": "2tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi7UYjkcDyuMvpmbiSNLLg4qVVbOV/0dgCv6TyJe6AKoi9uQ+PMs/qVFmUJEAV+WHesoiXDCdca17cE5/5zDlSCgeUmhuHgoaFxPIgICmIxDStMpHpoXiQNq9xQiLlZhoEKQO2qnoujYpPrw86NbT+4vcn9Qv0zGpvrlfFbJKItbuOUgXpOjhha/8nUhOI4fDPsQQuk2d/ZHcJ2tMqaN8aOQMH7P2zTfLw1lU5DJApo+R4scs3AEc4WqFTj0JWhuGz3Kwc9CgHIUWUxcmSIfnzveqBBNMSedlC8833UwB8U/4hIMxz44MaSOr/k7egmIrx+2uQ70HUm8w+Z1eQ27i6kv2epQsdtG5yGwr6/UfdS7xbtYWpMWVqoHRzZdGwja0qOWCmMBCd09jIqj/lVhyphA08xQwrARGA/xevXtSL4OY5U+JChvwA2s/+tDucYFY9PdJIKOCijXWNrYXWIMbeVX4ziMQm/4ikrlYS7SucCLY",
+            "groupId": 1,
+            "flightSegmentKeys": [
+              "102tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi4SQ/Tpba6/zn8Tmem9wPW/+cPuqIqDI4VkqD18Lsa9upKwtdP77pNXRruMqhKpDPDkauT44hXBpPc+oJ6GG/lEgKf8zkXQDhj7V2pDQ+neg"
+            ],
+            "travelTime": "01:35:00",
+            "direction": 2,
+            "isDomestic": true,
+            "isOWCCombinable": false,
+            "isPromotional": true,
+            "reservable": true,
+            "freeVolatileData": {
+              "data": "OFFERITEM10_1:SH1",
+              "OfferID": "NDU5MjU2Mio0MjAxNzYzNjcwNyotMSpLT1cqSypmYWxzZSpBMjA3Skg1OCotMSpOT05fT1cqdHJ1ZSoxOTQ3LjAqVFJZKjIwMjUtMDEtMjQqRmNuUGRzczNQaHlHRkxqVUdvVjUyMnVWTmRRbjRydjllMmlZJTJGVHdJMFRvTlRPRFZmJTJGektqUVc0Y2VpQlFkSHFpMDRNaHhleHFKQXBYcm9ubWVhJTJCWlElM0QlM0Q=",
+              "Owner": "PC",
+              "ResponseID": "2bd86df15a7c4ca79f6289651dd38310",
+              "brandname": "ECO",
+              "Seq": "FL_ADBVAS_4",
+              "SegmentRefs": "NDU5MjU2Mg==",
+              "PassengerList": "SH1",
+              "StandartSeatSelection": false,
+              "AllSeatSelection": false,
+              "FreeSandwich": false,
+              "Entertainment": false,
+              "FlexibleReturnChangeRight": false
             }
           },
-          "airlineList": {
-            "PC": "Pegasus  Havayolları"
-          },
-          "applyCancelationInsurance": true,
-          "buyInsurancePrice": 0,
-          "sellInsurancePrice": 0,
-          "showOnlyInsurancePrice": 0,
-          "moduleName": "Flight",
-          "totalPrice": 1112.56,
-          "priceCurrency": "TRY",
-          "loyaltyMultiple": 0,
-          "couponDiscountList": null,
-          "extraCharges": {
-            "CIP": {
-              "value": 0,
-              "currency": "TRY",
-              "rateValue": null
+          "flightSegments": [
+            {
+              "key": "102tqw+CuTGcjw5xvCIdM0MiFKlEoR0XL1uQV3mQhe7z2FLXzYJnt65s4gmjaEwgS7p3u0V4wf+itZSvYQxYaKi4SQ/Tpba6/zn8Tmem9wPW/+cPuqIqDI4VkqD18Lsa9upKwtdP77pNXRruMqhKpDPDkauT44hXBpPc+oJ6GG/lEgKf8zkXQDhj7V2pDQ+neg",
+              "groupId": 1,
+              "origin": {
+                "code": "ADB",
+                "isDomestic": false,
+                "iata": null,
+                "type": 7,
+                "id": 0
+              },
+              "destination": {
+                "code": "VAS",
+                "isDomestic": false,
+                "iata": null,
+                "type": 7,
+                "id": 0
+              },
+              "departureTime": "2025-01-24T10:20:00",
+              "arrivalTime": "2025-01-24T11:55:00",
+              "flightTime": "01:35:00",
+              "operatingAirline": {
+                "code": "PC",
+                "value": null,
+                "countryCode": null
+              },
+              "marketingAirline": {
+                "code": "PC",
+                "value": null,
+                "countryCode": null
+              },
+              "flightNumber": "3200",
+              "cabinClass": 0,
+              "bookingCode": "KOW",
+              "equipment": null,
+              "isMeal": false,
+              "quota": 9,
+              "baggageAllowance": {
+                "maxWeight": {
+                  "value": 15,
+                  "unit": 0
+                },
+                "piece": {
+                  "pieceCount": 0
+                }
+              },
+              "freeVolatileData": {
+                "ResBookDesigID": {
+                  "SeatsLeft": 9,
+                  "SeatsLeftSpecified": true,
+                  "Value": "K"
+                },
+                "ResBookDesigCode": "KOW",
+                "Baggage": "BaggageAllowance1",
+                "BrandName": "ECO",
+                "Seq": "FL_ADBVAS_4"
+              }
             }
-          },
-          "financellDiscount": {
+          ],
+          "flightPackageInfos": []
+        }
+      ],
+      "flightFareInfo": {
+        "flightDetailKeys": null,
+        "groupId": 0,
+        "key": null,
+        "totalPrice": {
+          "value": 4071.26,
+          "currency": "TRY",
+          "rateValue": null
+        },
+        "basePrice": {
+          "value": 3231.66,
+          "currency": "TRY",
+          "rateValue": null
+        },
+        "taxes": {
+          "value": 839.6,
+          "currency": "TRY",
+          "rateValue": null
+        },
+        "discount": {
+          "value": 0,
+          "currency": null,
+          "rateValue": null
+        },
+        "buyFee": {
+          "code": null,
+          "price": {
             "value": 0,
             "currency": null,
             "rateValue": null
           }
+        },
+        "fee": {
+          "code": "",
+          "price": {
+            "value": 0,
+            "currency": null,
+            "rateValue": null
+          }
+        },
+        "passengerPrices": [
+          {
+            "unitPrice": {
+              "value": 4071.26,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "unitBasePrice": {
+              "value": 3231.66,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "unitFee": {
+              "code": "",
+              "price": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              }
+            },
+            "unitTax": {
+              "value": 839.6,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "cancelPenalty": null,
+            "changePenalty": null,
+            "passengers": [
+              {
+                "key": "A0161426FFD4E5B745CDE08A835E8076E7802168059FDD041EB00F518D4298EC",
+                "name": null,
+                "passengerType": 0,
+                "age": 0,
+                "birthday": "0001-01-01T00:00:00",
+                "gender": 0
+              }
+            ],
+            "taxInfos": [
+              {
+                "key": "VQ",
+                "value": "19.30"
+              },
+              {
+                "key": "YR",
+                "value": "350.00"
+              },
+              {
+                "key": "||",
+                "value": "0"
+              },
+              {
+                "key": "VQ",
+                "value": "120.30"
+              },
+              {
+                "key": "YR",
+                "value": "350.00"
+              }
+            ],
+            "serviceCharges": null
+          }
+        ],
+        "taxInfos": [],
+        "serviceCharges": []
+      },
+      "flightPackageInfos": [],
+      "isReservable": true,
+      "hasOwc": false,
+      "activeFlightTripKind": 2,
+      "sessionToken": "B0FF8E9A21E4D640630C462DC00626270395AB94804E84BC394C9C80523BD82A",
+      "airportList": {
+        "ADB": {
+          "id": 90074,
+          "code": "ADB",
+          "value": [
+            {
+              "langCode": "tr_TR",
+              "value": "Adnan Menderes Havalimanı"
+            }
+          ],
+          "countryCode": "tr",
+          "country": "Türkiye",
+          "city": "İzmir"
+        },
+        "VAS": {
+          "id": 90094,
+          "code": "VAS",
+          "value": [
+            {
+              "langCode": "tr_TR",
+              "value": "Nuri Demirağ Havalimanı"
+            }
+          ],
+          "countryCode": "tr",
+          "country": "Türkiye",
+          "city": "Sivas"
         }
+      },
+      "airlineList": {
+        "PC": "Pegasus  Havayolları"
+      },
+      "applyCancelationInsurance": false,
+      "buyInsurancePrice": 0,
+      "sellInsurancePrice": 0,
+      "showOnlyInsurancePrice": 0,
+      "moduleName": "Flight",
+      "totalPrice": 4071.26,
+      "priceCurrency": "TRY",
+      "loyaltyMultiple": 2,
+      "couponDiscountList": null,
+      "extraCharges": null,
+      "financellDiscount": {
+        "value": 0,
+        "currency": null,
+        "rateValue": null
       }
-    ],
-    "totalPrice": 0,
-    "totalPriceCurrency": 0
-  },
-  "success": true,
-  "statusCode": 0,
-  "message": null,
-  "errors": null,
-  "validModelState": null
+    }
+  }
 }

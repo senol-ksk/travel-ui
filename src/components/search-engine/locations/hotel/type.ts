@@ -1,4 +1,3 @@
-type ID = string | number
 type arrayNumber = Array<[number]>
 
 export type LocationResult = {
@@ -20,7 +19,7 @@ export type LocationResult = {
 }
 
 export type LocationResults = {
-  Succeeded: true
+  Succeeded: boolean
   Result: Array<LocationResult>
   Errors: Array<[]>
   MessageEvents: Array<[]>

@@ -2,6 +2,7 @@
 import { Tabs, TabsTab } from '@mantine/core'
 
 import { Flight } from '@/modules/flight/'
+import { HotelSearchEngine } from '@/modules/hotel'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -10,9 +11,9 @@ const searchModules = {
 }
 
 export const SearchEngine = () => (
-  <Tabs defaultValue={searchModules.flight.value}>
+  <Tabs defaultValue={searchModules.hotel.value}>
     <Tabs.List className='px-2 pt-2 md:px-4 md:pt-4'>
-      <TabsTab value={searchModules.flight.value} size={'xl'}>
+      <TabsTab value={searchModules.flight.value}>
         {searchModules.flight.title}
       </TabsTab>
       <TabsTab value={searchModules.hotel.value}>
@@ -29,7 +30,7 @@ export const SearchEngine = () => (
       </Tabs.Panel>
 
       <Tabs.Panel value={searchModules.hotel.value}>
-        {searchModules.hotel.title}
+        <HotelSearchEngine />
       </Tabs.Panel>
 
       <Tabs.Panel value={searchModules.carRental.value}>

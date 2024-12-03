@@ -269,7 +269,7 @@ export const flightApiRequest = ({
       return
     }
 
-    if (flightData.data.hasMoreResponse && !!timer) {
+    if (flightData.data && flightData.data.hasMoreResponse && !!timer) {
       setTimeout(() => {
         resolve(flightApiRequest({ signal }))
       }, 1500)
