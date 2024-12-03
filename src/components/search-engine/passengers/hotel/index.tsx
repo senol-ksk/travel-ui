@@ -38,10 +38,10 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
       <Input
         icon={'passenger'}
         label='Misafir'
-        title={`${roomState.length} Oda, ${roomState.reduce((a, b) => {
-          console.log(a, b)
-          return a + b.adult + b.child
-        }, 0)} Misafir`}
+        title={`${roomState.length} Oda, ${roomState.reduce(
+          (a, b) => a + b.adult + b.child,
+          0
+        )} Misafir`}
         onClick={() => setContainerTransitionState(true)}
       />
 
