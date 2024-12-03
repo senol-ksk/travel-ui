@@ -198,16 +198,17 @@ const HotelGuestsActions: React.FC<Props> = ({
             type='button'
             leftSection={<FaPlus />}
             onClick={() => {
-              const nextState = roomState
+              let nextState = roomState
 
               if (roomState.length > 1) {
                 nextState.splice(index, 1)
                 setRoomState([...nextState])
               } else {
-                setRoomState([
+                nextState = [
                   ...nextState,
                   { adult: 1, child: 0, childAges: [] },
-                ])
+                ]
+                setRoomState(nextState)
               }
               onChange(nextState)
             }}
