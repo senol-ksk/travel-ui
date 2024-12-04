@@ -1,12 +1,20 @@
 import { Button, Skeleton } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
 
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import {
+  createSerializer,
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsIsoDate,
+  parseAsString,
+} from 'nuqs'
 
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { Locations } from '@/components/search-engine/locations/hotel/locations'
@@ -19,6 +27,7 @@ const schema = z.object({
     name: z.string().min(3),
     id: z.number().or(z.string()),
     slug: z.string().min(3),
+    type: z.number(),
   }),
   checkinDate: z.coerce.date(),
   checkoutDate: z.coerce.date(),
@@ -34,6 +43,8 @@ const schema = z.object({
 type HotelSearchEngineSchemaType = z.infer<typeof schema>
 
 export const HotelSearchEngine = () => {
+  const router = useRouter()
+
   const defaultDates = [
     dayjs().add(3, 'd').toDate(),
     dayjs().add(7, 'd').toDate(),
@@ -57,6 +68,7 @@ export const HotelSearchEngine = () => {
           id: 0,
           name: '',
           slug: '',
+          type: 0,
         },
         room: defaultRoom,
       },
@@ -88,15 +100,46 @@ export const HotelSearchEngine = () => {
         return getLocations
       },
     })
-
+  // const serializer = createSerializer
   const onSubmit: SubmitHandler<HotelSearchEngineSchemaType> = (data) => {
+    const dateFormat = 'YYYY.MM.DD'
     console.log('Data submited', data)
+
     setLocalParams(data)
+
+    const serialize = createSerializer({
+      checkinDate: parseAsIsoDate,
+      checkoutDate: parseAsIsoDate,
+      destination: parseAsString,
+      destinationId: parseAsString,
+      slug: parseAsString,
+      type: parseAsInteger,
+      adults: parseAsArrayOf(parseAsInteger),
+      childs: parseAsArrayOf(parseAsInteger),
+      childAges: parseAsArrayOf(parseAsInteger),
+    })
+
+    const childAges = data.room.flatMap((room) =>
+      room.childAges.map((age) => age)
+    )
+
+    const searchParams = serialize({
+      checkinDate: data.checkinDate,
+      checkoutDate: data.checkoutDate,
+      destination: data.destination.name,
+      slug: data.destination.slug,
+      destinationId: '' + data.destination.id,
+      type: data.destination.type,
+      adults: data.room.map((room) => room.adult),
+      childs: data.room.map((room) => room.child),
+      childAges,
+    })
+
+    router.push(`/hotel?${searchParams}`)
   }
 
   const mounted = useMounted()
 
-  // if (!mounted) return <Skeleton />
   if (!mounted) {
     return (
       <div className='grid gap-3 md:grid-cols-4'>
@@ -130,6 +173,7 @@ export const HotelSearchEngine = () => {
                 id: data.Id,
                 name: data.Name,
                 slug: data.Slug,
+                type: data.Type,
               })
               form.trigger('destination')
             }}
