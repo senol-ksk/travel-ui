@@ -4,6 +4,10 @@ import { PassengerTypesIndexEnum } from '@/types/passengerViewModel'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
 
+import { intlTelInput } from 'intl-tel-input/reactWithUtils'
+
+const libphonenumber = intlTelInput.utils
+
 import {
   useForm,
   UseFormProps,
@@ -200,7 +204,9 @@ export default function CheckoutPage(props: { searchParams: SearchParams }) {
                               tr: 'Türkiye',
                               searchPlaceholder: 'Ülke adı giriniz',
                             },
-                            loadUtilsOnInit: '/intl-tel-input/utils.js',
+                            loadUtils: () =>
+                              // @ts-expect-error watch for the package updates
+                              import('intl-tel-input/build/js/utils.js'),
                             geoIpLookup: (callback) => {
                               fetch('https://ipapi.co/json')
                                 .then((res) => res.json())

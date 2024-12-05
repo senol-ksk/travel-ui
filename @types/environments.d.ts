@@ -11,6 +11,7 @@ namespace NodeJS {
     NEXT_PUBLIC_SCOPE_NAME: string
     NEXT_PUBLIC_API_GW_ROUTE: string
     NEXT_PUBLIC_API_GW_KEY: string
+    NEXT_PUBLIC_SOCKET_URL: string
     // server envs
     API_GW_ROUTE: string
     SERVICE_PATH: string

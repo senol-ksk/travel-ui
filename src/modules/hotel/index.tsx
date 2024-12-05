@@ -8,19 +8,13 @@ import { useRouter } from 'next/navigation'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import {
-  createSerializer,
-  parseAsArrayOf,
-  parseAsInteger,
-  parseAsIsoDate,
-  parseAsString,
-} from 'nuqs'
 
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { Locations } from '@/components/search-engine/locations/hotel/locations'
 import { type LocationResults } from '@/components/search-engine/locations/hotel/type'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { request } from '@/network'
+import { serializeHotelSearchParams } from '@/modules/hotel/searchParams'
 
 const schema = z.object({
   destination: z.object({
@@ -31,7 +25,7 @@ const schema = z.object({
   }),
   checkinDate: z.coerce.date(),
   checkoutDate: z.coerce.date(),
-  room: z.array(
+  rooms: z.array(
     z.object({
       adult: z.number(),
       child: z.number(),
@@ -43,6 +37,7 @@ const schema = z.object({
 type HotelSearchEngineSchemaType = z.infer<typeof schema>
 
 export const HotelSearchEngine = () => {
+  const mounted = useMounted()
   const router = useRouter()
 
   const defaultDates = [
@@ -70,7 +65,7 @@ export const HotelSearchEngine = () => {
           slug: '',
           type: 0,
         },
-        room: defaultRoom,
+        rooms: defaultRoom,
       },
     })
 
@@ -102,43 +97,28 @@ export const HotelSearchEngine = () => {
     })
   // const serializer = createSerializer
   const onSubmit: SubmitHandler<HotelSearchEngineSchemaType> = (data) => {
-    const dateFormat = 'YYYY.MM.DD'
-    console.log('Data submited', data)
-
     setLocalParams(data)
 
-    const serialize = createSerializer({
-      checkinDate: parseAsIsoDate,
-      checkoutDate: parseAsIsoDate,
-      destination: parseAsString,
-      destinationId: parseAsString,
-      slug: parseAsString,
-      type: parseAsInteger,
-      adults: parseAsArrayOf(parseAsInteger),
-      childs: parseAsArrayOf(parseAsInteger),
-      childAges: parseAsArrayOf(parseAsInteger),
-    })
+    // const childAges = data.rooms.flatMap((room) =>
+    //   room.childAges.map((age) => age)
+    // )
 
-    const childAges = data.room.flatMap((room) =>
-      room.childAges.map((age) => age)
-    )
+    const rooms = data.rooms
+      .flatMap((room) => room.adult + '-' + room.childAges.join('-'))
+      .toString()
 
-    const searchParams = serialize({
+    const searchParams = serializeHotelSearchParams({
       checkinDate: data.checkinDate,
       checkoutDate: data.checkoutDate,
       destination: data.destination.name,
       slug: data.destination.slug,
       destinationId: '' + data.destination.id,
       type: data.destination.type,
-      adults: data.room.map((room) => room.adult),
-      childs: data.room.map((room) => room.child),
-      childAges,
+      rooms,
     })
 
-    router.push(`/hotel?${searchParams}`)
+    router.push(`/hotel/search-results${searchParams}`)
   }
-
-  const mounted = useMounted()
 
   if (!mounted) {
     return (
@@ -156,7 +136,7 @@ export const HotelSearchEngine = () => {
       <input type='hidden' {...form.register('destination')} />
       <input type='hidden' {...form.register('checkinDate')} />
       <input type='hidden' {...form.register('checkoutDate')} />
-      <input type='hidden' {...form.register('room')} />
+      <input type='hidden' {...form.register('rooms')} />
 
       <div className='grid grid-cols-12 gap-3 md:gap-3'>
         <div className='col-span-12 md:col-span-4'>
@@ -202,11 +182,11 @@ export const HotelSearchEngine = () => {
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <HotelPassengerDropdown
-            initialValues={localParams.room}
+            initialValues={localParams.rooms}
             onChange={(params) => {
               console.log(params)
 
-              form.setValue('room', params)
+              form.setValue('rooms', params)
             }}
           />
         </div>
