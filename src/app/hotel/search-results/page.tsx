@@ -4,7 +4,6 @@ import { type SearchParams } from 'nuqs/server'
 import { HotelSearchResults } from '@/app/hotel/search-results/search-result'
 import { Suspense } from 'react'
 import { Skeleton } from '@mantine/core'
-import { range } from '@mantine/hooks'
 
 type PageProps = {
   searchParams: Promise<SearchParams>
@@ -30,14 +29,14 @@ const SkeletonLoader = () => (
       <Skeleton radius={4} h={'100%'} />
     </div>
     <div className='col-span-4 grid grid-cols-8 gap-3'>
-      {[...Array(5).keys()].map((grid) => (
+      {[...Array(5).keys()].map((grid, gridIndex) => (
         <>
-          <div>
+          <div key={gridIndex}>
             <Skeleton radius={4} h={'100%'} />
           </div>
           <div className='col-span-7 grid gap-2'>
-            {[...Array(3).keys()].map((sklet) => (
-              <Skeleton key={sklet} radius={4} h={20} />
+            {[...Array(3).keys()].map((sklet, skeltIndex) => (
+              <Skeleton key={skeltIndex + sklet} radius={4} h={20} />
             ))}
           </div>
         </>

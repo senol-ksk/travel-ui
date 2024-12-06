@@ -4,10 +4,6 @@ import { PassengerTypesIndexEnum } from '@/types/passengerViewModel'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
 
-import { intlTelInput } from 'intl-tel-input/reactWithUtils'
-
-const libphonenumber = intlTelInput.utils
-
 import {
   useForm,
   UseFormProps,
