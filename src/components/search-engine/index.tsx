@@ -1,5 +1,6 @@
 'use client'
 import { Tabs, TabsTab } from '@mantine/core'
+import { useLocalStorage } from '@mantine/hooks'
 
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
@@ -10,32 +11,46 @@ const searchModules = {
   carRental: { value: 'carrental', title: 'Araç' },
 }
 
-export const SearchEngine = () => (
-  <Tabs defaultValue={searchModules.hotel.value}>
-    <Tabs.List className='px-2 pt-2 md:px-4 md:pt-4'>
-      <TabsTab value={searchModules.flight.value}>
-        {searchModules.flight.title}
-      </TabsTab>
-      <TabsTab value={searchModules.hotel.value}>
-        {searchModules.hotel.title}
-      </TabsTab>
-      <TabsTab value={searchModules.carRental.value}>
-        {searchModules.carRental.title}
-      </TabsTab>
-    </Tabs.List>
+export const SearchEngine = () => {
+  const [latestSearch, setLatestSearch] = useLocalStorage({
+    key: 'latest-search',
+    defaultValue: searchModules.flight.value,
+  })
 
-    <div className='p-2 md:p-4'>
-      <Tabs.Panel value={searchModules.flight.value}>
-        <Flight />
-      </Tabs.Panel>
+  return (
+    <Tabs
+      value={latestSearch}
+      onChange={(val) => {
+        if (val) {
+          setLatestSearch(val)
+        }
+      }}
+    >
+      <Tabs.List className='px-2 pt-2 md:px-4 md:pt-4'>
+        <TabsTab value={searchModules.flight.value}>
+          {searchModules.flight.title}
+        </TabsTab>
+        <TabsTab value={searchModules.hotel.value}>
+          {searchModules.hotel.title}
+        </TabsTab>
+        <TabsTab value={searchModules.carRental.value}>
+          {searchModules.carRental.title}
+        </TabsTab>
+      </Tabs.List>
 
-      <Tabs.Panel value={searchModules.hotel.value}>
-        <HotelSearchEngine />
-      </Tabs.Panel>
+      <div className='p-2 md:p-4'>
+        <Tabs.Panel value={searchModules.flight.value}>
+          <Flight />
+        </Tabs.Panel>
 
-      <Tabs.Panel value={searchModules.carRental.value}>
-        {searchModules.carRental.title}
-      </Tabs.Panel>
-    </div>
-  </Tabs>
-)
+        <Tabs.Panel value={searchModules.hotel.value}>
+          <HotelSearchEngine />
+        </Tabs.Panel>
+
+        <Tabs.Panel value={searchModules.carRental.value}>
+          {searchModules.carRental.title}
+        </Tabs.Panel>
+      </div>
+    </Tabs>
+  )
+}
