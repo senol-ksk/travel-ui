@@ -1,7 +1,9 @@
-import { Button } from '@mantine/core'
+import { Button, Skeleton } from '@mantine/core'
+import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
 
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,20 +14,22 @@ import { Locations } from '@/components/search-engine/locations/hotel/locations'
 import { type LocationResults } from '@/components/search-engine/locations/hotel/type'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { request } from '@/network'
+import { serializeHotelSearchParams } from '@/modules/hotel/searchParams'
 
 const schema = z.object({
   destination: z.object({
     name: z.string().min(3),
     id: z.number().or(z.string()),
     slug: z.string().min(3),
+    type: z.number(),
   }),
-  checkinDate: z.date(),
-  checkoutDate: z.date(),
-  room: z.array(
+  checkinDate: z.coerce.date(),
+  checkoutDate: z.coerce.date(),
+  rooms: z.array(
     z.object({
       adult: z.number(),
       child: z.number(),
-      childAges: z.array(z.number()).optional(),
+      childAges: z.array(z.number()),
     })
   ),
 })
@@ -33,6 +37,9 @@ const schema = z.object({
 type HotelSearchEngineSchemaType = z.infer<typeof schema>
 
 export const HotelSearchEngine = () => {
+  const mounted = useMounted()
+  const router = useRouter()
+
   const defaultDates = [
     dayjs().add(3, 'd').toDate(),
     dayjs().add(7, 'd').toDate(),
@@ -44,14 +51,28 @@ export const HotelSearchEngine = () => {
       childAges: [],
     },
   ]
+
+  const [localParams, setLocalParams] =
+    useLocalStorage<HotelSearchEngineSchemaType>({
+      key: 'hotel-search-engine',
+      getInitialValueInEffect: false,
+      defaultValue: {
+        checkinDate: defaultDates[0],
+        checkoutDate: defaultDates[1],
+        destination: {
+          id: 0,
+          name: '',
+          slug: '',
+          type: 0,
+        },
+        rooms: defaultRoom,
+      },
+    })
+
   const form = useForm<HotelSearchEngineSchemaType>({
     resolver: zodResolver(schema),
     mode: 'onChange',
-    defaultValues: {
-      checkinDate: defaultDates[0],
-      checkoutDate: defaultDates[1],
-      room: defaultRoom,
-    },
+    defaultValues: localParams,
   })
   const [destinationLocationInputValue, setDestinationLocationInputValue] =
     useState('')
@@ -74,17 +95,48 @@ export const HotelSearchEngine = () => {
         return getLocations
       },
     })
-
+  // const serializer = createSerializer
   const onSubmit: SubmitHandler<HotelSearchEngineSchemaType> = (data) => {
-    console.log('Data submited', data)
+    setLocalParams(data)
+
+    // const childAges = data.rooms.flatMap((room) =>
+    //   room.childAges.map((age) => age)
+    // )
+
+    const rooms = data.rooms
+      .flatMap((room) => room.adult + '-' + room.childAges.join('-'))
+      .toString()
+
+    const searchParams = serializeHotelSearchParams({
+      checkinDate: data.checkinDate,
+      checkoutDate: data.checkoutDate,
+      destination: data.destination.name,
+      slug: data.destination.slug,
+      destinationId: '' + data.destination.id,
+      type: data.destination.type,
+      rooms,
+    })
+
+    router.push(`/hotel/search-results${searchParams}`)
+  }
+
+  if (!mounted) {
+    return (
+      <div className='grid gap-3 md:grid-cols-4'>
+        <Skeleton visible h={50} />
+        <Skeleton visible h={50} />
+        <Skeleton visible h={50} />
+        <Skeleton visible h={50} />
+      </div>
+    )
   }
 
   return (
-    <form className='block' onSubmit={form.handleSubmit(onSubmit)} method='get'>
+    <form className='block' onSubmit={form.handleSubmit(onSubmit)}>
       <input type='hidden' {...form.register('destination')} />
       <input type='hidden' {...form.register('checkinDate')} />
       <input type='hidden' {...form.register('checkoutDate')} />
-      <input type='hidden' {...form.register('room')} />
+      <input type='hidden' {...form.register('rooms')} />
 
       <div className='grid grid-cols-12 gap-3 md:gap-3'>
         <div className='col-span-12 md:col-span-4'>
@@ -101,16 +153,20 @@ export const HotelSearchEngine = () => {
                 id: data.Id,
                 name: data.Name,
                 slug: data.Slug,
+                type: data.Type,
               })
               form.trigger('destination')
             }}
+            defaultValue={localParams.destination.name}
           />
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <HotelCalendar
-            defaultDates={[defaultDates[0], defaultDates[1]]}
+            defaultDates={[
+              new Date(localParams.checkinDate),
+              new Date(localParams.checkoutDate),
+            ]}
             onDateSelect={(dates) => {
-              console.log(dates)
               const checkinDate = dates[0]
               const checkoutDate = dates[1]
 
@@ -126,9 +182,11 @@ export const HotelSearchEngine = () => {
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <HotelPassengerDropdown
-            initialValues={defaultRoom}
+            initialValues={localParams.rooms}
             onChange={(params) => {
-              form.setValue('room', params)
+              console.log(params)
+
+              form.setValue('rooms', params)
             }}
           />
         </div>

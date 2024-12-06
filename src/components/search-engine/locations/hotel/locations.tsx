@@ -26,7 +26,7 @@ type Props = {
   onChange?: (params: string) => void
   data?: LocationResults['Result']
   isLoading?: boolean
-  defaultValue?: string | null
+  defaultValue?: string
 }
 
 export const Locations: React.FC<Props> = ({
@@ -36,13 +36,14 @@ export const Locations: React.FC<Props> = ({
   onChange = () => {},
   isLoading = false,
   data = [],
+  defaultValue = '',
 }) => {
   const [locationContainerOpened, setLocationContainerOpened] = useState(false)
   const clickOutsideRef = useClickOutside(() =>
     setLocationContainerOpened(false)
   )
   const [originValue, setOriginValue] = useState('')
-  const [locatioName, setLocationName] = useState<null | string>(null)
+  const [locatioName, setLocationName] = useState<string>(defaultValue)
 
   const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)

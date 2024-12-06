@@ -33,6 +33,7 @@ const HotelGuestsActions: React.FC<Props> = ({
     const nextState = roomState
     nextState[roomIndex].childAges[ageIndex] = value
     setRoomState([...nextState])
+    onChange(nextState)
   }
 
   function handlePassengerSelect({
@@ -63,11 +64,8 @@ const HotelGuestsActions: React.FC<Props> = ({
 
     nextRoomState[index] = currentRoom
     setRoomState([...nextRoomState])
+    onChange(nextRoomState)
   }
-
-  useEffect(() => {
-    onChange(roomState)
-  }, [roomState, onChange])
 
   return roomState.map((room, index) => {
     return (
@@ -200,17 +198,19 @@ const HotelGuestsActions: React.FC<Props> = ({
             type='button'
             leftSection={<FaPlus />}
             onClick={() => {
-              const nextState = roomState
+              let nextState = roomState
 
               if (roomState.length > 1) {
                 nextState.splice(index, 1)
                 setRoomState([...nextState])
               } else {
-                setRoomState([
+                nextState = [
                   ...nextState,
                   { adult: 1, child: 0, childAges: [] },
-                ])
+                ]
+                setRoomState(nextState)
               }
+              onChange(nextState)
             }}
           >
             {roomState.length > 1 ? 'Odayı Sil' : 'Oda Ekle'}
