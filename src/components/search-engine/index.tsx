@@ -4,6 +4,7 @@ import { useLocalStorage } from '@mantine/hooks'
 
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
+import { CarRentSearchPanel } from '@/modules/carrent'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -48,7 +49,7 @@ export const SearchEngine = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value={searchModules.carRental.value}>
-          {searchModules.carRental.title}
+          <CarRentSearchPanel />
         </Tabs.Panel>
       </div>
     </Tabs>
