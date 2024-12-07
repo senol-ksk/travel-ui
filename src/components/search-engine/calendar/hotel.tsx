@@ -67,6 +67,14 @@ const HotelCalendar: React.FC<Props> = ({
         <Transition
           mounted={containerTransitionState}
           transition='pop-top-right'
+          onExit={() => {
+            if (!rangeValue[1]) {
+              handleDateSelections([
+                rangeValue[0],
+                dayjs(rangeValue[0]).add(1, 'd').toDate(),
+              ])
+            }
+          }}
         >
           {(styles) => (
             <div
