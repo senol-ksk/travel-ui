@@ -9,6 +9,7 @@ interface Location {
   Name: string
   IsDomestic: boolean
   // ProviderName: string
+  Slug: string
 }
 
 export type CarSearchEngineSchemaType = {
@@ -31,10 +32,12 @@ export const carSearchEngineSchema = z.object<CarSearchEngineSchemaType>({
     CountryCode: z.string(),
     IsDomestic: z.boolean(),
     Name: z.string(),
+    Slug: z.string().min(3),
     // ProviderName: z.string(),
   }),
   pickup: z.object({
     Id: z.number(),
+    Slug: z.string().min(3),
     Code: z.string(),
     CountryCode: z.string(),
     IsDomestic: z.boolean(),

@@ -18,8 +18,8 @@ import type {
 } from '@/components/search-engine/locations/type'
 import { range, useLocalStorage, useMounted } from '@mantine/hooks'
 import { carSearchEngineSchema, CarSearchEngineSchemaTypeInfer } from './types'
-
-// istanbul-beylikduzu?dropoff=izmir-adnan-menderes-havalimani305223&pickup_date=2024-12-28&drop_date=2024-12-31&pickup_time=11%3A00&drop_time=12%3A00&driverAge=26
+import { serializeCarSearchParams } from './searchParams'
+import { useRouter } from 'next/navigation'
 
 const defaultDates = {
   drop_date: dayjs().add(2, 'day').toDate(),
@@ -27,6 +27,7 @@ const defaultDates = {
 }
 
 const CarRentSearchPanel: React.FC = () => {
+  const router = useRouter()
   const [carSearchLocalStorage, setCarSearchLocalStroge] =
     useLocalStorage<CarSearchEngineSchemaTypeInfer>({
       key: 'car-search-engine',
@@ -43,8 +44,10 @@ const CarRentSearchPanel: React.FC = () => {
           Id: -1,
           IsDomestic: false,
           Name: '',
+          Slug: '',
         },
         pickup: {
+          Slug: '',
           Code: '',
           CountryCode: '',
           Id: -1,
@@ -60,11 +63,6 @@ const CarRentSearchPanel: React.FC = () => {
   )
   const [pickupLocation, setPickupLocation] = useState('')
   const [dropoffLocation, setDropoffLocation] = useState('')
-
-  const [selectedPickupLocationData, setSelectedPickupLocationData] =
-    useState<LocationResult>()
-  const [selectedDropoffLocationData, setSelectedDropoffLocationData] =
-    useState<LocationResult>()
 
   const { data: pickupLocationData, isLoading: pickupLocationDataIsLoading } =
     useQuery<LocationResults>({
@@ -107,11 +105,20 @@ const CarRentSearchPanel: React.FC = () => {
   })
 
   const onSubmit: SubmitHandler<CarSearchEngineSchemaTypeInfer> = (data) => {
-    console.log('Data submited, ', data)
     setCarSearchLocalStroge(data)
-  }
 
-  console.log(formActions.formState.errors)
+    const searchParams = serializeCarSearchParams({
+      driverAge: data.driverAge,
+      drop_date: data.drop_date,
+      drop_time: data.drop_time,
+      dropoff: data.dropoff.Slug,
+      pickup: data.pickup.Slug,
+      pickup_date: data.pickup_date,
+      pickup_time: data.pickup_time,
+    })
+
+    router.push(`/car/search-results${searchParams}`)
+  }
 
   if (!mounted) return <Skeleton h={50} />
 
@@ -147,8 +154,9 @@ const CarRentSearchPanel: React.FC = () => {
                   Id: data.Id,
                   IsDomestic: data.IsDomestic,
                   Name: data.Name,
+                  Slug: data.Slug,
                 }
-                setSelectedPickupLocationData(data)
+
                 if (!isDiffrentDropLocation) {
                   formActions.setValue('dropoff', value)
                   formActions.trigger('dropoff')
@@ -177,6 +185,7 @@ const CarRentSearchPanel: React.FC = () => {
                     CountryCode: data.CountryCode,
                     Id: data.Id,
                     IsDomestic: data.IsDomestic,
+                    Slug: data.Slug,
                     Name: data.Name,
                   }
                   formActions.setValue('dropoff', value)
@@ -251,6 +260,9 @@ const CarRentSearchPanel: React.FC = () => {
           render={({ field }) => (
             <NativeSelect
               {...field}
+              onChange={({ currentTarget: { value } }) => {
+                field.onChange(+value)
+              }}
               variant='unstyle'
               label='Sürücünün yaşı'
               classNames={{
