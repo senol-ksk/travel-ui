@@ -7,7 +7,6 @@ import { SearchResult } from './search-result'
 type PageProps = {
   searchParams: Promise<SearchParams>
 }
-
 const CarSearchResultPage: React.FC<PageProps> = async ({ searchParams }) => {
   const params = await searchParams
 

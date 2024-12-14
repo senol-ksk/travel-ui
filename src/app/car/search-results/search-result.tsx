@@ -1,7 +1,7 @@
 import { SearchParams } from 'nuqs'
 
 import { getCarSearchResultParams } from '@/app/car/search-results/request-model'
-import { Search } from './component/search'
+import { Search } from '../component/search'
 
 type IProps = {
   searchParams: SearchParams
