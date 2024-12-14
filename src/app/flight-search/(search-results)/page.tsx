@@ -170,6 +170,9 @@ const FlightSearchPage = (props: {
 
   const changeDestinationFlight = () => {
     scrollTo({ y: 0 })
+
+    selectedFlightState.splice(0, selectedFlightState.length)
+
     setSelectedFlightPackage(null)
     setRoundTicketsIsVisible(false)
   }
