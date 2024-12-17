@@ -26,7 +26,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
 
   const handleCarSelect = (car: CarSearchResultItemType) => {
     const detailParams = createDetailParams({
-      key: car.key,
+      selectedProductKey: car.key,
       searchToken: searchRequestParams.params.searchToken,
       sessionToken: searchRequestParams.params.sessionToken,
     })

@@ -53,8 +53,8 @@ const CarCalendar: React.FC<Props> = ({
 
     onDateSelect(dates)
     setFormatedValues([
-      dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Giriş Tarihi',
-      dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Çıkış Tarihi',
+      dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Teslim Tarihi',
+      dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Bırakış Tarihi',
     ])
   }
 

@@ -1,10 +1,9 @@
-import { parseAsString } from 'nuqs/server'
-import { createSearchParamsCache } from 'nuqs/server'
+import { createSearchParamsCache, parseAsString } from 'nuqs/server'
 
 export const carDetailParams = {
   searchToken: parseAsString,
   sessionToken: parseAsString,
-  key: parseAsString,
+  selectedProductKey: parseAsString,
 }
 
 export const carDetailSearchParamsCache =

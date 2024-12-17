@@ -1,0 +1,792 @@
+{
+  "data": {
+    "detailResponse": {
+      "items": [
+        {
+          "carDetail": {
+            "name": "Renault Clio 5",
+            "pickupDate": "2025-01-21T08:00:00Z",
+            "pickupId": "245",
+            "pickupCode": "245",
+            "returnDate": "2025-01-30T18:00:00Z",
+            "returnId": "245",
+            "returnCode": "245",
+            "type": 0,
+            "category": "Special",
+            "doorCount": 0,
+            "passengerCount": 5,
+            "imageUrl": "https://cdn.kolaycar.com/images/renault-clio5-hatchback5kapi.png",
+            "vendorUrl": "https://ykmturizm.mncdn.com/11/carrentallogo/windycar.png",
+            "vendorName": "WindyCar",
+            "airConditioning": true,
+            "automaticTransmission": false,
+            "transmissionDrive": 0,
+            "fuelType": 7,
+            "included": [],
+            "navigationSystem": {
+              "isAvailable": false,
+              "isIncluded": false
+            },
+            "baggages": null,
+            "carGroupName": "EDMR",
+            "seatCount": "5",
+            "deposit": {
+              "value": 1500.0,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "kminCluded": "5000",
+            "addKmRate": {
+              "value": 0.0,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "minDriverAge": 21,
+            "licenseYear": 1,
+            "brand": null,
+            "model": null,
+            "deliveryType": "1"
+          },
+          "carIncluded": [],
+          "carInsurances": [
+            {
+              "code": "9",
+              "calculateInfo": {
+                "status": null,
+                "info": null
+              },
+              "description": "Ferdi Kaza Güvencesi",
+              "noOfUnits": 0,
+              "totalPrice": {
+                "value": 183.79,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitPrice": {
+                "value": 183.79,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "10",
+              "calculateInfo": {
+                "status": null,
+                "info": null
+              },
+              "description": "Geniş Sorumluluk Güvencesi",
+              "noOfUnits": 0,
+              "totalPrice": {
+                "value": 183.79,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitPrice": {
+                "value": 183.79,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "11",
+              "calculateInfo": {
+                "status": null,
+                "info": null
+              },
+              "description": "Maksimum Güvence",
+              "noOfUnits": 0,
+              "totalPrice": {
+                "value": 367.57,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitPrice": {
+                "value": 367.57,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "8",
+              "calculateInfo": {
+                "status": null,
+                "info": null
+              },
+              "description": "Pratik Hasar Güvencesi",
+              "noOfUnits": 0,
+              "totalPrice": {
+                "value": 257.3,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitPrice": {
+                "value": 257.3,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "13",
+              "calculateInfo": {
+                "status": null,
+                "info": null
+              },
+              "description": "Ultra Güvence",
+              "noOfUnits": 0,
+              "totalPrice": {
+                "value": 404.33,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitPrice": {
+                "value": 404.33,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "12",
+              "calculateInfo": {
+                "status": null,
+                "info": null
+              },
+              "description": "Ultra Pratik Hasar Güvencesi",
+              "noOfUnits": 0,
+              "totalPrice": {
+                "value": 308.76,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitPrice": {
+                "value": 308.76,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            }
+          ],
+          "carExtraOption": [
+            {
+              "code": "2",
+              "calculateInfo": null,
+              "name": "Bebek/Çocuk Koltuğu",
+              "totalPrice": {
+                "value": 1837.9,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "maxDay": 0,
+              "unitPrice": {
+                "value": 183.79,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "35",
+              "calculateInfo": null,
+              "name": "Ek 1.000 Kilometre Paketi (E)",
+              "totalPrice": {
+                "value": 11027.2,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "maxDay": 0,
+              "unitPrice": {
+                "value": 1102.72,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "6",
+              "calculateInfo": null,
+              "name": "Ek Sürücü",
+              "totalPrice": {
+                "value": 1176.2,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "maxDay": 0,
+              "unitPrice": {
+                "value": 117.62,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "7",
+              "calculateInfo": null,
+              "name": "Genç Sürücü Hizmeti",
+              "totalPrice": {
+                "value": 4778.5,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "maxDay": 0,
+              "unitPrice": {
+                "value": 477.85,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            },
+            {
+              "code": "24",
+              "calculateInfo": null,
+              "name": "Mesai Dışı Hizmet Bedeli",
+              "totalPrice": {
+                "value": 7351.5,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "maxDay": 0,
+              "unitPrice": {
+                "value": 735.15,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "isSelectable": true,
+              "selected": false,
+              "isFree": false
+            }
+          ],
+          "oneWay": {
+            "value": 0.0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "orginalTotalPrice": {
+            "value": 10292.1,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "carMessage": null,
+          "servicePrice": {
+            "value": 10292.1,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "totalCommission": {
+            "value": 0.0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "buyServiceFee": 1342.4478260869564,
+          "sellServiceFee": 1342.4478260869564,
+          "key": "qWjptyNkfh9StnS0vOcfsuGne4DZz/qjk9VMOqVAzL1jficzfW+KVv+LW4hZ/1+Of/nLwOuYEhuOXGt8uNKmpqr8X06Wt9At0b4kbFAPDBsYwqbVc/XebLKugQswzwPX",
+          "totalPrice": {
+            "value": 10292.1,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "basePrice": {
+            "value": 1029.21,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "taxes": {
+            "value": 0.0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "discount": {
+            "value": 0.0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "buyFee": {
+            "code": null,
+            "price": {
+              "value": 0.0,
+              "currency": null,
+              "rateValue": null
+            }
+          },
+          "fee": {
+            "code": null,
+            "price": {
+              "value": 0.0,
+              "currency": null,
+              "rateValue": null
+            }
+          },
+          "passengerPrices": [
+            {
+              "unitPrice": {
+                "value": 0.0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitBasePrice": {
+                "value": 0.0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "unitFee": {
+                "code": null,
+                "price": {
+                  "value": 0.0,
+                  "currency": null,
+                  "rateValue": null
+                }
+              },
+              "unitTax": {
+                "value": 0.0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "cancelPenalty": null,
+              "changePenalty": null,
+              "passengers": [
+                {
+                  "key": "b0c49ede-11c0-4c2a-bf6b-e430d2d48c0b",
+                  "name": null,
+                  "passengerType": 0,
+                  "age": 0,
+                  "birthday": "0001-01-01T00:00:00",
+                  "gender": 0
+                }
+              ],
+              "taxInfos": null,
+              "serviceCharges": null
+            }
+          ],
+          "taxInfos": null,
+          "serviceCharges": null
+        }
+      ],
+      "validationInformations": {
+        "age": {
+          "ageReferenceDate": "2024-12-17T10:48:54.3227474+03:00",
+          "infantAgeBegin": "7.00:00:00",
+          "childAgeBegin": 2,
+          "adultAgeBegin": 12,
+          "ageCalculationType": 0
+        }
+      },
+      "availableSpecialRequests": {},
+      "sessionToken": null,
+      "traceId": "1AD20B2E256839553FA684EDA507B862753ED66C330D229D15D90070C5FD29E9",
+      "isSucceeded": false,
+      "diagnostics": {
+        "sessionToken": "358DF82B66B1E9E45744B5BCDF927331C0F5EB53BB3C69A420416AE581595B4D",
+        "providerId": 2063,
+        "providerName": "WindyCar",
+        "generatingRequestTime": "00:00:00.0251768",
+        "callingServiceTime": "00:00:00.5503760",
+        "generatingResponseTime": "00:00:00.0074120",
+        "subDiagnostics": null,
+        "lastException": null,
+        "serviceRequestData": null,
+        "serviceResponseData": null,
+        "providerInfo": {
+          "isActive": true,
+          "isProduction": false
+        },
+        "traceId": null
+      },
+      "eventMessages": [],
+      "appName": null,
+      "scopeCode": "00000000-0000-0000-0000-000000000000",
+      "logSessionToken": null,
+      "logSearchToken": null
+    },
+    "pickupStation": {
+      "location": {
+        "id": 305237,
+        "code": "245",
+        "countryCode": "tr",
+        "name": "Ankara Esenboğa Havalimanı",
+        "isDomestic": true,
+        "providerName": "WindyCar"
+      },
+      "address": {
+        "addressName": "Ankara Esenboğa Havalimanı (ESB)",
+        "street": "Esenboğa Havalimanı , Ankara",
+        "city": "Ankara",
+        "country": {
+          "iataCode": null,
+          "id": 0,
+          "parentRegion": null,
+          "label": null
+        },
+        "postalCode": ""
+      },
+      "phoneNumbers": [
+        {
+          "countryCode": 0,
+          "areaCode": 0,
+          "number": "+90 507 947 14 79",
+          "type": 0
+        }
+      ],
+      "times": [
+        {
+          "day": "Pazartesi",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Salı",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Çarşamba",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Perşembe",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Cuma",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Cumartesi",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Pazar",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        }
+      ],
+      "direction": null,
+      "mailAddress": "esb@windycar.com.tr"
+    },
+    "returnStation": {
+      "location": {
+        "id": 305237,
+        "code": "245",
+        "countryCode": "tr",
+        "name": "Ankara Esenboğa Havalimanı",
+        "isDomestic": true,
+        "providerName": "WindyCar"
+      },
+      "address": {
+        "addressName": "Ankara Esenboğa Havalimanı (ESB)",
+        "street": "Esenboğa Havalimanı , Ankara",
+        "city": "Ankara",
+        "country": {
+          "iataCode": null,
+          "id": 0,
+          "parentRegion": null,
+          "label": null
+        },
+        "postalCode": ""
+      },
+      "phoneNumbers": [
+        {
+          "countryCode": 0,
+          "areaCode": 0,
+          "number": "+90 507 947 14 79",
+          "type": 0
+        }
+      ],
+      "times": [
+        {
+          "day": "Pazartesi",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Salı",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Çarşamba",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Perşembe",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Cuma",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Cumartesi",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        },
+        {
+          "day": "Pazar",
+          "openingTime": "07:00",
+          "closingTime": "23:00"
+        }
+      ],
+      "direction": null,
+      "mailAddress": "esb@windycar.com.tr"
+    },
+    "searchReponse": null,
+    "carRentalSearchPanel": {
+      "origin": [
+        {
+          "id": 305237,
+          "code": "ESBT01",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "EuropCarGlobal"
+        },
+        {
+          "id": 305237,
+          "code": "ankara-esenboga-havalimani-arac-kiralama",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "YesOtoEnterprise"
+        },
+        {
+          "id": 305237,
+          "code": "642",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "Europcar"
+        },
+        {
+          "id": 305237,
+          "code": "3:ANK51",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "SixtTurkey"
+        },
+        {
+          "id": 305237,
+          "code": "c517a7e3-c582-ee11-8179-6045bd8d158b",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "RentGo"
+        },
+        {
+          "id": 305237,
+          "code": "31",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "EasyGo"
+        },
+        {
+          "id": 305237,
+          "code": "1400",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "OtoCar"
+        },
+        {
+          "id": 305237,
+          "code": "7",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "HdyFilo"
+        },
+        {
+          "id": 305237,
+          "code": "ankara-esenboga-havalimani-esb",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "RentiCar"
+        },
+        {
+          "id": 305237,
+          "code": "245",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "KolayCar"
+        },
+        {
+          "id": 305237,
+          "code": "384",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "DmrCar"
+        },
+        {
+          "id": 305237,
+          "code": "245",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "WindyCar"
+        }
+      ],
+      "destination": [
+        {
+          "id": 305237,
+          "code": "ESBT01",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "EuropCarGlobal"
+        },
+        {
+          "id": 305237,
+          "code": "ankara-esenboga-havalimani-arac-kiralama",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "YesOtoEnterprise"
+        },
+        {
+          "id": 305237,
+          "code": "642",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "Europcar"
+        },
+        {
+          "id": 305237,
+          "code": "3:ANK51",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "SixtTurkey"
+        },
+        {
+          "id": 305237,
+          "code": "c517a7e3-c582-ee11-8179-6045bd8d158b",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "RentGo"
+        },
+        {
+          "id": 305237,
+          "code": "31",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "EasyGo"
+        },
+        {
+          "id": 305237,
+          "code": "1400",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "OtoCar"
+        },
+        {
+          "id": 305237,
+          "code": "7",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "HdyFilo"
+        },
+        {
+          "id": 305237,
+          "code": "ankara-esenboga-havalimani-esb",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "RentiCar"
+        },
+        {
+          "id": 305237,
+          "code": "245",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "KolayCar"
+        },
+        {
+          "id": 305237,
+          "code": "384",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "DmrCar"
+        },
+        {
+          "id": 305237,
+          "code": "245",
+          "countryCode": "tr",
+          "name": "Ankara Esenboğa Havalimanı",
+          "isDomestic": true,
+          "providerName": "WindyCar"
+        }
+      ],
+      "pickupDate": "2025-01-21T08:00:00Z",
+      "pickupHour": null,
+      "returnDate": "2025-01-30T18:00:00Z",
+      "returnHour": null,
+      "driverAge": 26,
+      "receivedProviders": null,
+      "customerId": 0,
+      "customerUserId": 0,
+      "sessionToken": "358DF82B66B1E9E45744B5BCDF927331C0F5EB53BB3C69A420416AE581595B4D",
+      "apiRoute": null,
+      "apiAction": null,
+      "appName": "fulltrip.preprod.webapp.html",
+      "scopeName": null,
+      "searchToken": null,
+      "scopeCode": "2d932774-a9d8-4df9-aae7-5ad2727da1c7"
+    },
+    "moduleName": "CarRental",
+    "totalPrice": 0.0,
+    "priceCurrency": null,
+    "loyaltyMultiple": 1,
+    "couponDiscountList": null,
+    "extraCharges": null,
+    "financellDiscount": {
+      "value": 0.0,
+      "currency": null,
+      "rateValue": null
+    }
+  },
+  "success": true,
+  "statusCode": 0,
+  "message": null,
+  "errors": null,
+  "validModelState": null
+}

@@ -33,7 +33,7 @@ import clsx from 'clsx'
 
 import FlightPassengers from '@/components/checkout/flight/passengers'
 
-import { request } from '@/network'
+import { request, serviceRequest } from '@/network'
 
 import { formatCurrency } from '@/libs/util'
 import {
@@ -41,8 +41,10 @@ import {
   CheckoutSchemaMergedFieldTypes,
   checkPhoneNumberIsValid,
 } from './validations'
-import { use, useEffect, useState } from 'react'
+import { use } from 'react'
 import { CheckoutCard } from '@/components/card'
+import { useQueryStates } from 'nuqs'
+import { reservationParsers } from '../searchParams'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -62,10 +64,10 @@ function useZodForm<TSchema extends z.ZodType>(
 type SearchParams = Promise<{ id: string }>
 
 export default function CheckoutPage(props: { searchParams: SearchParams }) {
-  const searchParams = use(props.searchParams)
+  // const searchParams = use(props.searchParams)
+  // const reservationId = searchParams.id
   const router = useRouter()
-  const reservationId = searchParams.id
-  const checkoutQuery = useCheckoutQuery(reservationId)
+  const checkoutQuery = useCheckoutQuery()
 
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
@@ -77,13 +79,18 @@ export default function CheckoutPage(props: { searchParams: SearchParams }) {
 
   const checkoutPassengersMutation = useMutation({
     mutationFn: (data: CheckoutSchemaMergedFieldTypes) => {
-      return request({
-        url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/api/payment/checkoutAssests`,
-        method: 'POST',
-        data: {
-          ...data,
-          searchToken: cookies.get('searchToken'),
-          sessionToken: cookies.get('sessionToken'),
+      return serviceRequest<{
+        status: 'error' | 'success'
+        success: boolean
+      }>({
+        axiosOptions: {
+          url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/api/payment/checkoutAssests`,
+          method: 'POST',
+          data: {
+            ...data,
+            searchToken: cookies.get('searchToken'),
+            sessionToken: cookies.get('sessionToken'),
+          },
         },
       })
     },
@@ -116,14 +123,11 @@ export default function CheckoutPage(props: { searchParams: SearchParams }) {
           onSubmit={formMethods.handleSubmit(async (data) => {
             console.log('Data submitted:', data)
             const requestCheckout =
-              (await checkoutPassengersMutation.mutateAsync(data)) as {
-                status: 'error' | 'success'
-                success: boolean
-              }
+              await checkoutPassengersMutation.mutateAsync(data)
 
-            if (requestCheckout.success) {
-              router.push(`/reservation/payment?id=${reservationId}`)
-            }
+            // if (requestCheckout?.success) {
+            //   router.push(`/reservation/payment?id=${reservationId}`)
+            // }
           })}
           className='relative grid gap-3 md:gap-5'
         >

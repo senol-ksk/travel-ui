@@ -71,7 +71,7 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
   const formMethods = useForm<CardValidationSchemaTypes>({
     resolver: zodResolver(paymentValidationSchema),
   })
-  const checkoutQuery = useCheckoutQuery(searchParams.id + 'payment')
+  const checkoutQuery = useCheckoutQuery()
   const threeDformRef = useRef<HTMLFormElement>(null)
 
   const paymentMutation = useMutation({

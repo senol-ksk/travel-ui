@@ -1,21 +1,22 @@
 import type { SearchParams } from 'nuqs/server'
 
 import { carDetailSearchParamsCache } from '../searchParams'
-import { CarDetail } from '../component/details'
+import { Suspense } from 'react'
+import { DetailClient } from './client'
 
 type PageProps = {
   searchParams: Promise<SearchParams>
 }
 
 const CarDetailPage: React.FC<PageProps> = async ({ searchParams }) => {
-  const params = await carDetailSearchParamsCache.parse(searchParams)
-
-  if (Object.values(params).every((v) => !v)) return <div>no data</div>
+  await carDetailSearchParamsCache.parse(searchParams)
 
   return (
-    <div className='py-3 md:container'>
-      <CarDetail />
-    </div>
+    <Suspense>
+      <div className='py-3 md:container md:py-8'>
+        <DetailClient />
+      </div>
+    </Suspense>
   )
 }
 
