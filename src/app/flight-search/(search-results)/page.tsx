@@ -126,17 +126,25 @@ const FlightSearchPage = (props: {
   const handleResultSelect = (flight: ClientFlightDataModel) => {
     openPackageDrawer()
 
-    const withPackages = flightService.data?.filter((item) =>
-      flightParams.Destination.IsDomestic && flightParams.Origin.IsDomestic
-        ? item.flightDetailSegments.at(0)?.groupId ===
-            flight.flightDetailSegments.at(0)?.groupId &&
-          item.flightDetailSegments?.at(0)?.flightNumber ===
-            flight.flightDetailSegments.at(0)?.flightNumber
-        : item.flightDetailSegments.at(0)?.groupId ===
-            flight.flightDetailSegments.at(0)?.groupId &&
-          item.flightDetailSegments.at(0)?.freeVolatileData.Seq ===
-            flight.flightDetailSegments.at(0)?.freeVolatileData.Seq
-    )
+    const withPackages = flightService.data
+      ?.filter((item) =>
+        flightParams.Destination.IsDomestic && flightParams.Origin.IsDomestic
+          ? item.flightDetailSegments.at(0)?.groupId ===
+              flight.flightDetailSegments.at(0)?.groupId &&
+            item.flightDetailSegments?.at(0)?.flightNumber ===
+              flight.flightDetailSegments.at(0)?.flightNumber
+          : item.flightDetailSegments.at(0)?.groupId === 0 &&
+            item.flightDetailSegments.at(0)?.freeVolatileData.Seq ===
+              flight.flightDetailSegments.at(0)?.freeVolatileData.Seq
+      )
+      .filter(
+        (obj1, i, arr) =>
+          arr.findIndex(
+            (obj2) =>
+              obj2.flightDetailSegments[0].freeVolatileData.BrandName ===
+              obj1.flightDetailSegments[0].freeVolatileData.BrandName
+          ) === i
+      )
 
     setSelectedFlightData([...new Set(withPackages)])
   }
@@ -363,6 +371,7 @@ const FlightSearchPage = (props: {
                           Array.isArray(flightDetailSegments)
                             ? flightDetailSegments.at(0)
                             : false
+
                         return (
                           <div
                             key={selectedFlight.id}
