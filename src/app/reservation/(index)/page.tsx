@@ -33,7 +33,7 @@ import clsx from 'clsx'
 
 import FlightPassengers from '@/components/checkout/flight/passengers'
 
-import { request, serviceRequest } from '@/network'
+import { serviceRequest } from '@/network'
 
 import { formatCurrency } from '@/libs/util'
 import {
@@ -41,10 +41,8 @@ import {
   CheckoutSchemaMergedFieldTypes,
   checkPhoneNumberIsValid,
 } from './validations'
-import { use } from 'react'
+
 import { CheckoutCard } from '@/components/card'
-import { useQueryStates } from 'nuqs'
-import { reservationParsers } from '../searchParams'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -61,9 +59,7 @@ function useZodForm<TSchema extends z.ZodType>(
   return form
 }
 
-type SearchParams = Promise<{ id: string }>
-
-export default function CheckoutPage(props: { searchParams: SearchParams }) {
+export default function CheckoutPage() {
   // const searchParams = use(props.searchParams)
   // const reservationId = searchParams.id
   const router = useRouter()
