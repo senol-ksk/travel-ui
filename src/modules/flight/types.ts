@@ -63,13 +63,6 @@ export type FlightApiRequestParams = {
   SearchToken: string
 }
 
-export type GetSecurityTokenResponse = {
-  succeeded: boolean
-  result: string
-  errors: []
-  messageEvents: []
-}
-
 export type GetNewSearchSessionTokenResponse = {
   code: number
   message: null

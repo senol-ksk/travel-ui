@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
@@ -16,14 +18,16 @@ const maxDate = today.add(1, 'year')
 type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
+  onExit?: (dates: DatesRangeValue) => void
 }
 const defaultFormat = 'DD MMM ddd'
 
 import { MdOutlineArrowForward } from 'react-icons/md'
 
-const HotelCalendar: React.FC<Props> = ({
+const CarCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
   defaultDates,
+  onExit = () => null,
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
     defaultDates[0],
@@ -49,8 +53,8 @@ const HotelCalendar: React.FC<Props> = ({
 
     onDateSelect(dates)
     setFormatedValues([
-      dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Giriş Tarihi',
-      dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Çıkış Tarihi',
+      dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Teslim Tarihi',
+      dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Bırakış Tarihi',
     ])
   }
 
@@ -74,6 +78,7 @@ const HotelCalendar: React.FC<Props> = ({
                 dayjs(rangeValue[0]).add(1, 'd').toDate(),
               ])
             }
+            onExit(rangeValue)
           }}
         >
           {(styles) => (
@@ -122,6 +127,7 @@ const HotelCalendar: React.FC<Props> = ({
                   <div>
                     <DatePicker
                       highlightToday
+                      allowSingleDateInRange
                       onChange={handleDateSelections}
                       type={'range'}
                       numberOfColumns={matches ? 2 : 13}
@@ -166,4 +172,4 @@ const HotelCalendar: React.FC<Props> = ({
   )
 }
 
-export { HotelCalendar }
+export { CarCalendar }

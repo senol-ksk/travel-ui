@@ -95,13 +95,9 @@ export const HotelSearchEngine = () => {
         return getLocations
       },
     })
-  // const serializer = createSerializer
+
   const onSubmit: SubmitHandler<HotelSearchEngineSchemaType> = (data) => {
     setLocalParams(data)
-
-    // const childAges = data.rooms.flatMap((room) =>
-    //   room.childAges.map((age) => age)
-    // )
 
     const rooms = data.rooms
       .flatMap((room) => room.adult + '-' + room.childAges.join('-'))

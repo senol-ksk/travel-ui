@@ -3,29 +3,26 @@ import { useQuery, UseQueryResult } from '@tanstack/react-query'
 import cookies from 'js-cookie'
 
 import { serviceRequest, ServiceResponse } from '@/network'
+import { reservationParsers } from './searchParams'
+import { useQueryStates } from 'nuqs'
 
-type CheckoutQueryFnType = (
-  id: ID
-) => UseQueryResult<
+type CheckoutQueryFnType = () => UseQueryResult<
   ServiceResponse<ProductPassengerApiResponseModel | undefined>
 >
 
-export const useCheckoutQuery: CheckoutQueryFnType = (id) => {
-  const searchToken = cookies.get('searchToken')
-  const sessionToken = cookies.get('sessionToken')
+export const useCheckoutQuery: CheckoutQueryFnType = () => {
+  const [pageSearchParams] = useQueryStates(reservationParsers)
 
   return useQuery({
-    queryKey: ['checkout', searchToken, sessionToken, id],
-    queryFn: async () => {
+    queryKey: ['checkout', pageSearchParams],
+    queryFn: async ({ signal }) => {
       const response = await serviceRequest<ProductPassengerApiResponseModel>({
         axiosOptions: {
+          signal,
           url: `api/product/reservationData`,
           withCredentials: true,
           method: 'get',
-          params: {
-            searchToken,
-            sessionToken,
-          },
+          params: pageSearchParams,
           headers: {
             'Access-Control-Allow-Credentials': true,
           },
@@ -34,6 +31,5 @@ export const useCheckoutQuery: CheckoutQueryFnType = (id) => {
 
       return response
     },
-    enabled: !!id,
   })
 }

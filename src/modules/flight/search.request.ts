@@ -9,14 +9,13 @@ import type {
   FlightApiRequestParams,
   FlightSearchApiResponse,
   FlightSearchRequestFlightSearchPanel,
-  FlightSearchRequestPayload,
   GetAirlineByCodeListResponse,
-  GetSecurityTokenResponse,
 } from '@/modules/flight/types'
 import {
   collectFlightData,
   generateFlightData,
 } from './search-results/generate'
+import { GetSecurityTokenResponse } from '@/types/global'
 
 const executerestUrl = process.env.NEXT_PUBLIC_OL_ROUTE
 const authToken = md5(

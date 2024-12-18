@@ -2,6 +2,8 @@ import type { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
 
 import axios from 'axios'
 import { ResponseStatus } from './app/reservation/types'
+import { GetSecurityTokenResponse } from './types/global'
+import md5 from 'md5'
 
 const client = axios.create({
   baseURL: '/',
@@ -69,7 +71,26 @@ async function serviceRequest<DataType>({
     })
 
     return response.data
-  } catch (error) {}
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export { request, serviceRequest }
+
+const authToken = md5(
+  process.env.NEXT_PUBLIC_DEVICE_ID + process.env.NEXT_PUBLIC_SECURE_STRING
+).toLocaleUpperCase()
+
+export const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
+  const getToken = await request({
+    url: process.env.NEXT_PUBLIC_SECURITY_ROUTE,
+    method: 'post',
+    data: {
+      authToken,
+      envName: process.env.NEXT_PUBLIC_APP_NAME,
+    },
+  })
+
+  return getToken
+}

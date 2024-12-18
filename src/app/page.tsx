@@ -1,9 +1,10 @@
 import { SearchEngine } from '@/components/search-engine/'
+import { Skeleton } from '@mantine/core'
 import { Suspense } from 'react'
 
-export default function Home() {
+export default async function Home() {
   return (
-    <Suspense fallback={'Loading...'}>
+    <Suspense fallback={<Skeleton h={20} />}>
       <div
         className='flex min-h-[228px] flex-col justify-center bg-cover p-2 md:p-4'
         style={{
