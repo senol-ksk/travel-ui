@@ -109,14 +109,9 @@ const FlightSearchPage = (props: {
         },
       })
     },
-    onMutate(query) {
-      // selectedFlightState.splice(0, selectedFlightState.length)
-    },
     onSuccess(query) {
       nprogress.complete()
-      const uuid = crypto.randomUUID()
 
-      console.log(query)
       const serialize = createSerializer(reservationParsers)
 
       const url = serialize('/reservation', {

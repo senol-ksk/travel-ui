@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
     orderId: string
     searchToken: string
     sessionToken: string
+    productKey: string
   }>({
     axiosOptions: {
       url: `/api/payment/complete?paymenttoken=${request.nextUrl.searchParams.get('paymenttoken')}`,
