@@ -36,6 +36,8 @@ import { Loader } from '@mantine/core'
 import { formatCurrency } from '@/libs/util'
 import { serviceRequest } from '@/network'
 import { flightFilter } from '@/app/flight-search/filters'
+import { createSerializer } from 'nuqs'
+import { reservationParsers } from '@/app/reservation/searchParams'
 
 type Params = Promise<{ slug: string }>
 type SearchParams = Promise<{ searchId: string }>
@@ -108,12 +110,26 @@ const FlightSearchPage = (props: {
       })
     },
     onMutate(query) {
-      selectedFlightState.splice(0, selectedFlightState.length)
+      // selectedFlightState.splice(0, selectedFlightState.length)
     },
     onSuccess(query) {
       nprogress.complete()
       const uuid = crypto.randomUUID()
-      if (query) router.push(`/reservation?id=${uuid}`)
+
+      console.log(query)
+      const serialize = createSerializer(reservationParsers)
+
+      const url = serialize('/reservation', {
+        productKey: selectedFlightState
+          .map((item) => item.flightFare.key)
+          .join(','),
+        searchToken: cookies.get('searchToken'),
+        sessionToken: cookies.get('sessionToken'),
+      })
+
+      selectedFlightState.splice(0, selectedFlightState.length)
+
+      if (query) router.push(url)
     },
   })
   const filteredResults = useMemo(() => {

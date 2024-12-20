@@ -1,8 +1,4 @@
-import {
-  createSearchParamsCache,
-  parseAsInteger,
-  parseAsString,
-} from 'nuqs/server'
+import { createSearchParamsCache, parseAsString } from 'nuqs/server'
 
 export const reservationParsers = {
   searchToken: parseAsString,

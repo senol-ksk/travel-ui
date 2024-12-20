@@ -72,7 +72,19 @@ async function serviceRequest<DataType>({
 
     return response.data
   } catch (error) {
-    console.error(error)
+    const err = error as Error | AxiosError
+
+    if (axios.isAxiosError(err)) {
+      return Promise.reject({
+        message: err.message,
+        code: err.code,
+        response: err.response,
+      })
+    }
+
+    console.log('Unhandled error ===> ', err)
+
+    // return err
   }
 }
 

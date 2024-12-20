@@ -1,18 +1,19 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import dayjs from 'dayjs'
-import cookies from 'js-cookie'
+
 import { useForm, Controller } from 'react-hook-form'
 import {
   Button,
-  Loader,
   LoadingOverlay,
   NativeSelect,
   Skeleton,
   Stack,
   TextInput,
 } from '@mantine/core'
-import { useRouter } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
+import { range } from '@mantine/hooks'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -20,12 +21,11 @@ import cardValidation from 'card-validator'
 import { formatCreditCard } from 'cleave-zen'
 
 import { formatCurrency, yearList } from '@/libs/util'
-import { range } from '@mantine/hooks'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
-import { useMutation } from '@tanstack/react-query'
-import { request } from '@/network'
-import { PaymentResponeType, ResponseStatus } from '@/app/reservation/types'
-import { use, useEffect, useRef } from 'react'
+import { serviceRequest, ServiceResponse } from '@/network'
+import { PaymentResponeType } from '@/app/reservation/types'
+import { createSerializer, useQueryStates } from 'nuqs'
+import { reservationParsers } from '../../searchParams'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -63,46 +63,53 @@ const cardMonths = () =>
     }
   })
 
-type Params = Promise<{ slug: string }>
-type SearchParams = Promise<{ id: string }>
-
-const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
-  const searchParams = use(props.searchParams)
+const PaymentPage = () => {
   const formMethods = useForm<CardValidationSchemaTypes>({
     resolver: zodResolver(paymentValidationSchema),
   })
+  const [queryStrings] = useQueryStates(reservationParsers)
+
   const checkoutQuery = useCheckoutQuery()
   const threeDformRef = useRef<HTMLFormElement>(null)
 
-  const paymentMutation = useMutation({
+  const paymentMutation = useMutation<
+    PaymentResponeType | null | undefined,
+    null,
+    CardValidationSchemaTypes
+  >({
     mutationKey: ['payment-mutation'],
-    mutationFn: async (data: CardValidationSchemaTypes) => {
+    mutationFn: async (data) => {
       const threedCallbackURL = `${window.location.origin}/reservation/callback/api`
 
-      const paymentResponse = (await request({
-        url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/api/payment/initProcess`,
-        method: 'post',
-        withCredentials: true,
-        data: {
-          ...data,
-          billingInfo: checkoutQuery.data?.data?.paymentIndexModel.billingInfo,
-          threeDCallbackUrl: threedCallbackURL,
-          threeDSuccessURL: threedCallbackURL,
-          threeDFailureURL: `${window.location.origin}/reservation/error/api`,
-          searchToken: cookies.get('searchToken'),
-          sessionToken: cookies.get('sessionToken'),
+      const paymentResponse = await serviceRequest<PaymentResponeType>({
+        axiosOptions: {
+          url: `api/payment/initProcess`,
+          method: 'post',
+          withCredentials: true,
+          data: {
+            ...data,
+            cardNumber: data.cardNumber?.replaceAll(' ', ''),
+            billingInfo:
+              checkoutQuery.data?.data?.paymentIndexModel.billingInfo,
+            threeDCallbackUrl: threedCallbackURL,
+            threeDSuccessURL: threedCallbackURL,
+            threeDFailureURL: `${window.location.origin}/reservation/error/api`,
+            searchToken: queryStrings.searchToken,
+            sessionToken: queryStrings.sessionToken,
+            productKey: queryStrings.productKey,
+          },
         },
-      })) as PaymentResponeType
+      })
 
-      return paymentResponse
+      return paymentResponse?.data
     },
   })
 
   useEffect(() => {
-    if (threeDformRef.current && paymentMutation.data?.success) {
+    if (paymentMutation.isSuccess && paymentMutation.data) {
       threeDformRef.current?.submit()
     }
-  }, [paymentMutation.data])
+  }, [paymentMutation.data, paymentMutation.isSuccess])
 
   if (checkoutQuery.isLoading) {
     return (
@@ -114,6 +121,9 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
       </Stack>
     )
   }
+
+  if (checkoutQuery.error || !checkoutQuery.data || !queryStrings.productKey)
+    return <div>Hata olustu</div>
 
   return (
     <>
@@ -281,28 +291,37 @@ const PaymentPage = (props: { params: Params; searchParams: SearchParams }) => {
           </div>
         </CheckoutCard>
       </form>
+
       <form
         ref={threeDformRef}
-        action={paymentMutation?.data?.data.action}
+        action={paymentMutation.data?.action}
         method='POST'
         hidden
       >
-        {paymentMutation.data && paymentMutation.data.success
-          ? Object.keys(paymentMutation.data?.data).map((input, index) => {
-              const value = input as keyof PaymentResponeType['data']
+        <input
+          type='hidden'
+          name='productKey'
+          defaultValue={queryStrings?.productKey}
+          readOnly
+          hidden
+        />
+        {paymentMutation.data && paymentMutation.isSuccess
+          ? Object.keys(paymentMutation.data).map((input, index) => {
+              const value = input as keyof PaymentResponeType
 
               return value !== 'action' ? (
                 <input
                   key={index}
                   name={input}
-                  defaultValue={paymentMutation.data.data[value]}
-                  // readOnly
-                  // disabled
+                  defaultValue={
+                    paymentMutation?.data ? paymentMutation?.data[value] : ''
+                  }
+                  readOnly
+                  disabled
                 />
               ) : null
             })
           : null}
-        {/* <button>submit</button> */}
       </form>
     </>
   )
