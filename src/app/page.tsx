@@ -1,20 +1,21 @@
-import { SearchEngine } from '@/components/search-engine/'
-import { Skeleton } from '@mantine/core'
 import { Suspense } from 'react'
+import { Skeleton, BackgroundImage } from '@mantine/core'
+
+import { SearchEngine } from '@/components/search-engine/'
 
 export default async function Home() {
   return (
     <Suspense fallback={<Skeleton h={20} />}>
-      <div
-        className='flex min-h-[228px] flex-col justify-center bg-cover p-2 md:p-4'
-        style={{
-          backgroundImage:
-            'url(https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg)',
-        }}
-      >
-        <div className='md:container'>
-          <div className='rounded-lg border bg-white'>
-            <SearchEngine />
+      <div className='relative'>
+        <BackgroundImage
+          src='https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg'
+          className='absolute left-0 top-0 -z-50 hidden h-full w-full md:block'
+        />
+        <div className='flex min-h-[228px] flex-col justify-center p-0 md:p-4'>
+          <div className='md:container'>
+            <div className='bg-white md:rounded-lg md:border'>
+              <SearchEngine />
+            </div>
           </div>
         </div>
       </div>

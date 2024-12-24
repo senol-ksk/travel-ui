@@ -5,6 +5,7 @@ import { ResponseStatus } from '@/app/reservation/types'
 
 export async function POST(request: NextRequest) {
   const data = await request.formData()
+  const paymenttoken = request.nextUrl.searchParams.get('paymenttoken')
 
   const bookResult = await serviceRequest<{
     moduleName: string
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
     productKey: string
   }>({
     axiosOptions: {
-      url: `/api/payment/complete?paymenttoken=${request.nextUrl.searchParams.get('paymenttoken')}`,
+      url: `/api/payment/complete?paymenttoken=${paymenttoken}`,
       withCredentials: true,
       method: 'POST',
       data,
@@ -38,5 +39,5 @@ export async function POST(request: NextRequest) {
     return redirect(`/reservation/callback?${bookResultParams}`)
   }
 
-  return redirect('/reservation/error?noDataRecieved')
+  return redirect(`/reservation/error?paymenttoken=${paymenttoken}`)
 }

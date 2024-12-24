@@ -298,13 +298,6 @@ const PaymentPage = () => {
         method='POST'
         hidden
       >
-        <input
-          type='hidden'
-          name='productKey'
-          defaultValue={queryStrings?.productKey}
-          readOnly
-          hidden
-        />
         {paymentMutation.data && paymentMutation.isSuccess
           ? Object.keys(paymentMutation.data).map((input, index) => {
               const value = input as keyof PaymentResponeType
@@ -317,7 +310,6 @@ const PaymentPage = () => {
                     paymentMutation?.data ? paymentMutation?.data[value] : ''
                   }
                   readOnly
-                  disabled
                 />
               ) : null
             })
