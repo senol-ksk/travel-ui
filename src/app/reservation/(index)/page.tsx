@@ -27,8 +27,7 @@ import {
   Title,
 } from '@mantine/core'
 import IntlTelInput from 'intl-tel-input/react'
-import { useMutation } from '@tanstack/react-query'
-import cookies from 'js-cookie'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 
 import FlightPassengers from '@/components/checkout/flight/passengers'
@@ -43,6 +42,8 @@ import {
 } from './validations'
 
 import { CheckoutCard } from '@/components/card'
+import { createSerializer, useQueryStates } from 'nuqs'
+import { reservationParsers } from '../searchParams'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -60,10 +61,9 @@ function useZodForm<TSchema extends z.ZodType>(
 }
 
 export default function CheckoutPage() {
-  // const searchParams = use(props.searchParams)
-  // const reservationId = searchParams.id
   const router = useRouter()
   const checkoutQuery = useCheckoutQuery()
+  const [queryStrings] = useQueryStates(reservationParsers)
 
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
@@ -80,17 +80,19 @@ export default function CheckoutPage() {
         success: boolean
       }>({
         axiosOptions: {
-          url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/api/payment/checkoutAssests`,
+          url: `/api/payment/checkoutAssests`,
           method: 'POST',
           data: {
             ...data,
-            searchToken: cookies.get('searchToken'),
-            sessionToken: cookies.get('sessionToken'),
+            searchToken: queryStrings.searchToken,
+            sessionToken: queryStrings.sessionToken,
+            productKey: queryStrings.productKey,
           },
         },
       })
     },
   })
+  const queryClient = useQueryClient()
 
   if (!checkoutQuery.data || checkoutQuery.isLoading) {
     return (
@@ -121,9 +123,17 @@ export default function CheckoutPage() {
             const requestCheckout =
               await checkoutPassengersMutation.mutateAsync(data)
 
-            // if (requestCheckout?.success) {
-            //   router.push(`/reservation/payment?id=${reservationId}`)
-            // }
+            const serialize = createSerializer(reservationParsers)
+            const url = serialize('/reservation/payment', {
+              productKey: queryStrings.productKey,
+              searchToken: queryStrings.searchToken,
+              sessionToken: queryStrings.sessionToken,
+            })
+
+            if (requestCheckout?.success) {
+              queryClient.clear()
+              router.push(url)
+            }
           })}
           className='relative grid gap-3 md:gap-5'
         >

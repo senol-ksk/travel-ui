@@ -23,11 +23,13 @@ type IProps = {
     searchToken: string
     sessionToken: string
     shoppingFileId: string
+    productKey: string
   }>
 }
 
 const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
-  const { searchToken, sessionToken, shoppingFileId } = await searchParams
+  const { searchToken, sessionToken, shoppingFileId, productKey } =
+    await searchParams
   const getSummaryData = await serviceRequest<OperationResultType>({
     axiosOptions: {
       // url: `api/product/summary/withshoppingfileId`,
@@ -37,6 +39,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
         searchToken,
         sessionToken,
         shoppingFileId,
+        productKey,
       },
     },
   })

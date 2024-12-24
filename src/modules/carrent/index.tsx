@@ -108,17 +108,17 @@ const CarRentSearchPanel: React.FC = () => {
   const onSubmit: SubmitHandler<CarSearchEngineSchemaTypeInfer> = (data) => {
     setCarSearchLocalStroge(data)
 
-    const searchParams = serializeCarSearchParams({
+    const url = serializeCarSearchParams('/car/search-results', {
       driverAge: data.driverAge,
       drop_date: data.drop_date,
       drop_time: data.drop_time,
-      dropoff: data.dropoff.Slug,
+      dropoff: !data.isDiffrentLocation ? data.pickup.Slug : data.dropoff.Slug,
       pickup: data.pickup.Slug,
       pickup_date: data.pickup_date,
       pickup_time: data.pickup_time,
     })
 
-    router.push(`/car/search-results${searchParams}`)
+    router.push(url)
   }
 
   if (!mounted) return <Skeleton h={50} />

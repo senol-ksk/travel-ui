@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { createSerializer, useQueryStates } from 'nuqs'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button, Image, Skeleton, Title } from '@mantine/core'
 import { useRouter } from 'next/navigation'
 
@@ -16,6 +16,7 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
+  const { searchToken, sessionToken } = params
   const router = useRouter()
 
   const carDetailQuery = useQuery({
@@ -28,10 +29,39 @@ export const DetailClient = () => {
         },
       })
 
-      console.log(response)
-
       return response?.data
       // return dummyData.data
+    },
+  })
+
+  const mutateReservation = useMutation({
+    mutationFn: async () => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: 'api/car/reservation',
+          method: 'post',
+
+          params: {
+            ExtraOptions: [],
+            InsuranceOptions: [],
+            SelectedProductKey: detailItem?.key,
+            searchToken: params.searchToken,
+            sessionToken: params.sessionToken,
+          },
+        },
+      })
+
+      return response
+    },
+    onSuccess(data) {
+      const resParams = createSerializer(reservationParsers)
+
+      const url = resParams('/reservation', {
+        productKey: detailItem?.key,
+        searchToken,
+        sessionToken,
+      })
+      router.push(url)
     },
   })
 
@@ -41,14 +71,7 @@ export const DetailClient = () => {
   )
 
   function handleCarSelect() {
-    const resParams = createSerializer(reservationParsers)
-    const url = resParams('/reservation', {
-      productKey: detailItem?.key,
-      searchToken: params.searchToken,
-      sessionToken: params.searchToken,
-    })
-
-    router.push(url)
+    mutateReservation.mutate()
   }
 
   if (!carDetailQuery.data && carDetailQuery.isLoading) {
