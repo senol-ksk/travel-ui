@@ -1,16 +1,20 @@
+'use client'
+
 import { Title } from '@mantine/core'
 
-import { SearchParams } from 'nuqs'
-import { getHotelSearchResultParams } from './request-model'
+import { useQueryStates } from 'nuqs'
+import { hotelSearchParamParser } from '@/modules/hotel/searchParams'
+import { useSearchResultParams } from './request-model'
 
-type IProps = {
-  searchParams: SearchParams
-}
+export const HotelSearchResults: React.FC = () => {
+  const [searchParams] = useQueryStates(hotelSearchParamParser)
+  const hotelSearchRequestQuery = useSearchResultParams(searchParams)
 
-export const HotelSearchResults: React.FC<IProps> = async ({
-  searchParams,
-}) => {
-  const hotelRequestModel = await getHotelSearchResultParams(searchParams)
+  console.log(hotelSearchRequestQuery.data?.pages.at(-1)?.hasMoreResponse)
+
+  if (hotelSearchRequestQuery.hasNextPage) {
+    hotelSearchRequestQuery.fetchNextPage()
+  }
 
   return <Title>otel aramalari</Title>
 }

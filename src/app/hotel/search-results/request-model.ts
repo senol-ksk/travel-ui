@@ -1,21 +1,86 @@
-import { hotelSearchParamsCahce } from '@/modules/hotel/searchParams'
-import { serviceRequest } from '@/network'
-import { HotelSearchRequestParams } from '@/types/hotel'
-import { SearchParams } from 'nuqs'
+import { type Values } from 'nuqs'
 
-export const getHotelSearchResultParams = async (
-  searchParams: SearchParams
-): Promise<HotelSearchRequestParams | null | undefined> => {
-  const params = hotelSearchParamsCahce.parse(searchParams)
+import { getsecuritytoken, request, serviceRequest } from '@/network'
+import { HotelSearchParams, HotelSearchRequestParams } from '@/types/hotel'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { GetSecurityTokenResponse } from '@/types/global'
+import { HotelSearchResultApiResponse } from '@/app/car/search-results/types'
 
-  const response = await serviceRequest<HotelSearchRequestParams>({
-    axiosOptions: {
-      url: 'api/hotel/searchResults',
-      params,
+let appToken: GetSecurityTokenResponse | undefined | null
+
+export const useSearchResultParams = (params: Values<HotelSearchParams>) => {
+  const searchParams = useQuery({
+    queryKey: ['hotel-search-params', params],
+    queryFn: async ({ signal }) => {
+      const response = await serviceRequest<HotelSearchRequestParams>({
+        axiosOptions: {
+          url: 'api/hotel/searchResults',
+          params,
+          signal,
+        },
+      })
+
+      return response?.data
     },
   })
 
-  return response?.data
+  const searchRequestParams = searchParams.data?.hotelSearchApiRequest
+
+  return useInfiniteQuery({
+    enabled: !!searchRequestParams,
+    queryKey: ['hotel-search-results', searchRequestParams],
+    initialPageParam: {
+      apiAction: '/api/Hotel/SearchResponseReadyData',
+    },
+    queryFn: async ({ signal, pageParam }) => {
+      if (!appToken) {
+        appToken = await getsecuritytoken()
+      }
+      console.log(pageParam)
+      const response = (await request({
+        method: 'post',
+        url: process.env.NEXT_PUBLIC_OL_ROUTE,
+        data: {
+          params: {
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            searchToken: searchRequestParams?.searchToken,
+            hotelSearchModuleRequest:
+              searchRequestParams?.hotelSearchModuleRequest,
+          },
+          apiRoute: 'HotelService',
+          apiAction: pageParam.apiAction,
+          sessionToken: searchRequestParams?.sessionToken,
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+          RequestType:
+            'TravelAccess.Business.Models.Hotel.HotelSearchApiRequest, Business.Models.Hotel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+          Device: 'Web',
+          LanguageCode: 'tr_TR',
+          signal,
+        },
+        headers: {
+          appToken: appToken.result,
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+        },
+      })) as HotelSearchResultApiResponse
+
+      return response?.data
+    },
+    getNextPageParam: (lastPage, pages, allPageParam, lastPageParams) => {
+      if (
+        !lastPage.hasMoreResponse ||
+        lastPageParams.at(-1)?.apiAction === '/api/Hotel/SearchResponse'
+      ) {
+        return undefined
+      }
+      return {
+        apiAction: '/api/Hotel/SearchResponse',
+      }
+    },
+  })
 }
 
 const dummyHotelSearchModelData: HotelSearchRequestParams = {

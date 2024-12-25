@@ -105,25 +105,22 @@ export const HotelSearchEngine = () => {
       .flatMap((room) => room.adult + '-' + room.childAges.join('-'))
       .toString()
 
-    const searchParams = serializeHotelSearchParams({
+    const searchParams = serializeHotelSearchParams('/hotel/search-results', {
       checkinDate: data.checkinDate,
       checkoutDate: data.checkoutDate,
       destination: data.destination.name,
       slug: data.destination.slug,
       destinationId: '' + data.destination.id,
       type: data.destination.type,
-      rooms,
+      rooms: rooms.endsWith('-') ? rooms.slice(0, -1) : rooms,
     })
 
-    router.push(`/hotel/search-results${searchParams}`)
+    router.push(searchParams)
   }
 
   if (!mounted) {
     return (
       <div className='grid gap-3 md:grid-cols-4'>
-        <Skeleton visible h={50} />
-        <Skeleton visible h={50} />
-        <Skeleton visible h={50} />
         <Skeleton visible h={50} />
       </div>
     )
