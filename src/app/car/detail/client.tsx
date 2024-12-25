@@ -36,7 +36,7 @@ export const DetailClient = () => {
 
   const mutateReservation = useMutation({
     mutationFn: async () => {
-      const response = await serviceRequest({
+      const response = await serviceRequest<DetailResponseData>({
         axiosOptions: {
           url: 'api/car/reservation',
           method: 'post',
@@ -57,7 +57,7 @@ export const DetailClient = () => {
       const resParams = createSerializer(reservationParsers)
 
       const url = resParams('/reservation', {
-        productKey: detailItem?.key,
+        productKey: data?.data?.detailResponse.items.at(0)?.key,
         searchToken,
         sessionToken,
       })

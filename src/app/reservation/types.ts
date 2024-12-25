@@ -17,6 +17,7 @@ export type PassengerValidationType = {
   gender: z.ZodNativeEnum<typeof GenderEnums>
   lastName: z.ZodString
   passengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
+  model_PassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
   nationality_Check: z.ZodOptional<z.ZodBoolean>
   passengerKey: z.ZodString
   passportCountry: z.ZodOptional<z.ZodString>

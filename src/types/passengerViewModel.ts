@@ -1167,7 +1167,7 @@ export type ProductPassengerApiResponseModel = {
         }
       }
     }
-    Reservable: 1 | 0
+    Reservable: 1 | 0 | null | undefined
   }
   treeContainer: {
     id: null

@@ -1,6 +1,7 @@
 'use client'
-import { Tabs, TabsTab } from '@mantine/core'
-import { useLocalStorage } from '@mantine/hooks'
+
+import { Skeleton, Tabs, TabsTab } from '@mantine/core'
+import { useLocalStorage, useMounted } from '@mantine/hooks'
 
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
@@ -17,6 +18,7 @@ export const SearchEngine = () => {
     key: 'latest-search',
     defaultValue: searchModules.flight.value,
   })
+  const mounted = useMounted()
 
   return (
     <Tabs
@@ -28,6 +30,15 @@ export const SearchEngine = () => {
       }}
     >
       <Tabs.List className='px-2 pt-2 md:px-4 md:pt-4'>
+        {!mounted ? (
+          <Skeleton
+            h='100%'
+            visible
+            classNames={{
+              root: 'absolute start-0 top-0 z-10 rounded-t-lg',
+            }}
+          />
+        ) : null}
         <TabsTab value={searchModules.flight.value}>
           {searchModules.flight.title}
         </TabsTab>

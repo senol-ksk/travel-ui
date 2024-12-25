@@ -50,7 +50,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
   // type ProductType =
 
   const productData = getSummary?.product.summaryResponse
-  console.log(getSummary)
+
   return (
     <div className='mx-auto max-w-screen-sm pt-4'>
       {productData && passengerData ? (

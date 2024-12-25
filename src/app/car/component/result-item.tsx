@@ -46,13 +46,16 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
           </div>
         </div>
       </div>
-      <div className='flex items-end justify-end border-t p-3 md:p-4'>
-        <Button
-          onClick={() => onSelect(item)}
-          rightSection={<IoArrowForward />}
-        >
-          Hemen Kirala
-        </Button>
+      <div className='flex justify-between border-t p-3 md:p-4'>
+        <div>{item.carDetail.vendorName}</div>
+        <div>
+          <Button
+            onClick={() => onSelect(item)}
+            rightSection={<IoArrowForward />}
+          >
+            Hemen Kirala
+          </Button>
+        </div>
       </div>
     </div>
   )
