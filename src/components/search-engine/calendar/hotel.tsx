@@ -137,7 +137,7 @@ const HotelCalendar: React.FC<Props> = ({
                         calendarHeaderLevel: 'text-base',
                         weekday: 'text-black',
                       }}
-                      value={rangeValue}
+                      defaultValue={rangeValue}
                     />
                   </div>
                 </div>

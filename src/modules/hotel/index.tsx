@@ -1,7 +1,8 @@
+import { useState } from 'react'
+
 import { Button, Skeleton } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 
@@ -15,6 +16,7 @@ import { type LocationResults } from '@/components/search-engine/locations/hotel
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { request } from '@/network'
 import { serializeHotelSearchParams } from '@/modules/hotel/searchParams'
+import { DatePickerInput } from '@mantine/dates'
 
 const schema = z.object({
   destination: z.object({
@@ -103,25 +105,22 @@ export const HotelSearchEngine = () => {
       .flatMap((room) => room.adult + '-' + room.childAges.join('-'))
       .toString()
 
-    const searchParams = serializeHotelSearchParams({
+    const searchParams = serializeHotelSearchParams('/hotel/search-results', {
       checkinDate: data.checkinDate,
       checkoutDate: data.checkoutDate,
       destination: data.destination.name,
       slug: data.destination.slug,
       destinationId: '' + data.destination.id,
       type: data.destination.type,
-      rooms,
+      rooms: rooms.endsWith('-') ? rooms.slice(0, -1) : rooms,
     })
 
-    router.push(`/hotel/search-results${searchParams}`)
+    router.push(searchParams)
   }
 
   if (!mounted) {
     return (
       <div className='grid gap-3 md:grid-cols-4'>
-        <Skeleton visible h={50} />
-        <Skeleton visible h={50} />
-        <Skeleton visible h={50} />
         <Skeleton visible h={50} />
       </div>
     )
