@@ -171,7 +171,7 @@ const FlightCalendar: React.FC<Props> = ({
                         calendarHeaderLevel: 'text-base',
                         weekday: 'text-black',
                       }}
-                      value={
+                      defaultValue={
                         tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
                       }
                     />
