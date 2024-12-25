@@ -30,7 +30,7 @@ import IntlTelInput from 'intl-tel-input/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 
-import FlightPassengers from '@/components/checkout/flight/passengers'
+import PassengerInformationForm from '@/components/checkout/flight/passengers'
 
 import { serviceRequest } from '@/network'
 
@@ -39,7 +39,7 @@ import {
   checkoutSchemaMerged,
   CheckoutSchemaMergedFieldTypes,
   checkPhoneNumberIsValid,
-} from './validations'
+} from '../validations'
 
 import { CheckoutCard } from '@/components/card'
 import { createSerializer, useQueryStates } from 'nuqs'
@@ -82,6 +82,7 @@ export default function CheckoutPage() {
         axiosOptions: {
           url: `/api/payment/checkoutAssests`,
           method: 'POST',
+          withCredentials: true,
           data: {
             ...data,
             searchToken: queryStrings.searchToken,
@@ -259,7 +260,7 @@ export default function CheckoutPage() {
                       <Title order={3} size={'lg'} pb={10}>
                         {PassengerTypesIndexEnum[passengerType]}
                       </Title>
-                      <FlightPassengers
+                      <PassengerInformationForm
                         fieldProps={{
                           firstName: field.firstName || '',
                           birthDate: field.birthDate || '',
@@ -272,11 +273,11 @@ export default function CheckoutPage() {
                             typeof field._passengerId === 'string'
                               ? field._passengerId
                               : '',
-                          passengerId: field.model_PassengerId,
+                          passengerId: field.passengerId,
+                          model_PassengerId: field.model_PassengerId,
                           nationality_Check: !!field.nationality_Check,
                           passengerKey: field.passengerKey || '',
-                          registeredPassengerId:
-                            field.registeredPassengerId || '',
+                          registeredPassengerId: field.registeredPassengerId,
                           type: field.type,
                           // citizenNo: field.citizenNo || '',
                           citizenNo: '',

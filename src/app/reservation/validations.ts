@@ -1,4 +1,4 @@
-import { boolean, z } from 'zod'
+import { z } from 'zod'
 import { PassengerValidationType } from '@/app/reservation/types'
 import { GenderEnums, PassengerTypesEnum } from '@/types/passengerViewModel'
 import { validTCKN } from '@/libs/tckn-validate'
@@ -42,7 +42,7 @@ const passengerValidation = z.object({
         nationality_Check: z.boolean().optional(),
         passengerId: z.string().or(z.number()),
         registeredPassengerId: z.string().or(z.number()),
-        passengerKey: z.string().min(2),
+        passengerKey: z.string(),
         passportCountry: z.string().optional(),
         passportNo: z.string().optional(),
         passportValidity_1: z.string().optional(),
@@ -50,6 +50,7 @@ const passengerValidation = z.object({
         passportValidity_3: z.string().optional(),
         passportValidityDate: z.string().optional().nullable(),
         hesCode: z.string(),
+        model_PassengerId: z.string().or(z.number()),
       })
       .superRefine((value, ctx) => {
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {

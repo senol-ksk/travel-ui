@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -22,10 +23,9 @@ import { formatCreditCard } from 'cleave-zen'
 
 import { formatCurrency, yearList } from '@/libs/util'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
-import { serviceRequest, ServiceResponse } from '@/network'
+import { serviceRequest } from '@/network'
 import { PaymentResponeType } from '@/app/reservation/types'
-import { createSerializer, useQueryStates } from 'nuqs'
-import { reservationParsers } from '../../searchParams'
+import { reservationParsers } from '@/app/reservation/searchParams'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -122,6 +122,8 @@ const PaymentPage = () => {
     )
   }
 
+  console.log(formMethods.formState.errors)
+
   if (checkoutQuery.error || !checkoutQuery.data || !queryStrings.productKey)
     return <div>Hata olustu</div>
 
@@ -145,7 +147,7 @@ const PaymentPage = () => {
             />
             <input
               {...formMethods.register('reservable', {
-                value: checkoutQuery.data?.data?.viewBag.Reservable,
+                value: checkoutQuery.data?.data?.viewBag.Reservable ?? 0,
               })}
               type='hidden'
             />

@@ -20,9 +20,10 @@ import localeDate from 'dayjs/plugin/localeData'
 import 'dayjs/locale/tr'
 import { range } from '@mantine/hooks'
 import clsx from 'clsx'
+
 import { GenderEnums } from '@/types/passengerViewModel'
 import { PassengerValidationType } from '@/app/reservation/types'
-import { PassengerSchemaType } from '@/app/reservation/(index)/validations'
+import { PassengerSchemaType } from '@/app/reservation/validations'
 
 type IProps = {
   fieldProps: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
@@ -90,7 +91,7 @@ const days = () =>
 
 const pasportDateValue = ['', '', '']
 
-export const FlightPassengers: React.FC<IProps> = ({
+export const PassengerInformationForm: React.FC<IProps> = ({
   fieldProps,
   index,
   error,
@@ -157,8 +158,14 @@ export const FlightPassengers: React.FC<IProps> = ({
         type='hidden'
       />
       <input
+        {...methods.register(`${namePrefix}.model_PassengerId`, {
+          value: fieldProps.model_PassengerId,
+        })}
+        type='hidden'
+      />
+      <input
         {...methods.register(`${namePrefix}.registeredPassengerId`, {
-          value: fieldProps.passengerId,
+          value: fieldProps.registeredPassengerId,
         })}
         type='hidden'
       />
@@ -454,4 +461,4 @@ export const FlightPassengers: React.FC<IProps> = ({
   )
 }
 
-export default FlightPassengers
+export default PassengerInformationForm
