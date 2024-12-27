@@ -2,7 +2,7 @@
 
 import { use, useEffect, useMemo, useState } from 'react'
 import { NavigationProgress, nprogress } from '@mantine/nprogress'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import clsx from 'clsx'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
@@ -85,7 +85,7 @@ const FlightSearchPage = (props: {
   })
 
   const pathname = usePathname()
-  // const searchparams = useSearchParams()
+
   const queryClient = useQueryClient()
   useEffect(() => {
     return () => {

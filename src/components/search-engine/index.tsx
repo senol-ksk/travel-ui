@@ -6,11 +6,13 @@ import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
 import { CarRentSearchPanel } from '@/modules/carrent'
+import { BusSearchEngine } from '@/modules/bus'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
   hotel: { value: 'hotel', title: 'Otel' },
   carRental: { value: 'carrental', title: 'Araç' },
+  bus: { value: 'bus', title: 'Otobüs' },
 }
 
 export const SearchEngine = () => {
@@ -18,6 +20,7 @@ export const SearchEngine = () => {
     key: 'latest-search',
     defaultValue: searchModules.flight.value,
   })
+
   const mounted = useMounted()
 
   return (
@@ -48,19 +51,23 @@ export const SearchEngine = () => {
         <TabsTab value={searchModules.carRental.value}>
           {searchModules.carRental.title}
         </TabsTab>
+        <TabsTab value={searchModules.bus.value}>
+          {searchModules.bus.title}
+        </TabsTab>
       </Tabs.List>
 
       <div className='p-2 md:p-4'>
         <Tabs.Panel value={searchModules.flight.value}>
           <Flight />
         </Tabs.Panel>
-
         <Tabs.Panel value={searchModules.hotel.value}>
           <HotelSearchEngine />
         </Tabs.Panel>
-
         <Tabs.Panel value={searchModules.carRental.value}>
           <CarRentSearchPanel />
+        </Tabs.Panel>
+        <Tabs.Panel value={searchModules.bus.value}>
+          <BusSearchEngine />
         </Tabs.Panel>
       </div>
     </Tabs>

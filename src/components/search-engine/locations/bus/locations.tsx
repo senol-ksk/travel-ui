@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState } from 'react'
 import {
   TextInput,
@@ -28,7 +30,7 @@ type Props = {
   defaultValue?: string
 }
 
-export const Locations: React.FC<Props> = ({
+export const BusLocations: React.FC<Props> = ({
   label,
   inputProps,
   onSelect = () => {},
@@ -111,7 +113,7 @@ export const Locations: React.FC<Props> = ({
                 <Skeleton height={12} mt={6} width='70%' radius='xl' />
                 <Skeleton height={12} mt={6} radius='xl' />
               </div>
-              {data?.length > 0 && (
+              {data && data.length > 0 && (
                 <div>
                   {data.map((location) => {
                     const { Name, SubDestinations, Id } = location
@@ -168,12 +170,12 @@ export const Locations: React.FC<Props> = ({
                   })}
                 </div>
               )}
-              {!isLoading && data.length === 0 ? (
+              {!isLoading && data?.length === 0 ? (
                 <div className='flex flex-col items-center gap-2 p-3 text-center'>
                   <div className='text-4xl'>
                     <IoSearch />
                   </div>
-                  <div className='text-sm'>Otel veya Şehir arayın.</div>
+                  <div className='text-sm'>Şehir veya Havaalanı arayın.</div>
                 </div>
               ) : null}
             </div>
