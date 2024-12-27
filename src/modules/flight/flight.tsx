@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import cookies from 'js-cookie'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
@@ -177,11 +177,10 @@ export const Flight = () => {
   }
 
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     setIsRedirecting(false)
-  }, [pathname, searchParams])
+  }, [pathname])
 
   if (formSkeletonVisibilty) return <Skeleton height={80} />
 

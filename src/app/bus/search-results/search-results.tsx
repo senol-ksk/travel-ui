@@ -3,8 +3,8 @@
 import { useSearchRequest } from '@/app/bus/search-results/useSearchResults'
 
 import { BusSearchItem } from './search-item'
-import { BusSearchEngine } from '@/modules/bus'
-import { Loader, Skeleton } from '@mantine/core'
+import { Skeleton } from '@mantine/core'
+import { Suspense } from 'react'
 
 const seatRequestParams = {
   params: {
