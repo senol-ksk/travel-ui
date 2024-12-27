@@ -14,11 +14,7 @@ const SearchResult: React.FC<IProps> = async ({ searchParams }) => {
     return <div>no data</div>
   }
 
-  return (
-    <div>
-      <Search searchRequestParams={searchApiParams} />
-    </div>
-  )
+  return <Search searchRequestParams={searchApiParams} />
 }
 
 export { SearchResult }

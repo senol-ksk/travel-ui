@@ -5,3 +5,8 @@ type ServicePriceType = {
   currency: 'TRY' | null
   rateValue: null
 }
+
+interface ServiceFeePriceType {
+  code: null
+  price: ServicePriceType
+}

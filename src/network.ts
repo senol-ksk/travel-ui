@@ -104,5 +104,64 @@ export const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
     },
   })
 
+  appToken = getToken.result
+
   return getToken
+}
+
+let appToken = ''
+
+export const getSessionToken = async (): Promise<string | undefined> => {
+  if (!appToken) await getsecuritytoken()
+
+  const response = await request({
+    url: process.env.NEXT_PUBLIC_GET_SESSION_TOKEN,
+    method: 'post',
+    headers: {
+      appToken,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+    },
+  })
+
+  return response
+}
+
+type BusSearchSessionTokenResponse = {
+  data: string
+  sessionToken: string
+}
+
+export const getBusSearchSessionToken = async () => {
+  if (!appToken) {
+    await getsecuritytoken()
+  }
+
+  const response = (await request({
+    url: process.env.NEXT_PUBLIC_OL_ROUTE,
+    method: 'post',
+    data: {
+      params: {
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
+        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      },
+      apiRoute: 'BusService',
+      apiAction: 'api/Bus/GetNewSearchSessionToken',
+      sessionToken: '',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      RequestType:
+        'TravelAccess.Core.Models.Bus.BusSearchRequest, TravelAccess.Core.Models.Bus, Version=1.0.4',
+    },
+    headers: {
+      appToken,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+    },
+  })) as BusSearchSessionTokenResponse
+
+  return {
+    sessionToken: response.sessionToken,
+    searchToken: response.data,
+  }
 }

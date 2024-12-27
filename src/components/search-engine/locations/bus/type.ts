@@ -15,7 +15,7 @@ export type LocationResult = {
   Slug: string
   Select: boolean
   IsDomestic: boolean
-  ExtentionData: { [key: string]: string }
+  ExtentionData: object
 }
 
 export type LocationResults = {

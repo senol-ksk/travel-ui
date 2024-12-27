@@ -15,12 +15,12 @@ export type LocationResult = {
   Slug: string
   Select: boolean
   IsDomestic: boolean
-  ExtentionData: object
+  ExtentionData: { [key: string]: string }
 }
 
 export type LocationResults = {
   Succeeded: true
-  Result: Array<LocationResult>
+  Result: LocationResult[]
   Errors: Array<[]>
   MessageEvents: Array<[]>
 }
