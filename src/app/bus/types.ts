@@ -116,3 +116,28 @@ export interface BusSeatApiResponse {
   eventMessageList: []
   data: { seats: Seat[] }
 }
+
+export enum BusGender {
+  MALE = 2,
+  WOMAN = 1,
+}
+
+export enum SeatStatus {
+  AVAILABLE = 0,
+  TAKENBYWOMAN = 1,
+  TAKENBYMAN = 3,
+}
+
+export enum SeatSideStatus {
+  /// Yan Koltuk Boş (Her İki Cinse Satılabilir)
+  empty = 0,
+  /// Sadece Bayana Satılabilir
+  SaleToLady = 1,
+  /// Sadece Baya Satılabilir
+  SaleToMr = 2,
+  /// Belirsiz satılamaz
+  Uncertain3 = 3,
+  Uncertain4 = 4,
+  Uncertain5 = 5,
+  Uncertain6 = 6,
+}
