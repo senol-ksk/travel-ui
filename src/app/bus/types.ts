@@ -85,3 +85,34 @@ export interface BusSearchResultItem {
   taxInfos: null | ServicePriceType
   serviceCharges: null | ServicePriceType
 }
+
+export interface Seat {
+  no: number
+  status: number
+  sideStatus: number
+  type: number
+  paxId: number
+  paxType: number
+  gender: number
+  age: number
+  discount: ServicePriceType
+  totalPrice: ServicePriceType
+  servicePrice: ServicePriceType
+  basePrice: ServicePriceType
+  taxes: ServicePriceType
+  totalCommission: ServicePriceType
+  buyServiceFee: number
+  sellServiceFee: number
+}
+
+export interface BusSeatApiResponse {
+  code: 1
+  message: null
+  token: null
+  clientIP: null
+  appName: null
+  sessionToken: string
+  userAuthenticationToken: null
+  eventMessageList: []
+  data: { seats: Seat[] }
+}

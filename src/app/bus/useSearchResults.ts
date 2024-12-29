@@ -3,7 +3,7 @@ import { useQueryStates } from 'nuqs'
 
 import { busSearchParams } from '@/modules/bus/searchParmas'
 import { getsecuritytoken, request } from '@/network'
-import { BusSearchResponse } from '@/app/bus/search-results/types'
+import { BusSearchResponse } from '@/app/bus/types'
 
 let appToken: null | string = ''
 
@@ -113,6 +113,7 @@ export const useSearchRequest = () => {
       appToken = null
       return undefined
     },
-    enabled: !!searchParams,
+    enabled: false,
+    // enabled: !!searchParams,
   })
 }

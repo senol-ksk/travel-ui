@@ -1,6 +1,7 @@
-import { Button, Image } from '@mantine/core'
-import { BusSearchResultItem } from './types'
 import dayjs from 'dayjs'
+import { Button, Image } from '@mantine/core'
+
+import { BusSearchResultItem } from '@/app/bus/types'
 
 type Props = {
   searchItem: BusSearchResultItem
