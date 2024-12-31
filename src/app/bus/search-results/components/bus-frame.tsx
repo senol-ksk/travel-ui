@@ -2,7 +2,7 @@ import { PiSteeringWheelLight } from 'react-icons/pi'
 import { SeatView } from './seat'
 import { busSeatResponseDummy } from '@/app/bus/search-results/seat-response'
 import clsx from 'clsx'
-import { useCallback, useLayoutEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { BusGender, Seat, SeatStatus } from '@/app/bus/types'
 
 import { BusSeatIcons } from './icons'
@@ -49,7 +49,7 @@ const BusFrame: React.FC<Props> = ({
     // }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     return () => {
       const seatsData = seats.map((seat, seatIndex, seatData) => {
         top = row_counter * offset
