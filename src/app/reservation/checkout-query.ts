@@ -1,20 +1,20 @@
 import type { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
-import cookies from 'js-cookie'
+import { useQueryStates } from 'nuqs'
 
 import { serviceRequest, ServiceResponse } from '@/network'
-import { reservationParsers } from './searchParams'
-import { useQueryStates } from 'nuqs'
+import { reservationParsers } from '@/app/reservation/searchParams'
 
 type CheckoutQueryFnType = () => UseQueryResult<
   ServiceResponse<ProductPassengerApiResponseModel | undefined>
 >
 
 export const useCheckoutQuery: CheckoutQueryFnType = () => {
-  const [pageSearchParams] = useQueryStates(reservationParsers)
+  const [{ searchToken, sessionToken, productKey }] =
+    useQueryStates(reservationParsers)
 
   return useQuery({
-    queryKey: ['checkout', pageSearchParams],
+    queryKey: ['checkout', [searchToken, sessionToken, productKey]],
     queryFn: async ({ signal }) => {
       const response = await serviceRequest<ProductPassengerApiResponseModel>({
         axiosOptions: {
@@ -22,7 +22,11 @@ export const useCheckoutQuery: CheckoutQueryFnType = () => {
           url: `api/product/reservationData`,
           withCredentials: true,
           method: 'get',
-          params: pageSearchParams,
+          params: {
+            searchToken,
+            sessionToken,
+            productKey,
+          },
           headers: {
             'Access-Control-Allow-Credentials': true,
           },

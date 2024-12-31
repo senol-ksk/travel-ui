@@ -85,3 +85,73 @@ export interface BusSearchResultItem {
   taxInfos: null | ServicePriceType
   serviceCharges: null | ServicePriceType
 }
+
+export interface Seat {
+  age: number
+  basePrice: ServicePriceType
+  buyServiceFee: number
+  discount: ServicePriceType
+  gender: BusGender
+  no: number
+  paxId: number
+  paxType: number
+  sellServiceFee: number
+  servicePrice: ServicePriceType
+  sideStatus: number
+  status: BusGender | SeatStatus
+  taxes: ServicePriceType
+  totalCommission: ServicePriceType
+  totalPrice: ServicePriceType
+  type: number
+}
+
+export interface BusSeatApiResponse {
+  code: 1
+  message: null
+  token: null
+  clientIP: null
+  appName: null
+  sessionToken: string
+  userAuthenticationToken: null
+  eventMessageList: []
+  data: { seats: Seat[] }
+}
+
+export enum BusGender {
+  EMPTY,
+  WOMAN,
+  MALE,
+}
+
+export enum SeatStatus {
+  AVAILABLE = 0,
+  TAKENBYWOMAN = 1,
+  REZERVTOWOMAN = 2,
+  TAKENBYMAN = 3,
+  REZERVTOMAN = 4,
+  ISSALE = 5,
+  CANNOTBESOLD = 6,
+  SELECTEDSEATTYPE = 7,
+}
+
+export enum SeatSideStatus {
+  /// Yan Koltuk Boş (Her İki Cinse Satılabilir)
+  empty = 0,
+  /// Sadece Bayana Satılabilir
+  SaleToLady = 1,
+  /// Sadece Baya Satılabilir
+  SaleToMr = 2,
+  /// Belirsiz satılamaz
+  Uncertain3 = 3,
+  Uncertain4 = 4,
+  Uncertain5 = 5,
+  Uncertain6 = 6,
+}
+
+export enum SeatColors {
+  AVAILABLE = 'white',
+  NOTAVAILABLE = '--mantine-color-gray-4',
+  SELECTED = '--mantine-color-green-3',
+  WOMAN = '--mantine-color-grape-2',
+  MALE = '--mantine-color-blue-2',
+}

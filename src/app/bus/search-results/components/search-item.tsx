@@ -1,6 +1,8 @@
-import { Button, Image } from '@mantine/core'
-import { BusSearchResultItem } from './types'
 import dayjs from 'dayjs'
+import { Button, Image } from '@mantine/core'
+
+import { BusSearchResultItem } from '@/app/bus/types'
+import { formatCurrency } from '@/libs/util'
 
 type Props = {
   searchItem: BusSearchResultItem
@@ -30,10 +32,15 @@ const BusSearchItem: React.FC<Props> = ({
           <div>{searchItem.destination}</div>
         </div>
       </div>
-      <div className='grid justify-end border-t p-3'>
-        <Button type='button' onClick={() => onSelect(searchItem)}>
-          Koltuk Seç
-        </Button>
+      <div className='flex justify-between border-t p-3'>
+        <div className='text-lg font-semibold'>
+          {formatCurrency(searchItem.bus.internetPrice.value)}
+        </div>
+        <div>
+          <Button type='button' onClick={() => onSelect(searchItem)}>
+            Koltuk Seç
+          </Button>
+        </div>
       </div>
     </div>
   )
