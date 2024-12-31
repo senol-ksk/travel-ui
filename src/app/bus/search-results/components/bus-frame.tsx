@@ -49,34 +49,32 @@ const BusFrame: React.FC<Props> = ({
     // }
   }
 
-  useEffect(() => {
-    return () => {
-      const seatsData = seats.map((seat, seatIndex, seatData) => {
-        top = row_counter * offset
-        left = col_counter * offset
+  useLayoutEffect(() => {
+    const seatsData = seats.map((seat, seatIndex, seatData) => {
+      top = row_counter * offset
+      left = col_counter * offset
 
-        row_counter = col_counter === 4 ? row_counter + 1 : row_counter
-        col_counter = col_counter === 4 ? 0 : col_counter + 1
+      row_counter = col_counter === 4 ? row_counter + 1 : row_counter
+      col_counter = col_counter === 4 ? 0 : col_counter + 1
 
-        if (seatData.length - 1 === seatIndex) {
-          setSeatWrapperDimensions({
-            height: row_counter * offset,
-            width: 5 * offset,
-          })
+      if (seatData.length - 1 === seatIndex) {
+        setSeatWrapperDimensions({
+          height: row_counter * offset,
+          width: 5 * offset,
+        })
 
-          row_counter = 0
-          col_counter = 0
-        }
+        row_counter = 0
+        col_counter = 0
+      }
 
-        return {
-          top,
-          left,
-          seatData: seat,
-        }
-      })
+      return {
+        top,
+        left,
+        seatData: seat,
+      }
+    })
 
-      setSeatPositions(seatsData)
-    }
+    setSeatPositions(seatsData)
   }, [seats])
 
   return (
