@@ -1,5 +1,6 @@
 import {
   BusGender,
+  SeatColors,
   SeatSideStatus,
   SeatStatus,
   type Seat,
@@ -11,10 +12,15 @@ import { useState } from 'react'
 
 type Props = {
   data: Seat
-  onSeatSelect: (genderType: BusGender | 0) => void
+  onSeatSelect: (genderType: BusGender) => void
+  maxSelectCountReached: boolean
 }
 
-const SeatView: React.FC<Props> = ({ data, onSeatSelect = () => null }) => {
+const SeatView: React.FC<Props> = ({
+  data,
+  onSeatSelect = () => null,
+  maxSelectCountReached = false,
+}) => {
   const [
     genderFrame,
     {
@@ -28,6 +34,8 @@ const SeatView: React.FC<Props> = ({ data, onSeatSelect = () => null }) => {
   const isSeatAvailable =
     data.status === SeatStatus.TAKENBYMAN ||
     data.status === SeatStatus.TAKENBYWOMAN ||
+    data.status === SeatStatus.REZERVTOMAN ||
+    data.status === SeatStatus.REZERVTOWOMAN ||
     data.no < 0
 
   const handleSeatSelect = (genderType: BusGender) => {
@@ -35,6 +43,16 @@ const SeatView: React.FC<Props> = ({ data, onSeatSelect = () => null }) => {
     closeGenderFrame()
     onSeatSelect(genderType)
   }
+
+  const seatColor = selectedState
+    ? SeatColors.SELECTED
+    : data.status === SeatStatus.TAKENBYMAN ||
+        data.status === SeatStatus.REZERVTOMAN
+      ? SeatColors.MALE
+      : data.status === SeatStatus.TAKENBYWOMAN ||
+          data.status === SeatStatus.REZERVTOWOMAN
+        ? SeatColors.WOMAN
+        : 'white'
 
   if (data.no < 0) return null
 
@@ -55,19 +73,24 @@ const SeatView: React.FC<Props> = ({ data, onSeatSelect = () => null }) => {
             className='relative cursor-pointer bg-transparent'
             disabled={isSeatAvailable}
             onClick={() => {
-              if (selectedState) {
+              if (selectedState || maxSelectCountReached) {
                 setSelectedState(false)
-                onSeatSelect(0)
+                onSeatSelect(BusGender.EMPTY)
               } else {
                 openGenderFrame()
               }
             }}
           >
-            <div className='seat-no absolute bottom-0 end-0 start-0 top-0 z-10 flex items-center justify-center pb-1'>
-              {data.no}
-            </div>
-            <div className='seat-icon'>
-              <svg
+            <div
+              className='flex size-[36px] items-center justify-center rounded-t-lg border-b-4 border-l border-r border-t border-gray-600 border-b-gray-600 pt-1'
+              style={{
+                backgroundColor: `var(${seatColor})`,
+              }}
+            >
+              <div className='seat-no absolute bottom-0 end-0 start-0 top-0 z-10 flex items-center justify-center text-sm text-black'>
+                {data.no}
+              </div>
+              {/* <svg
                 xmlns='http://www.w3.org/2000/svg'
                 xmlnsXlink='http://www.w3.org/1999/xlink'
                 height={37}
@@ -79,15 +102,17 @@ const SeatView: React.FC<Props> = ({ data, onSeatSelect = () => null }) => {
                 fill={
                   selectedState
                     ? 'green'
-                    : data.status === SeatStatus.TAKENBYMAN
+                    : data.status === SeatStatus.TAKENBYMAN ||
+                        data.status === SeatStatus.REZERVTOMAN
                       ? 'blue'
-                      : data.status === SeatStatus.TAKENBYWOMAN
+                      : data.status === SeatStatus.TAKENBYWOMAN ||
+                          data.status === SeatStatus.REZERVTOWOMAN
                         ? 'pink'
                         : 'white'
                 }
               >
                 <use xlinkHref='#seat' />
-              </svg>
+              </svg> */}
             </div>
           </Button>
         </Popover.Target>

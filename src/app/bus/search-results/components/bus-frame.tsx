@@ -2,10 +2,11 @@ import { PiSteeringWheelLight } from 'react-icons/pi'
 import { SeatView } from './seat'
 import { busSeatResponseDummy } from '@/app/bus/search-results/seat-response'
 import clsx from 'clsx'
-import { useLayoutEffect, useState } from 'react'
-import { Seat } from '@/app/bus/types'
+import { useCallback, useLayoutEffect, useState } from 'react'
+import { BusGender, Seat, SeatStatus } from '@/app/bus/types'
 
 import { BusSeatIcons } from './icons'
+import { Button } from '@mantine/core'
 
 let top = 0
 let left = 0
@@ -14,19 +15,43 @@ const offset = 45
 let col_counter = 0
 let row_counter = 0
 
-const BusFrame = () => {
+type Props = {
+  seats: Seat[]
+  onSeatSelect: (gender: BusGender, seats: Seat) => void
+  maxSelectCountReached: boolean
+}
+
+const BusFrame: React.FC<Props> = ({
+  seats,
+  onSeatSelect = () => null,
+  maxSelectCountReached,
+}) => {
   const [seatDataState, setSeatPositions] = useState<
     { left: number; top: number; seatData: Seat }[]
   >([])
-
   const [seatWrapperDimensions, setSeatWrapperDimensions] = useState({
     height: 0,
     width: 0,
   })
 
-  const initSeatPostions = () => {
-    const seats = busSeatResponseDummy.data.seats.map(
-      (seat, seatIndex, seatData) => {
+  const handleSeatSelect = (gender: BusGender, seat: Seat) => {
+    onSeatSelect(gender, seat)
+
+    // if (typeof gender === 'number') {
+    // setSelectedSeats((prev) => {
+    //   const prevItems = prev.find((item) => item.no === seat.no)
+    //   const nextState = prevItems
+    //     ? [...prev.filter((item) => item.no !== seat.no)]
+    //     : [...prev, { ...seat, status: gender }]
+    //   onSeatSelect(nextState)
+    //   return nextState
+    // })
+    // }
+  }
+
+  useLayoutEffect(() => {
+    return () => {
+      const seatsData = seats.map((seat, seatIndex, seatData) => {
         top = row_counter * offset
         left = col_counter * offset
 
@@ -48,15 +73,11 @@ const BusFrame = () => {
           left,
           seatData: seat,
         }
-      }
-    )
+      })
 
-    setSeatPositions(seats)
-  }
-
-  useLayoutEffect(() => {
-    initSeatPostions()
-  }, [])
+      setSeatPositions(seatsData)
+    }
+  }, [seats])
 
   return (
     <>
@@ -97,9 +118,10 @@ const BusFrame = () => {
                     }}
                   >
                     <SeatView
+                      maxSelectCountReached={maxSelectCountReached}
                       data={seat.seatData}
                       onSeatSelect={(gender) => {
-                        console.log(gender)
+                        handleSeatSelect(gender, seat.seatData)
                       }}
                     />
                   </div>

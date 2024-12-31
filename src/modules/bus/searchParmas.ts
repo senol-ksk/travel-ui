@@ -8,6 +8,7 @@ export const busSearchParams = {
   date: parseAsIsoDate,
   searchToken: parseAsString,
   sessionToken: parseAsString,
+  productKey: parseAsString,
 }
 
 export const serializeBusSearchParams = createSerializer(busSearchParams)

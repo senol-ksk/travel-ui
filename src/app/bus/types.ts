@@ -87,22 +87,22 @@ export interface BusSearchResultItem {
 }
 
 export interface Seat {
+  age: number
+  basePrice: ServicePriceType
+  buyServiceFee: number
+  discount: ServicePriceType
+  gender: BusGender
   no: number
-  status: number
-  sideStatus: number
-  type: number
   paxId: number
   paxType: number
-  gender: number
-  age: number
-  discount: ServicePriceType
-  totalPrice: ServicePriceType
+  sellServiceFee: number
   servicePrice: ServicePriceType
-  basePrice: ServicePriceType
+  sideStatus: number
+  status: BusGender | SeatStatus
   taxes: ServicePriceType
   totalCommission: ServicePriceType
-  buyServiceFee: number
-  sellServiceFee: number
+  totalPrice: ServicePriceType
+  type: number
 }
 
 export interface BusSeatApiResponse {
@@ -118,14 +118,20 @@ export interface BusSeatApiResponse {
 }
 
 export enum BusGender {
-  MALE = 2,
-  WOMAN = 1,
+  EMPTY,
+  WOMAN,
+  MALE,
 }
 
 export enum SeatStatus {
   AVAILABLE = 0,
   TAKENBYWOMAN = 1,
+  REZERVTOWOMAN = 2,
   TAKENBYMAN = 3,
+  REZERVTOMAN = 4,
+  ISSALE = 5,
+  CANNOTBESOLD = 6,
+  SELECTEDSEATTYPE = 7,
 }
 
 export enum SeatSideStatus {
@@ -140,4 +146,12 @@ export enum SeatSideStatus {
   Uncertain4 = 4,
   Uncertain5 = 5,
   Uncertain6 = 6,
+}
+
+export enum SeatColors {
+  AVAILABLE = 'white',
+  NOTAVAILABLE = '--mantine-color-gray-4',
+  SELECTED = '--mantine-color-green-3',
+  WOMAN = '--mantine-color-grape-2',
+  MALE = '--mantine-color-blue-2',
 }

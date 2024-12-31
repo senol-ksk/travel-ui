@@ -2,43 +2,81 @@
 
 import { BusSearchItem } from './components/search-item'
 import { Button, Drawer, Skeleton, Title } from '@mantine/core'
-import { Suspense, useState } from 'react'
+import { useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
+import { useRouter } from 'next/navigation'
+import { createSerializer, useQueryStates } from 'nuqs'
 
-import { useSearchRequest } from '@/app/bus/useSearchResults'
-import { BusSearchResultItem } from '@/app/bus/types'
-import { BusFrame } from './components/bus-frame'
-
-const seatRequestParams = {
-  params: {
-    SearchToken:
-      'F1C2A04E022976B70F089D2F37A1FCA37D8124B0C72F255DFD37CBCE69ACC2E6',
-    ProductKey: 'O8tZRiZYEF1+7ancZt3h/Zwy9OeoR2ZXqb6naZKbpwI=',
-    SessionToken:
-      'A734B8DFD032B8B1312D906CD5799BEE0ADDAE02D2A4E16D3B66BF0A9153C08F',
-    ReturnDiagnostics: 0,
-    AppName: 'fulltrip.prod.webapp.html',
-    ScopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-  },
-  apiRoute: 'BusService',
-  apiAction: '/api/Bus/Detail',
-  sessionToken:
-    'A734B8DFD032B8B1312D906CD5799BEE0ADDAE02D2A4E16D3B66BF0A9153C08F',
-  appName: 'fulltrip.prod.webapp.html',
-  scopeName: 'FULLTRIP',
-  scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7',
-  Device: 'Web',
-  LanguageCode: 'tr_TR',
-}
+import {
+  useBusSearchInitPaymentProcess,
+  useBusSeatMutation,
+  useSearchRequest,
+  useSeatControlMutation,
+} from '@/app/bus/useSearchResults'
+import {
+  BusGender,
+  BusSearchResultItem,
+  Seat,
+  SeatColors,
+} from '@/app/bus/types'
+import { BusFrame } from '@/app/bus/search-results/components/bus-frame'
+import { reservationParsers } from '@/app/reservation/searchParams'
+import { busSearchParams } from '@/modules/bus/searchParmas'
 
 const BusSearchResults: React.FC = () => {
+  const [searchParams] = useQueryStates(busSearchParams)
   const searchResults = useSearchRequest()
+  const seatRequestMutation = useBusSeatMutation()
+  const seatControlMutation = useSeatControlMutation()
+  const initBusPaymentProcess = useBusSearchInitPaymentProcess()
+
+  const seatData = seatRequestMutation.data
+  const router = useRouter()
+
   const [seatSelectIsOpened, { open: openSeatSelect, close: closeSeatSelect }] =
     useDisclosure(false)
-  const [selectedBus, setSelectedBus] = useState<BusSearchResultItem | null>()
+  const [selectedBus, setSelectedBus] = useState<BusSearchResultItem>()
+  const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
 
   if (searchResults.hasNextPage) {
     setTimeout(searchResults.fetchNextPage, 1000)
+  }
+
+  const handleBusSeatSelect = (bus: BusSearchResultItem) => {
+    setSelectedBus(bus)
+    openSeatSelect()
+
+    seatRequestMutation.mutate(bus.key)
+  }
+
+  const handleCheckSeatStatus = async () => {
+    const productKey = selectedBus?.key
+
+    if (productKey) {
+      const response = await seatControlMutation.mutateAsync({
+        selectedSeats,
+        productKey,
+      })
+
+      if (response) {
+        const resParams = createSerializer(reservationParsers)
+
+        const paymentResponse =
+          await initBusPaymentProcess.mutateAsync(productKey)
+
+        if (paymentResponse?.busJourney && paymentResponse.busJourney.key) {
+          const url = resParams('/reservation', {
+            productKey: paymentResponse?.busJourney.key,
+            searchToken: searchParams.searchToken,
+            sessionToken: searchParams.sessionToken,
+          })
+
+          console.log(url)
+
+          router.push(url)
+        }
+      }
+    }
   }
 
   return (
@@ -59,19 +97,20 @@ const BusSearchResults: React.FC = () => {
             <div className='grid gap-4 md:col-span-3'>
               {searchResults?.data?.pages.map((page, i) =>
                 page?.searchResults.map((searchResults) =>
-                  searchResults.items.map((searchItem) => {
-                    return (
-                      <BusSearchItem
-                        key={searchItem.key}
-                        searchItem={searchItem}
-                        onSelect={(bus) => {
-                          console.log(bus)
-                          setSelectedBus(bus)
-                          openSeatSelect()
-                        }}
-                      />
+                  searchResults.items
+                    .sort(
+                      (a, b) =>
+                        a.bus.internetPrice.value - b.bus.internetPrice.value
                     )
-                  })
+                    .map((searchItem) => {
+                      return (
+                        <BusSearchItem
+                          key={searchItem.key}
+                          searchItem={searchItem}
+                          onSelect={handleBusSeatSelect}
+                        />
+                      )
+                    })
                 )
               )}
             </div>
@@ -80,12 +119,13 @@ const BusSearchResults: React.FC = () => {
       </div>
       <Drawer
         position='right'
-        // opened={seatSelectIsOpened}
-        opened
-        onClose={closeSeatSelect}
+        opened={seatSelectIsOpened}
+        onClose={() => {
+          setSelectedSeatsData([])
+          closeSeatSelect()
+        }}
         title={
-          <div className='text-lg font-semibold'>Otobus Firmasi</div>
-          // <div className='text-lg font-semibold'>{selectedBus?.company}</div>
+          <div className='text-lg font-semibold'>{selectedBus?.company}</div>
         }
         radius={'lg'}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
@@ -93,7 +133,75 @@ const BusSearchResults: React.FC = () => {
           title: 'h2',
         }}
       >
-        <BusFrame />
+        {seatRequestMutation.isPending ? (
+          <Skeleton h={600} w={'75%'} radius={'xl'} mx='auto' />
+        ) : null}
+        {seatData?.seats.length ? (
+          <div>
+            <BusFrame
+              seats={seatData.seats}
+              maxSelectCountReached={selectedSeats.length === 4}
+              onSeatSelect={(gender, selectedSeatsData) => {
+                console.log(gender, selectedSeatsData)
+                setSelectedSeatsData((prev) => {
+                  // const prevItems = prev.find(
+                  //   (item) => item.no === selectedSeatsData.no
+                  // )
+                  const nextState =
+                    gender === BusGender.EMPTY
+                      ? [
+                          ...prev.filter(
+                            (item) => item.no !== selectedSeatsData.no
+                          ),
+                        ]
+                      : [...prev, { ...selectedSeatsData, gender: gender }]
+
+                  return nextState
+                })
+              }}
+            />
+            <div className='flex gap-3 py-3'>
+              {selectedSeats.length === 0 ? <div>Koltuk Seçiniz.</div> : null}
+              {selectedSeats.map((seat, seatIndex) => {
+                console.log(seat)
+                const gender = seat.gender
+                const isMale = gender === BusGender.MALE
+                const isWoman = gender === BusGender.WOMAN
+
+                const backgroundColor = isMale
+                  ? `var(${SeatColors.MALE})`
+                  : isWoman
+                    ? `var(${SeatColors.WOMAN})`
+                    : ''
+
+                return (
+                  <div
+                    key={seatIndex}
+                    className='flex size-[36px] items-center justify-center rounded-t-lg border-b-4 border-b-gray-600 pt-1 text-sm text-black'
+                    style={{
+                      backgroundColor,
+                    }}
+                  >
+                    <div className='relative'>{seat.no}</div>
+                  </div>
+                )
+              })}
+            </div>
+            <div className='flex justify-end pt-4'>
+              <div>
+                <Button
+                  disabled={!selectedSeats.length}
+                  onClick={handleCheckSeatStatus}
+                >
+                  Onayla ve Devam Et
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          seatData?.seats.length === 0 &&
+          seatRequestMutation.isSuccess && <div>No seat data</div>
+        )}
       </Drawer>
     </>
   )
