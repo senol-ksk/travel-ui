@@ -12,7 +12,7 @@ export default async function Home() {
           className='absolute left-0 top-0 -z-50 hidden h-full w-full md:block'
         />
         <div className='flex min-h-[228px] flex-col justify-center p-0 md:p-4'>
-          <div className='md:container'>
+          <div className='lg:container'>
             <div className='bg-white md:rounded-lg md:border'>
               <SearchEngine />
             </div>
