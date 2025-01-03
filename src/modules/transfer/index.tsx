@@ -130,6 +130,7 @@ const TransferSearchEngine = () => {
   })
 
   const handleSubmit = async (data: TransferSearchEngineSchemaInfer) => {
+    console.log('Transfer Search Data Submited', data)
     setTransferSearchLocalStroge(data)
 
     const { searchToken, sessionToken } =
@@ -152,6 +153,8 @@ const TransferSearchEngine = () => {
       }
     )
 
+    console.log(searchResultUrl)
+
     router.push(searchResultUrl)
   }
 
@@ -172,7 +175,12 @@ const TransferSearchEngine = () => {
               defaultValue={formActions.formState.defaultValues?.origin?.Name}
               onChange={setOriginLocationInputValue}
               onSelect={(value) => {
-                formActions.setValue('origin', value)
+                formActions.setValue('origin', {
+                  Code: value.Code,
+                  Id: Object.values(value.ExtentionData)[0],
+                  Name: value.Name,
+                  Slug: value.Slug,
+                })
               }}
             />
           </div>
@@ -187,7 +195,12 @@ const TransferSearchEngine = () => {
               }
               onChange={setDestinationLocationInputValue}
               onSelect={(value) => {
-                formActions.setValue('destination', value)
+                formActions.setValue('destination', {
+                  Code: value.Code,
+                  Id: Object.values(value.ExtentionData)[0],
+                  Name: value.Name,
+                  Slug: value.Slug,
+                })
               }}
             />
           </div>
@@ -213,11 +226,20 @@ const TransferSearchEngine = () => {
         </div>
         <div className='col-span-4 md:col-span-2'>
           <PassengerDropdown
+            initialValues={{
+              adult:
+                formActions.formState.defaultValues?.passengers?.adult ?? 1,
+              child:
+                formActions.formState.defaultValues?.passengers?.child ?? 0,
+              infant:
+                formActions.formState.defaultValues?.passengers?.infant ?? 0,
+            }}
             onChange={(passengers) => {
+              console.log(passengers)
               formActions.setValue('passengers', {
-                adult: passengers.adult ?? 1,
-                child: passengers.child ?? 0,
-                infant: passengers.infant ?? 0,
+                adult: passengers.adult,
+                child: passengers.child,
+                infant: passengers.infant,
               })
             }}
           />

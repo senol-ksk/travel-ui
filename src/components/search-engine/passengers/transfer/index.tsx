@@ -19,11 +19,7 @@ type PassengerTypes = 'adult' | 'child' | 'infant'
 type PassengerRequestModel = { adult: number; child: number; infant: number }
 
 type Props = {
-  onChange?: (params: {
-    adult?: number
-    child?: number
-    infant?: number
-  }) => void
+  onChange?: (params: { adult: number; child: number; infant: number }) => void
   initialValues?: PassengerRequestModel | null
 }
 
