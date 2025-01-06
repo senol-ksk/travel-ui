@@ -41,8 +41,8 @@ const CarHours: React.FC<IProps> = ({
           label: 'sr-only',
         }}
         data={range(0, 23).map((hour) => ({
-          label: hour < 9 ? `0${hour}:00` : `${hour}:00`,
-          value: hour < 9 ? `0${hour}:00` : `${hour}:00`,
+          label: hour < 10 ? `0${hour}:00` : `${hour}:00`,
+          value: hour < 10 ? `0${hour}:00` : `${hour}:00`,
         }))}
         onChange={onChange}
         defaultValue={defaultValue}
