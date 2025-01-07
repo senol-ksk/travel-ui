@@ -1,6 +1,6 @@
 import { createLoader, parseAsString } from 'nuqs/server'
 
-const transferExtraPageParams = {
+export const transferExtraPageParams = {
   searchToken: parseAsString,
   sessionToken: parseAsString,
   productKey: parseAsString,
