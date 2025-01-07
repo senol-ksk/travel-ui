@@ -8,6 +8,7 @@ import { HotelSearchEngine } from '@/modules/hotel'
 import { CarRentSearchPanel } from '@/modules/carrent'
 import { BusSearchEngine } from '@/modules/bus'
 import { TransferSearchEngine } from '@/modules/transfer'
+import { TourSearchEngine } from '@/modules/tour'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -15,6 +16,7 @@ const searchModules = {
   carRental: { value: 'carrental', title: 'Araç' },
   bus: { value: 'bus', title: 'Otobüs' },
   transfer: { value: 'transfer', title: 'Transfer' },
+  tour: { value: 'tour', title: 'Tur' },
 }
 
 export const SearchEngine = () => {
@@ -59,6 +61,9 @@ export const SearchEngine = () => {
         <TabsTab value={searchModules.transfer.value}>
           {searchModules.transfer.title}
         </TabsTab>
+        <TabsTab value={searchModules.tour.value}>
+          {searchModules.tour.title}
+        </TabsTab>
       </Tabs.List>
 
       <div className='p-2 md:p-4'>
@@ -76,6 +81,9 @@ export const SearchEngine = () => {
         </Tabs.Panel>
         <Tabs.Panel value={searchModules.transfer.value}>
           <TransferSearchEngine />
+        </Tabs.Panel>
+        <Tabs.Panel value={searchModules.tour.value}>
+          <TourSearchEngine />
         </Tabs.Panel>
       </div>
     </Tabs>
