@@ -10,10 +10,12 @@ namespace NodeJS {
     NEXT_PUBLIC_GET_SESSION_TOKEN: string
     NEXT_PUBLIC_SCOPE_NAME: string
     NEXT_PUBLIC_API_GW_ROUTE: string
+    NEXT_PUBLIC_API_DESTINATION_ROUTE: string
     NEXT_PUBLIC_API_GW_KEY: string
     NEXT_PUBLIC_SOCKET_URL: string
     // server envs
     API_GW_ROUTE: string
+    API_DESTINATION_ROUTE: string
     SERVICE_PATH: string
     APP_NAME: string
     SCOPE_CODE: string

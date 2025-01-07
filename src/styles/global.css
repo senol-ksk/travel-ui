@@ -15,9 +15,7 @@
   *::before,
   *::after {
     /* box-sizing: border-box; */
-    @apply border-0;
-    @apply border-solid;
-    @apply border-gray-100;
+    @apply border-0 border-solid border-gray-100;
   }
 }
 
@@ -37,7 +35,7 @@ body {
 }
 body {
   /* @apply bg-gray-50; */
-  @apply antialiased;
+  /* @apply antialiased; */
   @apply text-gray-800;
 }
 

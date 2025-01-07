@@ -7,15 +7,20 @@ type IProps = {
   error?: boolean
   label: string
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
-  defaultValue: string
+  defaultValue?: string
 }
 
-const CarHours: React.FC<IProps> = ({
+const TransferHours: React.FC<IProps> = ({
   error = false,
   label,
   onChange,
   defaultValue,
 }) => {
+  const hourRange = range(0, 23).map((hour) => ({
+    label: hour < 10 ? `0${hour}:00` : `${hour}:00`,
+    value: hour < 10 ? `0${hour}:00` : `${hour}:00`,
+  }))
+
   return (
     <div
       className={clsx(
@@ -40,15 +45,12 @@ const CarHours: React.FC<IProps> = ({
           wrapper: 'h-full',
           label: 'sr-only',
         }}
-        data={range(0, 23).map((hour) => ({
-          label: hour < 10 ? `0${hour}:00` : `${hour}:00`,
-          value: hour < 10 ? `0${hour}:00` : `${hour}:00`,
-        }))}
+        data={hourRange}
         onChange={onChange}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue ?? hourRange[0].value}
       />
     </div>
   )
 }
 
-export { CarHours }
+export { TransferHours }
