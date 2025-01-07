@@ -9,35 +9,35 @@ importers:
   .:
     dependencies:
       '@hookform/resolvers':
-        specifier: ^3.9.1
-        version: 3.9.1(react-hook-form@7.54.2(react@19.0.0))
+        specifier: ^3.10.0
+        version: 3.10.0(react-hook-form@7.54.2(react@19.0.0))
       '@mantine/core':
-        specifier: ^7.15.2
-        version: 7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^7.15.3
+        version: 7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mantine/dates':
-        specifier: ^7.15.2
-        version: 7.15.2(@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.2(react@19.0.0))(dayjs@1.11.13)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^7.15.3
+        version: 7.15.3(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.3(react@19.0.0))(dayjs@1.11.13)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mantine/form':
-        specifier: ^7.15.2
-        version: 7.15.2(react@19.0.0)
+        specifier: ^7.15.3
+        version: 7.15.3(react@19.0.0)
       '@mantine/hooks':
-        specifier: ^7.15.2
-        version: 7.15.2(react@19.0.0)
+        specifier: ^7.15.3
+        version: 7.15.3(react@19.0.0)
       '@mantine/nprogress':
-        specifier: ^7.15.2
-        version: 7.15.2(@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.2(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^7.15.3
+        version: 7.15.3(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.3(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@tailwindcss/container-queries':
         specifier: ^0.1.1
         version: 0.1.1(tailwindcss@3.4.17)
       '@tanstack/react-query':
-        specifier: ^5.62.15
-        version: 5.62.15(react@19.0.0)
+        specifier: ^5.62.16
+        version: 5.62.16(react@19.0.0)
       axios:
         specifier: ^1.7.9
         version: 1.7.9
       card-validator:
-        specifier: ^10.0.1
-        version: 10.0.1
+        specifier: ^10.0.2
+        version: 10.0.2
       cleave-zen:
         specifier: ^0.0.17
         version: 0.0.17
@@ -55,7 +55,7 @@ importers:
         version: 3.0.5
       mantine-form-zod-resolver:
         specifier: ^1.1.0
-        version: 1.1.0(@mantine/form@7.15.2(react@19.0.0))(zod@3.24.1)
+        version: 1.1.0(@mantine/form@7.15.3(react@19.0.0))(zod@3.24.1)
       md5:
         specifier: ^2.3.0
         version: 2.3.0
@@ -82,7 +82,7 @@ importers:
         version: 2.5.0
       tailwind-preset-mantine:
         specifier: ^1.3.2
-        version: 1.3.2(@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17)
+        version: 1.3.2(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17)
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -94,8 +94,8 @@ importers:
         specifier: ^9.17.0
         version: 9.17.0
       '@tanstack/eslint-plugin-query':
-        specifier: ^5.62.15
-        version: 5.62.15(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
+        specifier: ^5.62.16
+        version: 5.62.16(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.0
@@ -104,7 +104,7 @@ importers:
         version: 6.6.3
       '@testing-library/react':
         specifier: ^16.1.0
-        version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.2(@types/react@19.0.3))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@testing-library/user-event':
         specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
@@ -118,11 +118,11 @@ importers:
         specifier: ^22.10.5
         version: 22.10.5
       '@types/react':
-        specifier: ^19.0.2
-        version: 19.0.2
+        specifier: ^19.0.3
+        version: 19.0.3
       '@types/react-dom':
         specifier: ^19.0.2
-        version: 19.0.2(@types/react@19.0.2)
+        version: 19.0.2(@types/react@19.0.3)
       '@types/socket.io-client':
         specifier: ^1.4.36
         version: 1.4.36
@@ -473,8 +473,8 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
-  '@hookform/resolvers@3.9.1':
-    resolution: {integrity: sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==}
+  '@hookform/resolvers@3.10.0':
+    resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
     peerDependencies:
       react-hook-form: ^7.0.0
 
@@ -625,42 +625,42 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@mantine/core@7.15.2':
-    resolution: {integrity: sha512-640ns0L/HZAXYjz3+FRffr8UNcH1fU7ENUVxKLzqNA311Dcx0qS3byVKTY/IVJYln6AkjoEfIJMiixT9fCZBiQ==}
+  '@mantine/core@7.15.3':
+    resolution: {integrity: sha512-8IMTq5xDJDjByDUYkDNKImikASStzrnPtVumKsrEnyEY0zhAWkAe/z/+PjTUMcN44ncJ/PrXQkJ6qMaVWzSZwA==}
     peerDependencies:
-      '@mantine/hooks': 7.15.2
+      '@mantine/hooks': 7.15.3
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/dates@7.15.2':
-    resolution: {integrity: sha512-WeJ+a16bZC+7k9Fr6jiC5NrdZi23Hp28xGBa3kKYk0Nanz/lTgg2DTBgFB537+4MVD1kOmqso+7z1VO9uLeaEw==}
+  '@mantine/dates@7.15.3':
+    resolution: {integrity: sha512-lv71dcfA8qB43v03cRELC2/G7FQXfAgj0tSMImj2p2FL3PSWWF4WRvW6byiB+hszk4lgooSo7kppzkSMVUlsdA==}
     peerDependencies:
-      '@mantine/core': 7.15.2
-      '@mantine/hooks': 7.15.2
+      '@mantine/core': 7.15.3
+      '@mantine/hooks': 7.15.3
       dayjs: '>=1.0.0'
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/form@7.15.2':
-    resolution: {integrity: sha512-ADXLw/e0/ddNIj9EtJb5aes2VEpoR7GIVgKnzFhq8DXMfOZqaMn4rSVY8LmVOAtcMyocPR7hk8uQQ3ihmpzFaw==}
+  '@mantine/form@7.15.3':
+    resolution: {integrity: sha512-E+xrY/z6Y4JoHqL4f91AoMeNspuAe+nET667wKVBSUu4yLQX0FS8uvdypoaasb3LcTk7GRmnDNYyfC37zz4zkg==}
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mantine/hooks@7.15.2':
-    resolution: {integrity: sha512-p8dsW0fdJxzYhULbm1noFYRHuBvJHleYviC0BlwbkVySC8AsvFI8AmC3sMssWV3dQ3yQ/SidYo9U+K/czpDpZw==}
+  '@mantine/hooks@7.15.3':
+    resolution: {integrity: sha512-rZYObhrmww3OIb4O30pDox/rc+9k3AExO0FSw13t7cfz5/Di+Ho1cChswVFAshnp81ucGEod1fiDOfuyGW7JhA==}
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mantine/nprogress@7.15.2':
-    resolution: {integrity: sha512-H194TieysjpUVxuzmRvw+cEMIwg37rOi8GNHyI0RR9u5npysLdWH+tP7xtAxu7YqVlB22nswJDbkBxOlzKvjLg==}
+  '@mantine/nprogress@7.15.3':
+    resolution: {integrity: sha512-4AtMi2i9Jn6ECSSR2UsU41fISgdYw4UaiqdusEjp0YIhJRsTLCDhTxgodtNx6Dq5RD8o71OXW+1xB/JB2PDdRw==}
     peerDependencies:
-      '@mantine/core': 7.15.2
-      '@mantine/hooks': 7.15.2
+      '@mantine/core': 7.15.3
+      '@mantine/hooks': 7.15.3
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/store@7.15.2':
-    resolution: {integrity: sha512-8ZVRr6D/8GEu2VmUVU447w4H+hl9dwefl//GpSGI2vKxXBqlud5X9PJQkSwi5J7I5FAxvlG5dr/zCxC3r3nsIQ==}
+  '@mantine/store@7.15.3':
+    resolution: {integrity: sha512-E3pCEm5ozRF/iK/jM1liKntjqaKhotvPtNAqSBcx6AkWSJ8bt16JhNrmrs3J3RmWvfqzF+fftT8HI/3HYbgu9w==}
     peerDependencies:
       react: ^18.x || ^19.x
 
@@ -854,16 +854,16 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.2.0'
 
-  '@tanstack/eslint-plugin-query@5.62.15':
-    resolution: {integrity: sha512-24BHoF3LIzyptjrZXc1IpaISno+fhVD3zWWso/HPSB+ZVOyOXoiQSQc2K362T13JKJ07EInhHi1+KyNoRzCCfQ==}
+  '@tanstack/eslint-plugin-query@5.62.16':
+    resolution: {integrity: sha512-VhnHSQ/hc62olLzGhlLJ4BJGWynwjs3cDMsByasKJ3zjW1YZ+6raxOv0gHHISm+VEnAY42pkMowmSWrXfL4NTw==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
-  '@tanstack/query-core@5.62.15':
-    resolution: {integrity: sha512-wT20X14CxcWY8YLJ/1pnsXn/y1Q2uRJZYWW93PWRtZt+3/JlGZyiyTcO4pGnqycnP7CokCROAyatsraosqZsDA==}
+  '@tanstack/query-core@5.62.16':
+    resolution: {integrity: sha512-9Sgft7Qavcd+sN0V25xVyo0nfmcZXBuODy3FVG7BMWTg1HMLm8wwG5tNlLlmSic1u7l1v786oavn+STiFaPH2g==}
 
-  '@tanstack/react-query@5.62.15':
-    resolution: {integrity: sha512-Ny3xxsOWmEQCFyHiV3CF7t6+QAV+LpBEREiXyllKR4+tStyd8smOAa98ZHmEx0ZNy36M31K8enifB5wTSYAKJw==}
+  '@tanstack/react-query@5.62.16':
+    resolution: {integrity: sha512-XJIZNj65d2IdvU8VBESmrPakfIm6FSdHDzrS1dPrAwmq3ZX+9riMh/ZfbNQHAWnhrgmq7KoXpgZSRyXnqMYT9A==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -934,8 +934,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.0.0
 
-  '@types/react@19.0.2':
-    resolution: {integrity: sha512-USU8ZI/xyKJwFTpjSVIrSeHBVAGagkHQKPNbxeWwql/vDmnTIBgx+TJnhFnj1NXgz8XfprU0egV2dROLGpsBEg==}
+  '@types/react@19.0.3':
+    resolution: {integrity: sha512-UavfHguIjnnuq9O67uXfgy/h3SRJbidAYvNjLceB+2RIKVRBzVsh0QO+Pw6BCSQqFS9xwzKfwstXx0m6AbAREA==}
 
   '@types/socket.io-client@1.4.36':
     resolution: {integrity: sha512-ZJWjtFBeBy1kRSYpVbeGYTElf6BqPQUkXDlHHD4k/42byCN5Rh027f4yARHCink9sKAkbtGZXEAmR0ZCnc2/Ag==}
@@ -1216,8 +1216,8 @@ packages:
   caniuse-lite@1.0.30001690:
     resolution: {integrity: sha512-5ExiE3qQN6oF8Clf8ifIDcMRCRE/dMGcETG/XGMD8/XiXm6HXQgQTh1yZYLXXpSOsEUlJm1Xr7kGULZTuGtP/w==}
 
-  card-validator@10.0.1:
-    resolution: {integrity: sha512-W1Wb87meBxDMb9TaFMYxUBVLOzURsSFpUSm2ROgPepJm0HFQHP67TUORkcF/62p8CX3XIr3KENyeu3C0fkQe5w==}
+  card-validator@10.0.2:
+    resolution: {integrity: sha512-Mq8puzE9LqVoKK83Vpcl7x4CF2brHk/1ufYQWvVVpedGc/wXt844oWzwAkBbnbRdYQKwfBkfoWtR7vRvnIbf2g==}
 
   chai@5.1.2:
     resolution: {integrity: sha512-aGtmf24DW6MLHHG5gCx4zaI3uBq3KRtxeVs0DjFH6Z0rDNbsvTxFASFvdj79pxjxZ8/5u3PIiN3IwEIQkiiuPw==}
@@ -3547,7 +3547,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@hookform/resolvers@3.9.1(react-hook-form@7.54.2(react@19.0.0))':
+  '@hookform/resolvers@3.10.0(react-hook-form@7.54.2(react@19.0.0))':
     dependencies:
       react-hook-form: 7.54.2(react@19.0.0)
 
@@ -3665,48 +3665,48 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@floating-ui/react': 0.26.28(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@mantine/hooks': 7.15.2(react@19.0.0)
+      '@mantine/hooks': 7.15.3(react@19.0.0)
       clsx: 2.1.1
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       react-number-format: 5.4.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react-remove-scroll: 2.6.2(@types/react@19.0.2)(react@19.0.0)
-      react-textarea-autosize: 8.5.6(@types/react@19.0.2)(react@19.0.0)
+      react-remove-scroll: 2.6.2(@types/react@19.0.3)(react@19.0.0)
+      react-textarea-autosize: 8.5.6(@types/react@19.0.3)(react@19.0.0)
       type-fest: 4.31.0
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/dates@7.15.2(@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.2(react@19.0.0))(dayjs@1.11.13)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@mantine/dates@7.15.3(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.3(react@19.0.0))(dayjs@1.11.13)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@mantine/core': 7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@mantine/hooks': 7.15.2(react@19.0.0)
+      '@mantine/core': 7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mantine/hooks': 7.15.3(react@19.0.0)
       clsx: 2.1.1
       dayjs: 1.11.13
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@mantine/form@7.15.2(react@19.0.0)':
+  '@mantine/form@7.15.3(react@19.0.0)':
     dependencies:
       fast-deep-equal: 3.1.3
       klona: 2.0.6
       react: 19.0.0
 
-  '@mantine/hooks@7.15.2(react@19.0.0)':
+  '@mantine/hooks@7.15.3(react@19.0.0)':
     dependencies:
       react: 19.0.0
 
-  '@mantine/nprogress@7.15.2(@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.2(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@mantine/nprogress@7.15.3(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.15.3(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
-      '@mantine/core': 7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      '@mantine/hooks': 7.15.2(react@19.0.0)
-      '@mantine/store': 7.15.2(react@19.0.0)
+      '@mantine/core': 7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mantine/hooks': 7.15.3(react@19.0.0)
+      '@mantine/store': 7.15.3(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@mantine/store@7.15.2(react@19.0.0)':
+  '@mantine/store@7.15.3(react@19.0.0)':
     dependencies:
       react: 19.0.0
 
@@ -3830,7 +3830,7 @@ snapshots:
     dependencies:
       tailwindcss: 3.4.17
 
-  '@tanstack/eslint-plugin-query@5.62.15(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)':
+  '@tanstack/eslint-plugin-query@5.62.16(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)':
     dependencies:
       '@typescript-eslint/utils': 8.19.0(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
       eslint: 9.17.0(jiti@1.21.7)
@@ -3838,11 +3838,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tanstack/query-core@5.62.15': {}
+  '@tanstack/query-core@5.62.16': {}
 
-  '@tanstack/react-query@5.62.15(react@19.0.0)':
+  '@tanstack/react-query@5.62.16(react@19.0.0)':
     dependencies:
-      '@tanstack/query-core': 5.62.15
+      '@tanstack/query-core': 5.62.16
       react: 19.0.0
 
   '@testing-library/dom@10.4.0':
@@ -3866,15 +3866,15 @@ snapshots:
       lodash: 4.17.21
       redent: 3.0.0
 
-  '@testing-library/react@16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@testing-library/react@16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.2(@types/react@19.0.3))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@testing-library/dom': 10.4.0
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
     optionalDependencies:
-      '@types/react': 19.0.2
-      '@types/react-dom': 19.0.2(@types/react@19.0.2)
+      '@types/react': 19.0.3
+      '@types/react-dom': 19.0.2(@types/react@19.0.3)
 
   '@testing-library/user-event@14.5.2(@testing-library/dom@10.4.0)':
     dependencies:
@@ -3917,11 +3917,11 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
-  '@types/react-dom@19.0.2(@types/react@19.0.2)':
+  '@types/react-dom@19.0.2(@types/react@19.0.3)':
     dependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  '@types/react@19.0.2':
+  '@types/react@19.0.3':
     dependencies:
       csstype: 3.1.3
 
@@ -4262,7 +4262,7 @@ snapshots:
 
   caniuse-lite@1.0.30001690: {}
 
-  card-validator@10.0.1:
+  card-validator@10.0.2:
     dependencies:
       credit-card-type: 10.0.2
 
@@ -5386,9 +5386,9 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  mantine-form-zod-resolver@1.1.0(@mantine/form@7.15.2(react@19.0.0))(zod@3.24.1):
+  mantine-form-zod-resolver@1.1.0(@mantine/form@7.15.3(react@19.0.0))(zod@3.24.1):
     dependencies:
-      '@mantine/form': 7.15.2(react@19.0.0)
+      '@mantine/form': 7.15.3(react@19.0.0)
       zod: 3.24.1
 
   math-intrinsics@1.1.0: {}
@@ -5724,39 +5724,39 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
-  react-remove-scroll-bar@2.3.8(@types/react@19.0.2)(react@19.0.0):
+  react-remove-scroll-bar@2.3.8(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       react: 19.0.0
-      react-style-singleton: 2.2.3(@types/react@19.0.2)(react@19.0.0)
+      react-style-singleton: 2.2.3(@types/react@19.0.3)(react@19.0.0)
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  react-remove-scroll@2.6.2(@types/react@19.0.2)(react@19.0.0):
+  react-remove-scroll@2.6.2(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       react: 19.0.0
-      react-remove-scroll-bar: 2.3.8(@types/react@19.0.2)(react@19.0.0)
-      react-style-singleton: 2.2.3(@types/react@19.0.2)(react@19.0.0)
+      react-remove-scroll-bar: 2.3.8(@types/react@19.0.3)(react@19.0.0)
+      react-style-singleton: 2.2.3(@types/react@19.0.3)(react@19.0.0)
       tslib: 2.8.1
-      use-callback-ref: 1.3.3(@types/react@19.0.2)(react@19.0.0)
-      use-sidecar: 1.1.3(@types/react@19.0.2)(react@19.0.0)
+      use-callback-ref: 1.3.3(@types/react@19.0.3)(react@19.0.0)
+      use-sidecar: 1.1.3(@types/react@19.0.3)(react@19.0.0)
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  react-style-singleton@2.2.3(@types/react@19.0.2)(react@19.0.0):
+  react-style-singleton@2.2.3(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       get-nonce: 1.0.1
       react: 19.0.0
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  react-textarea-autosize@8.5.6(@types/react@19.0.2)(react@19.0.0):
+  react-textarea-autosize@8.5.6(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       '@babel/runtime': 7.26.0
       react: 19.0.0
-      use-composed-ref: 1.4.0(@types/react@19.0.2)(react@19.0.0)
-      use-latest: 1.3.0(@types/react@19.0.2)(react@19.0.0)
+      use-composed-ref: 1.4.0(@types/react@19.0.3)(react@19.0.0)
+      use-latest: 1.3.0(@types/react@19.0.3)(react@19.0.0)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -6146,9 +6146,9 @@ snapshots:
 
   tabbable@6.2.0: {}
 
-  tailwind-preset-mantine@1.3.2(@mantine/core@7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17):
+  tailwind-preset-mantine@1.3.2(@mantine/core@7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(tailwindcss@3.4.17):
     dependencies:
-      '@mantine/core': 7.15.2(@mantine/hooks@7.15.2(react@19.0.0))(@types/react@19.0.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@mantine/core': 7.15.3(@mantine/hooks@7.15.3(react@19.0.0))(@types/react@19.0.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       tailwindcss: 3.4.17
 
   tailwindcss@3.4.17:
@@ -6303,39 +6303,39 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-callback-ref@1.3.3(@types/react@19.0.2)(react@19.0.0):
+  use-callback-ref@1.3.3(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       react: 19.0.0
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  use-composed-ref@1.4.0(@types/react@19.0.2)(react@19.0.0):
+  use-composed-ref@1.4.0(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       react: 19.0.0
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  use-isomorphic-layout-effect@1.2.0(@types/react@19.0.2)(react@19.0.0):
+  use-isomorphic-layout-effect@1.2.0(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       react: 19.0.0
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  use-latest@1.3.0(@types/react@19.0.2)(react@19.0.0):
+  use-latest@1.3.0(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       react: 19.0.0
-      use-isomorphic-layout-effect: 1.2.0(@types/react@19.0.2)(react@19.0.0)
+      use-isomorphic-layout-effect: 1.2.0(@types/react@19.0.3)(react@19.0.0)
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
-  use-sidecar@1.1.3(@types/react@19.0.2)(react@19.0.0):
+  use-sidecar@1.1.3(@types/react@19.0.3)(react@19.0.0):
     dependencies:
       detect-node-es: 1.1.0
       react: 19.0.0
       tslib: 2.8.1
     optionalDependencies:
-      '@types/react': 19.0.2
+      '@types/react': 19.0.3
 
   util-deprecate@1.0.2: {}
 
