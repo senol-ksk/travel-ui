@@ -22,7 +22,7 @@ import type {
 type Props = {
   label: string
   inputProps?: TextInputProps
-  onSelect?: (params: LocationResult) => void
+  onSelect?: (params: LocationResult, locations?: LocationResult) => void
   onChange?: (params: string) => void
   data?: LocationResults['Result']
   isLoading?: boolean
@@ -157,7 +157,7 @@ export const Locations: React.FC<Props> = ({
                                     className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
                                     onClick={() => {
                                       setLocationName(subName)
-                                      onSelect(subLocation)
+                                      onSelect(subLocation, location)
                                       setLocationContainerOpened(false)
                                     }}
                                   >

@@ -1,6 +1,10 @@
 'use client'
 
-import { PassengerTypesIndexEnum } from '@/types/passengerViewModel'
+import {
+  GenderEnums,
+  PassengerTypesEnum,
+  PassengerTypesIndexEnum,
+} from '@/types/passengerViewModel'
 import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
 
@@ -244,58 +248,113 @@ export default function CheckoutPage() {
           </CheckoutCard>
           <CheckoutCard>
             {checkoutQuery?.data?.data &&
-              checkoutQuery.data.data?.treeContainer.childNodes.length &&
-              checkoutQuery.data.data?.treeContainer.childNodes.map(
-                (item, index) => {
-                  const field = item.items[0].value
-                  const passengerType = field.type
-                  let fieldErrors
-                  if (formMethods.formState.errors.passengers?.length) {
-                    fieldErrors =
-                      formMethods.formState?.errors?.passengers[index]
-                  }
+            checkoutQuery.data.data?.treeContainer.childNodes.length &&
+            checkoutQuery.data.data?.treeContainer.childNodes?.[0].childNodes
+              .length > 0 // transfer and flight passengers data have different values
+              ? checkoutQuery.data.data?.treeContainer.childNodes?.[0].childNodes.map(
+                  (item, index) => {
+                    const field = item.items[0].value
+                    const passengerType =
+                      field?.type || PassengerTypesEnum.Adult
+                    let fieldErrors
+                    if (formMethods.formState.errors.passengers?.length) {
+                      fieldErrors =
+                        formMethods.formState?.errors?.passengers[index]
+                    }
 
-                  return (
-                    <div key={index}>
-                      <Title order={3} size={'lg'} pb={10}>
-                        {PassengerTypesIndexEnum[passengerType]}
-                      </Title>
-                      <PassengerInformationForm
-                        fieldProps={{
-                          firstName: field.firstName || '',
-                          birthDate: field.birthDate || '',
-                          birthDate_day: '',
-                          birthDate_month: '',
-                          birthDate_year: '',
-                          gender: field.gender,
-                          lastName: field.lastName || '',
-                          id:
-                            typeof field._passengerId === 'string'
-                              ? field._passengerId
-                              : '',
-                          passengerId: field.passengerId,
-                          model_PassengerId: field.model_PassengerId,
-                          nationality_Check: !!field.nationality_Check,
-                          passengerKey: field.passengerKey || '',
-                          registeredPassengerId: field.registeredPassengerId,
-                          type: field.type,
-                          // citizenNo: field.citizenNo || '',
-                          citizenNo: '',
-                          passportCountry: field.passportCountry || 'tr',
-                          passportNo: field.passportNo || '',
-                          passportValidity_1: '',
-                          passportValidity_2: '',
-                          passportValidity_3: '',
-                          passportValidityDate: field.passportValidityDate,
-                          hesCode: field.hesCode || '',
-                        }}
-                        index={index}
-                        error={fieldErrors}
-                      />
-                    </div>
-                  )
-                }
-              )}
+                    return (
+                      <div key={index}>
+                        <Title order={3} size={'lg'} pb={10}>
+                          {PassengerTypesIndexEnum[passengerType]}
+                        </Title>
+                        <PassengerInformationForm
+                          fieldProps={{
+                            firstName: field?.firstName || '',
+                            birthDate: field?.birthDate || '',
+                            birthDate_day: '',
+                            birthDate_month: '',
+                            birthDate_year: '',
+                            gender: field?.gender ?? GenderEnums.Female,
+                            lastName: field?.lastName || '',
+                            id:
+                              typeof field?._passengerId === 'string'
+                                ? field._passengerId
+                                : '',
+                            passengerId: field?.passengerId ?? 0,
+                            model_PassengerId: field?.model_PassengerId ?? 0,
+                            nationality_Check: !!field?.nationality_Check,
+                            passengerKey: field?.passengerKey ?? '',
+                            registeredPassengerId:
+                              field?.registeredPassengerId ?? 0,
+                            type: passengerType,
+                            citizenNo: '',
+                            passportCountry: field?.passportCountry ?? 'tr',
+                            passportNo: field?.passportNo || '',
+                            passportValidity_1: '',
+                            passportValidity_2: '',
+                            passportValidity_3: '',
+                            passportValidityDate: field?.passportValidityDate,
+                            hesCode: field?.hesCode || '',
+                          }}
+                          index={index}
+                          error={fieldErrors}
+                        />
+                      </div>
+                    )
+                  }
+                )
+              : checkoutQuery.data.data?.treeContainer.childNodes?.map(
+                  (item, index) => {
+                    const field = item.items[0].value
+                    const passengerType =
+                      field?.type || PassengerTypesEnum.Adult
+                    let fieldErrors
+                    if (formMethods.formState.errors.passengers?.length) {
+                      fieldErrors =
+                        formMethods.formState?.errors?.passengers[index]
+                    }
+
+                    return (
+                      <div key={index}>
+                        <Title order={3} size={'lg'} pb={10}>
+                          {PassengerTypesIndexEnum[passengerType]}
+                        </Title>
+                        <PassengerInformationForm
+                          fieldProps={{
+                            firstName: field?.firstName || '',
+                            birthDate: field?.birthDate || '',
+                            birthDate_day: '',
+                            birthDate_month: '',
+                            birthDate_year: '',
+                            gender: field?.gender ?? GenderEnums.Female,
+                            lastName: field?.lastName || '',
+                            id:
+                              typeof field?._passengerId === 'string'
+                                ? field._passengerId
+                                : '',
+                            passengerId: field?.passengerId ?? 0,
+                            model_PassengerId: field?.model_PassengerId ?? 0,
+                            nationality_Check: !!field?.nationality_Check,
+                            passengerKey: field?.passengerKey ?? '',
+                            registeredPassengerId:
+                              field?.registeredPassengerId ?? 0,
+                            type: passengerType,
+                            citizenNo: '',
+                            passportCountry: field?.passportCountry ?? 'tr',
+                            passportNo: field?.passportNo || '',
+                            passportValidity_1: '',
+                            passportValidity_2: '',
+                            passportValidity_3: '',
+                            passportValidityDate: field?.passportValidityDate,
+                            hesCode: field?.hesCode || '',
+                          }}
+                          index={index}
+                          error={fieldErrors}
+                        />
+                      </div>
+                    )
+                  }
+                )}
           </CheckoutCard>
           <CheckoutCard>
             <div className='text-sm'>

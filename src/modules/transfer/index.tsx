@@ -16,33 +16,11 @@ import { LocationResults } from '@/components/search-engine/locations/type'
 import { getTransferSearchSessionToken, request } from '@/network'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import dayjs from 'dayjs'
-import { serializeTransferSearchParams } from './searchParams.client'
-
-const transferSearchEngineSchema = z.object({
-  origin: z.object({
-    Id: z.string().or(z.number()),
-    Code: z.string(),
-    Name: z.string(),
-    Slug: z.string().nonempty(),
-  }),
-  destination: z.object({
-    Id: z.string().or(z.number()),
-    Code: z.string(),
-    Name: z.string(),
-    Slug: z.string().nonempty(),
-  }),
-  date: z.string(),
-  time: z.string(),
-  passengers: z.object({
-    adult: z.number().min(1),
-    child: z.number().min(0),
-    infant: z.number().min(0),
-  }),
-})
-
-type TransferSearchEngineSchemaInfer = z.infer<
-  typeof transferSearchEngineSchema
->
+import {
+  serializeTransferSearchParams,
+  transferSearchEngineSchema,
+  TransferSearchEngineSchemaInfer,
+} from './searchParams.client'
 
 const defaultDate = dayjs().add(5, 'day').toISOString()
 
@@ -58,14 +36,18 @@ const TransferSearchEngine = () => {
         destination: {
           Code: '',
           Id: -1,
-          Name: '',
           Slug: '',
+          LocationName: '',
+          PointName: '',
+          Type: '',
         },
         origin: {
           Code: '',
           Id: -1,
-          Name: '',
           Slug: '',
+          LocationName: '',
+          PointName: '',
+          Type: '',
         },
         passengers: {
           adult: 1,
@@ -172,14 +154,20 @@ const TransferSearchEngine = () => {
               inputProps={{ error: !!formActions.formState.errors.origin }}
               data={originLocations?.Result}
               isLoading={originLocationsIsLoading}
-              defaultValue={formActions.formState.defaultValues?.origin?.Name}
+              defaultValue={
+                formActions.formState.defaultValues?.origin?.PointName
+              }
               onChange={setOriginLocationInputValue}
-              onSelect={(value) => {
+              onSelect={(value, parentLocation) => {
                 formActions.setValue('origin', {
                   Code: value.Code,
                   Id: Object.values(value.ExtentionData)[0],
-                  Name: value.Name,
+                  PointName: value.Name,
+                  LocationName: parentLocation
+                    ? parentLocation.Name
+                    : value.Name,
                   Slug: value.Slug,
+                  Type: Object.values(value.ExtentionData)[1],
                 })
               }}
             />
@@ -191,15 +179,19 @@ const TransferSearchEngine = () => {
               data={destinationLocation?.Result}
               isLoading={destinationLocationLoading}
               defaultValue={
-                formActions.formState.defaultValues?.destination?.Name
+                formActions.formState.defaultValues?.destination?.PointName
               }
               onChange={setDestinationLocationInputValue}
-              onSelect={(value) => {
+              onSelect={(value, parentLocation) => {
                 formActions.setValue('destination', {
                   Code: value.Code,
                   Id: Object.values(value.ExtentionData)[0],
-                  Name: value.Name,
+                  PointName: value.Name,
+                  LocationName: parentLocation
+                    ? parentLocation.Name
+                    : value.Name,
                   Slug: value.Slug,
+                  Type: Object.values(value.ExtentionData)[1],
                 })
               }}
             />

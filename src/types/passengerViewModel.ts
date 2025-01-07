@@ -25,10 +25,10 @@ export enum PassengerTypesIndexEnum {
   Soldier,
 }
 
-export type ChildNode = {
-  id: null
-  orderId: 1
-  key: 'PRODUCT'
+export interface ChildNode {
+  id: null | ID
+  orderId: ID
+  key: string
   items: [
     {
       valueType: 'System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e'
@@ -39,6 +39,53 @@ export type ChildNode = {
   ]
   childNodes: [
     {
+      childNodes: {
+        id: null
+        orderId: ID
+        key: string
+        items: {
+          valueType: 'TravelAccess.Core.Models.Product.OrderPassengerModel, Core.Models, Version=1.1.78.0, Culture=neutral, PublicKeyToken=null'
+          key: string
+          value: {
+            _passengerId: ID
+            model_PassengerId: ID
+            declaredAge: 0
+            productType: 1
+            checkinDate: '2024-11-27T07:40:00'
+            calculationYearBased: false
+            calculationYearType: 1
+            passengerId: 0
+            sequenceNo: 1
+            type: 0
+            gender: GenderEnums
+            firstName: null
+            lastName: null
+            middleName: null
+            birthDate: '0001-01-01T00:00:00'
+            nationality: 'tr'
+            nationality_Check: null
+            citizenNo: null
+            passportNo: null
+            mobilePhoneNumber: null
+            email: null
+            isContact: false
+            flightFrequencyNo: null
+            notes: null
+            passportValidityDate: null
+            webUserId: 0
+            passportCountry: null
+            groupOrderIndex: 0
+            passengerKey: string
+            isRecord: false
+            listFlightFrequencyAirline: null
+            listFlightFrequencyNo: null
+            registeredPassengerId: 0
+            isDontValidate: false
+            hesCode: null
+          }
+          orderId: ID
+        }
+      }[]
       id: ID
       orderId: ID
       key: string
@@ -47,8 +94,8 @@ export type ChildNode = {
           valueType: string
           key: string
           value: {
-            _passengerId: 0
-            model_PassengerId: 1
+            _passengerId: ID
+            model_PassengerId: ID
             declaredAge: 0
             productType: 1
             checkinDate: '2024-11-27T07:40:00'
@@ -83,7 +130,7 @@ export type ChildNode = {
             isDontValidate: false
             hesCode: null
           }
-          orderId: 1
+          orderId: ID
         },
         {
           valueType: 'System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e'
@@ -424,14 +471,7 @@ export type ProductPassengerApiResponseModel = {
         ]
       }
     }
-    PassengerData: {
-      id: null
-      orderId: ID
-      key: 'ROOT'
-      items: []
-      childNodes: ChildNode[]
-    }
-    ModuleName: 'Flight'
+    ModuleName: string
     SummaryViewDataResponser: {
       summaryResponse: {
         flightList: [
@@ -770,7 +810,7 @@ export type ProductPassengerApiResponseModel = {
     FlightCancellationInsurancePasssengerCount: number
     isPassportReq: boolean
     isHESReq: boolean
-    FlightArrivalDate: '27 Kasım 2024'
+    FlightArrivalDate: string
     DateCountToArrival: 41
     InsurancePrice: 0
     Insurances: [
@@ -1183,6 +1223,52 @@ export type ProductPassengerApiResponseModel = {
     ]
     childNodes: [
       {
+        childNodes:
+          | {
+              id: null
+              key: string
+              orderId: ID
+              items: {
+                value: {
+                  _passengerId: ID
+                  birthDate: string
+                  calculationYearBased: boolean
+                  calculationYearType: number
+                  checkinDate: string
+                  citizenNo: string
+                  declaredAge: number
+                  email: string
+                  firstName: string
+                  flightFrequencyNo: string | null
+                  gender: GenderEnums
+                  groupOrderIndex: number
+                  hesCode: string | null
+                  isContact: boolean
+                  isDontValidate: boolean
+                  isRecord: boolean
+                  lastName: string
+                  listFlightFrequencyAirline: string | null
+                  listFlightFrequencyNo: string | null
+                  middleName: string
+                  mobilePhoneNumber: string
+                  model_PassengerId: ID
+                  nationality_Check: boolean
+                  nationality: string
+                  notes: null
+                  passengerId: ID
+                  passengerKey: string
+                  passportCountry: string | null
+                  passportNo: string
+                  passportValidityDate: string
+                  productType: number
+                  registeredPassengerId: ID
+                  sequenceNo: number
+                  type: PassengerTypesEnum
+                  webUserId: ID
+                }
+              }[]
+            }[]
+          | []
         id: null
         orderId: 1
         key: 'Adult'
