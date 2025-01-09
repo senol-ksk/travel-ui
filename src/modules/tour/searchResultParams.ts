@@ -9,7 +9,7 @@ import {
 export const tourSearchResultParamParser = {
   checkinDate: parseAsIsoDate,
   checkoutDate: parseAsIsoDate,
-  destination: parseAsString,
+  destinationSlug: parseAsString,
 }
 
 export const serializeTourSearchParams = createSerializer(

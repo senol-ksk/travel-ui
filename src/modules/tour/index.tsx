@@ -63,7 +63,8 @@ const TourSearchEngine = () => {
         destinationLocationInputValue.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          //https://apipfn.lidyateknoloji.com/d/v1.1/api/tour/search?s=balkan&id=&scope=aa2eff06-6a09-4320-bae2-a82f9504ff19
+          //https://apipfn.lidyateknoloji.com/d/v1.1/api/tour/searchdomestic?s=balka&id=&scope=2d932774-a9d8-4df9-aae7-5ad2727da1c7
+          //          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/tour/search`,
           url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/tour/search`,
           params: {
             s: destinationLocationInputValue,
@@ -77,22 +78,26 @@ const TourSearchEngine = () => {
     })
 
   const handleSubmit = (data: TourSearchEngineSchemaType) => {
-    console.log('Tour search engine submitdata', data)
     setLocalParams(data)
-    //destination=balkan-turlari?checkinDate=2025-01-07&checkoutDate=2025-08-31
+
     const url = serializeTourSearchParams('/tour/search-results', {
       checkinDate: data.checkinDate,
       checkoutDate: data.checkoutDate,
-      destination: data.destination.slug,
+      destinationSlug: data.destination.slug,
     })
 
-    console.log(url)
     router.push(url)
   }
 
-  // console.log(formActions.formState.defaultValues)
-
-  if (!mounted) return <Skeleton height={50} radius={'lg'} />
+  if (!mounted) {
+    return (
+      <div className='grid grid-cols-12 gap-3 md:grid-cols-3 md:gap-3'>
+        <Skeleton height={40} radius={'lg'} />
+        <Skeleton height={40} radius={'lg'} />
+        <Skeleton height={40} radius={'lg'} />
+      </div>
+    )
+  }
 
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>

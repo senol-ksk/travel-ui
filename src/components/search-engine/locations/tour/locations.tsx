@@ -19,6 +19,7 @@ import type {
   LocationResult,
   LocationResults,
 } from '@/components/search-engine/locations/type'
+import { MdOutlineSubdirectoryArrowRight } from 'react-icons/md'
 
 type Props = {
   label: string
@@ -118,55 +119,53 @@ export const TourLocations: React.FC<Props> = ({
                   {data.map((location) => {
                     const { Name, SubDestinations, Id } = location
 
-                    if (!SubDestinations.length) {
-                      return (
-                        <div key={Id}>
-                          <div className='relative'>
-                            <button
-                              type='button'
-                              className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
-                              onClick={() => {
-                                setLocationName(Name)
-                                onSelect(location)
-                                setLocationContainerOpened(false)
-                              }}
-                            >
-                              <span className='sr-only'>{Name}</span>
-                            </button>
-                            <div className='flex items-center gap-2 px-4 py-2'>
-                              <div className='flex flex-col text-sm'>
-                                <strong>{Name}</strong>
-                                {/* <small>{Name}</small> */}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    }
-
-                    return SubDestinations.map((destination) => (
-                      <div key={destination.Id}>
+                    return (
+                      <div key={Id}>
                         <div className='relative'>
                           <button
                             type='button'
                             className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
                             onClick={() => {
-                              setLocationName(destination.Name)
-                              onSelect(destination)
+                              setLocationName(Name)
+                              onSelect(location)
                               setLocationContainerOpened(false)
                             }}
                           >
-                            <span className='sr-only'>{destination.Name}</span>
+                            <span className='sr-only'>{Name}</span>
                           </button>
-                          <div className='flex items-center gap-2 px-4 py-2'>
+                          <div className='flex items-center gap-2 py-1 pe-3 ps-4'>
                             <div className='flex flex-col text-sm'>
-                              <strong>{destination.Name}</strong>
-                              <small>{Name}</small>
+                              <strong>{Name}</strong>
                             </div>
                           </div>
                         </div>
+                        {SubDestinations.map((subDestination) => (
+                          <div key={subDestination.Id}>
+                            <div className='relative'>
+                              <button
+                                type='button'
+                                className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
+                                onClick={() => {
+                                  setLocationName(subDestination.Name)
+                                  onSelect(subDestination)
+                                  setLocationContainerOpened(false)
+                                }}
+                              >
+                                <span className='sr-only'>
+                                  {subDestination.Name}
+                                </span>
+                              </button>
+                              <div className='flex gap-3 px-4 py-1 ps-4 text-sm'>
+                                <div className='text-xl'>
+                                  <MdOutlineSubdirectoryArrowRight />
+                                </div>
+                                <div>{subDestination.Name}</div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))
+                    )
                   })}
                 </div>
               )}
