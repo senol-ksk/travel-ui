@@ -21,10 +21,11 @@ const TourSearchResultClient = () => {
   const hasNoResult =
     !searchResultsQuery.hasNextPage &&
     searchResultsQuery.data?.pages
-      .map(
-        (page) =>
-          page.data.searchResults.filter((results) => results.items.length)
-            .length
+      .map((page) =>
+        page.code === 1 && page.data.searchResults
+          ? page.data.searchResults.filter((results) => results.items.length)
+              .length
+          : 0
       )
       .filter(Number).length === 0
 
@@ -32,6 +33,8 @@ const TourSearchResultClient = () => {
     const detailUrl = serializeTourDetailPageParams('/tour/detail', {
       productKey: data.key,
       slug: data.slug,
+      searchToken: searchParamsQuery.data?.data?.params.searchToken,
+      sessionToken: searchParamsQuery.data?.data?.sessionToken,
     })
 
     router.push(detailUrl)
@@ -78,19 +81,22 @@ const TourSearchResultClient = () => {
               </Alert>
             ) : null}
             {searchResultsQuery.data?.pages.map((tourPage) => {
-              return tourPage?.data.searchResults.map((searchResult) => {
-                return searchResult.items
-                  ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                  .map((searchResultItem) => {
-                    return (
-                      <TourSearchResultItem
-                        key={searchResultItem.key}
-                        data={searchResultItem}
-                        onClick={handleTourItemSelect}
-                      />
-                    )
-                  })
-              })
+              return (
+                tourPage?.data &&
+                tourPage?.data.searchResults.map((searchResult) => {
+                  return searchResult.items
+                    ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
+                    .map((searchResultItem) => {
+                      return (
+                        <TourSearchResultItem
+                          key={searchResultItem.key}
+                          data={searchResultItem}
+                          onClick={handleTourItemSelect}
+                        />
+                      )
+                    })
+                })
+              )
             })}
           </div>
         </div>

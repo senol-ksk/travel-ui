@@ -8,6 +8,8 @@ import {
 export const tourDetailPageParamParser = {
   productKey: parseAsString,
   slug: parseAsString,
+  searchToken: parseAsString,
+  sessionToken: parseAsString,
 }
 
 export const serializeTourDetailPageParams = createSerializer(

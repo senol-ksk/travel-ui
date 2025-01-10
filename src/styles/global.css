@@ -1,7 +1,7 @@
 @layer tw_base, mantine, tw_components, tw_utilities;
 
 /* import tailwind */
-/* @import 'tailwindcss/base' layer(tw_base); */
+@import 'tailwindcss/base' layer(tw_base);
 @import 'tailwindcss/components' layer(tw_components);
 @import 'tailwindcss/utilities' layer(tw_utilities);
 
@@ -10,25 +10,6 @@
 @import '@mantine/dates/styles.layer.css';
 @import '@mantine/nprogress/styles.layer.css';
 
-@layer mantine {
-  *,
-  *::before,
-  *::after {
-    /* box-sizing: border-box; */
-    @apply border-0 border-solid border-gray-100;
-  }
-}
-
-img,
-svg {
-  @apply block;
-}
-
-img,
-video {
-  max-width: 100%;
-  height: auto;
-}
 html,
 body {
   @apply h-full;
@@ -36,7 +17,7 @@ body {
 body {
   /* @apply bg-gray-50; */
   /* @apply antialiased; */
-  @apply text-gray-800;
+  @apply text-gray-700;
 }
 
 .iti__selected-dial-code {
