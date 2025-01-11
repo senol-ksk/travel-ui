@@ -2,7 +2,7 @@ type ID = string | number
 
 type ServicePriceType = {
   value: number
-  currency: 'TRY' | 'EUR' | null
+  currency: 'TRY' | 'EUR' | undefined | null
   rateValue: null
 }
 

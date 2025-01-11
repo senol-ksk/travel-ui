@@ -1,34 +1,48 @@
 'use client'
 
 import { Button, LoadingOverlay, Skeleton, Modal, Group } from '@mantine/core'
-import { upperFirst, useDisclosure } from '@mantine/hooks'
-import { useState } from 'react'
+import { useDisclosure } from '@mantine/hooks'
+import { useEffect, useRef, useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import NumberFlow from '@number-flow/react'
 
 import { useTourDetailQuery } from './useTourDetailQuery'
 import { TourDetail } from './detail-view'
 import { TourDetailPriceSection } from './price-section'
 import { dummyTourDetailData } from './dummyData'
 import { TourSearchEngine } from '@/modules/tour'
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
-import {
-  PassengerFormTypes,
-  TourExtraServicesApiResponse,
-} from '@/modules/tour/type'
+import { TourExtraServicesApiResponse } from '@/modules/tour/type'
 import { ExtraServicePanel } from './extra-services'
 import { formatCurrency } from '@/libs/util'
+import { createSerializer, useQueryStates } from 'nuqs'
+import { reservationParsers } from '@/app/reservation/searchParams'
+import { useRouter } from 'next/navigation'
+import { tourDetailPageParamParser } from '@/modules/tour/detailSearchParams'
 
 const TourDetailClient = () => {
   const [
     isOpenExtraServicesModal,
     { open: openExtraSercivesModal, close: closeExtraServicesModal },
   ] = useDisclosure(false)
+  const [searchParams] = useQueryStates(tourDetailPageParamParser)
+
+  const lastKeys = useRef({
+    packageKey: '',
+    calculatedId: '',
+  })
+
+  useEffect(() => {
+    return () => {
+      lastKeys.current = {
+        calculatedId: '',
+        packageKey: '',
+      }
+      console.log('clear keys', lastKeys.current)
+    }
+  }, [])
 
   const detailQuery = useTourDetailQuery()
-  // const detailQuery = {
-  //   data: dummyTourDetailData,
-  //   isLoading: false,
-  // }
 
   const [passengers, setPassengers] = useState<{
     adultCount: string
@@ -39,15 +53,10 @@ const TourDetailClient = () => {
 
   const calculateTotalPriceQuery = useQuery({
     enabled: !!detailQuery.data && detailQuery.isSuccess,
-    queryKey: [
-      'tour-detail-totalPrice',
-      detailQuery.data,
-      passengers,
-      detailQuery.data?.searchToken,
-      detailQuery.data?.sessionToken,
-      detailQuery.data?.package?.key,
-    ],
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryKey: ['tour-detail-totalPrice', detailQuery.data, passengers],
     queryFn: async () => {
+      // console.log(lastKeys.current)
       const response = await serviceRequest<{
         value: ServicePriceType
         packageKey: string
@@ -56,9 +65,11 @@ const TourDetailClient = () => {
           url: `api/tour/passengerUpdate`,
           method: 'post',
           data: {
-            SearchToken: detailQuery.data?.searchToken,
-            SessionToken: detailQuery.data?.sessionToken,
-            Package: detailQuery.data?.package?.key,
+            SearchToken: searchParams?.searchToken,
+            SessionToken: searchParams?.sessionToken,
+            Package: lastKeys.current.packageKey.length
+              ? lastKeys.current.packageKey
+              : searchParams?.productKey,
             AdultCount: passengers.adultCount,
             ChildAges: passengers.childAge,
             CampaignCode: null,
@@ -69,9 +80,13 @@ const TourDetailClient = () => {
         },
       })
 
+      lastKeys.current.packageKey = response?.data?.packageKey ?? ''
+
       return response
     },
   })
+
+  console.log(lastKeys.current)
 
   const extraServicesMutation = useMutation({
     mutationKey: ['tour-extra-services'],
@@ -86,37 +101,37 @@ const TourDetailClient = () => {
           data: {
             AdultCount: passengers.adultCount,
             ChildAges: passengers.childAge,
-            SearchToken: detailQuery.data?.searchToken,
-            SessionToken: detailQuery.data?.sessionToken,
-            Package: detailQuery.data?.package?.key,
+            SearchToken: searchParams.searchToken,
+            SessionToken: searchParams.sessionToken,
+            Package: lastKeys.current.packageKey,
           },
         },
       })
 
+      lastKeys.current = {
+        calculatedId: response?.data?.calculatedId ?? '',
+        packageKey: response?.data?.package.key ?? '',
+      }
+
       return response
     },
-    onSuccess() {
+    onSuccess(data) {
+      // setSearchParams({
+      //   productKey: data?.data?.package.key,
+      // })
+
       openExtraSercivesModal()
     },
   })
 
-  const extraServiceadultCount = Number(
-    extraServicesMutation.data?.data?.adultCount.split(':').at(0)
-  )
-  const extraServiceChildCount =
-    extraServicesMutation.data?.data?.childAges?.filter((num) => num >= 0)
-      ?.length ?? 0
-  const extraMaxCount = extraServiceadultCount + extraServiceChildCount
-
-  console.log(extraMaxCount)
-
   const addOrRemoveExtraServicesMutation = useMutation({
-    mutationKey: [
-      'tour-extra-service-update',
-      extraServicesMutation.data?.data,
-    ],
+    mutationKey: ['tour-extra-service-update'],
     mutationFn: async () => {
-      const response = await serviceRequest<{ tlPrice: ServicePriceType }>({
+      const response = await serviceRequest<{
+        tlPrice: ServicePriceType
+        calculatedId: string
+        key: string
+      }>({
         axiosOptions: {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -124,18 +139,66 @@ const TourDetailClient = () => {
           url: 'api/tour/addRemoveExtraServices',
           method: 'post',
           data: {
-            CalculateId: extraServicesMutation.data?.data?.calculatedId,
-            SearchToken: detailQuery.data?.searchToken,
-            Package: detailQuery.data?.package?.key,
+            CalculateId: lastKeys.current.calculatedId,
             AdultCount: passengers.adultCount,
             ChildAges: passengers.childAge,
-            SessionToken: detailQuery.data?.sessionToken,
+            SearchToken: searchParams.searchToken,
+            SessionToken: searchParams.sessionToken,
+            Package: lastKeys.current.packageKey,
             ExtraServicesAndAmounts: extraServicesAndAmounts,
           },
         },
       })
 
       return response
+    },
+    onSuccess: (data) => {
+      // setSearchParams({
+      //   productKey: data?.data?.key,
+      // })
+      lastKeys.current = {
+        calculatedId: data?.data?.calculatedId ?? '',
+        packageKey: data?.data?.key ?? '',
+      }
+    },
+  })
+
+  const tourReservationQuery = useMutation({
+    mutationKey: ['tour-reservation'],
+    mutationFn: async () => {
+      const response = await serviceRequest<{ package: { key: string } }>({
+        axiosOptions: {
+          url: 'api/tour/reservation',
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+          data: {
+            AppName: process.env.NEXT_PUBLIC_APP_NAME,
+            ScopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            ScopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            CalculateId: lastKeys.current.calculatedId,
+            Package: lastKeys.current.packageKey,
+            AdultCount: passengers.adultCount,
+            ChildAges: passengers.childAge?.at(0),
+            SearchToken: searchParams.searchToken,
+            SessionToken: searchParams.sessionToken,
+          },
+        },
+      })
+
+      return response
+    },
+    onSuccess: (data) => {
+      const resParams = createSerializer(reservationParsers)
+
+      const url = resParams('/reservation', {
+        productKey: data?.data?.package.key,
+        searchToken: detailQuery.data?.searchToken,
+        sessionToken: detailQuery.data?.sessionToken,
+      })
+
+      router.push(url)
     },
   })
 
@@ -147,6 +210,8 @@ const TourDetailClient = () => {
         count: 0,
       }
     })
+
+  const router = useRouter()
 
   let extraServicesAndAmounts: string[]
 
@@ -163,16 +228,15 @@ const TourDetailClient = () => {
         return `${item.key}:${item.count}`
       })
     }
-
-    // if (
-    //   extraServicesAndAmounts?.length &&
-    //   !addOrRemoveExtraServicesMutation.isPending
-    // ) {
-    //   addOrRemoveExtraServicesMutation.mutate(extraServicesAndAmounts)
-    // }
-
-    console.log(extraServicesAndAmounts)
   }
+
+  const extraServiceadultCount = Number(
+    extraServicesMutation.data?.data?.adultCount.split(':').at(0)
+  )
+  const extraServiceChildCount =
+    extraServicesMutation.data?.data?.childAges?.filter((num) => num >= 0)
+      ?.length ?? 0
+  const extraMaxCount = extraServiceadultCount + extraServiceChildCount
 
   return (
     <>
@@ -268,29 +332,50 @@ const TourDetailClient = () => {
           <div className='flex items-center justify-between'>
             <div>Toplam:</div>
             <div className='text-lg font-semibold'>
-              {addOrRemoveExtraServicesMutation.data?.data
+              {/* {addOrRemoveExtraServicesMutation.data?.data
                 ? formatCurrency(
                     addOrRemoveExtraServicesMutation.data?.data.tlPrice.value
                   )
                 : formatCurrency(
                     calculateTotalPriceQuery.data?.data?.value.value ?? 0
-                  )}
+                  )} */}
+              <NumberFlow
+                format={{
+                  style: 'currency',
+                  currency: 'TRY',
+                  currencyDisplay: 'narrowSymbol',
+                }}
+                value={
+                  addOrRemoveExtraServicesMutation.data?.data
+                    ? addOrRemoveExtraServicesMutation.data?.data.tlPrice.value
+                    : (calculateTotalPriceQuery.data?.data?.value?.value ?? 0)
+                }
+              />
             </div>
           </div>
           <Button
             type='button'
             disabled={addOrRemoveExtraServicesMutation.isPending}
+            loading={addOrRemoveExtraServicesMutation.isPending}
             onClick={() => {
-              addOrRemoveExtraServicesMutation.mutateAsync()
+              addOrRemoveExtraServicesMutation.mutate()
             }}
           >
-            Güncelle
+            Ekle
           </Button>
         </div>
         <div>
           <Group className='justify-between border-t' pt='md' mt={'md'}>
             <Button color='red'>İptal</Button>
-            <Button color='green'>Rezervasyon Yap</Button>
+            <Button
+              color='green'
+              disabled={addOrRemoveExtraServicesMutation.isPending}
+              onClick={() => {
+                tourReservationQuery.mutate()
+              }}
+            >
+              Rezervasyon Yap
+            </Button>
           </Group>
         </div>
       </Modal>
