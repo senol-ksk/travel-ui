@@ -1,6 +1,7 @@
 'use client'
 
-import { Button, LoadingOverlay, Skeleton } from '@mantine/core'
+import { Button, LoadingOverlay, Skeleton, Modal, Group } from '@mantine/core'
+import { upperFirst, useDisclosure } from '@mantine/hooks'
 import { useState } from 'react'
 
 import { useTourDetailQuery } from './useTourDetailQuery'
@@ -10,9 +11,19 @@ import { dummyTourDetailData } from './dummyData'
 import { TourSearchEngine } from '@/modules/tour'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
-import { PassengerFormTypes } from '@/modules/tour/type'
+import {
+  PassengerFormTypes,
+  TourExtraServicesApiResponse,
+} from '@/modules/tour/type'
+import { ExtraServicePanel } from './extra-services'
+import { formatCurrency } from '@/libs/util'
 
 const TourDetailClient = () => {
+  const [
+    isOpenExtraServicesModal,
+    { open: openExtraSercivesModal, close: closeExtraServicesModal },
+  ] = useDisclosure(false)
+
   const detailQuery = useTourDetailQuery()
   // const detailQuery = {
   //   data: dummyTourDetailData,
@@ -61,6 +72,107 @@ const TourDetailClient = () => {
       return response
     },
   })
+
+  const extraServicesMutation = useMutation({
+    mutationKey: ['tour-extra-services'],
+    mutationFn: async () => {
+      const response = await serviceRequest<TourExtraServicesApiResponse>({
+        axiosOptions: {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+          url: 'api/tour/extraServices',
+          method: 'post',
+          data: {
+            AdultCount: passengers.adultCount,
+            ChildAges: passengers.childAge,
+            SearchToken: detailQuery.data?.searchToken,
+            SessionToken: detailQuery.data?.sessionToken,
+            Package: detailQuery.data?.package?.key,
+          },
+        },
+      })
+
+      return response
+    },
+    onSuccess() {
+      openExtraSercivesModal()
+    },
+  })
+
+  const extraServiceadultCount = Number(
+    extraServicesMutation.data?.data?.adultCount.split(':').at(0)
+  )
+  const extraServiceChildCount =
+    extraServicesMutation.data?.data?.childAges?.filter((num) => num >= 0)
+      ?.length ?? 0
+  const extraMaxCount = extraServiceadultCount + extraServiceChildCount
+
+  console.log(extraMaxCount)
+
+  const addOrRemoveExtraServicesMutation = useMutation({
+    mutationKey: [
+      'tour-extra-service-update',
+      extraServicesMutation.data?.data,
+    ],
+    mutationFn: async () => {
+      const response = await serviceRequest<{ tlPrice: ServicePriceType }>({
+        axiosOptions: {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+          },
+          url: 'api/tour/addRemoveExtraServices',
+          method: 'post',
+          data: {
+            CalculateId: extraServicesMutation.data?.data?.calculatedId,
+            SearchToken: detailQuery.data?.searchToken,
+            Package: detailQuery.data?.package?.key,
+            AdultCount: passengers.adultCount,
+            ChildAges: passengers.childAge,
+            SessionToken: detailQuery.data?.sessionToken,
+            ExtraServicesAndAmounts: extraServicesAndAmounts,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  const extraServicKeys = extraServicesMutation.data?.data?.extraServices
+    .filter((extra) => !extra.isPackage && !extra.isMandatory)
+    .map((ext) => {
+      return {
+        key: ext.key,
+        count: 0,
+      }
+    })
+
+  let extraServicesAndAmounts: string[]
+
+  const handleExtraServiceActions = (actions: {
+    key: string
+    count: number
+  }) => {
+    if (extraServicKeys) {
+      extraServicesAndAmounts = extraServicKeys?.map((item) => {
+        if (item.key === actions.key) {
+          item.count = actions.count
+        }
+
+        return `${item.key}:${item.count}`
+      })
+    }
+
+    // if (
+    //   extraServicesAndAmounts?.length &&
+    //   !addOrRemoveExtraServicesMutation.isPending
+    // ) {
+    //   addOrRemoveExtraServicesMutation.mutate(extraServicesAndAmounts)
+    // }
+
+    console.log(extraServicesAndAmounts)
+  }
 
   return (
     <>
@@ -112,7 +224,14 @@ const TourDetailClient = () => {
                           type='button'
                           fullWidth
                           size='lg'
-                          disabled={!calculateTotalPriceQuery.data?.success}
+                          disabled={
+                            !calculateTotalPriceQuery.data?.success ||
+                            extraServicesMutation.isPending
+                          }
+                          loading={extraServicesMutation.isPending}
+                          onClick={() => {
+                            extraServicesMutation.mutate()
+                          }}
                         >
                           Rezervasyon Yap
                         </Button>
@@ -127,6 +246,54 @@ const TourDetailClient = () => {
           </div>
         )}
       </div>
+      <Modal
+        opened={isOpenExtraServicesModal}
+        // opened
+        onClose={closeExtraServicesModal}
+        title='Ekstra Servisler'
+      >
+        <div className='grid gap-5'>
+          {extraServicesMutation.data?.data?.extraServices
+            .filter((extra) => !extra.isPackage && !extra.isMandatory)
+            .map((extra) => {
+              return (
+                <ExtraServicePanel
+                  data={extra}
+                  key={extra.key}
+                  maxCount={extraMaxCount}
+                  onChange={handleExtraServiceActions}
+                />
+              )
+            })}
+          <div className='flex items-center justify-between'>
+            <div>Toplam:</div>
+            <div className='text-lg font-semibold'>
+              {addOrRemoveExtraServicesMutation.data?.data
+                ? formatCurrency(
+                    addOrRemoveExtraServicesMutation.data?.data.tlPrice.value
+                  )
+                : formatCurrency(
+                    calculateTotalPriceQuery.data?.data?.value.value ?? 0
+                  )}
+            </div>
+          </div>
+          <Button
+            type='button'
+            disabled={addOrRemoveExtraServicesMutation.isPending}
+            onClick={() => {
+              addOrRemoveExtraServicesMutation.mutateAsync()
+            }}
+          >
+            Güncelle
+          </Button>
+        </div>
+        <div>
+          <Group className='justify-between border-t' pt='md' mt={'md'}>
+            <Button color='red'>İptal</Button>
+            <Button color='green'>Rezervasyon Yap</Button>
+          </Group>
+        </div>
+      </Modal>
     </>
   )
 }
