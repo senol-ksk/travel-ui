@@ -65,7 +65,7 @@ const TourSearchEngine = () => {
         const getLocations = await request({
           //https://apipfn.lidyateknoloji.com/d/v1.1/api/tour/searchdomestic?s=balka&id=&scope=2d932774-a9d8-4df9-aae7-5ad2727da1c7
           //          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/tour/search`,
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/tour/search`,
+          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/tour/searchdomestic`,
           params: {
             s: destinationLocationInputValue,
             id: null,
