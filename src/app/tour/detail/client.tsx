@@ -119,8 +119,16 @@ const TourDetailClient = () => {
       // setSearchParams({
       //   productKey: data?.data?.package.key,
       // })
-
-      openExtraSercivesModal()
+      if (
+        data?.data?.extraServices &&
+        data?.data?.extraServices?.filter(
+          (item) => !(item.isMandatory && item.isPackage)
+        ).length > 0
+      ) {
+        openExtraSercivesModal()
+      } else {
+        tourReservationQuery.mutate()
+      }
     },
   })
 
@@ -332,13 +340,6 @@ const TourDetailClient = () => {
           <div className='flex items-center justify-between'>
             <div>Toplam:</div>
             <div className='text-lg font-semibold'>
-              {/* {addOrRemoveExtraServicesMutation.data?.data
-                ? formatCurrency(
-                    addOrRemoveExtraServicesMutation.data?.data.tlPrice.value
-                  )
-                : formatCurrency(
-                    calculateTotalPriceQuery.data?.data?.value.value ?? 0
-                  )} */}
               <NumberFlow
                 format={{
                   style: 'currency',
