@@ -80,7 +80,7 @@ export const HotelSearchEngine = () => {
     useState('')
   const { data: destinationLocation, isLoading: destinationLocationLoading } =
     useQuery<LocationResults>({
-      queryKey: ['flight-locations', destinationLocationInputValue],
+      queryKey: ['hotel-locations', destinationLocationInputValue],
       enabled:
         !!destinationLocationInputValue &&
         destinationLocationInputValue.length > 2,

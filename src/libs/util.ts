@@ -2,11 +2,11 @@ import dayjs from 'dayjs'
 
 export const formatCurrency = (
   amount: number,
-  currency: 'TRY' | 'USD' | 'EUR' = 'TRY'
+  currency: 'TRY' | 'USD' | 'EUR' | undefined | null = 'TRY'
 ) =>
   new Intl.NumberFormat('tr', {
     style: 'currency',
-    currency,
+    currency: currency ?? 'TRY',
   }).format(amount)
 
 export const days = (): string[] =>
