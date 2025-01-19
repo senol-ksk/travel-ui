@@ -1,10 +1,13 @@
+'use client'
+
 import { useState } from 'react'
 
 import { Button, Skeleton } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+import { useTransitionRouter } from 'next-view-transitions'
 
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,7 +19,6 @@ import { type LocationResults } from '@/components/search-engine/locations/hotel
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { request } from '@/network'
 import { serializeHotelSearchParams } from '@/modules/hotel/searchParams'
-import { DatePickerInput } from '@mantine/dates'
 
 const schema = z.object({
   destination: z.object({
@@ -40,7 +42,7 @@ type HotelSearchEngineSchemaType = z.infer<typeof schema>
 
 export const HotelSearchEngine = () => {
   const mounted = useMounted()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   const defaultDates = [
     dayjs().add(3, 'd').toDate(),
@@ -102,7 +104,9 @@ export const HotelSearchEngine = () => {
     setLocalParams(data)
 
     const rooms = data.rooms
-      .flatMap((room) => room.adult + '-' + room.childAges.join('-'))
+      .flatMap((room) =>
+        room.child ? room.adult + '-' + room.childAges.join('-') : room.adult
+      )
       .toString()
 
     const searchParams = serializeHotelSearchParams('/hotel/search-results', {
@@ -112,7 +116,7 @@ export const HotelSearchEngine = () => {
       slug: data.destination.slug,
       destinationId: '' + data.destination.id,
       type: data.destination.type,
-      rooms: rooms.endsWith('-') ? rooms.slice(0, -1) : rooms,
+      rooms,
     })
 
     router.push(searchParams)

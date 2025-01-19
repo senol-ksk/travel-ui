@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+// import Link from 'next/link'
+import { Link } from 'next-view-transitions'
 
 import { Button, Drawer, Burger, NavLink, Box, Anchor } from '@mantine/core'
 import { FaRegUserCircle } from 'react-icons/fa'

@@ -27,3 +27,6 @@ export const yearList = (
 }
 
 export const generateUUID = () => crypto.randomUUID()
+
+export const delayCodeExecution = (ms: number) =>
+  new Promise((res) => setTimeout(res, ms))
