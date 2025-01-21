@@ -1,4 +1,4 @@
-import { Button, Image, TextInput, Title } from '@mantine/core'
+import { Box, Button, Image, TextInput, Title } from '@mantine/core'
 
 import {
   HotelSearchResultHotelInfo,
@@ -40,17 +40,20 @@ const HotelSearchResultItem: React.FC<IProps> = ({
       <div className='rounded-lg border border-gray-300'>
         {/* <TextInput value={JSON.stringify(hotelInfo)} readOnly />
         <TextInput value={JSON.stringify(resultItem)} readOnly /> */}
+        {/* {resultItem.provider} */}
         <div className='p-3'>
           <div className='grid gap-3 @2xl:grid-cols-12'>
             <div className='col-span-9 grid gap-3 @2xl:grid-cols-3'>
               <div className='@2xl:col-span-1'>
-                <Image
-                  w={'100%'}
-                  src={hotelImageUrl}
-                  alt={hotelInfo.name}
-                  radius={'md'}
-                  mah={200} //max-height
-                />
+                <Box h={200}>
+                  <Image
+                    h={'100%'}
+                    w={'100%'}
+                    src={hotelImageUrl}
+                    alt={hotelInfo.name}
+                    radius={'md'}
+                  />
+                </Box>
               </div>
               <div className='@2xl:col-span-2'>
                 <Title

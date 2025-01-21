@@ -1,10 +1,19 @@
 import { useQueryStates } from 'nuqs'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import {
+  useInfiniteQuery,
+  useMutation,
+  UseMutationResult,
+  useQuery,
+} from '@tanstack/react-query'
 
 import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
-import { serviceRequest } from '@/network'
-import { HotelDetailApiResponseData } from '@/app/hotel/types'
+import { serviceRequest, ServiceResponse } from '@/network'
+import {
+  HotelDetailApiResponseData,
+  HotelDetailRoomStatusResponseData,
+} from '@/app/hotel/types'
 import { delayCodeExecution } from '@/libs/util'
+import { useRef } from 'react'
 // import { hotelDetailDummyData, hotelDetailRoomDummyData } from './dummy'
 
 const useHotelDataQuery = () => {
@@ -38,6 +47,7 @@ const useHotelDataQuery = () => {
   })
 
   const searchPanel = hotelDetailQuery.data?.data?.searchPanel
+  const roomRefetchCount = useRef(5)
 
   const roomsQuery = useInfiniteQuery({
     enabled: !!searchPanel,
@@ -47,12 +57,12 @@ const useHotelDataQuery = () => {
       hotelDetailQuery.data?.data?.productKey,
       searchPanel?.checkInDate,
       searchPanel?.checkOutDate,
+      roomRefetchCount.current,
     ],
     initialPageParam: {
       page: 0,
     },
     queryFn: async ({ signal, pageParam }) => {
-      await delayCodeExecution(2000) // somehow the request should wait, otherwise request will be failed
       const response = await serviceRequest<HotelDetailApiResponseData>({
         axiosOptions: {
           signal,
@@ -74,18 +84,22 @@ const useHotelDataQuery = () => {
         },
       })
 
-      return response
+      roomRefetchCount.current = roomRefetchCount.current - 1
 
-      // return {
-      //   data: hotelDetailRoomDummyData,
-      //   success: true,
-      // }
+      if (!response?.data && roomRefetchCount.current >= 0) {
+        await delayCodeExecution(1000)
+        return null
+      }
+
+      return response
     },
-    retryDelay(failureCount, error) {
-      return 1000
-    },
-    retry: (data) => {
-      return true
+    refetchInterval: (query) => {
+      if (
+        (!query.state.data || query.state.data.pages.at(0) === null) &&
+        roomRefetchCount.current >= 0
+      ) {
+        return 1000
+      }
     },
     getNextPageParam: (lastPage, allPages, lastPageParams, allPageParams) => {
       if (lastPage?.data?.hotelDetailResponse?.isLoadProducts) {
@@ -97,7 +111,46 @@ const useHotelDataQuery = () => {
     },
   })
 
-  return { hotelDetailQuery, roomsQuery }
+  const selectedRoomMutaion: UseMutationResult<
+    ServiceResponse<HotelDetailRoomStatusResponseData> | undefined,
+    Error,
+    {
+      productKey: string
+      cancelWarranty: boolean
+    },
+    unknown
+  > = useMutation({
+    mutationKey: ['hotel-detail-selected-room'],
+    mutationFn: async ({
+      productKey,
+      cancelWarranty,
+    }: {
+      productKey: string
+      cancelWarranty: boolean
+    }) => {
+      const response = serviceRequest<HotelDetailRoomStatusResponseData>({
+        axiosOptions: {
+          url: 'api/hotel/checkRoomState',
+          method: 'post',
+          data: {
+            productKey,
+            cancelWarranty,
+            searchToken: searchPanel?.searchToken,
+            sessionToken: searchPanel?.sessionToken,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  return {
+    hotelDetailQuery,
+    roomsQuery,
+    selectedRoomMutaion,
+    searchParams,
+  }
 }
 
 export { useHotelDataQuery }

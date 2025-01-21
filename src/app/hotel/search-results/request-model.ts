@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
 import { io } from 'socket.io-client'
@@ -7,9 +8,6 @@ import { HotelSearchRequestParams } from '@/types/hotel'
 import { GetSecurityTokenResponse } from '@/types/global'
 import { HotelSearchResultApiResponse } from '@/app/hotel/types'
 import { hotelSearchParamParser } from '@/modules/hotel/searchParams'
-// import { hotelSocket } from '@/app/hotel/search-results/socket'
-import { useCallback, useEffect, useRef } from 'react'
-import { hotelSearchResponseDummyData } from './dummy'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
@@ -23,7 +21,6 @@ export const useSearchResultParams = () => {
 
   const searchParamsQuery = useQuery({
     enabled: !!searchParams,
-    // enabled: false,
     queryKey: ['hotel-search-params', searchParams],
     queryFn: async ({ signal }) => {
       const response = await serviceRequest<HotelSearchRequestParams>({
@@ -34,7 +31,6 @@ export const useSearchResultParams = () => {
         },
       })
 
-      // hotelSocket.connect()
       return response?.data
     },
   })
@@ -42,11 +38,10 @@ export const useSearchResultParams = () => {
   const searchRequestParams = searchParamsQuery.data?.hotelSearchApiRequest
   const hotelSearchRequestQuery = useInfiniteQuery({
     enabled: !!searchRequestParams,
-    // enabled: false,
     queryKey: ['hotel-search-results', searchRequestParams],
     initialPageParam: {
       apiAction: '/api/Hotel/SearchResponseReadyData',
-      pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo,
+      pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
     },
     queryFn: async ({ signal, pageParam }) => {
       if (!appToken) {
@@ -85,23 +80,28 @@ export const useSearchResultParams = () => {
         },
       })) as HotelSearchResultApiResponse
 
-      if (response.data && !hotelSocket.connected) {
-        hotelSocket.connect()
-      }
+      // if (response.data && !hotelSocket.connected) {
+      //   hotelSocket.connect()
+      // }
 
       return response?.data
-
-      // return hotelSearchResponseDummyData.data
     },
     getNextPageParam: (
       { hasMoreResponse, searchResults },
       allPages,
       { apiAction, pageNo }
     ) => {
-      if (hasMoreResponse && !searchResults[0].items.length) {
+      if (hasMoreResponse && !searchResults[0].items) {
         return {
           apiAction: '/api/Hotel/SearchResponse',
           pageNo: 0,
+        }
+      }
+
+      if (searchResults[0].hasMorePage) {
+        return {
+          apiAction: '/api/Hotel/SearchResponse',
+          pageNo: pageNo > -1 ? pageNo + 1 : 0,
         }
       }
 
@@ -109,30 +109,30 @@ export const useSearchResultParams = () => {
     },
   })
 
-  useEffect(() => {
-    const hotelSocketOnConnect = () => {
-      console.log('socket connected')
-      // hotelSocket.emit('Auth', {
-      //   searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-      // })
-    }
-    hotelSocket.on('Auth', (message) => {
-      console.log(message)
-    })
+  // useEffect(() => {
+  //   const hotelSocketOnConnect = () => {
+  //     console.log('socket connected')
+  //     // hotelSocket.emit('Auth', {
+  //     //   searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
+  //     // })
+  //   }
+  //   hotelSocket.on('Auth', (message) => {
+  //     console.log(message)
+  //   })
 
-    hotelSocket.on('AvailabilityStatus', (message) => {
-      console.log(message)
-    })
+  //   hotelSocket.on('AvailabilityStatus', (message) => {
+  //     console.log(message)
+  //   })
 
-    hotelSocket.emit('Auth', {
-      searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-    })
-    hotelSocket.on('connect', hotelSocketOnConnect)
+  //   hotelSocket.emit('Auth', {
+  //     searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
+  //   })
+  //   hotelSocket.on('connect', hotelSocketOnConnect)
 
-    return () => {
-      hotelSocket.disconnect()
-    }
-  }, [searchParamsQuery.data?.hotelSearchApiRequest.searchToken])
+  //   return () => {
+  //     hotelSocket.disconnect()
+  //   }
+  // }, [searchParamsQuery.data?.hotelSearchApiRequest.searchToken])
 
   return { hotelSearchRequestQuery, searchParams, searchParamsQuery }
 }

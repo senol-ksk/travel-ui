@@ -612,3 +612,382 @@ export interface HotelDetailApiResponseData {
     scopeCode: string
   }
 }
+
+export interface HotelDetailRoomStatusResponseData {
+  searchToken: string
+  sessionToken: string
+  destinationSlug: string
+  hotelSlug: null
+  roomGroup: {
+    hotelId: ID
+    hotelKey: string
+    hotel: {
+      id: ID
+      name: string
+      slug: string
+      zip_code: string
+      address: string
+      destination: string
+      country_code: string
+      location: [number, number]
+      phone: string
+      email: null
+      currency: string
+      meal_type: string
+      nearby: string[]
+      nearby_info: null
+      checkin_from: string
+      checkout_to: string
+      fax: null
+      nr_rooms: number
+      stars: number
+      availability_score: null
+      max_free_child_age: number
+      min_free_child_age: number
+      images: {
+        category: number
+        tag: ''
+        original: string
+        large: null | string
+        small: null | string
+        mid: null | string
+        default: boolean
+        priority: number
+      }[]
+      themes: number[]
+      facilities: number[]
+      facility_scopes: null
+      tripAdvisor: null
+      price: ServicePriceType
+      descriptions: {
+        hotelInformation: string
+        hotelAmenity: string
+        roomAmenity: null
+        locationInformation: string
+        hotelIntroduction: null
+        attractionInformation: null
+        dining: string
+        areaAttractions: null
+        recreation: null
+        policy: null
+        spa: null
+        whatToExpect: null
+        businessAmenities: null
+        beachPool: string
+        honeymoonInformation: null
+        specialDays: null
+        activities: string
+      }
+      year_built: null
+      nr_restaurants: number
+      nr_bars: number
+      nr_halls: null
+      last_update: string
+      video_list: null
+      web_site: string
+      deleted: boolean
+      destination_slug: string
+      old_destination_slug: null
+      rating: number
+      listing_rate: number
+      sales_rate: number
+      destination_id: ID
+      destination_map: number[]
+      search_rate: number
+      reviews: null
+      nearby_restaurants: null
+      comment_info: null
+      documents: {
+        no: string
+        type: string | null
+        description: string
+      }[]
+      food_drinks: {
+        area: string
+        area_type: string
+        service: string
+        description: null | string
+        start_time: string
+        end_time: string
+        season: string
+        is_paid: boolean
+        priority: number
+      }[]
+    }
+    roomDetails: {
+      [key: string]: {
+        roomKey: string
+        description: string
+        allotment: number
+        bedType: null | string
+        roomType: string
+        quantity: number
+        size: number
+        facilities: {
+          id: ID
+          name: string
+          scope_id: ID
+          type_id: ID
+          isPaid: boolean
+          featured: boolean
+          icon_key: null | string
+          priority: number
+        }[]
+        pensionType: string
+        pensionTypeId: ID
+        extraInformations: null
+        images: {
+          url: string
+          thumbnailUrl: string
+          title: number | string
+          isDefault: boolean
+          width: number
+        }[]
+      }
+    }
+    rooms: [
+      {
+        passengerKeys: [
+          '7CA6183D959F0B1420BF54D9154B6C791DC7389D9CA2B11765F503394B6C4620',
+          'EA985217AAE1E91EC4119FEB24A4B7BD4FED32803E0F89EE2842B095015BE1C9',
+        ]
+        nightlyRates: [
+          {
+            totalPrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            basePrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            taxes: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+            fee: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+          },
+          {
+            totalPrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            basePrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            taxes: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+            fee: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+          },
+          {
+            totalPrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            basePrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            taxes: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+            fee: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+          },
+          {
+            totalPrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            basePrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            taxes: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+            fee: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+          },
+          {
+            totalPrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            basePrice: {
+              value: 3520.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            taxes: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+            fee: {
+              value: 0.0
+              currency: null
+              rateValue: null
+            }
+          },
+        ]
+        addonInfos: []
+        freeChildAges: null
+        freeNights: 0
+        discountInformations: [
+          {
+            rate: 20.0
+            title: 'Erken Rezervasyon'
+            description: null
+          },
+        ]
+        key: 'jhldRD2fipiUp4aJwVKZ8Be3V8Vshmp1fJVNJJuLohDyhhZxCiOE1DOipHquKZheV3xir3XiEMZonMJ3WytHZf75N9ZrCtDdsb4K59Tg2k5ahHpUqNFI29Z7ewWwMVq5Gwup67zvGseJOirV+3vMJ3QTSIXK6Xw3KX2BP3EhMkOS2iQ9UH2PDiBzvmtywdQ3He'
+        totalPrice: {
+          value: 17600.0
+          currency: 'TRY'
+          rateValue: null
+        }
+        basePrice: {
+          value: 17600.0
+          currency: 'TRY'
+          rateValue: null
+        }
+        taxes: {
+          value: 0.0
+          currency: 'TRY'
+          rateValue: null
+        }
+        discount: {
+          value: 4400.0
+          currency: 'TRY'
+          rateValue: null
+        }
+        buyFee: {
+          code: null
+          price: {
+            value: 0.0
+            currency: null
+            rateValue: null
+          }
+        }
+        fee: {
+          code: null
+          price: {
+            value: 0.0
+            currency: null
+            rateValue: null
+          }
+        }
+        passengerPrices: null
+        taxInfos: null
+        serviceCharges: null
+      },
+    ]
+    averageRate: ServicePriceType
+    nightlyRateTotal: ServicePriceType
+    discountDescription: null
+    cancelWarrantyPrice: ServicePriceType
+    useCancelWarranty: boolean
+    prepaid: boolean
+    accommodationTax: {
+      price: ServicePriceType
+      included: boolean
+    }
+    isSingleMaleRestriction: boolean
+    cancellationPolicy: null
+    cancellationPolicies: {
+      penaltyPrice: ServicePriceType
+      optionDate: string
+      description: string
+    }[]
+    additionalInfos: []
+    nonRefundable: boolean
+    checkInDate: '2025-06-09T00:00:00Z'
+    minNight: 0
+    checkOutDate: '2025-06-14T00:00:00Z'
+    earlyBooking: boolean
+    addonInfos: []
+    packageSearchType: 0
+    provisionTime: string
+    provider: string
+    priceDifferenceBackGuarantee: boolean
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  status:
+    | []
+    | {
+        message: string
+        type: number
+        confirmed: boolean
+        oldPrice: ServicePriceType
+        price: ServicePriceType
+        oldNonRefundable: boolean
+        nonRefundable: boolean
+      }[]
+  productKey: string
+  moduleName: 'Hotel'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
+}

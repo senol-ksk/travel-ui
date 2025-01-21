@@ -56,7 +56,7 @@ const HotelGuestsActions: React.FC<Props> = ({
 
     if (type === 'child') {
       if (action === 1) {
-        currentRoom.childAges.push(0)
+        currentRoom.childAges.push(1)
       } else {
         currentRoom.childAges.pop()
       }
@@ -173,7 +173,7 @@ const HotelGuestsActions: React.FC<Props> = ({
                 <NativeSelect
                   key={ageIndex}
                   label={`${ageIndex + 1}. Çocuk yaşı`}
-                  data={range(0, 12).map(String)}
+                  data={range(1, 12).map(String)}
                   defaultValue={child}
                   aria-placeholder='1. Çocuk yaşı'
                   size='xs'

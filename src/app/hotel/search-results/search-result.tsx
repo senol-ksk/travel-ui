@@ -66,7 +66,12 @@ const HotelSearchResults: React.FC = () => {
               Filter section
             </div>
           </div>
-          <div className='grid gap-4 md:col-span-3'>
+          <div
+            className='grid gap-4 md:col-span-3'
+            style={{
+              contentVisibility: 'auto',
+            }}
+          >
             {hotelSearchRequestQuery.data?.pages.map((page) => {
               return (
                 page.searchResults.length &&
@@ -91,6 +96,21 @@ const HotelSearchResults: React.FC = () => {
                 })
               )
             })}
+            {hotelSearchRequestQuery.hasNextPage && (
+              <div className='flex justify-center'>
+                <Button
+                  size='md'
+                  loaderProps={{
+                    type: 'dots',
+                  }}
+                  type='button'
+                  onClick={() => hotelSearchRequestQuery.fetchNextPage()}
+                  loading={hotelSearchRequestQuery.isFetchingNextPage}
+                >
+                  Daha Fazla Yükle
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

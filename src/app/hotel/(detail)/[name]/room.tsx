@@ -19,7 +19,9 @@ const HotelRoom: React.FC<IProps> = ({
   roomDetails,
   onSelect = () => null,
 }) => {
-  const [isWarrantyChecked, setWarrantyCheck] = useState(false)
+  const [isCancelWarrantyChecked, setWarrantyCheck] = useState(
+    roomGroup.useCancelWarranty
+  )
   const rooms = roomGroup.rooms
   const roomKeys = rooms.map((x) => x.key)
   const cancelWarrantyPrice = roomGroup.cancelWarrantyPrice.value
@@ -61,7 +63,7 @@ const HotelRoom: React.FC<IProps> = ({
                 <Image
                   src={images?.at(0)}
                   alt={detail.roomType}
-                  className='h-full min-h-52 rounded'
+                  className='h-full max-h-52 rounded'
                 />
               </div>
               <div className='@2xl:col-span-7'>
@@ -90,7 +92,7 @@ const HotelRoom: React.FC<IProps> = ({
                       <div className='text-end text-lg font-semibold'>
                         <PriceNumberFlow
                           value={
-                            isWarrantyChecked
+                            isCancelWarrantyChecked
                               ? totalPriceWithCancelWarranty
                               : roomGroup.totalPrice.value
                           }
@@ -107,6 +109,7 @@ const HotelRoom: React.FC<IProps> = ({
                                 İptal Güvence Paketi Ekle
                               </span>
                             }
+                            defaultChecked={isCancelWarrantyChecked}
                             size='xs'
                             onChange={({ currentTarget }) => {
                               setWarrantyCheck(currentTarget.checked)
