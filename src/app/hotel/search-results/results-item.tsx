@@ -1,4 +1,5 @@
-import { Box, Button, Image, TextInput, Title } from '@mantine/core'
+import { useState } from 'react'
+import { Box, Button, Image, Skeleton, TextInput, Title } from '@mantine/core'
 
 import {
   HotelSearchResultHotelInfo,
@@ -23,6 +24,8 @@ const HotelSearchResultItem: React.FC<IProps> = ({
   resultItem,
   onSelect = () => null,
 }) => {
+  const [isImageLoading, setImageLoading] = useState(true)
+
   const hotelImageUrl =
     hotelInfo.images.at(0)?.mid ?? hotelInfo.images.at(0)?.large
 
@@ -45,8 +48,18 @@ const HotelSearchResultItem: React.FC<IProps> = ({
           <div className='grid gap-3 @2xl:grid-cols-12'>
             <div className='col-span-9 grid gap-3 @2xl:grid-cols-3'>
               <div className='@2xl:col-span-1'>
-                <Box h={200}>
+                <Box h={200} className='relative'>
+                  {isImageLoading && (
+                    <div className='absolute bottom-0 end-0 start-0 top-0 rounded-md border bg-white p-2'>
+                      <Skeleton className='size-full' radius={'md'} />
+                    </div>
+                  )}
                   <Image
+                    loading='lazy'
+                    fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
+                    onLoad={(e) => {
+                      setImageLoading(false)
+                    }}
                     h={'100%'}
                     w={'100%'}
                     src={hotelImageUrl}
