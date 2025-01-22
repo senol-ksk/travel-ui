@@ -12,12 +12,14 @@ type IProps = {
   roomGroup: HotelDetailRoomItem
   roomDetails: { [key: string]: HotelDetailRoomDetail }
   onSelect: (roomGroup: HotelDetailRoomItem) => void
+  onInstallmentClick?: (roomGroup: HotelDetailRoomItem) => void
 }
 
 const HotelRoom: React.FC<IProps> = ({
   roomGroup,
   roomDetails,
   onSelect = () => null,
+  onInstallmentClick = () => null,
 }) => {
   const [isCancelWarrantyChecked, setWarrantyCheck] = useState(
     roomGroup.useCancelWarranty
@@ -61,6 +63,8 @@ const HotelRoom: React.FC<IProps> = ({
             >
               <div className='@2xl:col-span-3 @2xl:row-span-2'>
                 <Image
+                  loading='lazy'
+                  fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
                   src={images?.at(0)}
                   alt={detail.roomType}
                   className='h-full max-h-52 rounded'
@@ -137,7 +141,12 @@ const HotelRoom: React.FC<IProps> = ({
         })}
         <Divider />
         <div className='p-2 text-end text-sm'>
-          <Button type='button' size='xs' variant='white'>
+          <Button
+            type='button'
+            size='xs'
+            variant='white'
+            onClick={() => onInstallmentClick(roomGroup)}
+          >
             Kartlara Göre Fiyat Tablosu
           </Button>
         </div>

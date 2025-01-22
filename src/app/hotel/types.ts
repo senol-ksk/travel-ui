@@ -991,3 +991,15 @@ export interface HotelDetailRoomStatusResponseData {
   extraCharges: null
   financellDiscount: ServicePriceType
 }
+
+export interface HotelDetailInstallmentData {
+  headers: number[]
+  items: {
+    bank: string
+    description: string
+    logo: string
+    installments: {
+      [key: string]: number
+    }
+  }[]
+}

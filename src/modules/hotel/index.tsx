@@ -123,11 +123,7 @@ export const HotelSearchEngine = () => {
   }
 
   if (!mounted) {
-    return (
-      <div className='grid gap-3 md:grid-cols-4'>
-        <Skeleton visible h={50} />
-      </div>
-    )
+    return <Skeleton h={50} radius={'md'} />
   }
 
   return (

@@ -5,6 +5,7 @@ import {
   AspectRatio,
   Button,
   Image,
+  Loader,
   LoadingOverlay,
   Modal,
   Skeleton,
@@ -19,32 +20,37 @@ import { formatCurrency } from '@/libs/util'
 import { createSerializer } from 'nuqs'
 import { reservationParsers } from '@/app/reservation/searchParams'
 import { useRouter } from 'next/navigation'
+import { HotelDetailRoomItem } from '../../types'
+import { InstallmentTable } from './installment'
 
 const HotelDetailSection = () => {
   const selectedRoomProductKey = useRef('')
   const router = useRouter()
-  const { hotelDetailQuery, roomsQuery, selectedRoomMutaion, searchParams } =
-    useHotelDataQuery()
+  const {
+    hotelDetailQuery,
+    roomInstallmentQuery,
+    roomsQuery,
+    selectedRoomMutaion,
+    searchParams,
+  } = useHotelDataQuery()
   const [
     roomStateModalOpened,
     { open: openRoomStateModal, close: closeRoomStateModal },
+  ] = useDisclosure(false)
+
+  const [
+    installmentTableOpened,
+    { open: openInstallmentTable, close: closeInstallmentTable },
   ] = useDisclosure(false)
   const [
     roomStateLoadingOverlayVisible,
     { close: closeRoomStateOverlayVisible, open: openRoomStateOverlayVisible },
   ] = useDisclosure(false)
+  const selectedRoomPrice = useRef(0)
 
   const hotelDetailData = hotelDetailQuery.data
   const hotelInfo = hotelDetailData?.data?.hotelDetailResponse?.hotelInfo
   const hotel = hotelInfo?.hotel
-
-  if (!hotelDetailData && hotelDetailQuery.isLoading) {
-    return <HotelDetailSkeleton />
-  }
-
-  if (!hotel || !hotelDetailData?.success) {
-    return <div>Error or Something happened bad</div>
-  }
 
   const handleRoomSelect = async ({
     productKey,
@@ -73,6 +79,27 @@ const HotelDetailSection = () => {
     }
   }
 
+  const installmentTableData = useRef(roomInstallmentQuery.data?.data)
+  const handleInstallment = async (roomGroup: HotelDetailRoomItem) => {
+    openInstallmentTable()
+
+    if (!installmentTableData.current) {
+      const tableResponse = await roomInstallmentQuery.mutateAsync({
+        countryCode: hotel?.country_code || 'tr',
+      })
+      installmentTableData.current = tableResponse?.data
+    }
+    const cancelWarrantyPrice = roomGroup.cancelWarrantyPrice.value
+    const totalPrice = roomGroup.totalPrice.value
+    const totalPriceWithCancelWarranty = totalPrice + cancelWarrantyPrice
+
+    if (installmentTableData?.current) {
+      selectedRoomPrice.current = roomGroup.useCancelWarranty
+        ? totalPriceWithCancelWarranty
+        : totalPrice
+    }
+  }
+
   const handleReservation = () => {
     const resParams = createSerializer(reservationParsers)
 
@@ -85,6 +112,13 @@ const HotelDetailSection = () => {
     router.push(url)
   }
 
+  if (!hotelDetailData && hotelDetailQuery.isLoading) {
+    return <HotelDetailSkeleton />
+  }
+
+  if (!hotel || !hotelDetailData?.success) {
+    return <div>Error or Something happened bad</div>
+  }
   return (
     <>
       <div className='grid gap-3 p-2 py-4 @container 2xl:container lg:gap-5'>
@@ -147,6 +181,10 @@ const HotelDetailSection = () => {
                             productKey: roomGroup.key,
                             cancelWarranty: selectedRoomGroup.useCancelWarranty,
                           })
+                        }}
+                        onInstallmentClick={(selectedRoomGroup) => {
+                          console.log(selectedRoomGroup)
+                          handleInstallment(selectedRoomGroup)
                         }}
                       />
                     </div>
@@ -251,6 +289,26 @@ const HotelDetailSection = () => {
             </div>
           </div>
         </div>
+      </Modal>
+      <Modal
+        opened={installmentTableOpened}
+        onClose={closeInstallmentTable}
+        title='Tüm Kartlara Göre Taksit Tablosu'
+        size={'xl'}
+      >
+        {roomInstallmentQuery.isPending && (
+          <div className='flex h-[500px] items-center justify-center'>
+            <Loader />
+          </div>
+        )}
+        {installmentTableData.current && (
+          <div>
+            <InstallmentTable
+              price={selectedRoomPrice.current}
+              installmentData={installmentTableData.current}
+            />
+          </div>
+        )}
       </Modal>
     </>
   )

@@ -1,11 +1,20 @@
 import { useState } from 'react'
-import { Box, Button, Image, Skeleton, TextInput, Title } from '@mantine/core'
+import {
+  Box,
+  Button,
+  Image,
+  Skeleton,
+  TextInput,
+  Title,
+  Transition,
+} from '@mantine/core'
 
 import {
   HotelSearchResultHotelInfo,
   HotelSearchResultItemType,
 } from '@/app/hotel/types'
 import { formatCurrency } from '@/libs/util'
+import clsx from 'clsx'
 
 type IProps = {
   hotelInfo: HotelSearchResultHotelInfo
@@ -43,17 +52,28 @@ const HotelSearchResultItem: React.FC<IProps> = ({
       <div className='rounded-lg border border-gray-300'>
         {/* <TextInput value={JSON.stringify(hotelInfo)} readOnly />
         <TextInput value={JSON.stringify(resultItem)} readOnly /> */}
-        {/* {resultItem.provider} */}
+        <span hidden>{resultItem.provider}</span>
         <div className='p-3'>
           <div className='grid gap-3 @2xl:grid-cols-12'>
             <div className='col-span-9 grid gap-3 @2xl:grid-cols-3'>
               <div className='@2xl:col-span-1'>
                 <Box h={200} className='relative'>
-                  {isImageLoading && (
-                    <div className='absolute bottom-0 end-0 start-0 top-0 rounded-md border bg-white p-2'>
-                      <Skeleton className='size-full' radius={'md'} />
-                    </div>
-                  )}
+                  <Transition
+                    mounted={isImageLoading}
+                    transition='pop'
+                    duration={400}
+                    timingFunction='ease'
+                  >
+                    {(styles) => (
+                      <div
+                        style={styles}
+                        className='absolute bottom-0 end-0 start-0 top-0 rounded-md border bg-white p-2 transition-opacity duration-300'
+                      >
+                        <Skeleton className='size-full' radius={'md'} />
+                      </div>
+                    )}
+                  </Transition>
+
                   <Image
                     loading='lazy'
                     fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'

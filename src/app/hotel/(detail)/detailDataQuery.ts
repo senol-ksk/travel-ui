@@ -10,6 +10,7 @@ import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
 import { serviceRequest, ServiceResponse } from '@/network'
 import {
   HotelDetailApiResponseData,
+  HotelDetailInstallmentData,
   HotelDetailRoomStatusResponseData,
 } from '@/app/hotel/types'
 import { delayCodeExecution } from '@/libs/util'
@@ -84,8 +85,6 @@ const useHotelDataQuery = () => {
         },
       })
 
-      roomRefetchCount.current = roomRefetchCount.current - 1
-
       if (!response?.data && roomRefetchCount.current >= 0) {
         await delayCodeExecution(1000)
         return null
@@ -94,12 +93,17 @@ const useHotelDataQuery = () => {
       return response
     },
     refetchInterval: (query) => {
+      if (roomRefetchCount.current === 0) {
+        return 0
+      }
       if (
-        (!query.state.data || query.state.data.pages.at(0) === null) &&
+        !query.state.data?.pages.at(0)?.success &&
         roomRefetchCount.current >= 0
       ) {
         return 1000
       }
+
+      return 0
     },
     getNextPageParam: (lastPage, allPages, lastPageParams, allPageParams) => {
       if (lastPage?.data?.hotelDetailResponse?.isLoadProducts) {
@@ -107,6 +111,7 @@ const useHotelDataQuery = () => {
           page: lastPageParams.page + 1,
         }
       }
+
       return undefined
     },
   })
@@ -145,11 +150,29 @@ const useHotelDataQuery = () => {
     },
   })
 
+  const roomInstallmentQuery = useMutation({
+    mutationKey: ['hotel-detail-room-installment'],
+    mutationFn: async ({ countryCode }: { countryCode: string }) => {
+      const response = await serviceRequest<HotelDetailInstallmentData>({
+        axiosOptions: {
+          url: 'api/hotel/getInstallment',
+          data: {
+            countryCode,
+          },
+          params: { countryCode },
+        },
+      })
+
+      return response
+    },
+  })
+
   return {
     hotelDetailQuery,
     roomsQuery,
     selectedRoomMutaion,
     searchParams,
+    roomInstallmentQuery,
   }
 }
 

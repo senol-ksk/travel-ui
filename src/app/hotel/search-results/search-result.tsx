@@ -1,33 +1,24 @@
 'use client'
 
-import { Button, Skeleton, Title } from '@mantine/core'
+import { Button, Skeleton } from '@mantine/core'
 
-import { createSerializer, useQueryStates } from 'nuqs'
-import {
-  hotelDetailSearchParams,
-  hotelSearchParamParser,
-} from '@/modules/hotel/searchParams'
+import { createSerializer } from 'nuqs'
+import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from './request-model'
-import { HotelSearchEngine } from '@/modules/hotel'
 import { HotelSearchResultItem } from './results-item'
 import { useTransitionRouter } from 'next-view-transitions'
 import {
   HotelSearchResultHotelInfo,
   HotelSearchResultItemType,
 } from '@/app/hotel/types'
+import { useTimeout } from '@mantine/hooks'
+import { useState } from 'react'
 
 const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
 
 const HotelSearchResults: React.FC = () => {
   const { hotelSearchRequestQuery, searchParams, searchParamsQuery } =
     useSearchResultParams()
-
-  // if (
-  //   hotelSearchRequestQuery.hasNextPage &&
-  //   !hotelSearchRequestQuery.isFetching
-  // ) {
-  //   hotelSearchRequestQuery.fetchNextPage()
-  // }
 
   const router = useTransitionRouter()
   function handleRedirectToDetail({
@@ -50,9 +41,18 @@ const HotelSearchResults: React.FC = () => {
     router.push(detailUrl)
   }
 
+  const handleLoadMoreActions = async () => {
+    hotelSearchRequestQuery.fetchNextPage()
+  }
+
   return (
     <>
-      {(hotelSearchRequestQuery.isLoading || searchParamsQuery.isLoading) && (
+      {(hotelSearchRequestQuery.isLoading ||
+        searchParamsQuery.isLoading ||
+        (hotelSearchRequestQuery.data?.pages &&
+          !hotelSearchRequestQuery.data?.pages?.filter(
+            (page) => page.searchResults[0]?.items.length > 0
+          )?.length)) && (
         <div className='relative'>
           <div className='absolute end-0 start-0'>
             <Skeleton h={6} radius={0} />
@@ -96,21 +96,26 @@ const HotelSearchResults: React.FC = () => {
                 })
               )
             })}
-            {hotelSearchRequestQuery.hasNextPage && (
-              <div className='flex justify-center'>
-                <Button
-                  size='md'
-                  loaderProps={{
-                    type: 'dots',
-                  }}
-                  type='button'
-                  onClick={() => hotelSearchRequestQuery.fetchNextPage()}
-                  loading={hotelSearchRequestQuery.isFetchingNextPage}
-                >
-                  Daha Fazla Yükle
-                </Button>
-              </div>
-            )}
+            {hotelSearchRequestQuery.data?.pages &&
+              hotelSearchRequestQuery.data?.pages?.filter(
+                (page) => page.searchResults[0]?.items.length > 0
+              )?.length > 0 &&
+              hotelSearchRequestQuery.hasNextPage && (
+                <div className='flex justify-center'>
+                  <Button
+                    size='md'
+                    loaderProps={{
+                      type: 'dots',
+                    }}
+                    type='button'
+                    onClick={handleLoadMoreActions}
+                    loading={hotelSearchRequestQuery.isFetchingNextPage}
+                  >
+                    Daha Fazla Yükle
+                  </Button>
+                </div>
+              )}
+            <div className='h-[500px]' />
           </div>
         </div>
       </div>

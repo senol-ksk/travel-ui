@@ -48,6 +48,8 @@ import {
 import { CheckoutCard } from '@/components/card'
 import { createSerializer, useQueryStates } from 'nuqs'
 import { reservationParsers } from '../searchParams'
+import { HotelPassengerInformationForm } from '@/components/checkout/hotel/passengers'
+import dayjs from 'dayjs'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -247,114 +249,222 @@ export default function CheckoutPage() {
             </div>
           </CheckoutCard>
           <CheckoutCard>
-            {checkoutQuery?.data?.data &&
-            checkoutQuery.data.data?.treeContainer.childNodes.length &&
-            checkoutQuery.data.data?.treeContainer.childNodes?.[0].childNodes
-              .length > 0 // transfer and flight passengers data have different values
-              ? checkoutQuery.data.data?.treeContainer.childNodes?.[0].childNodes.map(
-                  (item, index) => {
-                    const field = item.items[0].value
-                    const passengerType =
-                      field?.type || PassengerTypesEnum.Adult
-                    let fieldErrors
-                    if (formMethods.formState.errors.passengers?.length) {
-                      fieldErrors =
-                        formMethods.formState?.errors?.passengers[index]
-                    }
+            {(() => {
+              switch (
+                checkoutQuery.data.data.viewBag.ModuleName.toLowerCase()
+              ) {
+                case 'hotel':
+                  return (
+                    <div>
+                      {checkoutQuery.data.data.treeContainer.childNodes.map(
+                        (childNode, childNodeIndex) => {
+                          const startPoint = childNodeIndex
 
-                    return (
-                      <div key={index}>
-                        <Title order={3} size={'lg'} pb={10}>
-                          {PassengerTypesIndexEnum[passengerType]}
-                        </Title>
-                        <PassengerInformationForm
-                          fieldProps={{
-                            firstName: field?.firstName || '',
-                            birthDate: field?.birthDate || '',
-                            birthDate_day: '',
-                            birthDate_month: '',
-                            birthDate_year: '',
-                            gender: field?.gender ?? GenderEnums.Female,
-                            lastName: field?.lastName || '',
-                            id:
-                              typeof field?._passengerId === 'string'
-                                ? field._passengerId
-                                : '',
-                            passengerId: field?.passengerId ?? 0,
-                            model_PassengerId: field?.model_PassengerId ?? 0,
-                            nationality_Check: !!field?.nationality_Check,
-                            passengerKey: field?.passengerKey ?? '',
-                            registeredPassengerId:
-                              field?.registeredPassengerId ?? 0,
-                            type: passengerType,
-                            citizenNo: '',
-                            passportCountry: field?.passportCountry ?? 'tr',
-                            passportNo: field?.passportNo || '',
-                            passportValidity_1: '',
-                            passportValidity_2: '',
-                            passportValidity_3: '',
-                            passportValidityDate: field?.passportValidityDate,
-                            hesCode: field?.hesCode || '',
-                          }}
-                          index={index}
-                          error={fieldErrors}
-                        />
-                      </div>
-                    )
-                  }
-                )
-              : checkoutQuery.data.data?.treeContainer.childNodes?.map(
-                  (item, index) => {
-                    const field = item.items[0].value
-                    const passengerType =
-                      field?.type || PassengerTypesEnum.Adult
-                    let fieldErrors
-                    if (formMethods.formState.errors.passengers?.length) {
-                      fieldErrors =
-                        formMethods.formState?.errors?.passengers[index]
-                    }
+                          return (
+                            <div key={childNode.orderId}>
+                              <Title order={3} size={'lg'} pb={10}>
+                                {childNodeIndex + 1}. Oda
+                              </Title>
+                              {childNode.childNodes.map(
+                                (innerChildNode, innerChildNodeIndex) => {
+                                  const fields =
+                                    innerChildNode.items.at(0)?.value
+                                  // const nodeIndex = `${childNodeIndex}_${innerChildNodeIndex}`
+                                  const nodeIndex =
+                                    startPoint +
+                                    childNodeIndex +
+                                    innerChildNodeIndex
 
-                    return (
-                      <div key={index}>
-                        <Title order={3} size={'lg'} pb={10}>
-                          {PassengerTypesIndexEnum[passengerType]}
-                        </Title>
-                        <PassengerInformationForm
-                          fieldProps={{
-                            firstName: field?.firstName || '',
-                            birthDate: field?.birthDate || '',
-                            birthDate_day: '',
-                            birthDate_month: '',
-                            birthDate_year: '',
-                            gender: field?.gender ?? GenderEnums.Female,
-                            lastName: field?.lastName || '',
-                            id:
-                              typeof field?._passengerId === 'string'
-                                ? field._passengerId
-                                : '',
-                            passengerId: field?.passengerId ?? 0,
-                            model_PassengerId: field?.model_PassengerId ?? 0,
-                            nationality_Check: !!field?.nationality_Check,
-                            passengerKey: field?.passengerKey ?? '',
-                            registeredPassengerId:
-                              field?.registeredPassengerId ?? 0,
-                            type: passengerType,
-                            citizenNo: '',
-                            passportCountry: field?.passportCountry ?? 'tr',
-                            passportNo: field?.passportNo || '',
-                            passportValidity_1: '',
-                            passportValidity_2: '',
-                            passportValidity_3: '',
-                            passportValidityDate: field?.passportValidityDate,
-                            hesCode: field?.hesCode || '',
-                          }}
-                          index={index}
-                          error={fieldErrors}
-                        />
-                      </div>
-                    )
-                  }
-                )}
+                                  const passengerType =
+                                    fields?.type || PassengerTypesEnum.Adult
+                                  let fieldErrors
+                                  if (formMethods.formState.errors.passengers) {
+                                    fieldErrors =
+                                      formMethods.formState?.errors?.passengers[
+                                        nodeIndex
+                                      ]
+                                  }
+
+                                  if (!fields) return null
+
+                                  return (
+                                    <div key={innerChildNode.orderId}>
+                                      <div className='ps-4'>
+                                        <Title order={5} pb={10}>
+                                          {innerChildNode.key}
+                                        </Title>
+                                        <HotelPassengerInformationForm
+                                          fieldProps={{
+                                            birthDate: fields?.birthDate,
+                                            birthDate_day: '',
+                                            birthDate_month: '',
+                                            birthDate_year: '',
+                                            citizenNo: '',
+                                            firstName: fields.firstName,
+                                            gender: fields.gender,
+                                            lastName: fields.lastName,
+                                            hesCode: fields.hesCode || '',
+                                            id:
+                                              typeof fields?._passengerId ===
+                                              'string'
+                                                ? fields._passengerId
+                                                : '' + nodeIndex,
+                                            model_PassengerId:
+                                              fields.model_PassengerId,
+                                            passengerId:
+                                              fields.model_PassengerId,
+                                            passengerKey: fields.passengerKey,
+                                            registeredPassengerId:
+                                              fields.registeredPassengerId,
+                                            type: passengerType,
+                                            nationality_Check:
+                                              fields.nationality_Check,
+                                            passportCountry:
+                                              fields.passportCountry
+                                                ? fields.passportCountry
+                                                : 'NL',
+                                            passportNo: 'U412421521521',
+                                            passportValidity_1: '',
+                                            passportValidity_2: '',
+                                            passportValidity_3: '',
+                                            passportValidityDate: dayjs()
+                                              .add(20, 'y')
+                                              .toISOString(),
+                                          }}
+                                          error={fieldErrors}
+                                          index={nodeIndex}
+                                        />
+                                      </div>
+                                    </div>
+                                  )
+                                }
+                              )}
+                            </div>
+                          )
+                        }
+                      )}
+                    </div>
+                  )
+                  break
+
+                default:
+                  return checkoutQuery?.data?.data &&
+                    checkoutQuery.data.data?.treeContainer.childNodes.length &&
+                    checkoutQuery.data.data?.treeContainer.childNodes?.[0]
+                      .childNodes.length > 0 // transfer and flight passengers data have different values
+                    ? checkoutQuery.data.data?.treeContainer.childNodes?.[0].childNodes.map(
+                        (item, index) => {
+                          const field = item.items[0].value
+                          const passengerType =
+                            field?.type || PassengerTypesEnum.Adult
+                          let fieldErrors
+                          if (formMethods.formState.errors.passengers?.length) {
+                            fieldErrors =
+                              formMethods.formState?.errors?.passengers[index]
+                          }
+
+                          return (
+                            <div key={index}>
+                              <Title order={3} size={'lg'} pb={10}>
+                                {PassengerTypesIndexEnum[passengerType]}
+                              </Title>
+                              <PassengerInformationForm
+                                fieldProps={{
+                                  firstName: field?.firstName || '',
+                                  birthDate: field?.birthDate || '',
+                                  birthDate_day: '',
+                                  birthDate_month: '',
+                                  birthDate_year: '',
+                                  gender: field?.gender ?? GenderEnums.Female,
+                                  lastName: field?.lastName || '',
+                                  id:
+                                    typeof field?._passengerId === 'string'
+                                      ? field._passengerId
+                                      : '',
+                                  passengerId: field?.passengerId ?? 0,
+                                  model_PassengerId:
+                                    field?.model_PassengerId ?? 0,
+                                  nationality_Check: !!field?.nationality_Check,
+                                  passengerKey: field?.passengerKey ?? '',
+                                  registeredPassengerId:
+                                    field?.registeredPassengerId ?? 0,
+                                  type: passengerType,
+                                  citizenNo: '',
+                                  passportCountry:
+                                    field?.passportCountry ?? 'tr',
+                                  passportNo: field?.passportNo || '',
+                                  passportValidity_1: '',
+                                  passportValidity_2: '',
+                                  passportValidity_3: '',
+                                  passportValidityDate:
+                                    field?.passportValidityDate,
+                                  hesCode: field?.hesCode || '',
+                                }}
+                                index={index}
+                                error={fieldErrors}
+                              />
+                            </div>
+                          )
+                        }
+                      )
+                    : checkoutQuery.data.data?.treeContainer.childNodes?.map(
+                        (item, index) => {
+                          const field = item.items[0].value
+                          const passengerType =
+                            field?.type || PassengerTypesEnum.Adult
+                          let fieldErrors
+                          if (formMethods.formState.errors.passengers?.length) {
+                            fieldErrors =
+                              formMethods.formState?.errors?.passengers[index]
+                          }
+
+                          return (
+                            <div key={index}>
+                              <Title order={3} size={'lg'} pb={10}>
+                                {PassengerTypesIndexEnum[passengerType]}
+                              </Title>
+                              <PassengerInformationForm
+                                fieldProps={{
+                                  firstName: field?.firstName || '',
+                                  birthDate: field?.birthDate || '',
+                                  birthDate_day: '',
+                                  birthDate_month: '',
+                                  birthDate_year: '',
+                                  gender: field?.gender ?? GenderEnums.Female,
+                                  lastName: field?.lastName || '',
+                                  id:
+                                    typeof field?._passengerId === 'string'
+                                      ? field._passengerId
+                                      : '',
+                                  passengerId: field?.passengerId ?? 0,
+                                  model_PassengerId:
+                                    field?.model_PassengerId ?? 0,
+                                  nationality_Check: !!field?.nationality_Check,
+                                  passengerKey: field?.passengerKey ?? '',
+                                  registeredPassengerId:
+                                    field?.registeredPassengerId ?? 0,
+                                  type: passengerType,
+                                  citizenNo: '',
+                                  passportCountry:
+                                    field?.passportCountry ?? 'tr',
+                                  passportNo: field?.passportNo || '',
+                                  passportValidity_1: '',
+                                  passportValidity_2: '',
+                                  passportValidity_3: '',
+                                  passportValidityDate:
+                                    field?.passportValidityDate,
+                                  hesCode: field?.hesCode || '',
+                                }}
+                                index={index}
+                                error={fieldErrors}
+                              />
+                            </div>
+                          )
+                        }
+                      )
+                  break
+              }
+            })()}
           </CheckoutCard>
           <CheckoutCard>
             <div className='text-sm'>
