@@ -15,6 +15,10 @@ vi.mock('next/font/google', () => ({
   }),
 }))
 
+vi.mock('next-view-transitions', () => ({
+  Link: vi.fn(({ children, ...rest }) => <a {...rest}>{children}</a>),
+}))
+
 export function render(ui: React.ReactNode, props?: RenderOptions) {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (

@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, AxiosError } from 'axios'
 
 import axios from 'axios'
 import { ResponseStatus } from './app/reservation/types'
@@ -88,7 +88,7 @@ async function serviceRequest<DataType>({
   }
 }
 
-export { request, serviceRequest }
+async function olRequest() {}
 
 const authToken = md5(
   process.env.NEXT_PUBLIC_DEVICE_ID + process.env.NEXT_PUBLIC_SECURE_STRING
@@ -199,3 +199,5 @@ export const getTransferSearchSessionToken = async () => {
     searchToken: response.data,
   }
 }
+
+export { request, serviceRequest }

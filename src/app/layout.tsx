@@ -2,6 +2,7 @@ import '@/styles/global.css'
 
 import type { Metadata } from 'next'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
+import { ViewTransitions } from 'next-view-transitions'
 
 import { Providers } from '@/app/providers'
 
@@ -29,20 +30,22 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='tr' suppressHydrationWarning>
-      <head>
-        <link rel='icon' href='/favicon.ico' sizes='any' />
-        <ColorSchemeScript />
-      </head>
+    <ViewTransitions>
+      <html lang='tr' suppressHydrationWarning>
+        <head>
+          <link rel='icon' href='/favicon.ico' sizes='any' />
+          <ColorSchemeScript />
+        </head>
 
-      <body>
-        <Providers>
-          <MantineProvider theme={theme} defaultColorScheme='light'>
-            <Header />
-            {children}
-          </MantineProvider>
-        </Providers>
-      </body>
-    </html>
+        <body>
+          <Providers>
+            <MantineProvider theme={theme} defaultColorScheme='light'>
+              <Header />
+              {children}
+            </MantineProvider>
+          </Providers>
+        </body>
+      </html>
+    </ViewTransitions>
   )
 }

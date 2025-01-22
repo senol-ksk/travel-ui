@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import cookies from 'js-cookie'
-import { usePathname, useRouter } from 'next/navigation'
 
 import { z } from 'zod'
 import { zodResolver } from 'mantine-form-zod-resolver'
@@ -51,11 +50,12 @@ const schema = formSchema
 
 type FlightRequestType = z.infer<typeof schema>
 
+import { useTransitionRouter } from 'next-view-transitions'
+
 export const Flight = () => {
-  const router = useRouter()
+  const router = useTransitionRouter()
   const queryClient = useQueryClient()
   const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
-  const [isRedirecting, setIsRedirecting] = useState(false)
 
   const [selectedOriginLocation, setSelectedOriginLocation] =
     useState<LocationResult>()
@@ -171,16 +171,9 @@ export const Flight = () => {
 
     // window.location.href = `/flight-search`
 
-    setIsRedirecting(true)
     router.push(`/flight-search?searchId=${generateUUID()}`)
     // router.refresh()
   }
-
-  const pathname = usePathname()
-
-  useEffect(() => {
-    setIsRedirecting(false)
-  }, [pathname])
 
   if (formSkeletonVisibilty) return <Skeleton height={80} />
 
@@ -283,7 +276,6 @@ export const Flight = () => {
           <Button
             type='submit'
             className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
-            loading={isRedirecting}
           >
             Ara
           </Button>

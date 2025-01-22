@@ -75,45 +75,49 @@ export const generateFlightData = async (): Promise<
     airlineList = [...new Set(airlineList)]
   }
 
-  flightData.flightFareInfos.forEach((flightItem, count) => {
-    const flightObject: ClientFlightDataModel = {
-      flightFare: flightItem,
-      id: -1,
-      flightDetails: [],
-      flightDetailSegments: [],
-      airLines: airLines,
-      // airportList: [],
-      // departureAirportList: [],
-      // returnAirportList: [],
-      // transferPoints: [],
-    }
-
-    flightItem.flightDetailKeys.forEach((detailKey, detailCount) => {
-      const detail = flightData.flightDetails.filter(
-        (det) => det.key.toLocaleLowerCase() == detailKey.toLocaleLowerCase()
-      )
-
-      if (detail.length > 0) {
-        flightObject?.flightDetails.push(detail[0])
-        // flightObject!.groupId = groupId
-
-        detail.at(0)?.flightSegmentKeys.forEach((segmentKey, segmentCount) => {
-          const segment = flightData.flightDetailSegments.filter(
-            (seg) => seg.key === segmentKey
-          )
-
-          if (segment.length > 0) {
-            flightObject?.flightDetailSegments.push(segment[0])
-          }
-        })
+  flightData.flightFareInfos
+    .sort((a, b) => a.totalPrice.value - b.totalPrice.value)
+    .forEach((flightItem, count) => {
+      const flightObject: ClientFlightDataModel = {
+        flightFare: flightItem,
+        id: -1,
+        flightDetails: [],
+        flightDetailSegments: [],
+        airLines: airLines,
+        // airportList: [],
+        // departureAirportList: [],
+        // returnAirportList: [],
+        // transferPoints: [],
       }
 
-      // flightObject!.id = 'id' + Math.random().toString(16).slice(2)
-      flightObject!.id = crypto.randomUUID()
+      flightItem.flightDetailKeys.forEach((detailKey, detailCount) => {
+        const detail = flightData.flightDetails.filter(
+          (det) => det.key.toLocaleLowerCase() == detailKey.toLocaleLowerCase()
+        )
 
-      searchResults.push(flightObject)
+        if (detail.length > 0) {
+          flightObject?.flightDetails.push(detail[0])
+          // flightObject!.groupId = groupId
+
+          detail
+            .at(0)
+            ?.flightSegmentKeys.forEach((segmentKey, segmentCount) => {
+              const segment = flightData.flightDetailSegments.filter(
+                (seg) => seg.key === segmentKey
+              )
+
+              if (segment.length > 0) {
+                flightObject?.flightDetailSegments.push(segment[0])
+              }
+            })
+        }
+
+        // flightObject!.id = 'id' + Math.random().toString(16).slice(2)
+        flightObject!.id = crypto.randomUUID()
+
+        searchResults.push(flightObject)
+      })
     })
-  })
 
   if (flightData.flightDetailSegments.length > 0) {
     flightData.flightDetailSegments = []

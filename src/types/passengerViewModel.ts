@@ -1229,43 +1229,7 @@ export type ProductPassengerApiResponseModel = {
               key: string
               orderId: ID
               items: {
-                value: {
-                  _passengerId: ID
-                  birthDate: string
-                  calculationYearBased: boolean
-                  calculationYearType: number
-                  checkinDate: string
-                  citizenNo: string
-                  declaredAge: number
-                  email: string
-                  firstName: string
-                  flightFrequencyNo: string | null
-                  gender: GenderEnums
-                  groupOrderIndex: number
-                  hesCode: string | null
-                  isContact: boolean
-                  isDontValidate: boolean
-                  isRecord: boolean
-                  lastName: string
-                  listFlightFrequencyAirline: string | null
-                  listFlightFrequencyNo: string | null
-                  middleName: string
-                  mobilePhoneNumber: string
-                  model_PassengerId: ID
-                  nationality_Check: boolean
-                  nationality: string
-                  notes: null
-                  passengerId: ID
-                  passengerKey: string
-                  passportCountry: string | null
-                  passportNo: string
-                  passportValidityDate: string
-                  productType: number
-                  registeredPassengerId: ID
-                  sequenceNo: number
-                  type: PassengerTypesEnum
-                  webUserId: ID
-                }
+                value: PassengerChildNodeItemValue
               }[]
             }[]
           | []
@@ -2049,4 +2013,42 @@ export type ProductPassengerApiResponseModel = {
   isInPromoList: boolean
   sessionToken: string
   searchToken: string
+}
+
+export interface PassengerChildNodeItemValue {
+  _passengerId: ID
+  birthDate: string
+  calculationYearBased: boolean
+  calculationYearType: number
+  checkinDate: string
+  citizenNo: string
+  declaredAge: number
+  email: string
+  firstName: string
+  flightFrequencyNo: string | null
+  gender: GenderEnums
+  groupOrderIndex: number
+  hesCode: string | null
+  isContact: boolean
+  isDontValidate: boolean
+  isRecord: boolean
+  lastName: string
+  listFlightFrequencyAirline: string | null
+  listFlightFrequencyNo: string | null
+  middleName: string
+  mobilePhoneNumber: string
+  model_PassengerId: ID
+  nationality_Check: boolean
+  nationality: string
+  notes: null
+  passengerId: ID
+  passengerKey: string
+  passportCountry: string | null
+  passportNo: string
+  passportValidityDate: string
+  productType: number
+  registeredPassengerId: ID
+  sequenceNo: number
+  type: PassengerTypesEnum
+  webUserId: ID
 }
