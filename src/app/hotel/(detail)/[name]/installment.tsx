@@ -1,59 +1,88 @@
+import { Fragment } from 'react'
 import { Image, Table } from '@mantine/core'
+
 import { HotelDetailInstallmentData } from '@/app/hotel/types'
+import { formatCurrency } from '@/libs/util'
+import { InstallmentBankDescription } from './installment-description'
 
 type IProps = {
   price: number
   installmentData: HotelDetailInstallmentData
 }
 
-const elements = [
-  { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
-  { position: 7, mass: 14.007, symbol: 'N', name: 'Nitrogen' },
-  { position: 39, mass: 88.906, symbol: 'Y', name: 'Yttrium' },
-  { position: 56, mass: 137.33, symbol: 'Ba', name: 'Barium' },
-  { position: 58, mass: 140.12, symbol: 'Ce', name: 'Cerium' },
-]
-
 const InstallmentTable: React.FC<IProps> = ({ price, installmentData }) => {
-  console.log('installmentData', installmentData)
-  console.log('price', price)
-  const rows = installmentData.items.map((element) => (
-    <Table.Tr key={element.bank}>
-      <Table.Td>
-        <Image src={element.logo} alt={element.bank} />
-      </Table.Td>
-      {/* <Table.Td>{element.name}</Table.Td>
-      <Table.Td>{element.symbol}</Table.Td>
-      <Table.Td>{element.mass}</Table.Td> */}
-    </Table.Tr>
+  const bankRows = installmentData.items.map((item) => (
+    <Fragment key={item.bank}>
+      <Table.Tr>
+        <Table.Td>
+          <div className='flex h-[40px] w-[60px] items-center justify-center'>
+            <Image src={item.logo} alt={item.bank} />
+          </div>
+        </Table.Td>
+
+        <Table.Td>{formatCurrency(price)}</Table.Td>
+        {installmentData.headers.map((header, headerIndex) => {
+          const calculatedPrice =
+            price + (price * item.installments[header]) / 100
+          return (
+            <Table.Td key={headerIndex}>
+              <div className='text-center'>
+                {typeof item.installments[header] === 'number' ? (
+                  <div>
+                    <div>{formatCurrency(calculatedPrice / header)}</div>
+                    <div className='font-semibold'>
+                      {formatCurrency(calculatedPrice)}
+                    </div>
+                  </div>
+                ) : (
+                  '-'
+                )}
+              </div>
+            </Table.Td>
+          )
+        })}
+      </Table.Tr>
+      {item.description && (
+        <Table.Tr>
+          <Table.Td colSpan={installmentData.headers.length + 2}>
+            <InstallmentBankDescription
+              content={
+                <div
+                  className='text-xs'
+                  dangerouslySetInnerHTML={{
+                    __html: item.description,
+                  }}
+                />
+              }
+            />
+          </Table.Td>
+        </Table.Tr>
+      )}
+    </Fragment>
   ))
+  const headers = installmentData.headers.map((header) => {
+    return (
+      <Table.Th key={header}>
+        <div className='text-center font-normal'>
+          <div>{header} Taksit</div>
+          <div className='text-xs font-semibold'>Toplam</div>
+        </div>
+      </Table.Th>
+    )
+  })
 
   return (
-    // <Table stickyHeader stickyHeaderOffset={60}>
-    //   {price}
-    // </Table>
-
-    <Table stickyHeader stickyHeaderOffset={60}>
+    <Table stickyHeader stickyHeaderOffset={0} striped withColumnBorders>
       <Table.Thead>
         <Table.Tr>
           <Table.Th></Table.Th>
           <Table.Th>
             <div className='font-normal'>Tek Çekim</div>
           </Table.Th>
-          {installmentData.headers.map((header) => {
-            return (
-              <Table.Th key={header}>
-                <div className='font-normal'>
-                  <div>{header} Taksit</div>
-                  <div className='text-xs font-semibold'>Toplam</div>
-                </div>
-              </Table.Th>
-            )
-          })}
+          {headers}
         </Table.Tr>
       </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-      <Table.Caption>Scroll page to see sticky thead</Table.Caption>
+      <Table.Tbody>{bankRows}</Table.Tbody>
     </Table>
   )
 }

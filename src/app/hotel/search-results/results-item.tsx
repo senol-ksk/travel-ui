@@ -1,25 +1,19 @@
 import { useState } from 'react'
-import {
-  Box,
-  Button,
-  Image,
-  Skeleton,
-  TextInput,
-  Title,
-  Transition,
-} from '@mantine/core'
-
+import { Box, Button, Image, Skeleton, Title, Transition } from '@mantine/core'
+import { Link } from 'next-view-transitions'
 import {
   HotelSearchResultHotelInfo,
   HotelSearchResultItemType,
 } from '@/app/hotel/types'
 import { formatCurrency } from '@/libs/util'
-import clsx from 'clsx'
+import { createSerializer } from 'nuqs'
+import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
+import { useSearchResultParams } from './request-model'
 
 type IProps = {
   hotelInfo: HotelSearchResultHotelInfo
   resultItem: HotelSearchResultItemType
-  onSelect: ({
+  onSelect?: ({
     hotelInfo,
     resultItem,
   }: {
@@ -27,6 +21,7 @@ type IProps = {
     resultItem: HotelSearchResultItemType
   }) => void
 }
+const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
 
 const HotelSearchResultItem: React.FC<IProps> = ({
   hotelInfo,
@@ -46,6 +41,17 @@ const HotelSearchResultItem: React.FC<IProps> = ({
   const discountRate = Math.round(
     ((totalPriceWithDiscount - totalPrice) / totalPriceWithDiscount) * 100
   )
+
+  const { searchParamsQuery, searchParams } = useSearchResultParams()
+  const detailUrl = detailUrlSerializer(`/hotel/${hotelInfo.slug}`, {
+    slug: hotelInfo.slug,
+    productKey: resultItem.key,
+    searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
+    sessionToken: searchParamsQuery.data?.hotelSearchApiRequest.sessionToken,
+    propertyName: hotelInfo.name,
+    hotelSlug: hotelInfo.slug,
+    type: searchParams.type,
+  })
 
   return (
     <div className='@container'>
@@ -118,12 +124,14 @@ const HotelSearchResultItem: React.FC<IProps> = ({
 
               <div>
                 <Button
-                  onClick={() => {
-                    onSelect({
-                      hotelInfo,
-                      resultItem,
-                    })
-                  }}
+                  component={Link}
+                  // onClick={() => {
+                  //   onSelect({
+                  //     hotelInfo,
+                  //     resultItem,
+                  //   })
+                  // }}
+                  href={detailUrl}
                 >
                   Oda Seç
                 </Button>

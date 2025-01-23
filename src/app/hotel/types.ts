@@ -454,11 +454,13 @@ export interface HotelDetailApiResponseData {
         reviews: null
         nearby_restaurants: null
         comment_info: null
-        documents: {
-          no: string
-          type: string
-          description: string
-        }[]
+        documents:
+          | {
+              no: string
+              type: string
+              description: string
+            }[]
+          | null
         food_drinks: {
           area: string
           area_type: string

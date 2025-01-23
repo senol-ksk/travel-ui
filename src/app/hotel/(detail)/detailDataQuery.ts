@@ -61,7 +61,7 @@ const useHotelDataQuery = () => {
       roomRefetchCount.current,
     ],
     initialPageParam: {
-      page: 0,
+      page: 1,
     },
     queryFn: async ({ signal, pageParam }) => {
       const response = await serviceRequest<HotelDetailApiResponseData>({
