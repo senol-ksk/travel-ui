@@ -66,7 +66,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 <Box h={200} className='relative'>
                   <Transition
                     mounted={isImageLoading}
-                    transition='pop'
+                    transition='fade'
                     duration={400}
                     timingFunction='ease'
                   >

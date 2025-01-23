@@ -211,6 +211,7 @@ export default function CheckoutPage() {
                             id: 'contactGSM',
                           }}
                           initOptions={{
+                            strictMode: true,
                             containerClass: 'w-full',
                             separateDialCode: true,
                             initialCountry: 'auto',
