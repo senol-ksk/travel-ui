@@ -11,8 +11,8 @@ export const TourSearchResultItem: React.FC<Props> = ({
   onClick = () => null,
 }) => {
   return (
-    <div className='rounded-lg border border-gray-300 @container'>
-      <div className='grid gap-3 p-3 @lg:p-5 md:gap-5'>
+    <div className='@container rounded-lg border border-gray-300'>
+      <div className='grid gap-3 p-3 md:gap-5 @lg:p-5'>
         <Title order={3} className='text-md font-semibold @lg:text-lg'>
           {data.title}
         </Title>
@@ -24,7 +24,7 @@ export const TourSearchResultItem: React.FC<Props> = ({
         </div>
       </div>
       <Divider />
-      <div className='grid grid-cols-1 items-end justify-between gap-3 p-3 @lg:grid-cols-7 lg:p-5'>
+      <div className='grid grid-cols-1 items-end justify-between gap-3 p-3 lg:p-5 @lg:grid-cols-7'>
         <div className='leading-tight @lg:col-span-6'>
           <small className='text-gray-600'>
             {formatCurrency(

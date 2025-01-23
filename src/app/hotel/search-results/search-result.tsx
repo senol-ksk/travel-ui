@@ -1,45 +1,17 @@
 'use client'
 
 import { Button, Skeleton } from '@mantine/core'
-
 import { createSerializer } from 'nuqs'
+
 import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from './request-model'
 import { HotelSearchResultItem } from './results-item'
-import { useTransitionRouter } from 'next-view-transitions'
-import {
-  HotelSearchResultHotelInfo,
-  HotelSearchResultItemType,
-} from '@/app/hotel/types'
-import { useTimeout } from '@mantine/hooks'
-import { useState } from 'react'
 
 const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
 
 const HotelSearchResults: React.FC = () => {
   const { hotelSearchRequestQuery, searchParams, searchParamsQuery } =
     useSearchResultParams()
-
-  const router = useTransitionRouter()
-  function handleRedirectToDetail({
-    hotelInfo,
-    resultItem,
-  }: {
-    hotelInfo: HotelSearchResultHotelInfo
-    resultItem: HotelSearchResultItemType
-  }) {
-    const detailUrl = detailUrlSerializer(`/hotel/${hotelInfo.slug}`, {
-      slug: hotelInfo.slug,
-      productKey: resultItem.key,
-      searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-      sessionToken: searchParamsQuery.data?.hotelSearchApiRequest.sessionToken,
-      propertyName: hotelInfo.name,
-      hotelSlug: hotelInfo.slug,
-      type: searchParams.type,
-    })
-
-    router.push(detailUrl)
-  }
 
   const handleLoadMoreActions = async () => {
     hotelSearchRequestQuery.fetchNextPage()
@@ -54,7 +26,7 @@ const HotelSearchResults: React.FC = () => {
             (page) => page.searchResults[0]?.items.length > 0
           )?.length)) && (
         <div className='relative'>
-          <div className='absolute end-0 start-0'>
+          <div className='absolute start-0 end-0'>
             <Skeleton h={6} radius={0} />
           </div>
         </div>
@@ -88,7 +60,6 @@ const HotelSearchResults: React.FC = () => {
                             key={result.hotelId}
                             hotelInfo={hotelInfo}
                             resultItem={result}
-                            onSelect={handleRedirectToDetail}
                           />
                         )
                       )

@@ -47,7 +47,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
   return (
     <div>
       <div className='relative'>
-        <div className='absolute end-0 start-0 top-0 h-[20] overflow-hidden'>
+        <div className='absolute start-0 end-0 top-0 h-[20] overflow-hidden'>
           {carSearchResult.hasNextPage ? (
             <Skeleton className='w-full' h={13} />
           ) : null}

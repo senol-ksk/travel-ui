@@ -58,7 +58,7 @@ const TourSearchResultClient = () => {
       </div>
       <div className='relative'>
         {searchRequestIsLoading ? (
-          <Skeleton h={6} className='absolute end-0 start-0 top-0' />
+          <Skeleton h={6} className='absolute start-0 end-0 top-0' />
         ) : null}
       </div>
       <div className='px-3 pt-10 lg:container'>

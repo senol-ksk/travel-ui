@@ -82,12 +82,12 @@ const SeatView: React.FC<Props> = ({
             }}
           >
             <div
-              className='flex size-[36px] items-center justify-center rounded-t-lg border-b-4 border-l border-r border-t border-gray-600 border-b-gray-600 pt-1'
+              className='flex size-[36px] items-center justify-center rounded-t-lg border-t border-r border-b-4 border-l border-gray-600 border-b-gray-600 pt-1'
               style={{
                 backgroundColor: `var(${seatColor})`,
               }}
             >
-              <div className='seat-no absolute bottom-0 end-0 start-0 top-0 z-10 flex items-center justify-center text-sm text-black'>
+              <div className='seat-no absolute start-0 end-0 top-0 bottom-0 z-10 flex items-center justify-center text-sm text-black'>
                 {data.no}
               </div>
               {/* <svg

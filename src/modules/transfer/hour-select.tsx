@@ -24,7 +24,7 @@ const TransferHours: React.FC<IProps> = ({
   return (
     <div
       className={clsx(
-        'relative flex h-[54px] items-center overflow-hidden text-ellipsis text-nowrap rounded border leading-none',
+        'relative flex h-[54px] items-center overflow-hidden rounded border leading-none text-nowrap text-ellipsis',
         {
           'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
           'border-slate-300': !error,

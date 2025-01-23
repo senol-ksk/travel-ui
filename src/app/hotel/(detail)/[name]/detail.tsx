@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import {
   Alert,
   AspectRatio,
@@ -8,13 +9,13 @@ import {
   Loader,
   LoadingOverlay,
   Modal,
+  ScrollArea,
   Skeleton,
   Title,
 } from '@mantine/core'
 import { useHotelDataQuery } from '../detailDataQuery'
 import { HotelDetailSkeleton } from './skeletonLoader'
 import { HotelRoom } from './room'
-import { Fragment, useRef } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { formatCurrency } from '@/libs/util'
 import { createSerializer } from 'nuqs'
@@ -22,6 +23,7 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 import { useRouter } from 'next/navigation'
 import { HotelDetailRoomItem } from '../../types'
 import { InstallmentTable } from './installment'
+import { FaExclamationCircle } from 'react-icons/fa'
 
 const HotelDetailSection = () => {
   const selectedRoomProductKey = useRef('')
@@ -65,7 +67,13 @@ const HotelDetailSection = () => {
       cancelWarranty,
     })
 
-    if (!roomStatus?.data) return
+    closeRoomStateOverlayVisible()
+
+    if (!roomStatus?.data || !roomStatus.success) {
+      openRoomStateModal()
+
+      return
+    }
 
     selectedRoomProductKey.current = roomStatus?.data?.productKey
     if (
@@ -121,9 +129,9 @@ const HotelDetailSection = () => {
   }
   return (
     <>
-      <div className='grid gap-3 p-2 py-4 @container 2xl:container lg:gap-5'>
+      <div className='@container grid gap-3 p-2 py-4 lg:gap-5 2xl:container'>
         <Title size={'xl'}>{hotel.name}</Title>
-        {hotel.documents.length > 0 && (
+        {hotel?.documents && hotel?.documents?.length > 0 && (
           <div className='text-sm'>
             <span>
               Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
@@ -230,8 +238,22 @@ const HotelDetailSection = () => {
         opened={roomStateModalOpened}
         onClose={closeRoomStateModal}
         title='Otel Mesajı'
+        size={'auto'}
+        centered
       >
         <div>
+          {!selectedRoomMutaion.data?.data && (
+            <div>
+              <Alert
+                variant='light'
+                color='red'
+                title='Müsaitlik Bulunmuyor'
+                icon={<FaExclamationCircle />}
+              >
+                Üzgünüz. Seçtiğiniz oda için müsaitlik bulunmamaktadır.
+              </Alert>
+            </div>
+          )}
           {selectedRoomMutaion.data?.data?.status.length &&
             selectedRoomMutaion.data?.data?.status.map(
               (roomStatus, roomStatusIndex) => {
@@ -276,25 +298,22 @@ const HotelDetailSection = () => {
                 )
               }
             )}
-          <div className='flex justify-between gap-2'>
-            <div>
-              <Button color='red' onClick={closeRoomStateModal}>
-                Kapat
-              </Button>
-            </div>
-            <div>
+
+          {selectedRoomMutaion.data?.data && (
+            <div className='flex justify-end gap-2 pt-4'>
               <Button color='green' onClick={handleReservation}>
                 Devam Et
               </Button>
             </div>
-          </div>
+          )}
         </div>
       </Modal>
       <Modal
         opened={installmentTableOpened}
         onClose={closeInstallmentTable}
         title='Tüm Kartlara Göre Taksit Tablosu'
-        size={'xl'}
+        size={'auto'}
+        scrollAreaComponent={ScrollArea.Autosize}
       >
         {roomInstallmentQuery.isPending && (
           <div className='flex h-[500px] items-center justify-center'>
@@ -302,12 +321,10 @@ const HotelDetailSection = () => {
           </div>
         )}
         {installmentTableData.current && (
-          <div>
-            <InstallmentTable
-              price={selectedRoomPrice.current}
-              installmentData={installmentTableData.current}
-            />
-          </div>
+          <InstallmentTable
+            price={selectedRoomPrice.current}
+            installmentData={installmentTableData.current}
+          />
         )}
       </Modal>
     </>

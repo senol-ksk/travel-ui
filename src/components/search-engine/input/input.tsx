@@ -42,7 +42,7 @@ export const Input: React.FC<Props> = ({
   return (
     <div
       className={clsx(
-        'relative flex h-[54px] items-center overflow-hidden text-ellipsis text-nowrap rounded border p-1 leading-none',
+        'relative flex h-[54px] items-center overflow-hidden rounded border p-1 leading-none text-nowrap text-ellipsis',
         {
           'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
           'border-slate-300': !error,
@@ -78,7 +78,7 @@ export const Input: React.FC<Props> = ({
 
       <UnstyledButton
         type='button'
-        className='absolute bottom-0 end-0 start-0 top-0 z-10 h-full w-full'
+        className='absolute start-0 end-0 top-0 bottom-0 z-10 h-full w-full'
         onClick={onClick}
         id={labelId}
       />

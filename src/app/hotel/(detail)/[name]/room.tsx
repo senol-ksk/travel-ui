@@ -43,6 +43,8 @@ const HotelRoom: React.FC<IProps> = ({
       )
     : null
 
+  if (details && !details?.length) return null
+
   return (
     <div className='@container'>
       <div className='rounded-lg border'>

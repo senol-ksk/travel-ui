@@ -50,6 +50,7 @@ import { createSerializer, useQueryStates } from 'nuqs'
 import { reservationParsers } from '../searchParams'
 import { HotelPassengerInformationForm } from '@/components/checkout/hotel/passengers'
 import dayjs from 'dayjs'
+import { id } from 'intl-tel-input/i18n'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -166,20 +167,20 @@ export default function CheckoutPage() {
             </Title>
             <div className='grid grid-cols-2 gap-3'>
               <div>
-                <Input.Wrapper label='E-Posta'>
-                  <TextInput
-                    type='email'
-                    {...formMethods.register('contactEmail')}
-                    error={
-                      !!formMethods.formState?.errors?.contactEmail
-                        ? formMethods.formState?.errors?.contactEmail?.message
-                        : null
-                    }
-                  />
-                </Input.Wrapper>
+                <TextInput
+                  label='E-Posta'
+                  type='email'
+                  {...formMethods.register('contactEmail')}
+                  error={
+                    !!formMethods.formState?.errors?.contactEmail
+                      ? formMethods.formState?.errors?.contactEmail?.message
+                      : null
+                  }
+                />
               </div>
               <div>
-                <Input.Wrapper label='GSM No'>
+                <Input.Wrapper>
+                  <Input.Label htmlFor='contactGSM'>GSM No</Input.Label>
                   <div
                     className='m_6c018570 mantine-Input-wrapper'
                     data-variant='default'
@@ -190,11 +191,10 @@ export default function CheckoutPage() {
                       render={({ field }) => (
                         <IntlTelInput
                           {...field}
-                          initialValue={''}
+                          usePreciseValidation
                           onChangeValidity={(isValid) => {
                             checkPhoneNumberIsValid(isValid)
                           }}
-                          usePreciseValidation
                           ref={(ref) => {
                             field.ref({
                               focus: ref?.getInput,
@@ -208,8 +208,10 @@ export default function CheckoutPage() {
                             }),
                             'data-variant': 'default',
                             name: field.name,
+                            id: 'contactGSM',
                           }}
                           initOptions={{
+                            strictMode: true,
                             containerClass: 'w-full',
                             separateDialCode: true,
                             initialCountry: 'auto',

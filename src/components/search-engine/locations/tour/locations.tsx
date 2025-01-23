@@ -65,7 +65,7 @@ export const TourLocations: React.FC<Props> = ({
         {(styles) => (
           <Paper
             ref={clickOutsideRef}
-            className='fixed bottom-0 end-0 start-0 top-0 z-50 -ms-1 -mt-1 bg-white shadow-xl md:absolute md:bottom-auto md:end-auto md:min-w-[320px] md:max-w-[420px]'
+            className='fixed start-0 end-0 top-0 bottom-0 z-50 -ms-1 -mt-1 bg-white shadow-xl md:absolute md:end-auto md:bottom-auto md:max-w-[420px] md:min-w-[320px]'
             style={{ ...styles }}
           >
             <div className='flex justify-end md:hidden'>
@@ -124,7 +124,7 @@ export const TourLocations: React.FC<Props> = ({
                         <div className='relative'>
                           <button
                             type='button'
-                            className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
+                            className='hover:bg-opacity-15 absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300'
                             onClick={() => {
                               setLocationName(Name)
                               onSelect(location)
@@ -133,7 +133,7 @@ export const TourLocations: React.FC<Props> = ({
                           >
                             <span className='sr-only'>{Name}</span>
                           </button>
-                          <div className='flex items-center gap-2 py-1 pe-3 ps-4'>
+                          <div className='flex items-center gap-2 py-1 ps-4 pe-3'>
                             <div className='flex flex-col text-sm'>
                               <strong>{Name}</strong>
                             </div>
@@ -144,7 +144,7 @@ export const TourLocations: React.FC<Props> = ({
                             <div className='relative'>
                               <button
                                 type='button'
-                                className='absolute bottom-0 end-0 start-0 top-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300 hover:bg-opacity-15'
+                                className='hover:bg-opacity-15 absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300'
                                 onClick={() => {
                                   setLocationName(subDestination.Name)
                                   onSelect(subDestination)

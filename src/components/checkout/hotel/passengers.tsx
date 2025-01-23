@@ -187,41 +187,40 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
           </Input.Wrapper>
         </div>
         <div>
-          <Input.Wrapper label='Ad'>
-            <Controller
-              control={methods.control}
-              name={`${namePrefix}.firstName`}
-              defaultValue={fieldProps.firstName ? fieldProps.firstName : ''}
-              render={({ field }) => {
-                return (
-                  <TextInput
-                    {...field}
-                    error={error?.firstName ? error?.firstName?.message : null}
-                    autoComplete='given-name'
-                  />
-                )
-              }}
-            />
-          </Input.Wrapper>
-        </div>
-        <div>
-          <Input.Wrapper label='Soyad'>
-            <Controller
-              control={methods.control}
-              name={`${namePrefix}.lastName`}
-              defaultValue={fieldProps.lastName}
-              render={({ field }) => (
+          <Controller
+            control={methods.control}
+            name={`${namePrefix}.firstName`}
+            defaultValue={fieldProps.firstName ? fieldProps.firstName : ''}
+            render={({ field }) => {
+              return (
                 <TextInput
                   {...field}
-                  error={error?.lastName ? error?.lastName.message : null}
-                  autoComplete='family-name'
+                  label='Ad'
+                  error={error?.firstName ? error?.firstName?.message : null}
+                  autoComplete='given-name'
                 />
-              )}
-            />
-          </Input.Wrapper>
+              )
+            }}
+          />
         </div>
         <div>
-          <Input.Wrapper label={'Doğum Tarihi'}>
+          <Controller
+            control={methods.control}
+            name={`${namePrefix}.lastName`}
+            defaultValue={fieldProps.lastName}
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                label='Soyad'
+                error={error?.lastName ? error?.lastName.message : null}
+                autoComplete='family-name'
+              />
+            )}
+          />
+        </div>
+        <div>
+          <Input.Wrapper>
+            <Input.Label htmlFor={name_birthDate_day}>Doğum Tarihi</Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
                 control={methods.control}
@@ -229,6 +228,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    id={name_birthDate_day}
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -282,50 +282,49 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
           <input type='hidden' {...methods.register(name_birthDate)} readOnly />
         </div>
         <div>
-          <Input.Wrapper label='TC Kimlik No'>
+          <Controller
+            control={methods.control}
+            name={`${namePrefix}.citizenNo`}
+            defaultValue={fieldProps.citizenNo}
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                label='TC Kimlik No'
+                inputMode='numeric'
+                type='tel'
+                error={
+                  !methods.watch(`${namePrefix}.nationality_Check`) &&
+                  !!error?.citizenNo
+                    ? error.citizenNo.message
+                    : null
+                }
+                disabled={methods.watch(`${namePrefix}.nationality_Check`)}
+              />
+            )}
+          />
+          <div className='pt-2'>
             <Controller
               control={methods.control}
-              name={`${namePrefix}.citizenNo`}
-              defaultValue={fieldProps.citizenNo}
+              name={`${namePrefix}.nationality_Check`}
+              defaultValue={false}
               render={({ field }) => (
-                <TextInput
+                <Switch
                   {...field}
-                  inputMode='numeric'
-                  type='tel'
-                  error={
-                    !methods.watch(`${namePrefix}.nationality_Check`) &&
-                    !!error?.citizenNo
-                      ? error.citizenNo.message
-                      : null
-                  }
-                  disabled={methods.watch(`${namePrefix}.nationality_Check`)}
+                  onChange={(event) => {
+                    field.onChange(event)
+                    methods.setValue(`${namePrefix}.citizenNo`, '')
+                    // methods.setValue(`${namePrefix}.passportCountry`, '')
+                    // methods.setValue(`${namePrefix}.PassportNo`, '')
+                    // methods.setValue(`${namePrefix}.passportValidityDate`, '')
+                    // methods.setValue(name_passsportValid_day, '')
+                    // methods.setValue(name_passsportValid_month, '')
+                    // methods.setValue(name_passsportValid_year, '')
+                  }}
+                  label='TC Vatandaşı değilim'
                 />
               )}
             />
-            <div className='pt-2'>
-              <Controller
-                control={methods.control}
-                name={`${namePrefix}.nationality_Check`}
-                defaultValue={false}
-                render={({ field }) => (
-                  <Switch
-                    {...field}
-                    onChange={(event) => {
-                      field.onChange(event)
-                      methods.setValue(`${namePrefix}.citizenNo`, '')
-                      // methods.setValue(`${namePrefix}.passportCountry`, '')
-                      // methods.setValue(`${namePrefix}.PassportNo`, '')
-                      // methods.setValue(`${namePrefix}.passportValidityDate`, '')
-                      // methods.setValue(name_passsportValid_day, '')
-                      // methods.setValue(name_passsportValid_month, '')
-                      // methods.setValue(name_passsportValid_year, '')
-                    }}
-                    label='TC Vatandaşı değilim'
-                  />
-                )}
-              />
-            </div>
-          </Input.Wrapper>
+          </div>
         </div>
         <div hidden>
           <input {...methods.register(`${namePrefix}.PassportNo`)} />

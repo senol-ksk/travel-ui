@@ -9,7 +9,7 @@ export default async function Home() {
       <div className='relative'>
         <BackgroundImage
           src='https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg'
-          className='absolute left-0 top-0 -z-50 hidden h-full w-full md:block'
+          className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
         />
         <div className='flex min-h-[228px] flex-col justify-center p-0 md:p-4'>
           <div className='lg:container'>
