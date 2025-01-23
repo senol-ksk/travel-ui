@@ -1,14 +1,24 @@
-@layer tw_base, mantine, tw_components, tw_utilities;
+@layer theme, base, components, utilities;
 
 /* import tailwind */
-@import 'tailwindcss/base' layer(tw_base);
-@import 'tailwindcss/components' layer(tw_components);
-@import 'tailwindcss/utilities' layer(tw_utilities);
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 /* import mantine */
-@import '@mantine/core/styles.layer.css';
-@import '@mantine/dates/styles.layer.css';
-@import '@mantine/nprogress/styles.layer.css';
+@import '@mantine/core/styles.layer.css' layer(utilities);
+@import '@mantine/dates/styles.layer.css' layer(utilities);
+@import '@mantine/nprogress/styles.layer.css' layer(utilities);
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 html,
 body {
@@ -22,4 +32,8 @@ body {
 
 .iti__selected-dial-code {
   @apply text-sm;
+}
+
+@utility container {
+  @apply mx-auto;
 }

@@ -105,7 +105,7 @@ export const PassengerDropdown: React.FC<Props> = ({
         {(styles) => (
           <div
             ref={clickOutsideRef}
-            className='fixed bottom-0 end-0 start-0 top-0 z-50 sm:absolute sm:bottom-auto sm:start-auto md:-ms-1 md:-mt-1'
+            className='fixed start-0 end-0 top-0 bottom-0 z-50 sm:absolute sm:start-auto sm:bottom-auto md:-ms-1 md:-mt-1'
             style={{ ...styles }}
             role='menu'
           >

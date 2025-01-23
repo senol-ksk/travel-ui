@@ -23,7 +23,6 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 import { useRouter } from 'next/navigation'
 import { HotelDetailRoomItem } from '../../types'
 import { InstallmentTable } from './installment'
-import { BsCircle } from 'react-icons/bs'
 import { FaExclamationCircle } from 'react-icons/fa'
 
 const HotelDetailSection = () => {
@@ -130,7 +129,7 @@ const HotelDetailSection = () => {
   }
   return (
     <>
-      <div className='grid gap-3 p-2 py-4 @container 2xl:container lg:gap-5'>
+      <div className='@container grid gap-3 p-2 py-4 lg:gap-5 2xl:container'>
         <Title size={'xl'}>{hotel.name}</Title>
         {hotel?.documents && hotel?.documents?.length > 0 && (
           <div className='text-sm'>

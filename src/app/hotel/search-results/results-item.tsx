@@ -73,7 +73,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                     {(styles) => (
                       <div
                         style={styles}
-                        className='absolute bottom-0 end-0 start-0 top-0 rounded-md border bg-white p-2 transition-opacity duration-300'
+                        className='absolute start-0 end-0 top-0 bottom-0 rounded-md border bg-white p-2 transition-opacity duration-300'
                       >
                         <Skeleton className='size-full' radius={'md'} />
                       </div>
@@ -96,7 +96,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
               </div>
               <div className='@2xl:col-span-2'>
                 <Title
-                  className='pb-4 text-md @lg:text-lg'
+                  className='text-md pb-4 @lg:text-lg'
                   order={3}
                   key={resultItem.hotelId}
                 >
@@ -108,11 +108,11 @@ const HotelSearchResultItem: React.FC<IProps> = ({
               <div>
                 {hasDiscount && (
                   <>
-                    <div className='inline-flex items-center justify-end gap-1 rounded-lg bg-blue-500 p-2 text-end text-sm font-semibold leading-none text-white'>
+                    <div className='inline-flex items-center justify-end gap-1 rounded-lg bg-blue-500 p-2 text-end text-sm leading-none font-semibold text-white'>
                       <div className=''>%{discountRate}</div>
                       <small>İndirim</small>
                     </div>
-                    <div className='pb-2 pt-1 text-sm text-gray-500 line-through'>
+                    <div className='pt-1 pb-2 text-sm text-gray-500 line-through'>
                       {formatCurrency(totalPriceWithDiscount)}
                     </div>
                   </>

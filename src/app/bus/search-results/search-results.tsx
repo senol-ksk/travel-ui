@@ -83,12 +83,12 @@ const BusSearchResults: React.FC = () => {
     <>
       <div className='relative'>
         {searchResults.isLoading || searchResults.hasNextPage ? (
-          <div className='absolute end-0 start-0 top-0'>
+          <div className='absolute start-0 end-0 top-0'>
             <Skeleton h={5} title='Seferler sorgulaniyor' />
           </div>
         ) : null}
-        <div className='pt-5 @container md:pt-10'>
-          <div className='grid gap-4 lg:container md:grid-cols-4 md:gap-3'>
+        <div className='@container pt-5 md:pt-10'>
+          <div className='grid gap-4 md:grid-cols-4 md:gap-3 lg:container'>
             <div className='md:col-span-1'>
               <div className='rounded-md border border-gray-300 p-3'>
                 Filter section

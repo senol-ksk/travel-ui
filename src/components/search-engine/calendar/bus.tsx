@@ -60,7 +60,7 @@ const BusCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='fixed bottom-0 end-0 start-0 top-0 z-50 sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[420px] md:p-0 2xl:start-0'
+              className='fixed start-0 end-0 top-0 bottom-0 z-50 sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[420px] md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -112,7 +112,7 @@ const BusCalendar: React.FC<Props> = ({
 
       {containerTransitionState && (
         <Portal>
-          <div className='fixed bottom-0 end-0 start-0 top-0 bg-black bg-opacity-50 md:hidden' />
+          <div className='bg-opacity-50 fixed start-0 end-0 top-0 bottom-0 bg-black md:hidden' />
         </Portal>
       )}
     </Provider>

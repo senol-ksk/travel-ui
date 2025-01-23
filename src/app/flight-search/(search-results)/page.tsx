@@ -200,7 +200,7 @@ const FlightSearchPage = (props: {
     <div className='relative'>
       <div className='absolute h-[5px] w-full overflow-hidden'>
         <NavigationProgress
-          className='absolute end-0 start-0'
+          className='absolute start-0 end-0'
           withinPortal={false}
         />
       </div>
@@ -259,7 +259,7 @@ const FlightSearchPage = (props: {
                 ) : null}
                 <div className='relative'>
                   <div
-                    className={`absolute end-0 start-0 top-0 transition-opacity ${clsx(
+                    className={`absolute start-0 end-0 top-0 transition-opacity ${clsx(
                       {
                         'z-10 opacity-100': !roundTicketsIsVisible,
                         'z-0 opacity-0': roundTicketsIsVisible,
@@ -307,9 +307,9 @@ const FlightSearchPage = (props: {
                   </div>
 
                   <div
-                    className={`absolute end-0 start-0 transition-all ${clsx({
+                    className={`absolute start-0 end-0 transition-all ${clsx({
                       'top-56 z-0 opacity-0': !roundTicketsIsVisible,
-                      'opacity-1 top-0 z-10': roundTicketsIsVisible,
+                      'top-0 z-10 opacity-1': roundTicketsIsVisible,
                     })}`}
                   >
                     {flightService.data &&

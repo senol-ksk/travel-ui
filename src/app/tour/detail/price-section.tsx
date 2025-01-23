@@ -61,7 +61,7 @@ const TourDetailPriceSection: React.FC<Props> = ({
   }
 
   return (
-    <div className='relative @container'>
+    <div className='@container relative'>
       <div className='grid gap-3'>
         <Title order={3}>Rezervasyon Detayları</Title>
         <div className='text-sm text-gray-700'>

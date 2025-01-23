@@ -26,7 +26,7 @@ const HotelSearchResults: React.FC = () => {
             (page) => page.searchResults[0]?.items.length > 0
           )?.length)) && (
         <div className='relative'>
-          <div className='absolute end-0 start-0'>
+          <div className='absolute start-0 end-0'>
             <Skeleton h={6} radius={0} />
           </div>
         </div>

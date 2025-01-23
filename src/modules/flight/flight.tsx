@@ -179,7 +179,7 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.onSubmit(handleFormSubmit)}>
-      <div className='grid grow items-center justify-between gap-3 pb-4 sm:flex xs:justify-start'>
+      <div className='xs:justify-start grid grow items-center justify-between gap-3 pb-4 sm:flex'>
         <div>
           <Radio.Group
             key={form.key('ActiveTripKind')}
