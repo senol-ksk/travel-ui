@@ -1,10 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  useInfiniteQuery,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
+import { useEffect, useRef } from 'react'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
+import { useTimeout } from '@mantine/hooks'
 
 import { getsecuritytoken, request, serviceRequest } from '@/network'
 import { HotelSearchRequestParams } from '@/types/hotel'
@@ -15,8 +12,23 @@ import { hotelSocket } from './socket'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
+const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
+const apiActionSearchResponse = '/api/Hotel/SearchResponse'
+
 export const useSearchResultParams = () => {
   const [searchParams] = useQueryStates(hotelSearchParamParser)
+  const timeoutIsTriggered = useRef(false)
+  const { start: startRequestTimeout, clear: clearRequestTimeout } = useTimeout(
+    () => {
+      timeoutIsTriggered.current = true
+      console.log(
+        'timeout is triggered, timeoutIsTriggered.current',
+        timeoutIsTriggered.current
+      )
+      hotelSearchRequestQuery.fetchNextPage()
+    },
+    20000
+  )
 
   const searchParamsQuery = useQuery({
     enabled: !!searchParams,
@@ -43,7 +55,7 @@ export const useSearchResultParams = () => {
     enabled: !!searchRequestParams,
     queryKey: hotelSearchRequestQueryKey,
     initialPageParam: {
-      apiAction: '/api/Hotel/SearchResponseReadyData',
+      apiAction: apiActionSearchResponseReadyData,
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
     },
     queryFn: async ({ signal, pageParam }) => {
@@ -59,15 +71,17 @@ export const useSearchResultParams = () => {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
             scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
             scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-            searchToken: searchRequestParams?.searchToken,
+            searchToken:
+              searchRequestParams?.hotelSearchModuleRequest.searchToken,
             hotelSearchModuleRequest: {
               ...searchRequestParams?.hotelSearchModuleRequest,
-              ...pageParam,
+              pageNo: pageParam.pageNo,
             },
           },
           apiRoute: 'HotelService',
           apiAction: pageParam.apiAction,
-          sessionToken: searchRequestParams?.sessionToken,
+          sessionToken:
+            searchRequestParams?.hotelSearchModuleRequest.sessionToken,
           appName: process.env.NEXT_PUBLIC_APP_NAME,
           scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
           scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
@@ -84,28 +98,37 @@ export const useSearchResultParams = () => {
       })) as HotelSearchResultApiResponse
 
       if (
-        response.data.searchResults &&
+        response?.data?.searchResults &&
         response.data.searchResults.at(0)?.items.length === 0
       ) {
+        if (!timeoutIsTriggered.current) {
+          console.log('timeout is started')
+          startRequestTimeout()
+          timeoutIsTriggered.current = true
+        }
         hotelSocket.connect()
       }
 
       return response?.data
     },
     getNextPageParam: (lastPage, allPages, { pageNo }) => {
-      if (lastPage.searchResults[0].hasMorePage && lastPage.hasMoreResponse) {
+      if (lastPage?.searchResults[0].hasMorePage) {
+        if (timeoutIsTriggered.current) {
+          console.log('timeout is stoped')
+          clearRequestTimeout()
+        }
         return {
-          apiAction: '/api/Hotel/SearchResponse',
+          apiAction: apiActionSearchResponse,
           pageNo: pageNo > -1 ? pageNo + 1 : 0,
         }
       }
 
       if (
-        lastPage.hasMoreResponse &&
-        !lastPage.searchResults.at(0)?.items.length
+        !lastPage?.searchResults ||
+        !lastPage?.searchResults.at(0)?.items.length
       ) {
         return {
-          apiAction: '/api/Hotel/SearchResponse',
+          apiAction: apiActionSearchResponse,
           pageNo: 0,
         }
       }
@@ -114,9 +137,14 @@ export const useSearchResultParams = () => {
     },
   })
   const socketOnAvailablity = ({ status }: { status: number }) => {
-    console.log(status)
     console.log('socketOnAvailablity')
+
     if (status === 2) {
+      if (timeoutIsTriggered.current) {
+        console.log('timeout is stoped')
+        clearRequestTimeout()
+      }
+
       hotelSearchRequestQuery.fetchNextPage()
       hotelSocket.disconnect()
     }

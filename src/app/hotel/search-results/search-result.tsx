@@ -23,7 +23,7 @@ const HotelSearchResults: React.FC = () => {
         searchParamsQuery.isLoading ||
         (hotelSearchRequestQuery.data?.pages &&
           !hotelSearchRequestQuery.data?.pages?.filter(
-            (page) => page.searchResults[0]?.items.length > 0
+            (page) => page && page?.searchResults[0]?.items.length > 0
           )?.length)) && (
         <div className='relative'>
           <div className='absolute start-0 end-0'>
@@ -45,6 +45,7 @@ const HotelSearchResults: React.FC = () => {
             }}
           >
             {hotelSearchRequestQuery.data?.pages.map((page) => {
+              if (!page) return null
               return (
                 page.searchResults.length &&
                 page.searchResults.map((results) => {
@@ -69,7 +70,7 @@ const HotelSearchResults: React.FC = () => {
             })}
             {hotelSearchRequestQuery.data?.pages &&
               hotelSearchRequestQuery.data?.pages?.filter(
-                (page) => page.searchResults[0]?.items.length > 0
+                (page) => page && page.searchResults[0]?.items.length > 0
               )?.length > 0 &&
               hotelSearchRequestQuery.hasNextPage && (
                 <div className='flex justify-center'>
