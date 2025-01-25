@@ -154,11 +154,15 @@ export const Flight = () => {
 
   const handleFormSubmit = async () => {
     cookies.remove('searchToken')
+    const departurDate = dates[0]
+    const returnDate = dates[1]
+      ? dates[1]
+      : dayjs(dates[0]).add(2, 'd').toDate()
 
     setFlightLocalObj(() => ({
       Origin: selectedOriginLocation!,
       Destination: selectedDepartureLocation!,
-      Dates: dates,
+      Dates: [departurDate, returnDate],
       ActiveTripKind: form.getValues().ActiveTripKind,
       CabinClass: {
         value: form.getValues().CabinClass.value + '',
@@ -169,10 +173,7 @@ export const Flight = () => {
 
     queryClient.clear()
 
-    // window.location.href = `/flight-search`
-
     router.push(`/flight-search?searchId=${generateUUID()}`)
-    // router.refresh()
   }
 
   if (formSkeletonVisibilty) return <Skeleton height={80} />
