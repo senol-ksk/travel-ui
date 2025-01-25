@@ -124,7 +124,7 @@ export const BusLocations: React.FC<Props> = ({
                           <div className='relative'>
                             <button
                               type='button'
-                              className='hover:bg-opacity-15 absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300'
+                              className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
                               onClick={() => {
                                 setLocationName(Name)
                                 onSelect(location)
@@ -149,7 +149,7 @@ export const BusLocations: React.FC<Props> = ({
                         <div className='relative'>
                           <button
                             type='button'
-                            className='hover:bg-opacity-15 absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300'
+                            className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
                             onClick={() => {
                               setLocationName(destination.Name)
                               onSelect(destination)
