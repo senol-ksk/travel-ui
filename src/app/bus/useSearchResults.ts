@@ -199,7 +199,7 @@ export const useBusSearchInitPaymentProcess = () => {
         axiosOptions: {
           url: 'api/bus/reservation',
           method: 'post',
-          params: {
+          data: {
             searchToken: searchParams.searchToken,
             sessionToken: searchParams.sessionToken,
             ProductKey: productKey,

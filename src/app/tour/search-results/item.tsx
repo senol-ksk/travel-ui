@@ -1,6 +1,10 @@
-import { formatCurrency } from '@/libs/util'
 import { TourSearchResultSearchItem } from '@/modules/tour/type'
 import { Button, Divider, Image, Title } from '@mantine/core'
+import { Link } from 'next-view-transitions'
+
+import { formatCurrency } from '@/libs/util'
+import { serializeTourDetailPageParams } from '@/modules/tour/detailSearchParams'
+import { useTourSearchResultsQuery } from './useSearhResults'
 
 type Props = {
   data: TourSearchResultSearchItem
@@ -10,6 +14,15 @@ export const TourSearchResultItem: React.FC<Props> = ({
   data,
   onClick = () => null,
 }) => {
+  const { searchParamsQuery } = useTourSearchResultsQuery()
+
+  const detailUrl = serializeTourDetailPageParams('/tour/detail', {
+    productKey: data.key,
+    slug: data.slug,
+    searchToken: searchParamsQuery.data?.data?.params.searchToken,
+    sessionToken: searchParamsQuery.data?.data?.sessionToken,
+  })
+
   return (
     <div className='@container rounded-lg border border-gray-300'>
       <div className='grid gap-3 p-3 md:gap-5 @lg:p-5'>
@@ -37,7 +50,13 @@ export const TourSearchResultItem: React.FC<Props> = ({
           </div>
         </div>
         <div>
-          <Button type='button' onClick={() => onClick(data)} fullWidth>
+          <Button
+            component={Link}
+            href={detailUrl}
+            // onClick={() => onClick(data)}
+
+            fullWidth
+          >
             Seç
           </Button>
         </div>

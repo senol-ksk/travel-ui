@@ -127,7 +127,7 @@ const PaymentPage = () => {
   const reservationData = checkoutQuery.data?.data
   const passengerData = reservationData?.treeContainer
   const firstPassengerFullName = passengerData?.childNodes[0].items[0].value
-    ? `${upperFirst(passengerData?.childNodes[0].items[0].value.firstName.toLocaleUpperCase())} ${upperFirst(passengerData?.childNodes[0].items[0].value.lastName.toLocaleUpperCase())}`
+    ? `${upperFirst(passengerData?.childNodes[0].items[0].value.firstName.toLocaleLowerCase())} ${upperFirst(passengerData?.childNodes[0].items[0].value.lastName.toLocaleLowerCase())}`
     : `${upperFirst(passengerData?.childNodes[0]?.childNodes?.at(0)?.items.at(0)?.value?.firstName?.toLowerCase() ?? '')} ${upperFirst(passengerData?.childNodes[0].childNodes.at(0)?.items.at(0)?.value.lastName.toLocaleLowerCase() ?? '')}`
 
   if (!reservationData || !queryStrings.productKey)

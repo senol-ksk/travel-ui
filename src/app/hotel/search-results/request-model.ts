@@ -25,7 +25,12 @@ export const useSearchResultParams = () => {
         'timeout is triggered, timeoutIsTriggered.current',
         timeoutIsTriggered.current
       )
-      hotelSearchRequestQuery.fetchNextPage()
+      if (
+        !hotelSearchRequestQuery.isFetching ||
+        !hotelSearchRequestQuery.isFetchingNextPage
+      ) {
+        hotelSearchRequestQuery.fetchNextPage()
+      }
     },
     20000
   )
@@ -139,15 +144,28 @@ export const useSearchResultParams = () => {
   const socketOnAvailablity = ({ status }: { status: number }) => {
     console.log('socketOnAvailablity')
 
-    if (status === 2) {
-      if (timeoutIsTriggered.current) {
-        console.log('timeout is stoped')
-        clearRequestTimeout()
-      }
+    // if (status === 2) {
+    //   if (timeoutIsTriggered.current) {
+    //     console.log('timeout is stoped')
+    //     clearRequestTimeout()
+    //   }
 
+    //   hotelSearchRequestQuery.fetchNextPage()
+    //   hotelSocket.disconnect()
+    // }
+
+    // if (status === 3) {
+    // }
+
+    if (
+      !hotelSearchRequestQuery.isFetching ||
+      !hotelSearchRequestQuery.isFetchingNextPage
+    ) {
       hotelSearchRequestQuery.fetchNextPage()
-      hotelSocket.disconnect()
     }
+
+    hotelSocket.disconnect()
+    clearRequestTimeout()
   }
 
   const socketOnConnect = () => {
@@ -169,8 +187,10 @@ export const useSearchResultParams = () => {
   useEffect(() => {
     return () => {
       hotelSocket.disconnect()
+      clearRequestTimeout()
+      timeoutIsTriggered.current = false
     }
-  }, [])
+  }, [clearRequestTimeout])
 
   return {
     hotelSearchRequestQuery,

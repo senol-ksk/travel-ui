@@ -7,6 +7,7 @@ import type {
 } from '@/app/hotel/types'
 import { formatCurrency } from '@/libs/util'
 import { PriceNumberFlow } from '@/components/price-numberflow'
+import dayjs from 'dayjs'
 
 type IProps = {
   roomGroup: HotelDetailRoomItem
@@ -74,12 +75,26 @@ const HotelRoom: React.FC<IProps> = ({
               </div>
               <div className='@2xl:col-span-7'>
                 <Title order={5}>{detail.roomType}</Title>
-                <div
+                {!roomGroup.nonRefundable && (
+                  <div className='text-green-600'>
+                    {
+                      roomGroup.cancellationPolicies
+                        .sort((a, b) => {
+                          return (
+                            new Date(a.optionDate).getDate() -
+                            new Date(b.optionDate).getDate()
+                          )
+                        })
+                        .at(0)?.description
+                    }{' '}
+                  </div>
+                )}
+                {/* <div
                   className='text-sm'
                   dangerouslySetInnerHTML={{
                     __html: detail.description,
                   }}
-                />
+                /> */}
               </div>
               {isLastItem && (
                 <div className='self-end @2xl:col-span-2 @2xl:row-span-2 @2xl:justify-self-end'>

@@ -180,7 +180,7 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.onSubmit(handleFormSubmit)}>
-      <div className='xs:justify-start grid grow items-center justify-between gap-3 pb-4 sm:flex'>
+      <div className='flex items-center gap-3 pb-4'>
         <div>
           <Radio.Group
             key={form.key('ActiveTripKind')}
@@ -195,7 +195,7 @@ export const Flight = () => {
             </Group>
           </Radio.Group>
         </div>
-        <div className='flex'>
+        <div>
           <NativeSelect
             data={[
               { label: 'Ekonomi', value: '0' },
