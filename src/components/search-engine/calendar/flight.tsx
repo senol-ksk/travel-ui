@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
-import { useMediaQuery, useClickOutside, range } from '@mantine/hooks'
+import { useMediaQuery, useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
 import type { DatesRangeValue, DateValue } from '@mantine/dates'
 
@@ -18,7 +18,7 @@ const maxDate = today.add(1, 'year')
 type Props = {
   tripKind?: 'one-way' | 'round-trip'
   onDateSelect?: (dates: DatesRangeValue) => void
-  defaultDates?: DatesRangeValue
+  defaultDates: DatesRangeValue
 }
 const defaultFormat = 'DD MMM ddd'
 
@@ -34,7 +34,10 @@ const FlightCalendar: React.FC<Props> = ({
 
   const [formatedValues, setFormatedValues] = useState<
     [string | null, string | null]
-  >([null, null])
+  >([
+    dayjs(defaultDates?.at(0)).format(defaultFormat),
+    dayjs(defaultDates?.at(1)).format(defaultFormat),
+  ])
 
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
@@ -43,16 +46,6 @@ const FlightCalendar: React.FC<Props> = ({
     setContainerTransitionState(false)
   )
 
-  useEffect(() => {
-    if (defaultDates) {
-      setRangeValue(defaultDates)
-      setFormatedValues([
-        dayjs(defaultDates.at(0)).format(defaultFormat),
-        dayjs(defaultDates.at(1)).format(defaultFormat),
-      ])
-    }
-  }, [defaultDates])
-
   const handleDateSelections = (dates: DatesRangeValue | DateValue) => {
     let departurDate
     let returnDate
@@ -60,7 +53,6 @@ const FlightCalendar: React.FC<Props> = ({
     if (Array.isArray(dates)) {
       departurDate = dates.at(0)
       returnDate = dates.at(1)
-      setRangeValue(dates)
       onDateSelect(dates)
       setFormatedValues([
         dayjs(departurDate).format(defaultFormat),
@@ -68,11 +60,11 @@ const FlightCalendar: React.FC<Props> = ({
       ])
     } else if (dayjs(dates).isValid()) {
       departurDate = dates
-      setRangeValue([dates, null])
       onDateSelect([dates, dates])
-      setFormatedValues([dayjs(departurDate).format(defaultFormat), null])
-    } else {
-      console.error('Date type has some errors')
+      setFormatedValues([
+        dayjs(departurDate).format(defaultFormat),
+        dayjs(departurDate).format(defaultFormat),
+      ])
     }
   }
 
@@ -93,7 +85,7 @@ const FlightCalendar: React.FC<Props> = ({
           mounted={containerTransitionState}
           transition='pop-top-right'
           onExit={() => {
-            onDateSelect([
+            handleDateSelections([
               rangeValue[0],
               rangeValue[1]
                 ? rangeValue[1]
@@ -163,7 +155,22 @@ const FlightCalendar: React.FC<Props> = ({
                   <div>
                     <DatePicker
                       highlightToday
-                      onChange={handleDateSelections}
+                      onChange={(dates) => {
+                        if (Array.isArray(dates)) {
+                          setRangeValue(dates)
+
+                          setFormatedValues([
+                            dayjs(dates[0]).format(defaultFormat),
+                            dayjs(dates[1]).format(defaultFormat),
+                          ])
+                        } else {
+                          setRangeValue([dates, dates])
+                          setFormatedValues([
+                            dayjs(dates).format(defaultFormat),
+                            dayjs(dates).format(defaultFormat),
+                          ])
+                        }
+                      }}
                       type={tripKind === 'one-way' ? 'default' : 'range'}
                       allowSingleDateInRange
                       numberOfColumns={matches ? 2 : 13}

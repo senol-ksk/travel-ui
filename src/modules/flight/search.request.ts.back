@@ -29,7 +29,7 @@ const getSessionTokenUrl = process.env.NEXT_PUBLIC_GET_SESSION_TOKEN
 const requestedDayFormat = 'YYYY-MM-DD'
 let appToken: string | null
 
-const processFlightSearchPanel = (
+export const processFlightSearchPanel = (
   params: Omit<FlightApiRequestParams, 'SearchToken'>
 ): FlightSearchRequestFlightSearchPanel => {
   const recievedData = params

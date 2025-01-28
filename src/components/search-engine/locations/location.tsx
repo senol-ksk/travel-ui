@@ -4,7 +4,7 @@ import {
   Transition,
   Paper,
   CloseButton,
-  TextInputProps,
+  type TextInputProps,
   Skeleton,
 } from '@mantine/core'
 import { useClickOutside, useFocusTrap } from '@mantine/hooks'

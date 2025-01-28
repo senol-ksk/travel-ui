@@ -17,7 +17,7 @@ export type FlightLocationLeg = {
 }
 
 export type FlightSearchRequestFlightSearchPanel = {
-  ActiveTripKind: number
+  ActiveTripKind: '1' | '2'
   SearchLegs: {
     DepartureTime: string
     CabinClass: number | string

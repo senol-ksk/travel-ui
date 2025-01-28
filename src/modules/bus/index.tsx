@@ -228,7 +228,6 @@ const BusSearchEngine = () => {
             type='submit'
             className='w-full md:h-full'
             loading={searchSessionTokenQuery.isPending}
-            disabled={searchSessionTokenQuery.isPending}
           >
             Ara
           </Button>

@@ -1,35 +1,64 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import cookies from 'js-cookie'
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTransitionRouter } from 'next-view-transitions'
+import { DatesRangeValue } from '@mantine/dates'
+import dayjs from 'dayjs'
 
 import { z } from 'zod'
-import { zodResolver } from 'mantine-form-zod-resolver'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useForm } from '@mantine/form'
+import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { Button, NativeSelect, Radio, Group, Skeleton } from '@mantine/core'
-import { useLocalStorage } from '@mantine/hooks'
 
 import { request } from '@/network'
 
 import { Locations } from '@/components/search-engine/locations'
 import { FlightCalendar } from '@/components/search-engine/calendar/flight'
 import { PassengerDropdown } from '@/components/search-engine/passengers/flight'
-import type {
-  LocationResult,
-  LocationResults as LocationResults,
-} from '@/components/search-engine/locations/type'
-import dayjs from 'dayjs'
-import { DatesRangeValue } from '@mantine/dates'
-import { FlightApiRequestParams } from './types'
-import { generateUUID } from '@/libs/util'
+import type { LocationResults } from '@/components/search-engine/locations/type'
+import { serializeFlightSearchParams } from './searchParams'
 
 const formSchema = z.object({
-  Destination: z.string().min(3),
-  Origin: z.string().min(3),
-  ActiveTripKind: z.number(),
-  CabinClassSelect: z.string(),
+  DepartureDate: z.coerce.date(),
+  ReturnDate: z.coerce.date(),
+  Destination: z.object({
+    Code: z.string(),
+    CountryCode: z.string(),
+    ExtentionData: z.object({}),
+    Iata: z.array(z.string()),
+    Id: z.string().or(z.number()),
+    IsDomestic: z.boolean(),
+    Location: z.array(z.number()),
+    Name: z.string(),
+    Northeast: z.array(z.number()),
+    ParentIds: z.array(z.number()),
+    Select: z.boolean(),
+    Slug: z.string(),
+    Southwest: z.array(z.number()),
+    SubDestinations: z.array(z.object({})),
+    Type: z.number(),
+  }),
+  Origin: z.object({
+    Code: z.string(),
+    CountryCode: z.string(),
+    ExtentionData: z.object({}),
+    Iata: z.array(z.string()),
+    Id: z.string().or(z.number()),
+    IsDomestic: z.boolean(),
+    Location: z.array(z.number()),
+    Name: z.string(),
+    Northeast: z.array(z.number()),
+    ParentIds: z.array(z.number()),
+    Select: z.boolean(),
+    Slug: z.string(),
+    Southwest: z.array(z.number()),
+    SubDestinations: z.array(z.object({})),
+    Type: z.number(),
+  }),
+  ActiveTripKind: z.union([z.literal('1'), z.literal('2')]),
   CabinClass: z.object({
     value: z.number().or(z.string()),
     title: z.union([
@@ -50,168 +79,173 @@ const schema = formSchema
 
 type FlightRequestType = z.infer<typeof schema>
 
-import { useTransitionRouter } from 'next-view-transitions'
+// import { serializeFlightSearchParams } from './searchParams'
 
 export const Flight = () => {
+  const mounted = useMounted()
   const router = useTransitionRouter()
-  const queryClient = useQueryClient()
-  const [formSkeletonVisibilty, setFormSkeletonVisibilty] = useState(true)
-
-  const [selectedOriginLocation, setSelectedOriginLocation] =
-    useState<LocationResult>()
-  const [selectedDepartureLocation, setSelectedDeparturLocation] =
-    useState<LocationResult>()
-  const [originLocationInputValue, setOriginLocationInputValue] = useState('')
-  const [destinationLocationInputValue, setDestinationLocationInputValue] =
-    useState('')
+  // const [originLocationInputValue, setOriginLocationInputValue] = useState('')
+  // const [destinationLocationInputValue, setDestinationLocationInputValue] =
+  //   useState('')
 
   const [dates, setDates] = useState<DatesRangeValue>([
     dayjs().add(6, 'days').toDate(),
     dayjs().add(8, 'days').toDate(),
   ])
-  const [flightLocalObj, setFlightLocalObj] = useLocalStorage<
-    Omit<FlightApiRequestParams, 'SearchToken'>
-  >({
-    key: 'flight',
-  })
+  const [flightLocalObj, setFlightLocalObj] =
+    useLocalStorage<FlightRequestType>({
+      key: 'flight-search-engine',
+      getInitialValueInEffect: false,
+    })
 
   const form = useForm<FlightRequestType>({
-    mode: 'uncontrolled',
-    validate: zodResolver(schema),
-    initialValues: {
-      ActiveTripKind: 1,
-      CabinClass: { title: 'Ekonomi', value: 0 },
-      CabinClassSelect: '0',
-      Destination: '',
-      Origin: '',
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      ActiveTripKind: flightLocalObj?.ActiveTripKind ?? '1',
+      CabinClass: flightLocalObj?.CabinClass ?? { title: 'Ekonomi', value: 0 },
+      Destination: flightLocalObj?.Destination,
+      Origin: flightLocalObj?.Origin,
       PassengerCounts: {
-        Adult: 1,
-        Child: 0,
-        Infant: 0,
+        Adult: flightLocalObj?.PassengerCounts?.Adult ?? 1,
+        Child: flightLocalObj?.PassengerCounts?.Child ?? 0,
+        Infant: flightLocalObj?.PassengerCounts?.Infant ?? 0,
       },
+      DepartureDate: flightLocalObj?.DepartureDate
+        ? flightLocalObj?.DepartureDate
+        : dayjs().add(2, 'd').toDate(),
+      ReturnDate: flightLocalObj?.ReturnDate
+        ? flightLocalObj?.ReturnDate
+        : dayjs().add(4, 'd').toDate(),
     },
   })
 
-  useEffect(() => {
-    if (flightLocalObj) {
-      setSelectedOriginLocation(flightLocalObj.Origin)
-      setSelectedDeparturLocation(flightLocalObj.Destination)
-      setDates([
-        dayjs(flightLocalObj.Dates.at(0)).toDate(),
-        flightLocalObj.Dates.at(1)
-          ? dayjs(flightLocalObj.Dates.at(1)).toDate()
-          : null,
-      ])
-      form.initialize({
-        ...flightLocalObj,
-        Destination: flightLocalObj.Destination.Name,
-        Origin: flightLocalObj.Origin.Name,
-        CabinClassSelect: flightLocalObj.CabinClass?.value.toString(),
+  const {
+    data: originLocations,
+    isLoading: originLocationsIsLoading,
+    refetch: refetchOriginDestinations,
+  } = useQuery<LocationResults>({
+    queryKey: ['flight-origin-locations'],
+    enabled: false,
+    queryFn: async () => {
+      const getLocations = await request({
+        url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
+        params: {
+          s: form.getValues('Origin.Slug'),
+          id: null,
+          scope: process.env.NEXT_PUBLIC_SCOPE_CODE,
+        },
       })
-    }
 
-    setFormSkeletonVisibilty(false)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flightLocalObj])
+      return getLocations
+    },
+  })
+  const {
+    data: destinationLocation,
+    isLoading: destinationLocationLoading,
+    refetch: refetchTargetDestinations,
+  } = useQuery<LocationResults>({
+    queryKey: ['flight-destination-locations'],
+    enabled: false,
+    queryFn: async () => {
+      const getLocations = await request({
+        url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
+        params: {
+          s: form.getValues('Destination.Slug'),
+          id: null,
+          scope: process.env.NEXT_PUBLIC_SCOPE_CODE,
+        },
+      })
 
-  const { data: originLocations, isLoading: originLocationsIsLoading } =
-    useQuery<LocationResults>({
-      queryKey: ['flight-locations', originLocationInputValue],
-      enabled:
-        !!originLocationInputValue && originLocationInputValue.length > 2,
-      queryFn: async () => {
-        const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
-          params: {
-            s: originLocationInputValue,
-            id: null,
-            scope: process.env.NEXT_PUBLIC_SCOPE_CODE,
-          },
-        })
+      return getLocations
+    },
+  })
 
-        return getLocations
+  const handleFormSubmit = async (data: FlightRequestType) => {
+    const departurDate = data.DepartureDate
+    const returnDate =
+      dayjs(data.ReturnDate).diff(data.DepartureDate, 'd') < 0
+        ? dayjs(departurDate).add(2, 'd').toDate()
+        : data.ReturnDate
+
+    const searchUrl = serializeFlightSearchParams('/flight/search-results', {
+      activeTripKind: data.ActiveTripKind,
+      cabinClass: data.CabinClass,
+      departureDate: departurDate,
+      destination: {
+        code: data.Destination.Code,
+        iata: data.Destination.Iata,
+        id: data.Destination.Id,
+        isDomestic: data.Destination.IsDomestic,
+        type: data.Destination.Type,
       },
-    })
-  const { data: destinationLocation, isLoading: destinationLocationLoading } =
-    useQuery<LocationResults>({
-      queryKey: ['flight-locations', destinationLocationInputValue],
-      enabled:
-        !!destinationLocationInputValue &&
-        destinationLocationInputValue.length > 2,
-      queryFn: async () => {
-        const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
-          params: {
-            s: destinationLocationInputValue,
-            id: null,
-            scope: process.env.NEXT_PUBLIC_SCOPE_CODE,
-          },
-        })
-
-        return getLocations
+      origin: {
+        code: data.Origin.Code,
+        iata: data.Origin.Iata,
+        id: data.Origin.Id,
+        isDomestic: data.Origin.IsDomestic,
+        type: data.Origin.Type,
       },
+      passengerCounts: data.PassengerCounts,
+      returnDate: data.ActiveTripKind === '2' ? returnDate : null,
     })
-
-  const handleFormSubmit = async () => {
-    cookies.remove('searchToken')
-    const departurDate = dates[0]
-    const returnDate = dates[1]
-      ? dates[1]
-      : dayjs(dates[0]).add(2, 'd').toDate()
 
     setFlightLocalObj(() => ({
-      Origin: selectedOriginLocation!,
-      Destination: selectedDepartureLocation!,
-      Dates: [departurDate, returnDate],
-      ActiveTripKind: form.getValues().ActiveTripKind,
-      CabinClass: {
-        value: form.getValues().CabinClass.value + '',
-        title: form.getValues().CabinClass.title,
-      },
-      PassengerCounts: form.getValues().PassengerCounts,
+      Origin: data.Origin,
+      Destination: data.Destination,
+      ReturnDate: returnDate,
+      DepartureDate: departurDate,
+      ActiveTripKind: data.ActiveTripKind,
+      CabinClass: data.CabinClass,
+      PassengerCounts: data.PassengerCounts,
     }))
 
-    queryClient.clear()
-
-    router.push(`/flight-search?searchId=${generateUUID()}`)
+    // router.push(`/flight-search?searchId=${generateUUID()}`)
+    router.push(searchUrl)
   }
 
-  if (formSkeletonVisibilty) return <Skeleton height={80} />
+  if (!mounted) return <Skeleton height={80} />
 
   return (
-    <form onSubmit={form.onSubmit(handleFormSubmit)}>
+    <form onSubmit={form.handleSubmit(handleFormSubmit)}>
       <div className='flex items-center gap-3 pb-4'>
         <div>
           <Radio.Group
-            key={form.key('ActiveTripKind')}
-            {...form.getInputProps('ActiveTripKind')}
+            defaultValue={form.formState.defaultValues?.ActiveTripKind}
+            name='ActiveTripKind'
             onChange={(value) => {
-              form.setFieldValue('ActiveTripKind', +value)
+              if (value === '1' || value === '2') {
+                form.setValue('ActiveTripKind', value)
+                form.trigger('ActiveTripKind')
+              }
             }}
           >
             <Group gap={'md'}>
-              <Radio value={1} label='Tek Yön' />
-              <Radio value={2} label='Gidiş-Dönüş' />
+              <Radio value={'1'} label='Tek Yön' />
+              <Radio value={'2'} label='Gidiş-Dönüş' />
             </Group>
           </Radio.Group>
         </div>
         <div>
-          <NativeSelect
-            data={[
-              { label: 'Ekonomi', value: '0' },
-              { label: 'Business', value: '2' },
-              { label: 'First Class', value: '3' },
-            ]}
-            key={form.key('CabinClassSelect')}
-            {...form.getInputProps('CabinClassSelect')}
-            onChange={({ currentTarget }) => {
-              form.setFieldValue('CabinClass', {
-                value: +currentTarget.value,
-                title:
-                  currentTarget.options[currentTarget.options.selectedIndex]
-                    .innerText,
-              })
-            }}
+          <Controller
+            control={form.control}
+            name='CabinClass'
+            render={({ field }) => (
+              <NativeSelect
+                data={[
+                  { label: 'Ekonomi', value: '0' },
+                  { label: 'Business', value: '2' },
+                  { label: 'First Class', value: '3' },
+                ]}
+                onChange={({ currentTarget }) => {
+                  field.onChange({
+                    value: +currentTarget.value,
+                    title:
+                      currentTarget.options[currentTarget.options.selectedIndex]
+                        .innerText,
+                  })
+                }}
+              />
+            )}
           />
         </div>
       </div>
@@ -219,53 +253,81 @@ export const Flight = () => {
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <Locations
             label='Kalkış'
-            inputProps={{ ...form.getInputProps('Origin') }}
+            inputProps={{ error: !!form.formState.errors.Origin }}
             data={originLocations?.Result}
             isLoading={originLocationsIsLoading}
-            defaultValue={flightLocalObj?.Origin?.Name || null}
+            defaultValue={form.formState.defaultValues?.Origin?.Name}
             onChange={(value) => {
-              setOriginLocationInputValue(value)
+              if (value.length > 2) {
+                form.setValue('Origin.Slug', value)
+                form.trigger('Origin.Slug').then((value) => {
+                  if (value) {
+                    refetchOriginDestinations()
+                  }
+                })
+              }
             }}
             onSelect={(value) => {
-              form.setFieldValue('Origin', value.Name)
-              setSelectedOriginLocation(value)
+              form.setValue('Origin', value)
             }}
           />
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <Locations
             label='Nereye'
-            inputProps={{ ...form.getInputProps('Destination') }}
-            defaultValue={flightLocalObj?.Destination?.Name || null}
+            inputProps={{ error: !!form.formState.errors.Destination }}
+            defaultValue={form.formState.defaultValues?.Destination?.Name}
             data={destinationLocation?.Result}
             isLoading={destinationLocationLoading}
             onChange={(value) => {
-              setDestinationLocationInputValue(value)
+              if (value.length > 2) {
+                form.setValue('Destination.Slug', value)
+                form.trigger('Destination.Slug').then((value) => {
+                  if (value) {
+                    refetchTargetDestinations()
+                  }
+                })
+              }
             }}
             onSelect={(value) => {
-              form.setFieldValue('Destination', value.Name)
-              setSelectedDeparturLocation(value)
+              form.setValue('Destination', value)
             }}
           />
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>
           <FlightCalendar
-            onDateSelect={setDates}
+            onDateSelect={(dates) => {
+              if (dates[0]) {
+                form.setValue('DepartureDate', dates[0])
+
+                if (!dates[1]) {
+                  form.setValue(
+                    'ReturnDate',
+                    dayjs(dates[0]).add(2, 'd').toDate()
+                  )
+                }
+              }
+
+              if (dates[1]) {
+                form.setValue('ReturnDate', dates[1])
+              }
+            }}
             tripKind={
-              form.getValues().ActiveTripKind === 1 ? 'one-way' : 'round-trip'
+              form.getValues().ActiveTripKind === '1' ? 'one-way' : 'round-trip'
             }
-            defaultDates={dates}
+            defaultDates={[
+              new Date(form.getValues('DepartureDate')),
+              new Date(form.getValues('ReturnDate')),
+            ]}
           />
         </div>
         <div className='col-span-6 md:col-span-3 lg:col-span-2'>
           <PassengerDropdown
             initialValues={{
-              Adult: flightLocalObj?.PassengerCounts.Adult,
-              Child: flightLocalObj?.PassengerCounts.Child,
-              Infant: flightLocalObj?.PassengerCounts.Infant,
+              ...form.getValues('PassengerCounts'),
             }}
             onChange={({ Adult, Child, Infant }) => {
-              form.setFieldValue('PassengerCounts', {
+              form.setValue('PassengerCounts', {
                 Adult: Adult || 1,
                 Child: Child || 0,
                 Infant: Infant || 0,
