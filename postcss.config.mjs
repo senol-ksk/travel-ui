@@ -1,7 +1,6 @@
 // postcss.config.mjs
 const config = {
   plugins: {
-    'postcss-import': {},
     'postcss-preset-mantine': {},
     'postcss-simple-vars': {
       variables: {

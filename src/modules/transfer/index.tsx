@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useTransitionRouter } from 'next-view-transitions'
 import { Button, Skeleton } from '@mantine/core'
+import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
+import dayjs from 'dayjs'
 
 import { TransferCalendar } from '@/components/search-engine/calendar/transfer'
 import { Locations } from '@/components/search-engine/locations/transfer/locations'
@@ -14,8 +15,6 @@ import { TransferHours } from './hour-select'
 import { PassengerDropdown } from '@/components/search-engine/passengers/transfer'
 import { LocationResults } from '@/components/search-engine/locations/type'
 import { getTransferSearchSessionToken, request } from '@/network'
-import { useLocalStorage, useMounted } from '@mantine/hooks'
-import dayjs from 'dayjs'
 import {
   serializeTransferSearchParams,
   transferSearchEngineSchema,
@@ -26,7 +25,7 @@ const defaultDate = dayjs().add(5, 'day').toISOString()
 
 const TransferSearchEngine = () => {
   const mounted = useMounted()
-  const router = useRouter()
+  const router = useTransitionRouter()
   const [transferSearchLocalStorage, setTransferSearchLocalStroge] =
     useLocalStorage<TransferSearchEngineSchemaInfer>({
       key: 'transfer-search-engine',

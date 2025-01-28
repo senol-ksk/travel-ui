@@ -5,22 +5,21 @@ import { useDisclosure } from '@mantine/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import NumberFlow from '@number-flow/react'
+import { useTransitionRouter } from 'next-view-transitions'
+import { createSerializer, useQueryStates } from 'nuqs'
 
 import { useTourDetailQuery } from './useTourDetailQuery'
 import { TourDetail } from './detail-view'
 import { TourDetailPriceSection } from './price-section'
-import { dummyTourDetailData } from './dummyData'
 import { TourSearchEngine } from '@/modules/tour'
 import { serviceRequest } from '@/network'
 import { TourExtraServicesApiResponse } from '@/modules/tour/type'
 import { ExtraServicePanel } from './extra-services'
-import { formatCurrency } from '@/libs/util'
-import { createSerializer, useQueryStates } from 'nuqs'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { useRouter } from 'next/navigation'
 import { tourDetailPageParamParser } from '@/modules/tour/detailSearchParams'
 
 const TourDetailClient = () => {
+  const router = useTransitionRouter()
   const [
     isOpenExtraServicesModal,
     { open: openExtraSercivesModal, close: closeExtraServicesModal },
@@ -218,8 +217,6 @@ const TourDetailClient = () => {
         count: 0,
       }
     })
-
-  const router = useRouter()
 
   let extraServicesAndAmounts: string[]
 

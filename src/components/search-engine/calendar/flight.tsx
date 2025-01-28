@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
-import { useMediaQuery, useClickOutside } from '@mantine/hooks'
+import { useMediaQuery, useClickOutside, range } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
 import type { DatesRangeValue, DateValue } from '@mantine/dates'
 
@@ -92,6 +92,14 @@ const FlightCalendar: React.FC<Props> = ({
         <Transition
           mounted={containerTransitionState}
           transition='pop-top-right'
+          onExit={() => {
+            onDateSelect([
+              rangeValue[0],
+              rangeValue[1]
+                ? rangeValue[1]
+                : dayjs(rangeValue[0]).add(2, 'd').toDate(),
+            ])
+          }}
         >
           {(styles) => (
             <div

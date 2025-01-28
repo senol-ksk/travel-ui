@@ -4,23 +4,20 @@ import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button, Checkbox, NativeSelect, Skeleton } from '@mantine/core'
+import { range, useLocalStorage, useMounted } from '@mantine/hooks'
 import clsx from 'clsx'
 import { useState } from 'react'
-import { CarHours } from './hour-select'
 import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
-import { request } from '@/network'
+import { useTransitionRouter } from 'next-view-transitions'
 
+import { request } from '@/network'
+import { CarHours } from './hour-select'
 import { CarCalendar } from '@/components/search-engine/calendar/car'
 import { CarLocations } from '@/components/search-engine/locations/car/locations'
-import type {
-  LocationResult,
-  LocationResults,
-} from '@/components/search-engine/locations/type'
-import { range, useLocalStorage, useMounted } from '@mantine/hooks'
+import type { LocationResults } from '@/components/search-engine/locations/type'
 import { carSearchEngineSchema, CarSearchEngineSchemaTypeInfer } from './types'
 import { serializeCarSearchParams } from './searchParams'
-import { useRouter } from 'next/navigation'
 
 const defaultDates = {
   drop_date: dayjs().add(2, 'day').toDate(),
@@ -28,7 +25,7 @@ const defaultDates = {
 }
 
 const CarRentSearchPanel: React.FC = () => {
-  const router = useRouter()
+  const router = useTransitionRouter()
   const [carSearchLocalStorage, setCarSearchLocalStroge] =
     useLocalStorage<CarSearchEngineSchemaTypeInfer>({
       key: 'car-search-engine',

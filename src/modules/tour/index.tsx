@@ -2,16 +2,16 @@ import { Button, Skeleton } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { useRouter } from 'next/navigation'
+import { useTransitionRouter } from 'next-view-transitions'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useLocalStorage, useMounted } from '@mantine/hooks'
 
 import { TourCalendar } from '@/components/search-engine/calendar/tour'
 import { TourLocations } from '@/components/search-engine/locations/tour/locations'
 import { LocationResults } from '@/components/search-engine/locations/type'
 import { request } from '@/network'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { serializeTourSearchParams } from './searchResultParams'
 
 const defaultDates = [
@@ -32,7 +32,7 @@ type TourSearchEngineSchemaType = z.infer<typeof schema>
 
 const TourSearchEngine = () => {
   const mounted = useMounted()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   const [localParams, setLocalParams] =
     useLocalStorage<TourSearchEngineSchemaType>({

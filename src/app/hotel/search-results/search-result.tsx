@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Skeleton } from '@mantine/core'
+import { Alert, Button, Skeleton } from '@mantine/core'
 import { createSerializer } from 'nuqs'
 
 import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
@@ -10,8 +10,7 @@ import { HotelSearchResultItem } from './results-item'
 const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
 
 const HotelSearchResults: React.FC = () => {
-  const { hotelSearchRequestQuery, searchParams, searchParamsQuery } =
-    useSearchResultParams()
+  const { hotelSearchRequestQuery, searchParamsQuery } = useSearchResultParams()
 
   const handleLoadMoreActions = async () => {
     hotelSearchRequestQuery.fetchNextPage()
@@ -21,10 +20,10 @@ const HotelSearchResults: React.FC = () => {
     <>
       {(hotelSearchRequestQuery.isLoading ||
         searchParamsQuery.isLoading ||
-        (hotelSearchRequestQuery.data?.pages &&
-          !hotelSearchRequestQuery.data?.pages?.filter(
-            (page) => page.searchResults[0]?.items.length > 0
-          )?.length)) && (
+        !hotelSearchRequestQuery.data?.pages ||
+        hotelSearchRequestQuery.data?.pages.filter(
+          (item) => item?.searchResults[0].items.length
+        ).length === 0) && (
         <div className='relative'>
           <div className='absolute start-0 end-0'>
             <Skeleton h={6} radius={0} />
@@ -45,6 +44,7 @@ const HotelSearchResults: React.FC = () => {
             }}
           >
             {hotelSearchRequestQuery.data?.pages.map((page) => {
+              if (!page) return null
               return (
                 page.searchResults.length &&
                 page.searchResults.map((results) => {
@@ -69,7 +69,7 @@ const HotelSearchResults: React.FC = () => {
             })}
             {hotelSearchRequestQuery.data?.pages &&
               hotelSearchRequestQuery.data?.pages?.filter(
-                (page) => page.searchResults[0]?.items.length > 0
+                (page) => page && page.searchResults[0]?.items.length > 0
               )?.length > 0 &&
               hotelSearchRequestQuery.hasNextPage && (
                 <div className='flex justify-center'>

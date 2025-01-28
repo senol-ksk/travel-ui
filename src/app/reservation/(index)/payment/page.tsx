@@ -14,7 +14,7 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
-import { range } from '@mantine/hooks'
+import { range, upperFirst } from '@mantine/hooks'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -124,7 +124,13 @@ const PaymentPage = () => {
 
   console.log(formMethods.formState.errors)
 
-  if (checkoutQuery.error || !checkoutQuery.data || !queryStrings.productKey)
+  const reservationData = checkoutQuery.data?.data
+  const passengerData = reservationData?.treeContainer
+  const firstPassengerFullName = passengerData?.childNodes[0].items[0].value
+    ? `${upperFirst(passengerData?.childNodes[0].items[0].value.firstName.toLocaleLowerCase())} ${upperFirst(passengerData?.childNodes[0].items[0].value.lastName.toLocaleLowerCase())}`
+    : `${upperFirst(passengerData?.childNodes[0]?.childNodes?.at(0)?.items.at(0)?.value?.firstName?.toLowerCase() ?? '')} ${upperFirst(passengerData?.childNodes[0].childNodes.at(0)?.items.at(0)?.value.lastName.toLocaleLowerCase() ?? '')}`
+
+  if (!reservationData || !queryStrings.productKey)
     return <div>Hata olustu</div>
 
   return (
@@ -158,13 +164,7 @@ const PaymentPage = () => {
             <Controller
               control={formMethods.control}
               name='cardOwner'
-              defaultValue={`${
-                checkoutQuery.data?.data?.treeContainer.childNodes[0].items[0]
-                  .value.firstName
-              } ${
-                checkoutQuery.data?.data?.treeContainer.childNodes[0].items[0]
-                  .value.lastName
-              }`}
+              defaultValue={firstPassengerFullName}
               render={({ field }) => {
                 return (
                   <TextInput

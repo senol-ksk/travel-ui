@@ -230,7 +230,7 @@ export interface HotelSearchResultApiResponse {
         logSearchToken: null
       },
     ]
-  }
+  } | null
   message: null
   code: number
   token: null

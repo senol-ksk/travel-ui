@@ -10,13 +10,12 @@ import isTomorrow from 'dayjs/plugin/isTomorrow'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createSerializer, parseAsString, parseAsIsoDate } from 'nuqs/server'
 
 import { BusLocations } from '@/components/search-engine/locations/bus/locations'
 import { LocationResults } from '@/components/search-engine/locations/type'
-import { getBusSearchSessionToken, getSessionToken, request } from '@/network'
+import { getBusSearchSessionToken, request } from '@/network'
 import { BusCalendar } from '@/components/search-engine/calendar/bus'
-import { useRouter } from 'next/navigation'
+import { useTransitionRouter } from 'next-view-transitions'
 import { serializeBusSearchParams } from './searchParmas'
 
 dayjs.extend(isToday)
@@ -40,7 +39,7 @@ type BusSearchEngineInfer = z.infer<typeof busSearhEngineSchema>
 
 const BusSearchEngine = () => {
   const mounted = useMounted()
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   const [localStorageData, setLocalStorageData] =
     useLocalStorage<BusSearchEngineInfer>({

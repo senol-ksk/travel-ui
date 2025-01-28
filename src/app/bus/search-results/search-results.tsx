@@ -1,10 +1,10 @@
 'use client'
 
 import { BusSearchItem } from './components/search-item'
-import { Button, Drawer, Skeleton, Title } from '@mantine/core'
+import { Button, Drawer, Skeleton } from '@mantine/core'
 import { useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
-import { useRouter } from 'next/navigation'
+import { useTransitionRouter } from 'next-view-transitions'
 import { createSerializer, useQueryStates } from 'nuqs'
 
 import {
@@ -31,14 +31,14 @@ const BusSearchResults: React.FC = () => {
   const initBusPaymentProcess = useBusSearchInitPaymentProcess()
 
   const seatData = seatRequestMutation.data
-  const router = useRouter()
+  const router = useTransitionRouter()
 
   const [seatSelectIsOpened, { open: openSeatSelect, close: closeSeatSelect }] =
     useDisclosure(false)
   const [selectedBus, setSelectedBus] = useState<BusSearchResultItem>()
   const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
 
-  if (searchResults.hasNextPage) {
+  if (searchResults.hasNextPage && !searchResults.isFetchingNextPage) {
     setTimeout(searchResults.fetchNextPage, 1000)
   }
 
@@ -70,8 +70,6 @@ const BusSearchResults: React.FC = () => {
             searchToken: searchParams.searchToken,
             sessionToken: searchParams.sessionToken,
           })
-
-          console.log(url)
 
           router.push(url)
         }
@@ -192,6 +190,7 @@ const BusSearchResults: React.FC = () => {
                 <Button
                   disabled={!selectedSeats.length}
                   onClick={handleCheckSeatStatus}
+                  loading={seatControlMutation.isPending}
                 >
                   Onayla ve Devam Et
                 </Button>

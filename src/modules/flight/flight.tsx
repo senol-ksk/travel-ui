@@ -154,11 +154,15 @@ export const Flight = () => {
 
   const handleFormSubmit = async () => {
     cookies.remove('searchToken')
+    const departurDate = dates[0]
+    const returnDate = dates[1]
+      ? dates[1]
+      : dayjs(dates[0]).add(2, 'd').toDate()
 
     setFlightLocalObj(() => ({
       Origin: selectedOriginLocation!,
       Destination: selectedDepartureLocation!,
-      Dates: dates,
+      Dates: [departurDate, returnDate],
       ActiveTripKind: form.getValues().ActiveTripKind,
       CabinClass: {
         value: form.getValues().CabinClass.value + '',
@@ -169,17 +173,14 @@ export const Flight = () => {
 
     queryClient.clear()
 
-    // window.location.href = `/flight-search`
-
     router.push(`/flight-search?searchId=${generateUUID()}`)
-    // router.refresh()
   }
 
   if (formSkeletonVisibilty) return <Skeleton height={80} />
 
   return (
     <form onSubmit={form.onSubmit(handleFormSubmit)}>
-      <div className='xs:justify-start grid grow items-center justify-between gap-3 pb-4 sm:flex'>
+      <div className='flex items-center gap-3 pb-4'>
         <div>
           <Radio.Group
             key={form.key('ActiveTripKind')}
@@ -194,7 +195,7 @@ export const Flight = () => {
             </Group>
           </Radio.Group>
         </div>
-        <div className='flex'>
+        <div>
           <NativeSelect
             data={[
               { label: 'Ekonomi', value: '0' },

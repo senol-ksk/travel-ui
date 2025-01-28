@@ -102,6 +102,9 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 >
                   {hotelInfo.name}
                 </Title>
+                {!resultItem.nonRefundable && (
+                  <div className='text-green-500'>Ücretsiz İptal</div>
+                )}
               </div>
             </div>
             <div className='col-span-3 flex flex-col gap-3 self-end @2xl:text-end'>

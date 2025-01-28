@@ -23,7 +23,7 @@ const TourSearchResultClient = () => {
     searchResultsQuery.data?.pages
       .map((page) =>
         page.code === 1 && page.data.searchResults
-          ? page.data.searchResults.filter((results) => results.items.length)
+          ? page.data.searchResults?.filter((results) => results.items?.length)
               .length
           : 0
       )
