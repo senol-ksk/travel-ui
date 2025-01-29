@@ -2,7 +2,6 @@ import { formatCurrency } from '@/libs/util'
 import { FlightDetail, FlightDetailSegment, FlightFareInfo } from '../type'
 import { Button, Divider } from '@mantine/core'
 import dayjs from 'dayjs'
-import { useRef, useState } from 'react'
 
 type IProps = {
   fareInfo: FlightFareInfo
@@ -27,12 +26,20 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         </div>
         <div className='flex items-center gap-2'>
           <div>
-            {dayjs(detailSegments.at(0)?.departureTime).format('HH:mm')}
+            <div>
+              {dayjs(detailSegments.at(0)?.departureTime).format('HH:mm')}
+            </div>
+            <div>{detailSegments.at(0)?.origin.code}</div>
           </div>
           <div className='relative grow'>
             <Divider color='green' />
           </div>
-          <div>{dayjs(detailSegments.at(0)?.arrivalTime).format('HH:mm')}</div>
+          <div>
+            <div>
+              {dayjs(detailSegments.at(0)?.arrivalTime).format('HH:mm')}
+            </div>
+            <div>{detailSegments.at(-1)?.destination.code}</div>
+          </div>
         </div>
         <div className='flex justify-center'>
           <div className='text-sm text-gray-400'>

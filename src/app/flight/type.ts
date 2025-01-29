@@ -41,7 +41,7 @@ export interface FlightSearchResult {
 
 export interface FlightFareInfo {
   flightDetailKeys: string[]
-  groupId: ID
+  groupId: number
   key: string
   totalPrice: ServicePriceType
   basePrice: ServicePriceType

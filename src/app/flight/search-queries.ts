@@ -172,7 +172,7 @@ const useSearchResultsQueries = () => {
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
-      return await serviceRequest<{ productKey: string }>({
+      const response = await serviceRequest<{ productKey: string }>({
         axiosOptions: {
           url: '/api/flight/postKey',
           method: 'post',
@@ -183,6 +183,7 @@ const useSearchResultsQueries = () => {
           },
         },
       })
+      return response
     },
     onSuccess(query) {
       const serialize = createSerializer(reservationParsers)
@@ -193,10 +194,12 @@ const useSearchResultsQueries = () => {
         sessionToken: searchSessionTokenQuery.data?.sessionToken,
       })
 
-      if (query?.success && query.data?.productKey) router.push(reservationUrl)
+      if (query?.success && query.data?.productKey) {
+        router.push(reservationUrl)
+      }
     },
   })
-  return { searchResultsQuery, submitFlightData }
+  return { searchResultsQuery, submitFlightData, searchParams }
 }
 
 export { useSearchResultsQueries }
