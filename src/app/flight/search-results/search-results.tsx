@@ -9,6 +9,27 @@ import { Skeleton } from '@mantine/core'
 const FlightSearchView = () => {
   const { searchResultsQuery } = useSearchResultsQueries()
 
+  const searchResponseDataPages = searchResultsQuery.data?.pages
+    .map((page) => {
+      return page.data?.searchResults
+    })
+    .flat()
+
+  const flightFareInfos = searchResponseDataPages
+    ?.filter(
+      (item) =>
+        item?.flightFareInfos && Object.keys(item.flightFareInfos).length
+    )
+    .map(
+      (item) => item?.flightFareInfos && Object.values(item?.flightFareInfos)
+    )
+    .filter(Boolean)
+    .flat()
+    .sort((a, b) => (a?.totalPrice?.value ?? 0) - (b?.totalPrice?.value || 0))
+
+  console.log(flightFareInfos)
+  console.log(searchResponseDataPages)
+
   return (
     <>
       {searchResultsQuery.isLoading || searchResultsQuery.isFetching ? (
@@ -30,9 +51,23 @@ const FlightSearchView = () => {
           </div>
         </div>
         <div className='relative md:col-span-3'>
-          {searchResultsQuery.data && searchResultsQuery.data.pages.length && (
-            <FlightSearchResults data={searchResultsQuery.data?.pages} />
-          )}
+          {searchResultsQuery.data?.pages?.map((page) => {
+            console.log()
+            return page.data?.searchResults?.map(
+              (searchResult, searchResultIndex) => {
+                // console.log(searchResult, searchResultIndex)
+
+                return null
+                // return <div>1</div>
+                // return (
+                //   <FlightSearchResults
+                //     key={}
+                //     data={searchResultsQuery.data.pages}
+                //   />
+                // )
+              }
+            )
+          })}
         </div>
       </div>
     </>

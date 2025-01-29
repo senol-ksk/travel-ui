@@ -7,9 +7,9 @@ export interface FlightSearchResult {
       departureDate: string
     }
   }
-  flightFareInfos: { [key: FlightFareInfo['key']]: FlightFareInfo }
-  flightDetailSegments: { [key: string]: FlightDetailSegment }
-  flightDetails: { [key: string]: FlightDetail }
+  flightFareInfos: { [key: FlightFareInfo['key']]: FlightFareInfo } | null
+  flightDetailSegments: { [key: string]: FlightDetailSegment } | null
+  flightDetails: { [key: string]: FlightDetail } | null
 
   flightPackageInfos: object
   sessionToken: null
@@ -173,7 +173,7 @@ export interface FlightSearchResultsApiResponse {
     message: null
     hasMoreResponse: boolean
     executionTime: string
-    searchResults: FlightSearchResult[] | []
+    searchResults: FlightSearchResult[] | [] | null
   } | null
   token: null
   clientIP: null

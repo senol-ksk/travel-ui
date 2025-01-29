@@ -146,7 +146,7 @@ const useSearchResultsQueries = () => {
     },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
       if (lastPage.data && lastPage.data.hasMoreResponse) {
-        if (lastPage.data.searchResults.length) {
+        if (lastPage?.data?.searchResults?.length) {
           lastPage.data.searchResults.forEach((searchResult) => {
             const providerName = searchResult.diagnostics.providerName
 

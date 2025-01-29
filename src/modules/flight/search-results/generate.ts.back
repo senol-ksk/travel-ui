@@ -1,8 +1,8 @@
-import type {
-  ClientFlightDataModel,
-  FlightSearchApiResponse,
-} from '@/modules/flight/types'
-import { getAirlineByCodeList } from '@/modules/flight/search.request'
+// import type {
+//   ClientFlightDataModel,
+//   FlightSearchApiResponse,
+// } from '@/modules/flight/types'
+// import { getAirlineByCodeList } from '@/modules/flight/search.request'
 
 const dataTypes: ['flightFareInfos', 'flightDetailSegments', 'flightDetails'] =
   ['flightFareInfos', 'flightDetailSegments', 'flightDetails']
