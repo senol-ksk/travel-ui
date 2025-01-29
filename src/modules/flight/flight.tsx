@@ -236,6 +236,7 @@ export const Flight = () => {
                   { label: 'Business', value: '2' },
                   { label: 'First Class', value: '3' },
                 ]}
+                defaultValue={form.formState.defaultValues?.CabinClass?.value}
                 onChange={({ currentTarget }) => {
                   field.onChange({
                     value: +currentTarget.value,

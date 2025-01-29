@@ -76,7 +76,7 @@ export interface FlightFareInfo {
 
 export interface FlightDetailSegment {
   key: string
-  groupId: ID
+  groupId: number
   origin: {
     code: string
     isDomestic: boolean
@@ -135,7 +135,7 @@ export interface FlightDetailSegment {
 
 export interface FlightDetail {
   key: string
-  groupId: ID
+  groupId: number
   flightSegmentKeys: string[]
   travelTime: string
   direction: number

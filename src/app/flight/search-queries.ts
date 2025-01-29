@@ -1,29 +1,27 @@
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
+import dayjs from 'dayjs'
+import { useRef } from 'react'
+import { createSerializer, useQueryStates } from 'nuqs'
+import { useTransitionRouter } from 'next-view-transitions'
+
 import { flightSearchParams } from '@/modules/flight/searchParams'
-import { useQueryStates } from 'nuqs'
-import type { FlightApiRequestParams } from '@/modules/flight/types'
 import type { FlightSearchResultsApiResponse } from '@/app/flight/type'
 import {
   getFlightSearchSessionToken,
   getsecuritytoken,
   request,
+  serviceRequest,
 } from '@/network'
-import { useLocalStorage } from '@mantine/hooks'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import dayjs from 'dayjs'
-import { useRef } from 'react'
+
 import { delayCodeExecution } from '@/libs/util'
+import { reservationParsers } from '../reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
 const useSearchResultsQueries = () => {
   const [searchParams] = useQueryStates(flightSearchParams)
   const appToken = useRef<string>(null)
-  // const [flightLocalObj] = useLocalStorage<
-  //   Omit<FlightApiRequestParams, 'SearchToken'>
-  // >({
-  //   key: 'flight-search-engine',
-  //   getInitialValueInEffect: false,
-  // })
+  const router = useTransitionRouter()
 
   const generateFlightSearchPanel = () => {
     const FlightSearchPanel = {
@@ -144,6 +142,10 @@ const useSearchResultsQueries = () => {
 
       return response
     },
+    // select(data) {
+    //   console.log(data)
+    //   return data.pages.map()
+    // },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
       if (lastPage.data && lastPage.data.hasMoreResponse) {
         if (lastPage?.data?.searchResults?.length) {
@@ -168,7 +170,33 @@ const useSearchResultsQueries = () => {
     searchResultsQuery.fetchNextPage()
   }
 
-  return { searchResultsQuery }
+  const submitFlightData = useMutation({
+    mutationFn: async (key: string) => {
+      return await serviceRequest<{ productKey: string }>({
+        axiosOptions: {
+          url: '/api/flight/postKey',
+          method: 'post',
+          params: {
+            key,
+            session: searchSessionTokenQuery.data?.sessionToken,
+            search: searchSessionTokenQuery.data?.searchToken,
+          },
+        },
+      })
+    },
+    onSuccess(query) {
+      const serialize = createSerializer(reservationParsers)
+
+      const reservationUrl = serialize('/reservation', {
+        productKey: query?.data?.productKey,
+        searchToken: searchSessionTokenQuery.data?.searchToken,
+        sessionToken: searchSessionTokenQuery.data?.sessionToken,
+      })
+
+      if (query?.success && query.data?.productKey) router.push(reservationUrl)
+    },
+  })
+  return { searchResultsQuery, submitFlightData }
 }
 
 export { useSearchResultsQueries }
