@@ -229,12 +229,234 @@ export interface FlightSummaryResponse {
 }
 
 export interface HotelSummaryResponse {
-  price: number
+  searchToken: string
+  sessionToken: string
+  destinationSlug: string
+  hotelSlug: null
+  roomGroup: {
+    hotelId: ID
+    hotelKey: string
+    hotel: {
+      id: ID
+      name: string
+      slug: string
+      zip_code: string
+      address: string
+      destination: string
+      country_code: string
+      location: number[]
+      phone: string
+      email: string
+      currency: string
+      meal_type: string
+      nearby: string[]
+      nearby_info: null
+      checkin_from: string
+      checkout_to: string
+      fax: null
+      nr_rooms: number
+      stars: number
+      availability_score: null
+      max_free_child_age: 0
+      min_free_child_age: null
+      images: {
+        category: 51
+        tag: ''
+        original: 'https://cdng.jollytur.com/files/cms/media/hotel/d98de462-ca8d-444d-9933-33c3c5185d0e.jpg'
+        large: null
+        small: null
+        mid: null
+        default: boolean
+        priority: 0
+      }[]
+      themes: number[]
+      facilities: number[]
+      facility_scopes: null
+      tripAdvisor: null
+      price: ServicePriceType
+      descriptions: {
+        hotelInformation: string
+        hotelAmenity: string
+        roomAmenity: string
+        locationInformation: string
+        hotelIntroduction: string
+        attractionInformation: string
+        dining: null
+        areaAttractions: null
+        recreation: null
+        policy: null
+        spa: null
+        whatToExpect: null
+        businessAmenities: null
+        beachPool: string
+        honeymoonInformation: null
+        specialDays: null
+        activities: null
+        importentInfo: null
+      }
+      year_built: null | number
+      nr_restaurants: number
+      nr_bars: number
+      nr_halls: null
+      last_update: string
+      video_list: null
+      web_site: null
+      deleted: boolean
+      destination_slug: string
+      old_destination_slug: null
+      rating: number
+      listing_rate: number
+      sales_rate: number
+      destination_id: ID
+      destination_map: number[]
+      search_rate: number
+      reviews: null
+      nearby_restaurants: null
+      comment_info: {
+        comments: {
+          startDate: '2023-07-14T21:00:00Z'
+          endDate: '2023-07-15T21:00:00Z'
+          commentDate: '2024-02-13T21:00:00Z'
+          name: 'Abdullah '
+          surname: 'T***'
+          averageScore: 8
+          positiveCotent: 'Fiyatından dolayı 1 gün konakladık '
+          negativeCotent: ''
+          isSuggested: true
+          reasonLabel: 'İş Seyahati'
+          withWhoLabel: '2 Erkek'
+          userCountryCode: null
+          userCountry: null
+          userCity: null
+        }[]
+        totalComments: number
+        averageScore: number
+      }
+      documents: {
+        no: '2022-7-0574'
+        type: ''
+        description: 'Basit Konaklama Belgesi'
+      }[]
+      food_drinks: null
+    }
+    roomDetails: {
+      [key: string]: {
+        roomKey: string
+        description: string
+        allotment: number
+        bedType: string
+        roomType: string
+        quantity: number
+        size: number
+        facilities: {
+          id: ID
+          name: string
+          scope_id: ID
+          type_id: ID
+          isPaid: boolean
+          featured: boolean
+          icon_key: null
+          priority: number
+        }[]
+        pensionType: string
+        pensionTypeId: number
+        extraInformations: null
+        images: []
+      }
+    }
+    rooms: {
+      passengerKeys: string[]
+      nightlyRates: {
+        totalPrice: ServicePriceType
+        basePrice: ServicePriceType
+        taxes: ServicePriceType
+        fee: ServicePriceType
+      }[]
+      addonInfos: []
+      freeChildAges: null
+      freeNights: number
+      discountInformations: null
+      key: string
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: null
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    averageRate: ServicePriceType
+    nightlyRateTotal: ServicePriceType
+    discountDescription: null
+    cancelWarrantyPrice: ServicePriceType
+    useCancelWarranty: boolean
+    prepaid: boolean
+    accommodationTax: {
+      price: ServicePriceType
+      included: boolean
+    }
+    isSingleMaleRestriction: boolean
+    cancellationPolicy: null
+    cancellationPolicies: {
+      penaltyPrice: ServicePriceType
+      optionDate: string
+      description: string
+    }[]
+    additionalInfos: []
+    nonRefundable: boolean
+    checkInDate: string
+    minNight: number
+    checkOutDate: string
+    earlyBooking: boolean
+    addonInfos: []
+    packageSearchType: number
+    provisionTime: string
+    provider: string
+    priceDifferenceBackGuarantee: boolean
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  status: []
+  productKey: string
+  moduleName: string
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
 }
 
 export type OperationResultType = {
   passenger: {
-    modules: [1]
+    modules: number[]
     passengers: {
       type: PassengerTypesIndexEnum
       gender: GenderEnumIndex

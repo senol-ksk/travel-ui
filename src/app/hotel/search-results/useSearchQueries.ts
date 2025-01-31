@@ -26,7 +26,7 @@ export const useSearchResultParams = () => {
         timeoutIsTriggered.current
       )
       if (
-        !hotelSearchRequestQuery.isFetching ||
+        !hotelSearchRequestQuery.isFetching &&
         !hotelSearchRequestQuery.isFetchingNextPage
       ) {
         hotelSearchRequestQuery.fetchNextPage()
@@ -141,56 +141,43 @@ export const useSearchResultParams = () => {
       return
     },
   })
-  const socketOnAvailablity = ({ status }: { status: number }) => {
-    console.log('socketOnAvailablity')
-
-    // if (status === 2) {
-    //   if (timeoutIsTriggered.current) {
-    //     console.log('timeout is stoped')
-    //     clearRequestTimeout()
-    //   }
-
-    //   hotelSearchRequestQuery.fetchNextPage()
-    //   hotelSocket.disconnect()
-    // }
-
-    // if (status === 3) {
-    // }
-
-    if (
-      !hotelSearchRequestQuery.isFetching ||
-      !hotelSearchRequestQuery.isFetchingNextPage
-    ) {
-      hotelSearchRequestQuery.fetchNextPage()
-    }
-
-    hotelSocket.disconnect()
-    clearRequestTimeout()
-  }
-
-  const socketOnConnect = () => {
-    console.log('socket connected')
-
-    if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
-      hotelSocket.emit('Auth', {
-        searchtoken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-      })
-      hotelSocket.on('AvailabilityStatus', socketOnAvailablity)
-    }
-  }
-  const socketOnDisConnect = () => {
-    console.log('disconnected')
-  }
-  hotelSocket.on('connect', socketOnConnect)
-  hotelSocket.on('disconnect', socketOnDisConnect)
 
   useEffect(() => {
+    const socketOnAvailablity = ({ status }: { status: number }) => {
+      console.log('socketOnAvailablity')
+
+      if (
+        !hotelSearchRequestQuery.isFetching &&
+        !hotelSearchRequestQuery.isFetchingNextPage
+      ) {
+        hotelSearchRequestQuery.fetchNextPage()
+      }
+
+      hotelSocket.disconnect()
+      clearRequestTimeout()
+    }
+
+    const socketOnConnect = () => {
+      console.log('socket connected')
+
+      if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
+        hotelSocket.emit('Auth', {
+          searchtoken:
+            searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
+        })
+      }
+      hotelSocket.once('AvailabilityStatus', socketOnAvailablity)
+    }
+
+    hotelSocket.once('connect', socketOnConnect)
     return () => {
       hotelSocket.disconnect()
+      hotelSocket.off('AvailabilityStatus')
       clearRequestTimeout()
       timeoutIsTriggered.current = false
     }
-  }, [clearRequestTimeout])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return {
     hotelSearchRequestQuery,
