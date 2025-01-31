@@ -18,6 +18,8 @@ import { reservationParsers } from '../reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
+import dummyData from './search-results/intenational-dummy.json'
+
 const useSearchResultsQueries = () => {
   const [searchParams] = useQueryStates(flightSearchParams)
   const appToken = useRef<string>(null)
@@ -57,7 +59,7 @@ const useSearchResultsQueries = () => {
 
     if (searchParams.activeTripKind === '2') {
       FlightSearchPanel.SearchLegs.push({
-        DepartureTime: dayjs(searchParams.departureDate).format(
+        DepartureTime: dayjs(searchParams.returnDate).format(
           requestedDayFormat
         ),
         CabinClass: searchParams.cabinClass?.value,
@@ -83,6 +85,7 @@ const useSearchResultsQueries = () => {
   }
 
   const searchSessionTokenQuery = useQuery({
+    // enabled: false,
     enabled: !!searchParams,
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
@@ -139,8 +142,8 @@ const useSearchResultsQueries = () => {
           appName: process.env.NEXT_PUBLIC_APP_NAME,
         },
       })) as FlightSearchResultsApiResponse
-
       return response
+      // return dummyData as FlightSearchResultsApiResponse
     },
     // select(data) {
     //   console.log(data)

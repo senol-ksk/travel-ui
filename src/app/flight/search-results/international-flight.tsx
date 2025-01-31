@@ -17,7 +17,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
   detailSegments,
   onSelect = () => null,
 }) => {
-  const flightNumber = detailSegments.at(0)?.flightNumber
+  // const flightNumber = detailSegments.at(0)?.flightNumber
 
   return (
     <div className={clsx(`@container rounded-lg border border-gray-300`)}>
@@ -26,42 +26,52 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
       {/* <div>
         <code>details</code>
         <input defaultValue={JSON.stringify(details)} />
-      </div>*/}
+      </div> */}
       {/* <div>
         <code>detailSegments</code>
         <input defaultValue={JSON.stringify(detailSegments)} />
       </div> */}
-      {details.map((detail) => (
-        <div className='p-3' key={detail.key}>
-          <div>
-            {detailSegments.at(0)?.marketingAirline.code} {flightNumber}
-          </div>
-          <div className='flex items-center gap-2'>
+      {details.map((detail) => {
+        const relatedDetailSegments = detailSegments.filter(
+          (item) => detail.groupId === item.groupId
+        )
+        return (
+          <div className='p-3' key={detail.key}>
             <div>
-              <div>
-                {dayjs(detailSegments.at(0)?.departureTime).format('HH:mm')}
-              </div>
-              <div>{detailSegments.at(0)?.origin.code}</div>
+              {relatedDetailSegments.at(0)?.marketingAirline.code}{' '}
+              {relatedDetailSegments.at(0)?.flightNumber}
             </div>
-            <div className='relative grow'>
-              <Divider color='green' />
-            </div>
-            <div>
+            <div className='flex items-center gap-2'>
               <div>
-                {dayjs(detailSegments.at(-1)?.arrivalTime).format('HH:mm')}
+                <div>
+                  {dayjs(relatedDetailSegments.at(0)?.departureTime).format(
+                    'HH:mm'
+                  )}
+                </div>
+                <div>{relatedDetailSegments.at(0)?.origin.code}</div>
               </div>
-              <div>{detailSegments.at(-1)?.destination.code}</div>
+              <div className='relative grow'>
+                <Divider color='green' />
+              </div>
+              <div>
+                <div>
+                  {dayjs(relatedDetailSegments.at(-1)?.arrivalTime).format(
+                    'HH:mm'
+                  )}
+                </div>
+                <div>{relatedDetailSegments.at(-1)?.destination.code}</div>
+              </div>
+            </div>
+            <div className='flex justify-center'>
+              <div className='text-sm text-gray-400'>
+                {relatedDetailSegments.length > 1
+                  ? `${relatedDetailSegments.length - 1} Aktarma`
+                  : 'Aktarmasız'}
+              </div>
             </div>
           </div>
-          <div className='flex justify-center'>
-            <div className='text-sm text-gray-400'>
-              {detailSegments.length > 1
-                ? `${detailSegments.length - 1} Aktarma`
-                : 'Aktarmasız'}
-            </div>
-          </div>
-        </div>
-      ))}
+        )
+      })}
 
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
