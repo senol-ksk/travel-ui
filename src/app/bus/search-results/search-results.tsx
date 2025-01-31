@@ -39,7 +39,7 @@ const BusSearchResults: React.FC = () => {
   const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
 
   if (searchResults.hasNextPage && !searchResults.isFetchingNextPage) {
-    setTimeout(searchResults.fetchNextPage, 1000)
+    searchResults.fetchNextPage()
   }
 
   const handleBusSeatSelect = (bus: BusSearchResultItem) => {

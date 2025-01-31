@@ -5,7 +5,7 @@ import {
   FlightSummaryResponse,
   HotelSummaryResponse,
   OperationResultType,
-} from './type'
+} from '../type'
 import { ModuleNames } from '@/types/global'
 import { Divider, Title } from '@mantine/core'
 import {
@@ -15,6 +15,7 @@ import {
 import { formatCurrency } from '@/libs/util'
 import { FlightSummary } from './products/flight'
 import dayjs from 'dayjs'
+import { HotelSummary } from './products/hotel'
 
 type IProps = {
   searchParams: Promise<{
@@ -89,6 +90,10 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                     <FlightSummary
                       data={productData as FlightSummaryResponse}
                     />
+                  )
+                case 'Hotel':
+                  return (
+                    <HotelSummary data={productData as HotelSummaryResponse} />
                   )
 
                 default:

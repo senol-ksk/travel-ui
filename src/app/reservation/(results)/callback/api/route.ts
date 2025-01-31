@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     await serviceRequest({
       axiosOptions: {
-        url: `/api/book/complete`,
+        url: `/api/product/complete`,
         method: 'POST',
         data: bookResult.data,
       },
