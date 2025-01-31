@@ -4,7 +4,7 @@ import { Alert, Button, Skeleton } from '@mantine/core'
 import { createSerializer } from 'nuqs'
 
 import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
-import { useSearchResultParams } from './request-model'
+import { useSearchResultParams } from './useSearchQueries'
 import { HotelSearchResultItem } from './results-item'
 
 const detailUrlSerializer = createSerializer(hotelDetailSearchParams)

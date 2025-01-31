@@ -8,7 +8,7 @@ import {
 import { formatCurrency } from '@/libs/util'
 import { createSerializer } from 'nuqs'
 import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
-import { useSearchResultParams } from './request-model'
+import { useSearchResultParams } from './useSearchQueries'
 
 type IProps = {
   hotelInfo: HotelSearchResultHotelInfo
