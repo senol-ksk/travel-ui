@@ -1,0 +1,408 @@
+{
+  "data": {
+    "passenger": {
+      "modules": [14],
+      "passengers": [
+        {
+          "type": 0,
+          "gender": 0,
+          "fullName": "TEST  DENEME",
+          "birthday": "1960-07-02T00:00:00",
+          "identityNumber": "65*******94",
+          "bookingCode": "",
+          "campaignCode": null,
+          "eTicketNumber": null,
+          "firstName": "TEST",
+          "lastName": "DENEME",
+          "mobilePhoneNumber": "+90534*****43",
+          "email": "SENOLK@LIDYATEKNOLOJI.COM",
+          "marketingAirlineCode": "",
+          "isRoundedTrip": false,
+          "module": 14,
+          "groupOrderIndex": 1,
+          "localPassengerSequenceNo": 1,
+          "localRelatedPassengerSequenceNo": null,
+          "discount": {
+            "value": 0,
+            "currency": null,
+            "rateValue": null
+          },
+          "productItemId": 57816
+        },
+        {
+          "type": 0,
+          "gender": 1,
+          "fullName": "TEST  DENEME",
+          "birthday": "1990-01-03T00:00:00",
+          "identityNumber": "66*******36",
+          "bookingCode": "",
+          "campaignCode": null,
+          "eTicketNumber": null,
+          "firstName": "TEST",
+          "lastName": "DENEME",
+          "mobilePhoneNumber": "+90534*****43",
+          "email": "SENOLK@LIDYATEKNOLOJI.COM",
+          "marketingAirlineCode": "",
+          "isRoundedTrip": false,
+          "module": 14,
+          "groupOrderIndex": 2,
+          "localPassengerSequenceNo": 1,
+          "localRelatedPassengerSequenceNo": null,
+          "discount": {
+            "value": 0,
+            "currency": null,
+            "rateValue": null
+          },
+          "productItemId": 57817
+        }
+      ],
+      "billingInformation": [
+        {
+          "billingName": "react test",
+          "isCompany": false,
+          "address": "Kadikoy Kadikoy Istanbul",
+          "taxNo": "10*******00"
+        }
+      ],
+      "paymentInformation": {
+        "basketTotal": 1565.42,
+        "basketDiscountTotal": 0,
+        "collectingTotal": 1565.42,
+        "financellTotal": 0,
+        "mlTotal": null,
+        "rateOfInterest": 1,
+        "installmentCount": 1,
+        "bankName": "AKBANK",
+        "encryptedCardHolder": "T*** D*****",
+        "encryptedCardNumber": "435509******5232",
+        "sellingCurrency": "TRY"
+      },
+      "ssrList": [],
+      "passengerCargoAddress": [],
+      "bookingDateTime": "2025-02-03T14:17:55.5687469",
+      "fromSession": true,
+      "authorizeKey": null,
+      "shoppingFileId": 53080,
+      "taxAmount": 0,
+      "shippingAmount": 0,
+      "operationResultPromotionUsageList": null
+    },
+    "product": {
+      "summaryResponse": {
+        "searchPanel": {
+          "origin": 627,
+          "destination": 676,
+          "date": "2025-04-15T00:00:00Z",
+          "receivedProviders": [],
+          "scopeName": "FULLTRIP",
+          "searchToken": "5CA946F31DB579EB1A916AFFF44BBDB176AF978BD838AB4BEE4CA625D5E20C33",
+          "customerId": 2,
+          "customerUserId": 3,
+          "packageSearchType": 0,
+          "tags": [],
+          "domestic": false,
+          "sessionToken": "1B7EC621FDE7CFFA491567CE9582F18D6DCDF59D6E398D2537C2C3F9C7C278FB",
+          "traceId": "5CA946F31DB579EB1A916AFFF44BBDB176AF978BD838AB4BEE4CA625D5E20C33",
+          "returnDiagnostics": 0,
+          "appName": "fulltrip.preprod.webapp.html",
+          "scopeCode": "2d932774-a9d8-4df9-aae7-5ad2727da1c7",
+          "logSessionToken": null,
+          "logSearchToken": null
+        },
+        "busJourney": {
+          "id": 1,
+          "companyId": -129,
+          "company": "Lüks Yalova Seyahat",
+          "busType": "2+1",
+          "totalSeats": 0,
+          "availableSeats": 38,
+          "bus": {
+            "kind": "TRAVEGO 2+1",
+            "trackingNo": "363876-24-58",
+            "lineNo": 1,
+            "origin": null,
+            "destination": "İzmir",
+            "departureDate": "2025-04-15T10:30:00",
+            "arrivalDate": "2025-04-15T19:10:00",
+            "duration": "08:40:00",
+            "originalPrice": {
+              "value": 782.71,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "internetPrice": {
+              "value": 782.71,
+              "currency": "TRY",
+              "rateValue": null
+            },
+            "busName": null,
+            "policy": null,
+            "features": null,
+            "description": "",
+            "available": true
+          },
+          "totalCommission": {
+            "value": 108.61,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "buyServiceFee": 68.0909090909091,
+          "sellServiceFee": 68.0909090909091,
+          "features": [],
+          "origin": "Harem Otogarı",
+          "originId": 625,
+          "destination": "İzmir",
+          "destinationId": 676,
+          "isActive": true,
+          "cancellationOffset": 480,
+          "hasBusShuttle": false,
+          "isHesCodeRequired": true,
+          "disableSingleSeatSelection": false,
+          "changeOffset": 0,
+          "selectedSeats": [
+            {
+              "no": 19,
+              "status": 0,
+              "sideStatus": 0,
+              "type": 1,
+              "paxId": 1,
+              "paxType": 0,
+              "gender": 2,
+              "age": 0,
+              "discount": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "totalPrice": {
+                "value": 782.71,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "servicePrice": {
+                "value": 749,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "basePrice": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "taxes": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "totalCommission": {
+                "value": 108.61,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "buyServiceFee": 74.9,
+              "sellServiceFee": 108.61
+            },
+            {
+              "no": 22,
+              "status": 0,
+              "sideStatus": 0,
+              "type": 1,
+              "paxId": 2,
+              "paxType": 0,
+              "gender": 1,
+              "age": 0,
+              "discount": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "totalPrice": {
+                "value": 782.71,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "servicePrice": {
+                "value": 749,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "basePrice": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "taxes": {
+                "value": 0,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "totalCommission": {
+                "value": 108.61,
+                "currency": "TRY",
+                "rateValue": null
+              },
+              "buyServiceFee": 74.9,
+              "sellServiceFee": 108.61
+            }
+          ],
+          "routeInfos": [
+            {
+              "destination": "Harem Otogarı",
+              "priority": 1,
+              "departureDate": "2025-04-15T10:30:00",
+              "arrivalDate": "2025-04-15T10:30:00",
+              "locationPointId": 625,
+              "locationPoint": "Harem Otogarı"
+            },
+            {
+              "destination": "Gebze Otogarı",
+              "priority": 2,
+              "departureDate": "2025-04-15T11:30:00",
+              "arrivalDate": "2025-04-15T11:30:00",
+              "locationPointId": 777,
+              "locationPoint": "Gebze"
+            },
+            {
+              "destination": "Yalova İdo Otobüs Kalkış-Varış Noktası",
+              "priority": 4,
+              "departureDate": "2025-04-15T12:30:00",
+              "arrivalDate": "2025-04-15T12:30:00",
+              "locationPointId": 1971,
+              "locationPoint": "Yalova İdo Otobüs Kalkış Varış Noktası"
+            },
+            {
+              "destination": "Orhangazi Otogarı",
+              "priority": 5,
+              "departureDate": "2025-04-15T12:45:00",
+              "arrivalDate": "2025-04-15T12:45:00",
+              "locationPointId": 301,
+              "locationPoint": "Orhangazi"
+            },
+            {
+              "destination": "Gemlik Otogarı",
+              "priority": 6,
+              "departureDate": "2025-04-15T13:00:00",
+              "arrivalDate": "2025-04-15T13:00:00",
+              "locationPointId": 287,
+              "locationPoint": "Gemlik"
+            },
+            {
+              "destination": "Bursa Otogarı",
+              "priority": 7,
+              "departureDate": "2025-04-15T13:45:00",
+              "arrivalDate": "2025-04-15T13:45:00",
+              "locationPointId": 284,
+              "locationPoint": "Bursa"
+            },
+            {
+              "destination": "Mustafakemalpaşa Otogarı",
+              "priority": 8,
+              "departureDate": "2025-04-15T14:45:00",
+              "arrivalDate": "2025-04-15T14:45:00",
+              "locationPointId": 298,
+              "locationPoint": "Mustafakemalpaşa"
+            },
+            {
+              "destination": "Susurluk Otobüs Terminali",
+              "priority": 9,
+              "departureDate": "2025-04-15T15:00:00",
+              "arrivalDate": "2025-04-15T15:00:00",
+              "locationPointId": 218,
+              "locationPoint": "Susurluk"
+            },
+            {
+              "destination": "Balıkesir Otogarı",
+              "priority": 10,
+              "departureDate": "2025-04-15T16:15:00",
+              "arrivalDate": "2025-04-15T16:15:00",
+              "locationPointId": 185,
+              "locationPoint": "Balıkesir"
+            },
+            {
+              "destination": "Akhisar Otogarı",
+              "priority": 11,
+              "departureDate": "2025-04-15T17:00:00",
+              "arrivalDate": "2025-04-15T17:00:00",
+              "locationPointId": 874,
+              "locationPoint": "Akhisar"
+            },
+            {
+              "destination": "Manisa Otogarı",
+              "priority": 12,
+              "departureDate": "2025-04-15T18:30:00",
+              "arrivalDate": "2025-04-15T18:30:00",
+              "locationPointId": 891,
+              "locationPoint": "Manisa"
+            },
+            {
+              "destination": "İzmir Otogarı",
+              "priority": 13,
+              "departureDate": "2025-04-15T19:10:00",
+              "arrivalDate": "2025-04-15T19:10:00",
+              "locationPointId": 676,
+              "locationPoint": "İzmir"
+            }
+          ],
+          "key": "mMgJq98tYOTDKIgq6wSnM/mQuRDfHj2WXoGQD+kRDA0=",
+          "totalPrice": {
+            "value": 1565.42,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "basePrice": {
+            "value": 0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "taxes": {
+            "value": 0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "discount": {
+            "value": 0,
+            "currency": "TRY",
+            "rateValue": null
+          },
+          "buyFee": {
+            "code": null,
+            "price": {
+              "value": 0,
+              "currency": null,
+              "rateValue": null
+            }
+          },
+          "fee": {
+            "code": null,
+            "price": {
+              "value": 0,
+              "currency": null,
+              "rateValue": null
+            }
+          },
+          "passengerPrices": null,
+          "taxInfos": null,
+          "serviceCharges": null
+        },
+        "searchToken": "5CA946F31DB579EB1A916AFFF44BBDB176AF978BD838AB4BEE4CA625D5E20C33",
+        "sessionToken": "1B7EC621FDE7CFFA491567CE9582F18D6DCDF59D6E398D2537C2C3F9C7C278FB",
+        "moduleName": "Bus",
+        "totalPrice": 1565.42,
+        "priceCurrency": "TRY",
+        "loyaltyMultiple": 1,
+        "couponDiscountList": null,
+        "extraCharges": null,
+        "financellDiscount": {
+          "value": 0,
+          "currency": null,
+          "rateValue": null
+        }
+      }
+    }
+  },
+  "success": true,
+  "statusCode": 0,
+  "message": null,
+  "errors": null,
+  "validModelState": null
+}

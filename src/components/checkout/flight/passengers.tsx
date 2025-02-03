@@ -182,22 +182,43 @@ export const PassengerInformationForm: React.FC<IProps> = ({
       />
 
       <div className='grid grid-cols-2 gap-3'>
-        <div className='col-span-2'>
+        <div
+          className={clsx(`col-span-2`, {
+            hidden: fieldProps.moduleName?.toLowerCase() === 'bus',
+          })}
+        >
           <Input.Wrapper error={!!error?.gender}>
             <Controller
               control={methods.control}
               name={`${namePrefix}.gender`}
+              defaultValue={
+                fieldProps.moduleName?.toLowerCase() === 'bus'
+                  ? fieldProps.gender === '1'
+                    ? '1'
+                    : '0'
+                  : null
+              }
               render={({ field: { onChange, value } }) => (
-                <Radio.Group
-                  defaultValue={value}
-                  onChange={onChange}
-                  error={!!error?.gender ? error.gender.message : null}
-                >
-                  <Group>
-                    <Radio value={'' + GenderEnums.Female} label='Kadın' />
-                    <Radio value={'' + GenderEnums.Male} label='Erkek' />
-                  </Group>
-                </Radio.Group>
+                <>
+                  <Radio.Group
+                    defaultValue={'' + value}
+                    onChange={onChange}
+                    error={!!error?.gender ? error.gender.message : null}
+                  >
+                    <Group>
+                      <Radio
+                        value={GenderEnums.Female}
+                        name={`${namePrefix}.gender`}
+                        label='Kadın'
+                      />
+                      <Radio
+                        value={GenderEnums.Male}
+                        name={`${namePrefix}.gender`}
+                        label='Erkek'
+                      />
+                    </Group>
+                  </Radio.Group>
+                </>
               )}
             />
           </Input.Wrapper>

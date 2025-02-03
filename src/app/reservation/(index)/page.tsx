@@ -50,7 +50,6 @@ import { createSerializer, useQueryStates } from 'nuqs'
 import { reservationParsers } from '../searchParams'
 import { HotelPassengerInformationForm } from '@/components/checkout/hotel/passengers'
 import dayjs from 'dayjs'
-import { id } from 'intl-tel-input/i18n'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -121,6 +120,8 @@ export default function CheckoutPage() {
       </CheckoutCard>
     )
   }
+
+  console.log(formMethods.formState.errors)
 
   return (
     <div className='relative'>
@@ -297,13 +298,15 @@ export default function CheckoutPage() {
                                         </Title>
                                         <HotelPassengerInformationForm
                                           fieldProps={{
+                                            moduleName: checkoutQuery.data?.data
+                                              ?.viewBag.ModuleName as string,
                                             birthDate: fields?.birthDate,
                                             birthDate_day: '',
                                             birthDate_month: '',
                                             birthDate_year: '',
                                             citizenNo: '',
                                             firstName: fields.firstName,
-                                            gender: fields.gender,
+                                            gender: '' + fields.gender,
                                             lastName: fields.lastName,
                                             hesCode: fields.hesCode || '',
                                             id:
@@ -372,12 +375,15 @@ export default function CheckoutPage() {
                               </Title>
                               <PassengerInformationForm
                                 fieldProps={{
+                                  moduleName: checkoutQuery.data?.data?.viewBag
+                                    .ModuleName as string,
                                   firstName: field?.firstName || '',
                                   birthDate: field?.birthDate || '',
                                   birthDate_day: '',
                                   birthDate_month: '',
                                   birthDate_year: '',
-                                  gender: field?.gender ?? GenderEnums.Female,
+                                  gender:
+                                    '' + (field?.gender ?? GenderEnums.Female),
                                   lastName: field?.lastName || '',
                                   id:
                                     typeof field?._passengerId === 'string'
@@ -423,16 +429,24 @@ export default function CheckoutPage() {
                           return (
                             <div key={index}>
                               <Title order={3} size={'lg'} pb={10}>
-                                {PassengerTypesIndexEnum[passengerType]}
+                                {checkoutQuery.data?.data?.viewBag.ModuleName.toLowerCase() ===
+                                'bus'
+                                  ? field?.gender.toString() === '1'
+                                    ? 'Kadın'
+                                    : 'Erkek'
+                                  : PassengerTypesIndexEnum[passengerType]}
+                                {field?.gender}
                               </Title>
                               <PassengerInformationForm
                                 fieldProps={{
+                                  moduleName: checkoutQuery.data?.data?.viewBag
+                                    .ModuleName as string,
                                   firstName: field?.firstName || '',
                                   birthDate: field?.birthDate || '',
                                   birthDate_day: '',
                                   birthDate_month: '',
                                   birthDate_year: '',
-                                  gender: field?.gender ?? GenderEnums.Female,
+                                  gender: '' + field?.gender,
                                   lastName: field?.lastName || '',
                                   id:
                                     typeof field?._passengerId === 'string'

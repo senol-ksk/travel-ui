@@ -1,7 +1,7 @@
 import { Title } from '@mantine/core'
 import dayjs from 'dayjs'
 
-import { HotelSummaryResponse } from '../../type'
+import { HotelSummaryResponse } from '@/app/reservation/types'
 
 type IProps = {
   data: HotelSummaryResponse

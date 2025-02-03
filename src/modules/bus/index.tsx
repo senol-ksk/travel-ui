@@ -64,7 +64,7 @@ const BusSearchEngine = () => {
     resolver: zodResolver(busSearhEngineSchema),
     defaultValues: {
       ...localStorageData,
-      Date: dayjs().isBefore(localStorageData.Date)
+      Date: dayjs().isAfter(localStorageData.Date, 'day')
         ? dayjs().add(1, 'd').toDate()
         : dayjs(localStorageData.Date).toDate(),
     },

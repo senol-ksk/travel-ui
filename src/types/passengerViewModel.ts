@@ -1251,7 +1251,7 @@ export type ProductPassengerApiResponseModel = {
               email: string
               firstName: string
               flightFrequencyNo: string | null
-              gender: GenderEnums
+              gender: number
               groupOrderIndex: number
               hesCode: string | null
               isContact: boolean
@@ -2026,7 +2026,7 @@ export interface PassengerChildNodeItemValue {
   email: string
   firstName: string
   flightFrequencyNo: string | null
-  gender: GenderEnums
+  gender: number
   groupOrderIndex: number
   hesCode: string | null
   isContact: boolean
