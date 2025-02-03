@@ -35,7 +35,7 @@ const BusSearchResults: React.FC = () => {
 
   const [seatSelectIsOpened, { open: openSeatSelect, close: closeSeatSelect }] =
     useDisclosure(false)
-  const [selectedBus, setSelectedBus] = useState<BusSearchResultItem>()
+  const [selectedBus, setSelectedBus] = useState<BusSearchResultItem | null>()
   const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
 
   if (searchResults.hasNextPage && !searchResults.isFetchingNextPage) {
@@ -54,7 +54,10 @@ const BusSearchResults: React.FC = () => {
 
     if (productKey) {
       const response = await seatControlMutation.mutateAsync({
-        selectedSeats,
+        selectedSeats: selectedSeats.map((seat, paxId) => ({
+          ...seat,
+          paxId: paxId + 1,
+        })),
         productKey,
       })
 
@@ -74,6 +77,8 @@ const BusSearchResults: React.FC = () => {
           router.push(url)
         }
       }
+
+      setSelectedSeatsData([])
     }
   }
 
@@ -120,6 +125,8 @@ const BusSearchResults: React.FC = () => {
         opened={seatSelectIsOpened}
         onClose={() => {
           setSelectedSeatsData([])
+          setSelectedBus(null)
+
           closeSeatSelect()
         }}
         title={
@@ -142,9 +149,6 @@ const BusSearchResults: React.FC = () => {
               onSeatSelect={(gender, selectedSeatsData) => {
                 console.log(gender, selectedSeatsData)
                 setSelectedSeatsData((prev) => {
-                  // const prevItems = prev.find(
-                  //   (item) => item.no === selectedSeatsData.no
-                  // )
                   const nextState =
                     gender === BusGender.EMPTY
                       ? [
