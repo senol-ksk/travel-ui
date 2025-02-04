@@ -33,7 +33,7 @@ const passengerValidation = z.object({
           .max(50)
           .regex(/^[a-zA-Z a-z A-Z\-]+$/),
         birthDate: z.string().date(),
-        gender: z.nativeEnum(GenderEnums),
+        gender: z.string().nonempty(),
         birthDate_day: z.string().min(1).max(2),
         birthDate_month: z.string().min(2).max(2),
         birthDate_year: z.string().min(4).max(4),
@@ -51,6 +51,7 @@ const passengerValidation = z.object({
         passportValidityDate: z.string().optional().nullable(),
         hesCode: z.string(),
         model_PassengerId: z.string().or(z.number()),
+        moduleName: z.string().optional(),
       })
       .superRefine((value, ctx) => {
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {

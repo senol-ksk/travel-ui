@@ -1,7 +1,7 @@
 'use client'
 
 import { BusSearchItem } from './components/search-item'
-import { Button, Drawer, Skeleton } from '@mantine/core'
+import { Alert, Button, Drawer, Skeleton } from '@mantine/core'
 import { useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTransitionRouter } from 'next-view-transitions'
@@ -35,7 +35,7 @@ const BusSearchResults: React.FC = () => {
 
   const [seatSelectIsOpened, { open: openSeatSelect, close: closeSeatSelect }] =
     useDisclosure(false)
-  const [selectedBus, setSelectedBus] = useState<BusSearchResultItem>()
+  const [selectedBus, setSelectedBus] = useState<BusSearchResultItem | null>()
   const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
 
   if (searchResults.hasNextPage && !searchResults.isFetchingNextPage) {
@@ -54,7 +54,10 @@ const BusSearchResults: React.FC = () => {
 
     if (productKey) {
       const response = await seatControlMutation.mutateAsync({
-        selectedSeats,
+        selectedSeats: selectedSeats.map((seat, paxId) => ({
+          ...seat,
+          paxId: paxId + 1,
+        })),
         productKey,
       })
 
@@ -74,7 +77,28 @@ const BusSearchResults: React.FC = () => {
           router.push(url)
         }
       }
+
+      setSelectedSeatsData([])
     }
+  }
+
+  const searchResultPages = searchResults.data?.pages
+  const hasSearchResult = !(
+    !searchResults.isLoading &&
+    !searchResults.hasNextPage &&
+    searchResultPages?.some((item) =>
+      item?.searchResults.some((results) => results.items.length === 0)
+    )
+  )
+
+  if (!hasSearchResult) {
+    return (
+      <div className='container py-3'>
+        <Alert color='red'>
+          <div> Sonuç bulunamadı.</div>
+        </Alert>
+      </div>
+    )
   }
 
   return (
@@ -87,13 +111,22 @@ const BusSearchResults: React.FC = () => {
         ) : null}
         <div className='@container pt-5 md:pt-10'>
           <div className='grid gap-4 md:grid-cols-4 md:gap-3 lg:container'>
-            <div className='md:col-span-1'>
+            <div className='relative md:col-span-1'>
               <div className='rounded-md border border-gray-300 p-3'>
                 Filter section
               </div>
+              <Skeleton
+                w='100%'
+                h={'100%'}
+                top={0}
+                pos={'absolute'}
+                mah={150}
+                radius={'md'}
+                visible={searchResults.isLoading}
+              />
             </div>
             <div className='grid gap-4 md:col-span-3'>
-              {searchResults?.data?.pages.map((page, i) =>
+              {searchResultPages?.map((page) =>
                 page?.searchResults.map((searchResults) =>
                   searchResults.items
                     .sort(
@@ -120,6 +153,8 @@ const BusSearchResults: React.FC = () => {
         opened={seatSelectIsOpened}
         onClose={() => {
           setSelectedSeatsData([])
+          setSelectedBus(null)
+
           closeSeatSelect()
         }}
         title={
@@ -142,9 +177,6 @@ const BusSearchResults: React.FC = () => {
               onSeatSelect={(gender, selectedSeatsData) => {
                 console.log(gender, selectedSeatsData)
                 setSelectedSeatsData((prev) => {
-                  // const prevItems = prev.find(
-                  //   (item) => item.no === selectedSeatsData.no
-                  // )
                   const nextState =
                     gender === BusGender.EMPTY
                       ? [
