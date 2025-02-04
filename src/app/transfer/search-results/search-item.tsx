@@ -1,6 +1,10 @@
-import { TransferVehicle } from '@/app/transfer/types'
+import { Link } from 'next-view-transitions'
 import { formatCurrency } from '@/libs/util'
 import { Button, Image, Title } from '@mantine/core'
+import { TransferVehicle } from '@/app/transfer/types'
+import { createSerializer, useQueryStates } from 'nuqs'
+import { transferExtraPageParams } from '@/modules/transfer/searchParams.extras'
+import { transferSearchParams } from '@/modules/transfer/searchParams.client'
 
 type Props = {
   data: TransferVehicle
@@ -11,6 +15,15 @@ export const TransferSearchItem: React.FC<Props> = ({
   data,
   onSelect = () => null,
 }) => {
+  const [searchParams] = useQueryStates(transferSearchParams)
+
+  const extraSearchParams = createSerializer(transferExtraPageParams)
+  const extraPageUrl = extraSearchParams('/transfer/extras', {
+    searchToken: searchParams.searchToken,
+    sessionToken: searchParams.sessionToken,
+    productKey: data.productKey,
+  })
+
   return (
     <div className='rounded-lg border border-gray-300'>
       <div className='grid grid-cols-12 gap-3 p-3 md:gap-5'>
@@ -34,7 +47,11 @@ export const TransferSearchItem: React.FC<Props> = ({
             {formatCurrency(data.transferData.bookDetail.sortPrice)}
           </div>
           <div>
-            <Button type='button' onClick={() => onSelect(data)}>
+            <Button
+              component={Link}
+              href={extraPageUrl}
+              onClick={() => onSelect(data)}
+            >
               Seç
             </Button>
           </div>

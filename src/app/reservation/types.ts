@@ -134,7 +134,7 @@ export type OperationResultType = {
   }
   product: {
     summaryResponse: {
-      moduleName: 'Flight' | 'Hotel' | 'Bus'
+      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer'
     }
   }
 }
@@ -692,5 +692,254 @@ export interface BusSummaryResponse {
   loyaltyMultiple: number
   couponDiscountList: null
   extraCharges: null
+  financellDiscount: ServicePriceType
+}
+
+export interface TransferSummaryResponse {
+  selectResponse: {
+    requestId: string
+    selectedVehicleCount: number
+    extraServiceIds: null
+    extraServiceInfo: null
+    pickupPointName: string
+    pickupPointType: number
+    pickupLocationName: string
+    pickupDate: string
+    pickupInfo: string
+    pickupDescription: string
+    dropPointName: string
+    dropPointType: number
+    dropLocationName: string
+    dropInfo: string
+    dropDescription: string
+    adultPassengerCount: number
+    childrenPassengerCount: number
+    babyPassengerCount: number
+    transferVehicle: {
+      productKey: string
+      id: ID
+      partnerId: ID
+      vehicleType: number
+      vehicleName: string
+      vehicleTitle: string
+      transferInfo: {
+        transferMax: {
+          pax: string
+          suitcase: string
+        }
+        transferHour: {
+          booking: string
+          freeCancel: string
+          freeChange: string
+        }
+        vehiclePhotoUrl: string
+      }
+      extraServices: []
+      status: string
+      transferData: {
+        bookDetail: {
+          brmFactor: string
+          markupDetail: {
+            markupPercentAmount: string
+            markupPrice: null
+          }
+          priceWithoutMarkup: {
+            amount: number
+            transferCurrencyType: number
+          }
+          priceWithMarkup: {
+            amount: number
+            transferCurrencyType: number
+          }
+          suggestedVehicleCount: number
+          sortPrice: number
+          extraServices: {
+            id: string
+            code: string
+            title: string
+            description: string
+            priceWithoutMarkup: {
+              amount: number
+              transferCurrencyType: number
+            }
+            priceWithMarkup: {
+              amount: number
+              transferCurrencyType: number
+            }
+          }[]
+          buyServiceFee: number
+          sellServiceFee: number
+          sellBaseFareAddOn: number
+        }
+        selectedTransferDetail: null
+      }
+    }
+    sessionToken: string
+    traceId: null
+    isSucceeded: boolean
+    diagnostics: {
+      sessionToken: null
+      providerId: ID
+      providerName: string
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: null
+      traceId: null
+    }
+    eventMessages: []
+    appName: string
+    scopeCode: string
+    logSessionToken: null
+    logSearchToken: null
+  }
+  bookingResponse: {
+    transactionStatus: number
+    token: string
+    serviceBookingResponse: {
+      isEnabled: boolean
+      totalPrice: {
+        amount: number
+        transferCurrencyType: number
+      }
+    }
+    checkoutResponse: {
+      carts: {
+        cart_id: ID
+        cart_code: string
+        cart_object: string
+        cart_object_id: ID
+        cart_mpno: string
+        cart_mail: string
+        cart_name: string
+        cart_sys_prc: string
+        cart_sys_cid: number
+        cart_usr_prc: string
+        cart_usr_cid: number
+        cart_end_prc: string
+        cart_end_cid: number
+        cart_title: string
+        cart_infoa: string
+        cart_infob: string
+        cart_infoc: string
+        cart_infod: string
+        cart_infoe: string
+        cart_pay_case: string
+        cart_paya: null
+        cart_payb: null
+        cart_payc: null
+        cart_payd: null
+        cart_paye: null
+        cart_case: 'done'
+        cart_done_date: string
+        cart_paid_date: string
+        cart_cncl_date: null
+        cart_rfnd_date: null
+        cart_status: string
+      }[]
+      bookResponse: {
+        vbook_id: 66918
+        vbook_code: '308619066'
+        vbook_type: 'D'
+        vbook_fr: 'Istanbul Havalimanı'
+        vbook_fr_a: 'istanbul havalimani'
+        vbook_fr_b: 'Alınış Yeri İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
+        vbook_fr_type: '2'
+        vbook_fr_type_r: 'Havalimanı'
+        vbook_to: 'Kadiköy Park Suites'
+        vbook_to_a: 'istanbul havalimani'
+        vbook_to_b: 'Bırakılış Yeri  İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
+        vbook_to_type: '3'
+        vbook_to_type_r: 'Otel'
+        vbook_date: '2025-04-27 12:00:00'
+        vbook_name: 'SENOL DENEME'
+        vbook_mpno: '+905324234234'
+        vbook_mail: 'SENOLK@LIDYATEKNOLOJI.COM'
+        vbook_driver_x_: null
+        vbook_pax_adt: 1
+        vbook_pax_kid: 0
+        vbook_pax_bby: 0
+        vbook_note_ur: null
+        vbook_vehicle_type: 'MINC'
+        vbook_vehicle_type_r: 'Mini'
+        vbook_info_max_pax: '5'
+        vbook_info_max_suitcase: '5 Bavul'
+        vbook_info_hour_freeCancel: '24'
+        vbook_info_hour_freeChange: '24'
+        vbook_info_t_: []
+        vbook_feed_: {
+          prf: '0'
+          lng: 'tr'
+        }
+        vbook_hash: '109c6d3100f19a13b91de94b166dac36a45be782'
+      }[]
+      cart_orid: string
+      sessionToken: null
+      traceId: null
+      isSucceeded: boolean
+      diagnostics: {
+        sessionToken: null
+        providerId: ID
+        providerName: string
+        generatingRequestTime: string
+        callingServiceTime: string
+        generatingResponseTime: string
+        subDiagnostics: null
+        lastException: null
+        serviceRequestData: null
+        serviceResponseData: null
+        providerInfo: {
+          isActive: boolean
+          isProduction: boolean
+        }
+        traceId: null
+      }
+      eventMessages: []
+      appName: null
+      scopeCode: string
+      logSessionToken: null
+      logSearchToken: null
+    }
+    bookingKey: string
+    bookingDate: string
+    campaignCode: null
+    sessionToken: string
+    traceId: string
+    isSucceeded: boolean
+    diagnostics: {
+      sessionToken: string
+      providerId: ID
+      providerName: string
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: {
+        isActive: boolean
+        isProduction: boolean
+      }
+      traceId: null
+    }
+    eventMessages: []
+    appName: string
+    scopeCode: string
+    logSessionToken: null
+    logSearchToken: null
+  }
+  searchToken: string
+  sessionToken: string
+  moduleName: string
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: object
   financellDiscount: ServicePriceType
 }

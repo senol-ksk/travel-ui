@@ -143,7 +143,6 @@ export default function Page() {
         ProductKey: transferData?.selectResponse.transferVehicle.productKey,
         SessionToken: searchParams.sessionToken,
         SearchToken: searchParams.searchToken,
-        // form datas
         PickupInfo: data.DropInfo,
         PickupDescription: data.PickupDescription,
         DropInfo: data.DropInfo,
@@ -158,7 +157,6 @@ export default function Page() {
         }),
       }
 
-      console.log(params)
       const response = await serviceRequest<TransferExtraApiResponseData>({
         axiosOptions: {
           url: 'api/transfer/reservation',
@@ -170,7 +168,6 @@ export default function Page() {
       return response
     },
     onSuccess: (query) => {
-      console.log(query)
       const resParams = createSerializer(reservationParsers)
 
       const url = resParams('/reservation', {
