@@ -8,7 +8,7 @@ import {
   TourSearchResultApiResponse,
 } from '@/modules/tour/type'
 import { GetSecurityTokenResponse } from '@/types/global'
-import { dummyTourSearchResponse } from './dummy'
+import { delayCodeExecution } from '@/libs/util'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
@@ -30,6 +30,7 @@ export const useTourSearchResultsQuery = () => {
 
       return response
     },
+    staleTime: Infinity,
   })
 
   const searchResultsQuery = useInfiniteQuery({
@@ -40,6 +41,7 @@ export const useTourSearchResultsQuery = () => {
         appToken = await getsecuritytoken()
       }
 
+      await delayCodeExecution(1000)
       const response = (await request({
         signal,
         url: process.env.NEXT_PUBLIC_OL_ROUTE,

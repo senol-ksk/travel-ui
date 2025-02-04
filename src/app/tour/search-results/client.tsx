@@ -44,7 +44,7 @@ const TourSearchResultClient = () => {
     searchResultsQuery.hasNextPage &&
     !searchResultsQuery.isFetchingNextPage
   ) {
-    setTimeout(searchResultsQuery.fetchNextPage, 1000)
+    searchResultsQuery.fetchNextPage()
   }
 
   if (searchResultsQuery.error) return <div>Bir hata oldu</div>
@@ -68,7 +68,12 @@ const TourSearchResultClient = () => {
               Filter section
             </div>
           </div>
-          <div className='grid gap-4 sm:col-span-8 lg:col-span-9'>
+          <div
+            className='grid gap-4 sm:col-span-8 lg:col-span-9'
+            style={{
+              contentVisibility: 'auto',
+            }}
+          >
             {hasNoResult ? (
               <Alert
                 variant='light'
@@ -88,11 +93,12 @@ const TourSearchResultClient = () => {
                     ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
                     .map((searchResultItem) => {
                       return (
-                        <TourSearchResultItem
-                          key={searchResultItem.key}
-                          data={searchResultItem}
-                          onClick={handleTourItemSelect}
-                        />
+                        <div key={searchResultItem.key}>
+                          <TourSearchResultItem
+                            data={searchResultItem}
+                            onClick={handleTourItemSelect}
+                          />
+                        </div>
                       )
                     })
                 })
