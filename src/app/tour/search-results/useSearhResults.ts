@@ -30,7 +30,6 @@ export const useTourSearchResultsQuery = () => {
 
       return response
     },
-    staleTime: Infinity,
   })
 
   const searchResultsQuery = useInfiniteQuery({

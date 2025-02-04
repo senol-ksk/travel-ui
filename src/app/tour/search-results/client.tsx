@@ -18,16 +18,11 @@ const TourSearchResultClient = () => {
     searchResultsQuery.hasNextPage ||
     searchParamsQuery.isLoading
 
-  const hasNoResult =
-    !searchResultsQuery.hasNextPage &&
-    searchResultsQuery.data?.pages
-      .map((page) =>
-        page.code === 1 && page.data.searchResults
-          ? page.data.searchResults?.filter((results) => results.items?.length)
-              .length
-          : 0
-      )
-      .filter(Number).length === 0
+  const searchIsPending =
+    (searchResultsQuery.isLoading && searchResultsQuery.hasNextPage) ||
+    searchParamsQuery.isLoading
+
+  const searchResultPages = searchResultsQuery.data?.pages
 
   const handleTourItemSelect = (data: TourSearchResultSearchItem) => {
     const detailUrl = serializeTourDetailPageParams('/tour/detail', {
@@ -47,20 +42,42 @@ const TourSearchResultClient = () => {
     searchResultsQuery.fetchNextPage()
   }
 
+  const searchIsCompleted =
+    !searchRequestIsLoading && !searchResultsQuery.hasNextPage
+
+  const searchResponsePages = searchResultsQuery.data?.pages
+  const hasResult = searchIsCompleted
+    ? searchResponsePages?.some((searchData) =>
+        searchData.data.searchResults.some(
+          (searchResult) => searchResult.items?.length
+        )
+      )
+    : true
+
   if (searchResultsQuery.error) return <div>Bir hata oldu</div>
+  if (!hasResult) {
+    return (
+      <div className='container py-4'>
+        <Alert
+          variant='light'
+          color='red'
+          title='Sonuç bulunamadı'
+          icon={<FiAlertTriangle size={'100%'} />}
+        >
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. At officiis,
+          quae tempore necessitatibus placeat saepe.
+        </Alert>
+      </div>
+    )
+  }
 
   return (
     <div>
-      <div className='border-b p-3 md:p-5'>
-        <div className='lg:container'>
-          <TourSearchEngine />
-        </div>
-      </div>
-      <div className='relative'>
-        {searchRequestIsLoading ? (
+      {searchRequestIsLoading ? (
+        <div className='relative'>
           <Skeleton h={6} className='absolute start-0 end-0 top-0' />
-        ) : null}
-      </div>
+        </div>
+      ) : null}
       <div className='px-3 pt-10 lg:container'>
         <div className='grid gap-4 sm:grid-cols-12 md:gap-3'>
           <div className='sm:col-span-4 lg:col-span-3'>
@@ -74,18 +91,7 @@ const TourSearchResultClient = () => {
               contentVisibility: 'auto',
             }}
           >
-            {hasNoResult ? (
-              <Alert
-                variant='light'
-                color='red'
-                title='Sonuç bulunamadı'
-                icon={<FiAlertTriangle size={'100%'} />}
-              >
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. At
-                officiis, quae tempore necessitatibus placeat saepe.
-              </Alert>
-            ) : null}
-            {searchResultsQuery.data?.pages.map((tourPage) => {
+            {searchResultPages?.map((tourPage) => {
               return (
                 tourPage?.data &&
                 tourPage?.data.searchResults.map((searchResult) => {

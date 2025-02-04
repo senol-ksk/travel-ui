@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Skeleton } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
