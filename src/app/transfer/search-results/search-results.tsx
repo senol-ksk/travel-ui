@@ -18,9 +18,7 @@ const TransferSearchResults = () => {
   const router = useRouter()
 
   if (transferSearchResultsQuery.hasNextPage) {
-    setTimeout(() => {
-      transferSearchResultsQuery.fetchNextPage()
-    }, 1000)
+    transferSearchResultsQuery.fetchNextPage()
   }
 
   const handleVehicleSelect = (vehicle: TransferVehicle) => {
