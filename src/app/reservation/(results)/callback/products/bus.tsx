@@ -12,7 +12,7 @@ const BusSummary: React.FC<IProps> = ({ data }) => {
     <div>
       <Title fz={'h4'}>{busJourney.company}</Title>
       <div>
-        Kalkış {dayjs(busJourney.bus.departureDate).format('DD MMMM YYYY')}{' '}
+        Kalkış: {dayjs(busJourney.bus.departureDate).format('DD MMMM YYYY')}{' '}
         {dayjs(busJourney.bus.departureDate).format('HH:mm')}
       </div>
       <div>
