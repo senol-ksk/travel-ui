@@ -112,7 +112,7 @@ export interface TourSearchResultApiResponse {
     hasMoreResponse: boolean
     searchResults: [
       {
-        items: TourSearchResultSearchItem[] | []
+        items: TourSearchResultSearchItem[] | [] | null
         sessionToken: null
         traceId: string
         isSucceeded: boolean

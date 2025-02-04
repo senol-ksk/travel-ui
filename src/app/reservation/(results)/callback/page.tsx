@@ -17,8 +17,10 @@ import {
   FlightSummaryResponse,
   HotelSummaryResponse,
   OperationResultType,
+  TransferSummaryResponse,
 } from '../../types'
 import { BusSummary } from './products/bus'
+import { TransferSummary } from './products/transfer'
 
 type IProps = {
   searchParams: Promise<{
@@ -101,6 +103,12 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                   )
                 case 'Bus':
                   return <BusSummary data={productData as BusSummaryResponse} />
+                case 'Transfer':
+                  return (
+                    <TransferSummary
+                      data={productData as TransferSummaryResponse}
+                    />
+                  )
 
                 default:
                   break

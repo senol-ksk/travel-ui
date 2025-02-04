@@ -3,35 +3,14 @@
 import { useTransferSearchResults } from './useSearchResults'
 import { Alert, Skeleton } from '@mantine/core'
 import { FiAlertTriangle } from 'react-icons/fi'
-import { useRouter } from 'next/navigation'
-import { createSerializer, useQueryStates } from 'nuqs'
 
 import { TransferSearchItem } from '@/app/transfer/search-results/search-item'
-import { TransferVehicle } from '@/app/transfer/types'
-import { transferExtraPageParams } from '@/modules/transfer/searchParams.extras'
-import { transferSearchParams } from '@/modules/transfer/searchParams.client'
 
 const TransferSearchResults = () => {
-  const [searchParams] = useQueryStates(transferSearchParams)
-
   const transferSearchResultsQuery = useTransferSearchResults()
-  const router = useRouter()
 
   if (transferSearchResultsQuery.hasNextPage) {
-    setTimeout(() => {
-      transferSearchResultsQuery.fetchNextPage()
-    }, 1000)
-  }
-
-  const handleVehicleSelect = (vehicle: TransferVehicle) => {
-    const extraSearchParams = createSerializer(transferExtraPageParams)
-    const extraPageUrl = extraSearchParams('/transfer/extras', {
-      searchToken: searchParams.searchToken,
-      sessionToken: searchParams.sessionToken,
-      productKey: vehicle.productKey,
-    })
-
-    router.push(extraPageUrl)
+    transferSearchResultsQuery.fetchNextPage()
   }
 
   return (
@@ -75,11 +54,7 @@ const TransferSearchResults = () => {
                   )
                   .map((vehicle) => {
                     return (
-                      <TransferSearchItem
-                        key={vehicle.id}
-                        data={vehicle}
-                        onSelect={handleVehicleSelect}
-                      />
+                      <TransferSearchItem key={vehicle.id} data={vehicle} />
                     )
                   })
               })

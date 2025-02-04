@@ -5,6 +5,7 @@ import { useQueryStates } from 'nuqs'
 import { transferSearchParams } from '@/modules/transfer/searchParams.client'
 import { getsecuritytoken, request } from '@/network'
 import { TransferSearchResultsResponse } from '@/app/transfer/types'
+import { delayCodeExecution } from '@/libs/util'
 
 let appToken: null | string = ''
 
@@ -18,6 +19,8 @@ export const useTransferSearchResults = () => {
       if (!appToken) {
         appToken = (await getsecuritytoken()).result
       }
+
+      await delayCodeExecution(1000)
       const transferServiceResponse = (await request({
         signal,
         url: process.env.NEXT_PUBLIC_OL_ROUTE,
