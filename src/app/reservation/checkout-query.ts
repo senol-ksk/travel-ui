@@ -20,15 +20,11 @@ export const useCheckoutQuery: CheckoutQueryFnType = () => {
         axiosOptions: {
           signal,
           url: `api/product/reservationData`,
-          withCredentials: true,
           method: 'get',
           params: {
             searchToken,
             sessionToken,
             productKey,
-          },
-          headers: {
-            'Access-Control-Allow-Credentials': true,
           },
         },
       })

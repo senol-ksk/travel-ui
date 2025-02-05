@@ -40,7 +40,6 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     axiosOptions: {
       // url: `api/product/summary/withshoppingfileId`,
       url: `api/product/summary`,
-      withCredentials: true,
       params: {
         searchToken,
         sessionToken,

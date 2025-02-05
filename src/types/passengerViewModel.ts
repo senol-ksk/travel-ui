@@ -52,7 +52,7 @@ export interface ChildNode {
             declaredAge: 0
             productType: 1
             checkinDate: '2024-11-27T07:40:00'
-            calculationYearBased: false
+            calculationYearBased: boolean
             calculationYearType: 1
             passengerId: 0
             sequenceNo: 1
@@ -68,7 +68,7 @@ export interface ChildNode {
             passportNo: null
             mobilePhoneNumber: null
             email: null
-            isContact: false
+            isContact: boolean
             flightFrequencyNo: null
             notes: null
             passportValidityDate: null
@@ -76,11 +76,11 @@ export interface ChildNode {
             passportCountry: null
             groupOrderIndex: 0
             passengerKey: string
-            isRecord: false
+            isRecord: boolean
             listFlightFrequencyAirline: null
             listFlightFrequencyNo: null
             registeredPassengerId: 0
-            isDontValidate: false
+            isDontValidate: boolean
             hesCode: null
           }
           orderId: ID
@@ -99,7 +99,7 @@ export interface ChildNode {
             declaredAge: 0
             productType: 1
             checkinDate: '2024-11-27T07:40:00'
-            calculationYearBased: false
+            calculationYearBased: boolean
             calculationYearType: 1
             passengerId: 0
             sequenceNo: 1
@@ -115,7 +115,7 @@ export interface ChildNode {
             passportNo: null
             mobilePhoneNumber: null
             email: null
-            isContact: false
+            isContact: boolean
             flightFrequencyNo: null
             notes: null
             passportValidityDate: null
@@ -123,11 +123,11 @@ export interface ChildNode {
             passportCountry: null
             groupOrderIndex: 0
             passengerKey: '8126560C2A454B7AFB0D3DCA1CA77D446D0170E107607B099E3969D8D213FA0F'
-            isRecord: false
+            isRecord: boolean
             listFlightFrequencyAirline: null
             listFlightFrequencyNo: null
             registeredPassengerId: 0
-            isDontValidate: false
+            isDontValidate: boolean
             hesCode: null
           }
           orderId: ID
@@ -265,14 +265,14 @@ export type ProductPassengerApiResponseModel = {
                         maxConnections: 0
                         origin: {
                           code: 'SAW'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
                         }
                         destination: {
                           code: 'ADB'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
@@ -300,10 +300,10 @@ export type ProductPassengerApiResponseModel = {
                 {
                   uniqueIdentifier: 'XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-2__Service-2_XBagServiceDef2_BagAllowance2_ADT_SH1_'
                   code: 'XBAG'
-                  included: false
+                  included: boolean
                   description: null
-                  selected: false
-                  required: false
+                  selected: boolean
+                  required: boolean
                   indexNo: 1
                   data: '1600.00:TRY:ADT:CarryOn:10:KG:SH1:'
                   filters: [
@@ -319,14 +319,14 @@ export type ProductPassengerApiResponseModel = {
                         maxConnections: 0
                         origin: {
                           code: 'SAW'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
                         }
                         destination: {
                           code: 'ADB'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
@@ -354,10 +354,10 @@ export type ProductPassengerApiResponseModel = {
                 {
                   uniqueIdentifier: 'XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-3__Service-3_XBagServiceDef3_BagAllowance3_ADT_SH1_'
                   code: 'XBAG'
-                  included: false
+                  included: boolean
                   description: null
-                  selected: false
-                  required: false
+                  selected: boolean
+                  required: boolean
                   indexNo: 2
                   data: '3200.00:TRY:ADT:CarryOn:20:KG:SH1:'
                   filters: [
@@ -373,14 +373,14 @@ export type ProductPassengerApiResponseModel = {
                         maxConnections: 0
                         origin: {
                           code: 'SAW'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
                         }
                         destination: {
                           code: 'ADB'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
@@ -408,10 +408,10 @@ export type ProductPassengerApiResponseModel = {
                 {
                   uniqueIdentifier: 'XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-4__Service-4_XBagServiceDef4_BagAllowance4_ADT_SH1_'
                   code: 'XBAG'
-                  included: false
+                  included: boolean
                   description: null
-                  selected: false
-                  required: false
+                  selected: boolean
+                  required: boolean
                   indexNo: 3
                   data: '4800.00:TRY:ADT:CarryOn:30:KG:SH1:'
                   filters: [
@@ -427,14 +427,14 @@ export type ProductPassengerApiResponseModel = {
                         maxConnections: 0
                         origin: {
                           code: 'SAW'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
                         }
                         destination: {
                           code: 'ADB'
-                          isDomestic: false
+                          isDomestic: boolean
                           iata: null
                           type: 7
                           id: 0
@@ -471,8 +471,74 @@ export type ProductPassengerApiResponseModel = {
         ]
       }
     }
-    ModuleName: string
+    ModuleName: 'Flight' | 'Hotel'
     SummaryViewDataResponser: {
+      summaryResponse: FlightReservationSummary
+    }
+    PassengerInfoBackUrl: string
+    FlightDetailToSearchReturnPath: null
+    ViewIsPassengerInfo: boolean
+    IsPassengerViewDataCached: boolean
+    HESAddressReq: boolean
+    FlightCancellationInsuranceAmount: number
+    FlightCancellationInsurancePasssengerCount: number
+    isPassportReq: boolean
+    isHESReq: boolean
+    FlightArrivalDate: string
+    DateCountToArrival: 41
+    InsurancePrice: 0
+    Insurances: [
+      {
+        searchId: 0
+        insurance: [
+          {
+            productKey: 'heScao10dfizPkn3ago3d57XrFlqp6j+suxf9p7RZk6qxATNhoxG7DZB2PHqH6KoHKy+Aq+WbxQ1l6WTs1Hd+5nI1c58Oaaz8OW8+I5NFBGxl1WGs+diOJoAgK710olo'
+            price: {
+              value: 19.0
+              currency: 'TRY'
+              rateValue: null
+            }
+            id: 177
+            partnerId: 11
+            insuranceName: 'Seyahat Destek Hizmet Paketi'
+            insuranceDescripton: 'Seyahat Destek Hizmet Paketi ile yurt içi seyahatlerinizde beklenmedik sağlık sorunları durumunda tıbbi müdahalelerde geçerlidir.'
+            insuranceCategoryTitle: 'Seyahat Destek Hizmet Paketi'
+            insuranceGuarantee: '{\n  "Medical Park Hastaneler Grubundan Ayakta ve Yatarak Tedaviler İçin %10 indirim": "",\n  "Seyahat Sağlık Destek Hizmet paketi ile yurt içi seyahatlerinizde beklenmedik sağlık sorunları durumunda tıbbi müdahalelerde geçerlidir.": "",\n  "Sadece yurt içi seyahatlerde geçerli": "",\n  "5000₺\'ye kadar hastane masraflarını karşılayan seyahat sağlık sigortası": "",\n  "Online doktor hizmeti": "",\n  "Kayıp Bagajın Bulunup Ulaştırılması": ""\n}'
+            partnerName: 'Tamamliyo'
+            partnerFullName: 'Tamamliyo'
+            providerName: 'Seyahat Destek Hizmet Paketi , Tamamliyo Assistance Destek Hizmetleri A.Ş. tarafında sunulmaktadır.'
+            startDate: '2024-11-27T07:40:00'
+            endDate: '2024-11-28T07:40:00'
+          },
+        ]
+        sessionToken: '7E3175C8FDC0420E19D7D6B44A8E685B27EFE7F12ABEC41D9669FCF29409053B'
+        traceId: '738D00E2996563489F52CB7A25F1AAC938B757BA721C61028E77EC1BA4E54B26'
+        isSucceeded: boolean
+        diagnostics: {
+          sessionToken: '7E3175C8FDC0420E19D7D6B44A8E685B27EFE7F12ABEC41D9669FCF29409053B'
+          providerId: 2078
+          providerName: 'Tamamliyo'
+          generatingRequestTime: '00:00:00.3283172'
+          callingServiceTime: '00:00:00.3182215'
+          generatingResponseTime: '00:00:00.0102896'
+          subDiagnostics: null
+          lastException: null
+          serviceRequestData: null
+          serviceResponseData: null
+          providerInfo: {
+            isActive: boolean
+            isProduction: boolean
+          }
+          traceId: null
+        }
+        eventMessages: []
+        appName: string
+        scopeCode: string
+        logSessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
+        logSearchToken: '738D00E2996563489F52CB7A25F1AAC938B757BA721C61028E77EC1BA4E54B26'
+      },
+    ]
+    SummaryViewDataResponserPI: {
       summaryResponse: {
         flightList: [
           {
@@ -584,7 +650,7 @@ export type ProductPassengerApiResponseModel = {
               travelTime: '01:10:00'
               direction: 1
               isDomestic: boolean
-              isOWCCombinable: false
+              isOWCCombinable: boolean
               isPromotional: boolean
               reservable: boolean
               freeVolatileData: {
@@ -596,7 +662,7 @@ export type ProductPassengerApiResponseModel = {
                 Seq: 'FL_SAWADB_2'
                 SegmentRefs: 'NDQzNzgwNQ=='
                 PassengerList: 'SH1'
-                StandartSeatSelection: false
+                StandartSeatSelection: boolean
                 AllSeatSelection: boolean
                 FreeSandwich: boolean
                 Entertainment: boolean
@@ -609,14 +675,14 @@ export type ProductPassengerApiResponseModel = {
                 groupId: 0
                 origin: {
                   code: 'SAW'
-                  isDomestic: false
+                  isDomestic: boolean
                   iata: null
                   type: 7
                   id: 0
                 }
                 destination: {
                   code: 'ADB'
-                  isDomestic: false
+                  isDomestic: boolean
                   iata: null
                   type: 7
                   id: 0
@@ -638,7 +704,7 @@ export type ProductPassengerApiResponseModel = {
                 cabinClass: 0
                 bookingCode: 'ZOW'
                 equipment: null
-                isMeal: false
+                isMeal: boolean
                 quota: 9
                 baggageAllowance: {
                   maxWeight: {
@@ -765,398 +831,6 @@ export type ProductPassengerApiResponseModel = {
         flightPackageInfos: []
         isReservable: boolean
         hasOwc: boolean
-        activeFlightTripKind: number
-        airportList: {
-          ADB: {
-            id: 90074
-            code: 'ADB'
-            value: [
-              {
-                langCode: 'tr_TR'
-                value: 'Adnan Menderes Havalimanı'
-              },
-            ]
-            countryCode: 'tr'
-            country: 'Türkiye'
-            city: 'İzmir'
-          }
-        }
-        airlineList: {
-          PC: 'Pegasus  Havayolları'
-        }
-        applyCancelationInsurance: boolean
-        buyInsurancePrice: number
-        sellInsurancePrice: number
-        showOnlyInsurancePrice: number
-        moduleName: 'Flight'
-        totalPrice: number
-        priceCurrency: 'TRY'
-        loyaltyMultiple: 2
-        couponDiscountList: null
-        extraCharges: null
-        financellDiscount: {
-          value: number
-          currency: null
-          rateValue: null
-        }
-      }
-    }
-    PassengerInfoBackUrl: string
-    FlightDetailToSearchReturnPath: null
-    ViewIsPassengerInfo: boolean
-    IsPassengerViewDataCached: boolean
-    HESAddressReq: false
-    FlightCancellationInsuranceAmount: number
-    FlightCancellationInsurancePasssengerCount: number
-    isPassportReq: boolean
-    isHESReq: boolean
-    FlightArrivalDate: string
-    DateCountToArrival: 41
-    InsurancePrice: 0
-    Insurances: [
-      {
-        searchId: 0
-        insurance: [
-          {
-            productKey: 'heScao10dfizPkn3ago3d57XrFlqp6j+suxf9p7RZk6qxATNhoxG7DZB2PHqH6KoHKy+Aq+WbxQ1l6WTs1Hd+5nI1c58Oaaz8OW8+I5NFBGxl1WGs+diOJoAgK710olo'
-            price: {
-              value: 19.0
-              currency: 'TRY'
-              rateValue: null
-            }
-            id: 177
-            partnerId: 11
-            insuranceName: 'Seyahat Destek Hizmet Paketi'
-            insuranceDescripton: 'Seyahat Destek Hizmet Paketi ile yurt içi seyahatlerinizde beklenmedik sağlık sorunları durumunda tıbbi müdahalelerde geçerlidir.'
-            insuranceCategoryTitle: 'Seyahat Destek Hizmet Paketi'
-            insuranceGuarantee: '{\n  "Medical Park Hastaneler Grubundan Ayakta ve Yatarak Tedaviler İçin %10 indirim": "",\n  "Seyahat Sağlık Destek Hizmet paketi ile yurt içi seyahatlerinizde beklenmedik sağlık sorunları durumunda tıbbi müdahalelerde geçerlidir.": "",\n  "Sadece yurt içi seyahatlerde geçerli": "",\n  "5000₺\'ye kadar hastane masraflarını karşılayan seyahat sağlık sigortası": "",\n  "Online doktor hizmeti": "",\n  "Kayıp Bagajın Bulunup Ulaştırılması": ""\n}'
-            partnerName: 'Tamamliyo'
-            partnerFullName: 'Tamamliyo'
-            providerName: 'Seyahat Destek Hizmet Paketi , Tamamliyo Assistance Destek Hizmetleri A.Ş. tarafında sunulmaktadır.'
-            startDate: '2024-11-27T07:40:00'
-            endDate: '2024-11-28T07:40:00'
-          },
-        ]
-        sessionToken: '7E3175C8FDC0420E19D7D6B44A8E685B27EFE7F12ABEC41D9669FCF29409053B'
-        traceId: '738D00E2996563489F52CB7A25F1AAC938B757BA721C61028E77EC1BA4E54B26'
-        isSucceeded: false
-        diagnostics: {
-          sessionToken: '7E3175C8FDC0420E19D7D6B44A8E685B27EFE7F12ABEC41D9669FCF29409053B'
-          providerId: 2078
-          providerName: 'Tamamliyo'
-          generatingRequestTime: '00:00:00.3283172'
-          callingServiceTime: '00:00:00.3182215'
-          generatingResponseTime: '00:00:00.0102896'
-          subDiagnostics: null
-          lastException: null
-          serviceRequestData: null
-          serviceResponseData: null
-          providerInfo: {
-            isActive: boolean
-            isProduction: false
-          }
-          traceId: null
-        }
-        eventMessages: []
-        appName: string
-        scopeCode: string
-        logSessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
-        logSearchToken: '738D00E2996563489F52CB7A25F1AAC938B757BA721C61028E77EC1BA4E54B26'
-      },
-    ]
-    SummaryViewDataResponserPI: {
-      summaryResponse: {
-        flightList: [
-          {
-            flightFareInfo: {
-              flightDetailKeys: [
-                'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDlER+4VlXTkHHdJBIIQNSHS/efzt68jZEnpT7JvByV5jfndwihlXaUIT+bESsCiRKwoIw+yTBKTZT74nQ7FIIq7f61zGPtORTywh1gw/a3Qfwk6qXbDQpvCHzGGdbVH/yL2UYwEK0H3yhqGRctjWoUtqXefENLkD+PAsanWP0fsP21+02GqpmIpsSDzx6hj6EiL6LMQ8AU2A1v4YEtWQwlUIHV5lbpEhSLG72w9o7h3boLGdqdz8px2YoOtTXX0G/Jnl8i9CQaiTzTSYPn5RYD76Oh8iVGE5AUaAmGmqRqx0ntY7k8czRJj5qYMf5Tuoh5mfpRH15sKG1InxeJOsUv5ETSdACfcU5vfXxF1H9k3iC35XldH4b/e9d3fou+DXZSijpuxkylcFFAmR9wFTprFJfNkvXEuawFRvJiPzyxzYk6gKBNFkH5YWwE51DtpbsWzIj3UzhqvE/iJmJTwhhZb/BWDtVUihP398oCIMSsfb',
-              ]
-              groupId: 0
-              key: 'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmXBblb5zIEGfj+b2gA0A+oBo2t57oB+I09CdD4aEclgcBV0ybAQpPxkLVw75FvdSfjyezzS4WaQacpTOxjvPPzTyR2qLik7bAH+W5Prt3itmcYdva1xBPe89v+e4KzzC09HkH6lYvBgbYJexX3JhvbBj3eKg8jz3C6u7OpHOhHVbDPFkxkzP1UVX4SuzObEuqVWtye4VnKHABp3Mbr1ogemX8jJ6fGyuRmIyZXs6qxfNTvRejvNp0t8xx6HPPjbrpwQKelaKOvHI1nqqWtMIjO4/7KQkJangWc2NfqQe+YWwXmvdBmiFucgxpPQ8iEBGExjRpPGFWLSU/E2MgJBRB5Y+WGVoyM0TiQO4Dw0Ql3LJXvG4sH3SHRgADs9hDDB5kA='
-              totalPrice: {
-                value: 2207.18
-                currency: 'TRY'
-                rateValue: null
-              }
-              basePrice: {
-                value: 1584.88
-                currency: 'TRY'
-                rateValue: null
-              }
-              taxes: {
-                value: 422.3
-                currency: 'TRY'
-                rateValue: null
-              }
-              discount: {
-                value: 0.0
-                currency: null
-                rateValue: null
-              }
-              buyFee: {
-                code: null
-                price: {
-                  value: 0.0
-                  currency: null
-                  rateValue: null
-                }
-              }
-              fee: {
-                code: ''
-                price: {
-                  value: 200.0
-                  currency: 'TRY'
-                  rateValue: null
-                }
-              }
-              passengerPrices: [
-                {
-                  unitPrice: {
-                    value: 2207.18
-                    currency: 'TRY'
-                    rateValue: null
-                  }
-                  unitBasePrice: {
-                    value: 1584.88
-                    currency: 'TRY'
-                    rateValue: null
-                  }
-                  unitFee: {
-                    code: ''
-                    price: {
-                      value: 200.0
-                      currency: 'TRY'
-                      rateValue: null
-                    }
-                  }
-                  unitTax: {
-                    value: 422.3
-                    currency: 'TRY'
-                    rateValue: null
-                  }
-                  cancelPenalty: null
-                  changePenalty: null
-                  passengers: [
-                    {
-                      key: '8126560C2A454B7AFB0D3DCA1CA77D446D0170E107607B099E3969D8D213FA0F'
-                      name: null
-                      passengerType: 0
-                      age: 0
-                      birthday: '0001-01-01T00:00:00'
-                      gender: GenderEnums
-                    },
-                  ]
-                  taxInfos: [
-                    {
-                      key: 'VQ'
-                      value: '122.30'
-                    },
-                    {
-                      key: 'YR'
-                      value: '300.00'
-                    },
-                    {
-                      key: '||'
-                      value: '0'
-                    },
-                  ]
-                  serviceCharges: null
-                },
-              ]
-              taxInfos: null
-              serviceCharges: null
-            }
-            flightDetail: {
-              key: 'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDlER+4VlXTkHHdJBIIQNSHS/efzt68jZEnpT7JvByV5jfndwihlXaUIT+bESsCiRKwoIw+yTBKTZT74nQ7FIIq7f61zGPtORTywh1gw/a3Qfwk6qXbDQpvCHzGGdbVH/yL2UYwEK0H3yhqGRctjWoUtqXefENLkD+PAsanWP0fsP21+02GqpmIpsSDzx6hj6EiL6LMQ8AU2A1v4YEtWQwlUIHV5lbpEhSLG72w9o7h3boLGdqdz8px2YoOtTXX0G/Jnl8i9CQaiTzTSYPn5RYD76Oh8iVGE5AUaAmGmqRqx0ntY7k8czRJj5qYMf5Tuoh5mfpRH15sKG1InxeJOsUv5ETSdACfcU5vfXxF1H9k3iC35XldH4b/e9d3fou+DXZSijpuxkylcFFAmR9wFTprFJfNkvXEuawFRvJiPzyxzYk6gKBNFkH5YWwE51DtpbsWzIj3UzhqvE/iJmJTwhhZb/BWDtVUihP398oCIMSsfb'
-              groupId: 0
-              flightSegmentKeys: [
-                '6GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmUUo3rG76R0eGqj7O4fPBG/ZYpq8vKR/5bn8XnzWDNQxr6VCg3n8dc/vKhCm1yLxRsEZWTA2AQCnMgg57rWKEmLZOH7kMsQgdYcwMKYQsFTog==',
-              ]
-              travelTime: '01:10:00'
-              direction: 1
-              isDomestic: boolean
-              isOWCCombinable: false
-              isPromotional: boolean
-              reservable: boolean
-              freeVolatileData: {
-                data: 'OFFERITEM6_1:SH1'
-                OfferID: 'NDQzNzgwNSo0MTk2OTE2MjAxOSo1MDc0NzgqWk9XKloqZmFsc2UqQTIwN0pINTgqMTkwMDYqT1cqdHJ1ZSoxMDA3LjE4KlRSWSoyMDI0LTExLTI3KlFxZlpncGhJSDNnaTFWOFYzVGt1cFF4cTBPY0tEc2I5S0FPY0xUNSUyQnU4cSUyRnFxbUwwSDMlMkZMbUlIaXNubzN4N1dSUmh2WjhBbzd3JTJCa2tzUkhIR0dXRmclM0QlM0Q='
-                Owner: 'PC'
-                ResponseID: '75a64c86fc7e4000a63abf437b803242'
-                brandname: 'EXTRA'
-                Seq: 'FL_SAWADB_2'
-                SegmentRefs: 'NDQzNzgwNQ=='
-                PassengerList: 'SH1'
-                StandartSeatSelection: false
-                AllSeatSelection: boolean
-                FreeSandwich: boolean
-                Entertainment: boolean
-                FlexibleReturnChangeRight: boolean
-              }
-            }
-            flightSegments: [
-              {
-                key: '6GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmUUo3rG76R0eGqj7O4fPBG/ZYpq8vKR/5bn8XnzWDNQxr6VCg3n8dc/vKhCm1yLxRsEZWTA2AQCnMgg57rWKEmLZOH7kMsQgdYcwMKYQsFTog=='
-                groupId: 0
-                origin: {
-                  code: 'SAW'
-                  isDomestic: false
-                  iata: null
-                  type: 7
-                  id: 0
-                }
-                destination: {
-                  code: 'ADB'
-                  isDomestic: false
-                  iata: null
-                  type: 7
-                  id: 0
-                }
-                departureTime: '2024-11-27T07:40:00'
-                arrivalTime: '2024-11-27T08:50:00'
-                flightTime: '01:10:00'
-                operatingAirline: {
-                  code: 'PC'
-                  value: null
-                  countryCode: null
-                }
-                marketingAirline: {
-                  code: 'PC'
-                  value: null
-                  countryCode: null
-                }
-                flightNumber: '2184'
-                cabinClass: 0
-                bookingCode: 'ZOW'
-                equipment: null
-                isMeal: false
-                quota: 9
-                baggageAllowance: {
-                  maxWeight: {
-                    value: 20.0
-                    unit: 0
-                  }
-                  piece: {
-                    pieceCount: 0
-                  }
-                }
-                freeVolatileData: {
-                  ResBookDesigID: {
-                    SeatsLeft: 9
-                    SeatsLeftSpecified: boolean
-                    Value: 'Z'
-                  }
-                  ResBookDesigCode: 'ZOW'
-                  Baggage: 'BaggageAllowance4'
-                  BrandName: 'EXTRA'
-                  Seq: 'FL_SAWADB_2'
-                }
-              },
-            ]
-            flightPackageInfos: []
-          },
-        ]
-        flightFareInfo: {
-          flightDetailKeys: null
-          groupId: 0
-          key: null
-          totalPrice: {
-            value: 2207.18
-            currency: 'TRY'
-            rateValue: null
-          }
-          basePrice: {
-            value: 1584.88
-            currency: 'TRY'
-            rateValue: null
-          }
-          taxes: {
-            value: 422.3
-            currency: 'TRY'
-            rateValue: null
-          }
-          discount: {
-            value: 0.0
-            currency: null
-            rateValue: null
-          }
-          buyFee: {
-            code: null
-            price: {
-              value: 0.0
-              currency: null
-              rateValue: null
-            }
-          }
-          fee: {
-            code: ''
-            price: {
-              value: 200.0
-              currency: 'TRY'
-              rateValue: null
-            }
-          }
-          passengerPrices: [
-            {
-              unitPrice: {
-                value: 2207.18
-                currency: 'TRY'
-                rateValue: null
-              }
-              unitBasePrice: {
-                value: 1584.88
-                currency: 'TRY'
-                rateValue: null
-              }
-              unitFee: {
-                code: ''
-                price: {
-                  value: 200.0
-                  currency: 'TRY'
-                  rateValue: null
-                }
-              }
-              unitTax: {
-                value: 422.3
-                currency: 'TRY'
-                rateValue: null
-              }
-              cancelPenalty: null
-              changePenalty: null
-              passengers: [
-                {
-                  key: '8126560C2A454B7AFB0D3DCA1CA77D446D0170E107607B099E3969D8D213FA0F'
-                  name: null
-                  passengerType: 0
-                  age: 0
-                  birthday: '0001-01-01T00:00:00'
-                  gender: GenderEnums
-                },
-              ]
-              taxInfos: [
-                {
-                  key: 'VQ'
-                  value: '122.30'
-                },
-                {
-                  key: 'YR'
-                  value: '300.00'
-                },
-                {
-                  key: '||'
-                  value: '0'
-                },
-              ]
-              serviceCharges: null
-            },
-          ]
-          taxInfos: []
-          serviceCharges: []
-        }
-        flightPackageInfos: []
-        isReservable: boolean
-        hasOwc: false
         activeFlightTripKind: 1
         sessionToken: 'BE27D7BE9D18F8B500F6EDFFBB254BE6BCAAB1011463285BD23548A29878D677'
         airportList: {
@@ -1190,7 +864,7 @@ export type ProductPassengerApiResponseModel = {
         airlineList: {
           PC: 'Pegasus  Havayolları'
         }
-        applyCancelationInsurance: false
+        applyCancelationInsurance: boolean
         buyInsurancePrice: 0.0
         sellInsurancePrice: 0.0
         showOnlyInsurancePrice: 0.0
@@ -1307,7 +981,7 @@ export type ProductPassengerApiResponseModel = {
     ]
   }
   paymentIndexModel: {
-    isPhoneNumberConfirmed: false
+    isPhoneNumberConfirmed: boolean
     phoneNumber: ''
     billingInformationList: []
     installment: {
@@ -1990,7 +1664,7 @@ export type ProductPassengerApiResponseModel = {
     isDomestic: boolean
     isTotalSalaryNotEqualsZero: boolean
     showFinancell: boolean
-    usedFinancellCredit: false
+    usedFinancellCredit: boolean
     paymentMethodList: null
     billingInfo: {
       id: 7566910135234401391
@@ -2051,4 +1725,192 @@ export interface PassengerChildNodeItemValue {
   sequenceNo: number
   type: PassengerTypesEnum
   webUserId: ID
+}
+
+export interface FlightReservationSummary {
+  flightList: {
+    flightFareInfo: {
+      flightDetailKeys: string[]
+      groupId: 0 | 1
+      key: string
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: {
+        unitPrice: ServicePriceType
+        unitBasePrice: ServicePriceType
+        unitFee: ServiceFeePriceType
+        unitTax: ServicePriceType
+        cancelPenalty: null
+        changePenalty: null
+        passengers: {
+          key: string
+          name: null
+          passengerType: number
+          age: number
+          birthday: string
+          gender: number
+        }[]
+        taxInfos: {
+          key: string
+          value: string
+        }[]
+        serviceCharges: null
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }
+    flightDetail: {
+      key: string
+      groupId: 0 | 1
+      flightSegmentKeys: string[]
+      travelTime: string
+      direction: number
+      isDomestic: boolean
+      isOWCCombinable: boolean
+      isPromotional: boolean
+      reservable: boolean
+      freeVolatileData: {
+        data: string
+        OfferID: string
+        Owner: string
+        ResponseID: string
+        brandname: string
+        Seq: string
+        SegmentRefs: string
+        PassengerList: string
+        StandartSeatSelection: boolean
+        AllSeatSelection: boolean
+        FreeSandwich: boolean
+        Entertainment: boolean
+        FlexibleReturnChangeRight: boolean
+      }
+    }
+    flightSegments: {
+      key: string
+      groupId: 0 | 1
+      origin: {
+        code: string
+        isDomestic: boolean
+        iata: null
+        type: number
+        id: ID
+      }
+      destination: {
+        code: string
+        isDomestic: boolean
+        iata: null
+        type: number
+        id: ID
+      }
+      departureTime: string
+      arrivalTime: string
+      flightTime: string
+      operatingAirline: {
+        code: number
+        value: null
+        countryCode: null
+      }
+      marketingAirline: {
+        code: string
+        value: null
+        countryCode: null
+      }
+      flightNumber: string
+      cabinClass: number
+      bookingCode: string
+      equipment: null
+      isMeal: boolean
+      quota: number
+      baggageAllowance: {
+        maxWeight: {
+          value: number
+          unit: number
+        }
+        piece: {
+          pieceCount: number
+        }
+      }
+      freeVolatileData: {
+        ResBookDesigID: {
+          SeatsLeft: number
+          SeatsLeftSpecified: boolean
+          Value: string
+        }
+        ResBookDesigCode: string
+        Baggage: string
+        BrandName: string
+        Seq: string
+      }
+    }[]
+  }[]
+  flightFareInfo: {
+    flightDetailKeys: null
+    groupId: 0 | 1 | 2
+    key: null
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: {
+        key: string
+        value: string
+      }[]
+      serviceCharges: null
+    }[]
+    taxInfos: []
+    serviceCharges: []
+  }
+  isReservable: boolean
+  hasOwc: boolean
+  activeFlightTripKind: number
+  sessionToken: string
+  airportList: {
+    [key: string]: {
+      id: ID
+      code: string
+      value: {
+        langCode: string
+        value: string
+      }[]
+      countryCode: string
+      country: string
+      city: string
+    }
+  }
+  airlineList: {
+    [key: string]: string
+  }
+  applyCancelationInsurance: boolean
+  buyInsurancePrice: number
+  sellInsurancePrice: number
+  showOnlyInsurancePrice: number
+  productKey: null
+  moduleName: 'Flight'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
 }
