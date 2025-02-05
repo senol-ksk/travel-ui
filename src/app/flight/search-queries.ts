@@ -202,7 +202,12 @@ const useSearchResultsQueries = () => {
       }
     },
   })
-  return { searchResultsQuery, submitFlightData, searchParams }
+  return {
+    searchResultsQuery,
+    submitFlightData,
+    searchParams,
+    searchSessionTokenQuery,
+  }
 }
 
 export { useSearchResultsQueries }

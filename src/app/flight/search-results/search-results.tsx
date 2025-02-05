@@ -6,10 +6,9 @@ import { Button, Drawer, Skeleton } from '@mantine/core'
 import { FlightDetail, FlightDetailSegment, FlightFareInfo } from '../type'
 import { useRef, useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
-import { formatCurrency } from '@/libs/util'
-import clsx from 'clsx'
+
 import { FlightSearchResultsInternational } from './international-flight'
-import dayjs from 'dayjs'
+import { formatCurrency } from '@/libs/util'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -17,7 +16,7 @@ type SelectedPackageStateProps = {
 }
 
 const FlightSearchView = () => {
-  const { searchResultsQuery, submitFlightData, searchParams } =
+  const { searchResultsQuery, searchSessionTokenQuery, submitFlightData } =
     useSearchResultsQueries()
   const [isNextFlightVisible, setIsNextFlightVisible] = useState(false)
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
@@ -28,7 +27,7 @@ const FlightSearchView = () => {
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
   const selectedFlightKeys = useRef<string[]>([])
-
+  // console.log(selectedFlightItemPackages)
   const searchResponseDataPages = searchResultsQuery.data?.pages
     .map((page) => {
       return page.data?.searchResults
@@ -53,11 +52,6 @@ const FlightSearchView = () => {
       (item) => item?.flightDetails && Object.values(item?.flightDetails)
     )
     .filter(Boolean)
-  const flightDetailsSorted = flightFareInfos?.flatMap((flightFare) =>
-    flightDetails?.filter((flightDetail) =>
-      flightFare?.flightDetailKeys.includes(flightDetail?.key ?? '')
-    )
-  )
 
   const flightDetailSegments = searchResponseDataPages
     ?.filter(
@@ -71,28 +65,18 @@ const FlightSearchView = () => {
     )
     .filter(Boolean)
 
-  const flightDetailSegmentsSorted = flightDetailsSorted?.flatMap(
-    (flightDetail) =>
-      flightDetailSegments?.filter((flightDetailSegment) =>
-        flightDetail?.flightSegmentKeys.includes(flightDetailSegment?.key ?? '')
-      )
-  )
-
-  const flightDetailSegmentsWithoutSameFlights = flightDetailSegmentsSorted
-    ?.filter(
-      (obj, i, objArr) =>
-        objArr.findIndex(
-          (obj2) => obj2?.freeVolatileData.Seq === obj?.freeVolatileData.Seq
-        ) === i
+  const flightDetailSegmentsSorted = flightDetails?.flatMap((flightDetail) =>
+    flightDetailSegments?.filter((flightDetailSegment) =>
+      flightDetail?.flightSegmentKeys.includes(flightDetailSegment?.key ?? '')
     )
-    .filter(Boolean)
+  )
 
   const isDomestic = flightDetails?.every(
     (detailSegmeng) => detailSegmeng?.isDomestic
   )
   const clientData = flightFareInfos
 
-  const handleFlightSelect = async (data: SelectedPackageStateProps[]) => {
+  const handleFlightSelect = (data: SelectedPackageStateProps[]) => {
     if (data?.length) {
       setSelectedFlightItemPackages(data)
       openPackageDrawer()
@@ -113,12 +97,13 @@ const FlightSearchView = () => {
       setIsNextFlightVisible(false)
     }
     closePackageDrawer()
-    setSelectedFlightItemPackages(null)
   }
 
   return (
     <>
-      {searchResultsQuery.isLoading || searchResultsQuery.isFetching ? (
+      {searchResultsQuery.isLoading ||
+      searchResultsQuery.isFetching ||
+      searchSessionTokenQuery.isLoading ? (
         <div className='relative'>
           <div className='absolute start-0 end-0 top-0 bottom-0 h-[8px]'>
             <Skeleton h={6} />
@@ -139,7 +124,12 @@ const FlightSearchView = () => {
         <div className='md:col-span-3'>
           {isNextFlightVisible ? 'Dönüş seçiniz' : 'gidiş seçiniz'}
 
-          <div className='grid gap-3'>
+          <div
+            className='grid gap-3'
+            style={{
+              contentVisibility: 'auto',
+            }}
+          >
             {clientData?.map((flightFareInfo) => {
               const details = flightDetails?.filter(
                 (item) =>
@@ -147,17 +137,17 @@ const FlightSearchView = () => {
                   flightFareInfo?.flightDetailKeys.includes(item?.key)
               ) as FlightDetail[]
 
-              const intenationalFlightDetailsData =
-                flightFareInfo?.flightDetailKeys.flatMap((detailKey) => {
-                  return flightDetails?.filter(
-                    (flightDetail) => flightDetail?.key === detailKey
-                  )
-                }) as FlightDetail[]
+              // const intenationalFlightDetailsData =
+              //   flightFareInfo?.flightDetailKeys.flatMap((detailKey) => {
+              //     return flightDetails?.filter(
+              //       (flightDetail) => flightDetail?.key === detailKey
+              //     )
+              //   }) as FlightDetail[]
 
-              const internationalFlightSegments = intenationalFlightDetailsData
+              const internationalFlightSegments = details
                 .flatMap((item3) =>
                   item3.flightSegmentKeys.flatMap((item) =>
-                    flightDetailSegmentsWithoutSameFlights?.filter(
+                    flightDetailSegmentsSorted?.filter(
                       (item2) => item2?.key === item
                     )
                   )
@@ -169,16 +159,76 @@ const FlightSearchView = () => {
                     ) === i
                 ) as FlightDetailSegment[]
 
-              const internationalFlightSegmentsProps =
-                intenationalFlightDetailsData.flatMap((item3) =>
+              const internationalFlightSegmentsProps = details.flatMap(
+                (item3) =>
                   item3.flightSegmentKeys.flatMap((item) =>
                     flightDetailSegmentsSorted?.filter(
                       (item2) => item2?.key === item
                     )
                   )
-                ) as FlightDetailSegment[]
+              ) as FlightDetailSegment[]
+              // this will be passed to the component
+              const detailSegmentsAll = flightDetailSegments?.filter((item) => {
+                return details.filter((detail) => {
+                  return item && detail.flightSegmentKeys.includes(item?.key)
+                }).length
+              }) as FlightDetailSegment[]
 
               if (!flightFareInfo) return null
+
+              if (!isDomestic && internationalFlightSegments.length > 0) {
+                // international flight for round trip
+                const internationalPackages = flightDetailSegmentsSorted
+                  ?.filter(
+                    (item) =>
+                      item?.freeVolatileData.Seq ===
+                      internationalFlightSegmentsProps.at(0)?.freeVolatileData
+                        .Seq
+                  )
+                  .filter(
+                    (item) =>
+                      item?.flightNumber ===
+                      internationalFlightSegmentsProps.at(0)?.flightNumber
+                  )
+                  .map((detailSegment) => {
+                    return {
+                      flightDetailSegment: detailSegment,
+                      flightFareInfo: flightFareInfos?.find((fareItem) =>
+                        flightDetails?.find(
+                          (detailItem) =>
+                            fareItem?.flightDetailKeys.includes(
+                              detailItem?.key ?? ''
+                            ) &&
+                            detailItem?.flightSegmentKeys.includes(
+                              detailSegment?.key ?? ''
+                            )
+                        )
+                      ),
+                    }
+                  })
+                  .filter(
+                    (item1, index, itemArr) =>
+                      itemArr.findIndex(
+                        (item2) =>
+                          item1.flightFareInfo?.key ===
+                          item2.flightFareInfo?.key
+                      ) === index
+                  ) as SelectedPackageStateProps[]
+                return (
+                  <div key={flightFareInfo.key}>
+                    <FlightSearchResultsInternational
+                      detailSegments={internationalFlightSegmentsProps}
+                      details={details}
+                      fareInfo={flightFareInfo}
+                      onSelect={() => {
+                        console.log(internationalPackages)
+                        handleFlightSelect(internationalPackages)
+                      }}
+                    />
+                  </div>
+                )
+              }
+
               const detailSegments = flightDetailSegments
                 ?.filter(
                   (obj, i, arr) =>
@@ -191,27 +241,8 @@ const FlightSearchView = () => {
                     return item && detail.flightSegmentKeys.includes(item?.key)
                   }).length
                 })
-              if (!isDomestic && internationalFlightSegments.length > 0) {
-                return (
-                  <div key={flightFareInfo.key}>
-                    <FlightSearchResultsInternational
-                      detailSegments={internationalFlightSegmentsProps}
-                      details={intenationalFlightDetailsData}
-                      fareInfo={flightFareInfo}
-                      onSelect={() => {}}
-                    />
-                  </div>
-                )
-              }
 
               if (!detailSegments?.length) return null
-
-              // this will be passed to the component
-              const detailSegmentsAll = flightDetailSegments?.filter((item) => {
-                return details.filter((detail) => {
-                  return item && detail.flightSegmentKeys.includes(item?.key)
-                }).length
-              }) as FlightDetailSegment[]
 
               if (isDomestic) {
                 if (flightFareInfo.groupId === 0 && !isNextFlightVisible) {
@@ -302,7 +333,10 @@ const FlightSearchView = () => {
       </div>
       <Drawer
         opened={pacakgeDrawerOpened}
-        onClose={closePackageDrawer}
+        onClose={() => {
+          closePackageDrawer()
+          setSelectedFlightItemPackages(null)
+        }}
         position='bottom'
         title={
           <div>
@@ -317,54 +351,56 @@ const FlightSearchView = () => {
         }
       >
         <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
-          {selectedFlightItemPackages?.map((selectedPackage) => {
-            return (
-              <div
-                key={selectedPackage.flightDetailSegment.key}
-                className='flex flex-col rounded border p-2 md:p-3'
-              >
-                <div className='flex h-full flex-col gap-3'>
-                  <div className='text-lg font-semibold'>
-                    {formatCurrency(
-                      selectedPackage.flightFareInfo.totalPrice.value
-                    )}
-                  </div>
-                  <div>
-                    <div className='pb-2 font-semibold capitalize'>
-                      {(() => {
-                        switch (
-                          selectedPackage.flightDetailSegment.freeVolatileData
-                            .BrandName
-                        ) {
-                          case 'SUPER_ECO':
-                            return 'Light'
-                          case 'ECO':
-                            return 'Süper Eko'
-                          case 'ADVANTAGE':
-                            return 'Avantaj'
-                          case 'EXTRA':
-                            return 'Comfort Flex'
-                          default:
-                            return selectedPackage.flightDetailSegment
-                              .freeVolatileData.BrandName
-                        }
-                      })()}
+          {selectedFlightItemPackages &&
+            selectedFlightItemPackages.length &&
+            selectedFlightItemPackages?.map((selectedPackage) => {
+              return (
+                <div
+                  key={selectedPackage.flightFareInfo.key}
+                  className='flex flex-col rounded border p-2 md:p-3'
+                >
+                  <div className='flex h-full flex-col gap-3'>
+                    <div className='text-lg font-semibold'>
+                      {formatCurrency(
+                        selectedPackage.flightFareInfo.totalPrice.value
+                      )}
+                    </div>
+                    <div>
+                      <div className='pb-2 font-semibold capitalize'>
+                        {(() => {
+                          switch (
+                            selectedPackage.flightDetailSegment.freeVolatileData
+                              .BrandName
+                          ) {
+                            case 'SUPER_ECO':
+                              return 'Light'
+                            case 'ECO':
+                              return 'Süper Eko'
+                            case 'ADVANTAGE':
+                              return 'Avantaj'
+                            case 'EXTRA':
+                              return 'Comfort Flex'
+                            default:
+                              return selectedPackage.flightDetailSegment
+                                .freeVolatileData.BrandName
+                          }
+                        })()}
+                      </div>
+                    </div>
+                    <div className='mt-auto'>
+                      <Button
+                        type='button'
+                        onClick={() => {
+                          handlePackageSelect(selectedPackage)
+                        }}
+                      >
+                        Seç
+                      </Button>
                     </div>
                   </div>
-                  <div className='mt-auto'>
-                    <Button
-                      type='button'
-                      onClick={() => {
-                        handlePackageSelect(selectedPackage)
-                      }}
-                    >
-                      Seç
-                    </Button>
-                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
         </div>
       </Drawer>
     </>

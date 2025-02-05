@@ -8,7 +8,8 @@ type IProps = {
   fareInfo: FlightFareInfo
   details: FlightDetail[]
   detailSegments: FlightDetailSegment[]
-  onSelect: (fareInfo: FlightFareInfo) => void
+  onSelect: () => void
+  // onSelect: (fareInfo: FlightFareInfo) => void
 }
 
 const FlightSearchResultsInternational: React.FC<IProps> = ({
@@ -79,7 +80,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
           <Button
             type='button'
             onClick={() => {
-              onSelect(fareInfo)
+              onSelect()
             }}
           >
             Seç
