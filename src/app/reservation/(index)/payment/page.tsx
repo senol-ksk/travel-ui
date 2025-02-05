@@ -87,10 +87,6 @@ const PaymentPage = () => {
         axiosOptions: {
           url: `api/payment/initProcess`,
           method: 'post',
-          withCredentials: true,
-          headers: {
-            'Access-Control-Allow-Credentials': '*',
-          },
           data: {
             ...data,
             cardNumber: data.cardNumber?.replaceAll(' ', ''),

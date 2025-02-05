@@ -91,15 +91,11 @@ export default function CheckoutPage() {
         axiosOptions: {
           url: `/api/payment/checkoutAssests`,
           method: 'POST',
-          withCredentials: true,
           data: {
             ...data,
             searchToken: queryStrings.searchToken,
             sessionToken: queryStrings.sessionToken,
             productKey: queryStrings.productKey,
-          },
-          headers: {
-            'Access-Control-Allow-Credentials': '*',
           },
         },
       })

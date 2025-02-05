@@ -63,8 +63,10 @@ async function serviceRequest<DataType>({
 
   try {
     const response = await client<ServiceResponse<DataType>>({
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': '*',
       },
       ...axiosOptions,
       url,
