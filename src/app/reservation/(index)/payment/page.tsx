@@ -88,6 +88,9 @@ const PaymentPage = () => {
           url: `api/payment/initProcess`,
           method: 'post',
           withCredentials: true,
+          headers: {
+            'Access-Control-Allow-Credentials': true,
+          },
           data: {
             ...data,
             cardNumber: data.cardNumber?.replaceAll(' ', ''),

@@ -98,6 +98,9 @@ export default function CheckoutPage() {
             sessionToken: queryStrings.sessionToken,
             productKey: queryStrings.productKey,
           },
+          headers: {
+            'Access-Control-Allow-Origin ': true,
+          },
         },
       })
     },
