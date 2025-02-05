@@ -4,6 +4,7 @@ import { useQueryStates } from 'nuqs'
 import { busSearchParams } from '@/modules/bus/searchParmas'
 import { getsecuritytoken, request, serviceRequest } from '@/network'
 import { BusSearchResponse, BusSeatApiResponse, Seat } from '@/app/bus/types'
+import { delayCodeExecution } from '@/libs/util'
 
 let appToken: null | string = ''
 
@@ -17,6 +18,7 @@ export const useSearchRequest = () => {
         appToken = (await getsecuritytoken()).result
       }
 
+      await delayCodeExecution(1000)
       const response = (await request({
         signal,
         url: process.env.NEXT_PUBLIC_OL_ROUTE,

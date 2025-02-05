@@ -364,7 +364,9 @@ const TourDetailClient = () => {
         </div>
         <div>
           <Group className='justify-between border-t' pt='md' mt={'md'}>
-            <Button color='red'>İptal</Button>
+            <Button color='red' onClick={closeExtraServicesModal}>
+              İptal
+            </Button>
             <Button
               color='green'
               disabled={addOrRemoveExtraServicesMutation.isPending}

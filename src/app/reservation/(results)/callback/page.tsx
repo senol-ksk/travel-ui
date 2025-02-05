@@ -1,11 +1,7 @@
 import { serviceRequest } from '@/network'
 import { IoCheckmarkCircleOutline } from 'react-icons/io5'
 import { CheckoutCard } from '@/components/card'
-import {
-  FlightSummaryResponse,
-  HotelSummaryResponse,
-  OperationResultType,
-} from './type'
+
 import { ModuleNames } from '@/types/global'
 import { Divider, Title } from '@mantine/core'
 import {
@@ -15,6 +11,16 @@ import {
 import { formatCurrency } from '@/libs/util'
 import { FlightSummary } from './products/flight'
 import dayjs from 'dayjs'
+import { HotelSummary } from './products/hotel'
+import {
+  BusSummaryResponse,
+  FlightSummaryResponse,
+  HotelSummaryResponse,
+  OperationResultType,
+  TransferSummaryResponse,
+} from '../../types'
+import { BusSummary } from './products/bus'
+import { TransferSummary } from './products/transfer'
 
 type IProps = {
   searchParams: Promise<{
@@ -48,6 +54,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
   const passengerData = getSummary?.passenger
 
   // type ProductType =
+  console.log(getSummaryData)
 
   const productData = getSummary?.product.summaryResponse
 
@@ -88,6 +95,18 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                   return (
                     <FlightSummary
                       data={productData as FlightSummaryResponse}
+                    />
+                  )
+                case 'Hotel':
+                  return (
+                    <HotelSummary data={productData as HotelSummaryResponse} />
+                  )
+                case 'Bus':
+                  return <BusSummary data={productData as BusSummaryResponse} />
+                case 'Transfer':
+                  return (
+                    <TransferSummary
+                      data={productData as TransferSummaryResponse}
                     />
                   )
 

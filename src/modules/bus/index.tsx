@@ -62,10 +62,13 @@ const BusSearchEngine = () => {
 
   const formActions = useForm<BusSearchEngineInfer>({
     resolver: zodResolver(busSearhEngineSchema),
-    defaultValues: localStorageData,
+    defaultValues: {
+      ...localStorageData,
+      Date: dayjs().isAfter(localStorageData.Date, 'day')
+        ? dayjs().add(1, 'd').toDate()
+        : dayjs(localStorageData.Date).toDate(),
+    },
   })
-
-  const [departurDate, setDepartureDate] = useState(localStorageData.Date)
 
   const [pickupLocation, setPickupLocation] = useState('')
   const [targetLocation, setTargetLocation] = useState('')
@@ -140,7 +143,7 @@ const BusSearchEngine = () => {
               label='Nereden'
               data={pickupLocationData?.Result}
               isLoading={pickupLocationDataIsLoading}
-              defaultValue={localStorageData.Origin.Name}
+              defaultValue={formActions.formState.defaultValues?.Origin?.Name}
               onChange={(value) => {
                 setPickupLocation(value)
               }}
@@ -165,7 +168,9 @@ const BusSearchEngine = () => {
               label='Nereye'
               data={targeLocationData?.Result}
               isLoading={targetLocationDataIsLoading}
-              defaultValue={localStorageData.Destination.Name}
+              defaultValue={
+                formActions.formState.defaultValues?.Destination?.Name
+              }
               onChange={(value) => {
                 setTargetLocation(value)
               }}
@@ -189,10 +194,9 @@ const BusSearchEngine = () => {
         <div className='relative col-span-12 md:col-span-2'>
           <div className='relative'>
             <BusCalendar
-              defaultDate={new Date(departurDate)}
+              defaultDate={formActions.getValues('Date')}
               onDateSelect={(date) => {
                 if (date) {
-                  setDepartureDate(date)
                   formActions.setValue('Date', date)
                 }
               }}
@@ -202,22 +206,22 @@ const BusSearchEngine = () => {
         <div className='col-span-12 md:col-span-1'>
           <Stack gap={10}>
             <Radio
-              checked={dayjs(departurDate).isToday()}
+              checked={dayjs(formActions.getValues('Date')).isToday()}
               label='Bugün'
               onChange={(event) => {
                 if (event.target.checked) {
-                  setDepartureDate(new Date())
                   formActions.setValue('Date', new Date())
+                  formActions.trigger('Date')
                 }
               }}
             />
             <Radio
-              checked={dayjs(departurDate).isTomorrow()}
+              checked={dayjs(formActions.getValues('Date')).isTomorrow()}
               label='Yarın'
               onChange={(event) => {
                 if (event.target.checked) {
-                  setDepartureDate(dayjs().add(1, 'd').toDate())
                   formActions.setValue('Date', dayjs().add(1, 'd').toDate())
+                  formActions.trigger('Date')
                 }
               }}
             />

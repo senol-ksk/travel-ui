@@ -26,7 +26,6 @@ import { InstallmentTable } from './installment'
 import { FaExclamationCircle } from 'react-icons/fa'
 
 const HotelDetailSection = () => {
-  const selectedRoomProductKey = useRef('')
   const router = useRouter()
   const {
     hotelDetailQuery,
@@ -75,7 +74,6 @@ const HotelDetailSection = () => {
       return
     }
 
-    selectedRoomProductKey.current = roomStatus?.data?.productKey
     if (
       Array.isArray(roomStatus?.data?.status) &&
       roomStatus?.data?.status?.length > 0
@@ -83,7 +81,7 @@ const HotelDetailSection = () => {
       closeRoomStateOverlayVisible()
       openRoomStateModal()
     } else {
-      handleReservation()
+      handleReservation(roomStatus?.data?.productKey)
     }
   }
 
@@ -108,11 +106,11 @@ const HotelDetailSection = () => {
     }
   }
 
-  const handleReservation = () => {
+  const handleReservation = (productKey: string) => {
     const resParams = createSerializer(reservationParsers)
 
     const url = resParams('/reservation', {
-      productKey: selectedRoomProductKey.current,
+      productKey,
       searchToken: searchParams.searchToken,
       sessionToken: searchParams.sessionToken,
     })
@@ -301,7 +299,13 @@ const HotelDetailSection = () => {
 
           {selectedRoomMutaion.data?.data && (
             <div className='flex justify-end gap-2 pt-4'>
-              <Button color='green' onClick={handleReservation}>
+              <Button
+                color='green'
+                onClick={() =>
+                  selectedRoomMutaion.data?.data?.productKey &&
+                  handleReservation(selectedRoomMutaion?.data?.data?.productKey)
+                }
+              >
                 Devam Et
               </Button>
             </div>

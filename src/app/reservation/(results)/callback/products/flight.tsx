@@ -2,9 +2,9 @@ import dayjs from 'dayjs'
 import { AspectRatio, Divider, Image } from '@mantine/core'
 import NextImage from 'next/image'
 
-import type { FlightSummaryResponse } from '@/app/reservation/(results)/callback/type'
 import { CabinTypes } from '@/types/flight'
 import { CheckoutCard } from '@/components/card'
+import { FlightSummaryResponse } from '@/app/reservation/types'
 
 type IProps = {
   data: FlightSummaryResponse

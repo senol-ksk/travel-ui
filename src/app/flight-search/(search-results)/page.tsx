@@ -309,7 +309,7 @@ const FlightSearchPage = (props: {
                   <div
                     className={`absolute start-0 end-0 transition-all ${clsx({
                       'top-56 z-0 opacity-0': !roundTicketsIsVisible,
-                      'top-0 z-10 opacity-1': roundTicketsIsVisible,
+                      'top-0 z-10 opacity-100': roundTicketsIsVisible,
                     })}`}
                   >
                     {flightService.data &&
