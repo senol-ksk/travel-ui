@@ -2,7 +2,7 @@
 
 import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearhResults'
 import { TourSearchEngine } from '@/modules/tour'
-import { Alert, Skeleton } from '@mantine/core'
+import { Alert, Button, Skeleton } from '@mantine/core'
 import { TourSearchResultItem } from './item'
 import { FiAlertTriangle } from 'react-icons/fi'
 import { TourSearchResultSearchItem } from '@/modules/tour/type'
@@ -16,10 +16,6 @@ const TourSearchResultClient = () => {
   const searchRequestIsLoading =
     searchResultsQuery.isLoading ||
     searchResultsQuery.hasNextPage ||
-    searchParamsQuery.isLoading
-
-  const searchIsPending =
-    (searchResultsQuery.isLoading && searchResultsQuery.hasNextPage) ||
     searchParamsQuery.isLoading
 
   const searchResultPages = searchResultsQuery.data?.pages
@@ -54,8 +50,7 @@ const TourSearchResultClient = () => {
       )
     : true
 
-  if (searchResultsQuery.error) return <div>Bir hata oldu</div>
-  if (!hasResult) {
+  if (!hasResult || searchResultsQuery.isError || searchParamsQuery.isError) {
     return (
       <div className='container py-4'>
         <Alert
@@ -64,8 +59,22 @@ const TourSearchResultClient = () => {
           title='Sonuç bulunamadı'
           icon={<FiAlertTriangle size={'100%'} />}
         >
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. At officiis,
-          quae tempore necessitatibus placeat saepe.
+          <div>Sonuç bulunamadı.</div>
+          <div>
+            <Button
+              type='button'
+              onClick={() => {
+                if (searchResultsQuery.isError) {
+                  searchResultsQuery.refetch()
+                }
+                if (searchParamsQuery.isError) {
+                  searchParamsQuery.refetch()
+                }
+              }}
+            >
+              Tekrar Deneyin.
+            </Button>
+          </div>
         </Alert>
       </div>
     )
@@ -99,12 +108,12 @@ const TourSearchResultClient = () => {
                     ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
                     .map((searchResultItem) => {
                       return (
-                        <div key={searchResultItem.key}>
-                          <TourSearchResultItem
-                            data={searchResultItem}
-                            onClick={handleTourItemSelect}
-                          />
-                        </div>
+                        <TourSearchResultItem
+                          key={searchResultItem.key}
+                          providerName={searchResult.diagnostics.providerName}
+                          data={searchResultItem}
+                          onClick={handleTourItemSelect}
+                        />
                       )
                     })
                 })

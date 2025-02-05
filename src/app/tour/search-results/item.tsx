@@ -19,10 +19,12 @@ import { useState } from 'react'
 
 type Props = {
   data: TourSearchResultSearchItem
+  providerName?: string
   onClick?: (tour: TourSearchResultSearchItem) => void
 }
 export const TourSearchResultItem: React.FC<Props> = ({
   data,
+  providerName,
   onClick = () => null,
 }) => {
   const { searchParamsQuery } = useTourSearchResultsQuery()
@@ -39,7 +41,8 @@ export const TourSearchResultItem: React.FC<Props> = ({
     <div className='@container rounded-lg border border-gray-300'>
       <div className='grid gap-3 p-3 md:gap-5 @lg:p-5'>
         <Title order={3} className='text-md font-semibold @lg:text-lg'>
-          {data.title}
+          {data.title}{' '}
+          <small className='text-xs text-gray-300'>{providerName}</small>
         </Title>
         <div className='grid grid-cols-12 gap-4'>
           <div className='col-span-12 md:col-span-3'>
