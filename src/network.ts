@@ -7,10 +7,6 @@ import md5 from 'md5'
 
 const client = axios.create({
   baseURL: '/',
-  withCredentials: true,
-  headers: {
-    'Access-Control-Allow-Credentials': '*',
-  },
 })
 
 const request = async (options: AxiosRequestConfig) => {
@@ -67,8 +63,10 @@ async function serviceRequest<DataType>({
 
   try {
     const response = await client<ServiceResponse<DataType>>({
+      withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': '*',
       },
       ...axiosOptions,
       url,
