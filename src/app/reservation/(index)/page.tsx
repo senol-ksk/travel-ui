@@ -99,7 +99,7 @@ export default function CheckoutPage() {
             productKey: queryStrings.productKey,
           },
           headers: {
-            'Access-Control-Allow-Origin ': true,
+            'Access-Control-Allow-Credentials': '*',
           },
         },
       })
