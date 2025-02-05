@@ -28,7 +28,7 @@ export const useCheckoutQuery: CheckoutQueryFnType = () => {
             productKey,
           },
           headers: {
-            'Access-Control-Allow-Credentials': true,
+            'Access-Control-Allow-Credentials': '*',
           },
         },
       })

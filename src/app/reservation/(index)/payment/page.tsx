@@ -89,7 +89,7 @@ const PaymentPage = () => {
           method: 'post',
           withCredentials: true,
           headers: {
-            'Access-Control-Allow-Credentials': true,
+            'Access-Control-Allow-Credentials': '*',
           },
           data: {
             ...data,

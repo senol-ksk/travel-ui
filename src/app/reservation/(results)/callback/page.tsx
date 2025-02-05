@@ -42,7 +42,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
       url: `api/product/summary`,
       withCredentials: true,
       headers: {
-        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Credentials': '*',
       },
       params: {
         searchToken,

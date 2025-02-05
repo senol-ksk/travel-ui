@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       data,
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Allow-Credentials': '*',
       },
     },
   })
