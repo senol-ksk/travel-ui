@@ -16,12 +16,10 @@ export async function POST(request: NextRequest) {
   }>({
     axiosOptions: {
       url: `/api/payment/complete?paymenttoken=${paymenttoken}`,
-      withCredentials: true,
       method: 'POST',
       data,
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Access-Control-Allow-Credentials': '*',
       },
     },
   })
