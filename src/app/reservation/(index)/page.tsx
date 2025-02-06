@@ -1,15 +1,7 @@
 'use client'
 import 'intl-tel-input/styles'
 
-import {
-  FlightReservationSummary,
-  GenderEnums,
-  PassengerTypesEnum,
-  PassengerTypesIndexEnum,
-} from '@/types/passengerViewModel'
-import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 import { useRouter } from 'next/navigation'
-
 import {
   useForm,
   UseFormProps,
@@ -17,7 +9,6 @@ import {
   FormProvider,
   Controller,
 } from 'react-hook-form'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
@@ -28,31 +19,36 @@ import {
   List,
   LoadingOverlay,
   Skeleton,
-  Stack,
   TextInput,
   Title,
 } from '@mantine/core'
 import IntlTelInput from 'intl-tel-input/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
+import { createSerializer, useQueryStates } from 'nuqs'
+import dayjs from 'dayjs'
 
 import PassengerInformationForm from '@/components/checkout/flight/passengers'
-
 import { serviceRequest } from '@/network'
-
 import { formatCurrency } from '@/libs/util'
 import {
   checkoutSchemaMerged,
-  CheckoutSchemaMergedFieldTypes,
-  checkPhoneNumberIsValid,
+  type CheckoutSchemaMergedFieldTypes,
+  // checkPhoneNumberIsValid,
 } from '../validations'
+import {
+  type FlightReservationSummary,
+  GenderEnums,
+  PassengerTypesEnum,
+  PassengerTypesIndexEnum,
+} from '@/types/passengerViewModel'
+import { useCheckoutQuery } from '@/app/reservation/checkout-query'
 
 import { CheckoutCard } from '@/components/card'
-import { createSerializer, useQueryStates } from 'nuqs'
 import { reservationParsers } from '../searchParams'
 import { HotelPassengerInformationForm } from '@/components/checkout/hotel/passengers'
-import dayjs from 'dayjs'
 import { FlightSummary } from '../components/flight/summary'
+import { BillingForm } from '../components/billing'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -128,7 +124,7 @@ export default function CheckoutPage() {
       </CheckoutCard>
     )
   }
-
+  console.log(formMethods.formState.errors)
   return (
     <div className='py-2 md:py-5 lg:container'>
       <div className='grid gap-3 md:grid-cols-3 md:gap-4'>
@@ -138,20 +134,20 @@ export default function CheckoutPage() {
               <form
                 onSubmit={formMethods.handleSubmit(async (data) => {
                   console.log('Data submitted:', data)
-                  const requestCheckout =
-                    await checkoutPassengersMutation.mutateAsync(data)
+                  // const requestCheckout =
+                  //   await checkoutPassengersMutation.mutateAsync(data)
 
-                  const serialize = createSerializer(reservationParsers)
-                  const url = serialize('/reservation/payment', {
-                    productKey: queryStrings.productKey,
-                    searchToken: queryStrings.searchToken,
-                    sessionToken: queryStrings.sessionToken,
-                  })
+                  // const serialize = createSerializer(reservationParsers)
+                  // const url = serialize('/reservation/payment', {
+                  //   productKey: queryStrings.productKey,
+                  //   searchToken: queryStrings.searchToken,
+                  //   sessionToken: queryStrings.sessionToken,
+                  // })
 
-                  if (requestCheckout?.success) {
-                    queryClient.clear()
-                    router.push(url)
-                  }
+                  // if (requestCheckout?.success) {
+                  //   queryClient.clear()
+                  //   router.push(url)
+                  // }
                 })}
                 className='relative grid gap-3 md:gap-5'
               >
@@ -160,12 +156,6 @@ export default function CheckoutPage() {
                     <input
                       {...formMethods.register('moduleName', {
                         value: checkoutQuery.data?.data?.viewBag.ModuleName,
-                      })}
-                      type='hidden'
-                    />
-                    <input
-                      {...formMethods.register('fillBillingInfosCheck', {
-                        value: false,
                       })}
                       type='hidden'
                     />
@@ -203,9 +193,9 @@ export default function CheckoutPage() {
                               <IntlTelInput
                                 {...field}
                                 usePreciseValidation
-                                onChangeValidity={(isValid) => {
-                                  checkPhoneNumberIsValid(isValid)
-                                }}
+                                // onChangeValidity={(isValid) => {
+                                //   checkPhoneNumberIsValid(isValid)
+                                // }}
                                 ref={(ref) => {
                                   field.ref({
                                     focus: ref?.getInput,
@@ -519,6 +509,9 @@ export default function CheckoutPage() {
                         break
                     }
                   })()}
+                </CheckoutCard>
+                <CheckoutCard>
+                  <BillingForm />
                 </CheckoutCard>
                 <CheckoutCard>
                   <div className='text-sm'>
