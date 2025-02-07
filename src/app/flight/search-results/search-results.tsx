@@ -37,14 +37,14 @@ const FlightSearchView = () => {
       (item) =>
         item?.flightFareInfos && Object.keys(item.flightFareInfos).length
     )
-  const flightFareInfos = searchResponseDataPages
+  const flightFareInfosApiResponse = searchResponseDataPages
     ?.flatMap(
       (item) => item?.flightFareInfos && Object.values(item?.flightFareInfos)
     )
     .filter(Boolean)
     .sort((a, b) => (a && b ? a?.totalPrice?.value - b?.totalPrice?.value : 0))
 
-  const flightDetails = searchResponseDataPages
+  const flightDetailsApiResponse = searchResponseDataPages
     ?.filter(
       (item) => item?.flightDetails && Object.keys(item?.flightDetails).length
     )
@@ -53,7 +53,7 @@ const FlightSearchView = () => {
     )
     .filter(Boolean)
 
-  const flightDetailSegments = searchResponseDataPages
+  const flightDetailSegmentsApiResponse = searchResponseDataPages
     ?.filter(
       (item) =>
         item?.flightDetailSegments &&
@@ -66,28 +66,42 @@ const FlightSearchView = () => {
     .filter(Boolean)
 
   const isDomestic = useMemo(
-    () => flightDetails?.every((detailSegmeng) => detailSegmeng?.isDomestic),
-    [flightDetails]
+    () =>
+      flightDetailsApiResponse?.every(
+        (detailSegmeng) => detailSegmeng?.isDomestic
+      ),
+    [flightDetailsApiResponse]
   )
 
-  const clientData = flightFareInfos
+  const clientData = flightFareInfosApiResponse
 
   const internationalFlightData = useMemo(() => {
     const seqNumbers: string[][] = []
-    return flightFareInfos
+    return flightFareInfosApiResponse
       ?.map((fareInfo, fareInfoIndex, fareInfoArr) => {
         // should list with flightDetailKeys array
-        const flightDetail = flightDetails?.filter((flightDetail) =>
-          fareInfo?.flightDetailKeys.includes(flightDetail?.key as string)
+        const flightDetails = fareInfo?.flightDetailKeys.flatMap((detailKey) =>
+          flightDetailsApiResponse?.filter(
+            (flightDetail) => flightDetail?.key === detailKey
+          )
         )
 
-        const flightDetailSegment = flightDetail?.flatMap((flightDetailItem) =>
-          flightDetailSegments?.filter((detailSegment) =>
-            flightDetailItem?.flightSegmentKeys.includes(
-              detailSegment?.key as string
+        const flightDetailSegment = flightDetails?.flatMap((detail) =>
+          detail?.flightSegmentKeys.flatMap((segmentKey) =>
+            flightDetailSegmentsApiResponse?.filter(
+              (segmentData) => segmentData?.key === segmentKey
             )
           )
         )
+
+        // const flightDetailSegment = flightDetails?.flatMap((flightDetailItem) =>
+        //   flightDetailSegmentsApiResponse?.filter((detailSegment) =>
+        //     flightDetailItem?.flightSegmentKeys.includes(
+        //       detailSegment?.key as string
+        //     )
+        //   )
+        // )
+
         const pakcages = flightDetailSegment?.map(
           (segment) => segment?.freeVolatileData
         )
@@ -111,13 +125,17 @@ const FlightSearchView = () => {
 
         return {
           fareInfo,
-          flightDetail,
+          flightDetail: flightDetails,
           flightDetailSegment,
           pakcages,
         }
       })
       .filter(Boolean)
-  }, [flightDetailSegments, flightDetails, flightFareInfos])
+  }, [
+    flightDetailSegmentsApiResponse,
+    flightDetailsApiResponse,
+    flightFareInfosApiResponse,
+  ])
 
   console.log(internationalFlightData)
 
@@ -132,7 +150,7 @@ const FlightSearchView = () => {
     selectedFlightKeys.current.push(data.flightFareInfo.key)
 
     if (
-      flightFareInfos?.some((fareItem) => fareItem?.groupId) &&
+      flightFareInfosApiResponse?.some((fareItem) => fareItem?.groupId) &&
       !isNextFlightVisible
     ) {
       setIsNextFlightVisible(true)
@@ -178,22 +196,21 @@ const FlightSearchView = () => {
             {isDomestic
               ? clientData?.map((flightFareInfo) => {
                   if (!flightFareInfo) return null
-                  const details = flightDetails?.filter(
+                  const details = flightDetailsApiResponse?.filter(
                     (item) =>
                       item?.key &&
                       flightFareInfo?.flightDetailKeys.includes(item?.key)
                   ) as FlightDetail[]
-                  const detailSegmentsAll = flightDetailSegments?.filter(
-                    (item) => {
+                  const detailSegmentsAll =
+                    flightDetailSegmentsApiResponse?.filter((item) => {
                       return details.filter((detail) => {
                         return (
                           item && detail.flightSegmentKeys.includes(item?.key)
                         )
                       }).length
-                    }
-                  ) as FlightDetailSegment[]
+                    }) as FlightDetailSegment[]
 
-                  const detailSegments = flightDetailSegments
+                  const detailSegments = flightDetailSegmentsApiResponse
                     ?.filter(
                       (obj, i, arr) =>
                         arr.findIndex(
@@ -219,7 +236,7 @@ const FlightSearchView = () => {
                           detailSegments={detailSegmentsAll}
                           fareInfo={flightFareInfo}
                           onSelect={() => {
-                            const packages = flightDetailSegments
+                            const packages = flightDetailSegmentsApiResponse
                               ?.filter(
                                 (segmentItem) =>
                                   segmentItem?.flightNumber ===
@@ -228,18 +245,19 @@ const FlightSearchView = () => {
                               ?.map((detailSegment) => {
                                 return {
                                   flightDetailSegment: detailSegment,
-                                  flightFareInfo: flightFareInfos?.find(
-                                    (fareItem) =>
-                                      flightDetails?.find(
-                                        (detailItem) =>
-                                          fareItem?.flightDetailKeys.includes(
-                                            detailItem?.key ?? ''
-                                          ) &&
-                                          detailItem?.flightSegmentKeys.includes(
-                                            detailSegment?.key ?? ''
-                                          )
-                                      )
-                                  ),
+                                  flightFareInfo:
+                                    flightFareInfosApiResponse?.find(
+                                      (fareItem) =>
+                                        flightDetailsApiResponse?.find(
+                                          (detailItem) =>
+                                            fareItem?.flightDetailKeys.includes(
+                                              detailItem?.key ?? ''
+                                            ) &&
+                                            detailItem?.flightSegmentKeys.includes(
+                                              detailSegment?.key ?? ''
+                                            )
+                                        )
+                                    ),
                                 }
                               }) as SelectedPackageStateProps[]
 
@@ -259,7 +277,7 @@ const FlightSearchView = () => {
                           detailSegments={detailSegmentsAll}
                           fareInfo={flightFareInfo}
                           onSelect={() => {
-                            const packages = flightDetailSegments
+                            const packages = flightDetailSegmentsApiResponse
                               ?.filter(
                                 (segmentItem) =>
                                   segmentItem?.flightNumber ===
@@ -268,18 +286,19 @@ const FlightSearchView = () => {
                               ?.map((detailSegment) => {
                                 return {
                                   flightDetailSegment: detailSegment,
-                                  flightFareInfo: flightFareInfos?.find(
-                                    (fareItem) =>
-                                      flightDetails?.find(
-                                        (detailItem) =>
-                                          fareItem?.flightDetailKeys.includes(
-                                            detailItem?.key ?? ''
-                                          ) &&
-                                          detailItem?.flightSegmentKeys.includes(
-                                            detailSegment?.key ?? ''
-                                          )
-                                      )
-                                  ),
+                                  flightFareInfo:
+                                    flightFareInfosApiResponse?.find(
+                                      (fareItem) =>
+                                        flightDetailsApiResponse?.find(
+                                          (detailItem) =>
+                                            fareItem?.flightDetailKeys.includes(
+                                              detailItem?.key ?? ''
+                                            ) &&
+                                            detailItem?.flightSegmentKeys.includes(
+                                              detailSegment?.key ?? ''
+                                            )
+                                        )
+                                    ),
                                 }
                               }) as SelectedPackageStateProps[]
 
