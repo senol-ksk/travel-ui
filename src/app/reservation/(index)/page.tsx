@@ -193,14 +193,7 @@ export default function CheckoutPage() {
                               <IntlTelInput
                                 {...field}
                                 usePreciseValidation
-                                // onChangeValidity={(isValid) => {
-                                //   checkPhoneNumberIsValid(isValid)
-                                // }}
-                                ref={(ref) => {
-                                  field.ref({
-                                    focus: ref?.getInput,
-                                  })
-                                }}
+                                ref={(ref) => field.ref(ref?.getInput())}
                                 onChangeNumber={field.onChange}
                                 inputProps={{
                                   className: clsx(
