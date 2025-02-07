@@ -43,10 +43,8 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
 
         if (!departureSegment || !arrivalSegment) return null
 
-        console.log(flight)
-
         return (
-          <div key={flight.flightFareInfo.key}>
+          <div key={flight.flightDetail.key}>
             {flightIndex > 0 ? <Divider my={'md'} /> : null}
             <div className='flex items-center gap-3 py-2 font-semibold'>
               <div className='flex items-center gap-1'>
@@ -84,28 +82,23 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                 const prevArrivalTime = dayjs(prevSegment.arrivalTime)
                 const departureTime = dayjs(segments.departureTime)
                 const arrivalTime = dayjs(segments.arrivalTime)
-                const transferDuration = prevArrivalTime.to(departureTime)
+                const transferDuration = prevArrivalTime.to(departureTime, true)
 
                 if (segmentIndex === 0) return null
                 return (
-                  <div className='py-2 text-sm' key={segments.key}>
-                    <Alert
-                      color='blue'
-                      p={2}
-                      radius={'lg'}
-                      className='text-center'
-                    >
+                  <div className='my-2 py-2 text-sm' key={segments.key}>
+                    <div className='rounded-2xl border border-blue-200 p-2 text-center'>
                       {segmentIndex} Aktarma,{' '}
                       {
                         data.airportList[prevSegment.destination.code].value.at(
                           0
                         )?.value
                       }
-                      <div>
-                        Bir sonraki uçuş:{' '}
+                      <div className='pt-2 text-xs'>
+                        Bekleme Süresi:{' '}
                         <span className='font-bold'>{transferDuration}</span>
                       </div>
-                    </Alert>
+                    </div>
                   </div>
                 )
               })}
