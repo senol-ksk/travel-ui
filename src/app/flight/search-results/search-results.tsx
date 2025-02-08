@@ -79,7 +79,7 @@ const FlightSearchView = () => {
     const seqNumbers: string[][] = []
     return flightFareInfosApiResponse
       ?.map((fareInfo, fareInfoIndex, fareInfoArr) => {
-        // should list with flightDetailKeys array
+        // should list with flightDetailKeys array order
         const flightDetails = fareInfo?.flightDetailKeys.flatMap((detailKey) =>
           flightDetailsApiResponse?.filter(
             (flightDetail) => flightDetail?.key === detailKey
@@ -102,32 +102,25 @@ const FlightSearchView = () => {
         //   )
         // )
 
-        const pakcages = flightDetailSegment?.map(
-          (segment) => segment?.freeVolatileData
-        )
+        const pakcages = { flightDetailSegment, flightDetails }
 
-        const seqAndFlightNumbers = flightDetailSegment?.flatMap(
+        const seqAndNos = flightDetailSegment?.flatMap(
           (item) => [item?.freeVolatileData.Seq] as string[]
         )
 
         if (
           seqNumbers.filter(
-            (flightNumber) =>
-              JSON.stringify(seqAndFlightNumbers) ===
-              JSON.stringify(flightNumber)
+            (seqNo) => JSON.stringify(seqAndNos) === JSON.stringify(seqNo)
           ).length > 0
         )
           return null
 
-        seqNumbers.push(seqAndFlightNumbers as string[])
-
-        console.log(seqNumbers)
+        seqNumbers.push(seqAndNos as string[])
 
         return {
           fareInfo,
           flightDetail: flightDetails,
           flightDetailSegment,
-          pakcages,
         }
       })
       .filter(Boolean)
@@ -136,8 +129,6 @@ const FlightSearchView = () => {
     flightDetailsApiResponse,
     flightFareInfosApiResponse,
   ])
-
-  console.log(internationalFlightData)
 
   const handleFlightSelect = (data: SelectedPackageStateProps[]) => {
     if (data?.length) {
@@ -185,7 +176,11 @@ const FlightSearchView = () => {
           </div>
         </div>
         <div className='md:col-span-3'>
-          {isNextFlightVisible ? 'Dönüş seçiniz' : 'gidiş seçiniz'}
+          {isDomestic
+            ? isNextFlightVisible
+              ? 'Dönüş seçiniz'
+              : 'gidiş seçiniz'
+            : null}
           {internationalFlightData?.length}
           <div
             className='grid gap-3'
@@ -322,7 +317,9 @@ const FlightSearchView = () => {
                         detailSegments={flightDetailSegment}
                         details={details}
                         fareInfo={fareInfo}
-                        onSelect={() => {}}
+                        onSelect={() => {
+                          // console.log(flightItem?.pakcages)
+                        }}
                       />
                     </div>
                   )
