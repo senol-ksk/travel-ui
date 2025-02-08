@@ -140,42 +140,52 @@ const passengerValidation = z.object({
   ),
 })
 
+const phoneSchema = z
+  .string()
+  .optional()
+  .refine((value) => isMobilePhone(value ?? ''))
 // Define the individual billing schema with required fields
-const billingSchemaIndividual = z.object({
-  BillingInfoName: z.string().min(3).max(50),
-  Name: z.string().min(3).max(50),
-  LastName: z.string().min(3).max(50),
-  Title: z.union([z.literal('Bay'), z.literal('Bayan')]),
-  TcKimlikNo: z.string().refine((value) => validTCKN(value)),
-  CountryCode: z.string(),
-  City: z.string().nonempty(),
-  District: z.string().nonempty(),
-  Address: z.string().min(4).max(255),
-  Email: z.string().email(),
-  MobilPhoneNumber: z
-    .string()
-    .optional()
-    .refine((value) => {
-      // return intlTelInput.utils?.isValidNumber(value, 'tr')
-      return isMobilePhone(value as string)
-    }),
+const billingIndividualSchema = z.object({
+  billingInfoName: z.string().min(3).max(50),
+  name: z.string().min(3).max(50),
+  lastName: z.string().min(3).max(50),
+  title: z.union([z.literal('Bay'), z.literal('Bayan')]),
+  tcKimlikNo: z.string().refine((value) => validTCKN(value)),
+  countryCode: z.string(),
+  city: z.string().nonempty(),
+  district: z.string().nonempty(),
+  address: z.string().min(4).max(255),
+  email: z.string().email(),
+  mobilPhoneNumber: phoneSchema,
+})
+// Define the corporate billing schema with required fields
+const billingCorporateSchema = z.object({
+  billingInfoName: z.string().min(3).max(50),
+  title: z.string().nonempty(),
+  vergiDairesi: z.string().min(3).max(50),
+  vergiNo: z.string().min(3).max(50),
+  tcKimlikNo: z.string().refine((value) => validTCKN(value)),
+  countryCode: z.string(),
+  city: z.string().nonempty(),
+  district: z.string().nonempty(),
+  address: z.string().min(4).max(255),
+  email: z.string().email(),
+  phoneNumber: phoneSchema,
 })
 
 // General form schema
 const generalFormSchema = z.object({
   contactEmail: z.string().email(),
-  contactGSM: z
-    .string()
-    .optional()
-    .refine((value) => {
-      return isMobilePhone(value as string)
-    }),
+  contactGSM: phoneSchema,
   moduleName: z.string(),
   isInPromoList: z.boolean(),
   fillBillingInfosCheck: z.boolean(),
   invoiceType: z.union([z.literal('0'), z.literal('1')]).optional(),
   // individual is not optional anymore; we'll conditionally handle its validation
-  individual: z.unknown().or(billingSchemaIndividual.partial().optional()), // We'll handle the validation conditionally in .refine()
+  billingIndiviual: z
+    .unknown()
+    .or(billingIndividualSchema.partial().optional()), // We'll handle the validation conditionally in .refine()
+  billingCorporate: z.unknown().or(billingCorporateSchema.partial().optional()), // We'll handle the validation conditionally in .refine()
 })
 
 // Merging with passenger validation
@@ -189,11 +199,20 @@ export const checkoutSchemaMerged = checkoutSchemaBeforeRefine.superRefine(
       // Check if `individual` exists and validate it with billingSchemaIndividual
       // `0` means this is indivual billing type
       if (data.invoiceType === '0') {
-        const results = billingSchemaIndividual.safeParse(data.individual)
+        const results = billingIndividualSchema.safeParse(data.billingIndiviual)
 
         return results.success
           ? true
           : results?.error?.issues.map((issue) => ctx.addIssue(issue))
+      }
+      if (data.invoiceType === '1') {
+        const corporateResults = billingCorporateSchema.safeParse(
+          data.billingCorporate
+        )
+
+        return corporateResults.success
+          ? true
+          : corporateResults?.error?.issues.map((issue) => ctx.addIssue(issue))
       }
     }
 

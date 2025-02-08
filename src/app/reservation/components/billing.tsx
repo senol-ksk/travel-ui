@@ -72,30 +72,32 @@ const BillingForm = () => {
                   <div className='col-span-6'>
                     <TextInput
                       label='Faturaya bir ad verin'
-                      {...formContext.register('individual.BillingInfoName')}
-                      error={!!formContext.formState.errors.BillingInfoName}
+                      {...formContext.register(
+                        'billingIndiviual.billingInfoName'
+                      )}
+                      error={!!formContext.formState.errors.billingInfoName}
                     />
                   </div>
                 </div>
                 <div className='col-span-6'>
                   <TextInput
                     label='Ad'
-                    {...formContext.register('individual.Name')}
-                    error={!!formContext.formState.errors.Name}
+                    {...formContext.register('billingIndiviual.name')}
+                    error={!!formContext.formState.errors.name}
                   />
                 </div>
                 <div className='col-span-6'>
                   <TextInput
                     label='Soyad'
-                    {...formContext.register('individual.LastName')}
-                    error={!!formContext.formState.errors.LastName}
+                    {...formContext.register('billingIndiviual.lastName')}
+                    error={!!formContext.formState.errors.lastName}
                   />
                 </div>
                 <div className='col-span-6'>
                   <NativeSelect
                     label='Unvan'
                     defaultValue={'Bay'}
-                    {...formContext.register('individual.Title')}
+                    {...formContext.register('billingIndiviual.title')}
                     error={!!formContext.formState.errors.Title}
                   >
                     <option value='Bay'>Bay</option>
@@ -106,15 +108,15 @@ const BillingForm = () => {
                   <TextInput
                     label='TC Kimlik No'
                     type='tel'
-                    {...formContext.register('individual.TcKimlikNo')}
-                    error={!!formContext.formState.errors.TcKimlikNo}
+                    {...formContext.register('billingIndiviual.tcKimlikNo')}
+                    error={!!formContext.formState.errors.tcKimlikNo}
                   />
                 </div>
                 <div className='col-span-6'>
                   <NativeSelect
                     label='Ülke'
-                    {...formContext.register('individual.CountryCode')}
-                    error={!!formContext.formState.errors.CountryCode}
+                    {...formContext.register('billingIndiviual.countryCode')}
+                    error={!!formContext.formState.errors.countryCode}
                   >
                     <CountryOptions />
                   </NativeSelect>
@@ -122,34 +124,51 @@ const BillingForm = () => {
                 <div className='col-span-6'>
                   <TextInput
                     label='Şehir'
-                    {...formContext.register('individual.City')}
-                    error={!!formContext.formState.errors.City}
+                    {...formContext.register('billingIndiviual.city')}
+                    error={!!formContext.formState.errors.city}
                   />
                 </div>
                 <div className='col-span-12 md:col-span-6'>
                   <TextInput
                     label='İlçe'
-                    {...formContext.register('individual.District')}
-                    error={!!formContext.formState.errors.District}
+                    {...formContext.register('billingIndiviual.district')}
+                    error={!!formContext.formState.errors.district}
                   />
                 </div>
                 <div className='col-span-12'>
                   <TextInput
                     label='Adres'
-                    {...formContext.register('individual.Address')}
-                    error={!!formContext.formState.errors.Address}
+                    {...formContext.register('billingIndiviual.address')}
+                    error={!!formContext.formState.errors.address}
                   />
                 </div>
                 <div className='col-span-6'>
-                  <TextInput
-                    label='E-Posta'
-                    {...formContext.register('individual.Email')}
-                    error={!!formContext.formState.errors.Email}
+                  <Controller
+                    control={formContext.control}
+                    name='billingIndiviual.email'
+                    defaultValue={
+                      formContext.formState.defaultValues?.billingIndiviual
+                        ?.email ?? ''
+                    }
+                    render={({ field, fieldState, formState }) => {
+                      console.log('field, ', field)
+                      console.log('fieldState, ', fieldState)
+                      console.log('formState, ', formState)
+                      return (
+                        <TextInput
+                          label='E-Posta'
+                          type='email'
+                          {...field}
+                          ref={(ref) => field.ref(ref)}
+                          error={fieldState.invalid}
+                        />
+                      )
+                    }}
                   />
                 </div>
                 <div className='col-span-6'>
                   <Input.Wrapper>
-                    <Input.Label htmlFor='individual.MobilPhoneNumber'>
+                    <Input.Label htmlFor='billingIndiviual.mobilPhoneNumber'>
                       GSM No
                     </Input.Label>
                     <div
@@ -158,7 +177,7 @@ const BillingForm = () => {
                     >
                       <Controller
                         control={formContext.control}
-                        name='individual.MobilPhoneNumber'
+                        name='billingIndiviual.mobilPhoneNumber'
                         render={({ field }) => {
                           return (
                             <IntlTelInput
@@ -170,18 +189,14 @@ const BillingForm = () => {
                                   {
                                     'border-rose-500':
                                       !!formContext.formState?.errors
-                                        .MobilPhoneNumber,
+                                        .mobilPhoneNumber,
                                   }
                                 ),
                                 'data-variant': 'default',
                                 id: field.name,
                                 name: field.name,
                               }}
-                              ref={(ref) => {
-                                field.ref({
-                                  focus: ref?.getInput,
-                                })
-                              }}
+                              ref={(ref) => field.ref(ref?.getInput())}
                               onChangeNumber={field.onChange}
                               initOptions={{
                                 strictMode: true,
@@ -215,69 +230,190 @@ const BillingForm = () => {
               <div className='grid grid-cols-2 gap-3 pt-4 md:grid-cols-12'>
                 <div className='col-span-12 grid grid-cols-12 gap-3'>
                   <div className='col-span-6'>
-                    <TextInput label='Faturaya bir ad verin' />
+                    <Controller
+                      control={formContext.control}
+                      name='billingCorporate.billingInfoName'
+                      defaultValue={''}
+                      render={({ field, formState }) => {
+                        return (
+                          <TextInput
+                            label='Faturaya bir ad verin'
+                            {...field}
+                            error={!!formState.errors.billingInfoName}
+                          />
+                        )
+                      }}
+                    />
                   </div>
                 </div>
                 <div className='col-span-6'>
-                  <TextInput label='Şirket Ünvanı' />
+                  <Controller
+                    control={formContext.control}
+                    name='billingCorporate.title'
+                    defaultValue={''}
+                    render={({ field, formState }) => {
+                      return (
+                        <TextInput
+                          label='Şirket Ünvanı'
+                          {...field}
+                          error={!!formState.errors.title}
+                        />
+                      )
+                    }}
+                  />
                 </div>
                 <div className='col-span-6'>
-                  <TextInput label='Vergi Dairesi' />
+                  <Controller
+                    control={formContext.control}
+                    defaultValue={''}
+                    name='billingCorporate.vergiDairesi'
+                    render={({ field, formState }) => {
+                      return (
+                        <TextInput
+                          label='Vergi Dairesi'
+                          {...field}
+                          error={!!formState.errors.vergiDairesi}
+                        />
+                      )
+                    }}
+                  />
                 </div>
                 <div className='col-span-6'>
-                  <NativeSelect label='Vergi Numarası' />
+                  <Controller
+                    control={formContext.control}
+                    name='billingCorporate.vergiNo'
+                    defaultValue={''}
+                    render={({ field, formState }) => {
+                      return (
+                        <TextInput
+                          label='Vergi Numarası'
+                          {...field}
+                          error={!!formState.errors.vergiNo}
+                        />
+                      )
+                    }}
+                  />
                 </div>
                 <div className='col-span-6'>
-                  <NativeSelect label='Ülke'>
-                    <CountryOptions />
-                  </NativeSelect>
+                  <Controller
+                    control={formContext.control}
+                    defaultValue={'TR'}
+                    name='billingCorporate.countryCode'
+                    render={({ field }) => {
+                      return (
+                        <NativeSelect label='Ülke' {...field}>
+                          <CountryOptions />
+                        </NativeSelect>
+                      )
+                    }}
+                  />
                 </div>
                 <div className='col-span-6'>
-                  <TextInput label='Şehir' />
+                  <Controller
+                    control={formContext.control}
+                    name='billingCorporate.city'
+                    defaultValue={''}
+                    render={({ field, formState }) => (
+                      <TextInput
+                        label='Şehir'
+                        {...field}
+                        error={!!formState.errors.city}
+                      />
+                    )}
+                  />
                 </div>
                 <div className='col-span-6'>
-                  <TextInput label='İlçe' />
+                  <Controller
+                    control={formContext.control}
+                    name='billingCorporate.district'
+                    defaultValue={''}
+                    render={({ field, formState }) => (
+                      <TextInput
+                        label='İlçe'
+                        {...field}
+                        error={!!formState.errors.district}
+                      />
+                    )}
+                  />
                 </div>
                 <div className='col-span-12'>
-                  <TextInput label='Adres' />
+                  <Controller
+                    control={formContext.control}
+                    name='billingCorporate.address'
+                    defaultValue={''}
+                    render={({ field, formState }) => (
+                      <TextInput
+                        label='Adres'
+                        {...field}
+                        error={!!formState.errors.address}
+                      />
+                    )}
+                  />
                 </div>
                 <div className='col-span-6'>
-                  <TextInput label='E-Posta' />
+                  <Controller
+                    control={formContext.control}
+                    name='billingCorporate.email'
+                    defaultValue={''}
+                    render={({ field, formState }) => (
+                      <TextInput
+                        type='email'
+                        label='E-Posta'
+                        {...field}
+                        error={!!formState.errors.email}
+                      />
+                    )}
+                  />
                 </div>
                 <div className='col-span-6'>
                   <Input.Wrapper>
-                    <Input.Label htmlFor='MobilPhoneNumber'>GSM No</Input.Label>
+                    <Input.Label htmlFor='mobilPhoneNumber'>GSM No</Input.Label>
                     <div
                       className='m_6c018570 mantine-Input-wrapper'
                       data-variant='default'
                     >
-                      <IntlTelInput
-                        usePreciseValidation
-                        inputProps={{
-                          className: clsx('m_8fb7ebe7 mantine-Input-input'),
-                          'data-variant': 'default',
-                          id: 'MobilPhoneNumber',
-                          name: 'MobilPhoneNumber',
-                        }}
-                        initOptions={{
-                          strictMode: true,
-                          containerClass: 'w-full',
-                          separateDialCode: true,
-                          initialCountry: 'auto',
-                          i18n: {
-                            tr: 'Türkiye',
-                            searchPlaceholder: 'Ülke adı giriniz',
-                          },
-                          loadUtils: () =>
-                            // @ts-expect-error watch for the package updates
-                            import('intl-tel-input/build/js/utils.js'),
-                          geoIpLookup: (callback) => {
-                            fetch('https://ipapi.co/json')
-                              .then((res) => res.json())
-                              .then((data) => callback(data.country_code))
-                              .catch(() => callback('tr'))
-                          },
-                        }}
+                      <Controller
+                        control={formContext.control}
+                        name='billingCorporate.phoneNumber'
+                        defaultValue={''}
+                        render={({ field }) => (
+                          <IntlTelInput
+                            usePreciseValidation
+                            inputProps={{
+                              className: clsx(
+                                'm_8fb7ebe7 mantine-Input-input',
+                                {
+                                  'border-rose-500':
+                                    !!formContext.formState?.errors.phoneNumber,
+                                }
+                              ),
+                              'data-variant': 'default',
+                              id: 'billingCorporate.phoneNumber',
+                              name: 'billingCorporate.phoneNumber',
+                            }}
+                            initOptions={{
+                              strictMode: true,
+                              containerClass: 'w-full',
+                              separateDialCode: true,
+                              initialCountry: 'auto',
+                              i18n: {
+                                tr: 'Türkiye',
+                                searchPlaceholder: 'Ülke adı giriniz',
+                              },
+                              loadUtils: () =>
+                                // @ts-expect-error watch for the package updates
+                                import('intl-tel-input/build/js/utils.js'),
+                              geoIpLookup: (callback) => {
+                                fetch('https://ipapi.co/json')
+                                  .then((res) => res.json())
+                                  .then((data) => callback(data.country_code))
+                                  .catch(() => callback('tr'))
+                              },
+                            }}
+                            ref={(ref) => field.ref(ref?.getInput())}
+                            onChangeNumber={field.onChange}
+                          />
+                        )}
                       />
                     </div>
                   </Input.Wrapper>
