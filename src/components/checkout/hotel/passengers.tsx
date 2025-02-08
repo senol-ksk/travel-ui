@@ -27,6 +27,7 @@ import { PassengerSchemaType } from '@/app/reservation/validations'
 
 type IProps = {
   fieldProps: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
+  moduleName: string
   error: Merge<FieldError, FieldErrorsImpl<PassengerValidationType>> | undefined
   index: string | number
 }

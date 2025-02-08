@@ -12,7 +12,7 @@ import intlTelInput from 'intl-tel-input/react'
 export type GeneralFormFieldSchemaTypes = {
   contactEmail: z.ZodString
   contactGSM: z.ZodEffects<z.ZodOptional<z.ZodString>>
-  moduleName: z.ZodString
+  // moduleName: z.ZodString
   isInPromoList: z.ZodBoolean
   fillBillingInfosCheck: z.ZodBoolean
 }
@@ -56,7 +56,7 @@ const passengerValidation = z.object({
         passportValidityDate: z.string().optional().nullable(),
         hesCode: z.string(),
         model_PassengerId: z.string().or(z.number()),
-        moduleName: z.string().optional(),
+        // moduleName: z.string().optional(),
       })
       .superRefine((value, ctx) => {
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {
@@ -177,7 +177,7 @@ const billingCorporateSchema = z.object({
 const generalFormSchema = z.object({
   contactEmail: z.string().email(),
   contactGSM: phoneSchema,
-  moduleName: z.string(),
+  // moduleName: z.string(),
   isInPromoList: z.boolean(),
   fillBillingInfosCheck: z.boolean(),
   invoiceType: z.union([z.literal('0'), z.literal('1')]).optional(),

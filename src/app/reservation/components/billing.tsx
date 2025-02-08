@@ -150,20 +150,15 @@ const BillingForm = () => {
                       formContext.formState.defaultValues?.billingIndiviual
                         ?.email ?? ''
                     }
-                    render={({ field, fieldState, formState }) => {
-                      console.log('field, ', field)
-                      console.log('fieldState, ', fieldState)
-                      console.log('formState, ', formState)
-                      return (
-                        <TextInput
-                          label='E-Posta'
-                          type='email'
-                          {...field}
-                          ref={(ref) => field.ref(ref)}
-                          error={fieldState.invalid}
-                        />
-                      )
-                    }}
+                    render={({ field, fieldState, formState }) => (
+                      <TextInput
+                        label='E-Posta'
+                        type='email'
+                        {...field}
+                        ref={(ref) => field.ref(ref)}
+                        error={fieldState.invalid}
+                      />
+                    )}
                   />
                 </div>
                 <div className='col-span-6'>
