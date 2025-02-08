@@ -1910,7 +1910,17 @@ export interface FlightReservationSummary {
   totalPrice: number
   priceCurrency: string
   loyaltyMultiple: number
-  couponDiscountList: null
+  couponDiscountList:
+    | null
+    | {
+        index: number
+        discountPrice: ServicePriceType
+        discountInfo: {
+          index: number
+          type: number
+        }
+        isPartial: boolean
+      }[]
   extraCharges: null
   financellDiscount: ServicePriceType
 }

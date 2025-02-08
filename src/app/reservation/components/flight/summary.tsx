@@ -1,11 +1,10 @@
 import { FaArrowRightLong } from 'react-icons/fa6'
-import { Alert, Divider, Image, rem } from '@mantine/core'
+import { Divider, Image, rem } from '@mantine/core'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
 import { FlightReservationSummary } from '@/types/passengerViewModel'
-import { formatCurrency } from '@/libs/util'
 
 type IProps = {
   data: FlightReservationSummary
@@ -127,9 +126,6 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
           </div>
         )
       })}
-      <div className='pt-5 text-end text-lg font-semibold'>
-        {formatCurrency(data.flightFareInfo.totalPrice.value)}
-      </div>
     </div>
   )
 }

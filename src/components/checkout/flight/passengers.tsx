@@ -29,6 +29,7 @@ type IProps = {
   fieldProps: FieldArrayWithId<PassengerSchemaType, 'passengers', 'id'>
   error: Merge<FieldError, FieldErrorsImpl<PassengerValidationType>> | undefined
   index: number
+  moduleName: string
 }
 
 dayjs.locale('tr')
@@ -95,6 +96,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
   fieldProps,
   index,
   error,
+  moduleName,
 }) => {
   const methods = useFormContext()
   const namePrefix = `passengers.[${index}]`
@@ -184,7 +186,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
       <div className='grid grid-cols-2 gap-3'>
         <div
           className={clsx(`col-span-2`, {
-            hidden: fieldProps.moduleName?.toLowerCase() === 'bus',
+            hidden: moduleName.toLowerCase() === 'bus',
           })}
         >
           <Input.Wrapper error={!!error?.gender}>
@@ -192,7 +194,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               control={methods.control}
               name={`${namePrefix}.gender`}
               defaultValue={
-                fieldProps.moduleName?.toLowerCase() === 'bus'
+                moduleName?.toLowerCase() === 'bus'
                   ? fieldProps.gender === '1'
                     ? '1'
                     : '0'
