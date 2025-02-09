@@ -5,7 +5,13 @@ import { createSerializer, useQueryStates } from 'nuqs'
 import { useTransitionRouter } from 'next-view-transitions'
 
 import { flightSearchParams } from '@/modules/flight/searchParams'
-import type { FlightSearchResultsApiResponse } from '@/app/flight/type'
+import type {
+  ClientDataType,
+  FlightDetail,
+  FlightDetailSegment,
+  FlightFareInfo,
+  FlightSearchResultsApiResponse,
+} from '@/app/flight/type'
 import {
   getFlightSearchSessionToken,
   getsecuritytoken,
@@ -18,12 +24,41 @@ import { reservationParsers } from '../reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
-import dummyData from './search-results/intenational-dummy.json'
+import { useTimeout } from '@mantine/hooks'
+
+const removeDuplicateFlights = (
+  data: { segments: FlightDetailSegment[] }[]
+) => {
+  const flightMap = new Map()
+
+  data.forEach((item) => {
+    const flightNumbers = item.segments
+      .map((segment) => segment.flightNumber)
+      .join(',')
+
+    if (!flightMap.has(flightNumbers)) {
+      flightMap.set(flightNumbers, item)
+    } else {
+      // Keep the entry with the most segments
+      if (item.segments.length > flightMap.get(flightNumbers).segments.length) {
+        flightMap.set(flightNumbers, item)
+      }
+    }
+  })
+
+  return Array.from(flightMap.values())
+}
 
 const useSearchResultsQueries = () => {
   const [searchParams] = useQueryStates(flightSearchParams)
   const appToken = useRef<string>(null)
   const router = useTransitionRouter()
+
+  const timeoutEnded = useRef(false)
+  const { start: startSearchResultsTimeout, clear: clearSearchResultsTimeout } =
+    useTimeout(() => {
+      timeoutEnded.current = true
+    }, 60 * 1000)
 
   const generateFlightSearchPanel = () => {
     const FlightSearchPanel = {
@@ -90,27 +125,31 @@ const useSearchResultsQueries = () => {
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
       const response = await getFlightSearchSessionToken()
+      startSearchResultsTimeout()
 
       return response
     },
   })
 
+  const searchQueryKey = [
+    'flight-search-results',
+    searchSessionTokenQuery.data?.searchToken,
+    searchSessionTokenQuery.data?.sessionToken,
+    appToken.current,
+  ]
+
   const searchResultsQuery = useInfiniteQuery({
+    queryKey: searchQueryKey,
     enabled: !!searchSessionTokenQuery.data,
     initialPageParam: {
       ReceivedProviders: [''],
     },
-    queryKey: [
-      'flight-search-results',
-      searchSessionTokenQuery.data?.searchToken,
-      searchSessionTokenQuery.data?.sessionToken,
-      appToken.current,
-    ],
     queryFn: async ({ pageParam, signal }) => {
       if (!appToken.current) {
         appToken.current = (await getsecuritytoken()).result
       }
       await delayCodeExecution(1000)
+
       const response = (await request({
         signal,
         url: process.env.NEXT_PUBLIC_OL_ROUTE,
@@ -145,12 +184,114 @@ const useSearchResultsQueries = () => {
       return response
       // return dummyData as FlightSearchResultsApiResponse
     },
-    // select(data) {
-    //   console.log(data)
-    //   return data.pages.map()
-    // },
+    select(data) {
+      const pages = data.pages
+
+      const flightFareInfos = pages
+        .flatMap((page) =>
+          page.data?.searchResults?.length
+            ? page.data?.searchResults.filter((result) =>
+                result.flightFareInfos &&
+                Object.keys(result.flightFareInfos).length
+                  ? Object.values(result.flightFareInfos)
+                  : null
+              )
+            : null
+        )
+        .flatMap((item) =>
+          item?.flightFareInfos && Object.keys(item?.flightFareInfos).length
+            ? Object.values(item?.flightFareInfos)
+            : null
+        )
+        .filter(Boolean) as FlightFareInfo[]
+
+      const flightDetails = pages
+        .flatMap((page) =>
+          page.data?.searchResults?.length
+            ? page.data?.searchResults.filter((result) =>
+                result.flightDetails && Object.keys(result.flightDetails).length
+                  ? Object.values(result.flightDetails)
+                  : null
+              )
+            : null
+        )
+        .flatMap((item) =>
+          item?.flightDetails && Object.keys(item?.flightDetails).length
+            ? Object.values(item?.flightDetails)
+            : null
+        )
+        .filter(Boolean) as FlightDetail[]
+
+      const flightDetailSegments = pages
+        .flatMap((page) =>
+          page.data?.searchResults?.length
+            ? page.data?.searchResults.filter((result) =>
+                result.flightDetailSegments &&
+                Object.keys(result.flightDetailSegments).length
+                  ? Object.values(result.flightDetailSegments)
+                  : null
+              )
+            : null
+        )
+        .flatMap((item) =>
+          item?.flightDetailSegments &&
+          Object.keys(item?.flightDetailSegments).length
+            ? Object.values(item?.flightDetailSegments)
+            : null
+        )
+        .filter(Boolean) as FlightDetailSegment[]
+
+      const clientData = flightFareInfos
+        .sort((a, b) => a?.totalPrice?.value - b?.totalPrice.value)
+        .map((fareInfo, fareInfoIndex, fareInfoArr) => {
+          const details = flightDetails
+            .filter(
+              (detail) =>
+                fareInfo.flightDetailKeys.filter(
+                  (detailKey) => detailKey === detail.key
+                ).length > 0
+            )
+            .sort((a, b) => a.groupId - b.groupId)
+          const segments = details.flatMap((detail) =>
+            detail.flightSegmentKeys.flatMap((segmentKey) =>
+              flightDetailSegments.filter(
+                (segment) => segmentKey === segment.key
+              )
+            )
+          )
+
+          return {
+            fareInfo,
+            details,
+            segments,
+          }
+        })
+        .map((clientObj, cliengtObjIndex, clientObjArr) => {
+          const packageItems = clientObjArr.filter(
+            (client) =>
+              client.segments.filter((segment) =>
+                clientObj.segments.find(
+                  (item) => item.flightNumber === segment.flightNumber
+                )
+              ).length
+          )
+
+          return {
+            fareInfo: clientObj.fareInfo,
+            details: clientObj.details,
+            segments: clientObj.segments,
+            package: packageItems,
+          }
+        }) as ClientDataType[]
+      // console.log(clientData)
+
+      const cleanData = removeDuplicateFlights(clientData) as ClientDataType[]
+
+      // console.log(clientData)
+      return cleanData
+    },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
-      if (lastPage.data && lastPage.data.hasMoreResponse) {
+      if (lastPage?.data?.hasMoreResponse && !timeoutEnded.current) {
         if (lastPage?.data?.searchResults?.length) {
           lastPage.data.searchResults.forEach((searchResult) => {
             const providerName = searchResult.diagnostics.providerName

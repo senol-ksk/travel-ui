@@ -22,13 +22,15 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
   return (
     <div className={clsx(`@container rounded-lg border border-gray-300`)}>
-      {/* <div>details ==={details.at(0)?.groupId}</div>
-      <div>detailSegments ==={detailSegments.at(0)?.groupId}</div> */}
       {/* <div>
+        <code>fareInfo</code>
+        <input defaultValue={JSON.stringify(fareInfo)} />
+      </div>
+      <div>
         <code>details</code>
         <input defaultValue={JSON.stringify(details)} />
-      </div> */}
-      {/* <div>
+      </div>
+      <div>
         <code>detailSegments</code>
         <input defaultValue={JSON.stringify(detailSegments)} />
       </div> */}

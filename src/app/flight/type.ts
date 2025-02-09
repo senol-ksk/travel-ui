@@ -182,3 +182,14 @@ export interface FlightSearchResultsApiResponse {
   userAuthenticationToken: null
   eventMessageList: []
 }
+
+export interface ClientDataType {
+  fareInfo: FlightFareInfo
+  details: FlightDetail[]
+  segments: FlightDetailSegment[]
+  package: {
+    fareInfo: FlightFareInfo
+    details: FlightDetail[]
+    segments: FlightDetailSegment[]
+  }[]
+}
