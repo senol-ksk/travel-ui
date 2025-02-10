@@ -167,10 +167,10 @@ export interface FlightDetail {
 
 export interface FlightSearchResultsApiResponse {
   code: number
-  message: null
+  message: null | string
   data: {
     status: boolean
-    message: null
+    message: null | string
     hasMoreResponse: boolean
     executionTime: string
     searchResults: FlightSearchResult[] | [] | null

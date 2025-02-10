@@ -54,14 +54,10 @@ const FlightSearchView = () => {
 
   const handleFlightSelect = (flight: ClientDataType) => {
     console.log(flight)
-    const packages = flight.package
-      .map((freevolite) => ({
-        flightDetailSegment: freevolite.segments.at(0),
-        flightFareInfo: freevolite.fareInfo,
-      }))
-      .filter(
-        (item) => item.flightDetailSegment?.groupId === 0
-      ) as SelectedPackageStateProps[]
+    const packages = flight.package.map((pack) => ({
+      flightDetailSegment: pack.segments.at(0),
+      flightFareInfo: pack.fareInfo,
+    })) as SelectedPackageStateProps[]
 
     setSelectedFlightItemPackages(packages)
 

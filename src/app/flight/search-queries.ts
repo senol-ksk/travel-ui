@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { createSerializer, useQueryStates } from 'nuqs'
 import { useTransitionRouter } from 'next-view-transitions'
+import { useTimeout } from '@mantine/hooks'
 
 import { flightSearchParams } from '@/modules/flight/searchParams'
 import type {
@@ -24,7 +25,7 @@ import { reservationParsers } from '../reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
-import { useTimeout } from '@mantine/hooks'
+import dummyInternational from './search-results/intenational-dummy.json'
 
 const removeDuplicateFlights = (
   data: { segments: FlightDetailSegment[] }[]
@@ -120,8 +121,8 @@ const useSearchResultsQueries = () => {
   }
 
   const searchSessionTokenQuery = useQuery({
-    // enabled: false,
-    enabled: !!searchParams,
+    enabled: false,
+    // enabled: !!searchParams,
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
       const response = await getFlightSearchSessionToken()
@@ -140,7 +141,7 @@ const useSearchResultsQueries = () => {
 
   const searchResultsQuery = useInfiniteQuery({
     queryKey: searchQueryKey,
-    enabled: !!searchSessionTokenQuery.data,
+    // enabled: !!searchSessionTokenQuery.data,
     initialPageParam: {
       ReceivedProviders: [''],
     },
@@ -182,7 +183,8 @@ const useSearchResultsQueries = () => {
         },
       })) as FlightSearchResultsApiResponse
       return response
-      // return dummyData as FlightSearchResultsApiResponse
+
+      // return dummyInternational as FlightSearchResultsApiResponse
     },
     select(data) {
       const pages = data.pages
@@ -269,11 +271,14 @@ const useSearchResultsQueries = () => {
         .map((clientObj, cliengtObjIndex, clientObjArr) => {
           const packageItems = clientObjArr.filter(
             (client) =>
-              client.segments.filter((segment) =>
-                clientObj.segments.find(
-                  (item) => item.flightNumber === segment.flightNumber
-                )
-              ).length
+              client.details.filter(
+                (detail) =>
+                  client.segments.filter(
+                    (segment) =>
+                      segment.freeVolatileData.Seq ===
+                      detail.freeVolatileData.Seq
+                  ).length > 0
+              ).length > 0
           )
 
           return {
