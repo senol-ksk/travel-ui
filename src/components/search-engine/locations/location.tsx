@@ -77,9 +77,7 @@ export const Locations: React.FC<Props> = ({
               />
             </div>
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
-              <label htmlFor='location_select' className='sr-only'>
-                {label}
-              </label>
+              <div className='sr-only'>{label}</div>
               <TextInput
                 ref={inputRef}
                 value={originValue}
@@ -89,7 +87,6 @@ export const Locations: React.FC<Props> = ({
                 }}
                 onFocus={(event) => event.target.select()}
                 autoComplete='off'
-                id='location_select'
                 placeholder={label}
                 size='lg'
                 rightSectionPointerEvents='all'
@@ -100,7 +97,7 @@ export const Locations: React.FC<Props> = ({
                       setOriginValue('')
                     }}
                     aria-label='Aramayı temizle'
-                    style={{ display: originValue ? undefined : 'none' }}
+                    className={clsx({ hidden: !originValue })}
                   />
                 }
               />
