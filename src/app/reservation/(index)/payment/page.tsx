@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 
@@ -8,13 +8,15 @@ import { useForm, Controller } from 'react-hook-form'
 import {
   Button,
   LoadingOverlay,
+  Modal,
   NativeSelect,
   Skeleton,
   Stack,
   TextInput,
+  UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
-import { range, upperFirst } from '@mantine/hooks'
+import { range, upperFirst, useDisclosure } from '@mantine/hooks'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -28,11 +30,10 @@ import { PaymentResponeType } from '@/app/reservation/types'
 import { reservationParsers } from '@/app/reservation/searchParams'
 import { FlightSummary } from '../../components/flight/summary'
 import { FlightReservationSummary } from '@/types/passengerViewModel'
+import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
-  moduleName: z.string(),
-  reservable: z.number(),
   cardOwner: z.string().min(3).max(50),
   cardNumber: z
     .string()
@@ -47,6 +48,7 @@ const paymentValidationSchema = z.object({
   cardCvv: z.string().refine((val) => {
     return val.length === cardCvvLength
   }),
+  installment: z.string().default('1'),
 })
 
 const cardExpiredYearList = () =>
@@ -66,6 +68,10 @@ const cardMonths = () =>
   })
 
 const PaymentPage = () => {
+  const [
+    isOpenInstallmentTable,
+    { open: openInstallmentTableModal, close: closeInstallmentTableModal },
+  ] = useDisclosure(false)
   const formMethods = useForm<CardValidationSchemaTypes>({
     resolver: zodResolver(paymentValidationSchema),
   })
@@ -73,6 +79,15 @@ const PaymentPage = () => {
 
   const checkoutQuery = useCheckoutQuery()
   const threeDformRef = useRef<HTMLFormElement>(null)
+
+  const checkoutQueryMemoData = useMemo(
+    () => checkoutQuery.data?.data,
+    [checkoutQuery.data?.data]
+  )
+  const moduleName = useMemo(
+    () => checkoutQueryMemoData?.viewBag.ModuleName,
+    [checkoutQueryMemoData?.viewBag.ModuleName]
+  )
 
   const paymentMutation = useMutation<
     PaymentResponeType | null | undefined,
@@ -90,14 +105,16 @@ const PaymentPage = () => {
           data: {
             ...data,
             cardNumber: data.cardNumber?.replaceAll(' ', ''),
-            billingInfo:
-              checkoutQuery.data?.data?.paymentIndexModel.billingInfo,
+            billingInfo: checkoutQueryMemoData?.paymentIndexModel.billingInfo,
             threeDCallbackUrl: threedCallbackURL,
             threeDSuccessURL: threedCallbackURL,
             threeDFailureURL: `${window.location.origin}/reservation/error/api`,
             searchToken: queryStrings.searchToken,
             sessionToken: queryStrings.sessionToken,
             productKey: queryStrings.productKey,
+            reservable: checkoutQueryMemoData?.viewBag.Reservable ?? 0,
+            installment: formMethods.getValues('installment'),
+            moduleName,
           },
         },
       })
@@ -105,6 +122,28 @@ const PaymentPage = () => {
       return paymentResponse?.data
     },
   })
+  const installmentTableSelectOptions = useRef<
+    {
+      amountPerInstallment: number
+      bankName: string
+      binList: string
+      cardProgramName: string
+      installmentCount: number
+      totalAmount: number
+    }[]
+  >(null)
+  const listenCardNumberChange = (data: string) => {
+    if (!data || data.length < 6 || !checkoutQueryMemoData) {
+      installmentTableSelectOptions.current = null
+      formMethods.setValue('installment', '1')
+      return
+    }
+
+    installmentTableSelectOptions.current =
+      checkoutQueryMemoData?.paymentIndexModel.installment.installmentInfoList.filter(
+        (item) => item.binList.includes(data.substring(0, 6))
+      )
+  }
 
   useEffect(() => {
     if (paymentMutation.isSuccess && paymentMutation.data) {
@@ -125,9 +164,9 @@ const PaymentPage = () => {
     )
   }
 
-  console.log(formMethods.formState.errors)
+  // console.log(formMethods.formState.errors)
 
-  const reservationData = checkoutQuery.data?.data
+  const reservationData = checkoutQueryMemoData
   const passengerData = reservationData?.treeContainer
   const firstPassengerFullName = passengerData?.childNodes[0].items[0].value
     ? `${upperFirst(passengerData?.childNodes[0].items[0].value.firstName.toLocaleLowerCase())} ${upperFirst(passengerData?.childNodes[0].items[0].value.lastName.toLocaleLowerCase())}`
@@ -149,22 +188,7 @@ const PaymentPage = () => {
               className='relative grid gap-3 md:gap-5'
             >
               <LoadingOverlay visible={paymentMutation.isPending} />
-              {checkoutQuery.data ? (
-                <>
-                  <input
-                    {...formMethods.register('moduleName', {
-                      value: checkoutQuery.data?.data?.viewBag.ModuleName,
-                    })}
-                    type='hidden'
-                  />
-                  <input
-                    {...formMethods.register('reservable', {
-                      value: checkoutQuery.data?.data?.viewBag.Reservable ?? 0,
-                    })}
-                    type='hidden'
-                  />
-                </>
-              ) : null}
+
               <CheckoutCard>
                 <div className='grid w-full gap-3 md:w-72'>
                   <Controller
@@ -205,6 +229,7 @@ const PaymentPage = () => {
                         // value={creditCardNumber}
                         onChange={({ currentTarget: { value } }) => {
                           const formatedValue = formatCreditCard(value).trim()
+                          listenCardNumberChange(value.replaceAll(' ', ''))
                           field.onChange(formatedValue)
                         }}
                       />
@@ -275,17 +300,38 @@ const PaymentPage = () => {
                     />
                   </div>
                 </div>
+                <div className='text-end'>
+                  <UnstyledButton
+                    type='button'
+                    onClick={openInstallmentTableModal}
+                    className='text-sm text-orange-600'
+                  >
+                    Kartlara Göre Taksit Tablosu
+                  </UnstyledButton>
+                </div>
+                {installmentTableSelectOptions.current &&
+                  installmentTableSelectOptions.current.length > 0 && (
+                    <div>
+                      <InstallmentSelect
+                        data={installmentTableSelectOptions.current}
+                        onChange={(value) => {
+                          // formMethods.setValue('')
+                          formMethods.setValue('installment', value)
+                        }}
+                      />
+                    </div>
+                  )}
               </CheckoutCard>
 
               <CheckoutCard>
                 <div className='flex justify-center'>
-                  {checkoutQuery.data?.data ? (
+                  {checkoutQueryMemoData ? (
                     <div className='flex gap-3'>
                       <div>
                         <div className='text-sm'>Toplam Tutar</div>
                         <div className='pt-1 text-lg font-semibold'>
                           {formatCurrency(
-                            checkoutQuery.data?.data.viewBag
+                            checkoutQueryMemoData.viewBag
                               .SummaryViewDataResponser.summaryResponse
                               .totalPrice
                           )}
@@ -308,12 +354,12 @@ const PaymentPage = () => {
             <div className='sticky end-0 top-2'>
               <CheckoutCard>
                 {(() => {
-                  switch (checkoutQuery.data?.data?.viewBag.ModuleName) {
+                  switch (checkoutQueryMemoData?.viewBag.ModuleName) {
                     case 'Flight':
                       return (
                         <FlightSummary
                           data={
-                            checkoutQuery.data?.data?.viewBag
+                            checkoutQueryMemoData?.viewBag
                               .SummaryViewDataResponser
                               .summaryResponse as FlightReservationSummary
                           }
@@ -356,6 +402,22 @@ const PaymentPage = () => {
             })
           : null}
       </form>
+      {checkoutQueryMemoData?.paymentIndexModel.installment
+        .installmentInfoList && (
+        <Modal
+          opened={isOpenInstallmentTable}
+          onClose={closeInstallmentTableModal}
+          title='Tüm Kartlara Göre Taksit Tablosu'
+          size={'auto'}
+        >
+          <InstallmentTableModal
+            data={
+              checkoutQueryMemoData?.paymentIndexModel.installment
+                .installmentInfoList
+            }
+          />
+        </Modal>
+      )}
     </>
   )
 }

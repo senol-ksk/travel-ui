@@ -38,8 +38,6 @@ const FlightOptionalServices: React.FC<IProps> = ({
     )
   )
 
-  console.log(baggageServiceArray)
-
   return (
     <CheckoutCard>
       <div className='grid gap-5'>

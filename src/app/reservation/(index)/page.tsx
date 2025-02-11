@@ -16,9 +16,11 @@ import { map, z } from 'zod'
 import {
   Button,
   Checkbox,
+  Group,
   Input,
   List,
   LoadingOverlay,
+  Radio,
   Skeleton,
   TextInput,
   Title,
@@ -55,6 +57,7 @@ import { useMemo } from 'react'
 import NumberFlow from '@number-flow/react'
 import { formatCurrency } from '@/libs/util'
 import { FlightOptionalServices } from '@/app/reservation/(index)/flight-optional-services'
+import { TravelInsurancePackages } from './travel-insurance'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -211,20 +214,20 @@ export default function CheckoutPage() {
                 <form
                   onSubmit={formMethods.handleSubmit(async (data) => {
                     console.log('Data submitted:', data)
-                    // const requestCheckout =
-                    //   await checkoutPassengersMutation.mutateAsync(data)
+                    const requestCheckout =
+                      await checkoutPassengersMutation.mutateAsync(data)
 
-                    // const serialize = createSerializer(reservationParsers)
-                    // const url = serialize('/reservation/payment', {
-                    //   productKey: queryStrings.productKey,
-                    //   searchToken: queryStrings.searchToken,
-                    //   sessionToken: queryStrings.sessionToken,
-                    // })
+                    const serialize = createSerializer(reservationParsers)
+                    const url = serialize('/reservation/payment', {
+                      productKey: queryStrings.productKey,
+                      searchToken: queryStrings.searchToken,
+                      sessionToken: queryStrings.sessionToken,
+                    })
 
-                    // if (requestCheckout?.success) {
-                    //   queryClient.clear()
-                    //   router.push(url)
-                    // }
+                    if (requestCheckout?.success) {
+                      queryClient.clear()
+                      router.push(url)
+                    }
                   })}
                   className='relative grid gap-3 md:gap-5'
                 >
@@ -605,6 +608,8 @@ export default function CheckoutPage() {
                   <CheckoutCard>
                     <BillingForm />
                   </CheckoutCard>
+                  <TravelInsurancePackages />
+
                   <CheckoutCard>
                     <div className='text-sm'>
                       <Title order={4} pb='md'>
