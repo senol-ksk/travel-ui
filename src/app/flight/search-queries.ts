@@ -121,8 +121,8 @@ const useSearchResultsQueries = () => {
   }
 
   const searchSessionTokenQuery = useQuery({
-    enabled: false,
-    // enabled: !!searchParams,
+    // enabled: false,
+    enabled: !!searchParams,
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
       const response = await getFlightSearchSessionToken()
@@ -141,7 +141,7 @@ const useSearchResultsQueries = () => {
 
   const searchResultsQuery = useInfiniteQuery({
     queryKey: searchQueryKey,
-    // enabled: !!searchSessionTokenQuery.data,
+    enabled: !!searchSessionTokenQuery.data,
     initialPageParam: {
       ReceivedProviders: [''],
     },
@@ -245,7 +245,7 @@ const useSearchResultsQueries = () => {
 
       const clientData = flightFareInfos
         .sort((a, b) => a?.totalPrice?.value - b?.totalPrice.value)
-        .map((fareInfo, fareInfoIndex, fareInfoArr) => {
+        .map((fareInfo) => {
           const details = flightDetails
             .filter(
               (detail) =>
@@ -261,34 +261,45 @@ const useSearchResultsQueries = () => {
               )
             )
           )
+          const packageObject = {
+            freeVolatileData: segments.at(0)?.freeVolatileData,
+            fareInfo,
+          }
 
           return {
             fareInfo,
             details,
             segments,
+            packageObject,
           }
         })
         .map((clientObj, cliengtObjIndex, clientObjArr) => {
-          const packageItems = clientObjArr.filter(
-            (client) =>
-              client.details.filter(
-                (detail) =>
-                  client.segments.filter(
-                    (segment) =>
-                      segment.freeVolatileData.Seq ===
-                      detail.freeVolatileData.Seq
-                  ).length > 0
-              ).length > 0
+          const isDomestic = clientObj.details.every(
+            (detail) => detail.isDomestic
           )
+
+          const seqIds = clientObj.segments.flatMap(
+            (client) => client.freeVolatileData.Seq
+            // client.segments
+            //   .filter((segment) => isDomestic || segment.groupId === 0)
+            //   .map((segment) => segment.freeVolatileData.Seq)
+          )
+
+          const packages = clientObjArr.filter((client) => {
+            const currentSeqNos = client.segments.map((segment) => {
+              return segment.freeVolatileData.Seq
+            })
+
+            return JSON.stringify(currentSeqNos) === JSON.stringify(seqIds)
+          })
 
           return {
             fareInfo: clientObj.fareInfo,
             details: clientObj.details,
             segments: clientObj.segments,
-            package: packageItems,
+            package: packages,
           }
         }) as ClientDataType[]
-      // console.log(clientData)
 
       const cleanData = removeDuplicateFlights(clientData) as ClientDataType[]
 
