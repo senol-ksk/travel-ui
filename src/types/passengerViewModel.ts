@@ -210,8 +210,8 @@ export type ProductPassengerApiResponseModel = {
   } | null
   viewBag: {
     AdditionalData: {
-      additionalData: FlightAdditionalData
-    }
+      additionalData: FlightAdditionalData | null
+    } | null
     SessionToken: string
     SearchToken: string
     CallCenterFeeModel: {
@@ -1006,24 +1006,19 @@ export interface FlightAdditionalData {
   subGroups: FlightAdditionalDataSubGroup[]
 }
 
-export interface FlightAdditionalDataSubGroup {
-  items: []
-  owner: {
-    type: number
-    ownerKey: 'Flight'
-    identifier: null
-  }
-  subGroups: {
-    items: {
-      uniqueIdentifier: string
-      code: 'XBAG' | 'FrequentFlyer'
-      included: boolean
-      description: null | string
-      selected: boolean
-      required: boolean
-      indexNo: number
-      data: string
-      filters: [
+export const BaggageDefaultValue = '0|TRY|0|KG|NOEXTRABAGGE1'
+
+export interface FlightOptionalServicesDataItem {
+  uniqueIdentifier: string
+  code: 'XBAG' | 'FrequentFlyer'
+  included: boolean
+  description: null | string
+  selected: boolean
+  required: boolean
+  indexNo: number
+  data: string
+  filters:
+    | [
         {
           key: string
           value: {
@@ -1067,12 +1062,24 @@ export interface FlightAdditionalDataSubGroup {
           indexNo: number
         },
       ]
-    }[]
-    owner: {
-      type: number
-      ownerKey: string
-      identifier: string
-    }
-    subGroups: []
-  }[]
+    | null
+}
+
+export interface FlightOptionalServicesData {
+  items: FlightOptionalServicesDataItem[]
+  owner: {
+    type: number
+    ownerKey: string
+    identifier: string
+  }
+  subGroups: []
+}
+export interface FlightAdditionalDataSubGroup {
+  items: []
+  owner: {
+    type: number
+    ownerKey: 'Flight'
+    identifier: null
+  }
+  subGroups: FlightOptionalServicesData[]
 }
