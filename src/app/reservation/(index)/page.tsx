@@ -16,11 +16,9 @@ import { map, z } from 'zod'
 import {
   Button,
   Checkbox,
-  Group,
   Input,
   List,
   LoadingOverlay,
-  Radio,
   Skeleton,
   TextInput,
   Title,
@@ -44,7 +42,7 @@ import {
   PassengerTypesIndexEnum,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
-import { useCheckoutQuery } from '@/app/reservation/checkout-query'
+import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 
 import { CheckoutCard } from '@/components/card'
 import { reservationParsers } from '../searchParams'
@@ -79,8 +77,13 @@ export default function CheckoutPage() {
   const router = useRouter()
   const [queryStrings] = useQueryStates(reservationParsers)
 
-  const checkoutQuery = useCheckoutQuery()
+  const { checkoutDataQuery } = useCheckoutMethods()
   const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
+
+  const checkQueryData = useMemo(
+    () => checkoutDataQuery?.data,
+    [checkoutDataQuery?.data]
+  )
 
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
@@ -91,21 +94,21 @@ export default function CheckoutPage() {
   })
 
   const moduleName = useMemo(
-    () => checkoutQuery.data?.data?.viewBag.ModuleName,
-    [checkoutQuery.data?.data?.viewBag.ModuleName]
+    () => checkoutDataQuery.data?.data?.viewBag.ModuleName,
+    [checkoutDataQuery.data?.data?.viewBag.ModuleName]
   ) as ProductPassengerApiResponseModel['viewBag']['ModuleName']
 
   const isCouponUsed = useMemo(
     () =>
       Array.isArray(
-        checkoutQuery?.data?.data?.viewBag.SummaryViewDataResponser
-          .summaryResponse.couponDiscountList
+        checkQueryData?.data?.viewBag.SummaryViewDataResponser.summaryResponse
+          .couponDiscountList
       ) &&
-      checkoutQuery?.data.data?.viewBag.SummaryViewDataResponser.summaryResponse
+      checkQueryData.data?.viewBag.SummaryViewDataResponser.summaryResponse
         .couponDiscountList.length > 0,
     [
-      checkoutQuery?.data?.data?.viewBag.SummaryViewDataResponser
-        .summaryResponse.couponDiscountList,
+      checkQueryData?.data?.viewBag.SummaryViewDataResponser.summaryResponse
+        .couponDiscountList,
     ]
   )
 
@@ -131,8 +134,8 @@ export default function CheckoutPage() {
   })
 
   const passengerData = useMemo(
-    () => checkoutQuery?.data?.data?.treeContainer.childNodes,
-    [checkoutQuery?.data?.data?.treeContainer.childNodes]
+    () => checkQueryData?.data?.treeContainer.childNodes,
+    [checkQueryData?.data?.treeContainer.childNodes]
   )
 
   const handleCouponActions = async (promationText?: string) => {
@@ -174,10 +177,10 @@ export default function CheckoutPage() {
       }
     }
 
-    checkoutQuery.refetch()
+    checkoutDataQuery.refetch()
   }
 
-  if (!checkoutQuery.data || checkoutQuery.isLoading) {
+  if (checkoutDataQuery.isLoading) {
     return (
       <div className='container grid gap-3 py-5 md:grid-cols-3 md:gap-4'>
         <div className='grid gap-0 md:col-span-2'>
@@ -194,11 +197,10 @@ export default function CheckoutPage() {
     )
   }
 
-  if (!checkoutQuery.data?.data || !checkoutQuery.data?.success) {
+  if (!checkQueryData?.data || !checkoutDataQuery.data?.success) {
     return (
       <CheckoutCard>
         <Title>Bir hata olustu</Title>
-        <div>{checkoutQuery.data?.data?.exceptionAction?.message}</div>
       </CheckoutCard>
     )
   }
@@ -312,7 +314,7 @@ export default function CheckoutPage() {
                         <Checkbox
                           label='Fırsat ve kampanyalardan haberdar olmak istiyorum.'
                           {...formMethods.register('isInPromoList', {
-                            value: !!checkoutQuery.data?.data?.isInPromoList,
+                            value: !!checkQueryData?.data?.isInPromoList,
                           })}
                         />
                       </div>
@@ -427,10 +429,10 @@ export default function CheckoutPage() {
                           break
 
                         default:
-                          return checkoutQuery?.data?.data &&
+                          return checkQueryData?.data &&
                             passengerData?.length &&
-                            checkoutQuery.data.data?.treeContainer
-                              .childNodes?.[0].childNodes.length > 0 // transfer and flight passengers data have different values
+                            checkQueryData.data?.treeContainer.childNodes?.[0]
+                              .childNodes.length > 0 // transfer and flight passengers data have different values
                             ? passengerData?.[0].childNodes.map(
                                 (item, index) => {
                                   const field = item.items[0].value
@@ -573,8 +575,7 @@ export default function CheckoutPage() {
                     <Coupon
                       loading={
                         revokeCouponMutation.isPending ||
-                        applyCouponMutation.isPending ||
-                        checkoutQuery.isRefetching
+                        applyCouponMutation.isPending
                       }
                       isCouponUsed={isCouponUsed}
                       onRevoke={handleCouponActions}
@@ -583,7 +584,10 @@ export default function CheckoutPage() {
                   </CheckoutCard>
                   {moduleName === 'Flight' &&
                     passengerData &&
-                    checkoutQuery?.data?.data?.viewBag.AdditionalData.additionalData.subGroups.filter(
+                    checkQueryData?.data?.viewBag?.AdditionalData &&
+                    checkQueryData?.data?.viewBag?.AdditionalData
+                      .additionalData &&
+                    checkQueryData?.data?.viewBag?.AdditionalData?.additionalData?.subGroups?.filter(
                       (item) =>
                         item.subGroups.find((item2) =>
                           item2.items.find(
@@ -595,11 +599,11 @@ export default function CheckoutPage() {
                     ).length > 0 && (
                       <FlightOptionalServices
                         flightInfos={
-                          checkoutQuery?.data?.data?.viewBag
-                            .SummaryViewDataResponser.summaryResponse
+                          checkQueryData.data?.viewBag.SummaryViewDataResponser
+                            .summaryResponse
                         }
                         data={
-                          checkoutQuery?.data?.data?.viewBag.AdditionalData
+                          checkQueryData.data?.viewBag.AdditionalData
                             .additionalData.subGroups
                         }
                         passengers={passengerData}
@@ -627,17 +631,18 @@ export default function CheckoutPage() {
                         </List.Item>
                       </List>
                     </div>
-                    <div className='relative flex justify-center'>
-                      <LoadingOverlay
-                        overlayProps={{ radius: 'sm', blur: 2 }}
-                        loaderProps={{ children: ' ' }}
-                        visible={
-                          checkoutQuery.isLoading || checkoutQuery.isRefetching
-                        }
-                      />
-                      {checkoutQuery.data.data ? (
-                        <div className='flex gap-3'>
-                          <div>
+                    <div className='flex justify-center'>
+                      {checkQueryData.data ? (
+                        <div className='relative flex gap-3'>
+                          <div className='relative'>
+                            <LoadingOverlay
+                              overlayProps={{ radius: 'sm', blur: 2 }}
+                              loaderProps={{ children: ' ' }}
+                              visible={
+                                checkoutDataQuery.isLoading ||
+                                checkoutDataQuery.isRefetching
+                              }
+                            />
                             <div className='text-sm'>Toplam Tutar</div>
                             <div>
                               <NumberFlow
@@ -648,7 +653,7 @@ export default function CheckoutPage() {
                                   currencyDisplay: 'narrowSymbol',
                                 }}
                                 value={
-                                  checkoutQuery.data.data?.viewBag
+                                  checkQueryData.data?.viewBag
                                     .SummaryViewDataResponser.summaryResponse
                                     .totalPrice ?? 0
                                 }
@@ -658,7 +663,10 @@ export default function CheckoutPage() {
                           <Button
                             size='lg'
                             type='submit'
-                            // disabled={!isSubmittable}
+                            disabled={
+                              checkoutDataQuery.isLoading ||
+                              checkoutDataQuery.isRefetching
+                            }
                           >
                             Devam et
                           </Button>
@@ -680,7 +688,7 @@ export default function CheckoutPage() {
                       return (
                         <FlightSummary
                           data={
-                            checkoutQuery.data?.data?.viewBag
+                            checkQueryData.data?.viewBag
                               .SummaryViewDataResponser
                               .summaryResponse as FlightReservationSummary
                           }

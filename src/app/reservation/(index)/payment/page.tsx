@@ -24,7 +24,7 @@ import cardValidation from 'card-validator'
 import { formatCreditCard } from 'cleave-zen'
 
 import { formatCurrency, yearList } from '@/libs/util'
-import { useCheckoutQuery } from '@/app/reservation/checkout-query'
+import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
 import { PaymentResponeType } from '@/app/reservation/types'
 import { reservationParsers } from '@/app/reservation/searchParams'
@@ -77,7 +77,7 @@ const PaymentPage = () => {
   })
   const [queryStrings] = useQueryStates(reservationParsers)
 
-  const checkoutQuery = useCheckoutQuery()
+  const { checkoutDataQuery: checkoutQuery } = useCheckoutMethods()
   const threeDformRef = useRef<HTMLFormElement>(null)
 
   const checkoutQueryMemoData = useMemo(

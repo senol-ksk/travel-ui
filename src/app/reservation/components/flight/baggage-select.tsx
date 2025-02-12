@@ -1,53 +1,63 @@
 import { NativeSelect, type NativeSelectProps } from '@mantine/core'
 
-import { FlightAdditionalDataSubGroup } from '@/types/passengerViewModel'
+import { FlightOptionalServicesDataItem } from '@/types/passengerViewModel'
 import { upperFirst } from '@mantine/hooks'
 import { formatCurrency } from '@/libs/util'
 
-const defaultValue = '0|TRY|0|KG|NOEXTRABAGGE1'
-
 type IProps = {
-  data: FlightAdditionalDataSubGroup['subGroups'][0]['items']
-  onChange: (
-    data:
-      | FlightAdditionalDataSubGroup['subGroups'][0]['items'][0]
-      | typeof defaultValue
-  ) => void
+  data: FlightOptionalServicesDataItem[]
+  onChange: (data: FlightOptionalServicesDataItem) => void
   label?: string
 }
 
 const convertBaggageLabel = (data: string) => {
   const dataArr = data.split(':') // ==> ['5950.00', 'TRY', 'ADT', 'CarryOn', '35', 'KG', 'SH1', '']
-  const price = formatCurrency(+dataArr[0]) // first item is price
-  const baggage = `${dataArr[4]} ${upperFirst(dataArr[5].toLocaleLowerCase())}`
+  const price = +dataArr[0]
+  const priceFormated = formatCurrency(+dataArr[0]) // first item is price
 
-  return `+${baggage} ${price} `
+  if (!price || price === 0) return 'Bagaj İstemiyorum'
+
+  const baggage =
+    dataArr[4] && dataArr[5]
+      ? `${dataArr[4]} ${upperFirst(dataArr[5].toLocaleLowerCase())}`
+      : ''
+
+  return `+${baggage} ${priceFormated} `
 }
-
+const noExtraBaggaeOption: FlightOptionalServicesDataItem = {
+  code: 'XBAG',
+  data: '0:TRY:0:KG:NOEXTRABAGGE1',
+  included: false,
+  indexNo: -1,
+  required: false,
+  description: null,
+  filters: null,
+  selected: true,
+  uniqueIdentifier: '',
+}
 const BaggageSelect: React.FC<IProps> = ({ data, onChange, label }) => {
-  const options: NativeSelectProps['data'] = data.map((item) => {
-    return {
+  const dataWithDefaultValue: FlightOptionalServicesDataItem[] = [
+    {
+      ...noExtraBaggaeOption,
+      uniqueIdentifier: data[0].uniqueIdentifier,
+    },
+    ...data,
+  ]
+
+  const options: NativeSelectProps['data'] = dataWithDefaultValue.map(
+    (item, itemIndex) => ({
       label: convertBaggageLabel(item.data),
-      value: item.uniqueIdentifier,
-    }
-  })
+      value: '' + itemIndex,
+    })
+  )
 
   return (
     <NativeSelect
       label={label}
-      defaultValue={defaultValue}
-      data={[
-        {
-          label: 'Bagaj Ekle',
-          value: defaultValue,
-        },
-        ...options,
-      ]}
+      defaultValue={'0'}
+      data={options}
       onChange={({ currentTarget: { value } }) => {
-        const changeValue = data.find(
-          (item) => item.uniqueIdentifier === value
-        ) as FlightAdditionalDataSubGroup['subGroups'][0]['items'][0]
-        onChange(changeValue ?? '0|TRY|0|KG|NOEXTRABAGGE1')
+        onChange(dataWithDefaultValue[+value])
       }}
     />
   )
