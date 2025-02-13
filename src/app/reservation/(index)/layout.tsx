@@ -1,4 +1,6 @@
+import { Suspense } from 'react'
 import { Notifications } from '@mantine/notifications'
+
 import { ReservationSummarySection } from './summary-section'
 
 export default function ReservationLayout({
@@ -7,7 +9,7 @@ export default function ReservationLayout({
   children: React.ReactNode
 }>) {
   return (
-    <>
+    <Suspense>
       <Notifications />
       <div className='py-2 md:py-5 lg:container'>
         <div className='grid gap-3 md:grid-cols-3 md:gap-4'>
@@ -19,6 +21,6 @@ export default function ReservationLayout({
           </div>
         </div>
       </div>
-    </>
+    </Suspense>
   )
 }
