@@ -2,21 +2,8 @@
 
 import { useSearchResultsQueries } from '../search-queries'
 import { FlightSearchResultsOneWayDomestic } from './domestic-flight'
-import {
-  Button,
-  Drawer,
-  Loader,
-  Modal,
-  Skeleton,
-  Transition,
-  RemoveScroll,
-} from '@mantine/core'
-import {
-  ClientDataType,
-  FlightDetail,
-  FlightDetailSegment,
-  FlightFareInfo,
-} from '../type'
+import { Button, Drawer, Loader, Modal, Skeleton } from '@mantine/core'
+import { ClientDataType, FlightDetailSegment, FlightFareInfo } from '../type'
 import { useMemo, useRef, useState } from 'react'
 import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
 
@@ -62,7 +49,6 @@ const FlightSearchView = () => {
 
   // this is for flight select. first this should be called, then `handlePackageSelect`
   const handleFlightSelect = (flight: ClientDataType) => {
-    console.log(flight)
     const packages = flight.package.map((pack) => ({
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
@@ -75,12 +61,11 @@ const FlightSearchView = () => {
 
   // this, `handlePackageSelect`, should called after package is selected. handle domestic and roundtrip,
   // in  round trip and domestic case return flight section must be visible. otherwise redirect to reservation page
-  // and handle we scroll if user must select return flight
+  // and handle scroll if user must select return flight
   const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>({
     duration: 700,
   })
   const handlePackageSelect = async (data: SelectedPackageStateProps) => {
-    console.log(tripKind)
     selectedFlightKeys.current.push(data.flightFareInfo.key)
 
     closePackageDrawer()
@@ -95,14 +80,13 @@ const FlightSearchView = () => {
     } else {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.join(','))
       selectedFlightKeys.current = []
-      // setIsNextFlightVisible(false)
     }
   }
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmiting = submitFlightData.isPending
 
   return (
-    <RemoveScroll enabled={isFlightSubmiting}>
+    <>
       {searchResultsQuery.isLoading ||
       searchResultsQuery.isFetching ||
       searchSessionTokenQuery.isLoading ? (
@@ -124,14 +108,15 @@ const FlightSearchView = () => {
           </div>
         </div>
         <div className='md:col-span-3' ref={targetRef}>
+          {searchResults?.length && `Toplam Sonuç `}
+
           {searchResults?.length
             ? isDomestic
               ? isNextFlightVisible
-                ? `Dönüş seçiniz ${searchResults?.filter((item) => item.fareInfo.groupId === 1).length}`
-                : `gidiş seçiniz ${searchResults?.filter((item) => item.fareInfo.groupId === 0).length}`
-              : `Bulunan Toplam uçuş:  ${searchResults?.length}`
+                ? `${searchResults?.filter((item) => item.fareInfo.groupId === 1).length}`
+                : `${searchResults?.filter((item) => item.fareInfo.groupId === 0).length}`
+              : `${searchResults?.length}`
             : null}
-
           <div
             className='grid gap-3'
             style={{
@@ -273,7 +258,7 @@ const FlightSearchView = () => {
           <div className='text-lg'>Lutfen bekleyiniz</div>
         </div>
       </Modal>
-    </RemoveScroll>
+    </>
   )
 }
 

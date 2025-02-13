@@ -2,6 +2,7 @@ import { formatCurrency } from '@/libs/util'
 import { FlightDetail, FlightDetailSegment, FlightFareInfo } from '../type'
 import { Button, Divider } from '@mantine/core'
 import dayjs from 'dayjs'
+import { AirlineLogo } from '@/components/airline-logo'
 
 type IProps = {
   fareInfo: FlightFareInfo
@@ -22,7 +23,10 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
     <div className='@container rounded-lg border border-gray-300'>
       <div className='p-3'>
         <div>
-          {detailSegments.at(0)?.marketingAirline.code} {flightNumber}
+          <AirlineLogo
+            airlineCode={detailSegments[0].marketingAirline.code.toLocaleLowerCase()}
+          />
+          {flightNumber}
         </div>
         <div className='flex items-center gap-2'>
           <div>

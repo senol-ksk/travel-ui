@@ -3,6 +3,7 @@ import { FlightDetail, FlightDetailSegment, FlightFareInfo } from '../type'
 import { Button, Divider } from '@mantine/core'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
+import { AirlineLogo } from '@/components/airline-logo'
 
 type IProps = {
   fareInfo: FlightFareInfo
@@ -40,9 +41,16 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         )
         return (
           <div className='p-3' key={detail.key}>
-            <div>
-              {relatedDetailSegments.at(0)?.marketingAirline.code}{' '}
-              {relatedDetailSegments.at(0)?.flightNumber}
+            <div className='flex items-center gap-3 pb-2'>
+              <div>
+                <AirlineLogo
+                  airlineCode={relatedDetailSegments[0].marketingAirline.code}
+                  width={36}
+                  height={36}
+                />
+              </div>
+              <div>{relatedDetailSegments[0].marketingAirline.code}</div>
+              <div>{relatedDetailSegments.at(0)?.flightNumber}</div>
             </div>
             <div className='flex items-center gap-2'>
               <div>
