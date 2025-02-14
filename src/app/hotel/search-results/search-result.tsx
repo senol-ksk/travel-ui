@@ -48,22 +48,24 @@ const HotelSearchResults: React.FC = () => {
               return (
                 page.searchResults.length &&
                 page.searchResults.map((results) => {
-                  return results.items
-                    .sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                    .map((result) => {
-                      const hotelInfo = results.hotelInfos.find(
-                        (hotelInfo) => hotelInfo.id === result.hotelId
-                      )
-                      return (
-                        hotelInfo && (
-                          <HotelSearchResultItem
-                            key={result.hotelId}
-                            hotelInfo={hotelInfo}
-                            resultItem={result}
-                          />
+                  return (
+                    results.items
+                      // .sort((a, b) => a.totalPrice.value - b.totalPrice.value)
+                      .map((result) => {
+                        const hotelInfo = results.hotelInfos.find(
+                          (hotelInfo) => hotelInfo.id === result.hotelId
                         )
-                      )
-                    })
+                        return (
+                          hotelInfo && (
+                            <HotelSearchResultItem
+                              key={result.hotelId}
+                              hotelInfo={hotelInfo}
+                              resultItem={result}
+                            />
+                          )
+                        )
+                      })
+                  )
                 })
               )
             })}

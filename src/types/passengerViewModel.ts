@@ -231,7 +231,7 @@ export type ProductPassengerApiResponseModel = {
 
     ModuleName: 'Flight' | 'Hotel'
     SummaryViewDataResponser: {
-      summaryResponse: FlightReservationSummary
+      summaryResponse: FlightReservationSummary | HotelSummaryResponse
     }
     PassengerInfoBackUrl: string
     FlightDetailToSearchReturnPath: null
@@ -296,330 +296,6 @@ export type ProductPassengerApiResponseModel = {
         logSearchToken: string
       },
     ]
-    SummaryViewDataResponserPI: {
-      summaryResponse: {
-        flightList: [
-          {
-            flightFareInfo: {
-              flightDetailKeys: [
-                'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDlER+4VlXTkHHdJBIIQNSHS/efzt68jZEnpT7JvByV5jfndwihlXaUIT+bESsCiRKwoIw+yTBKTZT74nQ7FIIq7f61zGPtORTywh1gw/a3Qfwk6qXbDQpvCHzGGdbVH/yL2UYwEK0H3yhqGRctjWoUtqXefENLkD+PAsanWP0fsP21+02GqpmIpsSDzx6hj6EiL6LMQ8AU2A1v4YEtWQwlUIHV5lbpEhSLG72w9o7h3boLGdqdz8px2YoOtTXX0G/Jnl8i9CQaiTzTSYPn5RYD76Oh8iVGE5AUaAmGmqRqx0ntY7k8czRJj5qYMf5Tuoh5mfpRH15sKG1InxeJOsUv5ETSdACfcU5vfXxF1H9k3iC35XldH4b/e9d3fou+DXZSijpuxkylcFFAmR9wFTprFJfNkvXEuawFRvJiPzyxzYk6gKBNFkH5YWwE51DtpbsWzIj3UzhqvE/iJmJTwhhZb/BWDtVUihP398oCIMSsfb',
-              ]
-              groupId: 0
-              key: 'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmXBblb5zIEGfj+b2gA0A+oBo2t57oB+I09CdD4aEclgcBV0ybAQpPxkLVw75FvdSfjyezzS4WaQacpTOxjvPPzTyR2qLik7bAH+W5Prt3itmcYdva1xBPe89v+e4KzzC09HkH6lYvBgbYJexX3JhvbBj3eKg8jz3C6u7OpHOhHVbDPFkxkzP1UVX4SuzObEuqVWtye4VnKHABp3Mbr1ogemX8jJ6fGyuRmIyZXs6qxfNTvRejvNp0t8xx6HPPjbrpwQKelaKOvHI1nqqWtMIjO4/7KQkJangWc2NfqQe+YWwXmvdBmiFucgxpPQ8iEBGExjRpPGFWLSU/E2MgJBRB5Y+WGVoyM0TiQO4Dw0Ql3LJXvG4sH3SHRgADs9hDDB5kA='
-              totalPrice: {
-                value: 2207.18
-                currency: 'TRY'
-                rateValue: null
-              }
-              basePrice: {
-                value: 1584.88
-                currency: 'TRY'
-                rateValue: null
-              }
-              taxes: {
-                value: 422.3
-                currency: 'TRY'
-                rateValue: null
-              }
-              discount: {
-                value: 0.0
-                currency: null
-                rateValue: null
-              }
-              buyFee: {
-                code: null
-                price: {
-                  value: 0.0
-                  currency: null
-                  rateValue: null
-                }
-              }
-              fee: {
-                code: ''
-                price: {
-                  value: 200.0
-                  currency: 'TRY'
-                  rateValue: null
-                }
-              }
-              passengerPrices: [
-                {
-                  unitPrice: {
-                    value: 2207.18
-                    currency: 'TRY'
-                    rateValue: null
-                  }
-                  unitBasePrice: {
-                    value: 1584.88
-                    currency: 'TRY'
-                    rateValue: null
-                  }
-                  unitFee: {
-                    code: ''
-                    price: {
-                      value: 200.0
-                      currency: 'TRY'
-                      rateValue: null
-                    }
-                  }
-                  unitTax: {
-                    value: 422.3
-                    currency: 'TRY'
-                    rateValue: null
-                  }
-                  cancelPenalty: null
-                  changePenalty: null
-                  passengers: [
-                    {
-                      key: '8126560C2A454B7AFB0D3DCA1CA77D446D0170E107607B099E3969D8D213FA0F'
-                      name: null
-                      passengerType: 0
-                      age: 0
-                      birthday: '0001-01-01T00:00:00'
-                      gender: GenderEnums
-                    },
-                  ]
-                  taxInfos: [
-                    {
-                      key: 'VQ'
-                      value: '122.30'
-                    },
-                    {
-                      key: 'YR'
-                      value: '300.00'
-                    },
-                    {
-                      key: '||'
-                      value: '0'
-                    },
-                  ]
-                  serviceCharges: null
-                },
-              ]
-              taxInfos: null
-              serviceCharges: null
-            }
-            flightDetail: {
-              key: 'GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDlER+4VlXTkHHdJBIIQNSHS/efzt68jZEnpT7JvByV5jfndwihlXaUIT+bESsCiRKwoIw+yTBKTZT74nQ7FIIq7f61zGPtORTywh1gw/a3Qfwk6qXbDQpvCHzGGdbVH/yL2UYwEK0H3yhqGRctjWoUtqXefENLkD+PAsanWP0fsP21+02GqpmIpsSDzx6hj6EiL6LMQ8AU2A1v4YEtWQwlUIHV5lbpEhSLG72w9o7h3boLGdqdz8px2YoOtTXX0G/Jnl8i9CQaiTzTSYPn5RYD76Oh8iVGE5AUaAmGmqRqx0ntY7k8czRJj5qYMf5Tuoh5mfpRH15sKG1InxeJOsUv5ETSdACfcU5vfXxF1H9k3iC35XldH4b/e9d3fou+DXZSijpuxkylcFFAmR9wFTprFJfNkvXEuawFRvJiPzyxzYk6gKBNFkH5YWwE51DtpbsWzIj3UzhqvE/iJmJTwhhZb/BWDtVUihP398oCIMSsfb'
-              groupId: 0
-              flightSegmentKeys: [
-                '6GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmUUo3rG76R0eGqj7O4fPBG/ZYpq8vKR/5bn8XnzWDNQxr6VCg3n8dc/vKhCm1yLxRsEZWTA2AQCnMgg57rWKEmLZOH7kMsQgdYcwMKYQsFTog==',
-              ]
-              travelTime: '01:10:00'
-              direction: 1
-              isDomestic: boolean
-              isOWCCombinable: boolean
-              isPromotional: boolean
-              reservable: boolean
-              freeVolatileData: {
-                data: 'OFFERITEM6_1:SH1'
-                OfferID: 'NDQzNzgwNSo0MTk2OTE2MjAxOSo1MDc0NzgqWk9XKloqZmFsc2UqQTIwN0pINTgqMTkwMDYqT1cqdHJ1ZSoxMDA3LjE4KlRSWSoyMDI0LTExLTI3KlFxZlpncGhJSDNnaTFWOFYzVGt1cFF4cTBPY0tEc2I5S0FPY0xUNSUyQnU4cSUyRnFxbUwwSDMlMkZMbUlIaXNubzN4N1dSUmh2WjhBbzd3JTJCa2tzUkhIR0dXRmclM0QlM0Q='
-                Owner: 'PC'
-                ResponseID: '75a64c86fc7e4000a63abf437b803242'
-                brandname: 'EXTRA'
-                Seq: 'FL_SAWADB_2'
-                SegmentRefs: 'NDQzNzgwNQ=='
-                PassengerList: 'SH1'
-                StandartSeatSelection: boolean
-                AllSeatSelection: boolean
-                FreeSandwich: boolean
-                Entertainment: boolean
-                FlexibleReturnChangeRight: boolean
-              }
-            }
-            flightSegments: [
-              {
-                key: '6GwTA//4g3ToiewUaAz/Cgo6cvDJghhYWoQGVAK2462YSgJJl7DUxNorLXyfT/drCfj4tm/C3r+hDSf4XtUlvDq0rcyBWQcOgSoSIOpY8kmUUo3rG76R0eGqj7O4fPBG/ZYpq8vKR/5bn8XnzWDNQxr6VCg3n8dc/vKhCm1yLxRsEZWTA2AQCnMgg57rWKEmLZOH7kMsQgdYcwMKYQsFTog=='
-                groupId: 0
-                origin: {
-                  code: 'SAW'
-                  isDomestic: boolean
-                  iata: null
-                  type: 7
-                  id: 0
-                }
-                destination: {
-                  code: 'ADB'
-                  isDomestic: boolean
-                  iata: null
-                  type: 7
-                  id: 0
-                }
-                departureTime: '2024-11-27T07:40:00'
-                arrivalTime: '2024-11-27T08:50:00'
-                flightTime: '01:10:00'
-                operatingAirline: {
-                  code: 'PC'
-                  value: null
-                  countryCode: null
-                }
-                marketingAirline: {
-                  code: 'PC'
-                  value: null
-                  countryCode: null
-                }
-                flightNumber: '2184'
-                cabinClass: 0
-                bookingCode: 'ZOW'
-                equipment: null
-                isMeal: boolean
-                quota: 9
-                baggageAllowance: {
-                  maxWeight: {
-                    value: 20.0
-                    unit: 0
-                  }
-                  piece: {
-                    pieceCount: 0
-                  }
-                }
-                freeVolatileData: {
-                  ResBookDesigID: {
-                    SeatsLeft: 9
-                    SeatsLeftSpecified: boolean
-                    Value: 'Z'
-                  }
-                  ResBookDesigCode: 'ZOW'
-                  Baggage: 'BaggageAllowance4'
-                  BrandName: 'EXTRA'
-                  Seq: 'FL_SAWADB_2'
-                }
-              },
-            ]
-            flightPackageInfos: []
-          },
-        ]
-        flightFareInfo: {
-          flightDetailKeys: null
-          groupId: 0
-          key: null
-          totalPrice: {
-            value: 2207.18
-            currency: 'TRY'
-            rateValue: null
-          }
-          basePrice: {
-            value: 1584.88
-            currency: 'TRY'
-            rateValue: null
-          }
-          taxes: {
-            value: 422.3
-            currency: 'TRY'
-            rateValue: null
-          }
-          discount: {
-            value: 0.0
-            currency: null
-            rateValue: null
-          }
-          buyFee: {
-            code: null
-            price: {
-              value: 0.0
-              currency: null
-              rateValue: null
-            }
-          }
-          fee: {
-            code: ''
-            price: {
-              value: 200.0
-              currency: 'TRY'
-              rateValue: null
-            }
-          }
-          passengerPrices: [
-            {
-              unitPrice: {
-                value: 2207.18
-                currency: 'TRY'
-                rateValue: null
-              }
-              unitBasePrice: {
-                value: 1584.88
-                currency: 'TRY'
-                rateValue: null
-              }
-              unitFee: {
-                code: ''
-                price: {
-                  value: 200.0
-                  currency: 'TRY'
-                  rateValue: null
-                }
-              }
-              unitTax: {
-                value: 422.3
-                currency: 'TRY'
-                rateValue: null
-              }
-              cancelPenalty: null
-              changePenalty: null
-              passengers: [
-                {
-                  key: '8126560C2A454B7AFB0D3DCA1CA77D446D0170E107607B099E3969D8D213FA0F'
-                  name: null
-                  passengerType: 0
-                  age: 0
-                  birthday: '0001-01-01T00:00:00'
-                  gender: GenderEnums
-                },
-              ]
-              taxInfos: [
-                {
-                  key: 'VQ'
-                  value: '122.30'
-                },
-                {
-                  key: 'YR'
-                  value: '300.00'
-                },
-                {
-                  key: '||'
-                  value: '0'
-                },
-              ]
-              serviceCharges: null
-            },
-          ]
-          taxInfos: []
-          serviceCharges: []
-        }
-        flightPackageInfos: []
-        isReservable: boolean
-        hasOwc: boolean
-        activeFlightTripKind: number
-        sessionToken: string
-        airportList: {
-          [key: string]: {
-            id: ID
-            code: string
-            value: {
-              langCode: string
-              value: string
-            }[]
-            countryCode: string
-            country: string
-            city: string
-          }
-        }
-        airlineList: {
-          [key: string]: string
-        }
-        applyCancelationInsurance: boolean
-        buyInsurancePrice: 0.0
-        sellInsurancePrice: 0.0
-        showOnlyInsurancePrice: 0.0
-        moduleName: 'Flight'
-        totalPrice: number
-        priceCurrency: string
-        loyaltyMultiple: number
-        couponDiscountList: null
-        extraCharges: null
-        financellDiscount: ServicePriceType
-      }
-    }
     Reservable: 1 | 0 | null | undefined
   }
   treeContainer: {
@@ -1082,4 +758,237 @@ export interface FlightAdditionalDataSubGroup {
     identifier: null
   }
   subGroups: FlightOptionalServicesData[]
+}
+
+export interface HotelSummaryResponse {
+  searchToken: string
+  sessionToken: string
+  destinationSlug: string
+  hotelSlug: null
+  roomGroup: {
+    hotelId: ID
+    hotelKey: string
+    hotel: {
+      id: ID
+      name: string
+      slug: string
+      zip_code: string
+      address: string
+      destination: string
+      country_code: string
+      location: number[]
+      phone: null
+      email: null
+      currency: ''
+      meal_type: ''
+      nearby: string[]
+      nearby_info: null
+      checkin_from: string
+      checkout_to: string
+      fax: null
+      nr_rooms: number
+      stars: number
+      availability_score: null
+      max_free_child_age: number
+      min_free_child_age: number
+      images: {
+        category: ID
+        tag: string
+        original: string
+        large: null
+        small: null
+        mid: null
+        default: boolean
+        priority: number
+      }[]
+      themes: number[]
+      facilities: number[]
+      facility_scopes: null
+      tripAdvisor: null
+      price: ServicePriceType
+      descriptions: {
+        hotelInformation: string
+        hotelAmenity: string
+        roomAmenity: string
+        locationInformation: string
+        hotelIntroduction: string
+        attractionInformation: string
+        dining: null
+        areaAttractions: null
+        recreation: null
+        policy: null
+        spa: null
+        whatToExpect: null
+        businessAmenities: null
+        beachPool: string
+        honeymoonInformation: null
+        specialDays: null
+        activities: null
+        importentInfo: null
+      }
+      year_built: null
+      nr_restaurants: number
+      nr_bars: number
+      nr_halls: null
+      last_update: string
+      video_list: null
+      web_site: string
+      deleted: boolean
+      destination_slug: string
+      old_destination_slug: null
+      rating: number
+      listing_rate: number
+      sales_rate: number
+      destination_id: ID
+      destination_map: number[]
+      search_rate: number
+      reviews: null
+      nearby_restaurants: null
+      comment_info: {
+        comments: {
+          startDate: string
+          endDate: string
+          commentDate: string
+          name: string
+          surname: string
+          averageScore: number
+          positiveCotent: string
+          negativeCotent: string
+          isSuggested: boolean
+          reasonLabel: string
+          withWhoLabel: string
+          userCountryCode: string
+          userCountry: string
+          userCity: null
+        }[]
+        totalComments: number
+        averageScore: number
+      }
+      documents: {
+        no: string
+        type: string
+        description: string
+      }[]
+      food_drinks: null
+    }
+    roomDetails: {
+      [key: string]: HotelSummaryRoomDetail
+    }
+    rooms: {
+      passengerKeys: string[]
+      nightlyRates: {
+        totalPrice: ServicePriceType
+        basePrice: ServicePriceType
+        taxes: ServicePriceType
+        fee: ServicePriceType
+      }[]
+      addonInfos: []
+      freeChildAges: {
+        ageFrom: number
+        ageTo: number
+        whichChild: number
+      }[]
+      freeNights: number
+      discountInformations: {
+        rate: number
+        title: string
+        description: null
+      }[]
+      key: string
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: null
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    averageRate: ServicePriceType
+    nightlyRateTotal: ServicePriceType
+    discountDescription: null
+    cancelWarrantyPrice: ServicePriceType
+    useCancelWarranty: boolean
+    prepaid: boolean
+    accommodationTax: {
+      price: ServicePriceType
+      included: boolean
+    }
+    isSingleMaleRestriction: boolean
+    cancellationPolicy: null
+    cancellationPolicies: {
+      penaltyPrice: ServicePriceType
+      optionDate: string
+      description: string
+    }[]
+    additionalInfos: []
+    nonRefundable: boolean
+    checkInDate: string
+    minNight: number
+    checkOutDate: string
+    earlyBooking: boolean
+    addonInfos: []
+    packageSearchType: number
+    provisionTime: string
+    provider: string
+    priceDifferenceBackGuarantee: boolean
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  status: []
+  productKey: string
+  moduleName: 'Hotel'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
+}
+
+export interface HotelSummaryRoomDetail {
+  roomKey: string
+  description: string
+  allotment: number
+  bedType: string
+  roomType: string
+  quantity: number
+  size: number
+  facilities: []
+  pensionType: string
+  pensionTypeId: ID
+  extraInformations: null
+  images: {
+    url: string
+    thumbnailUrl: string
+    title: string
+    isDefault: boolean
+    width: number | null
+  }[]
 }

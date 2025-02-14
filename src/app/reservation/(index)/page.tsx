@@ -1,6 +1,6 @@
 'use client'
 import 'intl-tel-input/styles'
-import { Notifications, notifications } from '@mantine/notifications'
+import { notifications } from '@mantine/notifications'
 
 import { useRouter } from 'next/navigation'
 import {
@@ -11,7 +11,7 @@ import {
   Controller,
 } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { map, z } from 'zod'
+import { z } from 'zod'
 
 import {
   Button,
@@ -56,6 +56,7 @@ import NumberFlow from '@number-flow/react'
 import { formatCurrency } from '@/libs/util'
 import { FlightOptionalServices } from '@/app/reservation/(index)/flight-optional-services'
 import { TravelInsurancePackages } from './travel-insurance'
+import { EarlyReservationInsurance } from './hotel/insurance-options'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -525,6 +526,18 @@ export default function CheckoutPage() {
               onCouponSubmit={handleCouponActions}
             />
           </CheckoutCard>
+          {moduleName.toLowerCase() === 'hotel' &&
+            checkQueryData?.data?.viewBag.HotelCancelWarrantyPriceStatusModel &&
+            checkQueryData?.data?.viewBag.HotelCancelWarrantyPriceStatusModel
+              .cancelWarrantyPrice > 0 && (
+              <EarlyReservationInsurance
+                data={
+                  checkQueryData?.data?.viewBag
+                    .HotelCancelWarrantyPriceStatusModel
+                }
+              />
+            )}
+
           {moduleName === 'Flight' &&
             passengerData &&
             checkQueryData?.data?.viewBag?.AdditionalData &&
@@ -541,7 +554,7 @@ export default function CheckoutPage() {
               <FlightOptionalServices
                 flightInfos={
                   checkQueryData.data?.viewBag.SummaryViewDataResponser
-                    .summaryResponse
+                    .summaryResponse as FlightReservationSummary
                 }
                 data={
                   checkQueryData.data?.viewBag.AdditionalData.additionalData

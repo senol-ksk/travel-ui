@@ -1,14 +1,13 @@
 'use client'
 
-import type {
-  FlightReservationSummary,
-  ProductPassengerApiResponseModel,
-} from '@/types/passengerViewModel'
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query'
+import type { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
 
 import { serviceRequest } from '@/network'
 import { reservationParsers } from '@/app/reservation/searchParams'
+
+const promationText = 'LXMZ2HB66SGAES'
 
 export interface BaggageRequestDataModel {
   uniqueIdentifier: string
@@ -44,9 +43,12 @@ export const useCheckoutMethods = () => {
   const baggageMutation = useMutation({
     mutationKey: ['baggage-selection'],
     mutationFn: async (optionalServices: BaggageRequestDataModel[]) => {
-      const response = await serviceRequest<{
-        summaryResponse: FlightReservationSummary
-      }>({
+      /* {
+        summaryResponse: FlightReservationSummary | HotelSummaryResponse
+      }*/
+      const response = await serviceRequest<
+        ProductPassengerApiResponseModel['viewBag']['SummaryViewDataResponser']
+      >({
         axiosOptions: {
           url: 'api/product/baggageUpdate',
           method: 'post',
@@ -56,7 +58,7 @@ export const useCheckoutMethods = () => {
             productKey,
             priceCurrency: 'TRY',
             totalPrice:
-              checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser
+              checkoutDataQuery?.data?.data?.viewBag.SummaryViewDataResponser
                 .summaryResponse.totalPrice,
             optionalServices,
           },
@@ -72,5 +74,64 @@ export const useCheckoutMethods = () => {
     },
   })
 
-  return { checkoutDataQuery, baggageMutation }
+  const earlyReservationInsuranceMutation = useMutation({
+    mutationKey: ['early-reservation-mutation'],
+    mutationFn: async (isChecked: boolean) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: `api/product/${isChecked ? 'addHotelWarranty' : 'removeHotelWarranty'}`,
+          method: 'post',
+          data: {
+            promationText,
+            searchToken,
+            sessionToken,
+            productKey,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            moduleName: 'HOTEL',
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            totalPrice:
+              checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser
+                .summaryResponse.totalPrice,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  const partialPaymentMutation = useMutation({
+    mutationKey: ['early-reservation-mutation'],
+    mutationFn: async (isChecked: boolean) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: `api/promotion/${isChecked ? 'addHotelPartialPayment' : 'removeHotelPartialPayment'}`,
+          method: 'post',
+          data: {
+            promationText,
+            searchToken,
+            sessionToken,
+            productKey,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            moduleName: 'HOTEL',
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            totalPrice:
+              checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser
+                .summaryResponse.totalPrice,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  return {
+    checkoutDataQuery,
+    baggageMutation,
+    earlyReservationInsuranceMutation,
+    partialPaymentMutation,
+  }
 }

@@ -153,14 +153,12 @@ const PaymentPage = () => {
 
   if (checkoutQuery.isLoading) {
     return (
-      <div className='container py-5'>
-        <Stack gap={12} className='max-w-[600px]'>
-          <Skeleton height={20} radius='xl' />
-          <Skeleton height={20} w={'80%'} radius='xl' />
-          <Skeleton height={16} radius='xl' w={'75%'} />
-          <Skeleton height={10} width='60%' radius='xl' />
-        </Stack>
-      </div>
+      <Stack gap={12} className='max-w-[600px]'>
+        <Skeleton height={20} radius='xl' />
+        <Skeleton height={20} w={'80%'} radius='xl' />
+        <Skeleton height={16} radius='xl' w={'75%'} />
+        <Skeleton height={10} width='60%' radius='xl' />
+      </Stack>
     )
   }
 
