@@ -2,7 +2,7 @@
 
 import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearhResults'
 import { TourSearchEngine } from '@/modules/tour'
-import { Alert, Button, Skeleton } from '@mantine/core'
+import { Alert, Button, Container, Skeleton } from '@mantine/core'
 import { TourSearchResultItem } from './item'
 import { FiAlertTriangle } from 'react-icons/fi'
 import { TourSearchResultSearchItem } from '@/modules/tour/type'
@@ -87,7 +87,7 @@ const TourSearchResultClient = () => {
           <Skeleton h={6} className='absolute start-0 end-0 top-0' />
         </div>
       ) : null}
-      <div className='px-3 pt-10 lg:container'>
+      <Container className='pt-10'>
         <div className='grid gap-4 sm:grid-cols-12 md:gap-3'>
           <div className='sm:col-span-4 lg:col-span-3'>
             <div className='rounded-md border border-gray-300 p-3'>
@@ -121,7 +121,7 @@ const TourSearchResultClient = () => {
             })}
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   )
 }

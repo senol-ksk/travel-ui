@@ -193,3 +193,20 @@ export interface ClientDataType {
     segments: FlightDetailSegment[]
   }[]
 }
+
+export interface AirlineCodeServiceResponse {
+  Succeeded: boolean
+  Result: AirlineCode[]
+}
+
+export interface AirlineCode {
+  Id: ID
+  Code: string
+  CountryCode: string
+  Country: null
+  City: null
+  Value: {
+    LangCode: 'tr_TR' | 'en_US'
+    Value: string
+  }[]
+}

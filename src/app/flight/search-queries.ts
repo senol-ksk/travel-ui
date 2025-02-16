@@ -7,6 +7,7 @@ import { useTimeout } from '@mantine/hooks'
 
 import { flightSearchParams } from '@/modules/flight/searchParams'
 import type {
+  AirlineCodeServiceResponse,
   ClientDataType,
   FlightDetail,
   FlightDetailSegment,
@@ -21,11 +22,9 @@ import {
 } from '@/network'
 
 import { delayCodeExecution } from '@/libs/util'
-import { reservationParsers } from '../reservation/searchParams'
+import { reservationParsers } from '@/app/reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
-
-import dummyInternational from './search-results/intenational-dummy.json'
 
 const removeDuplicateFlights = (
   data: { segments: FlightDetailSegment[] }[]
@@ -280,9 +279,6 @@ const useSearchResultsQueries = () => {
 
           const seqIds = clientObj.segments.flatMap(
             (client) => client.freeVolatileData.Seq
-            // client.segments
-            //   .filter((segment) => isDomestic || segment.groupId === 0)
-            //   .map((segment) => segment.freeVolatileData.Seq)
           )
 
           const packages = clientObjArr.filter((client) => {
@@ -303,7 +299,6 @@ const useSearchResultsQueries = () => {
 
       const cleanData = removeDuplicateFlights(clientData) as ClientDataType[]
 
-      // console.log(clientData)
       return cleanData
     },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
@@ -359,11 +354,46 @@ const useSearchResultsQueries = () => {
       }
     },
   })
+
+  const airlineQueryParamsCodeArr = () => {
+    return [
+      ...new Set(
+        searchResultsQuery?.data?.flatMap((item) =>
+          item.segments.map((item2) =>
+            item2.marketingAirline.code === item2.operatingAirline.code
+              ? item2.marketingAirline.code
+              : item2.marketingAirline.code
+          )
+        )
+      ),
+    ]
+  }
+
+  const getAirlineByCodelist = useQuery({
+    enabled: !!searchResultsQuery.data?.length,
+    queryKey: ['airline-code-list', airlineQueryParamsCodeArr().toString()],
+    queryFn: async () => {
+      const response = (await request({
+        url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairlinebycodelist',
+        params: {
+          l: 'tr_TR',
+          cl: airlineQueryParamsCodeArr().toString(),
+        },
+      })) as AirlineCodeServiceResponse
+
+      return response
+    },
+    select(query) {
+      return query.Result
+    },
+  })
+
   return {
     searchResultsQuery,
     submitFlightData,
     searchParams,
     searchSessionTokenQuery,
+    getAirlineByCodelist,
   }
 }
 

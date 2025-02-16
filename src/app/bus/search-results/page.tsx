@@ -1,6 +1,6 @@
 import { BusSearchResults } from '@/app/bus/search-results/search-results'
 import { BusSearchEngine } from '@/modules/bus'
-import { Skeleton } from '@mantine/core'
+import { Container, Skeleton } from '@mantine/core'
 import { Suspense } from 'react'
 
 const BusSearchResultsPage = () => {
@@ -13,9 +13,9 @@ const BusSearchResultsPage = () => {
       }
     >
       <div className='border-b py-4'>
-        <div className='lg:container'>
+        <Container>
           <BusSearchEngine />
-        </div>
+        </Container>
       </div>
       <BusSearchResults />
     </Suspense>

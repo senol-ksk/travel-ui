@@ -1,9 +1,20 @@
-import { DEFAULT_THEME, mergeMantineTheme } from '@mantine/core'
+import { DEFAULT_THEME, mergeMantineTheme, rem } from '@mantine/core'
 
 import { fonts } from './fonts'
 
-const mantineTheme = mergeMantineTheme(DEFAULT_THEME, {
-  ...fonts,
-})
+const mantineTheme = mergeMantineTheme(
+  DEFAULT_THEME,
+
+  {
+    ...fonts,
+    components: {
+      Container: {
+        defaultProps: {
+          size: rem(1200),
+        },
+      },
+    },
+  }
+)
 
 export { mantineTheme }

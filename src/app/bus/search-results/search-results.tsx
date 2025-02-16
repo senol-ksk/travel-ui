@@ -1,7 +1,7 @@
 'use client'
 
 import { BusSearchItem } from './components/search-item'
-import { Alert, Button, Drawer, Skeleton } from '@mantine/core'
+import { Alert, Button, Container, Drawer, Skeleton } from '@mantine/core'
 import { useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTransitionRouter } from 'next-view-transitions'
@@ -110,42 +110,44 @@ const BusSearchResults: React.FC = () => {
           </div>
         ) : null}
         <div className='@container pt-5 md:pt-10'>
-          <div className='grid gap-4 md:grid-cols-4 md:gap-3 lg:container'>
-            <div className='relative md:col-span-1'>
-              <div className='rounded-md border border-gray-300 p-3'>
-                Filter section
+          <Container>
+            <div className='grid gap-4 md:grid-cols-4 md:gap-3'>
+              <div className='relative md:col-span-1'>
+                <div className='rounded-md border border-gray-300 p-3'>
+                  Filter section
+                </div>
+                <Skeleton
+                  w='100%'
+                  h={'100%'}
+                  top={0}
+                  pos={'absolute'}
+                  mah={150}
+                  radius={'md'}
+                  visible={searchResults.isLoading}
+                />
               </div>
-              <Skeleton
-                w='100%'
-                h={'100%'}
-                top={0}
-                pos={'absolute'}
-                mah={150}
-                radius={'md'}
-                visible={searchResults.isLoading}
-              />
-            </div>
-            <div className='grid gap-4 md:col-span-3'>
-              {searchResultPages?.map((page) =>
-                page?.searchResults.map((searchResults) =>
-                  searchResults.items
-                    .sort(
-                      (a, b) =>
-                        a.bus.internetPrice.value - b.bus.internetPrice.value
-                    )
-                    .map((searchItem) => {
-                      return (
-                        <BusSearchItem
-                          key={searchItem.key}
-                          searchItem={searchItem}
-                          onSelect={handleBusSeatSelect}
-                        />
+              <div className='grid gap-4 md:col-span-3'>
+                {searchResultPages?.map((page) =>
+                  page?.searchResults.map((searchResults) =>
+                    searchResults.items
+                      .sort(
+                        (a, b) =>
+                          a.bus.internetPrice.value - b.bus.internetPrice.value
                       )
-                    })
-                )
-              )}
+                      .map((searchItem) => {
+                        return (
+                          <BusSearchItem
+                            key={searchItem.key}
+                            searchItem={searchItem}
+                            onSelect={handleBusSeatSelect}
+                          />
+                        )
+                      })
+                  )
+                )}
+              </div>
             </div>
-          </div>
+          </Container>
         </div>
       </div>
       <Drawer

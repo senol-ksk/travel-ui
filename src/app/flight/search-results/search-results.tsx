@@ -2,8 +2,20 @@
 
 import { useSearchResultsQueries } from '../search-queries'
 import { FlightSearchResultsOneWayDomestic } from './domestic-flight'
-import { Button, Drawer, Loader, Modal, Skeleton } from '@mantine/core'
-import { ClientDataType, FlightDetailSegment, FlightFareInfo } from '../type'
+import {
+  Button,
+  Container,
+  Drawer,
+  Loader,
+  Modal,
+  Skeleton,
+} from '@mantine/core'
+import {
+  AirlineCode,
+  ClientDataType,
+  FlightDetailSegment,
+  FlightFareInfo,
+} from '../type'
 import { useMemo, useRef, useState } from 'react'
 import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
 
@@ -16,8 +28,12 @@ type SelectedPackageStateProps = {
 }
 
 const FlightSearchView = () => {
-  const { searchResultsQuery, searchSessionTokenQuery, submitFlightData } =
-    useSearchResultsQueries()
+  const {
+    searchResultsQuery,
+    searchSessionTokenQuery,
+    submitFlightData,
+    getAirlineByCodelist,
+  } = useSearchResultsQueries()
   const [isNextFlightVisible, setIsNextFlightVisible] = useState(false)
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
     SelectedPackageStateProps[] | undefined | null
@@ -96,83 +112,103 @@ const FlightSearchView = () => {
           </div>
         </div>
       ) : null}
-      <div className='grid px-3 py-5 md:grid-cols-4 md:gap-3 md:py-9 lg:container'>
-        <div className='md:col-span-1'>
-          Filter section
-          <div className='rounded-md border border-gray-300 p-3'>
-            <div className='pb-3'>Aktarma</div>
-            {/* <Stack>
+      <Container>
+        <div className='grid py-5 md:grid-cols-4 md:gap-3 md:py-9'>
+          <div className='md:col-span-1'>
+            Filter section
+            <div className='rounded-md border border-gray-300 p-3'>
+              <div className='pb-3'>Aktarma</div>
+              {/* <Stack>
               <Checkbox label='Aktarmasız' />
               <Checkbox label='1 Aktarma' />
             </Stack> */}
+            </div>
+          </div>
+          <div className='md:col-span-3' ref={targetRef}>
+            {searchResults?.length && `Toplam Sonuç `}
+
+            {searchResults?.length
+              ? isDomestic
+                ? isNextFlightVisible
+                  ? `${searchResults?.filter((item) => item.fareInfo.groupId === 1).length}`
+                  : `${searchResults?.filter((item) => item.fareInfo.groupId === 0).length}`
+                : `${searchResults?.length}`
+              : null}
+            <div
+              className='grid gap-3'
+              style={{
+                contentVisibility: 'auto',
+              }}
+            >
+              {isDomestic
+                ? !isNextFlightVisible
+                  ? searchResults
+                      ?.filter((item) => item.fareInfo.groupId === 0)
+                      ?.map((result) => {
+                        return (
+                          <FlightSearchResultsOneWayDomestic
+                            detailSegments={result.segments}
+                            details={result.details}
+                            fareInfo={result.fareInfo}
+                            onSelect={() => {
+                              // openPackageDrawer()
+
+                              handleFlightSelect(result)
+                            }}
+                            key={result.fareInfo.key}
+                          />
+                        )
+                      })
+                  : searchResults
+                      ?.filter((item) => item.fareInfo.groupId === 1)
+                      ?.map((result) => {
+                        // const airlineValue = getAirlineByCodelist.data?.find(airline => airline.Code === result.segments)
+                        return (
+                          <FlightSearchResultsOneWayDomestic
+                            // airlineValues={getAirlineByCodelist.data}
+                            detailSegments={result.segments}
+                            details={result.details}
+                            fareInfo={result.fareInfo}
+                            onSelect={() => {
+                              // openPackageDrawer()
+
+                              handleFlightSelect(result)
+                            }}
+                            key={result.fareInfo.key}
+                          />
+                        )
+                      })
+                : searchResults?.map((result) => {
+                    const segmentAirlines = result.segments.map((item) =>
+                      item.marketingAirline.code === item.operatingAirline.code
+                        ? item.marketingAirline.code
+                        : item.operatingAirline.code
+                    )
+
+                    const airlineValues: AirlineCode[] | undefined =
+                      getAirlineByCodelist?.data?.filter((airlineObj) =>
+                        segmentAirlines.find(
+                          (segment) => segment === airlineObj.Code
+                        )
+                      )
+
+                    return (
+                      <FlightSearchResultsInternational
+                        airlineValues={airlineValues}
+                        key={result.fareInfo.key}
+                        detailSegments={result.segments}
+                        details={result.details}
+                        fareInfo={result.fareInfo}
+                        onSelect={() => {
+                          handleFlightSelect(result)
+                        }}
+                      />
+                    )
+                  })}
+            </div>
           </div>
         </div>
-        <div className='md:col-span-3' ref={targetRef}>
-          {searchResults?.length && `Toplam Sonuç `}
-
-          {searchResults?.length
-            ? isDomestic
-              ? isNextFlightVisible
-                ? `${searchResults?.filter((item) => item.fareInfo.groupId === 1).length}`
-                : `${searchResults?.filter((item) => item.fareInfo.groupId === 0).length}`
-              : `${searchResults?.length}`
-            : null}
-          <div
-            className='grid gap-3'
-            style={{
-              contentVisibility: 'auto',
-            }}
-          >
-            {isDomestic
-              ? !isNextFlightVisible
-                ? searchResults
-                    ?.filter((item) => item.fareInfo.groupId === 0)
-                    ?.map((result) => {
-                      return (
-                        <FlightSearchResultsOneWayDomestic
-                          detailSegments={result.segments}
-                          details={result.details}
-                          fareInfo={result.fareInfo}
-                          onSelect={() => {
-                            // openPackageDrawer()
-
-                            handleFlightSelect(result)
-                          }}
-                          key={result.fareInfo.key}
-                        />
-                      )
-                    })
-                : searchResults
-                    ?.filter((item) => item.fareInfo.groupId === 1)
-                    ?.map((result) => {
-                      return (
-                        <FlightSearchResultsOneWayDomestic
-                          detailSegments={result.segments}
-                          details={result.details}
-                          fareInfo={result.fareInfo}
-                          onSelect={() => {
-                            // openPackageDrawer()
-
-                            handleFlightSelect(result)
-                          }}
-                          key={result.fareInfo.key}
-                        />
-                      )
-                    })
-              : searchResults?.map((item) => (
-                  <FlightSearchResultsInternational
-                    key={item.fareInfo.key}
-                    detailSegments={item.segments}
-                    details={item.details}
-                    fareInfo={item.fareInfo}
-                    onSelect={() => {
-                      handleFlightSelect(item)
-                    }}
-                  />
-                ))}
-          </div>
-        </div>
-      </div>
+      </Container>
       <Drawer
         opened={pacakgeDrawerOpened}
         onClose={() => {
@@ -192,66 +228,69 @@ const FlightSearchView = () => {
           </div>
         }
       >
-        <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
-          {selectedFlightItemPackages &&
-            selectedFlightItemPackages.length &&
-            selectedFlightItemPackages?.map((selectedPackage) => {
-              return (
-                <div
-                  key={selectedPackage.flightFareInfo.key}
-                  className='flex flex-col rounded border p-2 md:p-3'
-                >
-                  <div className='flex h-full flex-col gap-3'>
-                    <div className='text-lg font-semibold'>
-                      {formatCurrency(
-                        selectedPackage.flightFareInfo.totalPrice.value
-                      )}
-                    </div>
-                    <div>
-                      <div className='pb-2 font-semibold capitalize'>
-                        {(() => {
-                          switch (
-                            selectedPackage.flightDetailSegment.freeVolatileData
-                              .BrandName
-                          ) {
-                            case 'SUPER_ECO':
-                              return 'Light'
-                            case 'ECO':
-                              return 'Süper Eko'
-                            case 'ADVANTAGE':
-                              return 'Avantaj'
-                            case 'EXTRA':
-                              return 'Comfort Flex'
-                            default:
-                              return selectedPackage.flightDetailSegment
+        <Container>
+          <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
+            {selectedFlightItemPackages &&
+              selectedFlightItemPackages.length &&
+              selectedFlightItemPackages?.map((selectedPackage) => {
+                return (
+                  <div
+                    key={selectedPackage.flightFareInfo.key}
+                    className='flex flex-col rounded border p-2 md:p-3'
+                  >
+                    <div className='flex h-full flex-col gap-3'>
+                      <div className='text-lg font-semibold'>
+                        {formatCurrency(
+                          selectedPackage.flightFareInfo.totalPrice.value
+                        )}
+                      </div>
+                      <div>
+                        <div className='pb-2 font-semibold capitalize'>
+                          {(() => {
+                            switch (
+                              selectedPackage.flightDetailSegment
                                 .freeVolatileData.BrandName
-                          }
-                        })()}
+                            ) {
+                              case 'SUPER_ECO':
+                                return 'Light'
+                              case 'ECO':
+                                return 'Süper Eko'
+                              case 'ADVANTAGE':
+                                return 'Avantaj'
+                              case 'EXTRA':
+                                return 'Comfort Flex'
+                              default:
+                                return selectedPackage.flightDetailSegment
+                                  .freeVolatileData.BrandName
+                            }
+                          })()}
+                        </div>
+                      </div>
+                      <div className='mt-auto'>
+                        <Button
+                          type='button'
+                          onClick={() => {
+                            handlePackageSelect(selectedPackage)
+                          }}
+                        >
+                          Seç
+                        </Button>
                       </div>
                     </div>
-                    <div className='mt-auto'>
-                      <Button
-                        type='button'
-                        onClick={() => {
-                          handlePackageSelect(selectedPackage)
-                        }}
-                      >
-                        Seç
-                      </Button>
-                    </div>
                   </div>
-                </div>
-              )
-            })}
-        </div>
+                )
+              })}
+          </div>
+        </Container>
       </Drawer>
       <Modal
         opened={isFlightSubmiting}
         onClose={() => {}}
         withCloseButton={false}
         centered
+        radius={'xl'}
       >
-        <div className='flex items-center justify-center gap-4'>
+        <div className='flex items-center justify-center gap-4 p-7'>
           <div>
             <Loader />
           </div>

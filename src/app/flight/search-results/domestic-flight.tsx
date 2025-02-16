@@ -3,6 +3,7 @@ import { FlightDetail, FlightDetailSegment, FlightFareInfo } from '../type'
 import { Button, Divider } from '@mantine/core'
 import dayjs from 'dayjs'
 import { AirlineLogo } from '@/components/airline-logo'
+import { useSearchResultsQueries } from '../search-queries'
 
 type IProps = {
   fareInfo: FlightFareInfo
@@ -46,7 +47,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           </div>
         </div>
         <div className='flex justify-center'>
-          <div className='text-sm text-gray-400'>
+          <div className='text-sm text-gray-500'>
             {detailSegments.length > 1
               ? `${detailSegments.length - 1} Aktarma`
               : 'Aktarmasız'}

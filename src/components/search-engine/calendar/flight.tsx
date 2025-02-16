@@ -95,7 +95,7 @@ const FlightCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='fixed start-0 end-0 top-0 bottom-0 z-50 sm:p-20 md:absolute md:start-[-240px] md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
+              className='fixed start-0 end-0 top-0 bottom-0 z-50 mx-auto sm:w-[25rem] md:absolute md:start-[-75px] md:end-auto md:bottom-auto md:w-[35rem] lg:w-[40rem]'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -210,7 +210,7 @@ const FlightCalendar: React.FC<Props> = ({
 
       {containerTransitionState && (
         <Portal>
-          <div className='bg-opacity-50 fixed start-0 end-0 top-0 bottom-0 bg-black md:hidden' />
+          <div className='fixed start-0 end-0 top-0 bottom-0 bg-black/50 md:hidden' />
         </Portal>
       )}
     </Provider>

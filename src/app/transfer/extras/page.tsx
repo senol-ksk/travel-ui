@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Checkbox,
+  Container,
   Divider,
   Skeleton,
   Textarea,
@@ -237,202 +238,207 @@ export default function Page() {
     <Suspense>
       <form onSubmit={formActions.handleSubmit(handleSubmit)}>
         <div className='@container'>
-          <div className='grid grid-cols-12 items-baseline gap-4 p-5 @lg:container @lg:max-w-screen-md'>
-            <div className='col-span-12 rounded-md border p-3 md:col-span-8'>
-              <div>
-                <Title className='text-md @lg:text-xl' order={3}>
-                  Alınış Yeri - {transferData?.selectResponse.pickupPointName}
-                </Title>
-                <div className='grid gap-4 py-4'>
-                  <div>
-                    <Controller
-                      control={formActions.control}
-                      name='PickupInfo'
-                      defaultValue=''
-                      render={({ field, fieldState }) => {
-                        return (
+          <Container>
+            <div className='grid grid-cols-12 items-baseline gap-4 p-5'>
+              <div className='col-span-12 rounded-md border p-3 md:col-span-8'>
+                <div>
+                  <Title className='text-md @lg:text-xl' order={3}>
+                    Alınış Yeri - {transferData?.selectResponse.pickupPointName}
+                  </Title>
+                  <div className='grid gap-4 py-4'>
+                    <div>
+                      <Controller
+                        control={formActions.control}
+                        name='PickupInfo'
+                        defaultValue=''
+                        render={({ field, fieldState }) => {
+                          return (
+                            <TextInput
+                              {...field}
+                              label='Uçuş Numarası'
+                              error={fieldState.error?.message}
+                              description='Sürücünüz uçuşunuzun durumunu inceleyecektir'
+                              inputWrapperOrder={[
+                                'label',
+                                'input',
+                                'error',
+                                'description',
+                              ]}
+                            />
+                          )
+                        }}
+                      />
+                    </div>
+                    <div>
+                      <Controller
+                        control={formActions.control}
+                        name='PickupDescription'
+                        defaultValue=''
+                        render={({ field, fieldState }) => {
+                          return (
+                            <Textarea
+                              {...field}
+                              error={fieldState.error?.message}
+                              label='Not'
+                              description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
+                              inputWrapperOrder={[
+                                'label',
+                                'input',
+                                'error',
+                                'description',
+                              ]}
+                            />
+                          )
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <Title className='text-md @lg:text-xl' order={3}>
+                    Bırakılış Yeri -{' '}
+                    {transferData?.selectResponse.dropPointName}
+                  </Title>
+                  <div className='grid gap-4 py-4'>
+                    <div>
+                      <Controller
+                        control={formActions.control}
+                        name='DropInfo'
+                        defaultValue=''
+                        render={({ field, fieldState }) => (
                           <TextInput
                             {...field}
-                            label='Uçuş Numarası'
+                            label='Alınış Yeri Bilgisi'
                             error={fieldState.error?.message}
-                            description='Sürücünüz uçuşunuzun durumunu inceleyecektir'
+                            description='Adres Bilgisi'
                             inputWrapperOrder={[
                               'label',
-                              'input',
                               'error',
+                              'input',
                               'description',
                             ]}
                           />
-                        )
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <Controller
-                      control={formActions.control}
-                      name='PickupDescription'
-                      defaultValue=''
-                      render={({ field, fieldState }) => {
-                        return (
+                        )}
+                      />
+                    </div>
+                    <div>
+                      <Controller
+                        control={formActions.control}
+                        name='DropDescription'
+                        defaultValue=''
+                        render={({ field }) => (
                           <Textarea
                             {...field}
-                            error={fieldState.error?.message}
                             label='Not'
                             description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
                             inputWrapperOrder={[
                               'label',
-                              'input',
                               'error',
+                              'input',
                               'description',
                             ]}
                           />
-                        )
-                      }}
-                    />
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <Title className='text-md @lg:text-xl' order={3}>
-                  Bırakılış Yeri - {transferData?.selectResponse.dropPointName}
-                </Title>
-                <div className='grid gap-4 py-4'>
-                  <div>
-                    <Controller
-                      control={formActions.control}
-                      name='DropInfo'
-                      defaultValue=''
-                      render={({ field, fieldState }) => (
-                        <TextInput
-                          {...field}
-                          label='Alınış Yeri Bilgisi'
-                          error={fieldState.error?.message}
-                          description='Adres Bilgisi'
-                          inputWrapperOrder={[
-                            'label',
-                            'error',
-                            'input',
-                            'description',
-                          ]}
-                        />
-                      )}
-                    />
-                  </div>
-                  <div>
-                    <Controller
-                      control={formActions.control}
-                      name='DropDescription'
-                      defaultValue=''
-                      render={({ field }) => (
-                        <Textarea
-                          {...field}
-                          label='Not'
-                          description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
-                          inputWrapperOrder={[
-                            'label',
-                            'error',
-                            'input',
-                            'description',
-                          ]}
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div>
-                <Title order={5}>
-                  Aşağıda istediğiniz ek hizmeti seçebilirsiniz.
-                </Title>
+                <div>
+                  <Title order={5}>
+                    Aşağıda istediğiniz ek hizmeti seçebilirsiniz.
+                  </Title>
 
-                <div className='py-5'>
-                  {transferData?.selectResponse.transferVehicle.transferData.bookDetail.extraServices.map(
-                    (extra, extraIndex, extraData) => {
-                      const lastItem = extraData.length - 1 === extraIndex
-                      return (
-                        <Fragment key={extra.id}>
-                          <div>
-                            <div className='flex justify-between'>
-                              <div>
+                  <div className='py-5'>
+                    {transferData?.selectResponse.transferVehicle.transferData.bookDetail.extraServices.map(
+                      (extra, extraIndex, extraData) => {
+                        const lastItem = extraData.length - 1 === extraIndex
+                        return (
+                          <Fragment key={extra.id}>
+                            <div>
+                              <div className='flex justify-between'>
+                                <div>
+                                  <Controller
+                                    control={formActions.control}
+                                    name={`Extras.${extraIndex}.isSelected`}
+                                    disabled={
+                                      extra.priceWithMarkup.amount === 0
+                                    }
+                                    render={({
+                                      field: { onChange },
+                                      fieldState,
+                                    }) => (
+                                      <Checkbox
+                                        onChange={(event) => {
+                                          handleExtraSelect(
+                                            extra,
+                                            event.target.checked
+                                          )
+                                          onChange(event)
+                                        }}
+                                        label={extra.title}
+                                        value={'' + extra.id}
+                                      />
+                                    )}
+                                  />
+                                  <input
+                                    type='hidden'
+                                    {...formActions.register(
+                                      `Extras.${extraIndex}.id`
+                                    )}
+                                    value={extra.id}
+                                  />
+                                </div>
+                                <div>
+                                  {formatCurrency(extra.priceWithMarkup.amount)}
+                                </div>
+                              </div>
+                              <div
+                                className='pt-3'
+                                hidden={
+                                  !formActions.watch(`Extras.${extraIndex}`)
+                                    ?.isSelected
+                                }
+                              >
                                 <Controller
                                   control={formActions.control}
-                                  name={`Extras.${extraIndex}.isSelected`}
-                                  disabled={extra.priceWithMarkup.amount === 0}
-                                  render={({
-                                    field: { onChange },
-                                    fieldState,
-                                  }) => (
-                                    <Checkbox
-                                      onChange={(event) => {
-                                        handleExtraSelect(
-                                          extra,
-                                          event.target.checked
-                                        )
-                                        onChange(event)
-                                      }}
-                                      label={extra.title}
-                                      value={'' + extra.id}
+                                  name={`Extras.${extraIndex}.description`}
+                                  defaultValue=''
+                                  render={({ field, fieldState }) => (
+                                    <TextInput
+                                      {...field}
+                                      error={fieldState.error?.message}
                                     />
                                   )}
                                 />
-                                <input
-                                  type='hidden'
-                                  {...formActions.register(
-                                    `Extras.${extraIndex}.id`
-                                  )}
-                                  value={extra.id}
-                                />
-                              </div>
-                              <div>
-                                {formatCurrency(extra.priceWithMarkup.amount)}
                               </div>
                             </div>
-                            <div
-                              className='pt-3'
-                              hidden={
-                                !formActions.watch(`Extras.${extraIndex}`)
-                                  ?.isSelected
-                              }
-                            >
-                              <Controller
-                                control={formActions.control}
-                                name={`Extras.${extraIndex}.description`}
-                                defaultValue=''
-                                render={({ field, fieldState }) => (
-                                  <TextInput
-                                    {...field}
-                                    error={fieldState.error?.message}
-                                  />
-                                )}
-                              />
-                            </div>
-                          </div>
-                          {!lastItem ? <Divider my={'md'} /> : null}
-                        </Fragment>
-                      )
-                    }
-                  )}
+                            {!lastItem ? <Divider my={'md'} /> : null}
+                          </Fragment>
+                        )
+                      }
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className='col-span-12 rounded-md border p-3 md:col-span-4'>
+                <div className='flex justify-between'>
+                  <div>Toplam Tutar</div>
+                  <div className='text-end text-lg font-semibold'>
+                    {formatCurrency(totalPriceState)}
+                  </div>
+                </div>
+                <div className='pt-2'>
+                  <Button
+                    type='submit'
+                    fullWidth
+                    loading={reservationPageMutation.isPending}
+                  >
+                    Devam et
+                  </Button>
                 </div>
               </div>
             </div>
-            <div className='col-span-12 rounded-md border p-3 md:col-span-4'>
-              <div className='flex justify-between'>
-                <div>Toplam Tutar</div>
-                <div className='text-end text-lg font-semibold'>
-                  {formatCurrency(totalPriceState)}
-                </div>
-              </div>
-              <div className='pt-2'>
-                <Button
-                  type='submit'
-                  fullWidth
-                  loading={reservationPageMutation.isPending}
-                >
-                  Devam et
-                </Button>
-              </div>
-            </div>
-          </div>
+          </Container>
         </div>
       </form>
     </Suspense>

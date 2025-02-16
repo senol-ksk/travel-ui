@@ -1,11 +1,19 @@
 import { formatCurrency } from '@/libs/util'
-import { FlightDetail, FlightDetailSegment, FlightFareInfo } from '../type'
-import { Button, Divider } from '@mantine/core'
+import {
+  AirlineCode,
+  FlightDetail,
+  FlightDetailSegment,
+  FlightFareInfo,
+} from '../type'
+import { Button, Divider, Skeleton } from '@mantine/core'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { AirlineLogo } from '@/components/airline-logo'
+import { useSearchResultsQueries } from '../search-queries'
+import { useMemo } from 'react'
 
 type IProps = {
+  airlineValues: AirlineCode[] | undefined
   fareInfo: FlightFareInfo
   details: FlightDetail[]
   detailSegments: FlightDetailSegment[]
@@ -14,6 +22,7 @@ type IProps = {
 }
 
 const FlightSearchResultsInternational: React.FC<IProps> = ({
+  airlineValues,
   fareInfo,
   details,
   detailSegments,
@@ -39,6 +48,15 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         const relatedDetailSegments = detailSegments.filter(
           (item) => detail.groupId === item.groupId
         )
+        const airlineText = airlineValues
+          ?.find(
+            (airline) =>
+              airline.Code === relatedDetailSegments[0].marketingAirline.code
+          )
+          ?.Value.find((item) => item.LangCode === 'tr_TR')
+
+        // console.log(airlineText)
+
         return (
           <div className='p-3' key={detail.key}>
             <div className='flex items-center gap-3 pb-2'>
@@ -49,7 +67,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                   height={36}
                 />
               </div>
-              <div>{relatedDetailSegments[0].marketingAirline.code}</div>
+              <div className='min-[200px] relative'>{airlineText?.Value}</div>
               <div>{relatedDetailSegments.at(0)?.flightNumber}</div>
             </div>
             <div className='flex items-center gap-2'>

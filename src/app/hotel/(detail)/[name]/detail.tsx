@@ -5,6 +5,7 @@ import {
   Alert,
   AspectRatio,
   Button,
+  Container,
   Image,
   Loader,
   LoadingOverlay,
@@ -127,111 +128,115 @@ const HotelDetailSection = () => {
   }
   return (
     <>
-      <div className='@container grid gap-3 p-2 py-4 lg:gap-5 2xl:container'>
-        <Title size={'xl'}>{hotel.name}</Title>
-        {hotel?.documents && hotel?.documents?.length > 0 && (
-          <div className='text-sm'>
-            <span>
-              Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
-            </span>
-            <strong>{hotel.documents.at(0)?.no}</strong>
+      <Container>
+        <div className='@container grid gap-3 p-2 py-4 lg:gap-5'>
+          <Title size={'xl'}>{hotel.name}</Title>
+          {hotel?.documents && hotel?.documents?.length > 0 && (
+            <div className='text-sm'>
+              <span>
+                Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
+              </span>
+              <strong>{hotel.documents.at(0)?.no}</strong>
+            </div>
+          )}
+          <div>
+            <AspectRatio ratio={1080 / 720} maw={300}>
+              <Image src={hotel.images.at(0)?.original} alt={hotel.name} />
+            </AspectRatio>
           </div>
-        )}
-        <div>
-          <AspectRatio ratio={1080 / 720} maw={300}>
-            <Image src={hotel.images.at(0)?.original} alt={hotel.name} />
-          </AspectRatio>
-        </div>
-        <div className='grid gap-3 @4xl:grid-cols-7'>
-          <div className='grid gap-3 @lg:gap-5 @4xl:col-span-5'>
-            <Title order={2} size={'lg'}>
-              Odanızı Seçin
-            </Title>
-            <div className='relative grid gap-3 @lg:gap-5'>
-              {(roomsQuery.isLoading ||
-                roomsQuery.data?.pages.at(0) === null) && (
-                <div>
-                  <div className='text-center text-gray-500'>
-                    Odalar yükleniyor
-                  </div>
-                  <div className='flex gap-2 rounded border p-2'>
-                    <Skeleton h={120} radius={'md'} />
-                    <Skeleton h={120} radius={'md'} />
-                    <Skeleton h={120} radius={'md'} />
-                  </div>
-                </div>
-              )}
-              {roomsQuery?.data?.pages.length === 0 && (
-                <div>
-                  <Alert color='red' title='Oda Sonçları Bulunamadı'>
-                    Oda kalmamış veya bir hata oldu. Tekrar deneyeniz.
-                  </Alert>
-                </div>
-              )}
-              {roomsQuery.data?.pages.map((page) => {
-                const roomDetails = page?.data?.hotelDetailResponse?.roomDetails
-                const roomGroups = page?.data?.hotelDetailResponse?.items
-
-                if (!roomDetails || !roomGroups?.length) {
-                  return null
-                }
-
-                return roomGroups?.map((roomGroup) => {
-                  return (
-                    <div key={roomGroup.key}>
-                      <HotelRoom
-                        roomGroup={roomGroup}
-                        roomDetails={roomDetails}
-                        onSelect={(selectedRoomGroup) => {
-                          handleRoomSelect({
-                            productKey: roomGroup.key,
-                            cancelWarranty: selectedRoomGroup.useCancelWarranty,
-                          })
-                        }}
-                        onInstallmentClick={(selectedRoomGroup) => {
-                          console.log(selectedRoomGroup)
-                          handleInstallment(selectedRoomGroup)
-                        }}
-                      />
+          <div className='grid gap-3 @4xl:grid-cols-7'>
+            <div className='grid gap-3 @lg:gap-5 @4xl:col-span-5'>
+              <Title order={2} size={'lg'}>
+                Odanızı Seçin
+              </Title>
+              <div className='relative grid gap-3 @lg:gap-5'>
+                {(roomsQuery.isLoading ||
+                  roomsQuery.data?.pages.at(0) === null) && (
+                  <div>
+                    <div className='text-center text-gray-500'>
+                      Odalar yükleniyor
                     </div>
-                  )
-                })
-              })}
-              {roomsQuery.hasNextPage && (
-                <div className='flex justify-center'>
-                  <Button
-                    type='button'
-                    loading={roomsQuery.isFetchingNextPage}
-                    onClick={() => {
-                      roomsQuery.fetchNextPage()
-                    }}
-                  >
-                    Daha Fazla Oda Göster
-                  </Button>
-                </div>
-              )}
-              <LoadingOverlay
-                visible={roomStateLoadingOverlayVisible}
-                zIndex={1000}
-                overlayProps={{ radius: 'sm', blur: 2 }}
-              />
+                    <div className='flex gap-2 rounded border p-2'>
+                      <Skeleton h={120} radius={'md'} />
+                      <Skeleton h={120} radius={'md'} />
+                      <Skeleton h={120} radius={'md'} />
+                    </div>
+                  </div>
+                )}
+                {roomsQuery?.data?.pages.length === 0 && (
+                  <div>
+                    <Alert color='red' title='Oda Sonçları Bulunamadı'>
+                      Oda kalmamış veya bir hata oldu. Tekrar deneyeniz.
+                    </Alert>
+                  </div>
+                )}
+                {roomsQuery.data?.pages.map((page) => {
+                  const roomDetails =
+                    page?.data?.hotelDetailResponse?.roomDetails
+                  const roomGroups = page?.data?.hotelDetailResponse?.items
+
+                  if (!roomDetails || !roomGroups?.length) {
+                    return null
+                  }
+
+                  return roomGroups?.map((roomGroup) => {
+                    return (
+                      <div key={roomGroup.key}>
+                        <HotelRoom
+                          roomGroup={roomGroup}
+                          roomDetails={roomDetails}
+                          onSelect={(selectedRoomGroup) => {
+                            handleRoomSelect({
+                              productKey: roomGroup.key,
+                              cancelWarranty:
+                                selectedRoomGroup.useCancelWarranty,
+                            })
+                          }}
+                          onInstallmentClick={(selectedRoomGroup) => {
+                            console.log(selectedRoomGroup)
+                            handleInstallment(selectedRoomGroup)
+                          }}
+                        />
+                      </div>
+                    )
+                  })
+                })}
+                {roomsQuery.hasNextPage && (
+                  <div className='flex justify-center'>
+                    <Button
+                      type='button'
+                      loading={roomsQuery.isFetchingNextPage}
+                      onClick={() => {
+                        roomsQuery.fetchNextPage()
+                      }}
+                    >
+                      Daha Fazla Oda Göster
+                    </Button>
+                  </div>
+                )}
+                <LoadingOverlay
+                  visible={roomStateLoadingOverlayVisible}
+                  zIndex={1000}
+                  overlayProps={{ radius: 'sm', blur: 2 }}
+                />
+              </div>
+              <div>
+                <Title order={5}>İletişim Bilgileri</Title>
+                <address>
+                  {hotel.address}
+                  <div>
+                    <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
+                  </div>
+                  <div>
+                    <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
+                  </div>
+                </address>
+              </div>
             </div>
-            <div>
-              <Title order={5}>İletişim Bilgileri</Title>
-              <address>
-                {hotel.address}
-                <div>
-                  <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
-                </div>
-                <div>
-                  <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
-                </div>
-              </address>
-            </div>
+            <div className='@4xl:col-span-2'>Side section</div>
           </div>
-          <div className='@4xl:col-span-2'>Side section</div>
         </div>
-      </div>
+      </Container>
       <Modal
         opened={roomStateModalOpened}
         onClose={closeRoomStateModal}

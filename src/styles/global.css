@@ -33,10 +33,10 @@ body {
   @apply text-sm;
 }
 
-@utility container {
-  @apply mx-auto;
-}
-
 @theme {
   --spacing: 0.25rem;
+}
+
+@utility container {
+  @apply mx-auto;
 }
