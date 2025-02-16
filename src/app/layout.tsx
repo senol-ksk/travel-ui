@@ -7,7 +7,8 @@ import { ViewTransitions } from 'next-view-transitions'
 import { Providers } from '@/app/providers'
 
 import Header from '@/components/header'
-import { theme } from '../theme'
+// import { theme } from '@/theme'
+import { mantineTheme } from '@/styles/mantine'
 
 import dayjs from 'dayjs'
 
@@ -39,7 +40,7 @@ export default function RootLayout({
 
         <body>
           <Providers>
-            <MantineProvider theme={theme} defaultColorScheme='light'>
+            <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
               <Header />
               {children}
             </MantineProvider>

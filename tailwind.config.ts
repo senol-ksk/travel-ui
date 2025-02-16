@@ -1,4 +1,4 @@
-import tailwindPresetMantine from 'tailwind-preset-mantine'
+// import tailwindPresetMantine from 'tailwind-preset-mantine'
 
 import type { Config } from 'tailwindcss'
 
@@ -15,6 +15,6 @@ const config: Config = {
       },
     },
   },
-  presets: [tailwindPresetMantine()],
+  // presets: [tailwindPresetMantine()],
 }
 export default config

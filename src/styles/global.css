@@ -1,14 +1,15 @@
-@layer theme, base, components, utilities;
+@layer theme, base, mantine, components, utilities;
 
-/* import tailwind */
 @import 'tailwindcss/theme.css' layer(theme);
-@import 'tailwindcss/preflight.css' layer(base);
+/* @import 'tailwindcss/preflight.css' layer(base); */
 @import 'tailwindcss/utilities.css' layer(utilities);
 
-/* import mantine */
-@import '@mantine/core/styles.layer.css' layer(utilities);
-@import '@mantine/dates/styles.layer.css' layer(utilities);
-@import '@mantine/notifications/styles.layer.css' layer(utilities);
+@import 'tailwind-preset-mantine';
+@import './theme.css';
+
+/* @import '@mantine/core/styles.layer.css'; */
+@import '@mantine/dates/styles.layer.css';
+@import '@mantine/notifications/styles.layer.css';
 
 @layer base {
   *,
@@ -20,14 +21,12 @@
   }
 }
 
+body {
+  @apply text-gray-700;
+}
 html,
 body {
   @apply h-full;
-}
-body {
-  /* @apply bg-gray-50; */
-  /* @apply antialiased; */
-  @apply text-gray-700;
 }
 
 .iti__selected-dial-code {
@@ -36,4 +35,8 @@ body {
 
 @utility container {
   @apply mx-auto;
+}
+
+@theme {
+  --spacing: 0.25rem;
 }
