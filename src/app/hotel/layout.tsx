@@ -1,12 +1,13 @@
 import { HotelSearchEngine } from '@/modules/hotel'
+import { Container } from '@mantine/core'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className='border-b'>
-        <div className='p-4 lg:container'>
+        <Container className='py-4'>
           <HotelSearchEngine />
-        </div>
+        </Container>
       </div>
       <div>{children}</div>
     </>

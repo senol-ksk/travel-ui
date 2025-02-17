@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Loader, Skeleton } from '@mantine/core'
+import { Container, Loader, Skeleton } from '@mantine/core'
 import { useTimeout } from '@mantine/hooks'
 import { createSerializer } from 'nuqs'
 
@@ -49,37 +49,39 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
       <div className='relative'>
         <div className='absolute start-0 end-0 top-0 h-[20] overflow-hidden'>
           {carSearchResult.hasNextPage ? (
-            <Skeleton className='w-full' h={13} />
+            <Skeleton className='w-full' h={10} />
           ) : null}
         </div>
 
-        <div className='pt-10 md:container'>
-          <div className='grid gap-4 md:grid-cols-4 md:gap-3'>
-            <div className='md:col-span-1'>
-              <div className='rounded-md border border-gray-300 p-3'>
-                Filter section
+        <Container>
+          <div className='py-10'>
+            <div className='grid gap-4 md:grid-cols-4 md:gap-3'>
+              <div className='md:col-span-1'>
+                <div className='rounded-md border border-gray-300 p-3'>
+                  Filter section
+                </div>
+              </div>
+              <div className='grid gap-4 md:col-span-3'>
+                {carSearchResult.data?.pages.map((carPage) => {
+                  return carPage.data.searchResults.map((searchResult) => {
+                    return searchResult.items
+                      ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
+                      .map((carData) => {
+                        return (
+                          <div key={carData.key}>
+                            <CarSearchResultItem
+                              item={carData}
+                              onSelect={handleCarSelect}
+                            />
+                          </div>
+                        )
+                      })
+                  })
+                })}
               </div>
             </div>
-            <div className='grid gap-4 md:col-span-3'>
-              {carSearchResult.data?.pages.map((carPage) => {
-                return carPage.data.searchResults.map((searchResult) => {
-                  return searchResult.items
-                    ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                    .map((carData) => {
-                      return (
-                        <div key={carData.key}>
-                          <CarSearchResultItem
-                            item={carData}
-                            onSelect={handleCarSelect}
-                          />
-                        </div>
-                      )
-                    })
-                })
-              })}
-            </div>
           </div>
-        </div>
+        </Container>
       </div>
     </div>
   )

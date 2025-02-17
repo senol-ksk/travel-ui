@@ -1,6 +1,13 @@
 'use client'
 
-import { Button, LoadingOverlay, Skeleton, Modal, Group } from '@mantine/core'
+import {
+  Button,
+  LoadingOverlay,
+  Skeleton,
+  Modal,
+  Group,
+  Container,
+} from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -246,78 +253,79 @@ const TourDetailClient = () => {
   return (
     <>
       <div className='border-b p-4'>
-        <div className='lg:container'>
+        <Container>
           <TourSearchEngine />
-        </div>
+        </Container>
       </div>
-      <div className='grid gap-4 p-4 lg:container lg:p-7'>
-        {!detailQuery.isLoading && !detailQuery.data ? (
-          <div>no data</div>
-        ) : detailQuery.isLoading || !detailQuery.data ? (
-          <div className='grid gap-4'>
-            <Skeleton h={70} radius={'md'} />
-            <Skeleton h={20} radius={'xl'} />
-            <Skeleton h={20} radius={'xl'} className='max-w-6xl' />
-          </div>
-        ) : (
-          <div className='@container'>
-            {detailQuery.data ? (
-              <div className='grid gap-4 md:grid-cols-12'>
-                <div className='col-span-12 md:col-span-8 lg:col-span-9'>
-                  <div className='rounded border p-3 @lg:p-5'>
-                    <TourDetail data={detailQuery.data} />
-                  </div>
-                </div>
-                <div className='col-span-12 md:col-span-4 lg:col-span-3'>
-                  <div className='relative'>
-                    <LoadingOverlay
-                      visible={calculateTotalPriceQuery.isPending}
-                      zIndex={1000}
-                      overlayProps={{ radius: 'sm', blur: 2 }}
-                      loaderProps={{ color: 'indigo', type: 'bars' }}
-                    />
+      <Container>
+        <div className='grid gap-4 py-4 lg:py-7'>
+          {!detailQuery.isLoading && !detailQuery.data ? (
+            <div>no data</div>
+          ) : detailQuery.isLoading || !detailQuery.data ? (
+            <div className='grid gap-4'>
+              <Skeleton h={70} radius={'md'} />
+              <Skeleton h={20} radius={'xl'} />
+              <Skeleton h={20} radius={'xl'} className='max-w-6xl' />
+            </div>
+          ) : (
+            <div className='@container'>
+              {detailQuery.data ? (
+                <div className='grid gap-4 md:grid-cols-12'>
+                  <div className='col-span-12 md:col-span-8 lg:col-span-9'>
                     <div className='rounded border p-3 @lg:p-5'>
-                      <TourDetailPriceSection
-                        calculatedTotalPrice={
-                          calculateTotalPriceQuery.data?.success &&
-                          typeof calculateTotalPriceQuery.data?.data?.value
-                            .value === 'number'
-                            ? calculateTotalPriceQuery.data?.data?.value.value
-                            : 0
-                        }
-                        data={detailQuery.data}
-                        onPassengerChange={setPassengers}
+                      <TourDetail data={detailQuery.data} />
+                    </div>
+                  </div>
+                  <div className='col-span-12 md:col-span-4 lg:col-span-3'>
+                    <div className='relative'>
+                      <LoadingOverlay
+                        visible={calculateTotalPriceQuery.isPending}
+                        zIndex={1000}
+                        overlayProps={{ radius: 'sm', blur: 2 }}
+                        loaderProps={{ color: 'indigo', type: 'bars' }}
                       />
-                      <div className='py-4'>
-                        <Button
-                          type='button'
-                          fullWidth
-                          size='lg'
-                          disabled={
-                            !calculateTotalPriceQuery.data?.success ||
-                            extraServicesMutation.isPending
+                      <div className='rounded border p-3 @lg:p-5'>
+                        <TourDetailPriceSection
+                          calculatedTotalPrice={
+                            calculateTotalPriceQuery.data?.success &&
+                            typeof calculateTotalPriceQuery.data?.data?.value
+                              .value === 'number'
+                              ? calculateTotalPriceQuery.data?.data?.value.value
+                              : 0
                           }
-                          loading={extraServicesMutation.isPending}
-                          onClick={() => {
-                            extraServicesMutation.mutate()
-                          }}
-                        >
-                          Rezervasyon Yap
-                        </Button>
+                          data={detailQuery.data}
+                          onPassengerChange={setPassengers}
+                        />
+                        <div className='py-4'>
+                          <Button
+                            type='button'
+                            fullWidth
+                            size='lg'
+                            disabled={
+                              !calculateTotalPriceQuery.data?.success ||
+                              extraServicesMutation.isPending
+                            }
+                            loading={extraServicesMutation.isPending}
+                            onClick={() => {
+                              extraServicesMutation.mutate()
+                            }}
+                          >
+                            Rezervasyon Yap
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div>no data</div>
-            )}
-          </div>
-        )}
-      </div>
+              ) : (
+                <div>no data</div>
+              )}
+            </div>
+          )}
+        </div>
+      </Container>
       <Modal
         opened={isOpenExtraServicesModal}
-        // opened
         onClose={closeExtraServicesModal}
         title='Ekstra Servisler'
       >

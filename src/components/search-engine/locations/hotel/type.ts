@@ -2,13 +2,13 @@ type arrayNumber = Array<[number]>
 
 export type LocationResult = {
   Id: ID
-  ParentIds: arrayNumber
+  ParentIds: number[]
   Name: string
   Code: string
   CountryCode: string
-  Location: arrayNumber
-  Northeast: arrayNumber
-  Southwest: arrayNumber
+  Location: number[]
+  Northeast: number[]
+  Southwest: number[]
   Iata: string[]
   Type: number
   SubDestinations: LocationResult[]

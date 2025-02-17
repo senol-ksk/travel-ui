@@ -5,7 +5,7 @@ import type { RenderOptions } from '@testing-library/react'
 import { render as testingLibraryRender } from '@testing-library/react'
 import { MantineProvider } from '@mantine/core'
 
-import { theme } from '@/theme'
+import { mantineTheme } from '@/styles/mantine/index'
 
 vi.mock('next/font/google', () => ({
   Inter: () => ({
@@ -22,7 +22,7 @@ vi.mock('next-view-transitions', () => ({
 export function render(ui: React.ReactNode, props?: RenderOptions) {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
-      <MantineProvider theme={theme}>{children}</MantineProvider>
+      <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
     ),
     ...props,
   })

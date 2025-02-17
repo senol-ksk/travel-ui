@@ -1,4 +1,4 @@
-type arrayNumber = Array<[number]>
+type arrayNumber = Array<number>
 
 export type LocationResult = {
   Id: ID

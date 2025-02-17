@@ -30,7 +30,7 @@ export type PassengerValidationType = {
   registeredPassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
   type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
   hesCode: z.ZodString
-  moduleName: z.ZodOptional<z.ZodString>
+  // moduleName: z.ZodOptional<z.ZodString>
 }
 
 export enum ResponseStatus {

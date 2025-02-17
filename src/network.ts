@@ -201,5 +201,37 @@ export const getTransferSearchSessionToken = async () => {
     searchToken: response.data,
   }
 }
+export const getFlightSearchSessionToken = async () => {
+  if (!appToken) {
+    await getsecuritytoken()
+  }
+
+  const response = (await request({
+    url: process.env.NEXT_PUBLIC_OL_ROUTE,
+    method: 'post',
+    data: {
+      params: {
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
+        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      },
+      apiRoute: 'FlightService',
+      apiAction: 'api/Flight/GetNewSearchSessionToken',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+    },
+    headers: {
+      appToken,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+    },
+  })) as BusSearchSessionTokenResponse | null
+
+  if (!response) return null
+  return {
+    sessionToken: response.sessionToken,
+    searchToken: response.data,
+  }
+}
 
 export { request, serviceRequest }

@@ -1,19 +1,26 @@
+'use client'
+
 import type { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
 
-import { serviceRequest, ServiceResponse } from '@/network'
+import { serviceRequest } from '@/network'
 import { reservationParsers } from '@/app/reservation/searchParams'
 
-type CheckoutQueryFnType = () => UseQueryResult<
-  ServiceResponse<ProductPassengerApiResponseModel | undefined>
->
+const promationText = 'LXMZ2HB66SGAES'
 
-export const useCheckoutQuery: CheckoutQueryFnType = () => {
+export interface BaggageRequestDataModel {
+  uniqueIdentifier: string
+  code: string
+  data: string
+  releatedObjectId: string
+}
+
+export const useCheckoutMethods = () => {
   const [{ searchToken, sessionToken, productKey }] =
     useQueryStates(reservationParsers)
 
-  return useQuery({
+  const checkoutDataQuery = useQuery({
     queryKey: ['checkout', [searchToken, sessionToken, productKey]],
     queryFn: async ({ signal }) => {
       const response = await serviceRequest<ProductPassengerApiResponseModel>({
@@ -32,4 +39,99 @@ export const useCheckoutQuery: CheckoutQueryFnType = () => {
       return response
     },
   })
+
+  const baggageMutation = useMutation({
+    mutationKey: ['baggage-selection'],
+    mutationFn: async (optionalServices: BaggageRequestDataModel[]) => {
+      /* {
+        summaryResponse: FlightReservationSummary | HotelSummaryResponse
+      }*/
+      const response = await serviceRequest<
+        ProductPassengerApiResponseModel['viewBag']['SummaryViewDataResponser']
+      >({
+        axiosOptions: {
+          url: 'api/product/baggageUpdate',
+          method: 'post',
+          data: {
+            searchToken,
+            sessionToken,
+            productKey,
+            priceCurrency: 'TRY',
+            totalPrice:
+              checkoutDataQuery?.data?.data?.viewBag.SummaryViewDataResponser
+                .summaryResponse.totalPrice,
+            optionalServices,
+          },
+        },
+      })
+
+      return response
+    },
+    onSuccess(query) {
+      if (query?.success && query?.data?.summaryResponse) {
+        checkoutDataQuery.refetch()
+      }
+    },
+  })
+
+  const earlyReservationInsuranceMutation = useMutation({
+    mutationKey: ['early-reservation-mutation'],
+    mutationFn: async (isChecked: boolean) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: `api/product/${isChecked ? 'addHotelWarranty' : 'removeHotelWarranty'}`,
+          method: 'post',
+          data: {
+            promationText,
+            searchToken,
+            sessionToken,
+            productKey,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            moduleName: 'HOTEL',
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            totalPrice:
+              checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser
+                .summaryResponse.totalPrice,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  const partialPaymentMutation = useMutation({
+    mutationKey: ['early-reservation-mutation'],
+    mutationFn: async (isChecked: boolean) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: `api/promotion/${isChecked ? 'addHotelPartialPayment' : 'removeHotelPartialPayment'}`,
+          method: 'post',
+          data: {
+            promationText,
+            searchToken,
+            sessionToken,
+            productKey,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            moduleName: 'HOTEL',
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            totalPrice:
+              checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser
+                .summaryResponse.totalPrice,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  return {
+    checkoutDataQuery,
+    baggageMutation,
+    earlyReservationInsuranceMutation,
+    partialPaymentMutation,
+  }
 }

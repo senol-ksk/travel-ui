@@ -1,21 +1,26 @@
-import { z } from 'zod'
-import { PassengerValidationType } from '@/app/reservation/types'
-import { GenderEnums, PassengerTypesEnum } from '@/types/passengerViewModel'
-import { validTCKN } from '@/libs/tckn-validate'
 import dayjs from 'dayjs'
+import { z } from 'zod'
+
+import { isMobilePhone } from 'validator'
+
+import { type PassengerValidationType } from '@/app/reservation/types'
+import { PassengerTypesEnum } from '@/types/passengerViewModel'
+import { validTCKN } from '@/libs/tckn-validate'
+
+import intlTelInput from 'intl-tel-input/react'
 
 export type GeneralFormFieldSchemaTypes = {
   contactEmail: z.ZodString
   contactGSM: z.ZodEffects<z.ZodOptional<z.ZodString>>
-  moduleName: z.ZodString
+  // moduleName: z.ZodString
   isInPromoList: z.ZodBoolean
   fillBillingInfosCheck: z.ZodBoolean
 }
 
-let isPhoneNumberValid = false
-export const checkPhoneNumberIsValid = (value: boolean) => {
-  isPhoneNumberValid = value
-}
+// let isPhoneNumberValid = false
+// export const checkPhoneNumberIsValid = (value: boolean) => {
+//   isPhoneNumberValid = value
+// }
 const baseDateSchema = z.string().date()
 
 const passengerValidation = z.object({
@@ -51,7 +56,7 @@ const passengerValidation = z.object({
         passportValidityDate: z.string().optional().nullable(),
         hesCode: z.string(),
         model_PassengerId: z.string().or(z.number()),
-        moduleName: z.string().optional(),
+        // moduleName: z.string().optional(),
       })
       .superRefine((value, ctx) => {
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {
@@ -135,20 +140,86 @@ const passengerValidation = z.object({
   ),
 })
 
-const generalFormSchema = z.object<GeneralFormFieldSchemaTypes>({
-  contactEmail: z.string().email(),
-  contactGSM: z
-    .string()
-    .optional()
-    .refine(() => {
-      return isPhoneNumberValid
-    }),
-  moduleName: z.string(),
-  isInPromoList: z.boolean(),
-  fillBillingInfosCheck: z.boolean(),
+const phoneSchema = z
+  .string()
+  .optional()
+  .refine((value) => isMobilePhone(value ?? ''))
+// Define the individual billing schema with required fields
+const billingIndividualSchema = z.object({
+  billingInfoName: z.string().min(3).max(50),
+  name: z.string().min(3).max(50),
+  lastName: z.string().min(3).max(50),
+  title: z.union([z.literal('Bay'), z.literal('Bayan')]),
+  tcKimlikNo: z.string().refine((value) => validTCKN(value)),
+  countryCode: z.string(),
+  city: z.string().nonempty(),
+  district: z.string().nonempty(),
+  address: z.string().min(4).max(255),
+  email: z.string().email(),
+  mobilPhoneNumber: phoneSchema,
+})
+// Define the corporate billing schema with required fields
+const billingCorporateSchema = z.object({
+  billingInfoName: z.string().min(3).max(50),
+  title: z.string().nonempty(),
+  vergiDairesi: z.string().min(3).max(50),
+  vergiNo: z.string().min(3).max(50),
+  tcKimlikNo: z.string().refine((value) => validTCKN(value)),
+  countryCode: z.string(),
+  city: z.string().nonempty(),
+  district: z.string().nonempty(),
+  address: z.string().min(4).max(255),
+  email: z.string().email(),
+  phoneNumber: phoneSchema,
 })
 
-export const checkoutSchemaMerged = generalFormSchema.merge(passengerValidation)
+// General form schema
+const generalFormSchema = z.object({
+  contactEmail: z.string().email(),
+  contactGSM: phoneSchema,
+  // moduleName: z.string(),
+  isInPromoList: z.boolean(),
+  fillBillingInfosCheck: z.boolean(),
+  invoiceType: z.union([z.literal('0'), z.literal('1')]).optional(),
+  // individual is not optional anymore; we'll conditionally handle its validation
+  billingIndiviual: z
+    .unknown()
+    .or(billingIndividualSchema.partial().optional()), // We'll handle the validation conditionally in .refine()
+  billingCorporate: z.unknown().or(billingCorporateSchema.partial().optional()), // We'll handle the validation conditionally in .refine()
+})
+
+// Merging with passenger validation
+const checkoutSchemaBeforeRefine = generalFormSchema.merge(passengerValidation)
+
+// Refine the schema to enforce required fields in `individual` if `fillBillingInfosCheck` is true
+export const checkoutSchemaMerged = checkoutSchemaBeforeRefine.superRefine(
+  (data, ctx) => {
+    // When fillBillingInfosCheck is true, `individual` should match `billingSchemaIndividual`
+    if (data.fillBillingInfosCheck) {
+      // Check if `individual` exists and validate it with billingSchemaIndividual
+      // `0` means this is indivual billing type
+      if (data.invoiceType === '0') {
+        const results = billingIndividualSchema.safeParse(data.billingIndiviual)
+
+        return results.success
+          ? true
+          : results?.error?.issues.map((issue) => ctx.addIssue(issue))
+      }
+      if (data.invoiceType === '1') {
+        const corporateResults = billingCorporateSchema.safeParse(
+          data.billingCorporate
+        )
+
+        return corporateResults.success
+          ? true
+          : corporateResults?.error?.issues.map((issue) => ctx.addIssue(issue))
+      }
+    }
+
+    // If fillBillingInfosCheck is false, we don't need to validate `individual` at all
+    return true
+  }
+)
 
 export type PassengerSchemaType = z.infer<typeof passengerValidation>
 export type CheckoutSchemaMergedFieldTypes = z.infer<
