@@ -47,17 +47,27 @@ const BaggageSelect: React.FC<IProps> = ({ data, onChange, label }) => {
   const options: NativeSelectProps['data'] = dataWithDefaultValue.map(
     (item, itemIndex) => ({
       label: convertBaggageLabel(item.data),
-      value: '' + itemIndex,
+      value: '' + item.indexNo,
     })
   )
+
+  const selectedOption = (
+    dataWithDefaultValue.find((item) => item.selected)?.indexNo ??
+    noExtraBaggaeOption.indexNo
+  ).toString()
 
   return (
     <NativeSelect
       label={label}
-      defaultValue={'0'}
+      // default value is `indexNo` of data
+      defaultValue={selectedOption}
       data={options}
       onChange={({ currentTarget: { value } }) => {
-        onChange(dataWithDefaultValue[+value])
+        // find the selected item with `indexNo` comes from `value` and trigger `onChage` prop finding selected data
+        onChange(
+          dataWithDefaultValue.find((item) => item.indexNo === +value) ??
+            noExtraBaggaeOption
+        )
       }}
     />
   )

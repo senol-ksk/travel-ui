@@ -58,7 +58,6 @@ const FlightOptionalServices: React.FC<IProps> = ({
     passengerIndex: number
     flightLeg: number
   }) => {
-    console.log('recieved, ', baggageArgs)
     const hasItem = selectedBaggages.current.findIndex(
       (selectedBaggage) =>
         selectedBaggage.flightLeg === baggageArgs.flightLeg &&
@@ -77,22 +76,12 @@ const FlightOptionalServices: React.FC<IProps> = ({
       )
     }
 
-    // 1. passenger
-    // target => UniqueIdentifier=SSRItem_XBAG_XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-1__Service-1_XBagServiceDef1_BagAllowance1_ADT_SH1__0_1
-    // return => SSRItem_XBAG_XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-1__Service-1_XBagServiceDef1_BagAllowance1_ADT_SH1__1_1
-    // 2.passenger
-    // target => SSRItem_XBAG_XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-1__Service-1_XBagServiceDef1_BagAllowance1_ADT_SH1__0_2
-    // return => SSRItem_XBAG_XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-1__Service-1_XBagServiceDef1_BagAllowance1_ADT_SH1__1_2
-
     const baggageRequestArray: BaggageRequestDataModel[] =
       selectedBaggages.current.map((selectedBaggage) => {
         const { code, data, uniqueIdentifier } = selectedBaggage.baggageData
-
-        // "SSRItem_{0}_{1}",item.Code,item.UniqueIdentifier + "_0_" + dataId
         const uniqueIdentifierModified = `SSRItem_${code}_${uniqueIdentifier}_${selectedBaggage.flightLeg}_${selectedBaggage.passengerIndex + 1}`
-        // data=850.00|TRY|5|KG|XBAG_SAW_ADB_PC_ALaCarteBaggageOffer1_Offer-1__Service-1_XBagServiceDef1_BagAllowance1_ADT_SH1__0_1
         const modifiedData = `${data.replaceAll(':', '|')}${uniqueIdentifierModified}`
-        // debugger
+
         return {
           code,
           data: modifiedData,
