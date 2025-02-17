@@ -78,7 +78,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const [queryStrings] = useQueryStates(reservationParsers)
 
-  const { checkoutDataQuery } = useCheckoutMethods()
+  const { checkoutDataQuery, partialPaymentMutation } = useCheckoutMethods()
   const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
 
   const checkQueryData = useMemo(
@@ -516,16 +516,20 @@ export default function CheckoutPage() {
               }
             })()}
           </CheckoutCard>
-          <CheckoutCard>
-            <Coupon
-              loading={
-                revokeCouponMutation.isPending || applyCouponMutation.isPending
-              }
-              isCouponUsed={isCouponUsed}
-              onRevoke={handleCouponActions}
-              onCouponSubmit={handleCouponActions}
-            />
-          </CheckoutCard>
+          {!checkQueryData.data.viewBag.HotelCancelWarrantyPriceStatusModel
+            .hotelWarrantyDiscountSelected && (
+            <CheckoutCard>
+              <Coupon
+                loading={
+                  revokeCouponMutation.isPending ||
+                  applyCouponMutation.isPending
+                }
+                isCouponUsed={isCouponUsed}
+                onRevoke={handleCouponActions}
+                onCouponSubmit={handleCouponActions}
+              />
+            </CheckoutCard>
+          )}
           {moduleName.toLowerCase() === 'hotel' &&
             checkQueryData?.data?.viewBag.HotelCancelWarrantyPriceStatusModel &&
             checkQueryData?.data?.viewBag.HotelCancelWarrantyPriceStatusModel

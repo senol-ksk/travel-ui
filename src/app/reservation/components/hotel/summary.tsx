@@ -45,12 +45,12 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
         <Title order={3} fz='h4'>
           {hotel.name}
         </Title>
-        <address className='text-sm text-gray-500 not-italic'>
+        <address className='text-sm text-gray-600 not-italic'>
           {hotel.address}
         </address>
       </div>
 
-      <div className='text-sm text-gray-500'>
+      <div className='text-sm text-gray-600'>
         <div className='flex gap-2'>
           <div className='font-semibold'>Giriş Tarihi:</div>
           <div>{dayjs(roomGroup.checkInDate).format('DD.MM.YYYY')}</div>
