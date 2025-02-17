@@ -8,12 +8,12 @@ import { CheckoutCard } from '@/components/card'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import {
   FlightReservationSummary,
-  HotelSummaryResponse,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
 
 import { FlightSummary } from '@/app/reservation/components/flight/summary'
 import { HotelSummarySection } from '@/app/reservation/components/hotel/summary'
+import { CarReservationSummary } from '@/app/reservation/components/car/summary'
 
 const ReservationSummarySection = () => {
   const { checkoutDataQuery } = useCheckoutMethods()
@@ -56,6 +56,14 @@ const ReservationSummarySection = () => {
             case 'hotel':
               return (
                 <HotelSummarySection
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'carrental':
+              return (
+                <CarReservationSummary
                   data={
                     checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
                   }

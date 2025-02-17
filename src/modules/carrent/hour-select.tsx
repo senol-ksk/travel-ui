@@ -45,7 +45,7 @@ const CarHours: React.FC<IProps> = ({
           value: hour < 10 ? `0${hour}:00` : `${hour}:00`,
         }))}
         onChange={onChange}
-        defaultValue={defaultValue}
+        defaultValue={defaultValue ?? '00:00'}
       />
     </div>
   )
