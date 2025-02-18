@@ -87,14 +87,14 @@ const FlightSearchView = () => {
     closePackageDrawer()
 
     if (!tripKind) {
-      await submitFlightData.mutateAsync(data.flightFareInfo.key)
+      await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     }
 
     if (tripKind && !isNextFlightVisible) {
       scrollIntoView()
       setIsNextFlightVisible(true)
     } else {
-      await submitFlightData.mutateAsync(selectedFlightKeys.current.join(','))
+      await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
       selectedFlightKeys.current = []
     }
   }
@@ -145,14 +145,26 @@ const FlightSearchView = () => {
                   ? searchResults
                       ?.filter((item) => item.fareInfo.groupId === 0)
                       ?.map((result) => {
+                        const segmentAirlines = result.segments.map((item) =>
+                          item.marketingAirline.code ===
+                          item.operatingAirline.code
+                            ? item.marketingAirline.code
+                            : item.operatingAirline.code
+                        )
+
+                        const airlineValues: AirlineCode[] | undefined =
+                          getAirlineByCodelist?.data?.filter((airlineObj) =>
+                            segmentAirlines.find(
+                              (segment) => segment === airlineObj.Code
+                            )
+                          )
                         return (
                           <FlightSearchResultsOneWayDomestic
+                            airlineValues={airlineValues}
                             detailSegments={result.segments}
                             details={result.details}
                             fareInfo={result.fareInfo}
                             onSelect={() => {
-                              // openPackageDrawer()
-
                               handleFlightSelect(result)
                             }}
                             key={result.fareInfo.key}
@@ -162,10 +174,22 @@ const FlightSearchView = () => {
                   : searchResults
                       ?.filter((item) => item.fareInfo.groupId === 1)
                       ?.map((result) => {
-                        // const airlineValue = getAirlineByCodelist.data?.find(airline => airline.Code === result.segments)
+                        const segmentAirlines = result.segments.map((item) =>
+                          item.marketingAirline.code ===
+                          item.operatingAirline.code
+                            ? item.marketingAirline.code
+                            : item.operatingAirline.code
+                        )
+
+                        const airlineValues: AirlineCode[] | undefined =
+                          getAirlineByCodelist?.data?.filter((airlineObj) =>
+                            segmentAirlines.find(
+                              (segment) => segment === airlineObj.Code
+                            )
+                          )
                         return (
                           <FlightSearchResultsOneWayDomestic
-                            // airlineValues={getAirlineByCodelist.data}
+                            airlineValues={airlineValues}
                             detailSegments={result.segments}
                             details={result.details}
                             fareInfo={result.fareInfo}

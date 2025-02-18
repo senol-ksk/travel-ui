@@ -280,13 +280,23 @@ const useSearchResultsQueries = () => {
           const seqIds = clientObj.segments.flatMap(
             (client) => client.freeVolatileData.Seq
           )
+          const flightNumbersArr = clientObj.segments.flatMap(
+            (item) => item.flightNumber
+          )
 
           const packages = clientObjArr.filter((client) => {
             const currentSeqNos = client.segments.map((segment) => {
               return segment.freeVolatileData.Seq
             })
 
-            return JSON.stringify(currentSeqNos) === JSON.stringify(seqIds)
+            const flightNumbers = client.segments.filter((item) =>
+              flightNumbersArr.includes(item.flightNumber)
+            ).length
+
+            return (
+              JSON.stringify(currentSeqNos) === JSON.stringify(seqIds) &&
+              flightNumbers
+            )
           })
 
           return {
@@ -331,10 +341,10 @@ const useSearchResultsQueries = () => {
         axiosOptions: {
           url: '/api/flight/postKey',
           method: 'post',
-          params: {
+          data: {
             key,
-            session: searchSessionTokenQuery.data?.sessionToken,
-            search: searchSessionTokenQuery.data?.searchToken,
+            sessionToken: searchSessionTokenQuery.data?.sessionToken,
+            searchToken: searchSessionTokenQuery.data?.searchToken,
           },
         },
       })
@@ -359,11 +369,7 @@ const useSearchResultsQueries = () => {
     return [
       ...new Set(
         searchResultsQuery?.data?.flatMap((item) =>
-          item.segments.map((item2) =>
-            item2.marketingAirline.code === item2.operatingAirline.code
-              ? item2.marketingAirline.code
-              : item2.marketingAirline.code
-          )
+          item.segments.map((item2) => item2.marketingAirline.code)
         )
       ),
     ]

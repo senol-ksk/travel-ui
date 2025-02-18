@@ -32,18 +32,6 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
   return (
     <div className={clsx(`@container rounded-lg border border-gray-300`)}>
-      {/* <div>
-        <code>fareInfo</code>
-        <input defaultValue={JSON.stringify(fareInfo)} />
-      </div>
-      <div>
-        <code>details</code>
-        <input defaultValue={JSON.stringify(details)} />
-      </div>
-      <div>
-        <code>detailSegments</code>
-        <input defaultValue={JSON.stringify(detailSegments)} />
-      </div> */}
       {details.map((detail) => {
         const relatedDetailSegments = detailSegments.filter(
           (item) => detail.groupId === item.groupId
@@ -55,8 +43,6 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
           )
           ?.Value.find((item) => item.LangCode === 'tr_TR')
 
-        // console.log(airlineText)
-
         return (
           <div className='p-3' key={detail.key}>
             <div className='flex items-center gap-3 pb-2'>
@@ -67,7 +53,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                   height={36}
                 />
               </div>
-              <div className='min-[200px] relative'>{airlineText?.Value}</div>
+              <div>{airlineText?.Value}</div>
               <div>{relatedDetailSegments.at(0)?.flightNumber}</div>
             </div>
             <div className='flex items-center gap-2'>

@@ -48,8 +48,7 @@ const ReservationSummarySection = () => {
               return (
                 <FlightSummary
                   data={
-                    checkoutDataMemo?.viewBag.SummaryViewDataResponser
-                      .summaryResponse as FlightReservationSummary
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
                   }
                 />
               )
