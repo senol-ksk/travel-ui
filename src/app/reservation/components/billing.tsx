@@ -362,7 +362,9 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-6'>
                   <Input.Wrapper>
-                    <Input.Label htmlFor='mobilPhoneNumber'>GSM No</Input.Label>
+                    <Input.Label htmlFor='billingCorporate.phoneNumber'>
+                      GSM No
+                    </Input.Label>
                     <div
                       className='m_6c018570 mantine-Input-wrapper'
                       data-variant='default'
@@ -383,8 +385,8 @@ const BillingForm = () => {
                                 }
                               ),
                               'data-variant': 'default',
-                              id: 'billingCorporate.phoneNumber',
-                              name: 'billingCorporate.phoneNumber',
+                              id: field.name,
+                              name: field.name,
                             }}
                             initOptions={{
                               strictMode: true,

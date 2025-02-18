@@ -226,41 +226,40 @@ export const PassengerInformationForm: React.FC<IProps> = ({
           </Input.Wrapper>
         </div>
         <div>
-          <Input.Wrapper label='Ad'>
-            <Controller
-              control={methods.control}
-              name={`${namePrefix}.firstName`}
-              defaultValue={fieldProps.firstName ? fieldProps.firstName : ''}
-              render={({ field }) => {
-                return (
-                  <TextInput
-                    {...field}
-                    error={error?.firstName ? error?.firstName?.message : null}
-                    autoComplete='given-name'
-                  />
-                )
-              }}
-            />
-          </Input.Wrapper>
-        </div>
-        <div>
-          <Input.Wrapper label='Soyad'>
-            <Controller
-              control={methods.control}
-              name={`${namePrefix}.lastName`}
-              defaultValue={fieldProps.lastName}
-              render={({ field }) => (
+          <Controller
+            control={methods.control}
+            name={`${namePrefix}.firstName`}
+            defaultValue={fieldProps.firstName ? fieldProps.firstName : ''}
+            render={({ field }) => {
+              return (
                 <TextInput
                   {...field}
-                  error={error?.lastName ? error?.lastName.message : null}
-                  autoComplete='family-name'
+                  label='Ad'
+                  error={error?.firstName ? error?.firstName?.message : null}
+                  autoComplete='given-name'
                 />
-              )}
-            />
-          </Input.Wrapper>
+              )
+            }}
+          />
         </div>
         <div>
-          <Input.Wrapper label={'Doğum Tarihi'}>
+          <Controller
+            control={methods.control}
+            name={`${namePrefix}.lastName`}
+            defaultValue={fieldProps.lastName}
+            render={({ field }) => (
+              <TextInput
+                {...field}
+                label='Soyad'
+                error={error?.lastName ? error?.lastName.message : null}
+                autoComplete='family-name'
+              />
+            )}
+          />
+        </div>
+        <div>
+          <Input.Wrapper>
+            <Input.Label htmlFor={name_birthDate_day}>Doğum Tarihi</Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
                 control={methods.control}
@@ -268,6 +267,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    id={name_birthDate_day}
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -321,7 +321,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
           <input type='hidden' {...methods.register(name_birthDate)} readOnly />
         </div>
         <div>
-          <Input.Wrapper label='TC Kimlik No'>
+          <Input.Wrapper>
             <Controller
               control={methods.control}
               name={`${namePrefix}.citizenNo`}
@@ -329,6 +329,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               render={({ field }) => (
                 <TextInput
                   {...field}
+                  label='TC Kimlik No'
                   inputMode='numeric'
                   type='tel'
                   error={
@@ -409,7 +410,9 @@ export const PassengerInformationForm: React.FC<IProps> = ({
             />
           </div>
           <div>
-            <Input.Label>Pasaport Geçerlilik Tarihi</Input.Label>
+            <Input.Label htmlFor={`${namePrefix}_${name_passsportValid_day}`}>
+              Pasaport Geçerlilik Tarihi
+            </Input.Label>
             <Input.Wrapper className='grid grid-cols-3 gap-3'>
               <Controller
                 control={methods.control}
@@ -418,6 +421,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    id={`${namePrefix}_${name_passsportValid_day}`}
                     onChange={(event) => {
                       field.onChange(event)
                       handlePassportdateSelect(event, 'day')

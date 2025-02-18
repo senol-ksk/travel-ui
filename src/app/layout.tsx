@@ -4,17 +4,13 @@ import type { Metadata } from 'next'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import { ViewTransitions } from 'next-view-transitions'
 
-import { Providers } from '@/app/providers'
-
-import Header from '@/components/header'
-// import { theme } from '@/theme'
-import { mantineTheme } from '@/styles/mantine'
-
 import dayjs from 'dayjs'
-
 import 'dayjs/locale/tr'
-
 dayjs.locale('tr')
+
+import { Providers } from '@/app/providers'
+import Header from '@/components/header'
+import { mantineTheme } from '@/styles/mantine'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',

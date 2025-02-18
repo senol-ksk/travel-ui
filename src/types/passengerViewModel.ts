@@ -1,4 +1,4 @@
-import { CarSummaryResponse } from '@/app/reservation/types'
+import { BusSummaryResponse, CarSummaryResponse } from '@/app/reservation/types'
 
 export enum GenderEnumIndex {
   Male,
@@ -231,12 +231,13 @@ export type ProductPassengerApiResponseModel = {
       couponActive: boolean
     }
 
-    ModuleName: 'Flight' | 'Hotel' | 'CARRENTAL'
+    ModuleName: 'Flight' | 'Hotel' | 'CARRENTAL' | 'BUS'
     SummaryViewDataResponser: {
       summaryResponse:
         | FlightReservationSummary
         | HotelSummaryResponse
         | CarSummaryResponse
+        | BusSummaryResponse
     }
     PassengerInfoBackUrl: string
     FlightDetailToSearchReturnPath: null
