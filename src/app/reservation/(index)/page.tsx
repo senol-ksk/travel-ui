@@ -570,7 +570,7 @@ export default function CheckoutPage() {
           <CheckoutCard>
             <BillingForm />
           </CheckoutCard>
-          <TravelInsurancePackages />
+          {moduleName !== 'TRANSFER' && <TravelInsurancePackages />}
 
           <CheckoutCard>
             <div className='text-sm'>

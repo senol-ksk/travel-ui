@@ -1255,3 +1255,117 @@ export interface CarSummaryResponse {
   extraCharges: null
   financellDiscount: ServicePriceType
 }
+
+export interface TransferSummaryResponseViewDataResponser {
+  selectResponse: {
+    requestId: ID
+    selectedVehicleCount: number
+    extraServiceIds: null
+    extraServiceInfo: null
+    pickupPointName: string
+    pickupPointType: number
+    pickupLocationName: string
+    pickupDate: string
+    pickupInfo: string
+    pickupDescription: string
+    dropPointName: string
+    dropPointType: number
+    dropLocationName: string
+    dropInfo: string
+    dropDescription: string
+    adultPassengerCount: number
+    childrenPassengerCount: number
+    babyPassengerCount: number
+    transferVehicle: {
+      productKey: string
+      id: ID
+      partnerId: ID
+      vehicleName: string
+      vehicleType: number
+      vehicleTitle: string
+      transferInfo: {
+        transferMax: {
+          pax: string
+          suitcase: string
+        }
+        transferHour: {
+          booking: string
+          freeCancel: string
+          freeChange: string
+        }
+        vehiclePhotoUrl: string
+      }
+      extraServices: []
+      status: string
+      transferData: {
+        bookDetail: {
+          brmFactor: string
+          markupDetail: {
+            markupPercentAmount: string
+            markupPrice: null
+          }
+          priceWithoutMarkup: {
+            amount: number
+            transferCurrencyType: number
+          }
+          priceWithMarkup: {
+            amount: number
+            transferCurrencyType: number
+          }
+          suggestedVehicleCount: number
+          sortPrice: number
+          extraServices: {
+            id: string
+            code: string
+            title: string
+            description: string
+            priceWithoutMarkup: {
+              amount: number
+              transferCurrencyType: number
+            }
+            priceWithMarkup: {
+              amount: number
+              transferCurrencyType: number
+            }
+          }[]
+          buyServiceFee: number
+          sellServiceFee: number
+          sellBaseFareAddOn: number
+        }
+        selectedTransferDetail: null
+      }
+    }
+    sessionToken: string
+    traceId: null
+    isSucceeded: boolean
+    diagnostics: {
+      sessionToken: null
+      providerId: ID
+      providerName: string
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: null
+      traceId: null
+    }
+    eventMessages: []
+    appName: 'fulltrip.prod.webapp.html'
+    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+    logSessionToken: null
+    logSearchToken: null
+  }
+  bookingResponse: null
+  searchToken: 'F2212F1DC4A8A40CE0331219E633D7B27A166E6911DA1F2958B1D40B4E887F36'
+  sessionToken: 'A415CA28DF581F3BB0C8D719F45AF4790611068086DB9B4E30C07CB31678A6EB'
+  moduleName: 'Transfer'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: object
+  financellDiscount: ServicePriceType
+}

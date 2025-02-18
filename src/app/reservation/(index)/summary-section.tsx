@@ -15,6 +15,7 @@ import { FlightSummary } from '@/app/reservation/components/flight/summary'
 import { HotelSummarySection } from '@/app/reservation/components/hotel/summary'
 import { CarReservationSummary } from '@/app/reservation/components/car/summary'
 import { BusSummarySection } from '@/app/reservation/components/bus/summary'
+import { TransferSummary } from '../components/transfer/summary'
 
 const ReservationSummarySection = () => {
   const { checkoutDataQuery } = useCheckoutMethods()
@@ -72,6 +73,14 @@ const ReservationSummarySection = () => {
             case 'bus':
               return (
                 <BusSummarySection
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'transfer':
+              return (
+                <TransferSummary
                   data={
                     checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
                   }
