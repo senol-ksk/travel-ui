@@ -16,6 +16,7 @@ import { HotelSummarySection } from '@/app/reservation/components/hotel/summary'
 import { CarReservationSummary } from '@/app/reservation/components/car/summary'
 import { BusSummarySection } from '@/app/reservation/components/bus/summary'
 import { TransferSummary } from '../components/transfer/summary'
+import { TourSummary } from '../components/tour/summary'
 
 const ReservationSummarySection = () => {
   const { checkoutDataQuery } = useCheckoutMethods()
@@ -81,6 +82,14 @@ const ReservationSummarySection = () => {
             case 'transfer':
               return (
                 <TransferSummary
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'tour':
+              return (
+                <TourSummary
                   data={
                     checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
                   }

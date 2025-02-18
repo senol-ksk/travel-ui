@@ -234,8 +234,7 @@ export type ProductPassengerApiResponseModel = {
       dayCount: number
       couponActive: boolean
     }
-
-    ModuleName: 'Flight' | 'Hotel' | 'CARRENTAL' | 'BUS' | 'TRANSFER'
+    ModuleName: 'Flight' | 'Hotel' | 'CARRENTAL' | 'BUS' | 'TRANSFER' | 'TOUR'
     SummaryViewDataResponser: {
       summaryResponse:
         | FlightReservationSummary
@@ -243,6 +242,7 @@ export type ProductPassengerApiResponseModel = {
         | CarSummaryResponse
         | BusSummaryResponse
         | TransferSummaryResponseViewDataResponser
+        | TourSummaryViewData
     }
     PassengerInfoBackUrl: string
     FlightDetailToSearchReturnPath: null
@@ -1002,4 +1002,207 @@ export interface HotelSummaryRoomDetail {
     isDefault: boolean
     width: number | null
   }[]
+}
+
+export interface TourSummaryViewData {
+  package: {
+    title: string
+    description: string
+    countries: []
+    cities: {
+      code: null
+      title: string
+    }[]
+    group: {
+      code: null
+      title: string
+    }
+    region: {
+      code: null
+      title: string
+    }
+    imageUrl: string
+    startDate: string
+    endDate: string
+    tourTime: number
+    hotelInformations: {
+      name: string
+      rating: 0
+    }[]
+    priceInformations: {
+      priceForDouble: ServicePriceType
+      priceForSingle: ServicePriceType
+      additionalBedPrices: null
+      childrenPrices: {
+        startAge: number
+        endAge: number
+        price: ServicePriceType
+      }[]
+    }
+    quota: number
+    discountDescription: ''
+    extraServices: {
+      name: string
+      unitPrice: ServicePriceType
+      unitPriceTl: ServicePriceType
+      totalPriceTl: ServicePriceType
+      isPackage: boolean
+      unitPriceFor: number
+      isMandatory: boolean
+      mandatoryDescription: string
+      amount: number
+      extraServiceType: number
+      extraServiceCodes: string
+      extraServiceValues: string
+      commissionTlPrice: ServicePriceType
+      key: string
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: null
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    detail: {
+      images: string[]
+      countryInformation: {
+        name: string
+        description: string
+        imageUrl: string
+      }
+      extraTours: []
+      tourProgram: {
+        title: string
+        description: string
+      }[]
+      departureInformation: string
+      includedInformation: string
+      notIncludedInformation: string
+      flightInformation: []
+      hotelRooms: {
+        key: string
+        adultCount: number
+        childCount: number
+        additionalBedCount: number
+      }[]
+      additionalSSRData: {
+        items: {
+          uniqueIdentifier: string
+          code: string
+          included: boolean
+          description: 'Bus Pick Up Point'
+          selected: boolean
+          required: boolean
+          indexNo: number
+          data: null
+          filters: {
+            key: string
+            value: string
+            indexNo: number
+          }[]
+        }[]
+        owner: {
+          type: number
+          ownerKey: string
+          identifier: string
+        }
+        subGroups: []
+      }
+    }
+    tlPrice: ServicePriceType
+    calculatedId: null
+    slug: string
+    slugId: string
+    isDomestic: boolean
+    commission: number
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  detail: {
+    images: string[]
+    countryInformation: {
+      name: string
+      description: string
+      imageUrl: string
+    }
+    extraTours: []
+    tourProgram: {
+      title: string
+      description: string
+    }[]
+    departureInformation: string
+    includedInformation: string
+    notIncludedInformation: string
+    flightInformation: []
+    hotelRooms: {
+      key: string
+      adultCount: number
+      childCount: number
+      additionalBedCount: number
+    }[]
+    additionalSSRData: {
+      items: {
+        uniqueIdentifier: string
+        code: string
+        included: boolean
+        description: string
+        selected: boolean
+        required: boolean
+        indexNo: number
+        data: null
+        filters: {
+          key: string
+          value: string
+          indexNo: number
+        }[]
+      }[]
+      owner: {
+        type: number
+        ownerKey: string
+        identifier: string
+      }
+      subGroups: []
+    }
+  }
+  adultCount: string
+  childs: null
+  sessionToken: null
+  searchToken: null
+  tourExtraServiceToDetailReturnPath: null
+  location: null
+  moduleName: 'Tour'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
 }
