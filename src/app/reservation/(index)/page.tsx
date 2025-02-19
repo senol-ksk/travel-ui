@@ -36,7 +36,6 @@ import {
   type CheckoutSchemaMergedFieldTypes,
 } from '../validations'
 import {
-  FlightAdditionalData,
   FlightAdditionalDataSubGroup,
   type FlightReservationSummary,
   GenderEnums,
@@ -209,19 +208,19 @@ export default function CheckoutPage() {
         <form
           onSubmit={formMethods.handleSubmit(async (data) => {
             console.log('Data submitted:', data)
-            // const requestCheckout = await initCheckoutMutation.mutateAsync(data)
+            const requestCheckout = await initCheckoutMutation.mutateAsync(data)
 
-            // const serialize = createSerializer(reservationParsers)
-            // const url = serialize('/reservation/payment', {
-            //   productKey: queryStrings.productKey,
-            //   searchToken: queryStrings.searchToken,
-            //   sessionToken: queryStrings.sessionToken,
-            // })
+            const serialize = createSerializer(reservationParsers)
+            const url = serialize('/reservation/payment', {
+              productKey: queryStrings.productKey,
+              searchToken: queryStrings.searchToken,
+              sessionToken: queryStrings.sessionToken,
+            })
 
-            // if (requestCheckout?.success) {
-            //   queryClient.clear()
-            //   router.push(url)
-            // }
+            if (requestCheckout?.success) {
+              queryClient.clear()
+              router.push(url)
+            }
           })}
           className='relative grid gap-3 md:gap-5'
         >
@@ -396,7 +395,6 @@ export default function CheckoutPage() {
                       })}
                     </div>
                   )
-                  break
 
                 default:
                   return checkQueryData?.data &&
@@ -514,14 +512,14 @@ export default function CheckoutPage() {
                           </div>
                         )
                       })
-                  break
               }
             })()}
           </CheckoutCard>
 
           {/* Tour extra and optional services */}
           {/*  */}
-          {checkQueryData.data.viewBag.AdditionalData &&
+          {moduleName === 'TOUR' &&
+            checkQueryData.data.viewBag.AdditionalData &&
             checkQueryData.data.viewBag.AdditionalData.additionalData &&
             checkQueryData.data.viewBag.AdditionalData.additionalData.subGroups
               .length > 0 && <TourExtraServices data={checkQueryData.data} />}
