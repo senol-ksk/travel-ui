@@ -134,7 +134,7 @@ export type OperationResultType = {
   }
   product: {
     summaryResponse: {
-      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer'
+      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental'
     }
   }
 }
@@ -936,6 +936,432 @@ export interface TransferSummaryResponse {
   searchToken: string
   sessionToken: string
   moduleName: string
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: object
+  financellDiscount: ServicePriceType
+}
+
+export interface CarSummaryResponse {
+  detailResponse: {
+    items: {
+      carDetail: {
+        name: string
+        pickupDate: string
+        pickupId: ID
+        pickupCode: string
+        returnDate: string
+        returnId: ID
+        returnCode: string
+        type: number
+        category: string
+        doorCount: number
+        passengerCount: number
+        imageUrl: string
+        vendorUrl: string
+        vendorName: string
+        airConditioning: boolean
+        automaticTransmission: boolean
+        transmissionDrive: number
+        fuelType: number
+        included: []
+        navigationSystem: {
+          isAvailable: boolean
+          isIncluded: boolean
+        }
+        baggages: {
+          big: object
+          small: object
+        }
+        carGroupName: string
+        seatCount: string
+        deposit: ServicePriceType
+        kminCluded: string
+        addKmRate: ServicePriceType
+        minDriverAge: number
+        licenseYear: number
+        brand: null
+        model: null
+        deliveryType: string
+      }
+      carIncluded: []
+      carInsurances: {
+        code: string
+        calculateInfo: {
+          status: null
+          info: null
+        }
+        description: string
+        noOfUnits: number
+        totalPrice: ServicePriceType
+        unitPrice: ServicePriceType
+        isSelectable: boolean
+        selected: boolean
+        isFree: boolean
+      }[]
+      carExtraOption: {
+        code: string
+        calculateInfo: null
+        name: string
+        totalPrice: ServicePriceType
+        maxDay: number
+        unitPrice: ServicePriceType
+        isSelectable: boolean
+        selected: boolean
+        isFree: boolean
+      }[]
+      oneWay: ServicePriceType
+      orginalTotalPrice: ServicePriceType
+      carMessage: null | string
+      servicePrice: ServicePriceType
+      totalCommission: ServicePriceType
+      buyServiceFee: number
+      sellServiceFee: number
+      key: string
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: {
+        unitPrice: ServicePriceType
+        unitBasePrice: ServicePriceType
+        unitFee: ServiceFeePriceType
+        unitTax: ServicePriceType
+        cancelPenalty: null
+        changePenalty: null
+        passengers: {
+          key: string
+          name: null
+          passengerType: number
+          age: number
+          birthday: string
+          gender: number
+        }[]
+        taxInfos: null
+        serviceCharges: null
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    validationInformations: {
+      age: {
+        ageReferenceDate: string
+        infantAgeBegin: string
+        childAgeBegin: number
+        adultAgeBegin: number
+        ageCalculationType: number
+      }
+    }
+    availableSpecialRequests: object
+    isSucceeded: boolean
+    diagnostics: {
+      providerId: ID
+      providerName: string
+      providerInfo: null
+      traceId: null
+    }
+  }
+  pickupStation: {
+    location: {
+      id: ID
+      code: string
+      countryCode: string
+      name: string
+      isDomestic: boolean
+      providerName: string
+    }
+    address: {
+      addressName: string
+      street: string
+      city: string
+      country: {
+        iataCode: null
+        id: ID
+        parentRegion: null
+        label: null
+      }
+      postalCode: string
+    }
+    phoneNumbers: {
+      countryCode: number
+      areaCode: number
+      number: string
+      type: number
+    }[]
+    times: {
+      day: string
+      openingTime: string
+      closingTime: string
+    }[]
+    direction: null
+    mailAddress: string
+  }
+  returnStation: {
+    location: {
+      id: ID
+      code: string
+      countryCode: string
+      name: string
+      isDomestic: boolean
+      providerName: string
+    }
+    address: {
+      addressName: string
+      street: string
+      city: string
+      country: {
+        iataCode: null
+        id: ID
+        parentRegion: null
+        label: null
+      }
+      postalCode: string
+    }
+    phoneNumbers: {
+      countryCode: number
+      areaCode: number
+      number: string
+      type: number
+    }[]
+    times: {
+      day: string
+      openingTime: string
+      closingTime: string
+    }[]
+    direction: null
+    mailAddress: string
+  }
+  searchReponse: {
+    carDetail: {
+      name: string
+      pickupDate: string
+      pickupId: ID
+      pickupCode: string
+      returnDate: string
+      returnId: ID
+      returnCode: string
+      type: number
+      category: string
+      doorCount: number
+      passengerCount: number
+      imageUrl: string
+      vendorUrl: string
+      vendorName: string
+      airConditioning: boolean
+      automaticTransmission: boolean
+      transmissionDrive: number
+      fuelType: number
+      included: []
+      navigationSystem: {
+        isAvailable: boolean
+        isIncluded: boolean
+      }
+      baggages: {
+        big: object
+        small: object
+      }
+      carGroupName: string
+      seatCount: string
+      deposit: ServicePriceType
+      kminCluded: string
+      addKmRate: ServicePriceType
+      minDriverAge: number
+      licenseYear: number
+      brand: null
+      model: null
+      deliveryType: string
+    }
+    carIncluded: []
+    carInsurances: []
+    carExtraOption: {
+      code: string
+      calculateInfo: null
+      name: string
+      totalPrice: ServicePriceType
+      maxDay: number
+      unitPrice: ServicePriceType
+      isSelectable: boolean
+      selected: boolean
+      isFree: boolean
+    }[]
+    oneWay: ServicePriceType
+    orginalTotalPrice: ServicePriceType
+    carMessage: null | string
+    servicePrice: ServicePriceType
+    totalCommission: ServicePriceType
+    buyServiceFee: number
+    sellServiceFee: number
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }[]
+  carRentalSearchPanel: {
+    origin: {
+      id: ID
+      code: string
+      countryCode: string
+      name: string
+      isDomestic: boolean
+      providerName: string
+    }[]
+    destination: {
+      id: ID
+      code: string
+      countryCode: string
+      name: string
+      isDomestic: boolean
+      providerName: string
+    }[]
+    pickupDate: string
+    pickupHour: null
+    returnDate: string
+    returnHour: null
+    driverAge: number
+    sessionToken: string
+  }
+  moduleName: 'CarRental'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
+}
+
+export interface TransferSummaryResponseViewDataResponser {
+  selectResponse: {
+    requestId: ID
+    selectedVehicleCount: number
+    extraServiceIds: null
+    extraServiceInfo: null
+    pickupPointName: string
+    pickupPointType: number
+    pickupLocationName: string
+    pickupDate: string
+    pickupInfo: string
+    pickupDescription: string
+    dropPointName: string
+    dropPointType: number
+    dropLocationName: string
+    dropInfo: string
+    dropDescription: string
+    adultPassengerCount: number
+    childrenPassengerCount: number
+    babyPassengerCount: number
+    transferVehicle: {
+      productKey: string
+      id: ID
+      partnerId: ID
+      vehicleName: string
+      vehicleType: number
+      vehicleTitle: string
+      transferInfo: {
+        transferMax: {
+          pax: string
+          suitcase: string
+        }
+        transferHour: {
+          booking: string
+          freeCancel: string
+          freeChange: string
+        }
+        vehiclePhotoUrl: string
+      }
+      extraServices: []
+      status: string
+      transferData: {
+        bookDetail: {
+          brmFactor: string
+          markupDetail: {
+            markupPercentAmount: string
+            markupPrice: null
+          }
+          priceWithoutMarkup: {
+            amount: number
+            transferCurrencyType: number
+          }
+          priceWithMarkup: {
+            amount: number
+            transferCurrencyType: number
+          }
+          suggestedVehicleCount: number
+          sortPrice: number
+          extraServices: {
+            id: string
+            code: string
+            title: string
+            description: string
+            priceWithoutMarkup: {
+              amount: number
+              transferCurrencyType: number
+            }
+            priceWithMarkup: {
+              amount: number
+              transferCurrencyType: number
+            }
+          }[]
+          buyServiceFee: number
+          sellServiceFee: number
+          sellBaseFareAddOn: number
+        }
+        selectedTransferDetail: null
+      }
+    }
+    sessionToken: string
+    traceId: null
+    isSucceeded: boolean
+    diagnostics: {
+      sessionToken: null
+      providerId: ID
+      providerName: string
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: null
+      traceId: null
+    }
+    eventMessages: []
+    appName: 'fulltrip.prod.webapp.html'
+    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+    logSessionToken: null
+    logSearchToken: null
+  }
+  bookingResponse: null
+  searchToken: 'F2212F1DC4A8A40CE0331219E633D7B27A166E6911DA1F2958B1D40B4E887F36'
+  sessionToken: 'A415CA28DF581F3BB0C8D719F45AF4790611068086DB9B4E30C07CB31678A6EB'
+  moduleName: 'Transfer'
   totalPrice: number
   priceCurrency: string
   loyaltyMultiple: number

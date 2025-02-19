@@ -8,12 +8,15 @@ import { CheckoutCard } from '@/components/card'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import {
   FlightReservationSummary,
-  HotelSummaryResponse,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
 
 import { FlightSummary } from '@/app/reservation/components/flight/summary'
 import { HotelSummarySection } from '@/app/reservation/components/hotel/summary'
+import { CarReservationSummary } from '@/app/reservation/components/car/summary'
+import { BusSummarySection } from '@/app/reservation/components/bus/summary'
+import { TransferSummary } from '../components/transfer/summary'
+import { TourSummary } from '../components/tour/summary'
 
 const ReservationSummarySection = () => {
   const { checkoutDataQuery } = useCheckoutMethods()
@@ -47,8 +50,7 @@ const ReservationSummarySection = () => {
               return (
                 <FlightSummary
                   data={
-                    checkoutDataMemo?.viewBag.SummaryViewDataResponser
-                      .summaryResponse as FlightReservationSummary
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
                   }
                 />
               )
@@ -56,6 +58,38 @@ const ReservationSummarySection = () => {
             case 'hotel':
               return (
                 <HotelSummarySection
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'carrental':
+              return (
+                <CarReservationSummary
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'bus':
+              return (
+                <BusSummarySection
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'transfer':
+              return (
+                <TransferSummary
+                  data={
+                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                  }
+                />
+              )
+            case 'tour':
+              return (
+                <TourSummary
                   data={
                     checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
                   }

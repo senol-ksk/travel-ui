@@ -6,8 +6,9 @@ import { useQueryStates } from 'nuqs'
 
 import { serviceRequest } from '@/network'
 import { reservationParsers } from '@/app/reservation/searchParams'
+import { useRef } from 'react'
 
-const promationText = 'LXMZ2HB66SGAES'
+const promotionText = 'LXMZ2HB66SGAES'
 
 export interface BaggageRequestDataModel {
   uniqueIdentifier: string
@@ -19,6 +20,8 @@ export interface BaggageRequestDataModel {
 export const useCheckoutMethods = () => {
   const [{ searchToken, sessionToken, productKey }] =
     useQueryStates(reservationParsers)
+
+  const moduleName = useRef('')
 
   const checkoutDataQuery = useQuery({
     queryKey: ['checkout', [searchToken, sessionToken, productKey]],
@@ -39,6 +42,9 @@ export const useCheckoutMethods = () => {
       return response
     },
   })
+
+  moduleName.current = checkoutDataQuery.data?.data?.viewBag
+    .ModuleName as string
 
   const baggageMutation = useMutation({
     mutationKey: ['baggage-selection'],
@@ -82,7 +88,7 @@ export const useCheckoutMethods = () => {
           url: `api/product/${isChecked ? 'addHotelWarranty' : 'removeHotelWarranty'}`,
           method: 'post',
           data: {
-            promationText,
+            promationText: promotionText,
             searchToken,
             sessionToken,
             productKey,
@@ -109,7 +115,7 @@ export const useCheckoutMethods = () => {
           url: `api/promotion/${isChecked ? 'addHotelPartialPayment' : 'removeHotelPartialPayment'}`,
           method: 'post',
           data: {
-            promationText,
+            promationText: promotionText,
             searchToken,
             sessionToken,
             productKey,
@@ -120,6 +126,29 @@ export const useCheckoutMethods = () => {
             totalPrice:
               checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser
                 .summaryResponse.totalPrice,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  const healthInsuranceMutations = useMutation({
+    mutationKey: ['health-insurance-mutation'],
+    mutationFn: async (isAdd: boolean) => {
+      const response = serviceRequest({
+        axiosOptions: {
+          url: isAdd
+            ? 'api/product/addHealthInsurance'
+            : 'api/product/removeHealthInsurance',
+          method: 'post',
+          data: {
+            searchToken,
+            sessionToken,
+            productSessionToken: searchToken,
+            productSearchToken: sessionToken,
+            modulName: moduleName.current,
           },
         },
       })

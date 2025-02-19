@@ -34,8 +34,8 @@ const CarRentSearchPanel: React.FC = () => {
         driverAge: 26,
         drop_date: defaultDates.drop_date,
         pickup_date: defaultDates.pickup_date,
-        drop_time: '3',
-        pickup_time: '3',
+        drop_time: dayjs().add(2, 'hours').format('HH:00'),
+        pickup_time: dayjs().format('HH:00'),
         dropoff: {
           Code: '',
           CountryCode: '',
@@ -223,7 +223,7 @@ const CarRentSearchPanel: React.FC = () => {
               formActions.setValue('pickup_time', value)
             }}
             defaultValue={
-              formActions.formState.defaultValues?.pickup_time ?? '3'
+              formActions.formState.defaultValues?.pickup_time ?? '12:00'
             }
           />
         </div>
@@ -234,7 +234,9 @@ const CarRentSearchPanel: React.FC = () => {
               const value = event.currentTarget.value
               formActions.setValue('drop_time', value)
             }}
-            defaultValue={formActions.formState.defaultValues?.drop_time ?? '3'}
+            defaultValue={
+              formActions.formState.defaultValues?.drop_time ?? '12:00'
+            }
           />
         </div>
         <div className='col-span-12 flex grow-0 md:col-span-1'>

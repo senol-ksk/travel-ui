@@ -35,7 +35,18 @@ export interface CarPickLocation {
   direction: null
   mailAddress: string
 }
-export interface CarOption {
+export interface CarExtraOption {
+  code: string
+  calculateInfo: null
+  name: string
+  totalPrice: ServicePriceType
+  maxDay: number
+  unitPrice: ServicePriceType
+  isSelectable: boolean
+  selected: boolean
+  isFree: boolean
+}
+export interface CarInsuranceOption {
   code: string
   calculateInfo: {
     status: null
@@ -90,8 +101,8 @@ export interface DetailResponseData {
         deliveryType: number
       }
       carIncluded: []
-      carInsurances: CarOption[]
-      carExtraOption: CarOption[]
+      carInsurances: CarInsuranceOption[] | []
+      carExtraOption: CarExtraOption[] | []
       oneWay: ServicePriceType
       orginalTotalPrice: ServicePriceType
       carMessage: null
