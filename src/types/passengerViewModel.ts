@@ -216,7 +216,7 @@ export type ProductPassengerApiResponseModel = {
   } | null
   viewBag: {
     AdditionalData: {
-      additionalData: FlightAdditionalData | null
+      additionalData: FlightAdditionalData | TourExtraOptionsTypes | null
     } | null
     SessionToken: string
     SearchToken: string
@@ -691,6 +691,46 @@ export interface FlightAdditionalData {
     identifier: null
   }
   subGroups: FlightAdditionalDataSubGroup[]
+}
+
+export interface TourExtraOptionsTypes {
+  items: []
+  owner: {
+    type: number
+    ownerKey: string
+    identifier: null
+  }
+  subGroups: {
+    items: []
+    owner: {
+      type: number
+      ownerKey: 'Tour'
+      identifier: null
+    }
+    subGroups: {
+      items: {
+        uniqueIdentifier: string
+        code: 'PickUpPoint' | string
+        included: true
+        description: string
+        selected: true
+        required: true
+        indexNo: 0
+        data: null
+        filters: {
+          key: 'PickUpPointCode' | 'PickUpPointExplain'
+          value: string
+          indexNo: number
+        }[]
+      }[]
+      owner: {
+        type: number
+        ownerKey: string
+        identifier: string
+      }
+      subGroups: []
+    }[]
+  }[]
 }
 
 export const BaggageDefaultValue = '0|TRY|0|KG|NOEXTRABAGGE1'

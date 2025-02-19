@@ -23,10 +23,10 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
           radius={'md'}
         />
       </div>
-      <div className='text-sm leading-5 text-gray-600'>
+      <div className='text-sm leading-none text-gray-600'>
         {tourData.package.description}
       </div>
-      <div className='flex justify-center gap-4 p-4 text-center'>
+      <div className='my-4 flex justify-center gap-4 border p-2 text-center'>
         <div>
           <div className='font-semibold'>Başlangıç Tarihi</div>
           <div>{dayjs(tourData.package.startDate).format('DD MMMM YYYY')}</div>

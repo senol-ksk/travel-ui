@@ -10,10 +10,10 @@ const useCouponQuery = () => {
   const applyCouponMutation = useMutation({
     mutationKey: ['discount-coupon'],
     mutationFn: async ({
-      promationText,
+      promotionText,
       moduleName,
     }: {
-      promationText: string
+      promotionText: string
       moduleName: string
     }) => {
       const response = await serviceRequest<{
@@ -34,7 +34,7 @@ const useCouponQuery = () => {
             infoIndex: 1,
             infoType: 0,
             moduleName,
-            promationText,
+            promationText: promotionText,
           },
         },
       })

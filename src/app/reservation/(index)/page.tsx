@@ -36,6 +36,8 @@ import {
   type CheckoutSchemaMergedFieldTypes,
 } from '../validations'
 import {
+  FlightAdditionalData,
+  FlightAdditionalDataSubGroup,
   type FlightReservationSummary,
   GenderEnums,
   PassengerTypesEnum,
@@ -57,6 +59,7 @@ import { formatCurrency } from '@/libs/util'
 import { FlightOptionalServices } from '@/app/reservation/(index)/flight-optional-services'
 import { TravelInsurancePackages } from './travel-insurance'
 import { EarlyReservationInsurance } from './hotel/insurance-options'
+import { TourExtraServices } from './tour/extras'
 
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -113,14 +116,14 @@ export default function CheckoutPage() {
     ]
   )
 
-  const checkoutPassengersMutation = useMutation({
+  const initCheckoutMutation = useMutation({
     mutationFn: (data: CheckoutSchemaMergedFieldTypes) => {
       return serviceRequest<{
         status: 'error' | 'success'
         success: boolean
       }>({
         axiosOptions: {
-          url: `/api/payment/checkoutAssests`,
+          url: `/api/payment/checkoutAssets`,
           method: 'POST',
           data: {
             ...data,
@@ -139,10 +142,10 @@ export default function CheckoutPage() {
     [checkQueryData?.data?.treeContainer.childNodes]
   )
 
-  const handleCouponActions = async (promationText?: string) => {
-    if (promationText && !isCouponUsed) {
+  const handleCouponActions = async (promotionText?: string) => {
+    if (promotionText && !isCouponUsed) {
       const applyResponse = await applyCouponMutation.mutateAsync({
-        promationText,
+        promotionText,
         moduleName,
       })
 
@@ -206,20 +209,19 @@ export default function CheckoutPage() {
         <form
           onSubmit={formMethods.handleSubmit(async (data) => {
             console.log('Data submitted:', data)
-            const requestCheckout =
-              await checkoutPassengersMutation.mutateAsync(data)
+            // const requestCheckout = await initCheckoutMutation.mutateAsync(data)
 
-            const serialize = createSerializer(reservationParsers)
-            const url = serialize('/reservation/payment', {
-              productKey: queryStrings.productKey,
-              searchToken: queryStrings.searchToken,
-              sessionToken: queryStrings.sessionToken,
-            })
+            // const serialize = createSerializer(reservationParsers)
+            // const url = serialize('/reservation/payment', {
+            //   productKey: queryStrings.productKey,
+            //   searchToken: queryStrings.searchToken,
+            //   sessionToken: queryStrings.sessionToken,
+            // })
 
-            if (requestCheckout?.success) {
-              queryClient.clear()
-              router.push(url)
-            }
+            // if (requestCheckout?.success) {
+            //   queryClient.clear()
+            //   router.push(url)
+            // }
           })}
           className='relative grid gap-3 md:gap-5'
         >
@@ -516,6 +518,16 @@ export default function CheckoutPage() {
               }
             })()}
           </CheckoutCard>
+
+          {/* Tour extra and optional services */}
+          {/*  */}
+          {checkQueryData.data.viewBag.AdditionalData &&
+            checkQueryData.data.viewBag.AdditionalData.additionalData &&
+            checkQueryData.data.viewBag.AdditionalData.additionalData.subGroups
+              .length > 0 && <TourExtraServices data={checkQueryData.data} />}
+          {/*  */}
+          {/* Tour extra and optional services */}
+
           {!checkQueryData.data.viewBag.HotelCancelWarrantyPriceStatusModel
             .hotelWarrantyDiscountSelected && (
             <CheckoutCard>
@@ -541,7 +553,6 @@ export default function CheckoutPage() {
                 }
               />
             )}
-
           {moduleName === 'Flight' &&
             passengerData &&
             checkQueryData?.data?.viewBag?.AdditionalData &&
@@ -562,7 +573,7 @@ export default function CheckoutPage() {
                 }
                 data={
                   checkQueryData.data?.viewBag.AdditionalData.additionalData
-                    .subGroups
+                    .subGroups as FlightAdditionalDataSubGroup[]
                 }
                 passengers={passengerData}
               />
@@ -571,7 +582,6 @@ export default function CheckoutPage() {
             <BillingForm />
           </CheckoutCard>
           {moduleName !== 'TRANSFER' && <TravelInsurancePackages />}
-
           <CheckoutCard>
             <div className='text-sm'>
               <Title order={4} pb='md'>
@@ -633,7 +643,7 @@ export default function CheckoutPage() {
           </CheckoutCard>
         </form>
       </FormProvider>
-      <LoadingOverlay visible={checkoutPassengersMutation.isPending} />
+      <LoadingOverlay visible={initCheckoutMutation.isPending} />
     </div>
   )
 }
