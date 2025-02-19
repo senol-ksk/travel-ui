@@ -78,6 +78,7 @@ export const HotelSearchEngine = () => {
     mode: 'onChange',
     defaultValues: localParams,
   })
+  console.log(form.formState.errors.destination)
   const [destinationLocationInputValue, setDestinationLocationInputValue] =
     useState('')
   const { data: destinationLocation, isLoading: destinationLocationLoading } =
@@ -142,7 +143,7 @@ export const HotelSearchEngine = () => {
             onChange={(value) => {
               setDestinationLocationInputValue(value)
             }}
-            inputProps={{ error: form.formState.errors.destination?.message }}
+            inputProps={{ error: !!form.formState.errors.destination }}
             onSelect={(data) => {
               form.setValue('destination', {
                 id: data.Id,
