@@ -52,31 +52,18 @@ const TourSearchResultClient = () => {
 
   if (!hasResult || searchResultsQuery.isError || searchParamsQuery.isError) {
     return (
-      <div className='container py-4'>
-        <Alert
-          variant='light'
-          color='red'
-          title='Sonuç bulunamadı'
-          icon={<FiAlertTriangle size={'100%'} />}
-        >
-          <div>Sonuç bulunamadı.</div>
-          <div>
-            <Button
-              type='button'
-              onClick={() => {
-                if (searchResultsQuery.isError) {
-                  searchResultsQuery.refetch()
-                }
-                if (searchParamsQuery.isError) {
-                  searchParamsQuery.refetch()
-                }
-              }}
-            >
-              Tekrar Deneyin.
-            </Button>
-          </div>
-        </Alert>
-      </div>
+      <Container size={'sm'}>
+        <div className='py-4'>
+          <Alert
+            variant='light'
+            color='red'
+            title='Sonuç bulunamadı'
+            icon={<FiAlertTriangle size={'100%'} />}
+          >
+            <div>Sonuç bulunamadı.</div>
+          </Alert>
+        </div>
+      </Container>
     )
   }
 

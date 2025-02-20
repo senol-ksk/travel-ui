@@ -521,8 +521,12 @@ export default function CheckoutPage() {
           {moduleName === 'TOUR' &&
             checkQueryData.data.viewBag.AdditionalData &&
             checkQueryData.data.viewBag.AdditionalData.additionalData &&
-            checkQueryData.data.viewBag.AdditionalData.additionalData.subGroups
-              .length > 0 && <TourExtraServices data={checkQueryData.data} />}
+            checkQueryData.data.viewBag.AdditionalData.additionalData.subGroups.filter(
+              (firstSubGroup) =>
+                firstSubGroup.subGroups.filter(
+                  (secondSubGroup) => secondSubGroup.items.length > 0
+                ).length > 0
+            ).length > 0 && <TourExtraServices data={checkQueryData.data} />}
           {/*  */}
           {/* Tour extra and optional services */}
 
@@ -579,7 +583,9 @@ export default function CheckoutPage() {
           <CheckoutCard>
             <BillingForm />
           </CheckoutCard>
-          {moduleName !== 'TRANSFER' && <TravelInsurancePackages />}
+          {moduleName !== 'TRANSFER' && moduleName !== 'TOUR' && (
+            <TravelInsurancePackages />
+          )}
           <CheckoutCard>
             <div className='text-sm'>
               <Title order={4} pb='md'>

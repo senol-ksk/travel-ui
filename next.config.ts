@@ -1,7 +1,11 @@
 import { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
+    optimizePackageImports: [
+      '@mantine/core',
+      '@mantine/hooks',
+      '@mantine/dates',
+    ],
   },
   reactStrictMode: true,
   images: {
@@ -9,6 +13,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'fulltripstatic.mncdn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ykmturizm.mncdn.com',
       },
     ],
   },

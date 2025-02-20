@@ -3,7 +3,10 @@ import {
   ProductPassengerApiResponseModel,
   TourExtraOptionsTypes,
 } from '@/types/passengerViewModel'
-import { NativeSelect, NativeSelectProps, Title } from '@mantine/core'
+import { Title } from '@mantine/core'
+import { PickUpPointSelect } from './pickup-point'
+import { VisaReason } from './visa-reason'
+import { BedType } from './bed-type'
 
 type IProps = {
   data: ProductPassengerApiResponseModel
@@ -15,72 +18,65 @@ const TourExtraServices: React.FC<IProps> = ({ data }) => {
     ?.additionalData as TourExtraOptionsTypes
 
   const extraDataArr = tourExtraData.subGroups
+  const extraDataIterate = extraDataArr.flatMap((innerExtraData) =>
+    innerExtraData.subGroups.flatMap((item) =>
+      item.items.flatMap((item2) => item2)
+    )
+  )
 
   return (
     <CheckoutCard>
       <Title order={4}>Ekstra Servisler</Title>
 
-      <Title order={5} pt={10} pb={5}>
-        Otobüs Biniş Noktasını Seçiniz
-      </Title>
-      <div className='grid grid-cols-2 gap-5'>
-        {passengers.childNodes.map(
-          (passengerChildNode, passengerChildNodeIndex) =>
-            passengerChildNode.childNodes.map((subChildNode) => (
-              <div key={subChildNode.orderId}>
-                {extraDataArr.map((extraData) =>
-                  extraData.subGroups.map((extraItems) => {
-                    return extraItems.items.map((extraItem) => {
-                      const values = extraItem.filters
-                        .find((item) => item.key === 'PickUpPointCode')
-                        ?.value.split('@') as string[]
+      {extraDataIterate.map((item) => {
+        const extraDataType = item.code
 
-                      const labels = extraItem.filters
-                        .find((item) => item.key === 'PickUpPointExplain')
-                        ?.value.split('@') as string[]
+        return (
+          <div key={item.uniqueIdentifier}>
+            {
+              <Title order={5} pt={20} pb={5}>
+                <span>
+                  {extraDataType === 'BedType' && 'Yatak Secimi'}
+                  {extraDataType === 'VisaReason' &&
+                    'Vize Almama Nedenini Seçiniz'}
+                  {extraDataType === 'PickUpPoint' &&
+                    'Otobüs Biniş Noktasını Seçiniz'}
+                </span>
+              </Title>
+            }
+            {passengers.childNodes.map((passenger, passengerChildNodeIndex) => {
+              return (
+                <div key={passenger.orderId} className='grid grid-cols-2 gap-5'>
+                  {passenger.childNodes.map((childNode) => (
+                    <div key={childNode.orderId}>
+                      {/* {extraDataType} */}
+                      {extraDataType === 'PickUpPoint' && (
+                        <PickUpPointSelect data={item} />
+                      )}
+                      {extraDataType === 'VisaReason' && (
+                        <VisaReason data={item} />
+                      )}
+                      {extraDataType === 'BedType' && <BedType data={item} />}
 
-                      const options = values.map((value, valueIndex) => {
-                        return {
-                          label: labels[valueIndex] ?? '',
-                          value: `${value}|${labels[valueIndex] ?? ''}|${labels[valueIndex] ?? ''}`,
-                        }
-                      })
-
-                      return (
-                        <div key={extraData.owner.identifier}>
-                          <NativeSelect
-                            name={extraItem.code}
-                            label={extraItem.description}
-                            data={options}
-                            defaultValue={options[0].value}
-                            onChange={({ currentTarget: { value } }) => {
-                              console.log(extraItem, value)
-                            }}
-                          />
-                          <input
-                            type='hidden'
-                            name='SSR_UniqueIdentifier'
-                            value={`SSRItem_${extraItem.code}_${extraItem.uniqueIdentifier}`}
-                          />
-                          <input
-                            type='hidden'
-                            name='SSR_ReleatedObjectId'
-                            value={passengerChildNodeIndex + 1}
-                          />
-                          <input
-                            type='hidden'
-                            name='SSR_Code'
-                            value={extraItem.code}
-                          />
-                        </div>
-                      )
-                    })
-                  })
-                )}
-              </div>
-            ))
-        )}
-      </div>
+                      <input
+                        type='hidden'
+                        name='SSR_UniqueIdentifier'
+                        value={`SSRItem_${item.code}_${item.uniqueIdentifier}`}
+                      />
+                      <input
+                        type='hidden'
+                        name='SSR_ReleatedObjectId'
+                        value={passengerChildNodeIndex + 1}
+                      />
+                      <input type='hidden' name='SSR_Code' value={item.code} />
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+        )
+      })}
     </CheckoutCard>
   )
 }

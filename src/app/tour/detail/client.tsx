@@ -44,7 +44,6 @@ const TourDetailClient = () => {
         calculatedId: '',
         packageKey: '',
       }
-      console.log('clear keys', lastKeys.current)
     }
   }, [])
 
@@ -62,7 +61,6 @@ const TourDetailClient = () => {
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: ['tour-detail-totalPrice', detailQuery.data, passengers],
     queryFn: async () => {
-      // console.log(lastKeys.current)
       const response = await serviceRequest<{
         value: ServicePriceType
         packageKey: string
@@ -91,8 +89,6 @@ const TourDetailClient = () => {
       return response
     },
   })
-
-  console.log(lastKeys.current)
 
   const extraServicesMutation = useMutation({
     mutationKey: ['tour-extra-services'],
