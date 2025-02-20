@@ -1,5 +1,10 @@
 import { useQueryStates } from 'nuqs'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
+import { useEffect } from 'react'
 
 import { tourSearchResultParamParser } from '@/modules/tour/searchResultParams'
 import { getsecuritytoken, request, serviceRequest } from '@/network'
@@ -34,7 +39,11 @@ export const useTourSearchResultsQuery = () => {
 
   const searchResultsQuery = useInfiniteQuery({
     enabled: !!searchParamsQuery.data?.data,
-    queryKey: ['tour-search-results', searchParams],
+    queryKey: [
+      'tour-search-results',
+      searchParamsQuery.data?.data?.sessionToken,
+      searchParamsQuery.data?.data?.params.searchToken,
+    ],
     queryFn: async ({ signal, pageParam }) => {
       if (!appToken) {
         appToken = await getsecuritytoken()
@@ -77,6 +86,7 @@ export const useTourSearchResultsQuery = () => {
 
       return undefined
     },
+    staleTime: 2000,
   })
 
   return { searchResultsQuery, searchParamsQuery }
