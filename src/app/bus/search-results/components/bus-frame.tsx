@@ -87,7 +87,7 @@ const BusFrame: React.FC<Props> = ({
               <PiSteeringWheelLight strokeWidth={5} size={40} />
             </div>
             <div
-              id='bus-wheel-seperator'
+              id='bus-wheel-separator'
               className='h-[3px] w-full rounded-lg bg-gray-400'
             />
           </div>
