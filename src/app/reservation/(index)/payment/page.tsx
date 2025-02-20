@@ -28,9 +28,9 @@ import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
 import { PaymentResponeType } from '@/app/reservation/types'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { FlightSummary } from '../../components/flight/summary'
-import { FlightReservationSummary } from '@/types/passengerViewModel'
+
 import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
+import { CheckoutCard } from '@/components/card'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -383,13 +383,5 @@ const PaymentPage = () => {
     </>
   )
 }
-
-const CheckoutCard: React.FC<{
-  children: React.ReactNode
-}> = ({ children }) => (
-  <div className='grid gap-3 rounded-md border bg-white p-2 shadow-sm md:gap-6 md:p-6'>
-    {children}
-  </div>
-)
 
 export default PaymentPage
