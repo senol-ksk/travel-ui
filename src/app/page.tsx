@@ -16,7 +16,7 @@ export default async function Home() {
           className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
         />
         <div className='py-0 md:py-6 lg:py-10'>
-          <Container>
+          <Container className='px-0 md:px-4'>
             <div className='bg-white md:rounded-lg md:border'>
               <SearchEngine />
             </div>
