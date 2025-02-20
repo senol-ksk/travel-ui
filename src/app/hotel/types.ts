@@ -359,7 +359,7 @@ export interface HotelDetailRoomDetail {
   extraInformations: null
   images: {
     url: string
-    thumbnailUrl: string
+    thumbnailUrl: string | null
     title: '' | null
     isDefault: boolean
     width: number

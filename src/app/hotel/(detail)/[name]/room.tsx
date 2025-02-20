@@ -51,9 +51,8 @@ const HotelRoom: React.FC<IProps> = ({
       <div className='rounded-lg border'>
         {rooms.map((room, roomIndex, roomsArray) => {
           const detail = details?.find((x) => x.roomKey === room.key)
-          const largeImages = detail?.images.map((x) => x.url.trim())
           const images = detail?.images.map((image) =>
-            image.thumbnailUrl.trim()
+            image.thumbnailUrl ? image.thumbnailUrl?.trim() : image.url?.trim()
           )
           const isLastItem = roomsArray.length - 1 === roomIndex
 
