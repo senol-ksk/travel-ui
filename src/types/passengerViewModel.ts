@@ -692,7 +692,21 @@ export interface FlightAdditionalData {
   }
   subGroups: FlightAdditionalDataSubGroup[]
 }
-
+export interface TourExtraOptionsItemType {
+  uniqueIdentifier: string
+  code: 'PickUpPoint' | 'BedType' | 'VisaReason' | 'BedType'
+  included: true
+  description: string
+  selected: true
+  required: true
+  indexNo: 0
+  data: null
+  filters: {
+    key: 'PickUpPointCode' | 'PickUpPointExplain' | string
+    value: string
+    indexNo: number
+  }[]
+}
 export interface TourExtraOptionsTypes {
   items: []
   owner: {
@@ -708,21 +722,7 @@ export interface TourExtraOptionsTypes {
       identifier: null
     }
     subGroups: {
-      items: {
-        uniqueIdentifier: string
-        code: 'PickUpPoint' | string
-        included: true
-        description: string
-        selected: true
-        required: true
-        indexNo: 0
-        data: null
-        filters: {
-          key: 'PickUpPointCode' | 'PickUpPointExplain'
-          value: string
-          indexNo: number
-        }[]
-      }[]
+      items: TourExtraOptionsItemType[]
       owner: {
         type: number
         ownerKey: string

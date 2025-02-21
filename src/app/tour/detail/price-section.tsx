@@ -7,13 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   PassengerFormTypes,
   passengerUpdateSchema,
-  TourDeatilApiResponse,
+  TourDetailApiResponse,
 } from '@/modules/tour/type'
 import { formatCurrency } from '@/libs/util'
 import clsx from 'clsx'
 
 type Props = {
-  data: TourDeatilApiResponse
+  data: TourDetailApiResponse
   calculatedTotalPrice: number
   onPassengerChange?: (passengers: PassengerFormTypes) => void
 }
@@ -63,7 +63,9 @@ const TourDetailPriceSection: React.FC<Props> = ({
   return (
     <div className='@container relative'>
       <div className='grid gap-3'>
-        <Title order={3}>Rezervasyon Detayları</Title>
+        <Title order={3} fz={'h4'}>
+          Rezervasyon Detayları
+        </Title>
         <div className='text-sm text-gray-700'>
           {passengersFormValues?.adultCount?.split('').at(0)} Yetişkin
           {Number(passengersFormValues?.childAge) >= 0 ? ' ve 1 Çocuk' : null}

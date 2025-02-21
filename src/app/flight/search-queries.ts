@@ -8,6 +8,7 @@ import { useTimeout } from '@mantine/hooks'
 import { flightSearchParams } from '@/modules/flight/searchParams'
 import type {
   AirlineCodeServiceResponse,
+  AirportCodeServiceResponse,
   ClientDataType,
   FlightDetail,
   FlightDetailSegment,
@@ -374,8 +375,19 @@ const useSearchResultsQueries = () => {
       ),
     ]
   }
+  const airportQueryParamsCodeArr = () => {
+    return [
+      ...new Set(
+        searchResultsQuery?.data?.flatMap((item) =>
+          item.segments.map((item2) =>
+            [item2.destination.code, item2.origin.code].flat()
+          )
+        )
+      ),
+    ]
+  }
 
-  const getAirlineByCodelist = useQuery({
+  const getAirlineByCodeList = useQuery({
     enabled: !!searchResultsQuery.data?.length,
     queryKey: ['airline-code-list', airlineQueryParamsCodeArr().toString()],
     queryFn: async () => {
@@ -394,12 +406,32 @@ const useSearchResultsQueries = () => {
     },
   })
 
+  const getAirportsByCodeList = useQuery({
+    enabled: !!searchResultsQuery.data?.length,
+    queryKey: ['airports-code-list', airlineQueryParamsCodeArr().toString()],
+    queryFn: async () => {
+      const response = (await request({
+        url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairportbycodelist',
+        params: {
+          l: 'tr_TR',
+          cl: airportQueryParamsCodeArr().toString(),
+        },
+      })) as AirportCodeServiceResponse
+
+      return response
+    },
+    select(query) {
+      return query.Result
+    },
+  })
+
   return {
     searchResultsQuery,
     submitFlightData,
     searchParams,
     searchSessionTokenQuery,
-    getAirlineByCodelist,
+    getAirlineByCodeList,
+    getAirportsByCodeList,
   }
 }
 

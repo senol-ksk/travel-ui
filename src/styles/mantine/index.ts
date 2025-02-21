@@ -1,6 +1,13 @@
 'use client'
 
-import { DEFAULT_THEME, mergeMantineTheme, Portal, rem } from '@mantine/core'
+import {
+  DEFAULT_THEME,
+  mergeMantineTheme,
+  Modal,
+  Portal,
+  rem,
+  Title,
+} from '@mantine/core'
 
 import { fonts } from './fonts'
 
@@ -18,6 +25,13 @@ const mantineTheme = mergeMantineTheme(
       Portal: Portal.extend({
         defaultProps: {
           reuseTargetNode: true,
+        },
+      }),
+      Modal: Modal.extend({
+        styles: {
+          title: {
+            fontWeight: 600,
+          },
         },
       }),
     },

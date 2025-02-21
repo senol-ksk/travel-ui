@@ -9,8 +9,7 @@ import { Button, Divider, Skeleton } from '@mantine/core'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { AirlineLogo } from '@/components/airline-logo'
-import { useSearchResultsQueries } from '../search-queries'
-import { useMemo } from 'react'
+import { memo } from 'react'
 
 type IProps = {
   airlineValues: AirlineCode[] | undefined
@@ -36,6 +35,17 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         const relatedDetailSegments = detailSegments.filter(
           (item) => detail.groupId === item.groupId
         )
+
+        const lastArrivalTime = dayjs(relatedDetailSegments.at(-1)?.arrivalTime)
+        const firstDepartureTime = dayjs(
+          relatedDetailSegments.at(0)?.departureTime
+        )
+        const arrivalIsAfter = lastArrivalTime.isAfter(firstDepartureTime, 'D')
+
+        const totalFlightDuration = dayjs.duration(
+          lastArrivalTime.diff(firstDepartureTime)
+        )
+
         const airlineText = airlineValues
           ?.find(
             (airline) =>
@@ -45,6 +55,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
         return (
           <div className='p-3' key={detail.key}>
+            {/* <input defaultValue={JSON.stringify(relatedDetailSegments)} /> */}
             <div className='flex items-center gap-3 pb-2'>
               <div>
                 <AirlineLogo
@@ -72,16 +83,28 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                 <div>
                   {dayjs(relatedDetailSegments.at(-1)?.arrivalTime).format(
                     'HH:mm'
-                  )}
+                  )}{' '}
+                  {arrivalIsAfter && <sup className='text-red-700'>+1</sup>}
                 </div>
                 <div>{relatedDetailSegments.at(-1)?.destination.code}</div>
               </div>
             </div>
-            <div className='flex justify-center'>
-              <div className='text-sm text-gray-400'>
-                {relatedDetailSegments.length > 1
-                  ? `${relatedDetailSegments.length - 1} Aktarma`
-                  : 'Aktarmasız'}
+            <div className='flex items-center justify-center gap-3'>
+              <div className='flex gap-1'>
+                {totalFlightDuration.get('D') > 0 && (
+                  <div>{totalFlightDuration.format('DD')} gün</div>
+                )}
+                <div>{totalFlightDuration.format('HH')}sa</div>
+                <div>{totalFlightDuration.format('mm')}dk</div>
+              </div>
+              <div className='text-sm text-gray-600'>
+                {relatedDetailSegments.length > 1 ? (
+                  <span className='text-red-700'>
+                    {relatedDetailSegments.length - 1} Aktarma
+                  </span>
+                ) : (
+                  'Aktarmasız'
+                )}
               </div>
             </div>
           </div>
@@ -105,4 +128,11 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
   )
 }
 
-export { FlightSearchResultsInternational }
+const MemoizedFlightSearchResultsInternational = memo(
+  FlightSearchResultsInternational
+)
+
+export {
+  FlightSearchResultsInternational,
+  MemoizedFlightSearchResultsInternational,
+}

@@ -1,4 +1,5 @@
 'use client'
+import { useMemo, useRef, useState } from 'react'
 
 import { useSearchResultsQueries } from '../search-queries'
 import { FlightSearchResultsOneWayDomestic } from './domestic-flight'
@@ -16,10 +17,9 @@ import {
   FlightDetailSegment,
   FlightFareInfo,
 } from '../type'
-import { useMemo, useRef, useState } from 'react'
 import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
 
-import { FlightSearchResultsInternational } from './international-flight'
+import { MemoizedFlightSearchResultsInternational } from './international-flight'
 import { formatCurrency } from '@/libs/util'
 
 type SelectedPackageStateProps = {
@@ -32,14 +32,14 @@ const FlightSearchView = () => {
     searchResultsQuery,
     searchSessionTokenQuery,
     submitFlightData,
-    getAirlineByCodelist,
+    getAirlineByCodeList,
   } = useSearchResultsQueries()
   const [isNextFlightVisible, setIsNextFlightVisible] = useState(false)
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
     SelectedPackageStateProps[] | undefined | null
   >()
   const [
-    pacakgeDrawerOpened,
+    packageDrawerOpened,
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
   const searchResults = useMemo(
@@ -153,7 +153,7 @@ const FlightSearchView = () => {
                         )
 
                         const airlineValues: AirlineCode[] | undefined =
-                          getAirlineByCodelist?.data?.filter((airlineObj) =>
+                          getAirlineByCodeList?.data?.filter((airlineObj) =>
                             segmentAirlines.find(
                               (segment) => segment === airlineObj.Code
                             )
@@ -182,7 +182,7 @@ const FlightSearchView = () => {
                         )
 
                         const airlineValues: AirlineCode[] | undefined =
-                          getAirlineByCodelist?.data?.filter((airlineObj) =>
+                          getAirlineByCodeList?.data?.filter((airlineObj) =>
                             segmentAirlines.find(
                               (segment) => segment === airlineObj.Code
                             )
@@ -210,14 +210,14 @@ const FlightSearchView = () => {
                     )
 
                     const airlineValues: AirlineCode[] | undefined =
-                      getAirlineByCodelist?.data?.filter((airlineObj) =>
+                      getAirlineByCodeList?.data?.filter((airlineObj) =>
                         segmentAirlines.find(
                           (segment) => segment === airlineObj.Code
                         )
                       )
 
                     return (
-                      <FlightSearchResultsInternational
+                      <MemoizedFlightSearchResultsInternational
                         airlineValues={airlineValues}
                         key={result.fareInfo.key}
                         detailSegments={result.segments}
@@ -234,7 +234,7 @@ const FlightSearchView = () => {
         </div>
       </Container>
       <Drawer
-        opened={pacakgeDrawerOpened}
+        opened={packageDrawerOpened}
         onClose={() => {
           closePackageDrawer()
           setSelectedFlightItemPackages(null)

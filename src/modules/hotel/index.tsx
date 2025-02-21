@@ -78,7 +78,7 @@ export const HotelSearchEngine = () => {
     mode: 'onChange',
     defaultValues: localParams,
   })
-  console.log(form.formState.errors.destination)
+
   const [destinationLocationInputValue, setDestinationLocationInputValue] =
     useState('')
   const { data: destinationLocation, isLoading: destinationLocationLoading } =

@@ -1,12 +1,10 @@
 import {
-  BaggageDefaultValue,
   FlightAdditionalDataSubGroup,
-  FlightOptionalServicesData,
   FlightOptionalServicesDataItem,
   FlightReservationSummary,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
-import { Collapse, Title, UnstyledButton } from '@mantine/core'
+import { Collapse, LoadingOverlay, Title, UnstyledButton } from '@mantine/core'
 import { BaggageSelect } from '../components/flight/baggage-select'
 import { shallowEqual, useDisclosure } from '@mantine/hooks'
 import { CheckoutCard } from '@/components/card'
@@ -20,6 +18,7 @@ type IProps = {
   flightInfos: FlightReservationSummary
   data: FlightAdditionalDataSubGroup[]
   passengers: ProductPassengerApiResponseModel['treeContainer']['childNodes']
+  isLoading: boolean
 }
 
 interface BaggageCollectData {
@@ -32,6 +31,7 @@ const FlightOptionalServices: React.FC<IProps> = ({
   data,
   passengers,
   flightInfos,
+  isLoading,
 }) => {
   const { baggageMutation } = useCheckoutMethods()
   const selectedBaggages = useRef<BaggageCollectData[]>([])
@@ -105,7 +105,8 @@ const FlightOptionalServices: React.FC<IProps> = ({
         >
           İsteğe Bağlı Özel Tercihler
         </UnstyledButton>
-        <Collapse in={opened}>
+        <Collapse in={opened} className='relative'>
+          <LoadingOverlay visible={isLoading || baggageMutation.isPending} />
           <div className='grid gap-5'>
             {passengers
               ?.filter((passenger) => passenger.key !== 'Infant') // Infant passengers can not select baggage
@@ -115,32 +116,34 @@ const FlightOptionalServices: React.FC<IProps> = ({
                     {passenger.orderId}.Yolcu
                   </Title>
 
-                  {baggageServiceArray.map((item, flightIndex) => {
-                    const relatedFlightData =
-                      flightInfos.flightList[flightIndex]
-                    return (
-                      item.length > 0 && (
-                        <div key={flightIndex}>
-                          <BaggageSelect
-                            label={
-                              relatedFlightData.flightDetail.groupId === 0
-                                ? 'Gidiş Uçuşu'
-                                : 'Dönüş Uçuşu'
-                            }
-                            data={item}
-                            onChange={(item) => {
-                              handleBaggageSelect({
-                                baggageData: item,
-                                passengerIndex,
-                                flightLeg: flightIndex,
-                                // passengerIndex
-                              })
-                            }}
-                          />
-                        </div>
+                  <div className='grid grid-cols-2 gap-3 md:gap-5'>
+                    {baggageServiceArray.map((item, flightIndex) => {
+                      const relatedFlightData =
+                        flightInfos.flightList[flightIndex]
+                      return (
+                        item.length > 0 && (
+                          <div key={flightIndex}>
+                            <BaggageSelect
+                              label={
+                                relatedFlightData.flightDetail.groupId === 0
+                                  ? 'Gidiş Uçuşu'
+                                  : 'Dönüş Uçuşu'
+                              }
+                              data={item}
+                              onChange={(item) => {
+                                handleBaggageSelect({
+                                  baggageData: item,
+                                  passengerIndex,
+                                  flightLeg: flightIndex,
+                                  // passengerIndex
+                                })
+                              }}
+                            />
+                          </div>
+                        )
                       )
-                    )
-                  })}
+                    })}
+                  </div>
                 </div>
               ))}
           </div>

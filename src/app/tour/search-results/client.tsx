@@ -1,13 +1,14 @@
 'use client'
 
-import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearhResults'
-import { TourSearchEngine } from '@/modules/tour'
-import { Alert, Button, Container, Skeleton } from '@mantine/core'
-import { TourSearchResultItem } from './item'
+import { Alert, Container, Skeleton } from '@mantine/core'
 import { FiAlertTriangle } from 'react-icons/fi'
+import { useRouter } from 'next/navigation'
+
+import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearhResults'
+
+import { TourSearchResultItem } from './item'
 import { TourSearchResultSearchItem } from '@/modules/tour/type'
 import { serializeTourDetailPageParams } from '@/modules/tour/detailSearchParams'
-import { useRouter } from 'next/navigation'
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
@@ -52,31 +53,18 @@ const TourSearchResultClient = () => {
 
   if (!hasResult || searchResultsQuery.isError || searchParamsQuery.isError) {
     return (
-      <div className='container py-4'>
-        <Alert
-          variant='light'
-          color='red'
-          title='Sonuç bulunamadı'
-          icon={<FiAlertTriangle size={'100%'} />}
-        >
-          <div>Sonuç bulunamadı.</div>
-          <div>
-            <Button
-              type='button'
-              onClick={() => {
-                if (searchResultsQuery.isError) {
-                  searchResultsQuery.refetch()
-                }
-                if (searchParamsQuery.isError) {
-                  searchParamsQuery.refetch()
-                }
-              }}
-            >
-              Tekrar Deneyin.
-            </Button>
-          </div>
-        </Alert>
-      </div>
+      <Container size={'sm'}>
+        <div className='py-4'>
+          <Alert
+            variant='light'
+            color='red'
+            title='Sonuç bulunamadı'
+            icon={<FiAlertTriangle size={'100%'} />}
+          >
+            <div>Sonuç bulunamadı.</div>
+          </Alert>
+        </div>
+      </Container>
     )
   }
 
@@ -87,7 +75,7 @@ const TourSearchResultClient = () => {
           <Skeleton h={6} className='absolute start-0 end-0 top-0' />
         </div>
       ) : null}
-      <Container className='pt-10'>
+      <Container className='py-10'>
         <div className='grid gap-4 sm:grid-cols-12 md:gap-3'>
           <div className='sm:col-span-4 lg:col-span-3'>
             <div className='rounded-md border border-gray-300 p-3'>

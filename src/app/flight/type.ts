@@ -210,3 +210,20 @@ export interface AirlineCode {
     Value: string
   }[]
 }
+
+export interface AirportCodeServiceResponse {
+  Succeeded: boolean
+  Result: AirportCode[]
+}
+
+export interface AirportCode {
+  Id: ID
+  Code: string
+  CountryCode: string
+  Country: string
+  City: string
+  Value: {
+    LangCode: 'tr_TR' | 'en_US'
+    Value: string
+  }[]
+}

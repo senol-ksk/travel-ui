@@ -29,7 +29,7 @@ const TourDetailClient = () => {
   const router = useTransitionRouter()
   const [
     isOpenExtraServicesModal,
-    { open: openExtraSercivesModal, close: closeExtraServicesModal },
+    { open: openExtraServicesModal, close: closeExtraServicesModal },
   ] = useDisclosure(false)
   const [searchParams] = useQueryStates(tourDetailPageParamParser)
 
@@ -44,7 +44,6 @@ const TourDetailClient = () => {
         calculatedId: '',
         packageKey: '',
       }
-      console.log('clear keys', lastKeys.current)
     }
   }, [])
 
@@ -62,7 +61,6 @@ const TourDetailClient = () => {
     // eslint-disable-next-line @tanstack/query/exhaustive-deps
     queryKey: ['tour-detail-totalPrice', detailQuery.data, passengers],
     queryFn: async () => {
-      // console.log(lastKeys.current)
       const response = await serviceRequest<{
         value: ServicePriceType
         packageKey: string
@@ -91,8 +89,6 @@ const TourDetailClient = () => {
       return response
     },
   })
-
-  console.log(lastKeys.current)
 
   const extraServicesMutation = useMutation({
     mutationKey: ['tour-extra-services'],
@@ -131,7 +127,7 @@ const TourDetailClient = () => {
           (item) => !(item.isMandatory && item.isPackage)
         ).length > 0
       ) {
-        openExtraSercivesModal()
+        openExtraServicesModal()
       } else {
         tourReservationQuery.mutate()
       }
@@ -216,7 +212,7 @@ const TourDetailClient = () => {
     },
   })
 
-  const extraServicKeys = extraServicesMutation.data?.data?.extraServices
+  const extraServiceKeys = extraServicesMutation.data?.data?.extraServices
     .filter((extra) => !extra.isPackage && !extra.isMandatory)
     .map((ext) => {
       return {
@@ -231,8 +227,8 @@ const TourDetailClient = () => {
     key: string
     count: number
   }) => {
-    if (extraServicKeys) {
-      extraServicesAndAmounts = extraServicKeys?.map((item) => {
+    if (extraServiceKeys) {
+      extraServicesAndAmounts = extraServiceKeys?.map((item) => {
         if (item.key === actions.key) {
           item.count = actions.count
         }
@@ -242,13 +238,13 @@ const TourDetailClient = () => {
     }
   }
 
-  const extraServiceadultCount = Number(
+  const extraServiceAdultCount = Number(
     extraServicesMutation.data?.data?.adultCount.split(':').at(0)
   )
   const extraServiceChildCount =
     extraServicesMutation.data?.data?.childAges?.filter((num) => num >= 0)
       ?.length ?? 0
-  const extraMaxCount = extraServiceadultCount + extraServiceChildCount
+  const extraMaxCount = extraServiceAdultCount + extraServiceChildCount
 
   return (
     <>
@@ -272,9 +268,7 @@ const TourDetailClient = () => {
               {detailQuery.data ? (
                 <div className='grid gap-4 md:grid-cols-12'>
                   <div className='col-span-12 md:col-span-8 lg:col-span-9'>
-                    <div className='rounded border p-3 @lg:p-5'>
-                      <TourDetail data={detailQuery.data} />
-                    </div>
+                    <TourDetail data={detailQuery.data} />
                   </div>
                   <div className='col-span-12 md:col-span-4 lg:col-span-3'>
                     <div className='relative'>

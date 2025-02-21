@@ -52,7 +52,7 @@ const SeatView: React.FC<Props> = ({
       : data.status === SeatStatus.TAKENBYWOMAN ||
           data.status === SeatStatus.REZERVTOWOMAN
         ? SeatColors.WOMAN
-        : 'white'
+        : SeatColors.AVAILABLE
 
   if (data.no < 0) return null
 

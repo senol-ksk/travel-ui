@@ -1,7 +1,11 @@
 import '@/styles/global.css'
 
 import type { Metadata } from 'next'
-import { ColorSchemeScript, MantineProvider } from '@mantine/core'
+import {
+  ColorSchemeScript,
+  MantineProvider,
+  mantineHtmlProps,
+} from '@mantine/core'
 import { ViewTransitions } from 'next-view-transitions'
 
 import dayjs from 'dayjs'
@@ -28,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang='tr' suppressHydrationWarning>
+      <html lang='tr' {...mantineHtmlProps}>
         <head>
           <link rel='icon' href='/favicon.ico' sizes='any' />
           <ColorSchemeScript />
