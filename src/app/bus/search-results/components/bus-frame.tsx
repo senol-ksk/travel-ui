@@ -120,6 +120,7 @@ const BusFrame: React.FC<Props> = ({
                       data={seat.seatData}
                       onSeatSelect={(gender) => {
                         handleSeatSelect(gender, seat.seatData)
+                        console.log(seat.seatData)
                       }}
                     />
                   </div>

@@ -149,7 +149,7 @@ export enum SeatSideStatus {
 }
 
 export enum SeatColors {
-  AVAILABLE = 'white',
+  AVAILABLE = '--mantine-colors-white',
   NOTAVAILABLE = '--mantine-color-gray-4',
   SELECTED = '--mantine-color-green-3',
   WOMAN = '--mantine-color-grape-2',

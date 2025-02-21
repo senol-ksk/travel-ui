@@ -174,7 +174,6 @@ const BusSearchResults: React.FC = () => {
               seats={seatData.seats}
               maxSelectCountReached={selectedSeats.length === 4}
               onSeatSelect={(gender, selectedSeatsData) => {
-                console.log(gender, selectedSeatsData)
                 setSelectedSeatsData((prev) => {
                   const nextState =
                     gender === BusGender.EMPTY
