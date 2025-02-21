@@ -154,19 +154,16 @@ const BusSearchResults: React.FC = () => {
         position='right'
         opened={seatSelectIsOpened}
         onClose={() => {
+          if (seatControlMutation.isPending || initBusPaymentProcess.isPending)
+            return
           setSelectedSeatsData([])
           setSelectedBus(null)
 
           closeSeatSelect()
         }}
-        title={
-          <div className='text-lg font-semibold'>{selectedBus?.company}</div>
-        }
+        title={selectedBus?.company}
         radius={'lg'}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
-        classNames={{
-          title: 'h2',
-        }}
       >
         {seatRequestMutation.isPending ? (
           <Skeleton h={600} w={'75%'} radius={'xl'} mx='auto' />
@@ -224,7 +221,10 @@ const BusSearchResults: React.FC = () => {
                 <Button
                   disabled={!selectedSeats.length}
                   onClick={handleCheckSeatStatus}
-                  loading={seatControlMutation.isPending}
+                  loading={
+                    seatControlMutation.isPending ||
+                    initBusPaymentProcess.isPending
+                  }
                 >
                   Onayla ve Devam Et
                 </Button>
