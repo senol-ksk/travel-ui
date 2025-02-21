@@ -1,5 +1,12 @@
 import { TourDetailApiResponse } from '@/modules/tour/type'
-import { AspectRatio, Button, Image, Spoiler, Title } from '@mantine/core'
+import {
+  AspectRatio,
+  Button,
+  Image,
+  Spoiler,
+  Title,
+  TypographyStylesProvider,
+} from '@mantine/core'
 import dayjs from 'dayjs'
 
 type Props = {
@@ -41,11 +48,13 @@ const TourDetail: React.FC<Props> = ({ data }) => {
                 <Title order={4} fz={'h5'}>
                   {tourProgram.title}
                 </Title>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: tourProgram.description,
-                  }}
-                />
+                <TypographyStylesProvider>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: tourProgram.description,
+                    }}
+                  />
+                </TypographyStylesProvider>
               </div>
             ))}
           </div>
@@ -60,11 +69,13 @@ const TourDetail: React.FC<Props> = ({ data }) => {
           showLabel={'Daha fazla göster'}
           maxHeight={120}
         >
-          <div
-            dangerouslySetInnerHTML={{
-              __html: data.detail.includedInformation,
-            }}
-          />
+          <TypographyStylesProvider>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data.detail.includedInformation,
+              }}
+            />
+          </TypographyStylesProvider>
         </Spoiler>
       </div>
       <div>
@@ -76,11 +87,13 @@ const TourDetail: React.FC<Props> = ({ data }) => {
           hideLabel={'Daha Az Görüntüle'}
           showLabel={'Daha fazla göster'}
         >
-          <div
-            dangerouslySetInnerHTML={{
-              __html: data.detail.notIncludedInformation,
-            }}
-          />
+          <TypographyStylesProvider>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: data.detail.notIncludedInformation,
+              }}
+            />
+          </TypographyStylesProvider>
         </Spoiler>
       </div>
     </div>
