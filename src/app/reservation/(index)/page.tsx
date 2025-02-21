@@ -578,6 +578,9 @@ export default function CheckoutPage() {
                     .subGroups as FlightAdditionalDataSubGroup[]
                 }
                 passengers={passengerData}
+                isLoading={
+                  checkoutDataQuery.isLoading || checkoutDataQuery.isRefetching
+                }
               />
             )}
           <CheckoutCard>
