@@ -1,5 +1,5 @@
 import { tourDetailPageParamParser } from '@/modules/tour/detailSearchParams'
-import { TourDeatilApiResponse } from '@/modules/tour/type'
+import { TourDetailApiResponse } from '@/modules/tour/type'
 import { serviceRequest } from '@/network'
 import { useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
@@ -11,7 +11,7 @@ const useTourDetailQuery = () => {
     enabled: !!searchParams,
     queryKey: ['tour-detail-page', searchParams],
     queryFn: async () => {
-      const response = await serviceRequest<TourDeatilApiResponse>({
+      const response = await serviceRequest<TourDetailApiResponse>({
         axiosOptions: {
           url: 'api/tour/detail',
           method: 'post',

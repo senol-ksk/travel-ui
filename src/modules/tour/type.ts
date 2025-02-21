@@ -179,7 +179,7 @@ export interface TourDetailProgram {
   title: string
   description: string
 }
-export interface TourDeatilApiResponse {
+export interface TourDetailApiResponse {
   package: {
     title: string
     description: string

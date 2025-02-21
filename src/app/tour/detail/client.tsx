@@ -268,9 +268,7 @@ const TourDetailClient = () => {
               {detailQuery.data ? (
                 <div className='grid gap-4 md:grid-cols-12'>
                   <div className='col-span-12 md:col-span-8 lg:col-span-9'>
-                    <div className='rounded border p-3 @lg:p-5'>
-                      <TourDetail data={detailQuery.data} />
-                    </div>
+                    <TourDetail data={detailQuery.data} />
                   </div>
                   <div className='col-span-12 md:col-span-4 lg:col-span-3'>
                     <div className='relative'>
