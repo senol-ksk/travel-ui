@@ -6,9 +6,13 @@ import {
   FlightFareInfo,
 } from '../type'
 import { Button, Divider } from '@mantine/core'
+
 import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+
 import { AirlineLogo } from '@/components/airline-logo'
-import { useSearchResultsQueries } from '../search-queries'
+
+dayjs.extend(duration)
 
 type IProps = {
   fareInfo: FlightFareInfo
@@ -32,6 +36,14 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           (segment) => detail.groupId === segment.groupId
         )
         const flightNumber = relatedSegment.at(0)?.flightNumber
+
+        const lastArrivalTime = dayjs(relatedSegment.at(-1)?.arrivalTime)
+        const firstDepartureTime = dayjs(relatedSegment.at(0)?.departureTime)
+        const arrivalIsAfter = lastArrivalTime.isAfter(firstDepartureTime, 'D')
+
+        const totalFlightDuration = dayjs.duration(
+          lastArrivalTime.diff(firstDepartureTime)
+        )
 
         const airlineText = airlineValues
           ?.find(
@@ -61,16 +73,30 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
               </div>
               <div>
                 <div>
-                  {dayjs(relatedSegment.at(0)?.arrivalTime).format('HH:mm')}
+                  {dayjs(relatedSegment.at(-1)?.arrivalTime).format('HH:mm')}
+                  {arrivalIsAfter && <sup className='text-red-700'> +1</sup>}
                 </div>
                 <div>{relatedSegment.at(-1)?.destination.code}</div>
               </div>
             </div>
-            <div className='flex justify-center'>
-              <div className='text-sm text-gray-500'>
-                {relatedSegment.length > 1
-                  ? `${relatedSegment.length - 1} Aktarma`
-                  : 'Aktarmasız'}
+            <div className='flex items-center justify-center gap-3 text-sm text-gray-700'>
+              <div className='flex gap-1'>
+                {totalFlightDuration.get('D') > 0 && (
+                  <div>{totalFlightDuration.format('DD')} gün</div>
+                )}
+                <div>{totalFlightDuration.format('HH')}sa</div>
+                <div>{totalFlightDuration.format('mm')}dk</div>
+              </div>
+              <div className='flex justify-center'>
+                <div className='text-sm text-gray-500'>
+                  {relatedSegment.length > 1 ? (
+                    <span className='text-red-600'>
+                      {relatedSegment.length - 1} Aktarma
+                    </span>
+                  ) : (
+                    'Aktarmasız'
+                  )}
+                </div>
               </div>
             </div>
           </div>

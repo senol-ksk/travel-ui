@@ -11,13 +11,7 @@ import {
 import { AirlineLogo } from '@/components/airline-logo'
 
 type IProps = {
-  // data: FlightReservationSummary
   data: ProductPassengerApiResponseModel['viewBag']
-}
-
-enum CabinClass {
-  'Ekonomi',
-  'Business',
 }
 
 const FlightSummary: React.FC<IProps> = ({ data }) => {
@@ -30,9 +24,9 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
     <div className='grid gap-5'>
       {flightData.flightList
         .sort((a, b) => a.flightDetail.groupId - b.flightDetail.groupId)
-        .map((flihgtItem) => {
-          const flightDetail = flihgtItem.flightDetail
-          const flightSegments = flihgtItem.flightSegments
+        .map((flightItem) => {
+          const flightDetail = flightItem.flightDetail
+          const flightSegments = flightItem.flightSegments
           const flightSegmentsFirstItem = flightSegments[0]
           const flightSegmentsLastItem = flightSegments.at(
             -1
@@ -40,10 +34,10 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
           const hasTransfer = flightSegments.length > 1
           const transferCount = flightSegments.length - 1
 
-          const flightFareInfo = flihgtItem.flightFareInfo
+          const flightFareInfo = flightItem.flightFareInfo
 
           return (
-            <div key={flihgtItem.flightDetail.key}>
+            <div key={flightItem.flightDetail.key}>
               <div className='flex gap-2'>
                 <div>
                   <AirlineLogo
@@ -84,8 +78,10 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                 )}
               </div>
               {hasTransfer && (
-                <div className='rounded-md border border-yellow-300 bg-yellow-100 p-2 text-sm'>
-                  <div>{transferCount} Aktarma</div>
+                <div className='mt-2 rounded-md border border-yellow-300 bg-yellow-100 p-2 text-sm'>
+                  <div className='pb-2 text-center font-semibold'>
+                    {transferCount} Aktarma
+                  </div>
                   {flightSegments.map((segment, segmentIndex, segmentArr) => {
                     const prevSegment = segmentArr[segmentIndex]
                     const prevDepartureTime = dayjs(prevSegment.departureTime)
@@ -102,7 +98,7 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                     return (
                       <div key={segment.key} className='grid gap-2'>
                         <div className='flex items-center gap-3'>
-                          {transferCount > 2 && (
+                          {transferCount > 1 && (
                             <div>{segmentIndex}. Aktarma</div>
                           )}
 
