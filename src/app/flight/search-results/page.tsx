@@ -1,5 +1,5 @@
 import { Flight } from '@/modules/flight'
-import { FlightSearchView } from './search-results'
+import { FlightSearchView } from './client'
 import { Suspense } from 'react'
 import { Container, Skeleton } from '@mantine/core'
 

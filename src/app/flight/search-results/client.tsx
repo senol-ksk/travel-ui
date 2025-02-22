@@ -55,7 +55,7 @@ const FlightSearchView = () => {
     [searchResults]
   )
 
-  // if true this means Round trip, otherwise intenational or one way flight
+  // if true this means Round trip, otherwise international or one way flight
   const tripKind = useMemo(
     () =>
       isDomestic &&
@@ -99,7 +99,7 @@ const FlightSearchView = () => {
     }
   }
   const selectedFlightKeys = useRef<string[]>([])
-  const isFlightSubmiting = submitFlightData.isPending
+  const isFlightSubmitting = submitFlightData.isPending
 
   return (
     <>
@@ -308,7 +308,7 @@ const FlightSearchView = () => {
         </Container>
       </Drawer>
       <Modal
-        opened={isFlightSubmiting}
+        opened={isFlightSubmitting}
         onClose={() => {}}
         withCloseButton={false}
         centered
