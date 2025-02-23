@@ -132,7 +132,4 @@ const MemoizedFlightSearchResultsInternational = memo(
   FlightSearchResultsInternational
 )
 
-export {
-  FlightSearchResultsInternational,
-  MemoizedFlightSearchResultsInternational,
-}
+export { MemoizedFlightSearchResultsInternational }

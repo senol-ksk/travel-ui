@@ -1,7 +1,6 @@
 'use client'
 import { useMemo, useRef, useState } from 'react'
-
-import { useSearchResultsQueries } from '../search-queries'
+import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
 import {
   Button,
   Container,
@@ -11,16 +10,16 @@ import {
   NativeSelect,
   Skeleton,
 } from '@mantine/core'
+
+import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
   AirlineCode,
   ClientDataType,
   FlightDetailSegment,
   FlightFareInfo,
-} from '../type'
-import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
-
-import { MemoizedFlightSearchResultsDomestic } from './domestic-flight'
-import { MemoizedFlightSearchResultsInternational } from './international-flight'
+} from '@/app/flight/type'
+import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results/domestic-flight'
+import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
 import { formatCurrency } from '@/libs/util'
 import { SortOrderEnums } from '@/modules/flight/searchParams'
 

@@ -8,7 +8,6 @@ import { useTimeout } from '@mantine/hooks'
 import {
   filterParsers,
   flightSearchParams,
-  SortOrderEnums,
 } from '@/modules/flight/searchParams'
 import type {
   AirlineCodeServiceResponse,

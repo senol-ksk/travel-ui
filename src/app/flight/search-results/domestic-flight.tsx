@@ -1,17 +1,16 @@
+import { memo } from 'react'
+import { Button, Divider } from '@mantine/core'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+
 import { formatCurrency } from '@/libs/util'
 import {
   AirlineCode,
   FlightDetail,
   FlightDetailSegment,
   FlightFareInfo,
-} from '../type'
-import { Button, Divider } from '@mantine/core'
-
-import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
-
+} from '@/app/flight/type'
 import { AirlineLogo } from '@/components/airline-logo'
-import { memo } from 'react'
 
 dayjs.extend(duration)
 
