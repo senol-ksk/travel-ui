@@ -30,7 +30,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
   // const flightNumber = detailSegments.at(0)?.flightNumber
 
   return (
-    <div className={clsx(`@container rounded-lg border border-gray-300`)}>
+    <div className={`@container rounded-lg border border-gray-300 shadow-sm`}>
       {details.map((detail) => {
         const relatedDetailSegments = detailSegments.filter(
           (item) => detail.groupId === item.groupId

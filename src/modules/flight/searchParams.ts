@@ -1,6 +1,8 @@
 import {
   createSerializer,
   inferParserType,
+  parseAsArrayOf,
+  parseAsInteger,
   parseAsIsoDate,
   parseAsJson,
   parseAsString,
@@ -50,6 +52,7 @@ export const filterParsers = {
   order: parseAsStringEnum<SortOrderEnums>(
     Object.values(SortOrderEnums)
   ).withDefault(SortOrderEnums.priceAsc),
+  numOfStops: parseAsArrayOf(parseAsInteger),
 }
 
 export type FlightFilterSearchParams = inferParserType<typeof filterParsers>

@@ -1,10 +1,12 @@
 import dayjs from 'dayjs'
 
-import { ClientDataType, FlightDetailSegment } from '../type'
+import { ClientDataType, FlightDetailSegment } from '@/app/flight/type'
 import {
+  filterParsers,
   FlightFilterSearchParams,
   SortOrderEnums,
 } from '@/modules/flight/searchParams'
+import { useQueryStates } from 'nuqs'
 
 export const removeDuplicateFlights = (
   data: { segments: FlightDetailSegment[] }[]
@@ -29,11 +31,11 @@ export const removeDuplicateFlights = (
   return Array.from(flightMap.values())
 }
 
-export const filterActions = (
-  flightData: ClientDataType[],
+const sortOrder = (
+  flightData: ClientDataType[] | undefined,
   filterParams: FlightFilterSearchParams
 ) => {
-  const filtered = flightData.sort((a, b) => {
+  return flightData?.sort((a, b) => {
     const a_departure = dayjs(a.segments.at(0)?.departureTime)
     const b_departure = dayjs(b.segments.at(0)?.departureTime)
     const a_departure_ms = a_departure.diff(dayjs(), 'milliseconds')
@@ -72,6 +74,31 @@ export const filterActions = (
         return a.fareInfo.totalPrice.value - b.fareInfo.totalPrice.value
     }
   })
+}
 
-  return filtered
+export const useFilterActions = (flightData: ClientDataType[] | undefined) => {
+  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+  const isDomestic = flightData?.every(
+    (data) => !!data.details.every((detail) => detail.isPromotional)
+  )
+
+  const filteredData = sortOrder(flightData, filterParams)?.filter((data) => {
+    if (filterParams?.numOfStops) {
+      return (
+        filterParams?.numOfStops.filter((numOfStops) => {
+          return isDomestic
+            ? data.segments.length === numOfStops + 1
+            : data.segments.filter((segment) => segment.groupId === 0)
+                .length ===
+                numOfStops + 1 ||
+                data.segments.filter((segment) => segment.groupId === 1)
+                  .length ===
+                  numOfStops + 1
+        }).length > 0
+      )
+    }
+    return true
+  })
+
+  return { filteredData, filterParams, setFilterParams }
 }

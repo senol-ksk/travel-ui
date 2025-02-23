@@ -5,10 +5,7 @@ import { createSerializer, useQueryStates } from 'nuqs'
 import { useTransitionRouter } from 'next-view-transitions'
 import { useTimeout } from '@mantine/hooks'
 
-import {
-  filterParsers,
-  flightSearchParams,
-} from '@/modules/flight/searchParams'
+import { flightSearchParams } from '@/modules/flight/searchParams'
 import type {
   AirlineCodeServiceResponse,
   AirportCodeServiceResponse,
@@ -31,14 +28,11 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 const requestedDayFormat = 'YYYY-MM-DD'
 
 import responseDummy from './search-results/dummy-response.json'
-import {
-  filterActions,
-  removeDuplicateFlights,
-} from './search-results/filter-actions'
+import { removeDuplicateFlights } from './search-results/filter-actions'
+import router from 'next/router'
 
 const useSearchResultsQueries = () => {
   const [searchParams] = useQueryStates(flightSearchParams)
-  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
 
   const appToken = useRef<string>(null)
   const router = useTransitionRouter()
@@ -297,9 +291,7 @@ const useSearchResultsQueries = () => {
 
       const cleanData = removeDuplicateFlights(clientData) as ClientDataType[]
 
-      const filteredData = filterActions(cleanData, filterParams)
-
-      return filteredData
+      return cleanData
     },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
       if (lastPage?.data?.hasMoreResponse && !timeoutEnded.current) {
@@ -423,8 +415,6 @@ const useSearchResultsQueries = () => {
     searchSessionTokenQuery,
     getAirlineByCodeList,
     getAirportsByCodeList,
-    filterParams,
-    setFilterParams,
   }
 }
 

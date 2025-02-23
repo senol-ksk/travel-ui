@@ -56,7 +56,6 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
 
         return (
           <div key={detail.key} className='p-3'>
-            <input defaultValue={JSON.stringify(relatedSegment)} />
             <div className='flex items-center gap-3 pb-2'>
               <AirlineLogo
                 airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}

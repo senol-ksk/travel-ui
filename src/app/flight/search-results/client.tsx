@@ -1,15 +1,30 @@
 'use client'
 import { useMemo, useRef, useState } from 'react'
-import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
 import {
+  useDisclosure,
+  useMediaQuery,
+  useMounted,
+  useScrollIntoView,
+} from '@mantine/hooks'
+import {
+  Box,
   Button,
+  Checkbox,
+  CloseButton,
   Container,
   Drawer,
   Loader,
   Modal,
   NativeSelect,
+  rem,
   Skeleton,
+  Stack,
+  Title,
+  Transition,
 } from '@mantine/core'
+
+import { CiFilter } from 'react-icons/ci'
+// import { GoSortDesc } from 'react-icons/go'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -22,6 +37,7 @@ import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results
 import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
 import { formatCurrency } from '@/libs/util'
 import { SortOrderEnums } from '@/modules/flight/searchParams'
+import { useFilterActions } from './filter-actions'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -34,9 +50,14 @@ const FlightSearchView = () => {
     searchSessionTokenQuery,
     submitFlightData,
     getAirlineByCodeList,
-    setFilterParams,
-    filterParams,
   } = useSearchResultsQueries()
+  const searchQueryData = useMemo(
+    () => searchResultsQuery?.data,
+    [searchResultsQuery?.data]
+  )
+  const { filterParams, setFilterParams, filteredData } =
+    useFilterActions(searchQueryData)
+
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
     SelectedPackageStateProps[] | undefined | null
@@ -46,25 +67,20 @@ const FlightSearchView = () => {
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
 
-  const searchResults = useMemo(
-    () => searchResultsQuery.data,
-    [searchResultsQuery.data]
-  )
-
   const isDomestic = useMemo(
     () =>
-      searchResults?.every((detailSegment) =>
+      searchQueryData?.every((detailSegment) =>
         detailSegment?.details.every((detail) => detail.isDomestic)
       ),
-    [searchResults]
+    [searchQueryData]
   )
 
   // if true this means Round trip, otherwise international or one way flight
   const tripKind = useMemo(
     () =>
       isDomestic &&
-      !!searchResults?.filter((results) => results.fareInfo.groupId > 0).length,
-    [isDomestic, searchResults]
+      !!filteredData?.filter((results) => results.fareInfo.groupId > 0).length,
+    [isDomestic, filteredData]
   )
 
   // this is for flight select. first this should be called, then `handlePackageSelect`
@@ -105,10 +121,24 @@ const FlightSearchView = () => {
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmitting = submitFlightData.isPending
 
+  const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
+  const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
+  const mounted = useMounted()
+
+  if (!mounted)
+    return (
+      <Container className='grid gap-3 py-4'>
+        <Skeleton h={30} radius='sm' />
+        <Skeleton h={20} radius='sm' w={'90%'} />
+        <Skeleton h={16} radius='sm' w={'95%'} />
+      </Container>
+    )
+
   return (
     <>
       {searchResultsQuery.isLoading ||
       searchResultsQuery.isFetching ||
+      searchResultsQuery.isFetchingNextPage ||
       searchSessionTokenQuery.isLoading ? (
         <div className='relative'>
           <div className='absolute start-0 end-0 top-0 bottom-0 h-[8px]'>
@@ -116,82 +146,179 @@ const FlightSearchView = () => {
           </div>
         </div>
       ) : null}
+
       <Container ref={targetRef} className='pt-5'>
-        <div className='flex justify-end'>
-          <NativeSelect
-            defaultValue={filterParams.order}
-            onChange={({ currentTarget: { value } }) => {
-              setFilterParams({
-                order: value as SortOrderEnums,
-              })
-            }}
-            data={[
-              { label: 'Fiyat (Artan)', value: SortOrderEnums.priceAsc },
-              { label: 'Fiyat (Azalan)', value: SortOrderEnums.priceDesc },
-              { label: 'Gidiş Saati (Artan)', value: SortOrderEnums.hourAsc },
-              { label: 'Gidiş Saati (Azalan)', value: SortOrderEnums.hourDesc },
-              {
-                label: 'Uçuş Süresi (Artan)',
-                value: SortOrderEnums.durationAsc,
-              },
-              {
-                label: 'Uçuş Süresi (Azalan)',
-                value: SortOrderEnums.durationDesc,
-              },
-              // { label: 'Varış Saati (Artan)', value: '' },
-              // { label: 'Varış Saati (Azalan)', value: '' },
-            ]}
-          />
-        </div>
         <div className='grid md:grid-cols-4 md:gap-3'>
           <div className='md:col-span-1'>
-            Filter section
-            <div className='rounded-md border border-gray-300 p-3'>
-              <div className='pb-3'>Aktarma</div>
-              {/* <Stack>
-              <Checkbox label='Aktarmasız' />
-              <Checkbox label='1 Aktarma' />
-            </Stack> */}
-            </div>
+            <Transition
+              transition={'slide-right'}
+              mounted={filterSectionIsOpened || !!isBreakPointMatchesMd}
+            >
+              {(styles) => (
+                <div
+                  className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static'
+                  style={styles}
+                >
+                  {searchResultsQuery.isLoading ||
+                  searchResultsQuery.isFetching ||
+                  searchResultsQuery.isFetchingNextPage ||
+                  searchSessionTokenQuery.isLoading ? (
+                    <div className='grid gap-2'>
+                      <Skeleton h={25} className='grow-0' w={'100%'} />
+                      <Skeleton h={18} w={150} />
+                      <div className='flex gap-1'>
+                        <Skeleton className='size-4' />
+                        <Skeleton className='flex-1' />
+                      </div>
+                      <div className='flex gap-1'>
+                        <Skeleton className='size-4' />
+                        <Skeleton className='flex-1' />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className='flex justify-end md:hidden'>
+                        <CloseButton
+                          size={'lg'}
+                          onClick={() => setFilterSectionIsOpened(false)}
+                        />
+                      </div>
+                      <Title order={2} fz={'h4'} mb={rem(20)}>
+                        Filtreler
+                      </Title>
+                      <div>
+                        <Title order={6} fz='h5' mb={rem(10)}>
+                          Aktarma
+                        </Title>
+                        <Checkbox.Group
+                          onChange={(value) => {
+                            setFilterParams({
+                              numOfStops: value.length
+                                ? value.map(Number)
+                                : null,
+                            })
+                          }}
+                          defaultValue={filterParams.numOfStops?.map(String)}
+                        >
+                          <Stack gap={6}>
+                            {searchQueryData?.find((result) =>
+                              isDomestic
+                                ? result.segments.length === 1
+                                : result.segments.filter(
+                                    (segment) => segment.groupId === 0
+                                  ).length === 1 ||
+                                  result.segments.filter(
+                                    (segment) => segment.groupId === 1
+                                  ).length === 1
+                            ) && <Checkbox label='Aktarmasız' value={'0'} />}
+                            {searchQueryData?.find((result) =>
+                              isDomestic
+                                ? result.segments.length === 2
+                                : result.segments.filter(
+                                    (segment) => segment.groupId === 0
+                                  ).length === 2 ||
+                                  result.segments.filter(
+                                    (segment) => segment.groupId === 1
+                                  ).length === 2
+                            ) && <Checkbox label='1 Aktarma' value={'1'} />}
+                            {searchQueryData?.find((result) =>
+                              isDomestic
+                                ? result.segments.length > 2
+                                : result.segments.filter(
+                                    (segment) => segment.groupId === 0
+                                  ).length > 2 ||
+                                  result.segments.filter(
+                                    (segment) => segment.groupId === 1
+                                  ).length > 2
+                            ) && <Checkbox label='2+ Aktarma' value={'2'} />}
+                          </Stack>
+                        </Checkbox.Group>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </Transition>
           </div>
           <div className='md:col-span-3'>
-            {searchResults?.length ? (
+            <div className='grid grid-cols-2 pb-3'>
+              <Box className='justify-self-start'>
+                <Button
+                  leftSection={<CiFilter size={23} />}
+                  // variant='outline'
+                  color='green'
+                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                  hiddenFrom='md'
+                >
+                  Filtrele
+                </Button>
+              </Box>
+              <div className='justify-self-end'>
+                <NativeSelect
+                  maw={150}
+                  classNames={{
+                    label: 'hidden',
+                  }}
+                  label='Sırala'
+                  defaultValue={filterParams.order}
+                  // leftSection={<GoSortDesc size={20} />}
+                  onChange={({ currentTarget: { value } }) => {
+                    setFilterParams({
+                      order: value as SortOrderEnums,
+                    })
+                  }}
+                  data={[
+                    {
+                      label: 'Fiyat (Ucuzdan pahalıya)',
+                      value: SortOrderEnums.priceAsc,
+                    },
+                    {
+                      label: 'Fiyat (Pahalıdan ucuza)',
+                      value: SortOrderEnums.priceDesc,
+                    },
+                    {
+                      label: 'Gidiş Saati (En erken)',
+                      value: SortOrderEnums.hourAsc,
+                    },
+                    {
+                      label: 'Gidiş Saati (En geç)',
+                      value: SortOrderEnums.hourDesc,
+                    },
+                    {
+                      label: 'Uçuş Süresi (En kısa süreli)',
+                      value: SortOrderEnums.durationAsc,
+                    },
+                    {
+                      label: 'Uçuş Süresi (En uzun süreli)',
+                      value: SortOrderEnums.durationDesc,
+                    },
+                    // { label: 'Varış Saati (Artan)', value: '' },
+                    // { label: 'Varış Saati (Azalan)', value: '' },
+                  ]}
+                />
+              </div>
+            </div>
+            {filteredData?.length ? (
               isDomestic ? (
                 isReturnFlightVisible ? (
                   <div>
-                    <span>Dönüş uçuşunuzu seçiniz.</span>{' '}
-                    <strong>
-                      {
-                        searchResults?.filter(
-                          (item) => item.fareInfo.groupId === 1
-                        ).length
-                      }
-                    </strong>{' '}
-                    Sonuç
+                    <span>Dönüş uçuşunuzu seçiniz.</span>
                   </div>
                 ) : (
                   <div>
-                    <span>Gidiş uçuşunuzu seçiniz. Toplam</span>{' '}
-                    <strong>
-                      {
-                        searchResults?.filter(
-                          (item) => item.fareInfo.groupId === 0
-                        ).length
-                      }
-                    </strong>{' '}
-                    Sonuç
+                    <span>Gidiş uçuşunuzu seçiniz.</span>
                   </div>
                 )
               ) : null
             ) : null}
             <div
-              className='grid gap-3'
+              className='grid gap-3 pt-3 md:gap-5'
               style={{
                 contentVisibility: 'auto',
               }}
             >
               {isDomestic
-                ? searchResults
+                ? filteredData
                     ?.filter((item) => {
                       const groupId = isReturnFlightVisible ? 1 : 0
                       return item.fareInfo.groupId === groupId
@@ -224,7 +351,7 @@ const FlightSearchView = () => {
                         />
                       )
                     })
-                : searchResults?.map((result) => {
+                : filteredData?.map((result) => {
                     const segmentAirlines = result.segments.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code
                         ? item.marketingAirline.code
