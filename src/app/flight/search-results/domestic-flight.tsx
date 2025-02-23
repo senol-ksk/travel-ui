@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
 import { AirlineLogo } from '@/components/airline-logo'
+import { memo } from 'react'
 
 dayjs.extend(duration)
 
@@ -37,8 +38,10 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         )
         const flightNumber = relatedSegment.at(0)?.flightNumber
 
-        const lastArrivalTime = dayjs(relatedSegment.at(-1)?.arrivalTime)
-        const firstDepartureTime = dayjs(relatedSegment.at(0)?.departureTime)
+        const firstDepartureTime = dayjs.utc(
+          relatedSegment.at(0)?.departureTime
+        )
+        const lastArrivalTime = dayjs.utc(relatedSegment.at(-1)?.arrivalTime)
         const arrivalIsAfter = lastArrivalTime.isAfter(firstDepartureTime, 'D')
 
         const totalFlightDuration = dayjs.duration(
@@ -54,6 +57,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
 
         return (
           <div key={detail.key} className='p-3'>
+            <input defaultValue={JSON.stringify(relatedSegment)} />
             <div className='flex items-center gap-3 pb-2'>
               <AirlineLogo
                 airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
@@ -63,9 +67,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
             </div>
             <div className='flex items-center gap-2'>
               <div>
-                <div>
-                  {dayjs(relatedSegment.at(0)?.departureTime).format('HH:mm')}
-                </div>
+                <div>{firstDepartureTime.format('HH:mm')}</div>
                 <div>{relatedSegment.at(0)?.origin.code}</div>
               </div>
               <div className='relative grow'>
@@ -73,7 +75,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
               </div>
               <div>
                 <div>
-                  {dayjs(relatedSegment.at(-1)?.arrivalTime).format('HH:mm')}
+                  {lastArrivalTime.format('HH:mm')}
                   {arrivalIsAfter && <sup className='text-red-700'> +1</sup>}
                 </div>
                 <div>{relatedSegment.at(-1)?.destination.code}</div>
@@ -119,4 +121,8 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   )
 }
 
-export { FlightSearchResultsOneWayDomestic }
+const MemoizedFlightSearchResultsDomestic = memo(
+  FlightSearchResultsOneWayDomestic
+)
+
+export { MemoizedFlightSearchResultsDomestic }

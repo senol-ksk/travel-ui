@@ -2,13 +2,13 @@
 import { useMemo, useRef, useState } from 'react'
 
 import { useSearchResultsQueries } from '../search-queries'
-import { FlightSearchResultsOneWayDomestic } from './domestic-flight'
 import {
   Button,
   Container,
   Drawer,
   Loader,
   Modal,
+  NativeSelect,
   Skeleton,
 } from '@mantine/core'
 import {
@@ -19,8 +19,10 @@ import {
 } from '../type'
 import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
 
+import { MemoizedFlightSearchResultsDomestic } from './domestic-flight'
 import { MemoizedFlightSearchResultsInternational } from './international-flight'
 import { formatCurrency } from '@/libs/util'
+import { SortOrderEnums } from '@/modules/flight/searchParams'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -33,8 +35,10 @@ const FlightSearchView = () => {
     searchSessionTokenQuery,
     submitFlightData,
     getAirlineByCodeList,
+    setFilterParams,
+    filterParams,
   } = useSearchResultsQueries()
-  const [isNextFlightVisible, setIsNextFlightVisible] = useState(false)
+  const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
     SelectedPackageStateProps[] | undefined | null
   >()
@@ -42,6 +46,7 @@ const FlightSearchView = () => {
     packageDrawerOpened,
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
+
   const searchResults = useMemo(
     () => searchResultsQuery.data,
     [searchResultsQuery.data]
@@ -49,8 +54,8 @@ const FlightSearchView = () => {
 
   const isDomestic = useMemo(
     () =>
-      searchResults?.every((detailSegmeng) =>
-        detailSegmeng?.details.every((detail) => detail.isDomestic)
+      searchResults?.every((detailSegment) =>
+        detailSegment?.details.every((detail) => detail.isDomestic)
       ),
     [searchResults]
   )
@@ -90,9 +95,9 @@ const FlightSearchView = () => {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     }
 
-    if (tripKind && !isNextFlightVisible) {
+    if (tripKind && !isReturnFlightVisible) {
       scrollIntoView()
-      setIsNextFlightVisible(true)
+      setIsReturnFlightVisible(true)
     } else {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
       selectedFlightKeys.current = []
@@ -112,8 +117,34 @@ const FlightSearchView = () => {
           </div>
         </div>
       ) : null}
-      <Container>
-        <div className='grid py-5 md:grid-cols-4 md:gap-3 md:py-9'>
+      <Container ref={targetRef} className='pt-5'>
+        <div className='flex justify-end'>
+          <NativeSelect
+            defaultValue={filterParams.order}
+            onChange={({ currentTarget: { value } }) => {
+              setFilterParams({
+                order: value as SortOrderEnums,
+              })
+            }}
+            data={[
+              { label: 'Fiyat (Artan)', value: SortOrderEnums.priceAsc },
+              { label: 'Fiyat (Azalan)', value: SortOrderEnums.priceDesc },
+              { label: 'Gidiş Saati (Artan)', value: SortOrderEnums.hourAsc },
+              { label: 'Gidiş Saati (Azalan)', value: SortOrderEnums.hourDesc },
+              {
+                label: 'Uçuş Süresi (Artan)',
+                value: SortOrderEnums.durationAsc,
+              },
+              {
+                label: 'Uçuş Süresi (Azalan)',
+                value: SortOrderEnums.durationDesc,
+              },
+              // { label: 'Varış Saati (Artan)', value: '' },
+              // { label: 'Varış Saati (Azalan)', value: '' },
+            ]}
+          />
+        </div>
+        <div className='grid md:grid-cols-4 md:gap-3'>
           <div className='md:col-span-1'>
             Filter section
             <div className='rounded-md border border-gray-300 p-3'>
@@ -124,16 +155,36 @@ const FlightSearchView = () => {
             </Stack> */}
             </div>
           </div>
-          <div className='md:col-span-3' ref={targetRef}>
-            {searchResults?.length && `Toplam Sonuç `}
-
-            {searchResults?.length
-              ? isDomestic
-                ? isNextFlightVisible
-                  ? `${searchResults?.filter((item) => item.fareInfo.groupId === 1).length}`
-                  : `${searchResults?.filter((item) => item.fareInfo.groupId === 0).length}`
-                : `${searchResults?.length}`
-              : null}
+          <div className='md:col-span-3'>
+            {searchResults?.length ? (
+              isDomestic ? (
+                isReturnFlightVisible ? (
+                  <div>
+                    <span>Dönüş uçuşunuzu seçiniz.</span>{' '}
+                    <strong>
+                      {
+                        searchResults?.filter(
+                          (item) => item.fareInfo.groupId === 1
+                        ).length
+                      }
+                    </strong>{' '}
+                    Sonuç
+                  </div>
+                ) : (
+                  <div>
+                    <span>Gidiş uçuşunuzu seçiniz. Toplam</span>{' '}
+                    <strong>
+                      {
+                        searchResults?.filter(
+                          (item) => item.fareInfo.groupId === 0
+                        ).length
+                      }
+                    </strong>{' '}
+                    Sonuç
+                  </div>
+                )
+              ) : null
+            ) : null}
             <div
               className='grid gap-3'
               style={{
@@ -141,67 +192,39 @@ const FlightSearchView = () => {
               }}
             >
               {isDomestic
-                ? !isNextFlightVisible
-                  ? searchResults
-                      ?.filter((item) => item.fareInfo.groupId === 0)
-                      ?.map((result) => {
-                        const segmentAirlines = result.segments.map((item) =>
-                          item.marketingAirline.code ===
-                          item.operatingAirline.code
-                            ? item.marketingAirline.code
-                            : item.operatingAirline.code
-                        )
+                ? searchResults
+                    ?.filter((item) => {
+                      const groupId = isReturnFlightVisible ? 1 : 0
+                      return item.fareInfo.groupId === groupId
+                    })
+                    ?.map((result) => {
+                      const segmentAirlines = result.segments.map((item) =>
+                        item.marketingAirline.code ===
+                        item.operatingAirline.code
+                          ? item.marketingAirline.code
+                          : item.operatingAirline.code
+                      )
 
-                        const airlineValues: AirlineCode[] | undefined =
-                          getAirlineByCodeList?.data?.filter((airlineObj) =>
-                            segmentAirlines.find(
-                              (segment) => segment === airlineObj.Code
-                            )
+                      const airlineValues: AirlineCode[] | undefined =
+                        getAirlineByCodeList?.data?.filter((airlineObj) =>
+                          segmentAirlines.find(
+                            (segment) => segment === airlineObj.Code
                           )
-                        return (
-                          <FlightSearchResultsOneWayDomestic
-                            airlineValues={airlineValues}
-                            detailSegments={result.segments}
-                            details={result.details}
-                            fareInfo={result.fareInfo}
-                            onSelect={() => {
-                              handleFlightSelect(result)
-                            }}
-                            key={result.fareInfo.key}
-                          />
-                        )
-                      })
-                  : searchResults
-                      ?.filter((item) => item.fareInfo.groupId === 1)
-                      ?.map((result) => {
-                        const segmentAirlines = result.segments.map((item) =>
-                          item.marketingAirline.code ===
-                          item.operatingAirline.code
-                            ? item.marketingAirline.code
-                            : item.operatingAirline.code
                         )
 
-                        const airlineValues: AirlineCode[] | undefined =
-                          getAirlineByCodeList?.data?.filter((airlineObj) =>
-                            segmentAirlines.find(
-                              (segment) => segment === airlineObj.Code
-                            )
-                          )
-                        return (
-                          <FlightSearchResultsOneWayDomestic
-                            airlineValues={airlineValues}
-                            detailSegments={result.segments}
-                            details={result.details}
-                            fareInfo={result.fareInfo}
-                            onSelect={() => {
-                              // openPackageDrawer()
-
-                              handleFlightSelect(result)
-                            }}
-                            key={result.fareInfo.key}
-                          />
-                        )
-                      })
+                      return (
+                        <MemoizedFlightSearchResultsDomestic
+                          airlineValues={airlineValues}
+                          detailSegments={result.segments}
+                          details={result.details}
+                          fareInfo={result.fareInfo}
+                          onSelect={() => {
+                            handleFlightSelect(result)
+                          }}
+                          key={result.fareInfo.key}
+                        />
+                      )
+                    })
                 : searchResults?.map((result) => {
                     const segmentAirlines = result.segments.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code

@@ -5,7 +5,11 @@ import { createSerializer, useQueryStates } from 'nuqs'
 import { useTransitionRouter } from 'next-view-transitions'
 import { useTimeout } from '@mantine/hooks'
 
-import { flightSearchParams } from '@/modules/flight/searchParams'
+import {
+  filterParsers,
+  flightSearchParams,
+  SortOrderEnums,
+} from '@/modules/flight/searchParams'
 import type {
   AirlineCodeServiceResponse,
   AirportCodeServiceResponse,
@@ -22,36 +26,21 @@ import {
   serviceRequest,
 } from '@/network'
 
-import { delayCodeExecution } from '@/libs/util'
+import { days, delayCodeExecution } from '@/libs/util'
 import { reservationParsers } from '@/app/reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
-const removeDuplicateFlights = (
-  data: { segments: FlightDetailSegment[] }[]
-) => {
-  const flightMap = new Map()
-
-  data.forEach((item) => {
-    const flightNumbers = item.segments
-      .map((segment) => segment.flightNumber)
-      .join(',')
-
-    if (!flightMap.has(flightNumbers)) {
-      flightMap.set(flightNumbers, item)
-    } else {
-      // Keep the entry with the most segments
-      if (item.segments.length > flightMap.get(flightNumbers).segments.length) {
-        flightMap.set(flightNumbers, item)
-      }
-    }
-  })
-
-  return Array.from(flightMap.values())
-}
+import responseDummy from './search-results/dummy-response.json'
+import {
+  filterActions,
+  removeDuplicateFlights,
+} from './search-results/filter-actions'
 
 const useSearchResultsQueries = () => {
   const [searchParams] = useQueryStates(flightSearchParams)
+  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+
   const appToken = useRef<string>(null)
   const router = useTransitionRouter()
 
@@ -183,8 +172,7 @@ const useSearchResultsQueries = () => {
         },
       })) as FlightSearchResultsApiResponse
       return response
-
-      // return dummyInternational as FlightSearchResultsApiResponse
+      // return responseDummy
     },
     select(data) {
       const pages = data.pages
@@ -273,7 +261,7 @@ const useSearchResultsQueries = () => {
             packageObject,
           }
         })
-        .map((clientObj, cliengtObjIndex, clientObjArr) => {
+        .map((clientObj, clientObjIndex, clientObjArr) => {
           const isDomestic = clientObj.details.every(
             (detail) => detail.isDomestic
           )
@@ -310,7 +298,9 @@ const useSearchResultsQueries = () => {
 
       const cleanData = removeDuplicateFlights(clientData) as ClientDataType[]
 
-      return cleanData
+      const filteredData = filterActions(cleanData, filterParams)
+
+      return filteredData
     },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
       if (lastPage?.data?.hasMoreResponse && !timeoutEnded.current) {
@@ -369,27 +359,18 @@ const useSearchResultsQueries = () => {
   const airlineQueryParamsCodeArr = () => {
     return [
       ...new Set(
-        searchResultsQuery?.data?.flatMap((item) =>
-          item.segments.map((item2) => item2.marketingAirline.code)
-        )
-      ),
-    ]
-  }
-  const airportQueryParamsCodeArr = () => {
-    return [
-      ...new Set(
-        searchResultsQuery?.data?.flatMap((item) =>
-          item.segments.map((item2) =>
-            [item2.destination.code, item2.origin.code].flat()
+        searchResultsQuery?.data
+          ?.flatMap((item) =>
+            item.segments.map((item2) => item2.marketingAirline.code)
           )
-        )
+          .sort()
       ),
-    ]
+    ].sort()
   }
 
   const getAirlineByCodeList = useQuery({
     enabled: !!searchResultsQuery.data?.length,
-    queryKey: ['airline-code-list', airlineQueryParamsCodeArr().toString()],
+    queryKey: ['airline-code-list', airlineQueryParamsCodeArr().sort()],
     queryFn: async () => {
       const response = (await request({
         url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairlinebycodelist',
@@ -406,9 +387,20 @@ const useSearchResultsQueries = () => {
     },
   })
 
+  const airportQueryParamsCodeArr = () => {
+    const airports = searchResultsQuery?.data
+      ?.flatMap((item) =>
+        item.segments.map((item2) =>
+          [item2.destination.code, item2.origin.code].flat()
+        )
+      )
+      .flat()
+
+    return [...new Set(airports)].sort()
+  }
   const getAirportsByCodeList = useQuery({
     enabled: !!searchResultsQuery.data?.length,
-    queryKey: ['airports-code-list', airlineQueryParamsCodeArr().toString()],
+    queryKey: ['airports-code-list', airportQueryParamsCodeArr().sort()],
     queryFn: async () => {
       const response = (await request({
         url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairportbycodelist',
@@ -432,6 +424,8 @@ const useSearchResultsQueries = () => {
     searchSessionTokenQuery,
     getAirlineByCodeList,
     getAirportsByCodeList,
+    filterParams,
+    setFilterParams,
   }
 }
 
