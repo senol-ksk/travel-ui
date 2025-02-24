@@ -134,6 +134,7 @@ const FlightSearchView = () => {
       </Container>
     )
 
+  console.log(filterParams.numOfStops)
   return (
     <>
       {searchResultsQuery.isLoading ||
@@ -147,7 +148,7 @@ const FlightSearchView = () => {
         </div>
       ) : null}
 
-      <Container ref={targetRef} className='pt-5'>
+      <Container ref={targetRef} className='pt-5 pb-20'>
         <div className='grid md:grid-cols-4 md:gap-3'>
           <div className='md:col-span-1'>
             <Transition
@@ -198,7 +199,11 @@ const FlightSearchView = () => {
                                 : null,
                             })
                           }}
-                          defaultValue={filterParams.numOfStops?.map(String)}
+                          value={
+                            filterParams.numOfStops?.length
+                              ? filterParams.numOfStops?.map(String)
+                              : []
+                          }
                         >
                           <Stack gap={6}>
                             {searchQueryData?.find((result) =>
@@ -244,6 +249,7 @@ const FlightSearchView = () => {
             <div className='grid grid-cols-2 pb-3'>
               <Box className='justify-self-start'>
                 <Button
+                  size='sm'
                   leftSection={<CiFilter size={23} />}
                   // variant='outline'
                   color='green'
@@ -255,13 +261,12 @@ const FlightSearchView = () => {
               </Box>
               <div className='justify-self-end'>
                 <NativeSelect
-                  maw={150}
+                  size='sm'
                   classNames={{
                     label: 'hidden',
                   }}
                   label='Sırala'
-                  defaultValue={filterParams.order}
-                  // leftSection={<GoSortDesc size={20} />}
+                  value={filterParams.order}
                   onChange={({ currentTarget: { value } }) => {
                     setFilterParams({
                       order: value as SortOrderEnums,

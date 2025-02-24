@@ -37,11 +37,11 @@ const useSearchResultsQueries = () => {
   const appToken = useRef<string>(null)
   const router = useTransitionRouter()
 
-  const timeoutEnded = useRef(false)
-  const { start: startSearchResultsTimeout, clear: clearSearchResultsTimeout } =
-    useTimeout(() => {
-      timeoutEnded.current = true
-    }, 60 * 1000)
+  // const timeoutEnded = useRef(false)
+  // const { start: startSearchResultsTimeout, clear: clearSearchResultsTimeout } =
+  //   useTimeout(() => {
+  //     timeoutEnded.current = true
+  //   }, 60 * 1000)
 
   const generateFlightSearchPanel = () => {
     const FlightSearchPanel = {
@@ -108,7 +108,7 @@ const useSearchResultsQueries = () => {
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
       const response = await getFlightSearchSessionToken()
-      startSearchResultsTimeout()
+      // startSearchResultsTimeout()
 
       return response
     },
@@ -294,7 +294,7 @@ const useSearchResultsQueries = () => {
       return cleanData
     },
     getNextPageParam: (lastPage, pages, lastPageParams) => {
-      if (lastPage?.data?.hasMoreResponse && !timeoutEnded.current) {
+      if (lastPage?.data?.hasMoreResponse) {
         if (lastPage?.data?.searchResults?.length) {
           lastPage.data.searchResults.forEach((searchResult) => {
             const providerName = searchResult.diagnostics.providerName
@@ -306,6 +306,7 @@ const useSearchResultsQueries = () => {
 
         return lastPageParams
       }
+      // clearSearchResultsTimeout()
       return undefined
     },
   })

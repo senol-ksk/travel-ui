@@ -18,7 +18,7 @@ type IProps = {
   fareInfo: FlightFareInfo
   details: FlightDetail[]
   detailSegments: FlightDetailSegment[]
-  onSelect: (fareInfo: FlightFareInfo) => void
+  onSelect: () => void
   airlineValues: AirlineCode[] | undefined
 }
 
@@ -35,6 +35,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         const relatedSegment = detailSegments.filter(
           (segment) => detail.groupId === segment.groupId
         )
+        const hasTransferStop = relatedSegment.length > 1
         const flightNumber = relatedSegment.at(0)?.flightNumber
 
         const firstDepartureTime = dayjs.utc(
@@ -89,7 +90,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
               </div>
               <div className='flex justify-center'>
                 <div className='text-sm text-gray-500'>
-                  {relatedSegment.length > 1 ? (
+                  {hasTransferStop ? (
                     <span className='text-red-600'>
                       {relatedSegment.length - 1} Aktarma
                     </span>
@@ -99,6 +100,31 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                 </div>
               </div>
             </div>
+            {/* {hasTransferStop && (
+              <div className='flex items-center justify-center gap-1 p-1 text-xs text-gray-600'>
+                <span>{relatedSegment[0].origin.code}</span>
+                <span>&gt;</span>
+                <span>{relatedSegment[0].destination.code}</span>
+                <span>&gt;</span>
+                <span>{relatedSegment[1].destination.code}</span>
+              </div>
+            )} */}
+            {hasTransferStop && (
+              <div className='flex justify-center gap-1 text-xs text-gray-600'>
+                {relatedSegment.map((segment, segmentIndex, segmentArr) => {
+                  return (
+                    <div key={segment.key} className='flex items-center gap-1'>
+                      <span>{segment.origin.code} &gt;</span>
+                      {segmentIndex > 0 && (
+                        <span>
+                          {segmentArr.at(segmentIndex)?.destination.code}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )
       })}
@@ -108,7 +134,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           <Button
             type='button'
             onClick={() => {
-              onSelect(fareInfo)
+              onSelect()
             }}
           >
             Seç
