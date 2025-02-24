@@ -7,6 +7,8 @@ import {
   useScrollIntoView,
 } from '@mantine/hooks'
 import {
+  Accordion,
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -22,9 +24,8 @@ import {
   Title,
   Transition,
 } from '@mantine/core'
-
+import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
-// import { GoSortDesc } from 'react-icons/go'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -36,8 +37,9 @@ import {
 import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results/domestic-flight'
 import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
 import { formatCurrency } from '@/libs/util'
-import { SortOrderEnums } from '@/modules/flight/searchParams'
+import { filterParsers, SortOrderEnums } from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
+import { HourRangeSlider } from './components/hour-range'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -50,13 +52,15 @@ const FlightSearchView = () => {
     searchSessionTokenQuery,
     submitFlightData,
     getAirlineByCodeList,
+    getAirportsByCodeList,
   } = useSearchResultsQueries()
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
-  const { filterParams, setFilterParams, filteredData } =
-    useFilterActions(searchQueryData)
+  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+
+  const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
@@ -134,7 +138,6 @@ const FlightSearchView = () => {
       </Container>
     )
 
-  console.log(filterParams.numOfStops)
   return (
     <>
       {searchResultsQuery.isLoading ||
@@ -187,58 +190,165 @@ const FlightSearchView = () => {
                       <Title order={2} fz={'h4'} mb={rem(20)}>
                         Filtreler
                       </Title>
-                      <div>
-                        <Title order={6} fz='h5' mb={rem(10)}>
-                          Aktarma
-                        </Title>
-                        <Checkbox.Group
-                          onChange={(value) => {
-                            setFilterParams({
-                              numOfStops: value.length
-                                ? value.map(Number)
-                                : null,
-                            })
-                          }}
-                          value={
-                            filterParams.numOfStops?.length
-                              ? filterParams.numOfStops?.map(String)
-                              : []
-                          }
-                        >
-                          <Stack gap={6}>
-                            {searchQueryData?.find((result) =>
-                              isDomestic
-                                ? result.segments.length === 1
-                                : result.segments.filter(
-                                    (segment) => segment.groupId === 0
-                                  ).length === 1 ||
-                                  result.segments.filter(
-                                    (segment) => segment.groupId === 1
-                                  ).length === 1
-                            ) && <Checkbox label='Aktarmasız' value={'0'} />}
-                            {searchQueryData?.find((result) =>
-                              isDomestic
-                                ? result.segments.length === 2
-                                : result.segments.filter(
-                                    (segment) => segment.groupId === 0
-                                  ).length === 2 ||
-                                  result.segments.filter(
-                                    (segment) => segment.groupId === 1
-                                  ).length === 2
-                            ) && <Checkbox label='1 Aktarma' value={'1'} />}
-                            {searchQueryData?.find((result) =>
-                              isDomestic
-                                ? result.segments.length > 2
-                                : result.segments.filter(
-                                    (segment) => segment.groupId === 0
-                                  ).length > 2 ||
-                                  result.segments.filter(
-                                    (segment) => segment.groupId === 1
-                                  ).length > 2
-                            ) && <Checkbox label='2+ Aktarma' value={'2'} />}
-                          </Stack>
-                        </Checkbox.Group>
-                      </div>
+                      <Accordion
+                        defaultValue={[
+                          'numOfStops',
+                          'airlines',
+                          'departureHours',
+                        ]}
+                        multiple
+                      >
+                        <Accordion.Item value='numOfStops'>
+                          <Accordion.Control>Aktarma</Accordion.Control>
+                          <Accordion.Panel>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  numOfStops: value.length
+                                    ? value.map(Number)
+                                    : null,
+                                })
+                              }}
+                              value={
+                                filterParams.numOfStops?.length
+                                  ? filterParams.numOfStops?.map(String)
+                                  : []
+                              }
+                            >
+                              <Stack gap={6}>
+                                {searchQueryData?.find((result) =>
+                                  isDomestic
+                                    ? result.segments.length === 1
+                                    : result.segments.filter(
+                                        (segment) => segment.groupId === 0
+                                      ).length === 1 ||
+                                      result.segments.filter(
+                                        (segment) => segment.groupId === 1
+                                      ).length === 1
+                                ) && (
+                                  <Checkbox
+                                    name='numOfStops'
+                                    label='Aktarmasız'
+                                    value={'0'}
+                                  />
+                                )}
+                                {searchQueryData?.find((result) =>
+                                  isDomestic
+                                    ? result.segments.length === 2
+                                    : result.segments.filter(
+                                        (segment) => segment.groupId === 0
+                                      ).length === 2 ||
+                                      result.segments.filter(
+                                        (segment) => segment.groupId === 1
+                                      ).length === 2
+                                ) && (
+                                  <Checkbox
+                                    name='numOfStops'
+                                    label='1 Aktarma'
+                                    value={'1'}
+                                  />
+                                )}
+                                {searchQueryData?.find((result) =>
+                                  isDomestic
+                                    ? result.segments.length > 2
+                                    : result.segments.filter(
+                                        (segment) => segment.groupId === 0
+                                      ).length > 2 ||
+                                      result.segments.filter(
+                                        (segment) => segment.groupId === 1
+                                      ).length > 2
+                                ) && (
+                                  <Checkbox
+                                    name='numOfStops'
+                                    label='2+ Aktarma'
+                                    value={'2'}
+                                  />
+                                )}
+                              </Stack>
+                            </Checkbox.Group>
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                        <Accordion.Item value='airlines'>
+                          <Accordion.Control>Hava Yolları</Accordion.Control>
+                          <Accordion.Panel>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  airlines: value.length ? value : null,
+                                })
+                              }}
+                              value={filterParams.airlines?.map(String)}
+                            >
+                              <Stack gap={6}>
+                                {getAirlineByCodeList.data?.map((airline) => {
+                                  return (
+                                    <div key={airline.Code}>
+                                      <Checkbox
+                                        name='airlines'
+                                        label={
+                                          airline.Value.find(
+                                            (airlineValue) =>
+                                              airlineValue.LangCode === 'tr_TR'
+                                          )?.Value
+                                        }
+                                        value={airline.Code}
+                                      />
+                                    </div>
+                                  )
+                                })}
+                              </Stack>
+                            </Checkbox.Group>
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                        <Accordion.Item value='airports'>
+                          <Accordion.Control>Havaalanları</Accordion.Control>
+                          <Accordion.Panel>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  airports: value.length ? value : null,
+                                })
+                              }}
+                              value={filterParams.airports?.map(String)}
+                            >
+                              <Stack gap={6}>
+                                {getAirportsByCodeList.data?.map((airports) => {
+                                  return (
+                                    <div key={airports.Code}>
+                                      <Checkbox
+                                        name='airports'
+                                        label={
+                                          airports.Value.find(
+                                            (airportValue) =>
+                                              airportValue.LangCode === 'tr_TR'
+                                          )?.Value
+                                        }
+                                        value={airports.Code}
+                                      />
+                                    </div>
+                                  )
+                                })}
+                              </Stack>
+                            </Checkbox.Group>
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                        <Accordion.Item value='departureHours'>
+                          <Accordion.Control>Kalkış saatleri</Accordion.Control>
+                          <Accordion.Panel>
+                            <HourRangeSlider
+                              filterParams={filterParams.departureHours}
+                              onChange={(hourRange) => {
+                                setFilterParams({
+                                  departureHours: [
+                                    hourRange.at(0)?.label ?? '',
+                                    hourRange.at(-1)?.label ?? '',
+                                  ],
+                                })
+                              }}
+                            />
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      </Accordion>
                     </>
                   )}
                 </div>
@@ -322,6 +432,11 @@ const FlightSearchView = () => {
                 contentVisibility: 'auto',
               }}
             >
+              {filteredData?.length === 0 && (
+                <Alert color='red'>
+                  Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
+                </Alert>
+              )}
               {isDomestic
                 ? filteredData
                     ?.filter((item) => {

@@ -1,0 +1,154 @@
+'use client'
+
+import { RangeSlider, UnstyledButton } from '@mantine/core'
+import clsx from 'clsx'
+import { useState } from 'react'
+import { LuSun } from 'react-icons/lu'
+import { BsSunsetFill } from 'react-icons/bs'
+import { BsMoonStarsFill } from 'react-icons/bs'
+
+type Range = {
+  value: number
+  label: string
+}
+
+const hours = [...Array(48)].map((e, i) => {
+  return (
+    (i / 2 < 10 ? '0' : '') +
+    (i / 2 - ((i / 2) % 1)) +
+    ((i / 2) % 1 != 0 ? ':30' : ':00')
+  )
+})
+
+const marks = [
+  ...hours.map((hour, hourIndex) => {
+    return { value: hourIndex, label: hour }
+  }),
+  { value: hours.length, label: '23:59' },
+] as Range[]
+
+const morningRange = [
+  marks.find((value) => value.label === '05:00'),
+  marks.find((value) => value.label === '12:00'),
+] as Range[]
+
+const afternoonRange = [
+  marks.find((value) => value.label === '12:00'),
+  marks.find((value) => value.label === '18:00'),
+] as Range[]
+const eveningRange = [
+  marks.find((value) => value.label === '18:00'),
+  marks.find((value) => value.label === '23:59'),
+] as Range[]
+
+const definedRanges = [
+  {
+    range: morningRange,
+    id: 0,
+    order: 0,
+    label: 'Sabah',
+    icon: <LuSun size={24} />,
+  },
+  {
+    range: afternoonRange,
+    id: 1,
+    order: 1,
+    label: 'Öğleden sonra',
+    icon: <BsSunsetFill size={24} />,
+  },
+  {
+    range: eveningRange,
+    id: 2,
+    order: 2,
+    label: 'Akşam',
+    icon: <BsMoonStarsFill size={18} />,
+  },
+]
+
+type IProps = {
+  onChange: (arg: Range[]) => void
+  filterParams?: string[] | null
+}
+
+const HourRangeSlider: React.FC<IProps> = ({
+  onChange = () => {},
+  filterParams,
+}) => {
+  const receivedValues = marks.filter((mark) =>
+    filterParams?.includes(mark.label)
+  )
+
+  const [values, setValues] = useState<[number, number]>([
+    receivedValues[0].value ?? 0,
+    receivedValues[1]?.value ?? marks.length - 1,
+  ])
+
+  return (
+    <div>
+      <div className='flex gap-1 pb-3'>
+        <div>{marks.at(values?.[0] as number)?.label}</div>
+        <div>-</div>
+        <div>{marks.at(values?.[1] as number)?.label}</div>
+      </div>
+      <RangeSlider
+        thumbSize={26}
+        size={3}
+        min={0}
+        max={marks.at(-1)?.value}
+        label={null}
+        // label={(value) => {
+        //   return marks.find((mark) => value === mark.value)?.label
+        // }}
+        minRange={1}
+        styles={{
+          markLabel: { display: 'none' },
+          mark: { display: 'none' },
+        }}
+        marks={marks}
+        onChange={setValues}
+        onChangeEnd={(value) => {
+          const selectedRange = marks.filter((mark) =>
+            value.includes(mark.value)
+          )
+
+          onChange(selectedRange)
+        }}
+        value={values}
+      />
+      <div className='grid grid-cols-2 gap-3 pt-6'>
+        {definedRanges
+          .sort((a, b) => a.order - b.order)
+          .map((definedTime) => {
+            const ranges = definedTime.range
+            const isActive = !!(
+              ranges[0].value === values[0] && ranges[1].value === values[1]
+            )
+
+            return (
+              <UnstyledButton
+                key={definedTime.id}
+                type='button'
+                onClick={() => {
+                  onChange(ranges)
+                  setValues([ranges[0].value, ranges[1].value])
+                }}
+                className={clsx(
+                  `flex flex-col rounded border border-gray-500 p-1 text-center text-xs leading-none text-gray-700 transition-colors`,
+                  {
+                    'bg-primary border-primary-100 text-white': isActive,
+                  }
+                )}
+              >
+                <div className='self-center'>{definedTime.icon}</div>
+                <div className='py-1'>{definedTime.label}</div>
+                <div>
+                  ({ranges[0].label}-{ranges[1].label})
+                </div>
+              </UnstyledButton>
+            )
+          })}
+      </div>
+    </div>
+  )
+}
+export { HourRangeSlider }

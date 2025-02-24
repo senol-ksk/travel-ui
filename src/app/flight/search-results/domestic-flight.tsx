@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Button, Divider } from '@mantine/core'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
+import { IoAirplaneSharp } from 'react-icons/io5'
 
 import { formatCurrency } from '@/libs/util'
 import {
@@ -71,6 +72,9 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
               </div>
               <div className='relative grow'>
                 <Divider color='green' />
+                <div className='absolute end-0 top-0 -translate-y-1/2 bg-white ps-2'>
+                  <IoAirplaneSharp size={18} />
+                </div>
               </div>
               <div>
                 <div>

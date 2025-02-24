@@ -103,8 +103,8 @@ const useSearchResultsQueries = () => {
   }
 
   const searchSessionTokenQuery = useQuery({
-    // enabled: false,
-    enabled: !!searchParams,
+    enabled: false,
+    // enabled: !!searchParams,
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
       const response = await getFlightSearchSessionToken()
@@ -123,49 +123,49 @@ const useSearchResultsQueries = () => {
 
   const searchResultsQuery = useInfiniteQuery({
     queryKey: searchQueryKey,
-    enabled: !!searchSessionTokenQuery.data,
+    // enabled: !!searchSessionTokenQuery.data,
     initialPageParam: {
       ReceivedProviders: [''],
     },
     queryFn: async ({ pageParam, signal }) => {
-      if (!appToken.current) {
-        appToken.current = (await getsecuritytoken()).result
-      }
-      await delayCodeExecution(1000)
+      // if (!appToken.current) {
+      //   appToken.current = (await getsecuritytoken()).result
+      // }
+      // await delayCodeExecution(1000)
 
-      const response = (await request({
-        signal,
-        url: process.env.NEXT_PUBLIC_OL_ROUTE,
-        method: 'post',
-        data: {
-          params: {
-            appName: process.env.NEXT_PUBLIC_APP_NAME,
-            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-            searchToken: searchSessionTokenQuery.data?.searchToken,
-            FlightSearchPanel: {
-              ...generateFlightSearchPanel(),
-              ReceivedProviders: pageParam.ReceivedProviders.filter(
-                (provider) => provider
-              ),
-            },
-          },
-          apiRoute: 'FlightService',
-          apiAction: 'api/Flight/Search',
-          sessionToken: searchSessionTokenQuery.data?.sessionToken,
-          appName: process.env.NEXT_PUBLIC_APP_NAME,
-          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-          requestType:
-            'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-        },
-        headers: {
-          appToken: appToken.current,
-          appName: process.env.NEXT_PUBLIC_APP_NAME,
-        },
-      })) as FlightSearchResultsApiResponse
-      return response
-      // return responseDummy
+      // const response = (await request({
+      //   signal,
+      //   url: process.env.NEXT_PUBLIC_OL_ROUTE,
+      //   method: 'post',
+      //   data: {
+      //     params: {
+      //       appName: process.env.NEXT_PUBLIC_APP_NAME,
+      //       scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+      //       scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      //       searchToken: searchSessionTokenQuery.data?.searchToken,
+      //       FlightSearchPanel: {
+      //         ...generateFlightSearchPanel(),
+      //         ReceivedProviders: pageParam.ReceivedProviders.filter(
+      //           (provider) => provider
+      //         ),
+      //       },
+      //     },
+      //     apiRoute: 'FlightService',
+      //     apiAction: 'api/Flight/Search',
+      //     sessionToken: searchSessionTokenQuery.data?.sessionToken,
+      //     appName: process.env.NEXT_PUBLIC_APP_NAME,
+      //     scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+      //     scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      //     requestType:
+      //       'Service.Models.RequestModels.FlightSearchRequest, Service.Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+      //   },
+      //   headers: {
+      //     appToken: appToken.current,
+      //     appName: process.env.NEXT_PUBLIC_APP_NAME,
+      //   },
+      // })) as FlightSearchResultsApiResponse
+      // return response
+      return responseDummy as FlightSearchResultsApiResponse
     },
     select(data) {
       const pages = data.pages
@@ -382,14 +382,16 @@ const useSearchResultsQueries = () => {
   const airportQueryParamsCodeArr = () => {
     const airports = searchResultsQuery?.data
       ?.flatMap((item) =>
-        item.segments.map((item2) =>
-          [item2.destination.code, item2.origin.code].flat()
-        )
+        [
+          item.segments[0].origin.code,
+          item?.segments?.at(-1)?.destination.code,
+        ].flat()
       )
       .flat()
 
     return [...new Set(airports)].sort()
   }
+
   const getAirportsByCodeList = useQuery({
     enabled: !!searchResultsQuery.data?.length,
     queryKey: ['airports-code-list', airportQueryParamsCodeArr().sort()],

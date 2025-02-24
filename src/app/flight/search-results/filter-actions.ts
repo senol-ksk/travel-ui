@@ -77,28 +77,56 @@ const sortOrder = (
 }
 
 export const useFilterActions = (flightData: ClientDataType[] | undefined) => {
-  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+  const [filterParams] = useQueryStates(filterParsers)
   const isDomestic = flightData?.every(
     (data) => !!data.details.every((detail) => detail.isPromotional)
   )
 
-  const filteredData = sortOrder(flightData, filterParams)?.filter((data) => {
-    if (filterParams?.numOfStops) {
-      return (
-        filterParams?.numOfStops.filter((numOfStops) => {
-          return isDomestic
-            ? data.segments.length === numOfStops + 1
-            : data.segments.filter((segment) => segment.groupId === 0)
-                .length ===
-                numOfStops + 1 ||
-                data.segments.filter((segment) => segment.groupId === 1)
+  const filteredData = sortOrder(flightData, filterParams)
+    ?.filter((data) => {
+      if (filterParams?.numOfStops) {
+        return (
+          filterParams?.numOfStops.filter((numOfStops) => {
+            return isDomestic
+              ? data.segments.length === numOfStops + 1
+              : data.segments.filter((segment) => segment.groupId === 0)
                   .length ===
-                  numOfStops + 1
-        }).length > 0
-      )
-    }
-    return true
-  })
+                  numOfStops + 1 ||
+                  data.segments.filter((segment) => segment.groupId === 1)
+                    .length ===
+                    numOfStops + 1
+          }).length > 0
+        )
+      }
+      return true
+    })
+    .filter((data) => {
+      if (filterParams.airlines && filterParams.airlines.length) {
+        return (
+          data.segments.filter((segment) => {
+            return filterParams.airlines?.includes(
+              segment.marketingAirline.code
+            )
+          }).length > 0
+        )
+      }
 
-  return { filteredData, filterParams, setFilterParams }
+      return true
+    })
+    .filter((data) => {
+      if (filterParams.airports && filterParams.airports.length) {
+        return (
+          filterParams.airports.includes(
+            data.segments?.at(0)?.origin?.code ?? ''
+          ) ||
+          filterParams.airports.includes(
+            data.segments?.at(-1)?.destination?.code ?? ''
+          )
+        )
+      }
+
+      return true
+    })
+
+  return { filteredData }
 }

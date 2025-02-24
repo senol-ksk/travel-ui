@@ -53,6 +53,9 @@ export const filterParsers = {
     Object.values(SortOrderEnums)
   ).withDefault(SortOrderEnums.priceAsc),
   numOfStops: parseAsArrayOf(parseAsInteger),
+  airlines: parseAsArrayOf(parseAsString),
+  airports: parseAsArrayOf(parseAsString),
+  departureHours: parseAsArrayOf(parseAsString).withDefault(['00:00', '23:59']),
 }
 
 export type FlightFilterSearchParams = inferParserType<typeof filterParsers>
