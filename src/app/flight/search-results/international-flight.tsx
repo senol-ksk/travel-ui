@@ -1,3 +1,8 @@
+import dayjs from 'dayjs'
+import { memo } from 'react'
+import { Button, Divider, rem } from '@mantine/core'
+import { RxCaretRight } from 'react-icons/rx'
+
 import { formatCurrency } from '@/libs/util'
 import {
   AirlineCode,
@@ -5,11 +10,9 @@ import {
   FlightDetailSegment,
   FlightFareInfo,
 } from '../type'
-import { Button, Divider, Skeleton } from '@mantine/core'
-import dayjs from 'dayjs'
-import clsx from 'clsx'
+
 import { AirlineLogo } from '@/components/airline-logo'
-import { memo } from 'react'
+import { IoAirplaneSharp } from 'react-icons/io5'
 
 type IProps = {
   airlineValues: AirlineCode[] | undefined
@@ -30,16 +33,15 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
   // const flightNumber = detailSegments.at(0)?.flightNumber
 
   return (
-    <div className={clsx(`@container rounded-lg border border-gray-300`)}>
+    <div className={`@container rounded-lg border border-gray-300 shadow-sm`}>
       {details.map((detail) => {
-        const relatedDetailSegments = detailSegments.filter(
+        const relatedSegment = detailSegments.filter(
           (item) => detail.groupId === item.groupId
         )
+        const hasTransferStop = relatedSegment.length > 1
 
-        const lastArrivalTime = dayjs(relatedDetailSegments.at(-1)?.arrivalTime)
-        const firstDepartureTime = dayjs(
-          relatedDetailSegments.at(0)?.departureTime
-        )
+        const lastArrivalTime = dayjs(relatedSegment.at(-1)?.arrivalTime)
+        const firstDepartureTime = dayjs(relatedSegment.at(0)?.departureTime)
         const arrivalIsAfter = lastArrivalTime.isAfter(firstDepartureTime, 'D')
 
         const totalFlightDuration = dayjs.duration(
@@ -49,7 +51,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         const airlineText = airlineValues
           ?.find(
             (airline) =>
-              airline.Code === relatedDetailSegments[0].marketingAirline.code
+              airline.Code === relatedSegment[0].marketingAirline.code
           )
           ?.Value.find((item) => item.LangCode === 'tr_TR')
 
@@ -59,38 +61,37 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
             <div className='flex items-center gap-3 pb-2'>
               <div>
                 <AirlineLogo
-                  airlineCode={relatedDetailSegments[0].marketingAirline.code}
+                  airlineCode={relatedSegment[0].marketingAirline.code}
                   width={36}
                   height={36}
                 />
               </div>
               <div>{airlineText?.Value}</div>
-              <div>{relatedDetailSegments.at(0)?.flightNumber}</div>
+              <div>{relatedSegment.at(0)?.flightNumber}</div>
             </div>
             <div className='flex items-center gap-2'>
               <div>
                 <div>
-                  {dayjs(relatedDetailSegments.at(0)?.departureTime).format(
-                    'HH:mm'
-                  )}
+                  {dayjs(relatedSegment.at(0)?.departureTime).format('HH:mm')}
                 </div>
-                <div>{relatedDetailSegments.at(0)?.origin.code}</div>
+                <div>{relatedSegment.at(0)?.origin.code}</div>
               </div>
               <div className='relative grow'>
                 <Divider color='green' />
+                <div className='absolute end-0 top-0 -translate-y-1/2 bg-white ps-2'>
+                  <IoAirplaneSharp size={18} />
+                </div>
               </div>
               <div>
                 <div>
-                  {dayjs(relatedDetailSegments.at(-1)?.arrivalTime).format(
-                    'HH:mm'
-                  )}{' '}
+                  {dayjs(relatedSegment.at(-1)?.arrivalTime).format('HH:mm')}{' '}
                   {arrivalIsAfter && <sup className='text-red-700'>+1</sup>}
                 </div>
-                <div>{relatedDetailSegments.at(-1)?.destination.code}</div>
+                <div>{relatedSegment.at(-1)?.destination.code}</div>
               </div>
             </div>
-            <div className='flex items-center justify-center gap-3'>
-              <div className='flex gap-1'>
+            <div className='-mt-3 flex items-center justify-center gap-3 text-sm'>
+              <div className='flex gap-1 text-gray-700/80'>
                 {totalFlightDuration.get('D') > 0 && (
                   <div>{totalFlightDuration.format('DD')} gün</div>
                 )}
@@ -98,15 +99,49 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                 <div>{totalFlightDuration.format('mm')}dk</div>
               </div>
               <div className='text-sm text-gray-600'>
-                {relatedDetailSegments.length > 1 ? (
+                {hasTransferStop ? (
                   <span className='text-red-700'>
-                    {relatedDetailSegments.length - 1} Aktarma
+                    {relatedSegment.length - 1} Aktarma
                   </span>
                 ) : (
                   'Aktarmasız'
                 )}
               </div>
             </div>
+            {hasTransferStop && (
+              <div className='flex justify-center gap-1 text-xs text-gray-600'>
+                {relatedSegment.map((segment, segmentIndex, segmentArr) => {
+                  const firstItem = segmentIndex === 0
+                  const middleItems = segmentIndex > 0 && segmentArr.length - 1
+                  const lastItem = segmentIndex === segmentArr.length - 1
+                  return (
+                    <div key={segment.key} className='flex items-center'>
+                      {firstItem && <span>{segment.origin.code}</span>}
+                      {middleItems && (
+                        <>
+                          <span>
+                            <RxCaretRight size={20} />
+                          </span>
+                          <span>
+                            {segmentArr.at(segmentIndex)?.origin.code}
+                          </span>
+                        </>
+                      )}
+                      {lastItem && (
+                        <>
+                          <span>
+                            <RxCaretRight size={20} />
+                          </span>
+                          <span>
+                            {segmentArr.at(segmentIndex)?.destination.code}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )
       })}
@@ -132,7 +167,4 @@ const MemoizedFlightSearchResultsInternational = memo(
   FlightSearchResultsInternational
 )
 
-export {
-  FlightSearchResultsInternational,
-  MemoizedFlightSearchResultsInternational,
-}
+export { MemoizedFlightSearchResultsInternational }

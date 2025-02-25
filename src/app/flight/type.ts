@@ -178,7 +178,7 @@ export interface FlightSearchResultsApiResponse {
   token: null
   clientIP: null
   appName: null
-  sessionToken: '3A4EAE760ADF8C53995A7E330C0FC879875A86676B6275C6A7812E342E3694F7'
+  sessionToken: string
   userAuthenticationToken: null
   eventMessageList: []
 }
