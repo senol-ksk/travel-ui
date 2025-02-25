@@ -148,13 +148,15 @@ const HourRangeSlider: React.FC<IProps> = ({
                   setValues([ranges[0].value, ranges[1].value])
                 }}
                 className={clsx(
-                  `flex flex-col rounded border border-gray-500 p-1 text-center text-xs leading-none text-gray-700 transition-colors`,
+                  'rounded border border-gray-500 p-1 text-center text-xs leading-none text-gray-700 transition-colors',
                   {
                     'bg-primary border-primary-100 text-white': isActive,
                   }
                 )}
               >
-                <div className='self-center'>{definedTime.icon}</div>
+                <div className='flex justify-center'>
+                  <div>{definedTime.icon}</div>
+                </div>
                 <div className='py-1'>{definedTime.label}</div>
                 <div>
                   ({ranges[0].label}-{ranges[1].label})

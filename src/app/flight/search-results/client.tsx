@@ -26,6 +26,8 @@ import {
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
+import { IoAirplaneSharp } from 'react-icons/io5'
+import { GoArrowRight } from 'react-icons/go'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -59,11 +61,15 @@ const FlightSearchView = () => {
     [searchResultsQuery?.data]
   )
   const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+  const airlineDataObj = getAirlineByCodeList.data
 
   // list `filteredData` in the client, for other calculations, mutations...etc, use query data itself
   const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
+  const [selectedFlightItem, setSelectedFlightItem] =
+    useState<ClientDataType | null>(null)
+
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
     SelectedPackageStateProps[] | undefined | null
   >()
@@ -95,7 +101,7 @@ const FlightSearchView = () => {
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
     })) as SelectedPackageStateProps[]
-
+    setSelectedFlightItem(flight)
     setSelectedFlightItemPackages(packages)
 
     openPackageDrawer()
@@ -165,6 +171,12 @@ const FlightSearchView = () => {
                   className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static'
                   style={styles}
                 >
+                  <div className='flex justify-end md:hidden'>
+                    <CloseButton
+                      size={'lg'}
+                      onClick={() => setFilterSectionIsOpened(false)}
+                    />
+                  </div>
                   {searchResultsQuery.isLoading ||
                   searchResultsQuery.isFetching ||
                   searchResultsQuery.isFetchingNextPage ||
@@ -183,18 +195,16 @@ const FlightSearchView = () => {
                     </div>
                   ) : (
                     <>
-                      <div className='flex justify-end md:hidden'>
-                        <CloseButton
-                          size={'lg'}
-                          onClick={() => setFilterSectionIsOpened(false)}
-                        />
-                      </div>
                       <Title order={2} fz={'h4'} mb={rem(20)}>
                         Filtreler
                       </Title>
                       <Accordion
                         defaultValue={['numOfStops', 'airlines']}
                         multiple
+                        classNames={{
+                          control: 'p-2 text-sm',
+                          label: 'p-0',
+                        }}
                       >
                         <Accordion.Item value='numOfStops'>
                           <Accordion.Control>Aktarma</Accordion.Control>
@@ -282,7 +292,7 @@ const FlightSearchView = () => {
                               }
                             >
                               <Stack gap={6}>
-                                {getAirlineByCodeList.data?.map((airline) => {
+                                {airlineDataObj?.map((airline) => {
                                   return (
                                     <div key={airline.Code}>
                                       <Checkbox
@@ -423,7 +433,50 @@ const FlightSearchView = () => {
               isDomestic ? (
                 isReturnFlightVisible ? (
                   <div>
-                    <span>Dönüş uçuşunuzu seçiniz.</span>
+                    <div className='pb-3'>
+                      <div className='flex items-center gap-2 text-sm text-gray-600'>
+                        <div>
+                          {
+                            airlineDataObj
+                              ?.find(
+                                (airline) =>
+                                  airline.Code ===
+                                  selectedFlightItem?.segments[0]
+                                    .marketingAirline.code
+                              )
+                              ?.Value.find((val) => val.LangCode === 'tr_TR')
+                              ?.Value
+                          }
+                        </div>
+                        <div>
+                          <GoArrowRight />
+                        </div>
+                        <div>{selectedFlightItem?.segments[0].origin.code}</div>
+                        <div>
+                          <IoAirplaneSharp />
+                        </div>
+                        <div>
+                          {
+                            selectedFlightItem?.segments.at(-1)?.destination
+                              .code
+                          }
+                        </div>
+                      </div>
+                      <div className='pt-2'>
+                        <Button
+                          variant='outline'
+                          color='blue'
+                          size='compact-xs'
+                          type='button'
+                          onClick={() => {
+                            setIsReturnFlightVisible(false)
+                          }}
+                        >
+                          Uçuşu değiştir
+                        </Button>
+                      </div>
+                    </div>
+                    <div>Dönüş uçuşunuzu seçiniz.</div>
                   </div>
                 ) : (
                   <div>
@@ -439,11 +492,26 @@ const FlightSearchView = () => {
               }}
             >
               {!searchResultsQuery.isFetchingNextPage &&
-                filteredData?.length === 0 && (
+                filteredData?.filter((item) => {
+                  const groupId = isReturnFlightVisible ? 1 : 0
+                  return item.fareInfo.groupId === groupId
+                })?.length === 0 && (
                   <Alert color='red'>
-                    Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
+                    <div className='text-center text-lg'>
+                      Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
+                    </div>
+                    <div className='flex justify-center pt-3'>
+                      <Button
+                        onClick={() => {
+                          setFilterParams(null)
+                        }}
+                      >
+                        Tüm Sonuçları göster
+                      </Button>
+                    </div>
                   </Alert>
                 )}
+
               {isDomestic
                 ? filteredData
                     ?.filter((item) => {
@@ -459,7 +527,7 @@ const FlightSearchView = () => {
                       )
 
                       const airlineValues: AirlineCode[] | undefined =
-                        getAirlineByCodeList?.data?.filter((airlineObj) =>
+                        airlineDataObj?.filter((airlineObj) =>
                           segmentAirlines.find(
                             (segment) => segment === airlineObj.Code
                           )
@@ -486,7 +554,7 @@ const FlightSearchView = () => {
                     )
 
                     const airlineValues: AirlineCode[] | undefined =
-                      getAirlineByCodeList?.data?.filter((airlineObj) =>
+                      airlineDataObj?.filter((airlineObj) =>
                         segmentAirlines.find(
                           (segment) => segment === airlineObj.Code
                         )
