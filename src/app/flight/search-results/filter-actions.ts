@@ -83,6 +83,7 @@ export const useFilterActions = (flightData: ClientDataType[] | undefined) => {
   )
 
   const filteredData = sortOrder(flightData, filterParams)
+    // transfer/stop count
     ?.filter((data) => {
       if (filterParams?.numOfStops) {
         return (
@@ -124,6 +125,25 @@ export const useFilterActions = (flightData: ClientDataType[] | undefined) => {
           )
         )
       }
+
+      return true
+    })
+    .filter((data) => {
+      const departureHour = data.segments.map((segment) => {
+        const hour = dayjs(segment.departureTime).hour()
+        const minute = dayjs(segment.departureTime).minute()
+        const calculate = hour * 60 + minute
+        return calculate
+      })[0]
+
+      if (
+        filterParams.departureHours &&
+        filterParams.departureHours?.length > 1
+      )
+        return (
+          departureHour >= filterParams.departureHours[0] &&
+          departureHour <= filterParams.departureHours[1]
+        )
 
       return true
     })

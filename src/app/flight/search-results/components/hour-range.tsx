@@ -2,13 +2,14 @@
 
 import { RangeSlider, UnstyledButton } from '@mantine/core'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { LuSun } from 'react-icons/lu'
 import { BsSunsetFill } from 'react-icons/bs'
 import { BsMoonStarsFill } from 'react-icons/bs'
 
 type Range = {
   value: number
+  hourValue: number
   label: string
 }
 
@@ -20,12 +21,18 @@ const hours = [...Array(48)].map((e, i) => {
   )
 })
 
-const marks = [
+const marks: Range[] = [
   ...hours.map((hour, hourIndex) => {
-    return { value: hourIndex, label: hour }
+    const hourValue = hour.split(':').map(Number)
+
+    return {
+      value: hourIndex,
+      hourValue: hourValue[0] * 60 + hourValue[1],
+      label: hour,
+    }
   }),
-  { value: hours.length, label: '23:59' },
-] as Range[]
+  { value: hours.length, hourValue: 1439, label: '23:59' },
+]
 
 const morningRange = [
   marks.find((value) => value.label === '05:00'),
@@ -67,28 +74,40 @@ const definedRanges = [
 
 type IProps = {
   onChange: (arg: Range[]) => void
-  filterParams?: string[] | null
+  filterParams?: number[] | null
 }
 
 const HourRangeSlider: React.FC<IProps> = ({
   onChange = () => {},
   filterParams,
 }) => {
-  const receivedValues = marks.filter((mark) =>
-    filterParams?.includes(mark.label)
+  const lastItemInHourIndex = hours.length - 1
+  const receivedValues = marks.filter(
+    (mark) => filterParams && filterParams?.includes(mark.hourValue)
   )
 
   const [values, setValues] = useState<[number, number]>([
-    receivedValues[0].value ?? 0,
-    receivedValues[1]?.value ?? marks.length - 1,
+    receivedValues.length > 0 ? receivedValues[0]?.value : 0,
+    receivedValues.length > 0 ? receivedValues[1].value : lastItemInHourIndex,
   ])
+
+  // reset values when new search is initialized
+  useEffect(() => {
+    if (
+      !receivedValues.length &&
+      values[0] !== 0 &&
+      values[1] !== lastItemInHourIndex
+    ) {
+      setValues([0, lastItemInHourIndex])
+    }
+  }, [lastItemInHourIndex, receivedValues, values])
 
   return (
     <div>
       <div className='flex gap-1 pb-3'>
-        <div>{marks.at(values?.[0] as number)?.label}</div>
+        <div>{marks.find((mark) => mark.value === values?.[0])?.label}</div>
         <div>-</div>
-        <div>{marks.at(values?.[1] as number)?.label}</div>
+        <div>{marks.find((mark) => mark.value === values?.[1])?.label}</div>
       </div>
       <RangeSlider
         thumbSize={26}
@@ -96,9 +115,6 @@ const HourRangeSlider: React.FC<IProps> = ({
         min={0}
         max={marks.at(-1)?.value}
         label={null}
-        // label={(value) => {
-        //   return marks.find((mark) => value === mark.value)?.label
-        // }}
         minRange={1}
         styles={{
           markLabel: { display: 'none' },
@@ -120,9 +136,8 @@ const HourRangeSlider: React.FC<IProps> = ({
           .sort((a, b) => a.order - b.order)
           .map((definedTime) => {
             const ranges = definedTime.range
-            const isActive = !!(
+            const isActive =
               ranges[0].value === values[0] && ranges[1].value === values[1]
-            )
 
             return (
               <UnstyledButton

@@ -60,6 +60,7 @@ const FlightSearchView = () => {
   )
   const [filterParams, setFilterParams] = useQueryStates(filterParsers)
 
+  // list `filteredData` in the client, for other calculations, mutations...etc, use query data itself
   const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
@@ -83,8 +84,9 @@ const FlightSearchView = () => {
   const tripKind = useMemo(
     () =>
       isDomestic &&
-      !!filteredData?.filter((results) => results.fareInfo.groupId > 0).length,
-    [isDomestic, filteredData]
+      !!searchQueryData?.filter((results) => results.fareInfo.groupId > 0)
+        .length,
+    [isDomestic, searchQueryData]
   )
 
   // this is for flight select. first this should be called, then `handlePackageSelect`
@@ -191,11 +193,7 @@ const FlightSearchView = () => {
                         Filtreler
                       </Title>
                       <Accordion
-                        defaultValue={[
-                          'numOfStops',
-                          'airlines',
-                          'departureHours',
-                        ]}
+                        defaultValue={['numOfStops', 'airlines']}
                         multiple
                       >
                         <Accordion.Item value='numOfStops'>
@@ -277,7 +275,11 @@ const FlightSearchView = () => {
                                   airlines: value.length ? value : null,
                                 })
                               }}
-                              value={filterParams.airlines?.map(String)}
+                              value={
+                                filterParams?.airlines?.length
+                                  ? filterParams.airlines?.map(String)
+                                  : []
+                              }
                             >
                               <Stack gap={6}>
                                 {getAirlineByCodeList.data?.map((airline) => {
@@ -309,7 +311,11 @@ const FlightSearchView = () => {
                                   airports: value.length ? value : null,
                                 })
                               }}
-                              value={filterParams.airports?.map(String)}
+                              value={
+                                filterParams.airports?.length
+                                  ? filterParams.airports?.map(String)
+                                  : []
+                              }
                             >
                               <Stack gap={6}>
                                 {getAirportsByCodeList.data?.map((airports) => {
@@ -340,8 +346,8 @@ const FlightSearchView = () => {
                               onChange={(hourRange) => {
                                 setFilterParams({
                                   departureHours: [
-                                    hourRange.at(0)?.label ?? '',
-                                    hourRange.at(-1)?.label ?? '',
+                                    hourRange.at(0)?.hourValue ?? 0,
+                                    hourRange.at(-1)?.hourValue ?? 1440,
                                   ],
                                 })
                               }}
@@ -432,11 +438,12 @@ const FlightSearchView = () => {
                 contentVisibility: 'auto',
               }}
             >
-              {filteredData?.length === 0 && (
-                <Alert color='red'>
-                  Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
-                </Alert>
-              )}
+              {!searchResultsQuery.isFetchingNextPage &&
+                filteredData?.length === 0 && (
+                  <Alert color='red'>
+                    Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
+                  </Alert>
+                )}
               {isDomestic
                 ? filteredData
                     ?.filter((item) => {
