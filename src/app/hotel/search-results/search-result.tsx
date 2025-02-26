@@ -1,9 +1,25 @@
 'use client'
 
-import { Button, Container, Modal, NativeSelect, Skeleton } from '@mantine/core'
+import {
+  Accordion,
+  ActionIcon,
+  Button,
+  Checkbox,
+  CloseButton,
+  Container,
+  Modal,
+  NativeSelect,
+  Rating,
+  ScrollArea,
+  Skeleton,
+  Spoiler,
+  Stack,
+  TextInput,
+  Title,
+} from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { useState } from 'react'
-import { useDisclosure } from '@mantine/hooks'
+import { useDisclosure, useInputState, useMounted } from '@mantine/hooks'
 
 import {
   hotelFilterSearchParams,
@@ -13,8 +29,13 @@ import { useSearchResultParams } from './useSearchQueries'
 import { HotelSearchResultItem } from './results-item'
 import { HotelSearchResultHotelInfo, RoomDetailType } from '../types'
 import { HotelMap } from './components/maps'
+import { GoSearch } from 'react-icons/go'
+import { PriceRangeSlider } from './price-range'
+import { SearchByName } from './components/search-by-name'
+import { DestinationIds } from './components/filters/destinationIds'
 
 const HotelSearchResults: React.FC = () => {
+  const mounted = useMounted()
   const { hotelSearchRequestQuery, searchParamsQuery } = useSearchResultParams()
   const [filterParams, setFilterParams] = useQueryStates(
     hotelFilterSearchParams
@@ -27,6 +48,13 @@ const HotelSearchResults: React.FC = () => {
   const handleLoadMoreActions = async () => {
     hotelSearchRequestQuery.fetchNextPage()
   }
+
+  const minMaxPrices = hotelSearchRequestQuery.data?.pages.flatMap((page) =>
+    page?.searchResults.flatMap((searchResults) => [
+      searchResults.minPrice,
+      searchResults.maxPrice,
+    ])
+  )
 
   return (
     <>
@@ -44,11 +72,79 @@ const HotelSearchResults: React.FC = () => {
       )}
       <Container>
         <div className='py-5 lg:py-10'>
-          <div className='grid gap-4 md:grid-cols-4 md:gap-3'>
+          <div className='grid gap-4 md:grid-cols-4 md:gap-5'>
             <div className='md:col-span-1'>
-              <div className='rounded-md border border-gray-300 p-3'>
-                Filter section
-              </div>
+              {mounted && (
+                <div>
+                  <Title order={2} fz='h4'>
+                    Filtreler
+                  </Title>
+                  <div className='pt-3'>
+                    <Accordion
+                      defaultValue={['byName', 'priceRange']}
+                      multiple
+                      classNames={{
+                        control: 'p-2 text-sm',
+                        label: 'p-0',
+                        content: 'p-2',
+                      }}
+                    >
+                      <Accordion.Item value='byName'>
+                        <Accordion.Control>Otel Adına Göre</Accordion.Control>
+                        <Accordion.Panel>
+                          <SearchByName />
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='priceRange'>
+                        <Accordion.Control>Fiyat Aralığı</Accordion.Control>
+                        <Accordion.Panel>
+                          <div className='p-2'>
+                            {minMaxPrices && minMaxPrices.length > 0 && (
+                              <PriceRangeSlider
+                                minPrice={minMaxPrices[0]}
+                                maxPrice={minMaxPrices[1]}
+                              />
+                            )}
+                          </div>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='starCount' hidden>
+                        <Accordion.Control>Yıldız Sayısı</Accordion.Control>
+                        <Accordion.Panel>
+                          <Rating
+                            size={'xl'}
+                            mx='auto'
+                            className='gap-3'
+                            defaultValue={filterParams.maxStarRating ?? 0}
+                            onChange={(value) => {
+                              setFilterParams({
+                                maxStarRating: value,
+                                minStarRating: value,
+                              })
+                            }}
+                          />
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='destinationIds'>
+                        <Accordion.Control>Yakın Çevre</Accordion.Control>
+                        <Accordion.Panel>
+                          {hotelSearchRequestQuery.data &&
+                            hotelSearchRequestQuery.data?.pages[0]
+                              ?.searchResults[0]?.destinationsInfo && (
+                              <DestinationIds
+                                destinationsInfo={
+                                  hotelSearchRequestQuery.data?.pages
+                                    .at(0)
+                                    ?.searchResults.at(0)?.destinationsInfo
+                                }
+                              />
+                            )}
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                    </Accordion>
+                  </div>
+                </div>
+              )}
             </div>
             <div
               className='grid gap-4 pb-20 md:col-span-3'

@@ -15,6 +15,16 @@ import { hotelSocket } from './socket'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
+// removes nullish values from object
+function cleanObj<T>(obj: T): T {
+  for (const propName in obj) {
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName]
+    }
+  }
+  return obj
+}
+
 const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
 const apiActionSearchResponse = '/api/Hotel/SearchResponse'
 
@@ -53,11 +63,13 @@ export const useSearchResultParams = () => {
     },
   })
   const searchRequestParams = searchParamsQuery.data?.hotelSearchApiRequest
+  const cleanFilterParams = cleanObj(filterParams)
+
   const hotelSearchRequestQueryKey = [
     'hotel-search-results',
     searchRequestParams,
     searchParams,
-    filterParams,
+    cleanFilterParams,
   ]
 
   const hotelSearchRequestQuery = useInfiniteQuery({
@@ -85,8 +97,8 @@ export const useSearchResultParams = () => {
               searchRequestParams?.hotelSearchModuleRequest.searchToken,
             hotelSearchModuleRequest: {
               ...searchRequestParams?.hotelSearchModuleRequest,
-              orderBy: filterParams.orderBy,
               pageNo: pageParam.pageNo,
+              ...cleanFilterParams,
             },
           },
           apiRoute: 'HotelService',

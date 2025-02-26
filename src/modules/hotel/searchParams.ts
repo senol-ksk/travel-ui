@@ -33,6 +33,11 @@ export const hotelFilterSearchParams = {
   orderBy: parseAsStringEnum<HotelSortOrderEnums>(
     Object.values(HotelSortOrderEnums)
   ).withDefault(HotelSortOrderEnums.listingRateDescending),
+  hotelName: parseAsString,
+  minPrice: parseAsInteger,
+  maxPrice: parseAsInteger,
+  maxStarRating: parseAsInteger,
+  minStarRating: parseAsInteger,
 }
 
 export const hotelDetailSearchParams = {

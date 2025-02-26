@@ -150,6 +150,14 @@ export interface RoomDetailType {
   images: null
 }
 
+export interface HotelSearchResponseDestinationInfos {
+  id: ID
+  parentId: ID
+  name: string
+  count: number
+  subDestinationInfos: null
+}
+
 export interface HotelSearchResultApiResponse {
   data: {
     status: boolean
@@ -196,13 +204,7 @@ export interface HotelSearchResultApiResponse {
           icon: null | string
           priority: number
         }[]
-        destinationsInfo: {
-          id: ID
-          parentId: ID
-          name: string
-          count: number
-          subDestinationInfos: null
-        }[]
+        destinationsInfo: HotelSearchResponseDestinationInfos[]
         totalHotelFilterFound: number
         totalHotelFound: number
         maxPrice: ServicePriceType

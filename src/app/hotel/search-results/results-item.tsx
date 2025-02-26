@@ -5,6 +5,7 @@ import {
   Button,
   Image,
   List,
+  Rating,
   Skeleton,
   Title,
   Transition,
@@ -111,6 +112,9 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                   >
                     {hotelInfo?.name}
                   </Title>
+                  {hotelInfo?.stars ? (
+                    <Rating value={hotelInfo?.stars} readOnly />
+                  ) : null}
                   <div className='flex items-center gap-2 text-sm'>
                     <span className='text-gray-600'>
                       {hotelInfo?.destination}
