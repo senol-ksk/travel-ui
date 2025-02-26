@@ -135,6 +135,21 @@ export interface HotelSearchResultItemType {
   serviceCharges: null
 }
 
+export interface RoomDetailType {
+  roomKey: string
+  description: null
+  allotment: number
+  bedType: string
+  roomType: null
+  quantity: number
+  size: number
+  facilities: null
+  pensionType: string
+  pensionTypeId: number
+  extraInformations: null
+  images: null
+}
+
 export interface HotelSearchResultApiResponse {
   data: {
     status: boolean
@@ -146,22 +161,9 @@ export interface HotelSearchResultApiResponse {
         requestKey: null
         hasMorePage: boolean
         hotelInfos: HotelSearchResultHotelInfo[]
-        roomDetails: null | {
-          [key: string]: {
-            roomKey: string
-            description: null
-            allotment: number
-            bedType: string
-            roomType: null
-            quantity: number
-            size: number
-            facilities: null
-            pensionType: string
-            pensionTypeId: number
-            extraInformations: null
-            images: null
-          }
-        }
+        roomDetails: {
+          [key: string]: RoomDetailType
+        } | null
         passengers: null
         facilityType:
           | null

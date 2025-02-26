@@ -1,16 +1,28 @@
 'use client'
 
-import { Alert, Button, Container, Skeleton } from '@mantine/core'
-import { createSerializer } from 'nuqs'
+import { Button, Container, Modal, NativeSelect, Skeleton } from '@mantine/core'
+import { useQueryStates } from 'nuqs'
+import { useState } from 'react'
+import { useDisclosure } from '@mantine/hooks'
 
-import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
+import {
+  hotelFilterSearchParams,
+  HotelSortOrderEnums,
+} from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from './useSearchQueries'
 import { HotelSearchResultItem } from './results-item'
-
-const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
+import { HotelSearchResultHotelInfo, RoomDetailType } from '../types'
+import { HotelMap } from './components/maps'
 
 const HotelSearchResults: React.FC = () => {
   const { hotelSearchRequestQuery, searchParamsQuery } = useSearchResultParams()
+  const [filterParams, setFilterParams] = useQueryStates(
+    hotelFilterSearchParams
+  )
+  const [isMapsModalOpened, { open: openMapsModal, close: closeMapsModal }] =
+    useDisclosure(false)
+
+  const [hotelInfo, setHotelInfo] = useState<HotelSearchResultHotelInfo>()
 
   const handleLoadMoreActions = async () => {
     hotelSearchRequestQuery.fetchNextPage()
@@ -39,34 +51,90 @@ const HotelSearchResults: React.FC = () => {
               </div>
             </div>
             <div
-              className='grid gap-4 md:col-span-3'
+              className='grid gap-4 pb-20 md:col-span-3'
               style={{
                 contentVisibility: 'auto',
               }}
             >
+              <div className='flex gap-1'>
+                <div className='ms-auto'>
+                  <Skeleton
+                    visible={
+                      hotelSearchRequestQuery.isLoading ||
+                      searchParamsQuery.isLoading
+                    }
+                  >
+                    <NativeSelect
+                      value={filterParams.orderBy}
+                      onChange={({ currentTarget: { value } }) => {
+                        setFilterParams({
+                          orderBy: value as HotelSortOrderEnums,
+                        })
+                      }}
+                      data={[
+                        {
+                          value: HotelSortOrderEnums.priceAscending,
+                          label: 'Fiyat (Artan)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.priceDescending,
+                          label: 'Fiyat (Azalan)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.listingRateDescending,
+                          label: 'Önerilen Oteller',
+                        },
+                        {
+                          value: HotelSortOrderEnums.nameAscending,
+                          label: 'İsme Göre (A-Z)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.nameDescending,
+                          label: 'İsme Göre (Z-A)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.starAscending,
+                          label: 'Yıldız Sayısı (Artan)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.starDescending,
+                          label: 'Yıldız Sayısı (Azalan)',
+                        },
+                      ]}
+                    />
+                  </Skeleton>
+                </div>
+              </div>
               {hotelSearchRequestQuery.data?.pages.map((page) => {
                 if (!page) return null
                 return (
                   page.searchResults.length &&
                   page.searchResults.map((results) => {
-                    return (
-                      results.items
-                        // .sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                        .map((result) => {
-                          const hotelInfo = results.hotelInfos.find(
-                            (hotelInfo) => hotelInfo.id === result.hotelId
-                          )
-                          return (
-                            hotelInfo && (
-                              <HotelSearchResultItem
-                                key={result.hotelId}
-                                hotelInfo={hotelInfo}
-                                resultItem={result}
-                              />
-                            )
-                          )
-                        })
-                    )
+                    const hotelInfos = results.hotelInfos
+                    const roomDetails =
+                      results.roomDetails && Object.values(results.roomDetails)
+
+                    return results.items.map((result) => {
+                      const hotelInfo = hotelInfos.find(
+                        (hotelInfo) => hotelInfo.id === result.hotelId
+                      )
+                      const roomDetail = roomDetails?.find(
+                        (room) => room.roomKey == result.rooms[0].key
+                      )
+
+                      return (
+                        <HotelSearchResultItem
+                          key={result.hotelId}
+                          roomDetail={roomDetail}
+                          hotelInfo={hotelInfo}
+                          resultItem={result}
+                          onMapClick={() => {
+                            openMapsModal()
+                            setHotelInfo(hotelInfo)
+                          }}
+                        />
+                      )
+                    })
                   })
                 )
               })}
@@ -89,11 +157,18 @@ const HotelSearchResults: React.FC = () => {
                     </Button>
                   </div>
                 )}
-              <div className='h-[500px]' />
             </div>
           </div>
         </div>
       </Container>
+      <Modal
+        opened={isMapsModalOpened}
+        onClose={closeMapsModal}
+        size={'xl'}
+        title={hotelInfo?.name}
+      >
+        <HotelMap hotelInfo={hotelInfo} />
+      </Modal>
     </>
   )
 }

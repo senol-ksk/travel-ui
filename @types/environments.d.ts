@@ -13,6 +13,7 @@ namespace NodeJS {
     NEXT_PUBLIC_API_DESTINATION_ROUTE: string
     NEXT_PUBLIC_API_GW_KEY: string
     NEXT_PUBLIC_HOTEL_SOCKET_URL: string
+    NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string
     // server envs
     API_GW_ROUTE: string
     API_DESTINATION_ROUTE: string

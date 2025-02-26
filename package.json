@@ -27,6 +27,7 @@
     "@mantine/notifications": "^7.17.0",
     "@number-flow/react": "^0.5.5",
     "@tanstack/react-query": "^5.66.9",
+    "@vis.gl/react-google-maps": "^1.5.1",
     "axios": "^1.7.9",
     "card-validator": "^10.0.2",
     "cleave-zen": "^0.0.17",
@@ -48,7 +49,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
-    "@tailwindcss/postcss": "^4.0.8",
+    "@tailwindcss/postcss": "^4.0.9",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -74,7 +75,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.5.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.8",
+    "tailwindcss": "^4.0.9",
     "typescript": "^5.7.3",
     "vitest": "^3.0.7"
   }
