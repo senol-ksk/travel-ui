@@ -3,6 +3,7 @@ import {
   createSearchParamsCache,
   createSerializer,
   inferParserType,
+  parseAsArrayOf,
   parseAsInteger,
   parseAsIsoDate,
   parseAsString,
@@ -38,6 +39,7 @@ export const hotelFilterSearchParams = {
   maxPrice: parseAsInteger,
   maxStarRating: parseAsInteger,
   minStarRating: parseAsInteger,
+  destinationIds: parseAsArrayOf(parseAsString),
 }
 
 export const hotelDetailSearchParams = {

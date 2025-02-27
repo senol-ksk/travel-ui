@@ -5,10 +5,14 @@ import {
   Alert,
   Checkbox,
   CloseButton,
+  rem,
   ScrollArea,
   Stack,
   TextInput,
 } from '@mantine/core'
+import { useQueryStates } from 'nuqs'
+
+import { hotelFilterSearchParams } from '@/modules/hotel/searchParams'
 
 type IProps = {
   destinationsInfo: HotelSearchResponseDestinationInfos[] | undefined
@@ -18,9 +22,11 @@ const DestinationIds: React.FC<IProps> = ({ destinationsInfo = [] }) => {
   const [values, setValues] = useState<string[]>([])
   const [searchValue, setSearchValue] = useState('')
   const [filteredData, setFilteredData] = useState(destinationsInfo)
+  const [filterParams, setFilterParams] = useQueryStates(
+    hotelFilterSearchParams
+  )
 
   const handleSearchInput = (searchTerm: string) => {
-    // filteredData
     setSearchValue(searchTerm)
 
     setFilteredData(() => {
@@ -34,9 +40,11 @@ const DestinationIds: React.FC<IProps> = ({ destinationsInfo = [] }) => {
     <>
       <div className='pb-3'>
         <TextInput
+          size='xs'
           type='search'
           rightSection={
             <CloseButton
+              size={'sm'}
               onClick={() => {
                 setFilteredData(destinationsInfo)
                 setSearchValue('')
@@ -50,8 +58,17 @@ const DestinationIds: React.FC<IProps> = ({ destinationsInfo = [] }) => {
         />
       </div>
       <ScrollArea h={200} type='always' scrollbars='y'>
-        <Checkbox.Group value={values} onChange={setValues} defaultValue={[]}>
-          <Stack gap={4}>
+        <Checkbox.Group
+          value={
+            filterParams.destinationIds?.length
+              ? filterParams.destinationIds.map(String)
+              : []
+          }
+          onChange={(value) => {
+            setFilterParams({ destinationIds: value.length ? value : null })
+          }}
+        >
+          <Stack gap={4} p={rem(4)}>
             {filteredData?.length > 0 ? (
               filteredData?.map((destinationInfo) => {
                 return (

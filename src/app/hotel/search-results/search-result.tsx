@@ -10,6 +10,7 @@ import {
   Modal,
   NativeSelect,
   Rating,
+  rem,
   ScrollArea,
   Skeleton,
   Spoiler,
@@ -49,12 +50,9 @@ const HotelSearchResults: React.FC = () => {
     hotelSearchRequestQuery.fetchNextPage()
   }
 
-  const minMaxPrices = hotelSearchRequestQuery.data?.pages.flatMap((page) =>
-    page?.searchResults.flatMap((searchResults) => [
-      searchResults.minPrice,
-      searchResults.maxPrice,
-    ])
-  )
+  const minMaxPrices = hotelSearchRequestQuery.data?.pages
+    .at(-1)
+    ?.searchResults.flatMap((page) => [page.minPrice, page.maxPrice])
 
   return (
     <>
@@ -72,7 +70,7 @@ const HotelSearchResults: React.FC = () => {
       )}
       <Container>
         <div className='py-5 lg:py-10'>
-          <div className='grid gap-4 md:grid-cols-4 md:gap-5'>
+          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
             <div className='md:col-span-1'>
               {mounted && (
                 <div>
@@ -99,46 +97,59 @@ const HotelSearchResults: React.FC = () => {
                         <Accordion.Control>Fiyat Aralığı</Accordion.Control>
                         <Accordion.Panel>
                           <div className='p-2'>
-                            {minMaxPrices && minMaxPrices.length > 0 && (
-                              <PriceRangeSlider
-                                minPrice={minMaxPrices[0]}
-                                maxPrice={minMaxPrices[1]}
-                              />
-                            )}
+                            <Skeleton
+                              visible={
+                                hotelSearchRequestQuery.isLoading ||
+                                searchParamsQuery.isLoading
+                              }
+                              mih={rem(50)}
+                            >
+                              {hotelSearchRequestQuery.data?.pages?.length && (
+                                <PriceRangeSlider
+                                  minPrice={
+                                    minMaxPrices?.length
+                                      ? minMaxPrices[0]
+                                      : {
+                                          value: 0,
+                                          currency: null,
+                                          rateValue: null,
+                                        }
+                                  }
+                                  maxPrice={
+                                    minMaxPrices?.length
+                                      ? minMaxPrices[1]
+                                      : {
+                                          value: 0,
+                                          currency: null,
+                                          rateValue: null,
+                                        }
+                                  }
+                                />
+                              )}
+                            </Skeleton>
                           </div>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='starCount' hidden>
-                        <Accordion.Control>Yıldız Sayısı</Accordion.Control>
-                        <Accordion.Panel>
-                          <Rating
-                            size={'xl'}
-                            mx='auto'
-                            className='gap-3'
-                            defaultValue={filterParams.maxStarRating ?? 0}
-                            onChange={(value) => {
-                              setFilterParams({
-                                maxStarRating: value,
-                                minStarRating: value,
-                              })
-                            }}
-                          />
                         </Accordion.Panel>
                       </Accordion.Item>
                       <Accordion.Item value='destinationIds'>
                         <Accordion.Control>Yakın Çevre</Accordion.Control>
                         <Accordion.Panel>
-                          {hotelSearchRequestQuery.data &&
-                            hotelSearchRequestQuery.data?.pages[0]
-                              ?.searchResults[0]?.destinationsInfo && (
+                          <Skeleton
+                            visible={
+                              hotelSearchRequestQuery.isFetching ||
+                              searchParamsQuery.isLoading
+                            }
+                            mih={rem(150)}
+                          >
+                            {hotelSearchRequestQuery.data?.pages.length && (
                               <DestinationIds
                                 destinationsInfo={
                                   hotelSearchRequestQuery.data?.pages
-                                    .at(0)
-                                    ?.searchResults.at(0)?.destinationsInfo
+                                    .at(-1)
+                                    ?.searchResults.at(-1)?.destinationsInfo
                                 }
                               />
                             )}
+                          </Skeleton>
                         </Accordion.Panel>
                       </Accordion.Item>
                     </Accordion>

@@ -68,7 +68,6 @@ export const useSearchResultParams = () => {
   const hotelSearchRequestQueryKey = [
     'hotel-search-results',
     searchRequestParams,
-    searchParams,
     cleanFilterParams,
   ]
 
@@ -77,7 +76,6 @@ export const useSearchResultParams = () => {
     queryKey: hotelSearchRequestQueryKey,
     initialPageParam: {
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
-      apiAction: apiActionSearchResponseReadyData,
     },
     queryFn: async ({ signal, pageParam }) => {
       if (!appToken) {
@@ -88,7 +86,7 @@ export const useSearchResultParams = () => {
         method: 'post',
         url: process.env.NEXT_PUBLIC_OL_ROUTE,
         data: {
-          apiAction: pageParam.apiAction,
+          apiAction: apiActionSearchResponse,
           params: {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
             scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
@@ -141,7 +139,6 @@ export const useSearchResultParams = () => {
 
         return {
           pageNo: pageNo > -1 ? pageNo + 1 : 0,
-          apiAction: apiActionSearchResponse,
         }
       }
 
@@ -151,7 +148,6 @@ export const useSearchResultParams = () => {
       ) {
         return {
           pageNo: 0,
-          apiAction: apiActionSearchResponse,
         }
       }
 
