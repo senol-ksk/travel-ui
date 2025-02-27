@@ -34,6 +34,7 @@ import { GoSearch } from 'react-icons/go'
 import { PriceRangeSlider } from './price-range'
 import { SearchByName } from './components/search-by-name'
 import { DestinationIds } from './components/filters/destinationIds'
+import { PensionTypes } from './components/filters/pension-types'
 
 const HotelSearchResults: React.FC = () => {
   const mounted = useMounted()
@@ -150,6 +151,22 @@ const HotelSearchResults: React.FC = () => {
                               />
                             )}
                           </Skeleton>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='pensionTypes'>
+                        <Accordion.Control>Konaklama Tipi</Accordion.Control>
+                        <Accordion.Panel>
+                          {hotelSearchRequestQuery.data?.pages
+                            .at(-1)
+                            ?.searchResults.at(-1)?.pensionTypes && (
+                            <PensionTypes
+                              data={
+                                hotelSearchRequestQuery.data?.pages
+                                  .at(-1)
+                                  ?.searchResults.at(-1)?.pensionTypes
+                              }
+                            />
+                          )}
                         </Accordion.Panel>
                       </Accordion.Item>
                     </Accordion>

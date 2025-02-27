@@ -40,6 +40,7 @@ export const hotelFilterSearchParams = {
   maxStarRating: parseAsInteger,
   minStarRating: parseAsInteger,
   destinationIds: parseAsArrayOf(parseAsString),
+  pensionTypes: parseAsArrayOf(parseAsString),
 }
 
 export const hotelDetailSearchParams = {

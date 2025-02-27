@@ -157,6 +157,11 @@ export interface HotelSearchResponseDestinationInfos {
   count: number
   subDestinationInfos: null
 }
+export interface HotelSearchResponsePensionTypes {
+  id: ID
+  type: string
+  sorting: null
+}
 
 export interface HotelSearchResultApiResponse {
   data: {
@@ -191,13 +196,7 @@ export interface HotelSearchResultApiResponse {
           icon_key: null
           priority: number
         }[]
-        pensionTypes:
-          | null
-          | {
-              id: ID
-              type: string
-              sorting: null
-            }[]
+        pensionTypes: HotelSearchResponsePensionTypes[] | null
         themes: {
           id: ID
           themeName: string
