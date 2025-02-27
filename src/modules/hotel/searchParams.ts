@@ -41,6 +41,7 @@ export const hotelFilterSearchParams = {
   minStarRating: parseAsInteger,
   destinationIds: parseAsArrayOf(parseAsString),
   pensionTypes: parseAsArrayOf(parseAsString),
+  themes: parseAsArrayOf(parseAsString),
 }
 
 export const hotelDetailSearchParams = {

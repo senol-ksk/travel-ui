@@ -162,6 +162,12 @@ export interface HotelSearchResponsePensionTypes {
   type: string
   sorting: null
 }
+export interface HotelSearchResponseThemes {
+  id: ID
+  themeName: string
+  icon: null | string
+  priority: number
+}
 
 export interface HotelSearchResultApiResponse {
   data: {
@@ -197,12 +203,7 @@ export interface HotelSearchResultApiResponse {
           priority: number
         }[]
         pensionTypes: HotelSearchResponsePensionTypes[] | null
-        themes: {
-          id: ID
-          themeName: string
-          icon: null | string
-          priority: number
-        }[]
+        themes: HotelSearchResponseThemes[] | null
         destinationsInfo: HotelSearchResponseDestinationInfos[]
         totalHotelFilterFound: number
         totalHotelFound: number

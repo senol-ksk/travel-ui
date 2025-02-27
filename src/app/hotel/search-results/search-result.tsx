@@ -35,6 +35,7 @@ import { PriceRangeSlider } from './price-range'
 import { SearchByName } from './components/search-by-name'
 import { DestinationIds } from './components/filters/destinationIds'
 import { PensionTypes } from './components/filters/pension-types'
+import { Themes } from './components/filters/themes'
 
 const HotelSearchResults: React.FC = () => {
   const mounted = useMounted()
@@ -167,6 +168,28 @@ const HotelSearchResults: React.FC = () => {
                               }
                             />
                           )}
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='themes'>
+                        <Accordion.Control>Temalar</Accordion.Control>
+                        <Accordion.Panel>
+                          <Skeleton
+                            visible={
+                              hotelSearchRequestQuery.isFetching ||
+                              searchParamsQuery.isLoading
+                            }
+                            mih={rem(150)}
+                          >
+                            {hotelSearchRequestQuery.data?.pages.length && (
+                              <Themes
+                                data={
+                                  hotelSearchRequestQuery.data?.pages
+                                    .at(-1)
+                                    ?.searchResults.at(-1)?.themes
+                                }
+                              />
+                            )}
+                          </Skeleton>
                         </Accordion.Panel>
                       </Accordion.Item>
                     </Accordion>
