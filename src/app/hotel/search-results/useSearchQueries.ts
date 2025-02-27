@@ -1,30 +1,42 @@
 import { useEffect, useRef } from 'react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
-import { useTimeout } from '@mantine/hooks'
+import { useIsFirstRender, useTimeout } from '@mantine/hooks'
 
 import { getsecuritytoken, request, serviceRequest } from '@/network'
 import { HotelSearchRequestParams } from '@/types/hotel'
 import { GetSecurityTokenResponse } from '@/types/global'
 import { HotelSearchResultApiResponse } from '@/app/hotel/types'
-import { hotelSearchParamParser } from '@/modules/hotel/searchParams'
+import {
+  hotelFilterSearchParams,
+  hotelSearchParamParser,
+} from '@/modules/hotel/searchParams'
 import { hotelSocket } from './socket'
 
 let appToken: GetSecurityTokenResponse | undefined | null
+
+// removes nullish values from object
+function cleanObj<T>(obj: T): T {
+  for (const propName in obj) {
+    if (obj[propName] === null || obj[propName] === undefined) {
+      delete obj[propName]
+    }
+  }
+  return obj
+}
 
 const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
 const apiActionSearchResponse = '/api/Hotel/SearchResponse'
 
 export const useSearchResultParams = () => {
   const [searchParams] = useQueryStates(hotelSearchParamParser)
+  const [filterParams] = useQueryStates(hotelFilterSearchParams)
   const timeoutIsTriggered = useRef(false)
+
   const { start: startRequestTimeout, clear: clearRequestTimeout } = useTimeout(
     () => {
       timeoutIsTriggered.current = true
-      console.log(
-        'timeout is triggered, timeoutIsTriggered.current',
-        timeoutIsTriggered.current
-      )
+
       if (
         !hotelSearchRequestQuery.isFetching &&
         !hotelSearchRequestQuery.isFetchingNextPage
@@ -51,16 +63,18 @@ export const useSearchResultParams = () => {
     },
   })
   const searchRequestParams = searchParamsQuery.data?.hotelSearchApiRequest
+  const cleanFilterParams = cleanObj(filterParams)
+
   const hotelSearchRequestQueryKey = [
     'hotel-search-results',
     searchRequestParams,
+    cleanFilterParams,
   ]
 
   const hotelSearchRequestQuery = useInfiniteQuery({
     enabled: !!searchRequestParams,
     queryKey: hotelSearchRequestQueryKey,
     initialPageParam: {
-      apiAction: apiActionSearchResponseReadyData,
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
     },
     queryFn: async ({ signal, pageParam }) => {
@@ -72,6 +86,7 @@ export const useSearchResultParams = () => {
         method: 'post',
         url: process.env.NEXT_PUBLIC_OL_ROUTE,
         data: {
+          apiAction: apiActionSearchResponse,
           params: {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
             scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
@@ -81,10 +96,10 @@ export const useSearchResultParams = () => {
             hotelSearchModuleRequest: {
               ...searchRequestParams?.hotelSearchModuleRequest,
               pageNo: pageParam.pageNo,
+              ...cleanFilterParams,
             },
           },
           apiRoute: 'HotelService',
-          apiAction: pageParam.apiAction,
           sessionToken:
             searchRequestParams?.hotelSearchModuleRequest.sessionToken,
           appName: process.env.NEXT_PUBLIC_APP_NAME,
@@ -107,7 +122,6 @@ export const useSearchResultParams = () => {
         response.data.searchResults.at(0)?.items.length === 0
       ) {
         if (!timeoutIsTriggered.current) {
-          console.log('timeout is started')
           startRequestTimeout()
           timeoutIsTriggered.current = true
         }
@@ -117,13 +131,13 @@ export const useSearchResultParams = () => {
       return response?.data
     },
     getNextPageParam: (lastPage, allPages, { pageNo }) => {
+      const apiAction = apiActionSearchResponse
       if (lastPage?.searchResults[0].hasMorePage) {
         if (timeoutIsTriggered.current) {
-          console.log('timeout is stoped')
           clearRequestTimeout()
         }
+
         return {
-          apiAction: apiActionSearchResponse,
           pageNo: pageNo > -1 ? pageNo + 1 : 0,
         }
       }
@@ -133,7 +147,6 @@ export const useSearchResultParams = () => {
         !lastPage?.searchResults.at(0)?.items.length
       ) {
         return {
-          apiAction: apiActionSearchResponse,
           pageNo: 0,
         }
       }
@@ -143,9 +156,7 @@ export const useSearchResultParams = () => {
   })
 
   useEffect(() => {
-    const socketOnAvailablity = ({ status }: { status: number }) => {
-      console.log('socketOnAvailablity')
-
+    const socketOnAvailability = ({ status }: { status: number }) => {
       if (
         !hotelSearchRequestQuery.isFetching &&
         !hotelSearchRequestQuery.isFetchingNextPage
@@ -158,15 +169,13 @@ export const useSearchResultParams = () => {
     }
 
     const socketOnConnect = () => {
-      console.log('socket connected')
-
       if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
         hotelSocket.emit('Auth', {
           searchtoken:
             searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
         })
       }
-      hotelSocket.once('AvailabilityStatus', socketOnAvailablity)
+      hotelSocket.once('AvailabilityStatus', socketOnAvailability)
     }
 
     hotelSocket.once('connect', socketOnConnect)

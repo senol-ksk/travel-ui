@@ -1,20 +1,60 @@
 'use client'
 
-import { Alert, Button, Container, Skeleton } from '@mantine/core'
-import { createSerializer } from 'nuqs'
+import {
+  Accordion,
+  ActionIcon,
+  Button,
+  Checkbox,
+  CloseButton,
+  Container,
+  Modal,
+  NativeSelect,
+  Rating,
+  rem,
+  ScrollArea,
+  Skeleton,
+  Spoiler,
+  Stack,
+  TextInput,
+  Title,
+} from '@mantine/core'
+import { useQueryStates } from 'nuqs'
+import { useState } from 'react'
+import { useDisclosure, useInputState, useMounted } from '@mantine/hooks'
 
-import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
+import {
+  hotelFilterSearchParams,
+  HotelSortOrderEnums,
+} from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from './useSearchQueries'
 import { HotelSearchResultItem } from './results-item'
-
-const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
+import { HotelSearchResultHotelInfo, RoomDetailType } from '../types'
+import { HotelMap } from './components/maps'
+import { GoSearch } from 'react-icons/go'
+import { PriceRangeSlider } from './price-range'
+import { SearchByName } from './components/search-by-name'
+import { DestinationIds } from './components/filters/destinationIds'
+import { PensionTypes } from './components/filters/pension-types'
+import { Themes } from './components/filters/themes'
 
 const HotelSearchResults: React.FC = () => {
+  const mounted = useMounted()
   const { hotelSearchRequestQuery, searchParamsQuery } = useSearchResultParams()
+  const [filterParams, setFilterParams] = useQueryStates(
+    hotelFilterSearchParams
+  )
+  const [isMapsModalOpened, { open: openMapsModal, close: closeMapsModal }] =
+    useDisclosure(false)
+
+  const [hotelInfo, setHotelInfo] = useState<HotelSearchResultHotelInfo>()
 
   const handleLoadMoreActions = async () => {
     hotelSearchRequestQuery.fetchNextPage()
   }
+
+  const minMaxPrices = hotelSearchRequestQuery.data?.pages
+    .at(-1)
+    ?.searchResults.flatMap((page) => [page.minPrice, page.maxPrice])
 
   return (
     <>
@@ -32,41 +72,216 @@ const HotelSearchResults: React.FC = () => {
       )}
       <Container>
         <div className='py-5 lg:py-10'>
-          <div className='grid gap-4 md:grid-cols-4 md:gap-3'>
+          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
             <div className='md:col-span-1'>
-              <div className='rounded-md border border-gray-300 p-3'>
-                Filter section
-              </div>
+              {mounted && (
+                <div>
+                  <Title order={2} fz='h4'>
+                    Filtreler
+                  </Title>
+                  <div className='pt-3'>
+                    <Accordion
+                      defaultValue={['byName', 'priceRange']}
+                      multiple
+                      classNames={{
+                        control: 'p-2 text-sm',
+                        label: 'p-0',
+                        content: 'p-2',
+                      }}
+                    >
+                      <Accordion.Item value='byName'>
+                        <Accordion.Control>Otel Adına Göre</Accordion.Control>
+                        <Accordion.Panel>
+                          <SearchByName />
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='priceRange'>
+                        <Accordion.Control>Fiyat Aralığı</Accordion.Control>
+                        <Accordion.Panel>
+                          <div className='p-2'>
+                            <Skeleton
+                              visible={
+                                hotelSearchRequestQuery.isLoading ||
+                                searchParamsQuery.isLoading
+                              }
+                              mih={rem(50)}
+                            >
+                              {hotelSearchRequestQuery.data?.pages?.length && (
+                                <PriceRangeSlider
+                                  minPrice={
+                                    minMaxPrices?.length
+                                      ? minMaxPrices[0]
+                                      : {
+                                          value: 0,
+                                          currency: null,
+                                          rateValue: null,
+                                        }
+                                  }
+                                  maxPrice={
+                                    minMaxPrices?.length
+                                      ? minMaxPrices[1]
+                                      : {
+                                          value: 0,
+                                          currency: null,
+                                          rateValue: null,
+                                        }
+                                  }
+                                />
+                              )}
+                            </Skeleton>
+                          </div>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='destinationIds'>
+                        <Accordion.Control>Yakın Çevre</Accordion.Control>
+                        <Accordion.Panel>
+                          <Skeleton
+                            visible={
+                              hotelSearchRequestQuery.isFetching ||
+                              searchParamsQuery.isLoading
+                            }
+                            mih={rem(150)}
+                          >
+                            {hotelSearchRequestQuery.data?.pages.length && (
+                              <DestinationIds
+                                destinationsInfo={
+                                  hotelSearchRequestQuery.data?.pages
+                                    .at(-1)
+                                    ?.searchResults.at(-1)?.destinationsInfo
+                                }
+                              />
+                            )}
+                          </Skeleton>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='pensionTypes'>
+                        <Accordion.Control>Konaklama Tipi</Accordion.Control>
+                        <Accordion.Panel>
+                          {hotelSearchRequestQuery.data?.pages
+                            .at(-1)
+                            ?.searchResults.at(-1)?.pensionTypes && (
+                            <PensionTypes
+                              data={
+                                hotelSearchRequestQuery.data?.pages
+                                  .at(-1)
+                                  ?.searchResults.at(-1)?.pensionTypes
+                              }
+                            />
+                          )}
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='themes'>
+                        <Accordion.Control>Temalar</Accordion.Control>
+                        <Accordion.Panel>
+                          <Skeleton
+                            visible={
+                              hotelSearchRequestQuery.isFetching ||
+                              searchParamsQuery.isLoading
+                            }
+                            mih={rem(150)}
+                          >
+                            {hotelSearchRequestQuery.data?.pages.length && (
+                              <Themes
+                                data={
+                                  hotelSearchRequestQuery.data?.pages
+                                    .at(-1)
+                                    ?.searchResults.at(-1)?.themes
+                                }
+                              />
+                            )}
+                          </Skeleton>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                    </Accordion>
+                  </div>
+                </div>
+              )}
             </div>
             <div
-              className='grid gap-4 md:col-span-3'
+              className='grid gap-4 pb-20 md:col-span-3'
               style={{
                 contentVisibility: 'auto',
               }}
             >
+              <div className='flex gap-1'>
+                <div className='ms-auto'>
+                  <Skeleton
+                    visible={
+                      hotelSearchRequestQuery.isLoading ||
+                      searchParamsQuery.isLoading
+                    }
+                  >
+                    <NativeSelect
+                      value={filterParams.orderBy}
+                      onChange={({ currentTarget: { value } }) => {
+                        setFilterParams({
+                          orderBy: value as HotelSortOrderEnums,
+                        })
+                      }}
+                      data={[
+                        {
+                          value: HotelSortOrderEnums.priceAscending,
+                          label: 'Fiyat (Artan)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.priceDescending,
+                          label: 'Fiyat (Azalan)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.listingRateDescending,
+                          label: 'Önerilen Oteller',
+                        },
+                        {
+                          value: HotelSortOrderEnums.nameAscending,
+                          label: 'İsme Göre (A-Z)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.nameDescending,
+                          label: 'İsme Göre (Z-A)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.starAscending,
+                          label: 'Yıldız Sayısı (Artan)',
+                        },
+                        {
+                          value: HotelSortOrderEnums.starDescending,
+                          label: 'Yıldız Sayısı (Azalan)',
+                        },
+                      ]}
+                    />
+                  </Skeleton>
+                </div>
+              </div>
               {hotelSearchRequestQuery.data?.pages.map((page) => {
                 if (!page) return null
                 return (
                   page.searchResults.length &&
                   page.searchResults.map((results) => {
-                    return (
-                      results.items
-                        // .sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                        .map((result) => {
-                          const hotelInfo = results.hotelInfos.find(
-                            (hotelInfo) => hotelInfo.id === result.hotelId
-                          )
-                          return (
-                            hotelInfo && (
-                              <HotelSearchResultItem
-                                key={result.hotelId}
-                                hotelInfo={hotelInfo}
-                                resultItem={result}
-                              />
-                            )
-                          )
-                        })
-                    )
+                    const hotelInfos = results.hotelInfos
+                    const roomDetails =
+                      results.roomDetails && Object.values(results.roomDetails)
+
+                    return results.items.map((result) => {
+                      const hotelInfo = hotelInfos.find(
+                        (hotelInfo) => hotelInfo.id === result.hotelId
+                      )
+                      const roomDetail = roomDetails?.find(
+                        (room) => room.roomKey == result.rooms[0].key
+                      )
+
+                      return (
+                        <HotelSearchResultItem
+                          key={result.hotelId}
+                          roomDetail={roomDetail}
+                          hotelInfo={hotelInfo}
+                          resultItem={result}
+                          onMapClick={() => {
+                            openMapsModal()
+                            setHotelInfo(hotelInfo)
+                          }}
+                        />
+                      )
+                    })
                   })
                 )
               })}
@@ -89,11 +304,18 @@ const HotelSearchResults: React.FC = () => {
                     </Button>
                   </div>
                 )}
-              <div className='h-[500px]' />
             </div>
           </div>
         </div>
       </Container>
+      <Modal
+        opened={isMapsModalOpened}
+        onClose={closeMapsModal}
+        size={'xl'}
+        title={hotelInfo?.name}
+      >
+        <HotelMap hotelInfo={hotelInfo} />
+      </Modal>
     </>
   )
 }

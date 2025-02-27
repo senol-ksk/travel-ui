@@ -2,11 +2,11 @@
 
 import {
   DEFAULT_THEME,
+  Drawer,
   mergeMantineTheme,
   Modal,
   Portal,
   rem,
-  Title,
 } from '@mantine/core'
 
 import { fonts } from './fonts'
@@ -28,6 +28,13 @@ const mantineTheme = mergeMantineTheme(
         },
       }),
       Modal: Modal.extend({
+        styles: {
+          title: {
+            fontWeight: 600,
+          },
+        },
+      }),
+      Drawer: Drawer.extend({
         styles: {
           title: {
             fontWeight: 600,
