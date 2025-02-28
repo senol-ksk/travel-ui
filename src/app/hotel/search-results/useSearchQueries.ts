@@ -18,16 +18,18 @@ let appToken: GetSecurityTokenResponse | undefined | null
 
 const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
 const apiActionSearchResponse = '/api/Hotel/SearchResponse'
-let enableHotelSearchRequestQuery = false
 
 export const useSearchResultParams = () => {
+  const searchQueryStatus = useRef<'initial' | 'loading' | 'ended'>('initial')
+
   const [searchParams] = useQueryStates(hotelSearchParamParser)
   const [filterParams] = useQueryStates(hotelFilterSearchParams)
 
   const { start: startRequestTimeout, clear: clearRequestTimeout } = useTimeout(
     () => {
-      enableHotelSearchRequestQuery = true
-      hotelSearchRequestQuery.refetch()
+      hotelSocket.disconnect()
+      hotelSearchRequestQuery.fetchNextPage()
+      searchQueryStatus.current = 'ended'
     },
     20000
   )
@@ -50,61 +52,8 @@ export const useSearchResultParams = () => {
   const searchRequestParams = searchParamsQuery.data?.hotelSearchApiRequest
   const cleanFilterParams = cleanObj(filterParams)
 
-  const hotelSearchResponseReadyData = useQuery({
-    enabled: !!searchRequestParams,
-    queryKey: ['hotel-search-ready-data', searchRequestParams],
-    queryFn: async ({ signal }) => {
-      enableHotelSearchRequestQuery = false
-      if (!appToken) {
-        appToken = await getsecuritytoken()
-      }
-
-      const response = (await request({
-        method: 'post',
-        url: process.env.NEXT_PUBLIC_OL_ROUTE,
-        data: {
-          apiAction: apiActionSearchResponseReadyData,
-          params: {
-            appName: process.env.NEXT_PUBLIC_APP_NAME,
-            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-            searchToken:
-              searchRequestParams?.hotelSearchModuleRequest.searchToken,
-            hotelSearchModuleRequest: {
-              ...searchRequestParams?.hotelSearchModuleRequest,
-            },
-          },
-          apiRoute: 'HotelService',
-          sessionToken:
-            searchRequestParams?.hotelSearchModuleRequest.sessionToken,
-          appName: process.env.NEXT_PUBLIC_APP_NAME,
-          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-          RequestType:
-            'TravelAccess.Business.Models.Hotel.HotelSearchApiRequest, Business.Models.Hotel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
-          Device: 'Web',
-          LanguageCode: 'tr_TR',
-        },
-        signal,
-        headers: {
-          appToken: appToken.result,
-          appName: process.env.NEXT_PUBLIC_APP_NAME,
-        },
-      })) as HotelSearchResultApiResponse
-
-      if (!response.data?.searchResults[0].items.length) {
-        startRequestTimeout()
-        hotelSocket.connect()
-      } else {
-        enableHotelSearchRequestQuery = true
-      }
-
-      return response?.data
-    },
-  })
-
   const hotelSearchRequestQuery = useInfiniteQuery({
-    enabled: enableHotelSearchRequestQuery,
+    enabled: !!searchRequestParams,
     queryKey: ['hotel-search-results', searchRequestParams, cleanFilterParams],
     initialPageParam: {
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
@@ -163,8 +112,6 @@ export const useSearchResultParams = () => {
     },
     getNextPageParam: (lastPage, allPages, { pageNo }) => {
       if (lastPage?.searchResults[0].hasMorePage) {
-        // clearRequestTimeout()
-
         return {
           pageNo: pageNo > -1 ? pageNo + 1 : 0,
         }
@@ -183,38 +130,57 @@ export const useSearchResultParams = () => {
     },
   })
 
-  const socketOnAvailability = ({ status }: { status: number }) => {
-    console.log('socketOnAvailability is triggered')
-    // enableHotelSearchRequestQuery = true
+  if (
+    hotelSearchRequestQuery.data?.pages.length &&
+    !hotelSearchRequestQuery.data?.pages.at(-1)?.searchResults[0].items
+      .length &&
+    searchQueryStatus.current === 'initial'
+  ) {
+    searchQueryStatus.current = 'loading'
+    startRequestTimeout()
+    hotelSocket.connect()
+  }
 
-    hotelSocket.disconnect()
+  if (
+    hotelSearchRequestQuery.data?.pages.length &&
+    hotelSearchRequestQuery.data?.pages.at(-1)?.searchResults[0].items.length
+  ) {
+    searchQueryStatus.current = 'ended'
+  }
+
+  const socketOnAvailability = ({ status }: { status: number }) => {
     clearRequestTimeout()
+    searchQueryStatus.current = 'ended'
+
+    hotelSearchRequestQuery.fetchNextPage()
+    hotelSocket.disconnect()
+  }
+
+  const socketOnConnect = () => {
+    if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
+      hotelSocket.emit('Auth', {
+        searchtoken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
+      })
+    }
+    hotelSocket.once('AvailabilityStatus', socketOnAvailability)
   }
 
   useEffect(() => {
-    const socketOnConnect = () => {
-      if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
-        hotelSocket.emit('Auth', {
-          searchtoken:
-            searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-        })
-      }
-      hotelSocket.once('AvailabilityStatus', socketOnAvailability)
-    }
-
     hotelSocket.once('connect', socketOnConnect)
+
     return () => {
       hotelSocket.disconnect()
       hotelSocket.off('AvailabilityStatus')
       clearRequestTimeout()
+      searchQueryStatus.current = 'initial'
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [searchParams])
 
   return {
-    hotelSearchResponseReadyData,
     hotelSearchRequestQuery,
     searchParams,
     searchParamsQuery,
+    searchQueryStatus,
   }
 }

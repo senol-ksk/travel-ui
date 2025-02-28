@@ -2,26 +2,20 @@
 
 import {
   Accordion,
-  ActionIcon,
+  Alert,
   Button,
-  Checkbox,
-  CloseButton,
   Container,
+  LoadingOverlay,
   Modal,
   NativeSelect,
-  Rating,
   rem,
-  ScrollArea,
   Skeleton,
-  Spoiler,
-  Stack,
-  TextInput,
   Title,
   UnstyledButton,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { useState } from 'react'
-import { useDisclosure, useInputState, useMounted } from '@mantine/hooks'
+import { useDisclosure, useMounted } from '@mantine/hooks'
 
 import {
   hotelFilterSearchParams,
@@ -29,9 +23,8 @@ import {
 } from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from './useSearchQueries'
 import { HotelSearchResultItem } from './results-item'
-import { HotelSearchResultHotelInfo, RoomDetailType } from '../types'
+import { HotelSearchResultHotelInfo } from '../types'
 import { HotelMap } from './components/maps'
-import { GoSearch } from 'react-icons/go'
 import { PriceRangeSlider } from './price-range'
 import { SearchByName } from './components/search-by-name'
 import { DestinationIds } from './components/filters/destinationIds'
@@ -40,11 +33,8 @@ import { Themes } from './components/filters/themes'
 
 const HotelSearchResults: React.FC = () => {
   const mounted = useMounted()
-  const {
-    hotelSearchRequestQuery,
-    hotelSearchResponseReadyData,
-    searchParamsQuery,
-  } = useSearchResultParams()
+  const { hotelSearchRequestQuery, searchParamsQuery, searchQueryStatus } =
+    useSearchResultParams()
   const [filterParams, setFilterParams] = useQueryStates(
     hotelFilterSearchParams
   )
@@ -73,7 +63,16 @@ const HotelSearchResults: React.FC = () => {
           <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
             <div className='md:col-span-1'>
               {mounted && (
-                <div>
+                <div className='relative'>
+                  <LoadingOverlay
+                    visible={
+                      hotelSearchRequestQuery.isLoading ||
+                      searchParamsQuery.isLoading
+                    }
+                    zIndex={1000}
+                    overlayProps={{ radius: 'sm', blur: 2 }}
+                    loaderProps={{ color: 'yellow', type: 'bars' }}
+                  />
                   <div className='flex justify-between'>
                     <Title order={2} fz='h4'>
                       Filtreler
@@ -122,82 +121,65 @@ const HotelSearchResults: React.FC = () => {
                         <Accordion.Control>Fiyat Aralığı</Accordion.Control>
                         <Accordion.Panel>
                           <div className='p-2'>
-                            <Skeleton
-                              visible={
-                                hotelSearchRequestQuery.isFetching ||
-                                hotelSearchRequestQuery.isLoading ||
-                                searchParamsQuery.isLoading
-                              }
-                              mih={rem(50)}
-                            >
-                              {hotelSearchRequestQuery.data &&
-                              hotelSearchRequestQuery.data.pages.length &&
-                              hotelSearchRequestQuery.data.pages.at(-1) &&
-                              hotelSearchRequestQuery.data.pages.at(-1)
-                                ?.searchResults.length &&
-                              hotelSearchRequestQuery.data.pages.at(-1)
-                                ?.searchResults[0].maxPrice &&
-                              hotelSearchRequestQuery.data?.pages
-                                .at(-1)
-                                ?.searchResults.at(-1)?.minPrice &&
-                              hotelSearchRequestQuery.data?.pages
-                                .at(-1)
-                                ?.searchResults.at(-1)?.maxPrice ? (
-                                <PriceRangeSlider
-                                  minPrice={
-                                    restFilterParams?.priceRange
-                                      ? restFilterParams.priceRange[0]
-                                      : (hotelSearchRequestQuery.data?.pages
-                                          .at(-1)
-                                          ?.searchResults.at(-1)?.minPrice
-                                          .value ?? 0)
-                                  }
-                                  maxPrice={
-                                    restFilterParams?.priceRange
-                                      ? restFilterParams.priceRange[1]
-                                      : (hotelSearchRequestQuery.data?.pages
-                                          .at(-1)
-                                          ?.searchResults.at(-1)?.maxPrice
-                                          .value ?? 0)
-                                  }
-                                  defaultRanges={[
-                                    hotelSearchRequestQuery.data?.pages
-                                      .at(-1)
-                                      ?.searchResults.at(-1)?.minPrice.value ??
-                                      0,
-                                    hotelSearchRequestQuery.data?.pages
-                                      .at(-1)
-                                      ?.searchResults.at(-1)?.maxPrice.value ??
-                                      0,
-                                  ]}
-                                />
-                              ) : null}
-                            </Skeleton>
+                            {!hotelSearchRequestQuery.isLoading &&
+                            !hotelSearchRequestQuery.isFetching &&
+                            hotelSearchRequestQuery.data &&
+                            hotelSearchRequestQuery.data.pages.length &&
+                            hotelSearchRequestQuery.data.pages.at(-1) &&
+                            hotelSearchRequestQuery.data.pages.at(-1)
+                              ?.searchResults.length &&
+                            hotelSearchRequestQuery.data.pages.at(-1)
+                              ?.searchResults[0].maxPrice &&
+                            hotelSearchRequestQuery.data?.pages
+                              .at(-1)
+                              ?.searchResults.at(-1)?.minPrice &&
+                            hotelSearchRequestQuery.data?.pages
+                              .at(-1)
+                              ?.searchResults.at(-1)?.maxPrice ? (
+                              <PriceRangeSlider
+                                minPrice={
+                                  restFilterParams?.priceRange
+                                    ? restFilterParams.priceRange[0]
+                                    : (hotelSearchRequestQuery.data?.pages
+                                        .at(-1)
+                                        ?.searchResults.at(-1)?.minPrice
+                                        .value ?? 0)
+                                }
+                                maxPrice={
+                                  restFilterParams?.priceRange
+                                    ? restFilterParams.priceRange[1]
+                                    : (hotelSearchRequestQuery.data?.pages
+                                        .at(-1)
+                                        ?.searchResults.at(-1)?.maxPrice
+                                        .value ?? 0)
+                                }
+                                defaultRanges={[
+                                  hotelSearchRequestQuery.data?.pages
+                                    .at(-1)
+                                    ?.searchResults.at(-1)?.minPrice.value ?? 0,
+                                  hotelSearchRequestQuery.data?.pages
+                                    .at(-1)
+                                    ?.searchResults.at(-1)?.maxPrice.value ?? 0,
+                                ]}
+                              />
+                            ) : null}
                           </div>
                         </Accordion.Panel>
                       </Accordion.Item>
                       <Accordion.Item value='destinationIds'>
                         <Accordion.Control>Yakın Çevre</Accordion.Control>
                         <Accordion.Panel>
-                          <Skeleton
-                            visible={
-                              hotelSearchRequestQuery.isFetching ||
-                              searchParamsQuery.isLoading
-                            }
-                            mih={rem(150)}
-                          >
-                            {hotelSearchRequestQuery.data?.pages
-                              .at(-1)
-                              ?.searchResults.at(-1)?.destinationsInfo && (
-                              <DestinationIds
-                                destinationsInfo={
-                                  hotelSearchRequestQuery.data?.pages
-                                    .at(-1)
-                                    ?.searchResults.at(-1)?.destinationsInfo
-                                }
-                              />
-                            )}
-                          </Skeleton>
+                          {hotelSearchRequestQuery.data?.pages
+                            .at(-1)
+                            ?.searchResults.at(-1)?.destinationsInfo && (
+                            <DestinationIds
+                              destinationsInfo={
+                                hotelSearchRequestQuery.data?.pages
+                                  .at(-1)
+                                  ?.searchResults.at(-1)?.destinationsInfo
+                              }
+                            />
+                          )}
                         </Accordion.Panel>
                       </Accordion.Item>
                       <Accordion.Item value='pensionTypes'>
@@ -219,25 +201,17 @@ const HotelSearchResults: React.FC = () => {
                       <Accordion.Item value='themes'>
                         <Accordion.Control>Temalar</Accordion.Control>
                         <Accordion.Panel>
-                          <Skeleton
-                            visible={
-                              hotelSearchRequestQuery.isFetching ||
-                              searchParamsQuery.isLoading
-                            }
-                            mih={rem(150)}
-                          >
-                            {hotelSearchRequestQuery.data?.pages
-                              .at(-1)
-                              ?.searchResults.at(-1)?.themes && (
-                              <Themes
-                                data={
-                                  hotelSearchRequestQuery.data?.pages
-                                    .at(-1)
-                                    ?.searchResults.at(-1)?.themes
-                                }
-                              />
-                            )}
-                          </Skeleton>
+                          {hotelSearchRequestQuery.data?.pages
+                            .at(-1)
+                            ?.searchResults.at(-1)?.themes && (
+                            <Themes
+                              data={
+                                hotelSearchRequestQuery.data?.pages
+                                  .at(-1)
+                                  ?.searchResults.at(-1)?.themes
+                              }
+                            />
+                          )}
                         </Accordion.Panel>
                       </Accordion.Item>
                     </Accordion>
@@ -295,6 +269,18 @@ const HotelSearchResults: React.FC = () => {
                   </Skeleton>
                 </div>
               </div>
+              {!hotelSearchRequestQuery.isFetching &&
+                hotelSearchRequestQuery.data?.pages.filter(
+                  (page) =>
+                    page?.searchResults.filter(
+                      (searchresults) => searchresults.items.length > 0
+                    ).length
+                ).length === 0 &&
+                searchQueryStatus.current === 'ended' && (
+                  <Alert color='red' title='Sonuç bulunamadı'>
+                    Aradığınız kriterlerde sonuç bulunamadı.
+                  </Alert>
+                )}
               {hotelSearchRequestQuery.data?.pages.map((page) => {
                 if (!page) return null
                 return (
