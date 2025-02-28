@@ -21,6 +21,7 @@ const SearchByName: React.FC<IProps> = ({
     if (!defaultValue) {
       setValue(defaultValue)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue])
 
   return (
