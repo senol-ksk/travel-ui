@@ -12,37 +12,24 @@ import {
   hotelSearchParamParser,
 } from '@/modules/hotel/searchParams'
 import { hotelSocket } from './socket'
+import { cleanObj } from '@/libs/util'
 
 let appToken: GetSecurityTokenResponse | undefined | null
-
-// removes nullish values from object
-function cleanObj<T>(obj: T): T {
-  for (const propName in obj) {
-    if (obj[propName] === null || obj[propName] === undefined) {
-      delete obj[propName]
-    }
-  }
-  return obj
-}
 
 const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
 const apiActionSearchResponse = '/api/Hotel/SearchResponse'
 
 export const useSearchResultParams = () => {
+  const searchQueryStatus = useRef<'initial' | 'loading' | 'ended'>('initial')
+
   const [searchParams] = useQueryStates(hotelSearchParamParser)
   const [filterParams] = useQueryStates(hotelFilterSearchParams)
-  const timeoutIsTriggered = useRef(false)
 
   const { start: startRequestTimeout, clear: clearRequestTimeout } = useTimeout(
     () => {
-      timeoutIsTriggered.current = true
-
-      if (
-        !hotelSearchRequestQuery.isFetching &&
-        !hotelSearchRequestQuery.isFetchingNextPage
-      ) {
-        hotelSearchRequestQuery.fetchNextPage()
-      }
+      hotelSocket.disconnect()
+      hotelSearchRequestQuery.fetchNextPage()
+      searchQueryStatus.current = 'ended'
     },
     20000
   )
@@ -65,15 +52,9 @@ export const useSearchResultParams = () => {
   const searchRequestParams = searchParamsQuery.data?.hotelSearchApiRequest
   const cleanFilterParams = cleanObj(filterParams)
 
-  const hotelSearchRequestQueryKey = [
-    'hotel-search-results',
-    searchRequestParams,
-    cleanFilterParams,
-  ]
-
   const hotelSearchRequestQuery = useInfiniteQuery({
     enabled: !!searchRequestParams,
-    queryKey: hotelSearchRequestQueryKey,
+    queryKey: ['hotel-search-results', searchRequestParams, cleanFilterParams],
     initialPageParam: {
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
     },
@@ -96,6 +77,16 @@ export const useSearchResultParams = () => {
             hotelSearchModuleRequest: {
               ...searchRequestParams?.hotelSearchModuleRequest,
               pageNo: pageParam.pageNo,
+              minPrice:
+                cleanFilterParams?.priceRange &&
+                cleanFilterParams?.priceRange?.length > 0
+                  ? cleanFilterParams?.priceRange[0]
+                  : searchRequestParams?.hotelSearchModuleRequest.minPrice,
+              maxPrice:
+                cleanFilterParams?.priceRange &&
+                cleanFilterParams?.priceRange?.length > 0
+                  ? cleanFilterParams?.priceRange[1]
+                  : searchRequestParams?.hotelSearchModuleRequest.maxPrice,
               ...cleanFilterParams,
             },
           },
@@ -117,26 +108,10 @@ export const useSearchResultParams = () => {
         },
       })) as HotelSearchResultApiResponse
 
-      if (
-        response?.data?.searchResults &&
-        response.data.searchResults.at(0)?.items.length === 0
-      ) {
-        if (!timeoutIsTriggered.current) {
-          startRequestTimeout()
-          timeoutIsTriggered.current = true
-        }
-        hotelSocket.connect()
-      }
-
       return response?.data
     },
     getNextPageParam: (lastPage, allPages, { pageNo }) => {
-      const apiAction = apiActionSearchResponse
       if (lastPage?.searchResults[0].hasMorePage) {
-        if (timeoutIsTriggered.current) {
-          clearRequestTimeout()
-        }
-
         return {
           pageNo: pageNo > -1 ? pageNo + 1 : 0,
         }
@@ -155,42 +130,57 @@ export const useSearchResultParams = () => {
     },
   })
 
+  if (
+    hotelSearchRequestQuery.data?.pages.length &&
+    !hotelSearchRequestQuery.data?.pages.at(-1)?.searchResults[0].items
+      .length &&
+    searchQueryStatus.current === 'initial'
+  ) {
+    searchQueryStatus.current = 'loading'
+    startRequestTimeout()
+    hotelSocket.connect()
+  }
+
+  if (
+    hotelSearchRequestQuery.data?.pages.length &&
+    hotelSearchRequestQuery.data?.pages.at(-1)?.searchResults[0].items.length
+  ) {
+    searchQueryStatus.current = 'ended'
+  }
+
+  const socketOnAvailability = ({ status }: { status: number }) => {
+    clearRequestTimeout()
+    searchQueryStatus.current = 'ended'
+
+    hotelSearchRequestQuery.fetchNextPage()
+    hotelSocket.disconnect()
+  }
+
+  const socketOnConnect = () => {
+    if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
+      hotelSocket.emit('Auth', {
+        searchtoken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
+      })
+    }
+    hotelSocket.once('AvailabilityStatus', socketOnAvailability)
+  }
+
   useEffect(() => {
-    const socketOnAvailability = ({ status }: { status: number }) => {
-      if (
-        !hotelSearchRequestQuery.isFetching &&
-        !hotelSearchRequestQuery.isFetchingNextPage
-      ) {
-        hotelSearchRequestQuery.fetchNextPage()
-      }
-
-      hotelSocket.disconnect()
-      clearRequestTimeout()
-    }
-
-    const socketOnConnect = () => {
-      if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
-        hotelSocket.emit('Auth', {
-          searchtoken:
-            searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-        })
-      }
-      hotelSocket.once('AvailabilityStatus', socketOnAvailability)
-    }
-
     hotelSocket.once('connect', socketOnConnect)
+
     return () => {
       hotelSocket.disconnect()
       hotelSocket.off('AvailabilityStatus')
       clearRequestTimeout()
-      timeoutIsTriggered.current = false
+      searchQueryStatus.current = 'initial'
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [searchParams])
 
   return {
     hotelSearchRequestQuery,
     searchParams,
     searchParamsQuery,
+    searchQueryStatus,
   }
 }

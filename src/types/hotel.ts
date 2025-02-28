@@ -134,9 +134,9 @@ export interface HotelSearchRequestParams {
       sessionToken: null
       providerId: 0
       providerName: null
-      generatingRequestTime: '00:00:00'
-      callingServiceTime: '00:00:00'
-      generatingResponseTime: '00:00:00'
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
       subDiagnostics: null
       lastException: null
       serviceRequestData: null
@@ -146,22 +146,22 @@ export interface HotelSearchRequestParams {
     }
     eventMessages: []
     appName: null
-    scopeCode: '00000000-0000-0000-0000-000000000000'
+    scopeCode: string
     logSessionToken: null
     logSearchToken: null
   }
   hotelSearchApiRequest: {
     hotelSearchModuleRequest: {
-      id: 291
-      name: 'İstanbul'
-      slug: 'istanbul'
-      location: [41.008238, 28.978359]
+      id: ID
+      name: string
+      slug: string
+      location: [number, number]
       northeast: null
       southwest: null
-      type: 1
-      countryCode: 'tr'
-      checkInDate: '2025-01-20T00:00:00Z'
-      checkOutDate: '2025-01-22T00:00:00Z'
+      type: number
+      countryCode: string
+      checkInDate: string
+      checkOutDate: string
       rooms: Rooms[]
       domestic: boolean
       tags: null

@@ -1,45 +1,51 @@
 import { ActionIcon, CloseButton, TextInput } from '@mantine/core'
 import { useInputState } from '@mantine/hooks'
-import { useQueryStates } from 'nuqs'
+import { useEffect } from 'react'
+
 import { GoSearch } from 'react-icons/go'
 
-import { hotelFilterSearchParams } from '@/modules/hotel/searchParams'
+type IProps = {
+  defaultValue: string | null
+  onSearchClick: (value: string | null) => void
+  onClear: () => void
+}
 
-const SearchByName = () => {
-  const [filterParams, setFilterParams] = useQueryStates(
-    hotelFilterSearchParams
-  )
-  const [searchByNameValue, setSearchByNameValue] = useInputState<string>(
-    filterParams.hotelName ?? ''
-  )
+const SearchByName: React.FC<IProps> = ({
+  defaultValue,
+  onSearchClick,
+  onClear,
+}) => {
+  const [value, setValue] = useInputState(defaultValue ?? null)
+
+  useEffect(() => {
+    if (!defaultValue) {
+      setValue(defaultValue)
+    }
+  }, [defaultValue])
 
   return (
     <TextInput
       label=''
       type='search'
-      onChange={setSearchByNameValue}
       maxLength={20}
       placeholder='Otel adı yazın'
-      value={searchByNameValue}
+      value={value ?? ''}
+      onChange={setValue}
       rightSection={
         <>
-          {searchByNameValue.length > 0 && (
+          {value && value.length > 0 && (
             <CloseButton
               onClick={() => {
-                setSearchByNameValue('')
-                setFilterParams({
-                  hotelName: null,
-                })
+                onClear()
+                setValue(null)
               }}
             />
           )}
           <ActionIcon
             variant='light'
             onClick={() => {
-              if (searchByNameValue.length > 2) {
-                setFilterParams({
-                  hotelName: searchByNameValue,
-                })
+              if (value && value.length > 2) {
+                onSearchClick(value)
               }
             }}
           >
