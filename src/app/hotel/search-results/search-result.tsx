@@ -17,6 +17,7 @@ import {
   Stack,
   TextInput,
   Title,
+  UnstyledButton,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { useState } from 'react'
@@ -39,7 +40,11 @@ import { Themes } from './components/filters/themes'
 
 const HotelSearchResults: React.FC = () => {
   const mounted = useMounted()
-  const { hotelSearchRequestQuery, searchParamsQuery } = useSearchResultParams()
+  const {
+    hotelSearchRequestQuery,
+    hotelSearchResponseReadyData,
+    searchParamsQuery,
+  } = useSearchResultParams()
   const [filterParams, setFilterParams] = useQueryStates(
     hotelFilterSearchParams
   )
@@ -52,18 +57,11 @@ const HotelSearchResults: React.FC = () => {
     hotelSearchRequestQuery.fetchNextPage()
   }
 
-  const minMaxPrices = hotelSearchRequestQuery.data?.pages
-    .at(-1)
-    ?.searchResults.flatMap((page) => [page.minPrice, page.maxPrice])
+  const { orderBy, ...restFilterParams } = filterParams
 
   return (
     <>
-      {(hotelSearchRequestQuery.isLoading ||
-        searchParamsQuery.isLoading ||
-        !hotelSearchRequestQuery.data?.pages ||
-        hotelSearchRequestQuery.data?.pages.filter(
-          (item) => item?.searchResults[0].items.length
-        ).length === 0) && (
+      {(hotelSearchRequestQuery.isLoading || searchParamsQuery.isLoading) && (
         <div className='relative'>
           <div className='absolute start-0 end-0'>
             <Skeleton h={6} radius={0} />
@@ -76,9 +74,21 @@ const HotelSearchResults: React.FC = () => {
             <div className='md:col-span-1'>
               {mounted && (
                 <div>
-                  <Title order={2} fz='h4'>
-                    Filtreler
-                  </Title>
+                  <div className='flex justify-between'>
+                    <Title order={2} fz='h4'>
+                      Filtreler
+                    </Title>
+                    <UnstyledButton
+                      hidden={!Object.values(restFilterParams).find(Boolean)}
+                      fz='xs'
+                      className='font-semibold text-blue-500'
+                      onClick={() => {
+                        setFilterParams(null)
+                      }}
+                    >
+                      Temizle
+                    </UnstyledButton>
+                  </div>
                   <div className='pt-3'>
                     <Accordion
                       defaultValue={['byName', 'priceRange']}
@@ -92,7 +102,20 @@ const HotelSearchResults: React.FC = () => {
                       <Accordion.Item value='byName'>
                         <Accordion.Control>Otel Adına Göre</Accordion.Control>
                         <Accordion.Panel>
-                          <SearchByName />
+                          <SearchByName
+                            defaultValue={restFilterParams.hotelName}
+                            onClear={() => {
+                              setFilterParams({
+                                hotelName: null,
+                              })
+                            }}
+                            onSearchClick={(value) => {
+                              console.log(value)
+                              setFilterParams({
+                                hotelName: value,
+                              })
+                            }}
+                          />
                         </Accordion.Panel>
                       </Accordion.Item>
                       <Accordion.Item value='priceRange'>
@@ -101,33 +124,54 @@ const HotelSearchResults: React.FC = () => {
                           <div className='p-2'>
                             <Skeleton
                               visible={
+                                hotelSearchRequestQuery.isFetching ||
                                 hotelSearchRequestQuery.isLoading ||
                                 searchParamsQuery.isLoading
                               }
                               mih={rem(50)}
                             >
-                              {hotelSearchRequestQuery.data?.pages?.length && (
+                              {hotelSearchRequestQuery.data &&
+                              hotelSearchRequestQuery.data.pages.length &&
+                              hotelSearchRequestQuery.data.pages.at(-1) &&
+                              hotelSearchRequestQuery.data.pages.at(-1)
+                                ?.searchResults.length &&
+                              hotelSearchRequestQuery.data.pages.at(-1)
+                                ?.searchResults[0].maxPrice &&
+                              hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.minPrice &&
+                              hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.maxPrice ? (
                                 <PriceRangeSlider
                                   minPrice={
-                                    minMaxPrices?.length
-                                      ? minMaxPrices[0]
-                                      : {
-                                          value: 0,
-                                          currency: null,
-                                          rateValue: null,
-                                        }
+                                    restFilterParams?.priceRange
+                                      ? restFilterParams.priceRange[0]
+                                      : (hotelSearchRequestQuery.data?.pages
+                                          .at(-1)
+                                          ?.searchResults.at(-1)?.minPrice
+                                          .value ?? 0)
                                   }
                                   maxPrice={
-                                    minMaxPrices?.length
-                                      ? minMaxPrices[1]
-                                      : {
-                                          value: 0,
-                                          currency: null,
-                                          rateValue: null,
-                                        }
+                                    restFilterParams?.priceRange
+                                      ? restFilterParams.priceRange[1]
+                                      : (hotelSearchRequestQuery.data?.pages
+                                          .at(-1)
+                                          ?.searchResults.at(-1)?.maxPrice
+                                          .value ?? 0)
                                   }
+                                  defaultRanges={[
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.minPrice.value ??
+                                      0,
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.maxPrice.value ??
+                                      0,
+                                  ]}
                                 />
-                              )}
+                              ) : null}
                             </Skeleton>
                           </div>
                         </Accordion.Panel>
@@ -142,7 +186,9 @@ const HotelSearchResults: React.FC = () => {
                             }
                             mih={rem(150)}
                           >
-                            {hotelSearchRequestQuery.data?.pages.length && (
+                            {hotelSearchRequestQuery.data?.pages
+                              .at(-1)
+                              ?.searchResults.at(-1)?.destinationsInfo && (
                               <DestinationIds
                                 destinationsInfo={
                                   hotelSearchRequestQuery.data?.pages
@@ -180,7 +226,9 @@ const HotelSearchResults: React.FC = () => {
                             }
                             mih={rem(150)}
                           >
-                            {hotelSearchRequestQuery.data?.pages.length && (
+                            {hotelSearchRequestQuery.data?.pages
+                              .at(-1)
+                              ?.searchResults.at(-1)?.themes && (
                               <Themes
                                 data={
                                   hotelSearchRequestQuery.data?.pages
@@ -197,12 +245,7 @@ const HotelSearchResults: React.FC = () => {
                 </div>
               )}
             </div>
-            <div
-              className='grid gap-4 pb-20 md:col-span-3'
-              style={{
-                contentVisibility: 'auto',
-              }}
-            >
+            <div className='grid gap-4 pb-20 md:col-span-3'>
               <div className='flex gap-1'>
                 <div className='ms-auto'>
                   <Skeleton

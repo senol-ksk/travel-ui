@@ -12,37 +12,22 @@ import {
   hotelSearchParamParser,
 } from '@/modules/hotel/searchParams'
 import { hotelSocket } from './socket'
+import { cleanObj } from '@/libs/util'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
-// removes nullish values from object
-function cleanObj<T>(obj: T): T {
-  for (const propName in obj) {
-    if (obj[propName] === null || obj[propName] === undefined) {
-      delete obj[propName]
-    }
-  }
-  return obj
-}
-
 const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
 const apiActionSearchResponse = '/api/Hotel/SearchResponse'
+let enableHotelSearchRequestQuery = false
 
 export const useSearchResultParams = () => {
   const [searchParams] = useQueryStates(hotelSearchParamParser)
   const [filterParams] = useQueryStates(hotelFilterSearchParams)
-  const timeoutIsTriggered = useRef(false)
 
   const { start: startRequestTimeout, clear: clearRequestTimeout } = useTimeout(
     () => {
-      timeoutIsTriggered.current = true
-
-      if (
-        !hotelSearchRequestQuery.isFetching &&
-        !hotelSearchRequestQuery.isFetchingNextPage
-      ) {
-        hotelSearchRequestQuery.fetchNextPage()
-      }
+      enableHotelSearchRequestQuery = true
+      hotelSearchRequestQuery.refetch()
     },
     20000
   )
@@ -65,15 +50,62 @@ export const useSearchResultParams = () => {
   const searchRequestParams = searchParamsQuery.data?.hotelSearchApiRequest
   const cleanFilterParams = cleanObj(filterParams)
 
-  const hotelSearchRequestQueryKey = [
-    'hotel-search-results',
-    searchRequestParams,
-    cleanFilterParams,
-  ]
+  const hotelSearchResponseReadyData = useQuery({
+    enabled: !!searchRequestParams,
+    queryKey: ['hotel-search-ready-data', searchRequestParams],
+    queryFn: async ({ signal }) => {
+      enableHotelSearchRequestQuery = false
+      if (!appToken) {
+        appToken = await getsecuritytoken()
+      }
+
+      const response = (await request({
+        method: 'post',
+        url: process.env.NEXT_PUBLIC_OL_ROUTE,
+        data: {
+          apiAction: apiActionSearchResponseReadyData,
+          params: {
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            searchToken:
+              searchRequestParams?.hotelSearchModuleRequest.searchToken,
+            hotelSearchModuleRequest: {
+              ...searchRequestParams?.hotelSearchModuleRequest,
+            },
+          },
+          apiRoute: 'HotelService',
+          sessionToken:
+            searchRequestParams?.hotelSearchModuleRequest.sessionToken,
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+          scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+          RequestType:
+            'TravelAccess.Business.Models.Hotel.HotelSearchApiRequest, Business.Models.Hotel, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+          Device: 'Web',
+          LanguageCode: 'tr_TR',
+        },
+        signal,
+        headers: {
+          appToken: appToken.result,
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+        },
+      })) as HotelSearchResultApiResponse
+
+      if (!response.data?.searchResults[0].items.length) {
+        startRequestTimeout()
+        hotelSocket.connect()
+      } else {
+        enableHotelSearchRequestQuery = true
+      }
+
+      return response?.data
+    },
+  })
 
   const hotelSearchRequestQuery = useInfiniteQuery({
-    enabled: !!searchRequestParams,
-    queryKey: hotelSearchRequestQueryKey,
+    enabled: enableHotelSearchRequestQuery,
+    queryKey: ['hotel-search-results', searchRequestParams, cleanFilterParams],
     initialPageParam: {
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
     },
@@ -96,6 +128,16 @@ export const useSearchResultParams = () => {
             hotelSearchModuleRequest: {
               ...searchRequestParams?.hotelSearchModuleRequest,
               pageNo: pageParam.pageNo,
+              minPrice:
+                cleanFilterParams?.priceRange &&
+                cleanFilterParams?.priceRange?.length > 0
+                  ? cleanFilterParams?.priceRange[0]
+                  : searchRequestParams?.hotelSearchModuleRequest.minPrice,
+              maxPrice:
+                cleanFilterParams?.priceRange &&
+                cleanFilterParams?.priceRange?.length > 0
+                  ? cleanFilterParams?.priceRange[1]
+                  : searchRequestParams?.hotelSearchModuleRequest.maxPrice,
               ...cleanFilterParams,
             },
           },
@@ -117,25 +159,11 @@ export const useSearchResultParams = () => {
         },
       })) as HotelSearchResultApiResponse
 
-      if (
-        response?.data?.searchResults &&
-        response.data.searchResults.at(0)?.items.length === 0
-      ) {
-        if (!timeoutIsTriggered.current) {
-          startRequestTimeout()
-          timeoutIsTriggered.current = true
-        }
-        hotelSocket.connect()
-      }
-
       return response?.data
     },
     getNextPageParam: (lastPage, allPages, { pageNo }) => {
-      const apiAction = apiActionSearchResponse
       if (lastPage?.searchResults[0].hasMorePage) {
-        if (timeoutIsTriggered.current) {
-          clearRequestTimeout()
-        }
+        // clearRequestTimeout()
 
         return {
           pageNo: pageNo > -1 ? pageNo + 1 : 0,
@@ -155,19 +183,15 @@ export const useSearchResultParams = () => {
     },
   })
 
+  const socketOnAvailability = ({ status }: { status: number }) => {
+    console.log('socketOnAvailability is triggered')
+    // enableHotelSearchRequestQuery = true
+
+    hotelSocket.disconnect()
+    clearRequestTimeout()
+  }
+
   useEffect(() => {
-    const socketOnAvailability = ({ status }: { status: number }) => {
-      if (
-        !hotelSearchRequestQuery.isFetching &&
-        !hotelSearchRequestQuery.isFetchingNextPage
-      ) {
-        hotelSearchRequestQuery.fetchNextPage()
-      }
-
-      hotelSocket.disconnect()
-      clearRequestTimeout()
-    }
-
     const socketOnConnect = () => {
       if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
         hotelSocket.emit('Auth', {
@@ -183,12 +207,12 @@ export const useSearchResultParams = () => {
       hotelSocket.disconnect()
       hotelSocket.off('AvailabilityStatus')
       clearRequestTimeout()
-      timeoutIsTriggered.current = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return {
+    hotelSearchResponseReadyData,
     hotelSearchRequestQuery,
     searchParams,
     searchParamsQuery,

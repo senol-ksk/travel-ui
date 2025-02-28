@@ -1,31 +1,39 @@
 import { useQueryStates } from 'nuqs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { formatCurrency } from '@/libs/util'
 import { hotelFilterSearchParams } from '@/modules/hotel/searchParams'
 import { Button, RangeSlider, TextInput } from '@mantine/core'
 
 type IProps = {
-  minPrice: ServicePriceType | undefined
-  maxPrice: ServicePriceType | undefined
+  minPrice: number
+  maxPrice: number
+  defaultRanges: [number, number]
 }
 
-const PriceRangeSlider: React.FC<IProps> = ({ minPrice, maxPrice }) => {
+const PriceRangeSlider: React.FC<IProps> = ({
+  minPrice,
+  maxPrice,
+  defaultRanges,
+}) => {
   const [filterParams, setFilterParams] = useQueryStates(
     hotelFilterSearchParams
   )
 
-  const [values, setValues] = useState<[number, number]>([
-    filterParams.minPrice ?? minPrice?.value ?? 0,
-    filterParams.maxPrice ?? maxPrice?.value ?? 10000,
-  ])
+  const [values, setValues] = useState<[number, number]>([minPrice, maxPrice])
+
+  useEffect(() => {
+    if (!filterParams.priceRange) {
+      setValues(defaultRanges)
+    }
+  }, [filterParams])
 
   return (
     <>
       <RangeSlider
         value={values}
-        min={minPrice?.value}
-        max={maxPrice?.value}
+        min={defaultRanges[0]}
+        max={defaultRanges[1]}
         minRange={1000}
         step={1000}
         size={3}
@@ -65,8 +73,7 @@ const PriceRangeSlider: React.FC<IProps> = ({ minPrice, maxPrice }) => {
           onClick={() => {
             if (values.length) {
               setFilterParams({
-                minPrice: values[0],
-                maxPrice: values[1],
+                priceRange: values,
               })
             }
           }}
