@@ -26,7 +26,7 @@ const PriceRangeSlider: React.FC<IProps> = ({
     if (!filterParams.priceRange) {
       setValues(defaultRanges)
     }
-  }, [filterParams])
+  }, [defaultRanges, filterParams])
 
   return (
     <>
