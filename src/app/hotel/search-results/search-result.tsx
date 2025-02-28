@@ -67,7 +67,8 @@ const HotelSearchResults: React.FC = () => {
                   <LoadingOverlay
                     visible={
                       hotelSearchRequestQuery.isLoading ||
-                      searchParamsQuery.isLoading
+                      searchParamsQuery.isLoading ||
+                      searchQueryStatus.current === 'loading'
                     }
                     zIndex={1000}
                     overlayProps={{ radius: 'sm', blur: 2 }}
