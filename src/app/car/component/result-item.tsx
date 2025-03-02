@@ -1,10 +1,11 @@
-import { Image, Skeleton } from '@mantine/core'
+import { Image, rem, Skeleton, Transition } from '@mantine/core'
 import { Button, Title } from '@mantine/core'
 import { IoArrowForward } from 'react-icons/io5'
+import { PiImageBroken } from 'react-icons/pi'
 
 import { CarSearchResultItemType } from '@/app/car/types'
 import { formatCurrency } from '@/libs/util'
-import { PiImageBroken } from 'react-icons/pi'
+import { useState } from 'react'
 
 type Props = {
   item: CarSearchResultItemType
@@ -12,13 +13,37 @@ type Props = {
 }
 
 export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
+  const [isImageLoading, setImageLoading] = useState(true)
+
   return (
     <div className='rounded-lg border border-gray-300'>
       <div className='grid gap-3 p-3 md:grid-cols-12 md:p-4'>
         <div className='grid items-center justify-center md:col-span-3'>
           {item.carDetail.imageUrl ? (
-            <div>
-              <Image src={item.carDetail.imageUrl} alt={item.carDetail.name} />
+            <div className='relative'>
+              <Transition
+                mounted={isImageLoading}
+                transition='fade'
+                duration={400}
+                timingFunction='ease'
+              >
+                {(styles) => (
+                  <div
+                    style={styles}
+                    className='absolute start-0 end-0 top-0 bottom-0 rounded-md border bg-white p-2 transition-opacity duration-300'
+                  >
+                    <Skeleton className='size-full' radius={'md'} />
+                  </div>
+                )}
+              </Transition>
+              <Image
+                loading='lazy'
+                src={item.carDetail.imageUrl}
+                alt={item.carDetail.name}
+                onLoad={(e) => {
+                  setImageLoading(false)
+                }}
+              />
             </div>
           ) : (
             <div>
@@ -26,7 +51,7 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
             </div>
           )}
         </div>
-        <div className='col-span-7'>
+        <div className='col-span-6'>
           <Title order={3} className='text-xl'>
             {item.carDetail.name}
             <small className='text-sm font-normal'>
@@ -35,7 +60,7 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
             </small>
           </Title>
         </div>
-        <div className='col-span-2 grid'>
+        <div className='col-span-3 grid'>
           <div className='text-end'>
             <div className='text-xl font-semibold'>
               {formatCurrency(item.totalPrice.value)}
@@ -47,7 +72,13 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
         </div>
       </div>
       <div className='flex justify-between border-t p-3 md:p-4'>
-        <div>{item.carDetail.vendorName}</div>
+        <div>
+          <Image
+            src={item.carDetail.vendorUrl}
+            w={rem(70)}
+            alt={item.carDetail.vendorName}
+          />
+        </div>
         <div>
           <Button
             onClick={() => onSelect(item)}
