@@ -7,7 +7,7 @@ const SortBySelect = () => {
   const [filterParams, setFilterParams] = useQueryStates(filterParsers)
   return (
     <NativeSelect
-      defaultValue={filterParams.order}
+      value={filterParams.order}
       onChange={({ currentTarget: { value } }) => {
         setFilterParams({
           order: value as SortOrderEnums,

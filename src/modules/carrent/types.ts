@@ -2,8 +2,11 @@
 
 import {
   parseAsArrayOf,
+  parseAsBoolean,
   parseAsIndex,
+  parseAsInteger,
   parseAsNumberLiteral,
+  parseAsString,
   parseAsStringEnum,
 } from 'nuqs'
 import { z } from 'zod'
@@ -125,5 +128,10 @@ export const filterParsers = {
   order: parseAsStringEnum<SortOrderEnums>(
     Object.values(SortOrderEnums)
   ).withDefault(SortOrderEnums.priceAsc),
-  fuelTypes: parseAsArrayOf<FuelTypes>(parseAsIndex),
+  fuelTypes: parseAsArrayOf<FuelTypes>(parseAsInteger),
+  transmission: parseAsArrayOf(parseAsInteger),
+  provider: parseAsArrayOf(parseAsString),
+  seatCount: parseAsArrayOf(parseAsString),
+  category: parseAsArrayOf(parseAsString),
+  brand: parseAsArrayOf(parseAsString),
 }

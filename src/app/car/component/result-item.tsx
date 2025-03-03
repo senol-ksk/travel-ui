@@ -1,11 +1,19 @@
 import { Image, rem, Skeleton, Transition } from '@mantine/core'
 import { Button, Title } from '@mantine/core'
+
 import { IoArrowForward } from 'react-icons/io5'
 import { PiImageBroken } from 'react-icons/pi'
+import {
+  MdAirlineSeatReclineNormal,
+  MdElectricalServices,
+} from 'react-icons/md'
+import { TbManualGearboxFilled } from 'react-icons/tb'
 
 import { CarSearchResultItemType } from '@/app/car/types'
 import { formatCurrency } from '@/libs/util'
 import { useState } from 'react'
+import { BsFuelPump } from 'react-icons/bs'
+import { FuelTypes } from '@/modules/carrent/types'
 
 type Props = {
   item: CarSearchResultItemType
@@ -59,6 +67,34 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
               - {item.carDetail.category}
             </small>
           </Title>
+          <div className='grid grid-cols-3 gap-3 pt-2 text-xs text-gray-600'>
+            <div className='flex items-center gap-2'>
+              <div>
+                {item.carDetail.fuelType === FuelTypes['Elektirikli'] ? (
+                  <MdElectricalServices />
+                ) : (
+                  <BsFuelPump />
+                )}
+              </div>
+              <div>{FuelTypes[item.carDetail.fuelType]}</div>
+            </div>
+            <div className='flex items-center gap-2'>
+              <div>
+                <TbManualGearboxFilled />
+              </div>
+              <div>
+                {item.carDetail.automaticTransmission
+                  ? 'Otomatik Vites'
+                  : 'Düz Vites'}
+              </div>
+            </div>
+            <div className='flex items-center gap-2'>
+              <div>
+                <MdAirlineSeatReclineNormal />
+              </div>
+              <div>{item.carDetail.seatCount}</div>
+            </div>
+          </div>
         </div>
         <div className='col-span-3 grid'>
           <div className='text-end'>
