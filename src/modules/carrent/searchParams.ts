@@ -31,5 +31,5 @@ export const carSearchParamParser: CarSearchQueryParams = {
 
 export const serializeCarSearchParams = createSerializer(carSearchParamParser)
 
-export const carSearchParamsCahce =
+export const carSearchParamsCache =
   createSearchParamsCache(carSearchParamParser)

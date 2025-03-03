@@ -1,6 +1,22 @@
 // istanbul-beylikduzu?dropoff=izmir-adnan-menderes-havalimani305223&pickup_date=2024-12-28&drop_date=2024-12-31&pickup_time=11%3A00&drop_time=12%3A00&driverAge=26
 
+import {
+  parseAsArrayOf,
+  parseAsBoolean,
+  parseAsIndex,
+  parseAsInteger,
+  parseAsNumberLiteral,
+  parseAsString,
+  parseAsStringEnum,
+} from 'nuqs'
 import { z } from 'zod'
+
+export enum SortOrderEnums {
+  priceAsc = 'PRICE_ASC',
+  priceDesc = 'PRICE_DESC',
+  nameAsc = 'NAME_ASC',
+  nameDesc = 'NAME_DESC',
+}
 
 interface Location {
   Id: ID
@@ -96,4 +112,26 @@ export interface CarSearchParams {
   LanguageCode: string
   IPAddress: string
   MLToken: string
+}
+
+export enum FuelTypes {
+  'Belirtilmemiş',
+  'Diesel',
+  'Hibrid',
+  'Elektirikli',
+  'LPG',
+  'Hidrojen',
+  'Benzin',
+  'Benzin/Diesel',
+}
+export const filterParsers = {
+  order: parseAsStringEnum<SortOrderEnums>(
+    Object.values(SortOrderEnums)
+  ).withDefault(SortOrderEnums.priceAsc),
+  fuelTypes: parseAsArrayOf<FuelTypes>(parseAsInteger),
+  transmission: parseAsArrayOf(parseAsInteger),
+  provider: parseAsArrayOf(parseAsString),
+  seatCount: parseAsArrayOf(parseAsString),
+  category: parseAsArrayOf(parseAsString),
+  brand: parseAsArrayOf(parseAsString),
 }

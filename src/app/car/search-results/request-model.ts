@@ -1,13 +1,13 @@
 import { SearchParams } from 'nuqs'
 
-import { carSearchParamsCahce } from '@/modules/carrent/searchParams'
+import { carSearchParamsCache } from '@/modules/carrent/searchParams'
 import { serviceRequest } from '@/network'
 import { CarSearchRequest } from '../types'
 
 export const getCarSearchResultParams = async (
   searchParams: SearchParams
 ): Promise<CarSearchRequest | null | undefined> => {
-  const params = carSearchParamsCahce.parse(searchParams)
+  const params = carSearchParamsCache.parse(searchParams)
 
   const response = await serviceRequest<CarSearchRequest>({
     axiosOptions: {
