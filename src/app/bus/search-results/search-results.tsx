@@ -1,7 +1,20 @@
 'use client'
 
 import { BusSearchItem } from './components/search-item'
-import { Alert, Button, Container, Drawer, Skeleton } from '@mantine/core'
+import {
+  Accordion,
+  Alert,
+  Button,
+  Checkbox,
+  Container,
+  Drawer,
+  NativeSelect,
+  rem,
+  Skeleton,
+  Stack,
+  Title,
+  UnstyledButton,
+} from '@mantine/core'
 import { useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { useTransitionRouter } from 'next-view-transitions'
@@ -21,10 +34,19 @@ import {
 } from '@/app/bus/types'
 import { BusFrame } from '@/app/bus/search-results/components/bus-frame'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { busSearchParams } from '@/modules/bus/searchParmas'
+import {
+  busSearchParams,
+  filterParsers,
+  SortOrderEnums,
+} from '@/modules/bus/searchParmas'
+import { useFilterActions } from './filter-actions'
+import { cleanObj } from '@/libs/util'
 
 const BusSearchResults: React.FC = () => {
   const [searchParams] = useQueryStates(busSearchParams)
+  const [{ order, ...filterParams }, setFilterParams] =
+    useQueryStates(filterParsers)
+
   const searchResults = useSearchRequest()
   const seatRequestMutation = useBusSeatMutation()
   const seatControlMutation = useSeatControlMutation()
@@ -91,6 +113,23 @@ const BusSearchResults: React.FC = () => {
     )
   )
 
+  const busSearchResults = searchResultPages?.flatMap((bus) => {
+    return bus?.searchResults.flatMap((result) => result.items)
+  }) as BusSearchResultItem[] | null
+
+  const filteredSearchResults = useFilterActions(busSearchResults ?? [])
+
+  const busTypeChecks = [
+    ...new Set(busSearchResults?.map((bus) => bus.busType)),
+  ]
+  const destinationChecks = [
+    ...new Set(busSearchResults?.map((bus) => bus.destination)),
+  ]
+  const originChecks = [...new Set(busSearchResults?.map((bus) => bus.origin))]
+  const companyChecks = [
+    ...new Set(busSearchResults?.map((bus) => bus.company)),
+  ]
+
   if (!hasSearchResult) {
     return (
       <div className='container py-3'>
@@ -104,47 +143,159 @@ const BusSearchResults: React.FC = () => {
   return (
     <>
       <div className='relative'>
-        {searchResults.isLoading || searchResults.hasNextPage ? (
-          <div className='absolute start-0 end-0 top-0'>
-            <Skeleton h={5} title='Seferler sorgulaniyor' />
-          </div>
-        ) : null}
+        {searchResults.isLoading ||
+          (searchResults.isFetching && (
+            <div className='absolute start-0 end-0 top-0'>
+              <Skeleton h={5} title='Seferler sorgulanıyor' />
+            </div>
+          ))}
         <div className='@container pt-5 md:pt-10'>
           <Container>
-            <div className='grid gap-4 md:grid-cols-4 md:gap-3'>
-              <div className='relative md:col-span-1'>
-                <div className='rounded-md border border-gray-300 p-3'>
-                  Filter section
-                </div>
-                <Skeleton
-                  w='100%'
-                  h={'100%'}
-                  top={0}
-                  pos={'absolute'}
-                  mah={150}
-                  radius={'md'}
-                  visible={searchResults.isLoading}
-                />
-              </div>
-              <div className='grid gap-4 md:col-span-3'>
-                {searchResultPages?.map((page) =>
-                  page?.searchResults.map((searchResults) =>
-                    searchResults.items
-                      .sort(
-                        (a, b) =>
-                          a.bus.internetPrice.value - b.bus.internetPrice.value
-                      )
-                      .map((searchItem) => {
-                        return (
-                          <BusSearchItem
-                            key={searchItem.key}
-                            searchItem={searchItem}
-                            onSelect={handleBusSeatSelect}
-                          />
-                        )
-                      })
-                  )
+            <div className='grid items-start gap-4 pb-10 md:grid-cols-4 md:gap-3 md:pb-20'>
+              <div className='md:col-span-1'>
+                {searchResults.isLoading || searchResults.isFetching ? (
+                  <div>
+                    {' '}
+                    <Skeleton h={20} />{' '}
+                  </div>
+                ) : (
+                  <>
+                    <div className='flex justify-between'>
+                      <Title order={2} fz={'h4'} mb={rem(20)}>
+                        Filtreler
+                      </Title>
+
+                      <div
+                        hidden={
+                          Object.keys(cleanObj(filterParams)).length === 0
+                        }
+                      >
+                        <UnstyledButton
+                          fz='xs'
+                          className='font-semibold text-blue-500'
+                          onClick={() => {
+                            setFilterParams(null)
+                          }}
+                        >
+                          Temizle
+                        </UnstyledButton>
+                      </div>
+                    </div>
+                    <Accordion>
+                      <Accordion.Item value='busType'>
+                        <Accordion.Control>Oturma Düzeni </Accordion.Control>
+                        <Accordion.Panel>
+                          <Checkbox.Group>
+                            <Stack gap={rem(6)}>
+                              {busTypeChecks.map((item, itemIndex) => {
+                                return (
+                                  <Checkbox
+                                    key={itemIndex}
+                                    label={item}
+                                    value={item}
+                                  />
+                                )
+                              })}
+                            </Stack>
+                          </Checkbox.Group>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='departurePoint'>
+                        <Accordion.Control>Kalkış Noktası</Accordion.Control>
+                        <Accordion.Panel>
+                          <Checkbox.Group>
+                            <Stack gap={rem(6)}>
+                              {originChecks.map((item, itemIndex) => {
+                                return (
+                                  <Checkbox
+                                    key={itemIndex}
+                                    label={item}
+                                    value={item}
+                                  />
+                                )
+                              })}
+                            </Stack>
+                          </Checkbox.Group>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='arrivalPoint'>
+                        <Accordion.Control>Varış Noktası</Accordion.Control>
+                        <Accordion.Panel>
+                          <Checkbox.Group>
+                            <Stack gap={rem(6)}>
+                              {destinationChecks.map((item, itemIndex) => {
+                                return (
+                                  <Checkbox
+                                    key={itemIndex}
+                                    label={item}
+                                    value={item}
+                                  />
+                                )
+                              })}
+                            </Stack>
+                          </Checkbox.Group>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                      <Accordion.Item value='companies'>
+                        <Accordion.Control>Firmalar</Accordion.Control>
+                        <Accordion.Panel>
+                          <Checkbox.Group>
+                            <Stack gap={rem(6)}>
+                              {companyChecks?.map((item, itemIndex) => {
+                                return (
+                                  <Checkbox
+                                    key={itemIndex}
+                                    label={item}
+                                    value={item}
+                                  />
+                                )
+                              })}
+                            </Stack>
+                          </Checkbox.Group>
+                        </Accordion.Panel>
+                      </Accordion.Item>
+                    </Accordion>
+                  </>
                 )}
+              </div>
+              <div className='md:col-span-3'>
+                <div className='flex justify-between'>
+                  <div></div>
+                  <div>
+                    <NativeSelect
+                      size='xs'
+                      data={[
+                        {
+                          label: 'Fiyat Artan',
+                          value: SortOrderEnums.priceAsc,
+                        },
+                        {
+                          label: 'Fiyat Azalan',
+                          value: SortOrderEnums.priceDesc,
+                        },
+                        {
+                          label: 'Kalkış Saatine Göre',
+                          value: SortOrderEnums.hourAsc,
+                        },
+                      ]}
+                      value={order}
+                      onChange={({ currentTarget: { value } }) => {
+                        setFilterParams({
+                          order: value as SortOrderEnums,
+                        })
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className='grid gap-4 pt-4'>
+                  {filteredSearchResults?.map((searchItem) => (
+                    <BusSearchItem
+                      key={searchItem.key}
+                      searchItem={searchItem}
+                      onSelect={handleBusSeatSelect}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </Container>
