@@ -1,9 +1,9 @@
-import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useQueryStates } from 'nuqs'
 
 import { transferSearchParams } from '@/modules/transfer/searchParams.client'
-import { getBusSearchSessionToken, getsecuritytoken, request } from '@/network'
+import { getBusSearchSessionToken, request } from '@/network'
 import { TransferSearchResultsResponse } from '@/app/transfer/types'
 import { delayCodeExecution } from '@/libs/util'
 
