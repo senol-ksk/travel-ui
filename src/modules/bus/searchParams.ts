@@ -3,6 +3,7 @@ import {
   parseAsString,
   parseAsIsoDate,
   parseAsStringEnum,
+  parseAsArrayOf,
 } from 'nuqs/server'
 
 export const busSearchParams = {
@@ -11,8 +12,6 @@ export const busSearchParams = {
   originSlug: parseAsString,
   destinationSlug: parseAsString,
   date: parseAsIsoDate,
-  searchToken: parseAsString,
-  sessionToken: parseAsString,
   productKey: parseAsString,
 }
 
@@ -28,4 +27,8 @@ export const filterParsers = {
   order: parseAsStringEnum<SortOrderEnums>(
     Object.values(SortOrderEnums)
   ).withDefault(SortOrderEnums.priceAsc),
+  type: parseAsArrayOf(parseAsString),
+  origin: parseAsArrayOf(parseAsString),
+  destination: parseAsArrayOf(parseAsString),
+  company: parseAsArrayOf(parseAsString),
 }
