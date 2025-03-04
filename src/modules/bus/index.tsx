@@ -16,12 +16,12 @@ import { LocationResults } from '@/components/search-engine/locations/type'
 import { getBusSearchSessionToken, request } from '@/network'
 import { BusCalendar } from '@/components/search-engine/calendar/bus'
 import { useTransitionRouter } from 'next-view-transitions'
-import { serializeBusSearchParams } from './searchParmas'
+import { serializeBusSearchParams } from './searchParams'
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
 
-const busSearhEngineSchema = z.object({
+const busSearchEngineSchema = z.object({
   Date: z.coerce.date(),
   Origin: z.object({
     Id: z.string().nonempty(),
@@ -35,7 +35,7 @@ const busSearhEngineSchema = z.object({
   }),
 })
 
-type BusSearchEngineInfer = z.infer<typeof busSearhEngineSchema>
+type BusSearchEngineInfer = z.infer<typeof busSearchEngineSchema>
 
 const BusSearchEngine = () => {
   const mounted = useMounted()
@@ -61,7 +61,7 @@ const BusSearchEngine = () => {
     })
 
   const formActions = useForm<BusSearchEngineInfer>({
-    resolver: zodResolver(busSearhEngineSchema),
+    resolver: zodResolver(busSearchEngineSchema),
     defaultValues: {
       ...localStorageData,
       Date: dayjs().isAfter(localStorageData.Date, 'day')
@@ -117,7 +117,7 @@ const BusSearchEngine = () => {
   const handleSubmit = async (data: BusSearchEngineInfer) => {
     setLocalStorageData(data)
 
-    const tokens = await searchSessionTokenQuery.mutateAsync()
+    // const tokens = await searchSessionTokenQuery.mutateAsync()
 
     const url = serializeBusSearchParams('/bus/search-results', {
       originId: data.Origin.Id,
@@ -125,8 +125,8 @@ const BusSearchEngine = () => {
       destinationSlug: data.Destination.Slug,
       originSlug: data.Origin.Slug,
       date: data.Date,
-      searchToken: tokens.searchToken,
-      sessionToken: tokens.sessionToken,
+      // searchToken: tokens.searchToken,
+      // sessionToken: tokens.sessionToken,
     })
 
     router.push(url)
@@ -148,11 +148,11 @@ const BusSearchEngine = () => {
                 setPickupLocation(value)
               }}
               onSelect={(value) => {
-                const extentionId = Object.values(value.ExtentionData).at(0)
+                const extensionId = Object.values(value.ExtentionData).at(0)
 
-                if (extentionId) {
+                if (extensionId) {
                   formActions.setValue('Origin', {
-                    Id: extentionId,
+                    Id: extensionId,
                     Name: value.Name,
                     Slug: value.Slug,
                   })
@@ -175,11 +175,11 @@ const BusSearchEngine = () => {
                 setTargetLocation(value)
               }}
               onSelect={(value) => {
-                const extentionId = Object.values(value.ExtentionData).at(0)
+                const extensionId = Object.values(value.ExtentionData).at(0)
 
-                if (extentionId) {
+                if (extensionId) {
                   formActions.setValue('Destination', {
-                    Id: extentionId,
+                    Id: extensionId,
                     Name: value.Name,
                     Slug: value.Slug,
                   })

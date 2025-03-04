@@ -8,7 +8,7 @@ const BusSearchResultsPage = () => {
     <Suspense
       fallback={
         <div>
-          <Skeleton />
+          <Skeleton h={20} />
         </div>
       }
     >
