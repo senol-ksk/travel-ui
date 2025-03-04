@@ -14,7 +14,7 @@ import { Locations } from '@/components/search-engine/locations/transfer/locatio
 import { TransferHours } from './hour-select'
 import { PassengerDropdown } from '@/components/search-engine/passengers/transfer'
 import { LocationResults } from '@/components/search-engine/locations/type'
-import { getTransferSearchSessionToken, request } from '@/network'
+import { request } from '@/network'
 import {
   serializeTransferSearchParams,
   transferSearchEngineSchema,
@@ -26,7 +26,7 @@ const defaultDate = dayjs().add(5, 'day').toISOString()
 const TransferSearchEngine = () => {
   const mounted = useMounted()
   const router = useTransitionRouter()
-  const [transferSearchLocalStorage, setTransferSearchLocalStroge] =
+  const [transferSearchLocalStorage, setTransferSearchLocalStorage] =
     useLocalStorage<TransferSearchEngineSchemaInfer>({
       key: 'transfer-search-engine',
       getInitialValueInEffect: false,
@@ -105,17 +105,9 @@ const TransferSearchEngine = () => {
       },
     })
 
-  const sessionSearchTokenMutation = useMutation({
-    mutationKey: ['session-search-token'],
-    mutationFn: getTransferSearchSessionToken,
-  })
-
   const handleSubmit = async (data: TransferSearchEngineSchemaInfer) => {
-    console.log('Transfer Search Data Submited', data)
-    setTransferSearchLocalStroge(data)
-
-    const { searchToken, sessionToken } =
-      await sessionSearchTokenMutation.mutateAsync()
+    console.log('Transfer Search Data Submitted', data)
+    setTransferSearchLocalStorage(data)
 
     const searchResultUrl = serializeTransferSearchParams(
       '/transfer/search-results',
@@ -129,12 +121,8 @@ const TransferSearchEngine = () => {
         adultPassengerCount: data.passengers.adult,
         babyPassengerCount: data.passengers.infant,
         childrenPassengerCount: data.passengers.child,
-        searchToken,
-        sessionToken,
       }
     )
-
-    console.log(searchResultUrl)
 
     router.push(searchResultUrl)
   }
@@ -236,11 +224,7 @@ const TransferSearchEngine = () => {
           />
         </div>
         <div className='col-span-12 md:col-span-1'>
-          <Button
-            type='submit'
-            className='mx-auto w-full md:size-full'
-            loading={sessionSearchTokenMutation.isPending}
-          >
+          <Button type='submit' className='mx-auto w-full md:size-full'>
             Ara
           </Button>
         </div>

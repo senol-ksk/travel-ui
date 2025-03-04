@@ -1,25 +1,35 @@
-import { InfiniteData, useInfiniteQuery } from '@tanstack/react-query'
+import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useQueryStates } from 'nuqs'
 
 import { transferSearchParams } from '@/modules/transfer/searchParams.client'
-import { getsecuritytoken, request } from '@/network'
+import { getBusSearchSessionToken, getsecuritytoken, request } from '@/network'
 import { TransferSearchResultsResponse } from '@/app/transfer/types'
 import { delayCodeExecution } from '@/libs/util'
-
-let appToken: null | string = ''
 
 export const useTransferSearchResults = () => {
   const [searchParams] = useQueryStates(transferSearchParams)
 
-  return useInfiniteQuery({
+  const searchSessionTokenQuery = useQuery({
     enabled: !!searchParams,
-    queryKey: ['searchResults', searchParams],
-    queryFn: async ({ pageParam, signal }) => {
-      if (!appToken) {
-        appToken = (await getsecuritytoken()).result
-      }
+    queryKey: ['transfer-session-search-tokens'],
+    queryFn: async () => {
+      const response = await getBusSearchSessionToken()
+      return response
+    },
+  })
 
+  const searchToken = searchSessionTokenQuery.data?.searchToken
+  const sessionToken = searchSessionTokenQuery.data?.sessionToken
+  const appToken = searchSessionTokenQuery.data?.appToken
+
+  const searchResultsQuery = useInfiniteQuery({
+    enabled: !!(appToken && searchToken && sessionToken),
+    queryKey: [
+      'searchResults',
+      { searchParams, appToken, searchToken, sessionToken },
+    ],
+    queryFn: async ({ pageParam, signal }) => {
       await delayCodeExecution(1000)
       const transferServiceResponse = (await request({
         signal,
@@ -30,52 +40,50 @@ export const useTransferSearchResults = () => {
           appName: process.env.NEXT_PUBLIC_APP_NAME,
         },
         data: {
-          ...pageParam,
+          params: {
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            searchToken,
+            PickupPointId: searchParams.originId,
+            DropPointId: searchParams.destinationId,
+            TransferDate:
+              dayjs(searchParams.date).format('YYYY-MM-DD') +
+              ' ' +
+              searchParams.time,
+            AdultPassengerCount: searchParams.adultPassengerCount,
+            ChildrenPassengerCount: searchParams.childrenPassengerCount,
+            BabyPassengerCount: searchParams.babyPassengerCount,
+            TransferType: 'D',
+            TransferSearchPanel: {
+              ReceivedProviders: pageParam.ReceivedProviders.filter(Boolean),
+            },
+          },
+          apiRoute: 'TransferService',
+          apiAction: 'api/Transfer/Search',
+          sessionToken,
+          appName: process.env.NEXT_PUBLIC_APP_NAME,
+          scopeName: process.env.SCOPE_NAME,
+          scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+          requestType:
+            'TravelAccess.Core.Models.Transfer.Requests.TransferSearchRequest, Core.Models.Transfer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
         },
       })) as TransferSearchResultsResponse
 
       return transferServiceResponse.data
     },
     initialPageParam: {
-      params: {
-        appName: process.env.NEXT_PUBLIC_APP_NAME,
-        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-        searchToken: searchParams.searchToken,
-        PickupPointId: searchParams.originId,
-        DropPointId: searchParams.destinationId,
-        TransferDate:
-          dayjs(searchParams.date).format('YYYY-MM-DD') +
-          ' ' +
-          searchParams.time,
-        AdultPassengerCount: searchParams.adultPassengerCount,
-        ChildrenPassengerCount: searchParams.childrenPassengerCount,
-        BabyPassengerCount: searchParams.babyPassengerCount,
-        TransferType: 'D',
-        TransferSearchPanel: { ReceivedProviders: [] },
-      },
-      apiRoute: 'TransferService',
-      apiAction: 'api/Transfer/Search',
-      sessionToken: searchParams.sessionToken,
-      appName: process.env.NEXT_PUBLIC_APP_NAME,
-      scopeName: process.env.SCOPE_NAME,
-      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-      requestType:
-        'TravelAccess.Core.Models.Transfer.Requests.TransferSearchRequest, Core.Models.Transfer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null',
+      ReceivedProviders: [''],
     },
     getNextPageParam: (lastPage, page, lastPageParam) => {
       if (lastPage.hasMoreResponse) {
-        lastPageParam.params.TransferSearchPanel.ReceivedProviders = []
-
         lastPage.searchResults.forEach((result) => {
-          const hasValue =
-            lastPageParam.params.TransferSearchPanel.ReceivedProviders.find(
-              (provider) => provider === result.diagnostics.providerName
-            )
+          const hasValue = lastPageParam.ReceivedProviders.find(
+            (provider) => provider === result.diagnostics.providerName
+          )
 
           if (!hasValue) {
-            lastPageParam.params.TransferSearchPanel?.ReceivedProviders.push(
-              // @ts-expect-error - providerName is not defined in the type
+            lastPageParam.ReceivedProviders.push(
               result.diagnostics.providerName
             )
           }
@@ -84,10 +92,11 @@ export const useTransferSearchResults = () => {
         return { ...lastPageParam }
       }
 
-      appToken = null
       return undefined
     },
   })
+
+  return { searchResultsQuery, sessionToken, searchToken }
 }
 
 interface TransferApiSearchParams {

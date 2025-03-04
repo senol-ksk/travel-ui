@@ -7,7 +7,8 @@ import { FiAlertTriangle } from 'react-icons/fi'
 import { TransferSearchItem } from '@/app/transfer/search-results/search-item'
 
 const TransferSearchResults = () => {
-  const transferSearchResultsQuery = useTransferSearchResults()
+  const { searchResultsQuery: transferSearchResultsQuery } =
+    useTransferSearchResults()
 
   if (transferSearchResultsQuery.hasNextPage) {
     transferSearchResultsQuery.fetchNextPage()
