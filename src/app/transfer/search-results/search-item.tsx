@@ -1,10 +1,14 @@
 import { Link } from 'next-view-transitions'
+import { Button, Image, rem, Title } from '@mantine/core'
+import { createSerializer } from 'nuqs'
+import { BsCheck2Circle } from 'react-icons/bs'
+
 import { formatCurrency } from '@/libs/util'
-import { Button, Image, Title } from '@mantine/core'
 import { TransferVehicle } from '@/app/transfer/types'
-import { createSerializer, useQueryStates } from 'nuqs'
 import { transferExtraPageParams } from '@/modules/transfer/searchParams.extras'
-import { transferSearchParams } from '@/modules/transfer/searchParams.client'
+import { useTransferSearchResults } from './useSearchResults'
+import { GoPerson } from 'react-icons/go'
+import { PiSuitcaseRolling } from 'react-icons/pi'
 
 type Props = {
   data: TransferVehicle
@@ -15,12 +19,12 @@ export const TransferSearchItem: React.FC<Props> = ({
   data,
   onSelect = () => null,
 }) => {
-  const [searchParams] = useQueryStates(transferSearchParams)
+  const { searchToken, sessionToken } = useTransferSearchResults()
 
   const extraSearchParams = createSerializer(transferExtraPageParams)
   const extraPageUrl = extraSearchParams('/transfer/extras', {
-    searchToken: searchParams.searchToken,
-    sessionToken: searchParams.sessionToken,
+    searchToken,
+    sessionToken,
     productKey: data.productKey,
   })
 
@@ -35,12 +39,37 @@ export const TransferSearchItem: React.FC<Props> = ({
           />
         </div>
         <div className='col-span-12 sm:col-span-7'>
-          <Title order={4}>{data.vehicleTitle}</Title>
+          <Title order={4} pb={rem(18)}>
+            {data.vehicleTitle}
+          </Title>
+          <div className='flex gap-3'>
+            <div className='flex items-center gap-1 text-sm text-gray-700'>
+              <div>
+                <GoPerson size={18} />
+              </div>
+              <div>Maks. {data.transferInfo.transferMax.pax} Yolcu</div>
+            </div>
+            <div className='flex items-center gap-1 text-sm text-gray-700'>
+              <div>
+                <PiSuitcaseRolling size={18} />
+              </div>
+              <div>Maks. {data.transferInfo.transferMax.suitcase}</div>
+            </div>
+          </div>
+          <div className='flex items-center gap-1 pt-2 text-sm text-green-700'>
+            <div>
+              <BsCheck2Circle size={18} />
+            </div>
+            <div>
+              Son {data.transferInfo.transferHour.freeChange} saate kadar
+              değişiklik
+            </div>
+          </div>
         </div>
         <div className='col-span-12 grid content-start gap-2 text-end sm:col-span-3'>
           <div>
             <small>
-              {data.transferData.bookDetail.suggestedVehicleCount} Araç fiyat
+              {data.transferData.bookDetail.suggestedVehicleCount} Araç fiyatı
             </small>
           </div>
           <div className='text-lg font-semibold'>

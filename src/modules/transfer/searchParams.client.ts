@@ -13,8 +13,6 @@ export const transferSearchParams = {
   destinationSlug: parseAsString,
   date: parseAsIsoDate,
   time: parseAsString,
-  searchToken: parseAsString,
-  sessionToken: parseAsString,
   adultPassengerCount: parseAsInteger,
   babyPassengerCount: parseAsInteger,
   childrenPassengerCount: parseAsInteger,

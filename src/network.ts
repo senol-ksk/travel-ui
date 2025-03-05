@@ -165,6 +165,7 @@ export const getBusSearchSessionToken = async () => {
   return {
     sessionToken: response.sessionToken,
     searchToken: response.data,
+    appToken,
   }
 }
 export const getTransferSearchSessionToken = async () => {
