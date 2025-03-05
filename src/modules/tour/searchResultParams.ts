@@ -1,5 +1,7 @@
 import {
   createSerializer,
+  parseAsArrayOf,
+  parseAsFloat,
   parseAsIsoDate,
   parseAsString,
   parseAsStringEnum,
@@ -31,4 +33,5 @@ export const filterParser = {
   order: parseAsStringEnum<SortOrderEnums>(
     Object.values(SortOrderEnums)
   ).withDefault(SortOrderEnums.priceAsc),
+  priceRange: parseAsArrayOf(parseAsFloat),
 }
