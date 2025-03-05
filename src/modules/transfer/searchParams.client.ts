@@ -3,6 +3,9 @@ import {
   parseAsInteger,
   parseAsString,
   parseAsIsoDate,
+  parseAsStringEnum,
+  parseAsArrayOf,
+  parseAsFloat,
 } from 'nuqs/server'
 import { z } from 'zod'
 
@@ -46,6 +49,19 @@ export const transferSearchEngineSchema = z.object({
     infant: z.number().min(0),
   }),
 })
+export enum SortOrderEnums {
+  priceAsc = 'PRICE_ASC',
+  priceDesc = 'PRICE_DESC',
+}
+
+export const filterParsers = {
+  order: parseAsStringEnum<SortOrderEnums>(
+    Object.values(SortOrderEnums)
+  ).withDefault(SortOrderEnums.priceAsc),
+  priceRange: parseAsArrayOf(parseAsFloat),
+  vehicle: parseAsArrayOf(parseAsString),
+  pax: parseAsArrayOf(parseAsString),
+}
 
 export type TransferSearchEngineSchemaInfer = z.infer<
   typeof transferSearchEngineSchema
