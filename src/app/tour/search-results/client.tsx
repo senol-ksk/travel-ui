@@ -1,10 +1,10 @@
 'use client'
 
-import { Alert, Container, Skeleton } from '@mantine/core'
+import { Alert, Container, NativeSelect, Skeleton } from '@mantine/core'
 import { FiAlertTriangle } from 'react-icons/fi'
 import { useRouter } from 'next/navigation'
 
-import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearhResults'
+import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchResults'
 
 import { TourSearchResultItem } from './item'
 import { TourSearchResultSearchItem } from '@/modules/tour/type'
@@ -45,7 +45,7 @@ const TourSearchResultClient = () => {
   const searchResponsePages = searchResultsQuery.data?.pages
   const hasResult = searchIsCompleted
     ? searchResponsePages?.some((searchData) =>
-        searchData.data.searchResults.some(
+        searchData?.data?.searchResults?.some(
           (searchResult) => searchResult.items?.length
         )
       )
@@ -82,31 +82,46 @@ const TourSearchResultClient = () => {
               Filter section
             </div>
           </div>
-          <div
-            className='grid gap-4 sm:col-span-8 lg:col-span-9'
-            style={{
-              contentVisibility: 'auto',
-            }}
-          >
-            {searchResultPages?.map((tourPage) => {
-              return (
-                tourPage?.data &&
-                tourPage?.data.searchResults.map((searchResult) => {
-                  return searchResult.items
-                    ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                    .map((searchResultItem) => {
-                      return (
-                        <TourSearchResultItem
-                          key={searchResultItem.key}
-                          providerName={searchResult.diagnostics.providerName}
-                          data={searchResultItem}
-                          onClick={handleTourItemSelect}
-                        />
-                      )
-                    })
-                })
-              )
-            })}
+          <div className='grid gap-3 sm:col-span-8 lg:col-span-9'>
+            <div className='flex justify-between gap-3'>
+              <div></div>
+              <div>
+                <NativeSelect
+                  data={[
+                    { label: 'Fiyat (Ucuzdan pahalıya)', value: '' },
+                    { label: 'Fiyat (Pahalıdan ucuza)', value: '' },
+                    { label: 'Tarihe Göre (En erken)', value: '' },
+                    { label: 'Tarihe Göre (En geç)', value: '' },
+                  ]}
+                />
+              </div>
+            </div>
+            <div
+              className='grid gap-5'
+              style={{
+                contentVisibility: 'auto',
+              }}
+            >
+              {searchResultPages?.map((tourPage) => {
+                return (
+                  tourPage?.data &&
+                  tourPage?.data.searchResults.map((searchResult) => {
+                    return searchResult.items
+                      ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
+                      .map((searchResultItem) => {
+                        return (
+                          <TourSearchResultItem
+                            key={searchResultItem.key}
+                            providerName={searchResult.diagnostics.providerName}
+                            data={searchResultItem}
+                            onClick={handleTourItemSelect}
+                          />
+                        )
+                      })
+                  })
+                )
+              })}
+            </div>
           </div>
         </div>
       </Container>
