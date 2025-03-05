@@ -2,35 +2,25 @@
 
 import { Alert, Container, NativeSelect, Skeleton } from '@mantine/core'
 import { FiAlertTriangle } from 'react-icons/fi'
-import { useRouter } from 'next/navigation'
+import { Virtuoso } from 'react-virtuoso'
 
 import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchResults'
 
 import { TourSearchResultItem } from './item'
+import { filterParser, SortOrderEnums } from '@/modules/tour/searchResultParams'
+import { useQueryStates } from 'nuqs'
+import { useFilterActions } from './useFilteractions'
 import { TourSearchResultSearchItem } from '@/modules/tour/type'
-import { serializeTourDetailPageParams } from '@/modules/tour/detailSearchParams'
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
-  const router = useRouter()
+  const [{ order, ...filterParams }, setFilterParams] =
+    useQueryStates(filterParser)
 
   const searchRequestIsLoading =
     searchResultsQuery.isLoading ||
     searchResultsQuery.hasNextPage ||
     searchParamsQuery.isLoading
-
-  const searchResultPages = searchResultsQuery.data?.pages
-
-  const handleTourItemSelect = (data: TourSearchResultSearchItem) => {
-    const detailUrl = serializeTourDetailPageParams('/tour/detail', {
-      productKey: data.key,
-      slug: data.slug,
-      searchToken: searchParamsQuery.data?.data?.params.searchToken,
-      sessionToken: searchParamsQuery.data?.data?.sessionToken,
-    })
-
-    router.push(detailUrl)
-  }
 
   if (
     searchResultsQuery.hasNextPage &&
@@ -38,6 +28,12 @@ const TourSearchResultClient = () => {
   ) {
     searchResultsQuery.fetchNextPage()
   }
+
+  const searchData = searchResultsQuery.data?.pages?.flatMap((page) =>
+    page?.data?.searchResults?.flatMap((item) => item.items)
+  ) as TourSearchResultSearchItem[]
+
+  const filteredData = useFilterActions(searchData ?? [])
 
   const searchIsCompleted =
     !searchRequestIsLoading && !searchResultsQuery.hasNextPage
@@ -72,11 +68,11 @@ const TourSearchResultClient = () => {
     <div>
       {searchRequestIsLoading ? (
         <div className='relative'>
-          <Skeleton h={6} className='absolute start-0 end-0 top-0' />
+          <Skeleton h={6} className='absolute start-0 end-0 top-0' radius={0} />
         </div>
       ) : null}
       <Container className='py-10'>
-        <div className='grid gap-4 sm:grid-cols-12 md:gap-3'>
+        <div className='grid gap-4 sm:grid-cols-12 md:gap-6'>
           <div className='sm:col-span-4 lg:col-span-3'>
             <div className='rounded-md border border-gray-300 p-3'>
               Filter section
@@ -88,39 +84,54 @@ const TourSearchResultClient = () => {
               <div>
                 <NativeSelect
                   data={[
-                    { label: 'Fiyat (Ucuzdan pahalıya)', value: '' },
-                    { label: 'Fiyat (Pahalıdan ucuza)', value: '' },
-                    { label: 'Tarihe Göre (En erken)', value: '' },
-                    { label: 'Tarihe Göre (En geç)', value: '' },
+                    {
+                      label: 'Fiyat (Ucuzdan pahalıya)',
+                      value: SortOrderEnums.priceAsc,
+                    },
+                    {
+                      label: 'Fiyat (Pahalıdan ucuza)',
+                      value: SortOrderEnums.priceDesc,
+                    },
+                    {
+                      label: 'Tarihe Göre (En erken)',
+                      value: SortOrderEnums.dateAsc,
+                    },
+                    {
+                      label: 'Tarihe Göre (En geç)',
+                      value: SortOrderEnums.dateDesc,
+                    },
                   ]}
+                  onChange={({ target: { value } }) => {
+                    setFilterParams({
+                      order: value as SortOrderEnums,
+                    })
+                  }}
+                  value={order}
                 />
               </div>
             </div>
-            <div
-              className='grid gap-5'
-              style={{
-                contentVisibility: 'auto',
-              }}
-            >
-              {searchResultPages?.map((tourPage) => {
+            <div className='grid gap-5'>
+              <Virtuoso
+                useWindowScroll
+                totalCount={filteredData?.length}
+                data={filteredData}
+                itemContent={(_, data) => {
+                  return (
+                    <div className='pb-6'>
+                      <TourSearchResultItem data={data} />
+                    </div>
+                  )
+                }}
+              />
+              {/* {searchData?.map((searchItem) => {
                 return (
-                  tourPage?.data &&
-                  tourPage?.data.searchResults.map((searchResult) => {
-                    return searchResult.items
-                      ?.sort((a, b) => a.totalPrice.value - b.totalPrice.value)
-                      .map((searchResultItem) => {
-                        return (
-                          <TourSearchResultItem
-                            key={searchResultItem.key}
-                            providerName={searchResult.diagnostics.providerName}
-                            data={searchResultItem}
-                            onClick={handleTourItemSelect}
-                          />
-                        )
-                      })
-                  })
+                  <TourSearchResultItem
+                    key={searchItem?.key}
+                    data={searchItem as TourSearchResultSearchItem}
+                    onClick={handleTourItemSelect}
+                  />
                 )
-              })}
+              })} */}
             </div>
           </div>
         </div>

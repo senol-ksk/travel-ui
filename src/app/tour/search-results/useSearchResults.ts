@@ -41,8 +41,8 @@ export const useTourSearchResultsQuery = () => {
     enabled: !!searchParamsQuery.data?.data,
     queryKey: [
       'tour-search-results',
-      searchParamsQuery.data?.data?.sessionToken,
-      searchParamsQuery.data?.data?.params.searchToken,
+      searchParamsQuery.data?.data,
+      searchParamsQuery.data?.data?.params.tourSearchRequest,
     ],
     queryFn: async ({ signal, pageParam }) => {
       if (!appToken) {
@@ -54,7 +54,15 @@ export const useTourSearchResultsQuery = () => {
         signal,
         url: process.env.NEXT_PUBLIC_OL_ROUTE,
         method: 'post',
-        data: { ...pageParam },
+        data: {
+          ...searchParamsQuery.data?.data,
+          params: {
+            tourSearchRequest: {
+              ...searchParamsQuery.data?.data?.params.tourSearchRequest,
+              receivedProviders: pageParam.receivedProviders.filter(Boolean),
+            },
+          },
+        },
         headers: {
           appToken: appToken.result,
           appName: process.env.NEXT_PUBLIC_APP_NAME,
@@ -63,20 +71,16 @@ export const useTourSearchResultsQuery = () => {
 
       return response
     },
-    initialPageParam: searchParamsQuery.data?.data,
+    initialPageParam: {
+      receivedProviders: [''],
+    },
     getNextPageParam: (lastPage, page, lastPageParam, allPageParams) => {
       if (lastPage?.data?.hasMoreResponse) {
         if (lastPage.data.searchResults.length) {
           lastPage.data.searchResults.forEach((searchResult) => {
             const providerName = searchResult.diagnostics.providerName
-            if (
-              !lastPageParam?.params.tourSearchRequest.receivedProviders.includes(
-                providerName
-              )
-            ) {
-              lastPageParam?.params.tourSearchRequest.receivedProviders.push(
-                providerName
-              )
+            if (!lastPageParam?.receivedProviders.includes(providerName)) {
+              lastPageParam?.receivedProviders.push(providerName)
             }
           })
         }
@@ -86,7 +90,6 @@ export const useTourSearchResultsQuery = () => {
 
       return undefined
     },
-    staleTime: 2000,
   })
 
   return { searchResultsQuery, searchParamsQuery }
