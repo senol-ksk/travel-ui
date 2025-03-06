@@ -28,7 +28,7 @@ export const useTourSearchResultsQuery = () => {
         axiosOptions: {
           signal,
           url: 'api/tour/searchParams',
-          method: 'post',
+          method: 'get',
           params: searchParams,
         },
       })
@@ -42,6 +42,7 @@ export const useTourSearchResultsQuery = () => {
     queryKey: [
       'tour-search-results',
       searchParamsQuery.data?.data,
+      searchParamsQuery.data?.data?.params,
       searchParamsQuery.data?.data?.params.tourSearchRequest,
     ],
     queryFn: async ({ signal, pageParam }) => {
@@ -57,6 +58,7 @@ export const useTourSearchResultsQuery = () => {
         data: {
           ...searchParamsQuery.data?.data,
           params: {
+            ...searchParamsQuery.data?.data?.params,
             tourSearchRequest: {
               ...searchParamsQuery.data?.data?.params.tourSearchRequest,
               receivedProviders: pageParam.receivedProviders.filter(Boolean),
@@ -75,7 +77,7 @@ export const useTourSearchResultsQuery = () => {
       receivedProviders: [''],
     },
     getNextPageParam: (lastPage, page, lastPageParam, allPageParams) => {
-      if (lastPage?.data?.hasMoreResponse) {
+      if (lastPage?.data?.hasMoreResponse && lastPage.code === 1) {
         if (lastPage.data.searchResults.length) {
           lastPage.data.searchResults.forEach((searchResult) => {
             const providerName = searchResult.diagnostics.providerName

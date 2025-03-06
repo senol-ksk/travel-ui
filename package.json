@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
-    "@tailwindcss/postcss": "^4.0.9",
+    "@tailwindcss/postcss": "^4.0.10",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -76,7 +76,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.9",
+    "tailwindcss": "^4.0.10",
     "typescript": "^5.8.2",
     "vitest": "^3.0.7"
   }

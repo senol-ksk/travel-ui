@@ -40,3 +40,13 @@ export function cleanObj<T>(obj: T): T {
   }
   return obj
 }
+
+export function slugify(input: string | number): string {
+  if (!input) return ''
+  let slug = input.toLocaleString().toLowerCase().trim()
+  slug = slug.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  slug = slug.replace(/[^a-z0-9\s-]/g, ' ').trim()
+  slug = slug.replace(/[\s-]+/g, '-')
+
+  return slug
+}
