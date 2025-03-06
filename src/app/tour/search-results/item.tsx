@@ -10,23 +10,18 @@ import {
 } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 import { HiOutlineCalendarDays } from 'react-icons/hi2'
+import { LiaInfoCircleSolid } from 'react-icons/lia'
 
 import { formatCurrency } from '@/libs/util'
 import { serializeTourDetailPageParams } from '@/modules/tour/detailSearchParams'
-import { useTourSearchResultsQuery } from './useSearhResults'
+import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchResults'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 
 type Props = {
   data: TourSearchResultSearchItem
-  providerName?: string
-  onClick?: (tour: TourSearchResultSearchItem) => void
 }
-export const TourSearchResultItem: React.FC<Props> = ({
-  data,
-  providerName,
-  onClick = () => null,
-}) => {
+export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
   const { searchParamsQuery } = useTourSearchResultsQuery()
   const [isImageLoading, setImageLoading] = useState(true)
 
@@ -41,12 +36,11 @@ export const TourSearchResultItem: React.FC<Props> = ({
     <div className='@container rounded-lg border border-gray-300'>
       <div className='grid gap-3 p-3 md:gap-5 @lg:p-5'>
         <Title order={3} className='text-md font-semibold @lg:text-lg'>
-          {data.title}{' '}
-          <small className='text-xs text-gray-300'>{providerName}</small>
+          {data.region.title}
         </Title>
-        <div className='grid grid-cols-12 gap-4'>
+        <div className='grid grid-cols-12 items-start gap-4'>
           <div className='col-span-12 md:col-span-3'>
-            <Box h={200} className='relative'>
+            <Box h={150} className='relative'>
               <Transition
                 mounted={isImageLoading}
                 transition='fade'
@@ -73,15 +67,22 @@ export const TourSearchResultItem: React.FC<Props> = ({
               />
             </Box>
           </div>
-          <div className='col-span-12 md:col-span-9'>
-            <div className='font-semibold'>{data.description}</div>
-            <div className='flex items-center gap-2'>
+          <div className='col-span-12 grid gap-1 md:col-span-9'>
+            <div className='pb-3 font-semibold'>{data.description}</div>
+            <div className='flex items-center gap-2 text-sm text-gray-700'>
               <div>
                 <HiOutlineCalendarDays size={22} />
               </div>
               <div>{dayjs(data.startDate).format('DD MMMM YYYY')}</div>
               <div>{'-'}</div>
               <div>{dayjs(data.endDate).format('DD MMMM YYYY')}</div>
+            </div>
+            <div className='flex gap-2 text-sm text-gray-700'>
+              <div>
+                <LiaInfoCircleSolid size={22} />
+              </div>
+
+              <div>{data.title}</div>
             </div>
           </div>
         </div>
