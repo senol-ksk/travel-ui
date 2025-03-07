@@ -406,8 +406,8 @@ export interface HotelDetailApiResponseData {
         max_free_child_age: number
         min_free_child_age: null
         images: {
-          category: number
-          tag: string
+          category: number | null
+          tag: string | null
           original: string
           large: null | string
           small: null | string

@@ -31,7 +31,7 @@ export const useSearchResultParams = () => {
       hotelSearchRequestQuery.fetchNextPage()
       searchQueryStatus.current = 'ended'
     },
-    20000
+    30000
   )
 
   const searchParamsQuery = useQuery({

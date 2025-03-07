@@ -73,6 +73,15 @@ export const HotelSearchEngine = () => {
       },
     })
 
+  if (dayjs(localParams.checkinDate).isBefore(dayjs())) {
+    console.log('yess is isBefore')
+    setLocalParams({
+      ...localParams,
+      checkinDate: defaultDates[0],
+      checkoutDate: defaultDates[1],
+    })
+  }
+
   const form = useForm<HotelSearchEngineSchemaType>({
     resolver: zodResolver(schema),
     mode: 'onChange',
@@ -159,8 +168,12 @@ export const HotelSearchEngine = () => {
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <HotelCalendar
             defaultDates={[
-              new Date(localParams.checkinDate),
-              new Date(localParams.checkoutDate),
+              new Date(
+                form?.formState?.defaultValues?.checkinDate ?? defaultDates[0]
+              ),
+              new Date(
+                form?.formState?.defaultValues?.checkoutDate ?? defaultDates[1]
+              ),
             ]}
             onDateSelect={(dates) => {
               const checkinDate = dates[0]

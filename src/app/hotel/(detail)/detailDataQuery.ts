@@ -116,7 +116,7 @@ const useHotelDataQuery = () => {
     },
   })
 
-  const selectedRoomMutaion: UseMutationResult<
+  const selectedRoomMutation: UseMutationResult<
     ServiceResponse<HotelDetailRoomStatusResponseData> | undefined,
     Error,
     {
@@ -170,7 +170,7 @@ const useHotelDataQuery = () => {
   return {
     hotelDetailQuery,
     roomsQuery,
-    selectedRoomMutaion,
+    selectedRoomMutation,
     searchParams,
     roomInstallmentQuery,
   }
