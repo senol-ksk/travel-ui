@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
   Alert,
   AspectRatio,
@@ -32,6 +32,7 @@ import { HotelPassengerDropdown } from '@/components/search-engine/passengers/ho
 
 const HotelDetailSection = () => {
   const router = useRouter()
+  const [showCalendar, setShowCalendar] = useState(false)
   const {
     hotelDetailQuery,
     roomInstallmentQuery,
@@ -139,8 +140,6 @@ const HotelDetailSection = () => {
     return <div>Error or Something happened bad</div>
   }
 
-  console.log(hotel.images)
-
   return (
     <>
       <Container className='px-0 pt-5 pb-5 sm:px-4 md:pt-8'>
@@ -186,7 +185,10 @@ const HotelDetailSection = () => {
           </Title>
           <div className='grid grid-cols-3 gap-3'>
             <div>
-              <HotelCalendar defaultDates={[checkInDate, checkOutDate]} />
+              <HotelCalendar
+                showCalendar={showCalendar}
+                defaultDates={[checkInDate, checkOutDate]}
+              />
             </div>
             <div>
               <HotelPassengerDropdown
@@ -200,7 +202,11 @@ const HotelDetailSection = () => {
               />
             </div>
             <div className='col-span-1'>
-              <Button className='h-full' type='button'>
+              <Button
+                className='h-full'
+                type='button'
+                onClick={() => setShowCalendar((prev) => !prev)}
+              >
                 Değiştir
               </Button>
             </div>

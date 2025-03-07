@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
@@ -16,6 +16,7 @@ const maxDate = today.add(1, 'year')
 type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
+  showCalendar?: boolean
 }
 const defaultFormat = 'DD MMM ddd'
 
@@ -24,6 +25,7 @@ import { MdOutlineArrowForward } from 'react-icons/md'
 const HotelCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
   defaultDates,
+  showCalendar = false,
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
     defaultDates[0],
@@ -40,9 +42,10 @@ const HotelCalendar: React.FC<Props> = ({
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
-  const clickOutsideRef = useClickOutside(() =>
+
+  const clickOutsideRef = useClickOutside(() => {
     setContainerTransitionState(false)
-  )
+  })
 
   const handleDateSelections = (dates: DatesRangeValue) => {
     setRangeValue(dates)
@@ -53,6 +56,9 @@ const HotelCalendar: React.FC<Props> = ({
       dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Çıkış Tarihi',
     ])
   }
+  useEffect(() => {
+    setContainerTransitionState(showCalendar)
+  }, [showCalendar])
 
   return (
     <Provider>

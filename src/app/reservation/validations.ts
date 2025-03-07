@@ -27,16 +27,8 @@ const passengerValidation = z.object({
   passengers: z.array(
     z
       .object<PassengerValidationType>({
-        firstName: z
-          .string()
-          .min(3)
-          .max(50)
-          .regex(/^[a-zA-Z a-z A-Z\-]+$/),
-        lastName: z
-          .string()
-          .min(3)
-          .max(50)
-          .regex(/^[a-zA-Z a-z A-Z\-]+$/),
+        firstName: z.string().min(3).max(50),
+        lastName: z.string().min(3).max(50),
         birthDate: z.string().date(),
         gender: z.string().nonempty(),
         birthDate_day: z.string().min(1).max(2),

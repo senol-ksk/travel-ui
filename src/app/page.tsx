@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <Suspense fallback={<Skeleton h={20} />}>
       <div className='relative'>
-        <Title className='pt-13 text-center text-white [text-shadow:_0_0_1px_var(--mantine-color-dark-2)]'>
+        <Title className='text-dark pt-5 text-center text-lg [text-shadow:_0_0_1px_var(--mantine-color-dark-2)] md:pt-13 md:text-4xl md:text-white'>
           FullTrip ile seyahat planlamak çok kolay
         </Title>
         <Image
