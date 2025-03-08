@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   useDisclosure,
   useMediaQuery,
@@ -58,6 +58,7 @@ const FlightSearchView = () => {
     submitFlightData,
     getAirlineByCodeList,
     getAirportsByCodeList,
+    searchParams,
   } = useSearchResultsQueries()
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
@@ -141,11 +142,19 @@ const FlightSearchView = () => {
     }
   }
 
-  const resetSelectedFlights = () => {
+  const resetSelectedFlights = useCallback(() => {
     setIsReturnFlightVisible(false)
     setSelectedFlightItemPackages(null)
     selectedFlightKeys.current = []
-  }
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      console.log('unmounting...')
+      resetSelectedFlights()
+    }
+  }, [resetSelectedFlights, searchParams])
+
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmitting = submitFlightData.isPending
 
@@ -575,18 +584,20 @@ const FlightSearchView = () => {
                 !searchResultsQuery.isFetchingNextPage &&
                 filteredData?.filter((item) => {
                   const groupId = isReturnFlightVisible ? 1 : 0
-                  if (groupId === 1) {
-                    const departureTime = dayjs(
-                      item.segments.at(0)?.departureTime
-                    )
+                  const { departureDate, returnDate } = searchParams
+                  const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
+
+                  if (groupId === 1 && isSameDay) {
                     const selectedFlightArrivalTime = dayjs(
                       selectedFlightItemPackages?.flights.at(0)?.segments.at(-1)
                         ?.arrivalTime
                     )
 
                     return (
-                      departureTime.isSame(selectedFlightArrivalTime, 'd') &&
-                      departureTime.diff(selectedFlightArrivalTime, 'hour') > 1
+                      dayjs(item.segments.at(0)?.departureTime).diff(
+                        selectedFlightArrivalTime,
+                        'hour'
+                      ) > 1
                     )
                   }
                   return true
@@ -612,10 +623,13 @@ const FlightSearchView = () => {
                   })
                   ?.filter((item) => {
                     const groupId = isReturnFlightVisible ? 1 : 0
-                    if (groupId === 1) {
-                      const departureTime = dayjs(
-                        item.segments.at(0)?.departureTime
-                      )
+                    const { departureDate, returnDate } = searchParams
+                    const isSameDay = dayjs(departureDate).isSame(
+                      returnDate,
+                      'd'
+                    )
+
+                    if (groupId === 1 && isSameDay) {
                       const selectedFlightArrivalTime = dayjs(
                         selectedFlightItemPackages?.flights
                           .at(0)
@@ -623,11 +637,13 @@ const FlightSearchView = () => {
                       )
 
                       return (
-                        departureTime.isSame(selectedFlightArrivalTime, 'd') &&
-                        departureTime.diff(selectedFlightArrivalTime, 'hour') >
-                          1
+                        dayjs(item.segments.at(0)?.departureTime).diff(
+                          selectedFlightArrivalTime,
+                          'hour'
+                        ) > 1
                       )
                     }
+
                     return true
                   })
                   ?.map((result) => {
