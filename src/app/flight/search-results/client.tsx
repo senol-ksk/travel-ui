@@ -23,6 +23,7 @@ import {
   Stack,
   Title,
   Transition,
+  UnstyledButton,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
@@ -60,7 +61,8 @@ const FlightSearchView = () => {
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
-  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+  const [{ order, ...filterParams }, setFilterParams] =
+    useQueryStates(filterParsers)
   const airlineDataObj = getAirlineByCodeList.data
 
   // list `filteredData` in the client, for other calculations, mutations...etc, use query data itself
@@ -195,9 +197,23 @@ const FlightSearchView = () => {
                     </div>
                   ) : (
                     <>
-                      <Title order={2} fz={'h4'} mb={rem(20)}>
-                        Filtreler
-                      </Title>
+                      <div className='flex justify-between gap-2'>
+                        <Title order={2} fz={'h4'} mb={rem(20)}>
+                          Filtreler
+                        </Title>
+                        <div>
+                          <UnstyledButton
+                            className='font-semibold text-blue-500'
+                            fz='xs'
+                            hidden={!Object.values(filterParams).find(Boolean)}
+                            onClick={() => {
+                              setFilterParams(null)
+                            }}
+                          >
+                            Temizle
+                          </UnstyledButton>
+                        </div>
+                      </div>
                       <Accordion
                         defaultValue={['numOfStops', 'airlines']}
                         multiple
@@ -392,7 +408,7 @@ const FlightSearchView = () => {
                     label: 'hidden',
                   }}
                   label='Sırala'
-                  value={filterParams.order}
+                  value={order}
                   onChange={({ currentTarget: { value } }) => {
                     setFilterParams({
                       order: value as SortOrderEnums,

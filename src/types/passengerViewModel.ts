@@ -485,6 +485,11 @@ export interface PassengerChildNodeItemValue {
   webUserId: ID
 }
 
+export enum FlightPassengerTypes {
+  Adult,
+  Child,
+  Infant,
+}
 export interface FlightReservationSummary {
   flightList: {
     flightFareInfo: {
@@ -625,7 +630,7 @@ export interface FlightReservationSummary {
       passengers: {
         key: string
         name: null
-        passengerType: number
+        passengerType: FlightPassengerTypes
         age: number
         birthday: string
         gender: number
