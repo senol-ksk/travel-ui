@@ -28,7 +28,6 @@ const useHotelDataQuery = () => {
         axiosOptions: {
           signal,
           url: 'api/hotel/detail',
-          method: 'post',
 
           params: {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
