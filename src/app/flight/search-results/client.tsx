@@ -43,6 +43,7 @@ import { formatCurrency } from '@/libs/util'
 import { filterParsers, SortOrderEnums } from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
+import dayjs from 'dayjs'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -69,12 +70,11 @@ const FlightSearchView = () => {
   const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
-  const [selectedFlightItem, setSelectedFlightItem] =
-    useState<ClientDataType | null>(null)
 
-  const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
-    SelectedPackageStateProps[] | undefined | null
-  >()
+  const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
+    packages: SelectedPackageStateProps[] | undefined | null
+    flights: ClientDataType[]
+  } | null>()
   const [
     packageDrawerOpened,
     { open: openPackageDrawer, close: closePackageDrawer },
@@ -103,8 +103,15 @@ const FlightSearchView = () => {
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
     })) as SelectedPackageStateProps[]
-    setSelectedFlightItem(flight)
-    setSelectedFlightItemPackages(packages)
+    // setSelectedFlightItem(flight)
+
+    setSelectedFlightItemPackages((prevValues) => ({
+      packages,
+      flights:
+        prevValues?.flights.length && flight.fareInfo.groupId !== 0
+          ? [prevValues.flights[0], flight]
+          : [flight],
+    }))
 
     openPackageDrawer()
   }
@@ -117,20 +124,26 @@ const FlightSearchView = () => {
   })
   const handlePackageSelect = async (data: SelectedPackageStateProps) => {
     selectedFlightKeys.current.push(data.flightFareInfo.key)
-
+    console.log(selectedFlightKeys.current)
     closePackageDrawer()
 
     if (!tripKind) {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     }
 
-    if (tripKind && !isReturnFlightVisible) {
+    if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
       scrollIntoView()
       setIsReturnFlightVisible(true)
     } else {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
       selectedFlightKeys.current = []
     }
+  }
+
+  const resetSelectedFlights = () => {
+    setIsReturnFlightVisible(false)
+    setSelectedFlightItemPackages(null)
+    selectedFlightKeys.current = []
   }
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmitting = submitFlightData.isPending
@@ -451,30 +464,45 @@ const FlightSearchView = () => {
                   <div>
                     <div className='pb-3'>
                       <div className='flex items-center gap-2 text-sm text-gray-600'>
-                        <div>
-                          {
-                            airlineDataObj
-                              ?.find(
-                                (airline) =>
-                                  airline.Code ===
-                                  selectedFlightItem?.segments[0]
-                                    .marketingAirline.code
-                              )
-                              ?.Value.find((val) => val.LangCode === 'tr_TR')
-                              ?.Value
-                          }
+                        <div className='flex gap-1'>
+                          <span>
+                            {
+                              airlineDataObj
+                                ?.find(
+                                  (airline) =>
+                                    airline.Code ===
+                                    selectedFlightItemPackages?.flights.at(0)
+                                      ?.segments[0].marketingAirline.code
+                                )
+                                ?.Value.find((val) => val.LangCode === 'tr_TR')
+                                ?.Value
+                            }
+                          </span>
+                          <span className='underline'>
+                            {dayjs(
+                              selectedFlightItemPackages?.flights
+                                .at(0)
+                                ?.segments.at(0)?.departureTime
+                            ).format('ddd DD, HH:mm')}
+                          </span>
                         </div>
                         <div>
                           <GoArrowRight />
                         </div>
-                        <div>{selectedFlightItem?.segments[0].origin.code}</div>
+                        <div>
+                          {
+                            selectedFlightItemPackages?.flights.at(0)
+                              ?.segments[0].origin.code
+                          }
+                        </div>
                         <div>
                           <IoAirplaneSharp />
                         </div>
                         <div>
                           {
-                            selectedFlightItem?.segments.at(-1)?.destination
-                              .code
+                            selectedFlightItemPackages?.flights
+                              .at(0)
+                              ?.segments.at(-1)?.destination.code
                           }
                         </div>
                       </div>
@@ -484,9 +512,7 @@ const FlightSearchView = () => {
                           color='blue'
                           size='compact-xs'
                           type='button'
-                          onClick={() => {
-                            setIsReturnFlightVisible(false)
-                          }}
+                          onClick={resetSelectedFlights}
                         >
                           Uçuşu değiştir
                         </Button>
@@ -527,12 +553,69 @@ const FlightSearchView = () => {
                     </div>
                   </Alert>
                 )}
+              {isDomestic &&
+                !searchResultsQuery.isFetchingNextPage &&
+                filteredData?.filter((item) => {
+                  const groupId = isReturnFlightVisible ? 1 : 0
+                  if (groupId === 1) {
+                    const departureTime = dayjs(
+                      item.segments.at(0)?.departureTime
+                    )
+                    const selectedFlightArrivalTime = dayjs(
+                      selectedFlightItemPackages?.flights.at(0)?.segments.at(-1)
+                        ?.arrivalTime
+                    )
+
+                    return (
+                      departureTime.isSame(selectedFlightArrivalTime, 'd') &&
+                      departureTime.diff(selectedFlightArrivalTime, 'hour') > 1
+                    )
+                  }
+                  return true
+                }).length === 0 && (
+                  <Alert>
+                    <div>
+                      Seçilen uçuş saatleri uygun değil. Gidiş uçuşunuzu
+                      değiştirin.
+                    </div>
+                    <div className='pt-2'>
+                      <Button type='button' onClick={resetSelectedFlights}>
+                        Gidiş değiştir
+                      </Button>
+                    </div>
+                  </Alert>
+                )}
 
               {isDomestic
                 ? filteredData
                     ?.filter((item) => {
                       const groupId = isReturnFlightVisible ? 1 : 0
                       return item.fareInfo.groupId === groupId
+                    })
+                    ?.filter((item) => {
+                      const groupId = isReturnFlightVisible ? 1 : 0
+                      if (groupId === 1) {
+                        const departureTime = dayjs(
+                          item.segments.at(0)?.departureTime
+                        )
+                        const selectedFlightArrivalTime = dayjs(
+                          selectedFlightItemPackages?.flights
+                            .at(0)
+                            ?.segments.at(-1)?.arrivalTime
+                        )
+
+                        return (
+                          departureTime.isSame(
+                            selectedFlightArrivalTime,
+                            'd'
+                          ) &&
+                          departureTime.diff(
+                            selectedFlightArrivalTime,
+                            'hour'
+                          ) > 1
+                        )
+                      }
+                      return true
                     })
                     ?.map((result) => {
                       const segmentAirlines = result.segments.map((item) =>
@@ -597,26 +680,26 @@ const FlightSearchView = () => {
         opened={packageDrawerOpened}
         onClose={() => {
           closePackageDrawer()
-          setSelectedFlightItemPackages(null)
+          // setSelectedFlightItemPackages(null)
         }}
         position='bottom'
         title={
           <div>
             <span className='font-semibold'>
               {
-                selectedFlightItemPackages?.at(0)?.flightDetailSegment.origin
-                  .code
+                selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
+                  ?.origin.code
               }
             </span>{' '}
-            Fiyatlarini İnceleyin
+            Fiyatlarını İnceleyin
           </div>
         }
       >
         <Container>
           <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
             {selectedFlightItemPackages &&
-              selectedFlightItemPackages.length &&
-              selectedFlightItemPackages?.map((selectedPackage) => {
+              selectedFlightItemPackages.packages?.length &&
+              selectedFlightItemPackages.packages?.map((selectedPackage) => {
                 return (
                   <div
                     key={selectedPackage.flightFareInfo.key}
