@@ -126,7 +126,7 @@ const FlightSearchView = () => {
   })
   const handlePackageSelect = async (data: SelectedPackageStateProps) => {
     selectedFlightKeys.current.push(data.flightFareInfo.key)
-    console.log(selectedFlightKeys.current)
+
     closePackageDrawer()
 
     if (!tripKind) {
@@ -150,7 +150,6 @@ const FlightSearchView = () => {
 
   useEffect(() => {
     return () => {
-      console.log('unmounting...')
       resetSelectedFlights()
     }
   }, [resetSelectedFlights, searchParams])
