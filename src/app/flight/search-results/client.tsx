@@ -581,6 +581,11 @@ const FlightSearchView = () => {
 
               {isDomestic &&
                 !searchResultsQuery.isFetchingNextPage &&
+                filteredData &&
+                filteredData?.filter((item) => {
+                  const groupId = isReturnFlightVisible ? 1 : 0
+                  return item.fareInfo.groupId === groupId
+                })?.length > 0 &&
                 filteredData?.filter((item) => {
                   const groupId = isReturnFlightVisible ? 1 : 0
                   const { departureDate, returnDate } = searchParams
