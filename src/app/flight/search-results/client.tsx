@@ -44,6 +44,7 @@ import { filterParsers, SortOrderEnums } from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import dayjs from 'dayjs'
+import { Virtuoso } from 'react-virtuoso'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -527,15 +528,12 @@ const FlightSearchView = () => {
                 )
               ) : null
             ) : null}
-            <div
-              className='grid gap-3 pt-3 md:gap-5'
-              style={{
-                contentVisibility: 'auto',
-              }}
-            >
+            <div className='grid gap-3 pt-3 md:gap-5'>
               {!searchResultsQuery.isFetchingNextPage &&
+                isDomestic &&
                 filteredData?.filter((item) => {
                   const groupId = isReturnFlightVisible ? 1 : 0
+
                   return item.fareInfo.groupId === groupId
                 })?.length === 0 && (
                   <Alert color='red'>
@@ -553,6 +551,26 @@ const FlightSearchView = () => {
                     </div>
                   </Alert>
                 )}
+
+              {!searchResultsQuery.isFetchingNextPage &&
+                !isDomestic &&
+                filteredData?.length === 0 && (
+                  <Alert color='red'>
+                    <div className='text-center text-lg'>
+                      Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
+                    </div>
+                    <div className='flex justify-center pt-3'>
+                      <Button
+                        onClick={() => {
+                          setFilterParams(null)
+                        }}
+                      >
+                        Tüm Sonuçları göster
+                      </Button>
+                    </div>
+                  </Alert>
+                )}
+
               {isDomestic &&
                 !searchResultsQuery.isFetchingNextPage &&
                 filteredData?.filter((item) => {
@@ -586,66 +604,33 @@ const FlightSearchView = () => {
                   </Alert>
                 )}
 
-              {isDomestic
-                ? filteredData
-                    ?.filter((item) => {
-                      const groupId = isReturnFlightVisible ? 1 : 0
-                      return item.fareInfo.groupId === groupId
-                    })
-                    ?.filter((item) => {
-                      const groupId = isReturnFlightVisible ? 1 : 0
-                      if (groupId === 1) {
-                        const departureTime = dayjs(
-                          item.segments.at(0)?.departureTime
-                        )
-                        const selectedFlightArrivalTime = dayjs(
-                          selectedFlightItemPackages?.flights
-                            .at(0)
-                            ?.segments.at(-1)?.arrivalTime
-                        )
-
-                        return (
-                          departureTime.isSame(
-                            selectedFlightArrivalTime,
-                            'd'
-                          ) &&
-                          departureTime.diff(
-                            selectedFlightArrivalTime,
-                            'hour'
-                          ) > 1
-                        )
-                      }
-                      return true
-                    })
-                    ?.map((result) => {
-                      const segmentAirlines = result.segments.map((item) =>
-                        item.marketingAirline.code ===
-                        item.operatingAirline.code
-                          ? item.marketingAirline.code
-                          : item.operatingAirline.code
+              {isDomestic ? (
+                filteredData
+                  ?.filter((item) => {
+                    const groupId = isReturnFlightVisible ? 1 : 0
+                    return item.fareInfo.groupId === groupId
+                  })
+                  ?.filter((item) => {
+                    const groupId = isReturnFlightVisible ? 1 : 0
+                    if (groupId === 1) {
+                      const departureTime = dayjs(
+                        item.segments.at(0)?.departureTime
                       )
-
-                      const airlineValues: AirlineCode[] | undefined =
-                        airlineDataObj?.filter((airlineObj) =>
-                          segmentAirlines.find(
-                            (segment) => segment === airlineObj.Code
-                          )
-                        )
+                      const selectedFlightArrivalTime = dayjs(
+                        selectedFlightItemPackages?.flights
+                          .at(0)
+                          ?.segments.at(-1)?.arrivalTime
+                      )
 
                       return (
-                        <MemoizedFlightSearchResultsDomestic
-                          airlineValues={airlineValues}
-                          detailSegments={result.segments}
-                          details={result.details}
-                          fareInfo={result.fareInfo}
-                          onSelect={() => {
-                            handleFlightSelect(result)
-                          }}
-                          key={result.fareInfo.key}
-                        />
+                        departureTime.isSame(selectedFlightArrivalTime, 'd') &&
+                        departureTime.diff(selectedFlightArrivalTime, 'hour') >
+                          1
                       )
-                    })
-                : filteredData?.map((result) => {
+                    }
+                    return true
+                  })
+                  ?.map((result) => {
                     const segmentAirlines = result.segments.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code
                         ? item.marketingAirline.code
@@ -660,18 +645,52 @@ const FlightSearchView = () => {
                       )
 
                     return (
-                      <MemoizedFlightSearchResultsInternational
+                      <MemoizedFlightSearchResultsDomestic
                         airlineValues={airlineValues}
-                        key={result.fareInfo.key}
                         detailSegments={result.segments}
                         details={result.details}
                         fareInfo={result.fareInfo}
                         onSelect={() => {
                           handleFlightSelect(result)
                         }}
+                        key={result.fareInfo.key}
                       />
                     )
-                  })}
+                  })
+              ) : (
+                <Virtuoso
+                  useWindowScroll
+                  data={filteredData}
+                  totalCount={filteredData?.length}
+                  itemContent={(_, result) => {
+                    const segmentAirlines = result.segments.map((item) =>
+                      item.marketingAirline.code === item.operatingAirline.code
+                        ? item.marketingAirline.code
+                        : item.operatingAirline.code
+                    )
+                    const airlineValues: AirlineCode[] | undefined =
+                      airlineDataObj?.filter((airlineObj) =>
+                        segmentAirlines.find(
+                          (segment) => segment === airlineObj.Code
+                        )
+                      )
+
+                    return (
+                      <div className='pb-3 md:pb-5'>
+                        <MemoizedFlightSearchResultsInternational
+                          airlineValues={airlineValues}
+                          detailSegments={result.segments}
+                          details={result.details}
+                          fareInfo={result.fareInfo}
+                          onSelect={() => {
+                            handleFlightSelect(result)
+                          }}
+                        />
+                      </div>
+                    )
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
