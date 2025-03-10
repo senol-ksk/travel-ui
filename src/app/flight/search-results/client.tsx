@@ -72,6 +72,8 @@ const FlightSearchView = () => {
   const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
+  const { departureDate, returnDate } = searchParams
+  const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
 
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
     packages: SelectedPackageStateProps[] | undefined | null
@@ -588,8 +590,6 @@ const FlightSearchView = () => {
                 })?.length > 0 &&
                 filteredData?.filter((item) => {
                   const groupId = isReturnFlightVisible ? 1 : 0
-                  const { departureDate, returnDate } = searchParams
-                  const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
 
                   if (groupId === 1 && isSameDay) {
                     const selectedFlightArrivalTime = dayjs(
