@@ -37,7 +37,7 @@ const mantineTheme = mergeMantineTheme(
       Drawer: Drawer.extend({
         styles: {
           title: {
-            fontWeight: 600,
+            // fontWeight: 600,
           },
         },
       }),

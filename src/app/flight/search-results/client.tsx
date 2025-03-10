@@ -722,15 +722,31 @@ const FlightSearchView = () => {
           // setSelectedFlightItemPackages(null)
         }}
         position='bottom'
+        classNames={{
+          title: 'flex-1 text-center font-normal',
+        }}
         title={
-          <div>
+          <div className='flex gap-1'>
+            <span className='font-semibold'>
+              {
+                airlineDataObj
+                  ?.find(
+                    (airline) =>
+                      airline.Code ==
+                      selectedFlightItemPackages?.flights.at(-1)?.segments.at(0)
+                        ?.marketingAirline.code
+                  )
+                  ?.Value.at(0)?.Value
+              }
+            </span>
             <span className='font-semibold'>
               {
                 selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
                   ?.origin.code
               }
-            </span>{' '}
-            Fiyatlarını İnceleyin
+            </span>
+
+            <span>Fiyatlarını İnceleyin</span>
           </div>
         }
       >
