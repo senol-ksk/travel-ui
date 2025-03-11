@@ -5,20 +5,11 @@ import { useClickOutside } from '@mantine/hooks'
 
 import { Input } from '@/components/search-engine/input'
 import { HotelGuestsActions } from './guests'
-
-export type HotelRoomOptionTypes = {
-  childAges: number[]
-  adult: number
-  child: number
-  // infant: number
-  // student: number
-  // senior: number
-  // military: number
-}[]
+import { HotelRoomOptionTypes } from '@/modules/hotel/searchParams'
 
 type Props = {
-  onChange?: (params: HotelRoomOptionTypes) => void
-  initialValues: HotelRoomOptionTypes
+  onChange?: (params: HotelRoomOptionTypes[]) => void
+  initialValues: HotelRoomOptionTypes[]
 }
 
 export const HotelPassengerDropdown: React.FC<Props> = ({

@@ -18,27 +18,12 @@ import { Locations } from '@/components/search-engine/locations/hotel/locations'
 import { type LocationResults } from '@/components/search-engine/locations/hotel/type'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { request } from '@/network'
-import { serializeHotelSearchParams } from '@/modules/hotel/searchParams'
-
-const schema = z.object({
-  destination: z.object({
-    name: z.string().min(3),
-    id: z.number().or(z.string()),
-    slug: z.string().min(3),
-    type: z.number(),
-  }),
-  checkinDate: z.coerce.date(),
-  checkoutDate: z.coerce.date(),
-  rooms: z.array(
-    z.object({
-      adult: z.number(),
-      child: z.number(),
-      childAges: z.array(z.number()),
-    })
-  ),
-})
-
-type HotelSearchEngineSchemaType = z.infer<typeof schema>
+import {
+  HotelRoomOptionTypes,
+  HotelSearchEngineSchemaType,
+  searchEngineSchema,
+  serializeHotelSearchParams,
+} from '@/modules/hotel/searchParams'
 
 export const HotelSearchEngine = () => {
   const mounted = useMounted()
@@ -74,7 +59,6 @@ export const HotelSearchEngine = () => {
     })
 
   if (dayjs(localParams.checkinDate).isBefore(dayjs())) {
-    console.log('yess is isBefore')
     setLocalParams({
       ...localParams,
       checkinDate: defaultDates[0],
@@ -83,7 +67,7 @@ export const HotelSearchEngine = () => {
   }
 
   const form = useForm<HotelSearchEngineSchemaType>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(searchEngineSchema),
     mode: 'onChange',
     defaultValues: localParams,
   })
@@ -191,10 +175,10 @@ export const HotelSearchEngine = () => {
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>
           <HotelPassengerDropdown
-            initialValues={localParams.rooms}
+            initialValues={
+              form.formState.defaultValues?.rooms as HotelRoomOptionTypes[]
+            }
             onChange={(params) => {
-              console.log(params)
-
               form.setValue('rooms', params)
             }}
           />

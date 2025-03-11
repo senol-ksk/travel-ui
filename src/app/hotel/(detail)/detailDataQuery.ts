@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useQueryStates } from 'nuqs'
 import {
   useInfiniteQuery,
@@ -14,11 +15,11 @@ import {
   HotelDetailRoomStatusResponseData,
 } from '@/app/hotel/types'
 import { delayCodeExecution } from '@/libs/util'
-import { useRef } from 'react'
-// import { hotelDetailDummyData, hotelDetailRoomDummyData } from './dummy'
 
 const useHotelDataQuery = () => {
-  const [searchParams] = useQueryStates(hotelDetailSearchParams)
+  const [searchParams, setSearchParams] = useQueryStates(
+    hotelDetailSearchParams
+  )
 
   const hotelDetailQuery = useQuery({
     enabled: !!searchParams,
@@ -28,21 +29,14 @@ const useHotelDataQuery = () => {
         axiosOptions: {
           signal,
           url: 'api/hotel/detail',
-
-          params: {
-            appName: process.env.NEXT_PUBLIC_APP_NAME,
+          method: 'post',
+          data: {
             ...searchParams,
-            hotelSlug: searchParams.hotelSlug,
           },
         },
       })
 
       return response
-
-      // return {
-      //   data: hotelDetailDummyData,
-      //   success: true,
-      // }
     },
   })
 
@@ -50,45 +44,46 @@ const useHotelDataQuery = () => {
   const roomRefetchCount = useRef(5)
 
   const roomsQuery = useInfiniteQuery({
-    enabled: !!searchPanel,
+    enabled: !!hotelDetailQuery.data?.data,
     queryKey: [
       'hotel-rooms',
-      searchParams,
       hotelDetailQuery.data?.data?.productKey,
-      searchPanel?.checkInDate,
-      searchPanel?.checkOutDate,
+      searchPanel?.sessionToken,
+      searchPanel?.searchToken,
+      searchParams.hotelSlug,
+      searchParams.checkInDate,
+      searchParams.checkOutDate,
       roomRefetchCount.current,
     ],
     initialPageParam: {
       page: 1,
     },
     queryFn: async ({ signal, pageParam }) => {
+      await delayCodeExecution(1000)
+
       const response = await serviceRequest<HotelDetailApiResponseData>({
         axiosOptions: {
           signal,
           url: 'api/hotel/rooms',
           method: 'post',
           data: {
-            sessionToken: searchParams.sessionToken,
-            searchToken: searchParams.searchToken,
             appName: process.env.NEXT_PUBLIC_APP_NAME,
-            slug: searchParams.hotelSlug,
             scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            sessionToken: searchPanel?.sessionToken,
+            searchToken: searchPanel?.searchToken,
+            slug: searchParams.hotelSlug,
             productKey: hotelDetailQuery.data?.data?.productKey,
-            isSearch: false,
-            checkInDate: searchPanel?.checkInDate,
-            checkOutDate: searchPanel?.checkOutDate,
+            checkInDate: searchParams.checkInDate,
+            checkOutDate: searchParams.checkOutDate,
             page: pageParam.page,
             size: 5,
           },
         },
       })
-
       if (!response?.data && roomRefetchCount.current >= 0) {
         await delayCodeExecution(1000)
         return null
       }
-
       return response
     },
     refetchInterval: (query) => {

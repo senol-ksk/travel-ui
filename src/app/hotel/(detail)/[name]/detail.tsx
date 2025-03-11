@@ -26,13 +26,13 @@ import { useRouter } from 'next/navigation'
 import { HotelDetailRoomItem } from '../../types'
 import { InstallmentTable } from './installment'
 import { FaExclamationCircle } from 'react-icons/fa'
-import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
+
 import dayjs from 'dayjs'
-import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
+import { RoomUpdateForm } from './_components/room-update-form'
 
 const HotelDetailSection = () => {
   const router = useRouter()
-  const [showCalendar, setShowCalendar] = useState(false)
+
   const {
     hotelDetailQuery,
     roomInstallmentQuery,
@@ -40,6 +40,7 @@ const HotelDetailSection = () => {
     selectedRoomMutation,
     searchParams,
   } = useHotelDataQuery()
+
   const [
     roomStateModalOpened,
     { open: openRoomStateModal, close: closeRoomStateModal },
@@ -57,12 +58,6 @@ const HotelDetailSection = () => {
 
   const hotelDetailData = hotelDetailQuery.data
   const hotelSearchPanel = hotelDetailData?.data?.searchPanel
-  const checkInDate = hotelSearchPanel
-    ? dayjs(hotelSearchPanel.checkInDate).toDate()
-    : dayjs().add(4, 'd').toDate()
-  const checkOutDate = hotelSearchPanel
-    ? dayjs(hotelSearchPanel.checkOutDate).toDate()
-    : dayjs().add(10, 'd').toDate()
 
   const hotelInfo = hotelDetailData?.data?.hotelDetailResponse?.hotelInfo
   const hotel = hotelInfo?.hotel
@@ -125,8 +120,8 @@ const HotelDetailSection = () => {
 
     const url = resParams('/reservation', {
       productKey,
-      searchToken: searchParams.searchToken,
-      sessionToken: searchParams.sessionToken,
+      searchToken: hotelDetailData?.data?.searchPanel.searchToken,
+      sessionToken: hotelDetailData?.data?.searchPanel.sessionToken,
     })
 
     router.push(url)
@@ -179,38 +174,15 @@ const HotelDetailSection = () => {
         </div>
       </Container>
       <Container>
-        <div className='grid gap-3'>
-          <Title order={2} size={'lg'}>
-            Odanızı Seçin
-          </Title>
-          <div className='grid grid-cols-3 gap-3'>
-            <div>
-              <HotelCalendar
-                showCalendar={showCalendar}
-                defaultDates={[checkInDate, checkOutDate]}
-              />
-            </div>
-            <div>
-              <HotelPassengerDropdown
-                initialValues={[
-                  {
-                    adult: 2,
-                    child: 0,
-                    childAges: [],
-                  },
-                ]}
-              />
-            </div>
-            <div className='col-span-1'>
-              <Button
-                className='h-full'
-                type='button'
-                onClick={() => setShowCalendar((prev) => !prev)}
-              >
-                Değiştir
-              </Button>
-            </div>
+        <Title fz={'h2'}>{hotel.name.trim()}</Title>
+        <div className='grid gap-5 pt-4'>
+          <div>
+            <Title order={2} size={'lg'} pb={rem(12)}>
+              Odanızı Seçin
+            </Title>
+            <RoomUpdateForm />
           </div>
+
           <div className='relative grid gap-3 @lg:gap-5'>
             {(roomsQuery.isLoading ||
               roomsQuery.data?.pages.at(0) === null) && (

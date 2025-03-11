@@ -32,7 +32,7 @@ const HotelCalendar: React.FC<Props> = ({
     defaultDates[1],
   ])
 
-  const [formatedValues, setFormatedValues] = useState<
+  const [formattedValues, setFormattedValues] = useState<
     [string | null, string | null]
   >([
     rangeValue[0] ? dayjs(rangeValue[0]).format(defaultFormat) : 'Giriş Tarihi',
@@ -48,13 +48,19 @@ const HotelCalendar: React.FC<Props> = ({
   })
 
   const handleDateSelections = (dates: DatesRangeValue) => {
-    setRangeValue(dates)
+    const isDatesValid =
+      dates.filter((date) => dayjs(date).isValid()).length > 1
 
-    onDateSelect(dates)
-    setFormatedValues([
+    setFormattedValues([
       dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Giriş Tarihi',
       dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Çıkış Tarihi',
     ])
+
+    if (isDatesValid) {
+      setRangeValue(dates)
+
+      onDateSelect(dates)
+    }
   }
   useEffect(() => {
     setContainerTransitionState(showCalendar)
@@ -105,7 +111,7 @@ const HotelCalendar: React.FC<Props> = ({
                         }
                       )}
                     >
-                      {formatedValues[0]}
+                      {formattedValues[0]}
                     </div>
                     <div>
                       <MdOutlineArrowForward size={20} />
@@ -120,7 +126,7 @@ const HotelCalendar: React.FC<Props> = ({
                         }
                       )}
                     >
-                      {formatedValues[1]}
+                      {formattedValues[1]}
                     </div>
                   </div>
                 </div>
