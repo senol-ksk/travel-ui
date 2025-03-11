@@ -13,7 +13,9 @@ import {
   rem,
   ScrollArea,
   Skeleton,
+  Spoiler,
   Title,
+  TypographyStylesProvider,
 } from '@mantine/core'
 import { useHotelDataQuery } from '../detailDataQuery'
 import { HotelDetailSkeleton } from './skeletonLoader'
@@ -29,6 +31,8 @@ import { FaExclamationCircle } from 'react-icons/fa'
 
 import dayjs from 'dayjs'
 import { RoomUpdateForm } from './_components/room-update-form'
+import { LuMapPinned } from 'react-icons/lu'
+import { MdOutlineRoomService } from 'react-icons/md'
 
 const HotelDetailSection = () => {
   const router = useRouter()
@@ -173,97 +177,131 @@ const HotelDetailSection = () => {
           ))}
         </div>
       </Container>
-      <Container>
-        <Title fz={'h2'}>{hotel.name.trim()}</Title>
-        <div className='grid gap-5 pt-4'>
-          <div>
-            <Title order={2} size={'lg'} pb={rem(12)}>
-              Odanızı Seçin
+      <Container className='grid gap-5'>
+        <div>
+          <Title fz={'h2'}>{hotel.name.trim()}</Title>
+          <div className='grid grid-cols-5 gap-4 pt-3 text-sm'>
+            <div className='flex gap-1'>
+              <span>
+                <LuMapPinned size={22} />
+              </span>
+              <span className='font-semibold'>{hotel.destination}</span>
+            </div>
+            {hotel.meal_type && (
+              <div className='flex gap-1'>
+                <span>
+                  <MdOutlineRoomService size={22} />
+                </span>
+                <span className='font-semibold'>{hotel.meal_type}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        {hotel.descriptions.hotelInformation.trim() && (
+          <div className='pb-5'>
+            <Title order={3} fz={'h5'}>
+              Genel Bilgiler
             </Title>
-            <RoomUpdateForm />
-          </div>
-
-          <div className='relative grid gap-3 @lg:gap-5'>
-            {(roomsQuery.isLoading ||
-              roomsQuery.data?.pages.at(0) === null) && (
-              <div>
-                <div className='text-center text-gray-500'>
-                  Odalar yükleniyor
-                </div>
-                <div className='flex gap-2 rounded border p-2'>
-                  <Skeleton h={120} radius={'md'} />
-                  <Skeleton h={120} radius={'md'} />
-                  <Skeleton h={120} radius={'md'} />
-                </div>
-              </div>
-            )}
-            {roomsQuery?.data?.pages.length === 0 && (
-              <div>
-                <Alert color='red' title='Oda Sonuçları Bulunamadı'>
-                  Oda kalmamış veya bir hata oldu. Tekrar deneyiniz.
-                </Alert>
-              </div>
-            )}
-            {roomsQuery.data?.pages.map((page) => {
-              const roomDetails = page?.data?.hotelDetailResponse?.roomDetails
-              const roomGroups = page?.data?.hotelDetailResponse?.items
-
-              if (!roomDetails || !roomGroups?.length) {
-                return null
-              }
-
-              return roomGroups?.map((roomGroup) => {
-                return (
-                  <div key={roomGroup.key}>
-                    <HotelRoom
-                      roomGroup={roomGroup}
-                      roomDetails={roomDetails}
-                      onSelect={(selectedRoomGroup) => {
-                        handleRoomSelect({
-                          productKey: roomGroup.key,
-                          cancelWarranty: selectedRoomGroup.useCancelWarranty,
-                        })
-                      }}
-                      onInstallmentClick={(selectedRoomGroup) => {
-                        console.log(selectedRoomGroup)
-                        handleInstallment(selectedRoomGroup)
-                      }}
-                    />
-                  </div>
-                )
-              })
-            })}
-            {roomsQuery.hasNextPage && (
-              <div className='flex justify-center'>
-                <Button
-                  type='button'
-                  loading={roomsQuery.isFetchingNextPage}
-                  onClick={() => {
-                    roomsQuery.fetchNextPage()
+            <TypographyStylesProvider>
+              <Spoiler
+                maxHeight={150}
+                hideLabel='Kapat'
+                showLabel='Daha Fazla Göster'
+              >
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: hotel.descriptions.hotelInformation.trim(),
                   }}
-                >
-                  Daha Fazla Oda Göster
-                </Button>
-              </div>
-            )}
-            <LoadingOverlay
-              visible={roomStateLoadingOverlayVisible}
-              zIndex={1000}
-              overlayProps={{ radius: 'sm', blur: 2 }}
-            />
+                />
+              </Spoiler>
+            </TypographyStylesProvider>
           </div>
-          <div>
-            <Title order={5}>İletişim Bilgileri</Title>
-            <address>
-              {hotel.address}
-              <div>
-                <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
+        )}
+
+        <div>
+          <Title order={2} size={'lg'} pb={rem(12)}>
+            Odanızı Seçin
+          </Title>
+          <RoomUpdateForm />
+        </div>
+
+        <div className='relative grid gap-3 @lg:gap-5'>
+          {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
+            <div>
+              <div className='text-center text-gray-500'>Odalar yükleniyor</div>
+              <div className='flex gap-2 rounded border p-2'>
+                <Skeleton h={120} radius={'md'} />
+                <Skeleton h={120} radius={'md'} />
+                <Skeleton h={120} radius={'md'} />
               </div>
-              <div>
-                <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
-              </div>
-            </address>
-          </div>
+            </div>
+          )}
+          {roomsQuery?.data?.pages.length === 0 && (
+            <div>
+              <Alert color='red' title='Oda Sonuçları Bulunamadı'>
+                Oda kalmamış veya bir hata oldu. Tekrar deneyiniz.
+              </Alert>
+            </div>
+          )}
+          {roomsQuery.data?.pages.map((page) => {
+            const roomDetails = page?.data?.hotelDetailResponse?.roomDetails
+            const roomGroups = page?.data?.hotelDetailResponse?.items
+
+            if (!roomDetails || !roomGroups?.length) {
+              return null
+            }
+
+            return roomGroups?.map((roomGroup) => {
+              return (
+                <div key={roomGroup.key}>
+                  <HotelRoom
+                    roomGroup={roomGroup}
+                    roomDetails={roomDetails}
+                    onSelect={(selectedRoomGroup) => {
+                      handleRoomSelect({
+                        productKey: roomGroup.key,
+                        cancelWarranty: selectedRoomGroup.useCancelWarranty,
+                      })
+                    }}
+                    onInstallmentClick={(selectedRoomGroup) => {
+                      console.log(selectedRoomGroup)
+                      handleInstallment(selectedRoomGroup)
+                    }}
+                  />
+                </div>
+              )
+            })
+          })}
+          {roomsQuery.hasNextPage && (
+            <div className='flex justify-center'>
+              <Button
+                type='button'
+                loading={roomsQuery.isFetchingNextPage}
+                onClick={() => {
+                  roomsQuery.fetchNextPage()
+                }}
+              >
+                Daha Fazla Oda Göster
+              </Button>
+            </div>
+          )}
+          <LoadingOverlay
+            visible={roomStateLoadingOverlayVisible}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+          />
+        </div>
+        <div>
+          <Title order={5}>İletişim Bilgileri</Title>
+          <address>
+            {hotel.address}
+            <div>
+              <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
+            </div>
+            <div>
+              <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
+            </div>
+          </address>
         </div>
       </Container>
       <Modal

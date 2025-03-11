@@ -17,6 +17,8 @@ import { useQueryStates } from 'nuqs'
 import { useState } from 'react'
 import { useDisclosure, useMounted } from '@mantine/hooks'
 
+import { HotelSearchEngine } from '@/modules/hotel'
+
 import {
   hotelFilterSearchParams,
   HotelSortOrderEnums,
@@ -51,6 +53,11 @@ const HotelSearchResults: React.FC = () => {
 
   return (
     <>
+      <div className='border-b py-4'>
+        <Container>
+          <HotelSearchEngine />
+        </Container>
+      </div>
       {(hotelSearchRequestQuery.isLoading || searchParamsQuery.isLoading) && (
         <div className='relative'>
           <div className='absolute start-0 end-0'>
