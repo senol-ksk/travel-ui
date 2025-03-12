@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { createSerializer, useQueryStates } from 'nuqs'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
+  Alert,
   Button,
   Checkbox,
   Container,
@@ -25,6 +26,15 @@ import { formatCurrency } from '@/libs/util'
 
 import { reservationParsers } from '@/app/reservation/searchParams'
 import clsx from 'clsx'
+import { FaCheckCircle } from 'react-icons/fa'
+import { FuelTypes } from '@/modules/carrent/types'
+import {
+  MdAirlineSeatReclineNormal,
+  MdElectricalServices,
+} from 'react-icons/md'
+import { BsFuelPump } from 'react-icons/bs'
+import { TbManualGearboxFilled } from 'react-icons/tb'
+import dayjs from 'dayjs'
 
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
@@ -117,21 +127,99 @@ export const DetailClient = () => {
 
   return (
     <div className='xs:grid-cols-6 grid gap-5'>
-      <div className='col-span-4'>
+      <div className='col-span-4 grid gap-4'>
+        <div>
+          <Alert
+            color='green'
+            radius={'md'}
+            icon={<FaCheckCircle size={70} />}
+            classNames={{
+              root: 'border border-green-200',
+            }}
+          >
+            <div className='md:text-md font-semibold text-green-800'>
+              Teslim almadan 24 saat öncesine kadar ÜCRETSİZ iptal
+            </div>
+          </Alert>
+        </div>
         <div className='grid grid-cols-5'>
-          <div className='col-span-1'>
+          <div className='col-span-2'>
             <Image
               src={detailItem.carDetail.imageUrl}
               alt={detailItem.carDetail.name}
             />
           </div>
-          <div className='col-span-4'>
+          <div className='col-span-3'>
             <Title fz={'h3'}>
               {detailItem.carDetail.name}{' '}
               <small className='text-gray-700'>
                 - {detailItem.carDetail.category}
               </small>
             </Title>
+            <div className='grid grid-cols-2 gap-2 pt-3 text-sm'>
+              <div className='flex items-center gap-2'>
+                <div>
+                  {detailItem.carDetail.fuelType ===
+                  FuelTypes['Elektirikli'] ? (
+                    <MdElectricalServices />
+                  ) : (
+                    <BsFuelPump />
+                  )}
+                </div>
+                <div>{FuelTypes[detailItem.carDetail.fuelType]}</div>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div>
+                  <TbManualGearboxFilled />
+                </div>
+                <div>
+                  {detailItem.carDetail.automaticTransmission
+                    ? 'Otomatik Vites'
+                    : 'Düz Vites'}
+                </div>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div>
+                  <MdAirlineSeatReclineNormal />
+                </div>
+                <div>{detailItem.carDetail.seatCount}</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <Image
+              src={detailItem.carDetail.vendorUrl}
+              alt={detailItem.carDetail.vendorName}
+            />
+          </div>
+        </div>
+        <div className='grid gap-3 md:grid-cols-2'>
+          <div>
+            <Title order={6} fz={'h5'}>
+              Teslim Alış
+            </Title>
+            <div className='font-semibold'>
+              {dayjs
+                .utc(detailItem.carDetail.pickupDate)
+                .format('DD MMMM YYYY, HH:mm')}
+            </div>
+            <div className='text-sm'>
+              {carDetailQuery.data?.pickupStation.address.addressName}
+            </div>
+          </div>
+
+          <div>
+            <Title order={6} fz={'h5'}>
+              Teslim ediş
+            </Title>
+            <div className='font-semibold'>
+              {dayjs
+                .utc(detailItem.carDetail.returnDate)
+                .format('DD MMMM YYYY, HH:mm')}
+            </div>
+            <div className='text-sm'>
+              {carDetailQuery.data?.returnStation.address.addressName}
+            </div>
           </div>
         </div>
         {extraOptions && extraOptions?.length > 0 && (
