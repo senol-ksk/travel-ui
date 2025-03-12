@@ -31,7 +31,7 @@ export const useSearchResultParams = () => {
       hotelSearchRequestQuery.fetchNextPage()
       searchQueryStatus.current = 'ended'
     },
-    20000
+    30000
   )
 
   const searchParamsQuery = useQuery({
@@ -139,6 +139,9 @@ export const useSearchResultParams = () => {
     searchQueryStatus.current = 'loading'
     startRequestTimeout()
     hotelSocket.connect()
+    hotelSocket.emit('Auth', {
+      searchtoken: searchRequestParams?.searchToken,
+    })
   }
 
   if (
@@ -156,17 +159,8 @@ export const useSearchResultParams = () => {
     hotelSocket.disconnect()
   }
 
-  const socketOnConnect = () => {
-    if (searchParamsQuery.data?.hotelSearchApiRequest.searchToken) {
-      hotelSocket.emit('Auth', {
-        searchtoken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-      })
-    }
-    hotelSocket.once('AvailabilityStatus', socketOnAvailability)
-  }
-
   useEffect(() => {
-    hotelSocket.once('connect', socketOnConnect)
+    hotelSocket.once('AvailabilityStatus', socketOnAvailability)
 
     return () => {
       hotelSocket.disconnect()

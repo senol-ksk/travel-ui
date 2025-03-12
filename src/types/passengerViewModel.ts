@@ -31,6 +31,16 @@ export enum PassengerTypesIndexEnum {
   Soldier,
 }
 
+export interface CouponDiscountListType {
+  index: number
+  discountPrice: ServicePriceType
+  discountInfo: {
+    index: number
+    type: number
+  }
+  isPartial: boolean
+}
+
 export interface ChildNode {
   id: null | ID
   orderId: ID
@@ -485,6 +495,11 @@ export interface PassengerChildNodeItemValue {
   webUserId: ID
 }
 
+export enum FlightPassengerTypes {
+  Adult,
+  Child,
+  Infant,
+}
 export interface FlightReservationSummary {
   flightList: {
     flightFareInfo: {
@@ -625,7 +640,7 @@ export interface FlightReservationSummary {
       passengers: {
         key: string
         name: null
-        passengerType: number
+        passengerType: FlightPassengerTypes
         age: number
         birthday: string
         gender: number
@@ -668,17 +683,7 @@ export interface FlightReservationSummary {
   totalPrice: number
   priceCurrency: string
   loyaltyMultiple: number
-  couponDiscountList:
-    | null
-    | {
-        index: number
-        discountPrice: ServicePriceType
-        discountInfo: {
-          index: number
-          type: number
-        }
-        isPartial: boolean
-      }[]
+  couponDiscountList: null | CouponDiscountListType[]
   extraCharges: null
   financellDiscount: ServicePriceType
 }
@@ -1001,7 +1006,7 @@ export interface HotelSummaryResponse {
       passengers: {
         key: string
         name: null
-        passengerType: number
+        passengerType: HotelGenderEnums
         age: number
         birthday: string
         gender: number
@@ -1018,9 +1023,14 @@ export interface HotelSummaryResponse {
   totalPrice: number
   priceCurrency: string
   loyaltyMultiple: number
-  couponDiscountList: null
+  couponDiscountList: null | CouponDiscountListType[]
   extraCharges: null
   financellDiscount: ServicePriceType
+}
+
+export enum HotelGenderEnums {
+  Adult,
+  Infant,
 }
 
 export interface HotelSummaryRoomDetail {

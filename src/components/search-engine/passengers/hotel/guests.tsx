@@ -4,12 +4,11 @@ import { ActionIcon, Button, NativeSelect, Select, Title } from '@mantine/core'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { range } from '@mantine/hooks'
 import { FaPlus } from 'react-icons/fa6'
-
-import type { HotelRoomOptionTypes } from '@/components/search-engine/passengers/hotel'
+import { HotelRoomOptionTypes } from '@/modules/hotel/searchParams'
 
 type Props = {
-  onChange?: (params: HotelRoomOptionTypes) => void
-  initialValues: HotelRoomOptionTypes
+  onChange?: (params: HotelRoomOptionTypes[]) => void
+  initialValues: HotelRoomOptionTypes[]
 }
 
 type HandleChildAgesParam = {
@@ -23,7 +22,7 @@ const HotelGuestsActions: React.FC<Props> = ({
   onChange = () => null,
 }) => {
   const [roomState, setRoomState] =
-    useState<HotelRoomOptionTypes>(initialValues)
+    useState<HotelRoomOptionTypes[]>(initialValues)
 
   function handleChildAges({
     ageIndex,
@@ -43,13 +42,13 @@ const HotelGuestsActions: React.FC<Props> = ({
     type,
   }: {
     index: number
-    room: HotelRoomOptionTypes[0]
+    room: HotelRoomOptionTypes
     action: number
     type: 'adult' | 'child'
   }) {
     const nextRoomState = roomState
 
-    const currentRoom: HotelRoomOptionTypes[0] = {
+    const currentRoom: HotelRoomOptionTypes = {
       ...room,
       [type]: roomState[index][type] + action,
     }

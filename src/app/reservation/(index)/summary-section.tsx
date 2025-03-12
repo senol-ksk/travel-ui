@@ -6,17 +6,14 @@ import { LoadingOverlay, Skeleton } from '@mantine/core'
 import { CheckoutCard } from '@/components/card'
 
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
-import {
-  FlightReservationSummary,
-  ProductPassengerApiResponseModel,
-} from '@/types/passengerViewModel'
+import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
 
 import { FlightSummary } from '@/app/reservation/components/flight/summary'
 import { HotelSummarySection } from '@/app/reservation/components/hotel/summary'
 import { CarReservationSummary } from '@/app/reservation/components/car/summary'
 import { BusSummarySection } from '@/app/reservation/components/bus/summary'
-import { TransferSummary } from '../components/transfer/summary'
-import { TourSummary } from '../components/tour/summary'
+import { TransferSummary } from '@/app/reservation/components/transfer/summary'
+import { TourSummary } from '@/app/reservation/components/tour/summary'
 
 const ReservationSummarySection = () => {
   const { checkoutDataQuery } = useCheckoutMethods()
@@ -24,6 +21,7 @@ const ReservationSummarySection = () => {
     () => checkoutDataQuery.data?.data,
     [checkoutDataQuery.data?.data]
   )
+
   const moduleName = useMemo(
     () => checkoutDataMemo?.viewBag.ModuleName,
     [checkoutDataMemo?.viewBag.ModuleName]
@@ -41,67 +39,65 @@ const ReservationSummarySection = () => {
   }
 
   return (
-    <CheckoutCard>
-      <div className='relative'>
-        <LoadingOverlay visible={checkoutDataQuery.isRefetching} />
-        {(() => {
-          switch (moduleName?.toLowerCase()) {
-            case 'flight':
-              return (
-                <FlightSummary
-                  data={
-                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
-                  }
-                />
-              )
-              break
-            case 'hotel':
-              return (
-                <HotelSummarySection
-                  data={
-                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
-                  }
-                />
-              )
-            case 'carrental':
-              return (
-                <CarReservationSummary
-                  data={
-                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
-                  }
-                />
-              )
-            case 'bus':
-              return (
-                <BusSummarySection
-                  data={
-                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
-                  }
-                />
-              )
-            case 'transfer':
-              return (
-                <TransferSummary
-                  data={
-                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
-                  }
-                />
-              )
-            case 'tour':
-              return (
-                <TourSummary
-                  data={
-                    checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
-                  }
-                />
-              )
-            default:
-              return <div>No summary section</div>
-              break
-          }
-        })()}
-      </div>
-    </CheckoutCard>
+    <div className='relative'>
+      <LoadingOverlay visible={checkoutDataQuery.isRefetching} />
+      {(() => {
+        switch (moduleName?.toLowerCase()) {
+          case 'flight':
+            return (
+              <FlightSummary
+                data={
+                  checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                }
+              />
+            )
+            break
+          case 'hotel':
+            return (
+              <HotelSummarySection
+                data={
+                  checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                }
+              />
+            )
+          case 'carrental':
+            return (
+              <CarReservationSummary
+                data={
+                  checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                }
+              />
+            )
+          case 'bus':
+            return (
+              <BusSummarySection
+                data={
+                  checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                }
+              />
+            )
+          case 'transfer':
+            return (
+              <TransferSummary
+                data={
+                  checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                }
+              />
+            )
+          case 'tour':
+            return (
+              <TourSummary
+                data={
+                  checkoutDataMemo?.viewBag as ProductPassengerApiResponseModel['viewBag']
+                }
+              />
+            )
+          default:
+            return <div>No summary section</div>
+            break
+        }
+      })()}
+    </div>
   )
 }
 

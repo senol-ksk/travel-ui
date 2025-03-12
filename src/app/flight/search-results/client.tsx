@@ -1,5 +1,5 @@
 'use client'
-import { useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   useDisclosure,
   useMediaQuery,
@@ -23,6 +23,7 @@ import {
   Stack,
   Title,
   Transition,
+  UnstyledButton,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
@@ -42,6 +43,8 @@ import { formatCurrency } from '@/libs/util'
 import { filterParsers, SortOrderEnums } from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
+import dayjs from 'dayjs'
+import { Virtuoso } from 'react-virtuoso'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -55,24 +58,27 @@ const FlightSearchView = () => {
     submitFlightData,
     getAirlineByCodeList,
     getAirportsByCodeList,
+    searchParams,
   } = useSearchResultsQueries()
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
-  const [filterParams, setFilterParams] = useQueryStates(filterParsers)
+  const [{ order, ...filterParams }, setFilterParams] =
+    useQueryStates(filterParsers)
   const airlineDataObj = getAirlineByCodeList.data
 
   // list `filteredData` in the client, for other calculations, mutations...etc, use query data itself
   const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
-  const [selectedFlightItem, setSelectedFlightItem] =
-    useState<ClientDataType | null>(null)
+  const { departureDate, returnDate } = searchParams
+  const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
 
-  const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<
-    SelectedPackageStateProps[] | undefined | null
-  >()
+  const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
+    packages: SelectedPackageStateProps[] | undefined | null
+    flights: ClientDataType[]
+  } | null>()
   const [
     packageDrawerOpened,
     { open: openPackageDrawer, close: closePackageDrawer },
@@ -101,8 +107,15 @@ const FlightSearchView = () => {
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
     })) as SelectedPackageStateProps[]
-    setSelectedFlightItem(flight)
-    setSelectedFlightItemPackages(packages)
+    // setSelectedFlightItem(flight)
+
+    setSelectedFlightItemPackages((prevValues) => ({
+      packages,
+      flights:
+        prevValues?.flights.length && flight.fareInfo.groupId !== 0
+          ? [prevValues.flights[0], flight]
+          : [flight],
+    }))
 
     openPackageDrawer()
   }
@@ -122,7 +135,7 @@ const FlightSearchView = () => {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     }
 
-    if (tripKind && !isReturnFlightVisible) {
+    if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
       scrollIntoView()
       setIsReturnFlightVisible(true)
     } else {
@@ -130,6 +143,19 @@ const FlightSearchView = () => {
       selectedFlightKeys.current = []
     }
   }
+
+  const resetSelectedFlights = useCallback(() => {
+    setIsReturnFlightVisible(false)
+    setSelectedFlightItemPackages(null)
+    selectedFlightKeys.current = []
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      resetSelectedFlights()
+    }
+  }, [resetSelectedFlights, searchParams])
+
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmitting = submitFlightData.isPending
 
@@ -195,9 +221,23 @@ const FlightSearchView = () => {
                     </div>
                   ) : (
                     <>
-                      <Title order={2} fz={'h4'} mb={rem(20)}>
-                        Filtreler
-                      </Title>
+                      <div className='flex justify-between gap-2'>
+                        <Title order={2} fz={'h4'} mb={rem(20)}>
+                          Filtreler
+                        </Title>
+                        <div>
+                          <UnstyledButton
+                            className='font-semibold text-blue-500'
+                            fz='xs'
+                            hidden={!Object.values(filterParams).find(Boolean)}
+                            onClick={() => {
+                              setFilterParams(null)
+                            }}
+                          >
+                            Temizle
+                          </UnstyledButton>
+                        </div>
+                      </div>
                       <Accordion
                         defaultValue={['numOfStops', 'airlines']}
                         multiple
@@ -392,7 +432,7 @@ const FlightSearchView = () => {
                     label: 'hidden',
                   }}
                   label='Sırala'
-                  value={filterParams.order}
+                  value={order}
                   onChange={({ currentTarget: { value } }) => {
                     setFilterParams({
                       order: value as SortOrderEnums,
@@ -435,30 +475,45 @@ const FlightSearchView = () => {
                   <div>
                     <div className='pb-3'>
                       <div className='flex items-center gap-2 text-sm text-gray-600'>
-                        <div>
-                          {
-                            airlineDataObj
-                              ?.find(
-                                (airline) =>
-                                  airline.Code ===
-                                  selectedFlightItem?.segments[0]
-                                    .marketingAirline.code
-                              )
-                              ?.Value.find((val) => val.LangCode === 'tr_TR')
-                              ?.Value
-                          }
+                        <div className='flex gap-1'>
+                          <span>
+                            {
+                              airlineDataObj
+                                ?.find(
+                                  (airline) =>
+                                    airline.Code ===
+                                    selectedFlightItemPackages?.flights.at(0)
+                                      ?.segments[0].marketingAirline.code
+                                )
+                                ?.Value.find((val) => val.LangCode === 'tr_TR')
+                                ?.Value
+                            }
+                          </span>
+                          <span className='underline'>
+                            {dayjs(
+                              selectedFlightItemPackages?.flights
+                                .at(0)
+                                ?.segments.at(0)?.departureTime
+                            ).format('ddd DD, HH:mm')}
+                          </span>
                         </div>
                         <div>
                           <GoArrowRight />
                         </div>
-                        <div>{selectedFlightItem?.segments[0].origin.code}</div>
+                        <div>
+                          {
+                            selectedFlightItemPackages?.flights.at(0)
+                              ?.segments[0].origin.code
+                          }
+                        </div>
                         <div>
                           <IoAirplaneSharp />
                         </div>
                         <div>
                           {
-                            selectedFlightItem?.segments.at(-1)?.destination
-                              .code
+                            selectedFlightItemPackages?.flights
+                              .at(0)
+                              ?.segments.at(-1)?.destination.code
                           }
                         </div>
                       </div>
@@ -468,9 +523,7 @@ const FlightSearchView = () => {
                           color='blue'
                           size='compact-xs'
                           type='button'
-                          onClick={() => {
-                            setIsReturnFlightVisible(false)
-                          }}
+                          onClick={resetSelectedFlights}
                         >
                           Uçuşu değiştir
                         </Button>
@@ -485,15 +538,12 @@ const FlightSearchView = () => {
                 )
               ) : null
             ) : null}
-            <div
-              className='grid gap-3 pt-3 md:gap-5'
-              style={{
-                contentVisibility: 'auto',
-              }}
-            >
+            <div className='grid gap-3 pt-3 md:gap-5'>
               {!searchResultsQuery.isFetchingNextPage &&
+                isDomestic &&
                 filteredData?.filter((item) => {
                   const groupId = isReturnFlightVisible ? 1 : 0
+
                   return item.fareInfo.groupId === groupId
                 })?.length === 0 && (
                   <Alert color='red'>
@@ -512,41 +562,95 @@ const FlightSearchView = () => {
                   </Alert>
                 )}
 
-              {isDomestic
-                ? filteredData
-                    ?.filter((item) => {
-                      const groupId = isReturnFlightVisible ? 1 : 0
-                      return item.fareInfo.groupId === groupId
-                    })
-                    ?.map((result) => {
-                      const segmentAirlines = result.segments.map((item) =>
-                        item.marketingAirline.code ===
-                        item.operatingAirline.code
-                          ? item.marketingAirline.code
-                          : item.operatingAirline.code
-                      )
+              {!searchResultsQuery.isFetchingNextPage &&
+                !isDomestic &&
+                filteredData?.length === 0 && (
+                  <Alert color='red'>
+                    <div className='text-center text-lg'>
+                      Üzgünüz, filtre seçimlerinize uygun bir uçuş bulunmuyor.
+                    </div>
+                    <div className='flex justify-center pt-3'>
+                      <Button
+                        onClick={() => {
+                          setFilterParams(null)
+                        }}
+                      >
+                        Tüm Sonuçları göster
+                      </Button>
+                    </div>
+                  </Alert>
+                )}
 
-                      const airlineValues: AirlineCode[] | undefined =
-                        airlineDataObj?.filter((airlineObj) =>
-                          segmentAirlines.find(
-                            (segment) => segment === airlineObj.Code
-                          )
-                        )
+              {isDomestic &&
+                !searchResultsQuery.isFetchingNextPage &&
+                filteredData &&
+                filteredData?.filter((item) => {
+                  const groupId = isReturnFlightVisible ? 1 : 0
+                  return item.fareInfo.groupId === groupId
+                })?.length > 0 &&
+                filteredData?.filter((item) => {
+                  const groupId = isReturnFlightVisible ? 1 : 0
+
+                  if (groupId === 1 && isSameDay) {
+                    const selectedFlightArrivalTime = dayjs(
+                      selectedFlightItemPackages?.flights.at(0)?.segments.at(-1)
+                        ?.arrivalTime
+                    )
+
+                    return (
+                      dayjs(item.segments.at(0)?.departureTime).diff(
+                        selectedFlightArrivalTime,
+                        'hour'
+                      ) > 1
+                    )
+                  }
+                  return true
+                }).length === 0 && (
+                  <Alert>
+                    <div>
+                      Seçilen uçuş saatleri uygun değil. Gidiş uçuşunuzu
+                      değiştirin.
+                    </div>
+                    <div className='pt-2'>
+                      <Button type='button' onClick={resetSelectedFlights}>
+                        Gidiş değiştir
+                      </Button>
+                    </div>
+                  </Alert>
+                )}
+
+              {isDomestic ? (
+                filteredData
+                  ?.filter((item) => {
+                    const groupId = isReturnFlightVisible ? 1 : 0
+                    return item.fareInfo.groupId === groupId
+                  })
+                  ?.filter((item) => {
+                    const groupId = isReturnFlightVisible ? 1 : 0
+                    const { departureDate, returnDate } = searchParams
+                    const isSameDay = dayjs(departureDate).isSame(
+                      returnDate,
+                      'd'
+                    )
+
+                    if (groupId === 1 && isSameDay) {
+                      const selectedFlightArrivalTime = dayjs(
+                        selectedFlightItemPackages?.flights
+                          .at(0)
+                          ?.segments.at(-1)?.arrivalTime
+                      )
 
                       return (
-                        <MemoizedFlightSearchResultsDomestic
-                          airlineValues={airlineValues}
-                          detailSegments={result.segments}
-                          details={result.details}
-                          fareInfo={result.fareInfo}
-                          onSelect={() => {
-                            handleFlightSelect(result)
-                          }}
-                          key={result.fareInfo.key}
-                        />
+                        dayjs(item.segments.at(0)?.departureTime).diff(
+                          selectedFlightArrivalTime,
+                          'hour'
+                        ) > 1
                       )
-                    })
-                : filteredData?.map((result) => {
+                    }
+
+                    return true
+                  })
+                  ?.map((result) => {
                     const segmentAirlines = result.segments.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code
                         ? item.marketingAirline.code
@@ -561,18 +665,52 @@ const FlightSearchView = () => {
                       )
 
                     return (
-                      <MemoizedFlightSearchResultsInternational
+                      <MemoizedFlightSearchResultsDomestic
                         airlineValues={airlineValues}
-                        key={result.fareInfo.key}
                         detailSegments={result.segments}
                         details={result.details}
                         fareInfo={result.fareInfo}
                         onSelect={() => {
                           handleFlightSelect(result)
                         }}
+                        key={result.fareInfo.key}
                       />
                     )
-                  })}
+                  })
+              ) : (
+                <Virtuoso
+                  useWindowScroll
+                  data={filteredData}
+                  totalCount={filteredData?.length}
+                  itemContent={(_, result) => {
+                    const segmentAirlines = result.segments.map((item) =>
+                      item.marketingAirline.code === item.operatingAirline.code
+                        ? item.marketingAirline.code
+                        : item.operatingAirline.code
+                    )
+                    const airlineValues: AirlineCode[] | undefined =
+                      airlineDataObj?.filter((airlineObj) =>
+                        segmentAirlines.find(
+                          (segment) => segment === airlineObj.Code
+                        )
+                      )
+
+                    return (
+                      <div className='pb-3 md:pb-5'>
+                        <MemoizedFlightSearchResultsInternational
+                          airlineValues={airlineValues}
+                          detailSegments={result.segments}
+                          details={result.details}
+                          fareInfo={result.fareInfo}
+                          onSelect={() => {
+                            handleFlightSelect(result)
+                          }}
+                        />
+                      </div>
+                    )
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -581,26 +719,42 @@ const FlightSearchView = () => {
         opened={packageDrawerOpened}
         onClose={() => {
           closePackageDrawer()
-          setSelectedFlightItemPackages(null)
+          // setSelectedFlightItemPackages(null)
         }}
         position='bottom'
+        classNames={{
+          title: 'flex-1 text-center font-normal',
+        }}
         title={
-          <div>
+          <div className='flex gap-1'>
             <span className='font-semibold'>
               {
-                selectedFlightItemPackages?.at(0)?.flightDetailSegment.origin
-                  .code
+                airlineDataObj
+                  ?.find(
+                    (airline) =>
+                      airline.Code ==
+                      selectedFlightItemPackages?.flights.at(-1)?.segments.at(0)
+                        ?.marketingAirline.code
+                  )
+                  ?.Value.at(0)?.Value
               }
-            </span>{' '}
-            Fiyatlarini İnceleyin
+            </span>
+            <span className='font-semibold'>
+              {
+                selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
+                  ?.origin.code
+              }
+            </span>
+
+            <span>Fiyatlarını İnceleyin</span>
           </div>
         }
       >
         <Container>
           <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
             {selectedFlightItemPackages &&
-              selectedFlightItemPackages.length &&
-              selectedFlightItemPackages?.map((selectedPackage) => {
+              selectedFlightItemPackages.packages?.length &&
+              selectedFlightItemPackages.packages?.map((selectedPackage) => {
                 return (
                   <div
                     key={selectedPackage.flightFareInfo.key}

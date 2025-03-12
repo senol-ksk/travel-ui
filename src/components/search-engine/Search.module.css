@@ -1,7 +1,6 @@
 .list {
   position: relative;
-  margin-bottom: var(--mantine-spacing-md);
-  padding: 1rem 1rem 0.25rem;
+  padding: 1rem 1rem 0.5rem;
   border-bottom-width: 1px;
 }
 

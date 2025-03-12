@@ -1,3 +1,5 @@
+import { HotelRoomOptionTypes } from '@/modules/hotel/searchParams'
+
 export interface HotelSearchResultHotelInfo {
   id: ID
   name: string
@@ -406,8 +408,8 @@ export interface HotelDetailApiResponseData {
         max_free_child_age: number
         min_free_child_age: null
         images: {
-          category: number
-          tag: string
+          category: number | null
+          tag: string | null
           original: string
           large: null | string
           small: null | string
@@ -576,15 +578,7 @@ export interface HotelDetailApiResponseData {
     countryCode: string
     checkInDate: string
     checkOutDate: string
-    rooms: {
-      childAges: number[] | []
-      adult: number
-      child: number
-      infant: number
-      student: number
-      senior: number
-      military: number
-    }[]
+    rooms: HotelRoomOptionTypes[]
     domestic: boolean
     tags: null
     earlyBooking: boolean
@@ -753,10 +747,7 @@ export interface HotelDetailRoomStatusResponseData {
     }
     rooms: [
       {
-        passengerKeys: [
-          '7CA6183D959F0B1420BF54D9154B6C791DC7389D9CA2B11765F503394B6C4620',
-          'EA985217AAE1E91EC4119FEB24A4B7BD4FED32803E0F89EE2842B095015BE1C9',
-        ]
+        passengerKeys: string[]
         nightlyRates: [
           {
             totalPrice: {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
   Alert,
   AspectRatio,
@@ -10,9 +10,12 @@ import {
   Loader,
   LoadingOverlay,
   Modal,
+  rem,
   ScrollArea,
   Skeleton,
+  Spoiler,
   Title,
+  TypographyStylesProvider,
 } from '@mantine/core'
 import { useHotelDataQuery } from '../detailDataQuery'
 import { HotelDetailSkeleton } from './skeletonLoader'
@@ -26,15 +29,22 @@ import { HotelDetailRoomItem } from '../../types'
 import { InstallmentTable } from './installment'
 import { FaExclamationCircle } from 'react-icons/fa'
 
+import dayjs from 'dayjs'
+import { RoomUpdateForm } from './_components/room-update-form'
+import { LuMapPinned } from 'react-icons/lu'
+import { MdOutlineRoomService } from 'react-icons/md'
+
 const HotelDetailSection = () => {
   const router = useRouter()
+
   const {
     hotelDetailQuery,
     roomInstallmentQuery,
     roomsQuery,
-    selectedRoomMutaion,
+    selectedRoomMutation,
     searchParams,
   } = useHotelDataQuery()
+
   const [
     roomStateModalOpened,
     { open: openRoomStateModal, close: closeRoomStateModal },
@@ -51,6 +61,8 @@ const HotelDetailSection = () => {
   const selectedRoomPrice = useRef(0)
 
   const hotelDetailData = hotelDetailQuery.data
+  const hotelSearchPanel = hotelDetailData?.data?.searchPanel
+
   const hotelInfo = hotelDetailData?.data?.hotelDetailResponse?.hotelInfo
   const hotel = hotelInfo?.hotel
 
@@ -62,7 +74,7 @@ const HotelDetailSection = () => {
     cancelWarranty: boolean
   }) => {
     openRoomStateOverlayVisible()
-    const roomStatus = await selectedRoomMutaion.mutateAsync({
+    const roomStatus = await selectedRoomMutation.mutateAsync({
       productKey,
       cancelWarranty,
     })
@@ -112,8 +124,8 @@ const HotelDetailSection = () => {
 
     const url = resParams('/reservation', {
       productKey,
-      searchToken: searchParams.searchToken,
-      sessionToken: searchParams.sessionToken,
+      searchToken: hotelDetailData?.data?.searchPanel.searchToken,
+      sessionToken: hotelDetailData?.data?.searchPanel.sessionToken,
     })
 
     router.push(url)
@@ -126,115 +138,170 @@ const HotelDetailSection = () => {
   if (!hotel || !hotelDetailData?.success) {
     return <div>Error or Something happened bad</div>
   }
+
   return (
     <>
-      <Container>
-        <div className='@container grid gap-3 p-2 py-4 lg:gap-5'>
-          <Title size={'xl'}>{hotel.name}</Title>
-          {hotel?.documents && hotel?.documents?.length > 0 && (
-            <div className='text-sm'>
+      <Container className='px-0 pt-5 pb-5 sm:px-4 md:pt-8'>
+        {hotel?.documents && hotel?.documents?.length > 0 && (
+          <div className='pb-3 text-end text-xs text-gray-700/85'>
+            <span>
+              Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
+            </span>
+            <strong>{hotel.documents.at(0)?.no}</strong>
+          </div>
+        )}
+        <div className='grid auto-cols-fr gap-1 sm:grid-cols-4 md:grid-rows-2'>
+          <figure
+            style={{ contentVisibility: 'auto' }}
+            className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
+          >
+            <Image
+              className='aspect-16/9 h-full w-full object-cover'
+              src={hotel.images.at(0)?.original}
+              alt={hotel.name}
+            />
+          </figure>
+
+          {hotel.images.slice(1, 5).map((image, imageIndex) => (
+            <figure
+              key={imageIndex}
+              className='relative hidden gap-1 place-self-stretch sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
+              style={{ contentVisibility: 'auto' }}
+            >
+              <Image
+                src={image.original}
+                alt={hotel.name}
+                className='absolute aspect-16/9 h-full w-full object-cover'
+              />
+            </figure>
+          ))}
+        </div>
+      </Container>
+      <Container className='grid gap-5'>
+        <div>
+          <Title fz={'h2'}>{hotel.name.trim()}</Title>
+          <div className='grid grid-cols-5 gap-4 pt-3 text-sm'>
+            <div className='flex gap-1'>
               <span>
-                Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
+                <LuMapPinned size={22} />
               </span>
-              <strong>{hotel.documents.at(0)?.no}</strong>
+              <span className='font-semibold'>{hotel.destination}</span>
+            </div>
+            {hotel.meal_type && (
+              <div className='flex gap-1'>
+                <span>
+                  <MdOutlineRoomService size={22} />
+                </span>
+                <span className='font-semibold'>{hotel.meal_type}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        {hotel.descriptions.hotelInformation.trim() && (
+          <div className='pb-5'>
+            <Title order={3} fz={'h5'}>
+              Genel Bilgiler
+            </Title>
+            <TypographyStylesProvider>
+              <Spoiler
+                maxHeight={150}
+                hideLabel='Kapat'
+                showLabel='Daha Fazla Göster'
+              >
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: hotel.descriptions.hotelInformation.trim(),
+                  }}
+                />
+              </Spoiler>
+            </TypographyStylesProvider>
+          </div>
+        )}
+
+        <div>
+          <Title order={2} size={'lg'} pb={rem(12)}>
+            Odanızı Seçin
+          </Title>
+          <RoomUpdateForm />
+        </div>
+
+        <div className='relative grid gap-3 @lg:gap-5'>
+          {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
+            <div>
+              <div className='text-center text-gray-500'>Odalar yükleniyor</div>
+              <div className='flex gap-2 rounded border p-2'>
+                <Skeleton h={120} radius={'md'} />
+                <Skeleton h={120} radius={'md'} />
+                <Skeleton h={120} radius={'md'} />
+              </div>
             </div>
           )}
-          <div>
-            <AspectRatio ratio={1080 / 720} maw={300}>
-              <Image src={hotel.images.at(0)?.original} alt={hotel.name} />
-            </AspectRatio>
-          </div>
-          <div className='grid gap-3 @4xl:grid-cols-7'>
-            <div className='grid gap-3 @lg:gap-5 @4xl:col-span-5'>
-              <Title order={2} size={'lg'}>
-                Odanızı Seçin
-              </Title>
-              <div className='relative grid gap-3 @lg:gap-5'>
-                {(roomsQuery.isLoading ||
-                  roomsQuery.data?.pages.at(0) === null) && (
-                  <div>
-                    <div className='text-center text-gray-500'>
-                      Odalar yükleniyor
-                    </div>
-                    <div className='flex gap-2 rounded border p-2'>
-                      <Skeleton h={120} radius={'md'} />
-                      <Skeleton h={120} radius={'md'} />
-                      <Skeleton h={120} radius={'md'} />
-                    </div>
-                  </div>
-                )}
-                {roomsQuery?.data?.pages.length === 0 && (
-                  <div>
-                    <Alert color='red' title='Oda Sonçları Bulunamadı'>
-                      Oda kalmamış veya bir hata oldu. Tekrar deneyeniz.
-                    </Alert>
-                  </div>
-                )}
-                {roomsQuery.data?.pages.map((page) => {
-                  const roomDetails =
-                    page?.data?.hotelDetailResponse?.roomDetails
-                  const roomGroups = page?.data?.hotelDetailResponse?.items
-
-                  if (!roomDetails || !roomGroups?.length) {
-                    return null
-                  }
-
-                  return roomGroups?.map((roomGroup) => {
-                    return (
-                      <div key={roomGroup.key}>
-                        <HotelRoom
-                          roomGroup={roomGroup}
-                          roomDetails={roomDetails}
-                          onSelect={(selectedRoomGroup) => {
-                            handleRoomSelect({
-                              productKey: roomGroup.key,
-                              cancelWarranty:
-                                selectedRoomGroup.useCancelWarranty,
-                            })
-                          }}
-                          onInstallmentClick={(selectedRoomGroup) => {
-                            console.log(selectedRoomGroup)
-                            handleInstallment(selectedRoomGroup)
-                          }}
-                        />
-                      </div>
-                    )
-                  })
-                })}
-                {roomsQuery.hasNextPage && (
-                  <div className='flex justify-center'>
-                    <Button
-                      type='button'
-                      loading={roomsQuery.isFetchingNextPage}
-                      onClick={() => {
-                        roomsQuery.fetchNextPage()
-                      }}
-                    >
-                      Daha Fazla Oda Göster
-                    </Button>
-                  </div>
-                )}
-                <LoadingOverlay
-                  visible={roomStateLoadingOverlayVisible}
-                  zIndex={1000}
-                  overlayProps={{ radius: 'sm', blur: 2 }}
-                />
-              </div>
-              <div>
-                <Title order={5}>İletişim Bilgileri</Title>
-                <address>
-                  {hotel.address}
-                  <div>
-                    <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
-                  </div>
-                  <div>
-                    <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
-                  </div>
-                </address>
-              </div>
+          {roomsQuery?.data?.pages.length === 0 && (
+            <div>
+              <Alert color='red' title='Oda Sonuçları Bulunamadı'>
+                Oda kalmamış veya bir hata oldu. Tekrar deneyiniz.
+              </Alert>
             </div>
-            <div className='@4xl:col-span-2'>Side section</div>
-          </div>
+          )}
+          {roomsQuery.data?.pages.map((page) => {
+            const roomDetails = page?.data?.hotelDetailResponse?.roomDetails
+            const roomGroups = page?.data?.hotelDetailResponse?.items
+
+            if (!roomDetails || !roomGroups?.length) {
+              return null
+            }
+
+            return roomGroups?.map((roomGroup) => {
+              return (
+                <div key={roomGroup.key}>
+                  <HotelRoom
+                    roomGroup={roomGroup}
+                    roomDetails={roomDetails}
+                    onSelect={(selectedRoomGroup) => {
+                      handleRoomSelect({
+                        productKey: roomGroup.key,
+                        cancelWarranty: selectedRoomGroup.useCancelWarranty,
+                      })
+                    }}
+                    onInstallmentClick={(selectedRoomGroup) => {
+                      console.log(selectedRoomGroup)
+                      handleInstallment(selectedRoomGroup)
+                    }}
+                  />
+                </div>
+              )
+            })
+          })}
+          {roomsQuery.hasNextPage && (
+            <div className='flex justify-center'>
+              <Button
+                type='button'
+                loading={roomsQuery.isFetchingNextPage}
+                onClick={() => {
+                  roomsQuery.fetchNextPage()
+                }}
+              >
+                Daha Fazla Oda Göster
+              </Button>
+            </div>
+          )}
+          <LoadingOverlay
+            visible={roomStateLoadingOverlayVisible}
+            zIndex={1000}
+            overlayProps={{ radius: 'sm', blur: 2 }}
+          />
+        </div>
+        <div>
+          <Title order={5}>İletişim Bilgileri</Title>
+          <address>
+            {hotel.address}
+            <div>
+              <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
+            </div>
+            <div>
+              <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
+            </div>
+          </address>
         </div>
       </Container>
       <Modal
@@ -245,7 +312,7 @@ const HotelDetailSection = () => {
         centered
       >
         <div>
-          {!selectedRoomMutaion.data?.data && (
+          {!selectedRoomMutation.data?.data && (
             <div>
               <Alert
                 variant='light'
@@ -257,8 +324,8 @@ const HotelDetailSection = () => {
               </Alert>
             </div>
           )}
-          {selectedRoomMutaion.data?.data?.status.length &&
-            selectedRoomMutaion.data?.data?.status.map(
+          {selectedRoomMutation.data?.data?.status.length &&
+            selectedRoomMutation.data?.data?.status.map(
               (roomStatus, roomStatusIndex) => {
                 return (
                   <div key={roomStatusIndex}>
@@ -288,7 +355,7 @@ const HotelDetailSection = () => {
                             : 'iptal edilebilir.'}
                         </div>
                         <div>
-                          Yeni iptal politilası{' '}
+                          Yeni iptal politikası{' '}
                           <span className='font-semibold'>
                             {roomStatus.nonRefundable
                               ? 'iptal edilemez.'
@@ -302,13 +369,15 @@ const HotelDetailSection = () => {
               }
             )}
 
-          {selectedRoomMutaion.data?.data && (
+          {selectedRoomMutation.data?.data && (
             <div className='flex justify-end gap-2 pt-4'>
               <Button
                 color='green'
                 onClick={() =>
-                  selectedRoomMutaion.data?.data?.productKey &&
-                  handleReservation(selectedRoomMutaion?.data?.data?.productKey)
+                  selectedRoomMutation.data?.data?.productKey &&
+                  handleReservation(
+                    selectedRoomMutation?.data?.data?.productKey
+                  )
                 }
               >
                 Devam Et

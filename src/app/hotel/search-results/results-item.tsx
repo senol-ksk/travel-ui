@@ -12,7 +12,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { Link } from 'next-view-transitions'
-import { createSerializer } from 'nuqs'
+import { createSerializer, useQueryStates } from 'nuqs'
 import { FaRegCheckCircle } from 'react-icons/fa'
 import { GiKnifeFork } from 'react-icons/gi'
 
@@ -22,7 +22,10 @@ import {
   RoomDetailType,
 } from '@/app/hotel/types'
 import { formatCurrency } from '@/libs/util'
-import { hotelDetailSearchParams } from '@/modules/hotel/searchParams'
+import {
+  hotelDetailSearchParams,
+  hotelSearchParamParser,
+} from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from '@/app/hotel/search-results/useSearchQueries'
 
 type IProps = {
@@ -62,6 +65,8 @@ const HotelSearchResultItem: React.FC<IProps> = ({
     propertyName: hotelInfo?.name,
     hotelSlug: hotelInfo?.slug,
     type: searchParams.type,
+    checkInDate: searchParams.checkinDate,
+    checkOutDate: searchParams.checkoutDate,
   })
 
   return (

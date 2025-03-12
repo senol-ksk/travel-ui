@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
@@ -16,6 +16,7 @@ const maxDate = today.add(1, 'year')
 type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
+  showCalendar?: boolean
 }
 const defaultFormat = 'DD MMM ddd'
 
@@ -24,13 +25,14 @@ import { MdOutlineArrowForward } from 'react-icons/md'
 const HotelCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
   defaultDates,
+  showCalendar = false,
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
     defaultDates[0],
     defaultDates[1],
   ])
 
-  const [formatedValues, setFormatedValues] = useState<
+  const [formattedValues, setFormattedValues] = useState<
     [string | null, string | null]
   >([
     rangeValue[0] ? dayjs(rangeValue[0]).format(defaultFormat) : 'Giriş Tarihi',
@@ -40,19 +42,29 @@ const HotelCalendar: React.FC<Props> = ({
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
-  const clickOutsideRef = useClickOutside(() =>
+
+  const clickOutsideRef = useClickOutside(() => {
     setContainerTransitionState(false)
-  )
+  })
 
   const handleDateSelections = (dates: DatesRangeValue) => {
-    setRangeValue(dates)
+    const isDatesValid =
+      dates.filter((date) => dayjs(date).isValid()).length > 1
 
-    onDateSelect(dates)
-    setFormatedValues([
+    setFormattedValues([
       dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Giriş Tarihi',
       dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Çıkış Tarihi',
     ])
+
+    if (isDatesValid) {
+      setRangeValue(dates)
+
+      onDateSelect(dates)
+    }
   }
+  useEffect(() => {
+    setContainerTransitionState(showCalendar)
+  }, [showCalendar])
 
   return (
     <Provider>
@@ -99,7 +111,7 @@ const HotelCalendar: React.FC<Props> = ({
                         }
                       )}
                     >
-                      {formatedValues[0]}
+                      {formattedValues[0]}
                     </div>
                     <div>
                       <MdOutlineArrowForward size={20} />
@@ -114,7 +126,7 @@ const HotelCalendar: React.FC<Props> = ({
                         }
                       )}
                     >
-                      {formatedValues[1]}
+                      {formattedValues[1]}
                     </div>
                   </div>
                 </div>

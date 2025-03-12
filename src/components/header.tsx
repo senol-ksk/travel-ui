@@ -29,7 +29,7 @@ export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
   const toggleDrawer = () => setDrawerOpened((prev) => !prev)
   return (
-    <header className='border-b bg-white shadow-xs'>
+    <header className='border-b bg-white'>
       <Container>
         <div className='flex items-center py-4'>
           <Link href='/'>
