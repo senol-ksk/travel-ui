@@ -2,12 +2,11 @@
 
 import { useMemo, useState } from 'react'
 import { createSerializer, useQueryStates } from 'nuqs'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   Alert,
   Button,
   Checkbox,
-  Container,
   Group,
   Image,
   Skeleton,
@@ -38,6 +37,12 @@ import dayjs from 'dayjs'
 
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
+  const queryClient = useQueryClient()
+
+  const [extraOptions, setExtraOptions] = useState<CarExtraOption[]>()
+  const [insuranceOptions, setInsuranceOptions] =
+    useState<CarInsuranceOption[]>()
+
   const { searchToken, sessionToken } = params
   const router = useRouter()
 
@@ -50,25 +55,16 @@ export const DetailClient = () => {
           params,
         },
       })
-
-      if (response?.data?.detailResponse.items[0].carExtraOption.length) {
-        setExtraOptions(response?.data?.detailResponse.items[0].carExtraOption)
-      }
-      if (response?.data?.detailResponse.items[0].carInsurances.length) {
-        setInsuranceOptions(
-          response?.data?.detailResponse.items[0].carInsurances
-        )
-      }
       return response?.data
     },
   })
 
   const mutateReservation = useMutation({
     mutationFn: async () => {
-      const selectedExtraOptions = extraOptions
+      const selectedExtraOptions = detailItem?.carExtraOption
         ?.filter((item) => item.selected)
         .map((item) => item.code)
-      const selectedInsuranceOptions = insuranceOptions
+      const selectedInsuranceOptions = detailItem?.carInsurances
         ?.filter((item) => item.selected)
         .map((item) => item.code)
 
@@ -89,6 +85,10 @@ export const DetailClient = () => {
       return response
     },
     onSuccess(data) {
+      queryClient.invalidateQueries({
+        queryKey: ['checkout'],
+      })
+
       const resParams = createSerializer(reservationParsers)
 
       const url = resParams('/reservation', {
@@ -105,12 +105,58 @@ export const DetailClient = () => {
     [carDetailQuery.data]
   )
 
-  const [extraOptions, setExtraOptions] = useState<CarExtraOption[]>()
-  const [insuranceOptions, setInsuranceOptions] =
-    useState<CarInsuranceOption[]>()
+  const selectedExtraOptionPrice =
+    detailItem?.carExtraOption?.reduce((a, b) => {
+      const selectedPrice = b.selected ? b.totalPrice.value : 0
+      return a + selectedPrice
+    }, 0) ?? 0
+
+  const selectedInsurancePrice =
+    detailItem?.carInsurances?.reduce((a, b) => {
+      const selectedPrice = b.selected ? b.totalPrice.value : 0
+      return a + selectedPrice
+    }, 0) ?? 0
 
   function handleCarSelect() {
     mutateReservation.mutate()
+  }
+
+  const handleAdditionalOptionSelect = ({
+    data,
+    checked,
+    type,
+  }: {
+    data: CarInsuranceOption | CarExtraOption
+    checked: boolean
+    type: 'extra' | 'insurance'
+  }) => {
+    switch (type) {
+      case 'extra':
+        setExtraOptions(() => {
+          const nextValue = detailItem?.carExtraOption?.map((optionItem) => {
+            if (data.code === optionItem.code) {
+              optionItem.selected = checked
+            }
+            return optionItem
+          })
+
+          return nextValue
+        })
+        break
+
+      case 'insurance':
+        setInsuranceOptions(() => {
+          const nextValue = detailItem?.carInsurances?.map((optionItem) => {
+            if (data.code === optionItem.code) {
+              optionItem.selected = checked
+            }
+            return optionItem
+          })
+
+          return nextValue
+        })
+        break
+    }
   }
 
   if (!carDetailQuery.data && carDetailQuery.isLoading) {
@@ -222,30 +268,23 @@ export const DetailClient = () => {
             </div>
           </div>
         </div>
-        {extraOptions && extraOptions?.length > 0 && (
+        {detailItem && detailItem.carExtraOption?.length > 0 && (
           <div className='pt-5'>
             <Title order={5}>Ekstralar Ekleyin</Title>
             <div className='grid gap-3 pt-2 md:grid-cols-2'>
-              {extraOptions
+              {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
                 .filter((item) => item.isSelectable)
                 .map((extraOption) => (
                   <div key={extraOption.code}>
                     <Checkbox.Card
                       p={12}
-                      defaultChecked={
-                        extraOption.selected || extraOption.isFree
-                      }
+                      checked={extraOption.selected || extraOption.isFree}
                       disabled={extraOption.isFree}
                       onChange={(checked) => {
-                        setExtraOptions((prevOptions) => {
-                          const nextValue = prevOptions?.map((optionItem) => {
-                            if (extraOption.code === optionItem.code) {
-                              optionItem.selected = checked
-                            }
-                            return optionItem
-                          })
-
-                          return nextValue
+                        handleAdditionalOptionSelect({
+                          data: extraOption,
+                          checked,
+                          type: 'extra',
                         })
                       }}
                       className={clsx({
@@ -254,7 +293,7 @@ export const DetailClient = () => {
                     >
                       <Group>
                         <Checkbox.Indicator disabled={extraOption.isFree} />
-                        <div>
+                        <div className='flex-1 text-sm'>
                           <div>{extraOption.name}</div>
                           <div className='font-semibold text-blue-700'>
                             {formatCurrency(extraOption.totalPrice.value)}
@@ -267,30 +306,25 @@ export const DetailClient = () => {
             </div>
           </div>
         )}
-        {insuranceOptions && insuranceOptions?.length > 0 && (
+        {detailItem && detailItem.carInsurances.length > 0 && (
           <div className='pt-5'>
             <Title order={5}>Güvence Paketi Ekleyin</Title>
             <div className='grid gap-3 pt-2 md:grid-cols-2'>
-              {insuranceOptions
+              {detailItem.carInsurances
                 .filter((item) => item.isSelectable)
                 .map((insuranceOption) => (
                   <div key={insuranceOption.code}>
                     <Checkbox.Card
                       p={12}
-                      defaultChecked={
+                      checked={
                         insuranceOption.selected || insuranceOption.isFree
                       }
                       disabled={insuranceOption.isFree}
                       onChange={(checked) => {
-                        setInsuranceOptions((prevOptions) => {
-                          const nextValue = prevOptions?.map((optionItem) => {
-                            if (insuranceOption.code === optionItem.code) {
-                              optionItem.selected = checked
-                            }
-                            return optionItem
-                          })
-
-                          return nextValue
+                        handleAdditionalOptionSelect({
+                          data: insuranceOption,
+                          checked,
+                          type: 'insurance',
                         })
                       }}
                       className={clsx({
@@ -300,7 +334,7 @@ export const DetailClient = () => {
                     >
                       <Group>
                         <Checkbox.Indicator disabled={insuranceOption.isFree} />
-                        <div>
+                        <div className='flex-1 text-sm'>
                           <div>{insuranceOption.description}</div>
                           <div className='font-semibold text-blue-700'>
                             {formatCurrency(insuranceOption.totalPrice.value)}
@@ -324,7 +358,18 @@ export const DetailClient = () => {
           <div className='text-sm text-gray-600'>
             {formatCurrency(detailItem.basePrice.value)} / Günlük{' '}
           </div>
-          <div className='pt-4'>
+          {(selectedExtraOptionPrice || selectedInsurancePrice) > 0 && (
+            <div className='flex items-center justify-between rounded-md bg-blue-100 p-3 font-semibold'>
+              <div>Ofiste Ödenecek Tutar</div>
+              <div>
+                {formatCurrency(
+                  selectedExtraOptionPrice + selectedInsurancePrice
+                )}
+              </div>
+            </div>
+          )}
+
+          <div>
             <Button
               onClick={handleCarSelect}
               type='button'
