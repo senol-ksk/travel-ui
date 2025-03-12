@@ -1,9 +1,11 @@
-import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-import { CarSummaryResponse } from '../../types'
 import { Image, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+
+import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
+import { CarSummaryResponse } from '@/app/reservation/types'
 import { formatCurrency } from '@/libs/util'
+import { CheckoutCard } from '@/components/card'
 
 dayjs.extend(utc)
 
@@ -35,45 +37,47 @@ const CarReservationSummary: React.FC<IProps> = ({ data }) => {
     extraOptionsTotalPrice + insuranceOptionsTotalPrice
 
   return (
-    <div className='grid gap-3'>
-      <Title order={5}>
-        {carDetail.name} - <small>{carDetail.category}</small>
-      </Title>
-      <div className='my-2 flex h-[100px] items-center justify-center'>
-        <Image src={carDetail.imageUrl} alt={carDetail.name} h='100%' />
-      </div>
-      <div>
-        <div className='font-semibold'>Teslim Alış</div>
-        <div>
-          {dayjs(carDetail.pickupDate).utc().format('DD MMMM YYYY HH:mm')}
+    <CheckoutCard>
+      <div className='grid gap-3'>
+        <Title order={5}>
+          {carDetail.name} - <small>{carDetail.category}</small>
+        </Title>
+        <div className='my-2 flex h-[100px] items-center justify-center'>
+          <Image src={carDetail.imageUrl} alt={carDetail.name} h='100%' />
         </div>
-      </div>
-      <div>
-        <div className='font-semibold'>Teslim Ediş</div>
         <div>
-          {dayjs(carDetail.returnDate).utc().format('DD MMMM YYYY HH:mm')}
+          <div className='font-semibold'>Teslim Alış</div>
+          <div>
+            {dayjs(carDetail.pickupDate).utc().format('DD MMMM YYYY HH:mm')}
+          </div>
         </div>
-      </div>
-      <div className='flex gap-2 text-sm text-gray-600'>
-        <div className='font-semibold'>Günlük Kiralama Tutarı</div>
-        <div>{formatCurrency(responseFirstItem.basePrice.value)}</div>
-      </div>
-      <div className='rounded-sm bg-blue-50 p-2'>
-        <div className='font-semibold'>Kartınızdan Çekilecek Tutar</div>
-        <div>{formatCurrency(summaryResponse.totalPrice)}</div>
-      </div>
+        <div>
+          <div className='font-semibold'>Teslim Ediş</div>
+          <div>
+            {dayjs(carDetail.returnDate).utc().format('DD MMMM YYYY HH:mm')}
+          </div>
+        </div>
+        <div className='flex gap-2 text-sm text-gray-600'>
+          <div className='font-semibold'>Günlük Kiralama Tutarı</div>
+          <div>{formatCurrency(responseFirstItem.basePrice.value)}</div>
+        </div>
+        <div className='rounded-sm bg-blue-50 p-2'>
+          <div className='font-semibold'>Kartınızdan Çekilecek Tutar</div>
+          <div>{formatCurrency(summaryResponse.totalPrice)}</div>
+        </div>
 
-      <div className='rounded-sm bg-red-50 p-2'>
-        <div className='font-semibold'>Ofiste Ödenecek Tutar</div>
-        <div>{formatCurrency(payAtOfficeTotalPrice)}</div>
-      </div>
-      <div className='mt-1 flex items-center justify-between border-t pt-3'>
-        <div className='font-semibold'>Toplam Tutar</div>
-        <div className='text-lg font-semibold'>
-          {formatCurrency(summaryResponse.totalPrice + payAtOfficeTotalPrice)}
+        <div className='rounded-sm bg-red-50 p-2'>
+          <div className='font-semibold'>Ofiste Ödenecek Tutar</div>
+          <div>{formatCurrency(payAtOfficeTotalPrice)}</div>
+        </div>
+        <div className='mt-1 flex items-center justify-between border-t pt-3'>
+          <div className='font-semibold'>Toplam Tutar</div>
+          <div className='text-lg font-semibold'>
+            {formatCurrency(summaryResponse.totalPrice + payAtOfficeTotalPrice)}
+          </div>
         </div>
       </div>
-    </div>
+    </CheckoutCard>
   )
 }
 

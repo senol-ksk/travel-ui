@@ -51,7 +51,6 @@ const ReservationSummarySection = () => {
                 }
               />
             )
-            break
           case 'hotel':
             return (
               <HotelSummarySection
