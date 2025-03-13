@@ -244,6 +244,7 @@ const useSearchResultsQueries = () => {
           )
           const packageObject = {
             freeVolatileData: segments.at(0)?.freeVolatileData,
+            details,
             fareInfo,
           }
 
