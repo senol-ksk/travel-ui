@@ -27,7 +27,7 @@
     "@mantine/notifications": "^7.17.1",
     "@number-flow/react": "^0.5.7",
     "@tanstack/react-query": "^5.67.3",
-    "@vis.gl/react-google-maps": "^1.5.1",
+    "@vis.gl/react-google-maps": "^1.5.2",
     "axios": "^1.8.3",
     "card-validator": "^10.0.2",
     "cleave-zen": "^0.0.17",
@@ -44,13 +44,13 @@
     "react-icons": "^5.5.0",
     "react-virtuoso": "^4.12.5",
     "socket.io-client": "^4.8.1",
-    "tailwind-preset-mantine": "^2.0.3",
+    "tailwind-preset-mantine": "^2.0.4",
     "validator": "^13.12.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.0",
-    "@tailwindcss/postcss": "^4.0.13",
+    "@tailwindcss/postcss": "^4.0.14",
     "@tanstack/eslint-plugin-query": "^5.67.2",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
@@ -76,7 +76,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.13",
+    "tailwindcss": "^4.0.14",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
   }
