@@ -91,6 +91,7 @@ export default function CheckoutPage() {
   const formMethods = useZodForm({
     schema: checkoutSchemaMerged,
   })
+
   useFieldArray({
     name: 'passengers',
     control: formMethods.control,
@@ -210,6 +211,7 @@ export default function CheckoutPage() {
         <form
           onSubmit={formMethods.handleSubmit(async (data) => {
             console.log('Data submitted:', data)
+
             const requestCheckout = await initCheckoutMutation.mutateAsync(data)
 
             const serialize = createSerializer(reservationParsers)
@@ -322,7 +324,6 @@ export default function CheckoutPage() {
                             {childNode.childNodes.map(
                               (innerChildNode, innerChildNodeIndex) => {
                                 const fields = innerChildNode.items.at(0)?.value
-                                // const nodeIndex = `${childNodeIndex}_${innerChildNodeIndex}`
                                 const nodeIndex =
                                   startPoint +
                                   childNodeIndex +
@@ -349,7 +350,12 @@ export default function CheckoutPage() {
                                       <HotelPassengerInformationForm
                                         moduleName={moduleName}
                                         fieldProps={{
+                                          declaredAge: '' + fields.declaredAge,
+                                          checkinDate: fields.checkinDate,
+                                          moduleName,
                                           birthDate: fields?.birthDate,
+                                          calculationYearType:
+                                            fields.calculationYearType,
                                           birthDate_day: '',
                                           birthDate_month: '',
                                           birthDate_year: '',
@@ -421,6 +427,10 @@ export default function CheckoutPage() {
                             <PassengerInformationForm
                               moduleName={moduleName}
                               fieldProps={{
+                                declaredAge: '' + field.declaredAge,
+                                moduleName,
+                                checkinDate: field.checkinDate,
+                                calculationYearType: field.calculationYearType,
                                 firstName: field?.firstName || '',
                                 birthDate: field?.birthDate || '',
                                 birthDate_day: '',
@@ -479,6 +489,10 @@ export default function CheckoutPage() {
                             <PassengerInformationForm
                               moduleName={moduleName}
                               fieldProps={{
+                                declaredAge: '' + field.declaredAge,
+                                checkinDate: field.checkinDate,
+                                moduleName,
+                                calculationYearType: field.calculationYearType,
                                 firstName: field?.firstName || '',
                                 birthDate: field?.birthDate || '',
                                 birthDate_day: '',

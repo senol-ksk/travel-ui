@@ -4,6 +4,14 @@ import {
   TransferSummaryResponseViewDataResponser,
 } from '@/app/reservation/types'
 
+export type ModuleName =
+  | 'Flight'
+  | 'Hotel'
+  | 'CARRENTAL'
+  | 'BUS'
+  | 'TRANSFER'
+  | 'TOUR'
+
 export enum GenderEnumIndex {
   Male,
   Female,
@@ -13,13 +21,19 @@ export enum GenderEnums {
   Female = '1',
 }
 
+export enum AgeCalculationType {
+  YearBased,
+  DayBased,
+  DayOver,
+}
+
 export enum PassengerTypesEnum {
   // The Yolcu tipi 0.Adult 1. Child 2.Infant 3.Senior 4.Soldier field is required.
-  Adult = '0',
-  Child = '1',
-  Infant = '2',
-  Senior = '3',
-  Soldier = '4',
+  Adult,
+  Child,
+  Infant,
+  Senior,
+  Soldier,
 }
 
 export enum PassengerTypesIndexEnum {
@@ -244,7 +258,7 @@ export type ProductPassengerApiResponseModel = {
       dayCount: number
       couponActive: boolean
     }
-    ModuleName: 'Flight' | 'Hotel' | 'CARRENTAL' | 'BUS' | 'TRANSFER' | 'TOUR'
+    ModuleName: ModuleName
     SummaryViewDataResponser: {
       summaryResponse:
         | FlightReservationSummary
@@ -353,7 +367,7 @@ export type ProductPassengerApiResponseModel = {
             _passengerId: ID
             birthDate: string
             calculationYearBased: boolean
-            calculationYearType: number
+            calculationYearType: AgeCalculationType
             checkinDate: string
             citizenNo: string
             declaredAge: number
@@ -461,7 +475,7 @@ export interface PassengerChildNodeItemValue {
   _passengerId: ID
   birthDate: string
   calculationYearBased: boolean
-  calculationYearType: number
+  calculationYearType: AgeCalculationType
   checkinDate: string
   citizenNo: string
   declaredAge: number
