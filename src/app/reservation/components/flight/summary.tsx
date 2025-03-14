@@ -24,6 +24,7 @@ type IProps = {
 }
 import { CheckoutCard } from '@/components/card'
 import { formatCurrency } from '@/libs/util'
+import NumberFlow from '@number-flow/react'
 
 const FlightSummary: React.FC<IProps> = ({ data }) => {
   const [openedPriceDetails, { toggle: togglePriceDetails }] =
@@ -178,7 +179,15 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
             </span>
           </div>
           <div className='text-lg font-semibold'>
-            {formatCurrency(flightData.totalPrice)}
+            <NumberFlow
+              className='pt-1 text-lg font-semibold'
+              format={{
+                style: 'currency',
+                currency: 'TRY',
+                currencyDisplay: 'narrowSymbol',
+              }}
+              value={flightData.totalPrice}
+            />
           </div>
         </UnstyledButton>
         <Collapse in={openedPriceDetails}>

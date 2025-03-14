@@ -153,9 +153,11 @@ export default function CheckoutPage() {
           title: 'Tebrikler!',
           message: (
             <div>
-              {applyResponse?.data?.discountPrice.value
-                ? formatCurrency(applyResponse?.data?.discountPrice.value)
-                : null}{' '}
+              <span className='font-semibold underline'>
+                {applyResponse?.data?.discountPrice.value
+                  ? formatCurrency(applyResponse?.data?.discountPrice.value)
+                  : null}
+              </span>{' '}
               indirim uygulandı.
             </div>
           ),
