@@ -34,6 +34,7 @@ import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
   AirlineCode,
   ClientDataType,
+  FlightDetail,
   FlightDetailSegment,
   FlightFareInfo,
 } from '@/app/flight/type'
@@ -49,6 +50,7 @@ import { Virtuoso } from 'react-virtuoso'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
   flightFareInfo: FlightFareInfo
+  flightDetails: FlightDetail
 }
 
 const FlightSearchView = () => {
@@ -106,8 +108,14 @@ const FlightSearchView = () => {
     const packages = flight.package.map((pack) => ({
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
+      flightDetails: pack.details.at(0),
     })) as SelectedPackageStateProps[]
     // setSelectedFlightItem(flight)
+
+    if (flight.package.length <= 1) {
+      handlePackageSelect(packages[0])
+      return
+    }
 
     setSelectedFlightItemPackages((prevValues) => ({
       packages,
@@ -726,7 +734,7 @@ const FlightSearchView = () => {
           title: 'flex-1 text-center font-normal',
         }}
         title={
-          <div className='flex gap-1'>
+          <div className='flex justify-center gap-1'>
             <span className='font-semibold'>
               {
                 airlineDataObj
@@ -752,56 +760,82 @@ const FlightSearchView = () => {
       >
         <Container>
           <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
-            {selectedFlightItemPackages &&
-              selectedFlightItemPackages.packages?.length &&
-              selectedFlightItemPackages.packages?.map((selectedPackage) => {
-                return (
-                  <div
-                    key={selectedPackage.flightFareInfo.key}
-                    className='flex flex-col rounded border p-2 md:p-3'
-                  >
-                    <div className='flex h-full flex-col gap-3'>
-                      <div className='text-lg font-semibold'>
-                        {formatCurrency(
-                          selectedPackage.flightFareInfo.totalPrice.value
-                        )}
-                      </div>
-                      <div>
-                        <div className='pb-2 font-semibold capitalize'>
-                          {(() => {
-                            switch (
-                              selectedPackage.flightDetailSegment
-                                .freeVolatileData.BrandName
-                            ) {
-                              case 'SUPER_ECO':
-                                return 'Light'
-                              case 'ECO':
-                                return 'Süper Eko'
-                              case 'ADVANTAGE':
-                                return 'Avantaj'
-                              case 'EXTRA':
-                                return 'Comfort Flex'
-                              default:
-                                return selectedPackage.flightDetailSegment
-                                  .freeVolatileData.BrandName
-                            }
-                          })()}
-                        </div>
-                      </div>
-                      <div className='mt-auto'>
-                        <Button
-                          type='button'
-                          onClick={() => {
-                            handlePackageSelect(selectedPackage)
-                          }}
-                        >
-                          Seç
-                        </Button>
-                      </div>
+            {selectedFlightItemPackages?.packages?.map((selectedPackage) => {
+              return (
+                <div
+                  key={selectedPackage.flightFareInfo.key}
+                  className='flex flex-col items-start gap-2 rounded-md border p-2 md:p-3'
+                >
+                  <div className='flex w-full justify-between gap-2'>
+                    <div className='font-semibold capitalize'>
+                      {(() => {
+                        switch (
+                          selectedPackage.flightDetailSegment.freeVolatileData
+                            .BrandName
+                        ) {
+                          case 'SUPER_ECO':
+                            return 'Light'
+                          case 'ECO':
+                            return 'Süper Eko'
+                          case 'ADVANTAGE':
+                            return 'Avantaj'
+                          case 'EXTRA':
+                            return 'Comfort Flex'
+                          default:
+                            return selectedPackage.flightDetailSegment
+                              .freeVolatileData.BrandName
+                        }
+                      })()}
+                    </div>
+                    <div className='text-lg font-semibold'>
+                      {formatCurrency(
+                        selectedPackage.flightFareInfo.totalPrice.value
+                      )}
                     </div>
                   </div>
-                )
-              })}
+                  <Stack gap={rem(4)} className='text-sm'>
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'PC' && (
+                      <div>1 Adet Koltuk Altına Sığacak Çanta (40x30x15)</div>
+                    )}
+                    {selectedPackage.flightDetailSegment.freeVolatileData
+                      .BrandName !== 'SUPER_ECO' &&
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'PC' && (
+                        <div>1 Parça Kabin bagajı (55x40x20)</div>
+                      )}
+                    {selectedPackage.flightDetails.freeVolatileData
+                      .StandartSeatSelection && (
+                      <div>Standart koltuk seçimi</div>
+                    )}
+                    {selectedPackage.flightDetailSegment.freeVolatileData
+                      .BrandName === 'EXTRA' &&
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'PC' && <div>Sandviç İkramı</div>}
+                    {selectedPackage.flightDetailSegment.freeVolatileData
+                      .BrandName === 'EXTRA' &&
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'PC' && <div>Film, Dizi, Müzik, Oyun</div>}
+                    {selectedPackage.flightDetails.freeVolatileData
+                      .FlexibleReturnChangeRight && (
+                      <div>Esnek İade/Değişiklik Hakkı</div>
+                    )}
+                    {selectedPackage.flightDetails.freeVolatileData
+                      .AllSeatSelection && <div>Dilediğiniz Koltuk Seçimi</div>}
+                  </Stack>
+                  <div className='mt-auto'>
+                    <Button
+                      type='button'
+                      onClick={() => {
+                        handlePackageSelect(selectedPackage)
+                      }}
+                    >
+                      Seç
+                    </Button>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </Container>
       </Drawer>

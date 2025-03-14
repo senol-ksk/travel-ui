@@ -8,7 +8,7 @@ import { MantineProvider } from '@mantine/core'
 import { mantineTheme } from '@/styles/mantine/index'
 
 vi.mock('next/font/google', () => ({
-  Inter: () => ({
+  Figtree: () => ({
     style: {
       fontFamily: 'mocked',
     },

@@ -1,7 +1,7 @@
 import { createTheme } from '@mantine/core'
-import { Inter } from 'next/font/google'
+import { Figtree } from 'next/font/google'
 
-const inter = Inter({
+const inter = Figtree({
   subsets: ['latin'],
 })
 
