@@ -1,10 +1,17 @@
-import dayjs from 'dayjs'
 import { z } from 'zod'
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+dayjs.extend(isSameOrAfter)
+dayjs.extend(isSameOrBefore)
 
 import { isMobilePhone } from 'validator'
 
 import { type PassengerValidationType } from '@/app/reservation/types'
-import { PassengerTypesEnum } from '@/types/passengerViewModel'
+import {
+  AgeCalculationType,
+  PassengerTypesEnum,
+} from '@/types/passengerViewModel'
 import { validTCKN } from '@/libs/tckn-validate'
 
 import intlTelInput from 'intl-tel-input/react'
@@ -27,18 +34,22 @@ const passengerValidation = z.object({
   passengers: z.array(
     z
       .object<PassengerValidationType>({
-        firstName: z.string().min(3).max(50),
-        lastName: z.string().min(3).max(50),
-        birthDate: z.string().date(),
-        gender: z.string().nonempty(),
+        declaredAge: z.string().readonly(),
+        // declaredAge: z.number().readonly(),
+        checkinDate: z.string().readonly(),
         birthDate_day: z.string().min(1).max(2),
         birthDate_month: z.string().min(2).max(2),
         birthDate_year: z.string().min(4).max(4),
-        type: z.nativeEnum(PassengerTypesEnum).readonly(),
+        birthDate: z.string().date(),
+        calculationYearType: z.nativeEnum(AgeCalculationType).readonly(),
         citizenNo: z.string().optional(),
+        firstName: z.string().min(3).max(50),
+        gender: z.string().nonempty(),
+        hesCode: z.string(),
+        lastName: z.string().min(3).max(50),
+        model_PassengerId: z.string().or(z.number()),
         nationality_Check: z.boolean().optional(),
         passengerId: z.string().or(z.number()),
-        registeredPassengerId: z.string().or(z.number()),
         passengerKey: z.string(),
         passportCountry: z.string().optional(),
         passportNo: z.string().optional(),
@@ -46,11 +57,15 @@ const passengerValidation = z.object({
         passportValidity_2: z.string().optional(),
         passportValidity_3: z.string().optional(),
         passportValidityDate: z.string().optional().nullable(),
-        hesCode: z.string(),
-        model_PassengerId: z.string().or(z.number()),
-        // moduleName: z.string().optional(),
+        registeredPassengerId: z.string().or(z.number()),
+        type: z.nativeEnum(PassengerTypesEnum).readonly(),
+        moduleName: z.string().readonly(),
       })
       .superRefine((value, ctx) => {
+        console.log(value, ctx)
+        const moduleName = value.moduleName.toLowerCase()
+        const passengerType = +value.type
+
         if (!value.nationality_Check && !validTCKN(value.citizenNo!)) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
@@ -90,9 +105,76 @@ const passengerValidation = z.object({
 
         const birthDayVal = value.birthDate
         if (baseDateSchema.safeParse(birthDayVal).success) {
-          const dayjsBirthDay = dayjs(birthDayVal)
+          const dayjsBirthDay = dayjs(
+            birthDayVal,
+            {
+              utc: true,
+            },
+            true
+          )
           const dayjsToday = dayjs()
           const dateDiff = dayjsToday.diff(dayjsBirthDay, 'day')
+          const checkinDate = dayjs(value.checkinDate)
+          const declaredAge = +value.declaredAge
+          const adultMinBirthDate = dayjs(checkinDate).subtract(18, 'year')
+          let minBirthDay
+          let maxBirthDay
+          if (moduleName === 'hotel' && passengerType === 1) {
+            switch (value.calculationYearType) {
+              case AgeCalculationType.YearBased:
+                minBirthDay = dayjs(checkinDate).subtract(
+                  declaredAge * 2 + 1 - declaredAge,
+                  'year'
+                )
+                maxBirthDay = dayjs(minBirthDay).add(1, 'year')
+
+                return (
+                  dayjsBirthDay.isSameOrAfter(minBirthDay) &&
+                  dayjsBirthDay.isBefore(maxBirthDay)
+                )
+
+              case AgeCalculationType.DayBased:
+                minBirthDay = dayjs(checkinDate).subtract(
+                  declaredAge * 2 + 1 - declaredAge,
+                  'year'
+                )
+                maxBirthDay = dayjs(minBirthDay)
+                  .add(1, 'year')
+                  .subtract(1, 'day')
+
+                if (
+                  !(
+                    dayjsBirthDay.isSameOrAfter(minBirthDay) &&
+                    dayjsBirthDay.isSameOrBefore(maxBirthDay)
+                  )
+                ) {
+                  {
+                    ctx.addIssue({
+                      code: z.ZodIssueCode.custom,
+                      message: `${minBirthDay.format('DD-MM-YYYY')}-${maxBirthDay.format('DD-MM-YYYY')} tarihleri arasında olmalıdır.`,
+                      path: ['birthDate'],
+                    })
+                  }
+                }
+                break
+
+              case AgeCalculationType.DayOver:
+                if (
+                  dayjs(
+                    checkinDate.millisecond() - dayjsBirthDay.millisecond()
+                  ).day() +
+                    1 !==
+                  declaredAge
+                ) {
+                  ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    message: 'bebek yasi hatali ',
+                    path: ['birthDate'],
+                  })
+                }
+                break
+            }
+          }
 
           switch (value.type) {
             case PassengerTypesEnum.Adult:

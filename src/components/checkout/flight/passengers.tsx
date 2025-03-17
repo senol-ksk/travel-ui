@@ -90,7 +90,7 @@ const days = () =>
     }
   })
 
-const pasportDateValue = ['', '', '']
+const passportDateValue = ['', '', '']
 
 export const PassengerInformationForm: React.FC<IProps> = ({
   fieldProps,
@@ -104,11 +104,11 @@ export const PassengerInformationForm: React.FC<IProps> = ({
   const name_birthDate_day = `${namePrefix}.birthDate_day`
   const name_birthDate_month = `${namePrefix}.birthDate_month`
   const name_birthDate_year = `${namePrefix}.birthDate_year`
-  const name_passsportValidDate = `${namePrefix}.passportValidityDate`
+  const name_passportValidDate = `${namePrefix}.passportValidityDate`
 
-  const name_passsportValid_day = `${namePrefix}.passportValidity_1`
-  const name_passsportValid_month = `${namePrefix}.passportValidity_2`
-  const name_passsportValid_year = `${namePrefix}.passportValidity_3`
+  const name_passportValid_day = `${namePrefix}.passportValidity_1`
+  const name_passportValid_month = `${namePrefix}.passportValidity_2`
+  const name_passportValid_year = `${namePrefix}.passportValidity_3`
 
   function handleBirthdateSelect(e: ChangeEvent<HTMLSelectElement>) {
     const values = methods.getValues([
@@ -121,7 +121,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
       shouldValidate: true,
     })
   }
-  function handlePassportdateSelect(
+  function handlePassportDateSelect(
     event: ChangeEvent<HTMLSelectElement>,
     type: 'month' | 'day' | 'year'
   ) {
@@ -129,19 +129,19 @@ export const PassengerInformationForm: React.FC<IProps> = ({
     // YYYY-MM-DD
     switch (type) {
       case 'year':
-        pasportDateValue[0] = value
+        passportDateValue[0] = value
         break
       case 'month':
-        pasportDateValue[1] = value
+        passportDateValue[1] = value
         break
       case 'day':
-        pasportDateValue[2] = value
+        passportDateValue[2] = value
         break
       default:
         break
     }
 
-    methods.setValue(name_passsportValidDate, pasportDateValue.join('-'), {
+    methods.setValue(name_passportValidDate, passportDateValue.join('-'), {
       shouldValidate: true,
     })
   }
@@ -149,8 +149,9 @@ export const PassengerInformationForm: React.FC<IProps> = ({
   return (
     <div className='grid gap-3 md:gap-4'>
       <input
-        {...methods.register(`${namePrefix}.type`)}
-        defaultValue={fieldProps.type}
+        {...methods.register(`${namePrefix}.type`, {
+          value: fieldProps.type,
+        })}
         type='hidden'
       />
       <input
@@ -180,6 +181,30 @@ export const PassengerInformationForm: React.FC<IProps> = ({
       <input
         {...methods.register(`${namePrefix}.hesCode`)}
         defaultValue={fieldProps.hesCode}
+        type='hidden'
+      />
+      <input
+        {...methods.register(`${namePrefix}.moduleName`, {
+          value: fieldProps.moduleName,
+        })}
+        type='hidden'
+      />
+      <input
+        {...methods.register(`${namePrefix}.calculationYearType`, {
+          value: fieldProps.calculationYearType,
+        })}
+        type='hidden'
+      />
+      <input
+        {...methods.register(`${namePrefix}.checkinDate`, {
+          value: fieldProps.checkinDate,
+        })}
+        type='hidden'
+      />
+      <input
+        {...methods.register(`${namePrefix}.declaredAge`, {
+          value: fieldProps.declaredAge,
+        })}
         type='hidden'
       />
 
@@ -356,9 +381,9 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                       methods.setValue(`${namePrefix}.passportCountry`, '')
                       methods.setValue(`${namePrefix}.PassportNo`, '')
                       methods.setValue(`${namePrefix}.passportValidityDate`, '')
-                      methods.setValue(name_passsportValid_day, '')
-                      methods.setValue(name_passsportValid_month, '')
-                      methods.setValue(name_passsportValid_year, '')
+                      methods.setValue(name_passportValid_day, '')
+                      methods.setValue(name_passportValid_month, '')
+                      methods.setValue(name_passportValid_year, '')
                     }}
                     label='TC Vatandaşı değilim'
                   />
@@ -410,21 +435,21 @@ export const PassengerInformationForm: React.FC<IProps> = ({
             />
           </div>
           <div>
-            <Input.Label htmlFor={`${namePrefix}_${name_passsportValid_day}`}>
+            <Input.Label htmlFor={`${namePrefix}_${name_passportValid_day}`}>
               Pasaport Geçerlilik Tarihi
             </Input.Label>
             <Input.Wrapper className='grid grid-cols-3 gap-3'>
               <Controller
                 control={methods.control}
-                name={name_passsportValid_day}
+                name={name_passportValid_day}
                 defaultValue={''}
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
-                    id={`${namePrefix}_${name_passsportValid_day}`}
+                    id={`${namePrefix}_${name_passportValid_day}`}
                     onChange={(event) => {
                       field.onChange(event)
-                      handlePassportdateSelect(event, 'day')
+                      handlePassportDateSelect(event, 'day')
                     }}
                     error={!!error?.passportValidityDate}
                     data={[{ label: 'Gün', value: '' }, ...days()]}
@@ -435,14 +460,14 @@ export const PassengerInformationForm: React.FC<IProps> = ({
 
               <Controller
                 control={methods.control}
-                name={name_passsportValid_month}
+                name={name_passportValid_month}
                 defaultValue={''}
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
                     onChange={(event) => {
                       field.onChange(event)
-                      handlePassportdateSelect(event, 'month')
+                      handlePassportDateSelect(event, 'month')
                     }}
                     error={!!error?.passportValidityDate}
                     data={[{ label: 'Ay', value: '' }, ...passportMonths()]}
@@ -452,14 +477,14 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               />
               <Controller
                 control={methods.control}
-                name={name_passsportValid_year}
+                name={name_passportValid_year}
                 defaultValue={''}
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
                     onChange={(event) => {
                       field.onChange(event)
-                      handlePassportdateSelect(event, 'year')
+                      handlePassportDateSelect(event, 'year')
                     }}
                     error={!!error?.passportValidityDate}
                     data={[{ label: 'Yıl', value: '' }, ...passportYears()]}
@@ -476,7 +501,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
 
             <input
               type='hidden'
-              {...methods.register(name_passsportValidDate, {
+              {...methods.register(name_passportValidDate, {
                 value: fieldProps.passportValidityDate,
               })}
               autoComplete='off'

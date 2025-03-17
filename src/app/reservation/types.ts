@@ -2,12 +2,15 @@ import { z } from 'zod'
 import { GenderEnumIndex } from '@/types/passengerViewModel'
 
 import type {
-  GenderEnums,
+  AgeCalculationType,
   PassengerTypesEnum,
   PassengerTypesIndexEnum,
 } from '@/types/passengerViewModel'
 
 export type PassengerValidationType = {
+  declaredAge: z.ZodReadonly<z.ZodString>
+  checkinDate: z.ZodReadonly<z.ZodString>
+  moduleName: z.ZodReadonly<z.ZodString>
   birthDate_day: z.ZodString
   birthDate_month: z.ZodString
   birthDate_year: z.ZodString
@@ -15,7 +18,7 @@ export type PassengerValidationType = {
   citizenNo: z.ZodOptional<z.ZodString>
   firstName: z.ZodString
   gender: z.ZodString
-  // gender: z.ZodNativeEnum<typeof GenderEnums>
+  calculationYearType: z.ZodReadonly<z.ZodNativeEnum<typeof AgeCalculationType>>
   lastName: z.ZodString
   passengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
   model_PassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
@@ -30,7 +33,6 @@ export type PassengerValidationType = {
   registeredPassengerId: z.ZodUnion<[z.ZodString, z.ZodNumber]>
   type: z.ZodReadonly<z.ZodNativeEnum<typeof PassengerTypesEnum>>
   hesCode: z.ZodString
-  // moduleName: z.ZodOptional<z.ZodString>
 }
 
 export enum ResponseStatus {
