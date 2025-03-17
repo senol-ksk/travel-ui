@@ -29,7 +29,6 @@ export type GeneralFormFieldSchemaTypes = {
 //   isPhoneNumberValid = value
 // }
 const baseDateSchema = z.string().date()
-import type { ModuleName } from '@/types/passengerViewModel'
 
 const passengerValidation = z.object({
   passengers: z.array(

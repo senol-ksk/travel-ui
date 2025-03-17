@@ -3,8 +3,6 @@ import { GenderEnumIndex } from '@/types/passengerViewModel'
 
 import type {
   AgeCalculationType,
-  GenderEnums,
-  ModuleName,
   PassengerTypesEnum,
   PassengerTypesIndexEnum,
 } from '@/types/passengerViewModel'
