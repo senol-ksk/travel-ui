@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 
 import { FlatCompat } from '@eslint/eslintrc'
 import { Linter } from 'eslint'
+import { globalIgnores } from 'eslint/config'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -30,6 +31,7 @@ const configs = [
       '@typescript-eslint/no-unused-vars': 'off',
     },
   },
+  globalIgnores(['.lintstagedrc.js']),
 ]
 
 export default configs

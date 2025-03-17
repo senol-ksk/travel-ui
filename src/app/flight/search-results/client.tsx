@@ -527,9 +527,8 @@ const FlightSearchView = () => {
                       </div>
                       <div className='pt-2'>
                         <Button
+                          className='px-4 py-2'
                           variant='outline'
-                          color='blue'
-                          size='compact-xs'
                           type='button'
                           onClick={resetSelectedFlights}
                         >
@@ -764,9 +763,12 @@ const FlightSearchView = () => {
               return (
                 <div
                   key={selectedPackage.flightFareInfo.key}
-                  className='flex flex-col items-start gap-2 rounded-md border p-2 md:p-3'
+                  className='flex cursor-pointer flex-col items-start gap-2 rounded-md border p-2 hover:border-1 hover:border-blue-500 md:p-3'
+                  onClick={() => {
+                    handlePackageSelect(selectedPackage)
+                  }}
                 >
-                  <div className='flex w-full justify-between gap-2'>
+                  <div className='flex w-full cursor-pointer justify-between gap-2'>
                     <div className='font-semibold capitalize'>
                       {(() => {
                         switch (
@@ -794,6 +796,16 @@ const FlightSearchView = () => {
                     </div>
                   </div>
                   <Stack gap={rem(4)} className='text-sm'>
+                    {selectedPackage.flightDetailSegment.baggageAllowance
+                      .maxWeight.value > 0 && (
+                      <div>
+                        {
+                          selectedPackage.flightDetailSegment.baggageAllowance
+                            .maxWeight.value
+                        }{' '}
+                        kg bagaj
+                      </div>
+                    )}
                     {selectedPackage.flightDetailSegment.operatingAirline
                       .code === 'PC' && (
                       <div>1 Adet Koltuk Altına Sığacak Çanta (40x30x15)</div>
@@ -822,6 +834,36 @@ const FlightSearchView = () => {
                     )}
                     {selectedPackage.flightDetails.freeVolatileData
                       .AllSeatSelection && <div>Dilediğiniz Koltuk Seçimi</div>}
+                    {selectedPackage.flightDetailSegment.bookingCode !== 'EF' &&
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code !== 'PC' && (
+                        <div
+                          style={
+                            selectedPackage.flightDetailSegment.bookingCode ===
+                            'XF'
+                              ? {}
+                              : { color: 'red' }
+                          }
+                        >
+                          {selectedPackage.flightDetailSegment.bookingCode ===
+                          'PF'
+                            ? 'Cezasız Değişiklik'
+                            : 'Ücretli Değişiklik'}
+                        </div>
+                      )}
+
+                    {!(
+                      selectedPackage.flightDetailSegment.bookingCode !==
+                        'EF' &&
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code !== 'PC'
+                    ) &&
+                      selectedPackage.flightDetailSegment.baggageAllowance
+                        .maxWeight.value <= 15 && (
+                        <div className='text-red-600'>
+                          Değişiklik yapılamaz &amp; İade edilemez
+                        </div>
+                      )}
                   </Stack>
                   <div className='mt-auto'>
                     <Button
