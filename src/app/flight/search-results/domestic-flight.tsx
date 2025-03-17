@@ -31,7 +31,12 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   onSelect = () => null,
 }) => {
   return (
-    <div className='@container rounded-lg border border-gray-300'>
+    <div
+      className='@container cursor-pointer rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'
+      onClick={() => {
+        onSelect()
+      }}
+    >
       {details.map((detail) => {
         const relatedSegment = detailSegments.filter(
           (segment) => detail.groupId === segment.groupId
