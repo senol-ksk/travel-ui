@@ -13,7 +13,7 @@ import {
 
 import { AirlineLogo } from '@/components/airline-logo'
 import { IoAirplaneSharp } from 'react-icons/io5'
-
+import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
 type IProps = {
   airlineValues: AirlineCode[] | undefined
   fareInfo: FlightFareInfo
@@ -151,6 +151,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
+        <FlightDetailsSearch />
         <div>
           <Button type='button'>Seç</Button>
         </div>
