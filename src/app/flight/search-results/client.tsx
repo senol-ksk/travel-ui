@@ -46,6 +46,7 @@ import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import dayjs from 'dayjs'
 import { Virtuoso } from 'react-virtuoso'
+import clsx from 'clsx'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -838,12 +839,11 @@ const FlightSearchView = () => {
                       selectedPackage.flightDetailSegment.operatingAirline
                         .code !== 'PC' && (
                         <div
-                          style={
-                            selectedPackage.flightDetailSegment.bookingCode ===
-                            'XF'
-                              ? {}
-                              : { color: 'red' }
-                          }
+                          className={clsx({
+                            'text-red-500':
+                              selectedPackage.flightDetailSegment
+                                .bookingCode !== 'XF',
+                          })}
                         >
                           {selectedPackage.flightDetailSegment.bookingCode ===
                           'PF'
@@ -864,6 +864,197 @@ const FlightSearchView = () => {
                           Değişiklik yapılamaz &amp; İade edilemez
                         </div>
                       )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      selectedPackage.flightDetailSegment.bookingCode !==
+                        'AAAT-FBUSFL' && <div>2x32 Kg Bagaj Hakkı</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-FFIRFL' && <div>3x32 Kg Bagaj Hakkı</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      (selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-PEC' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-PECFL') && <div>2x23 Kg Bagaj Hakkı</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      (selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-MAINFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-MAINSFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-MAIN') && <div>1x23 Kg Bagaj Hakkı</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'UA' ||
+                      (selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'LO' &&
+                        selectedPackage.flightDetailSegment.bookingCode !==
+                          'SAVER-PCID' && <div>1x23 Kg Bagaj Hakkı</div>)}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'VF' ||
+                      (selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'UA' && <div>1 parça X 8 kg El Bagajı</div>)}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'QR' ||
+                      (selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'SQ' && <div>1 parça X 7 kg El Bagajı</div>)}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'LO' ||
+                      (selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'AA' && <div>Kabin Bagajı</div>)}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'LO' && <div>Ücretli Koltuk Seçimi</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'UA' ||
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'AA' ||
+                      (selectedPackage.flightDetailSegment.operatingAirline
+                        .code === 'LO' &&
+                        (selectedPackage.flightDetailSegment.bookingCode ===
+                          'SAVER-PCID' ||
+                          selectedPackage.flightDetailSegment.bookingCode ===
+                            'STANDARD-PCID') && <div>Ekstra Mil Kazancı</div>)}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'SQ' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FF41-PCID' && <div>50 Ekstra Mil</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'SQ' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FF21-PCID' && <div>Esnek Değişim (Uçuşa kadar)</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'SQ' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FF21-PCID' && <div>%100 Ekstra Mil Kazancı</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'SQ' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FF01-PCID' && <div>%125 Ekstra Mil Kazancı</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'LO' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FLEX-PCID' && <div>%150 Ekstra Mil Kazancı</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'LO' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FLEX-PCID' && <div>Esnek Değişim (Uçuşa kadar)</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'SQ' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FF21-PCID' && <div>Ücretsiz Koltuk Seçimi</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'SQ' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'FF31-PCID' && <div>75 Ekstra Mil</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'QR' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'CLASSIC-PCID' && (
+                        <div className='text-red-600'>Cezalı İade</div>
+                      )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'QR' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'CONVENIENC-PCID' && (
+                        <div className='text-red-600'>Cezalı İade</div>
+                      )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'QR' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'COMFORT-PCID' && (
+                        <div className='text-red-600'>
+                          Cezasız İade (Son 12 Saate Kadar)
+                        </div>
+                      )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'QR' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'CLASSIC-PCID' && (
+                        <div>Uçuştan Önce Koltuk Seçimi (Ücretli)</div>
+                      )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'QR' &&
+                      (selectedPackage.flightDetailSegment.bookingCode ===
+                        'CONVENIENC-PCID' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'COMFORT-PCID') && (
+                        <div>Uçuştan Önce Koltuk Seçimi (Ücretli)</div>
+                      )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'UA' && <div>Özel Koltuk Seçimi (Ücretli)</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'UA' && (
+                      <div>Mil veya ek ödeme ile kabin yükseltme</div>
+                    )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'UA' && <div>Öncelikli Boarding (Ücretli)</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'UA' && <div>İkinci ek bagaj (Ücretli)</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' && <div>Sandviç İkramı</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' && <div>Film, Dizi, Müzik, Oyun</div>}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      selectedPackage.flightDetailSegment.bookingCode !==
+                        'AAAT-BASIC' && <div> Ücretsiz Koltuk Seçimi</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-BASIC' && <div> Ücretsiz Koltuk Seçimi</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      (selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-PEC' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-PECFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-FFIRFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-FBUSFL') && <div>Öncelikli Check-In Hakkı</div>}
+
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      (selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-PEC' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-PECFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-FFIRFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-FBUSFL') && (
+                        <div>Esnek Değişim (Uçuşa kadar)</div>
+                      )}
+                    {selectedPackage.flightDetailSegment.operatingAirline
+                      .code === 'AA' &&
+                      (selectedPackage.flightDetailSegment.bookingCode ===
+                        'AAAT-FFIRFL' ||
+                        selectedPackage.flightDetailSegment.bookingCode ===
+                          'AAAT-FBUSFL') && (
+                        <div>Esnek İptal (Uçuşa kadar)</div>
+                      )}
+
+                    {/* {selectedPackage.flightDetailSegment.baggageAllowance
+                      .maxWeight.value > 0 &&
+                      selectedPackage.flightDetailSegment.operatingAirline
+                        .code !== 'AA' && (
+                        <div>
+                          {
+                            selectedPackage.flightDetailSegment.baggageAllowance
+                              .maxWeight.value
+                          }{' '}
+                          Kg Bagaj Hakkı
+                        </div>
+                      )} */}
                   </Stack>
                   <div className='mt-auto'>
                     <Button
