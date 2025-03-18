@@ -33,9 +33,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   return (
     <div
       className='@container cursor-pointer rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'
-      onClick={() => {
-        onSelect()
-      }}
+      onClick={onSelect}
     >
       {details.map((detail) => {
         const relatedSegment = detailSegments.filter(
@@ -140,14 +138,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
         <div>
-          <Button
-            type='button'
-            onClick={() => {
-              onSelect()
-            }}
-          >
-            Seç
-          </Button>
+          <Button>Seç</Button>
         </div>
       </div>
     </div>
