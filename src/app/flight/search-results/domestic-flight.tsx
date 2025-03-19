@@ -12,7 +12,7 @@ import {
   FlightFareInfo,
 } from '@/app/flight/type'
 import { AirlineLogo } from '@/components/airline-logo'
-
+import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
 dayjs.extend(duration)
 
 type IProps = {
@@ -31,10 +31,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   onSelect = () => null,
 }) => {
   return (
-    <div
-      className='@container cursor-pointer rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'
-      onClick={onSelect}
-    >
+    <div className='@container rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'>
       {details.map((detail) => {
         const relatedSegment = detailSegments.filter(
           (segment) => detail.groupId === segment.groupId
@@ -137,8 +134,13 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
       })}
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
+        <div className='relative z-50'>
+          <FlightDetailsSearch />
+        </div>
         <div>
-          <Button>Seç</Button>
+          <Button type='button' onClick={onSelect}>
+            Seç
+          </Button>
         </div>
       </div>
     </div>
