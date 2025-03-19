@@ -1,5 +1,27 @@
+import { useDisclosure } from '@mantine/hooks'
+import { Drawer, Button } from '@mantine/core'
+
 const FlightDetailsSearch = () => {
-  return <div className='text-xs text-blue-500'>Uçuş Detayları</div>
+  const [opened, { open, close }] = useDisclosure(false)
+
+  return (
+    <>
+      <Drawer
+        position='right'
+        opened={opened}
+        onClose={close}
+        title='Uçuş Detayları'
+        padding='xl'
+        size='xl'
+      >
+        <p>Uçuş Detayları</p>
+      </Drawer>
+
+      <Button variant='transparent' size='xs' onClick={open}>
+        Uçuş Detayları
+      </Button>
+    </>
+  )
 }
 
 export { FlightDetailsSearch }

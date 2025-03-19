@@ -56,18 +56,25 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
           ?.Value.find((item) => item.LangCode === 'tr_TR')
 
         return (
-          <div className='p-3' key={detail.key}>
+          <div
+            className='cursor-pointer p-3'
+            key={detail.key}
+            onClick={onSelect}
+          >
             {/* <input defaultValue={JSON.stringify(relatedDetailSegments)} /> */}
-            <div className='flex items-center gap-3 pb-2'>
-              <div>
-                <AirlineLogo
-                  airlineCode={relatedSegment[0].marketingAirline.code}
-                  width={36}
-                  height={36}
-                />
+            <div className='flex justify-between'>
+              <div className='flex items-center gap-3 pb-2'>
+                <div>
+                  <AirlineLogo
+                    airlineCode={relatedSegment[0].marketingAirline.code}
+                    width={36}
+                    height={36}
+                  />
+                </div>
+                <div>{airlineText?.Value}</div>
+                <div>{relatedSegment.at(0)?.flightNumber}</div>
               </div>
-              <div>{airlineText?.Value}</div>
-              <div>{relatedSegment.at(0)?.flightNumber}</div>
+              <div className='text-xs'>8kg El Bagajı</div>
             </div>
             <div className='flex items-center gap-2'>
               <div>
@@ -148,7 +155,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
-        <div className='relative z-50'>
+        <div>
           <FlightDetailsSearch />
         </div>
         <div>
