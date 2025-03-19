@@ -57,13 +57,20 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           ?.Value.find((item) => item.LangCode === 'tr_TR')
 
         return (
-          <div key={detail.key} className='p-3'>
-            <div className='flex items-center gap-3 pb-2'>
-              <AirlineLogo
-                airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
-              />
-              <div>{airlineText?.Value}</div>
-              <div>{flightNumber}</div>
+          <div
+            key={detail.key}
+            className='cursor-pointer p-3'
+            onClick={onSelect}
+          >
+            <div className='flex justify-between'>
+              <div className='flex items-center gap-3 pb-2'>
+                <AirlineLogo
+                  airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
+                />
+                <div>{airlineText?.Value}</div>
+                <div>{flightNumber}</div>
+              </div>
+              <div className='text-xs'>8kg El Bagajı</div>
             </div>
             <div className='flex items-center gap-2'>
               <div>
@@ -134,7 +141,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
       })}
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
-        <div className='relative z-50'>
+        <div>
           <FlightDetailsSearch />
         </div>
         <div>
