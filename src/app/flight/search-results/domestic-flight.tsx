@@ -12,7 +12,7 @@ import {
   FlightFareInfo,
 } from '@/app/flight/type'
 import { AirlineLogo } from '@/components/airline-logo'
-
+import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
 dayjs.extend(duration)
 
 type IProps = {
@@ -31,10 +31,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   onSelect = () => null,
 }) => {
   return (
-    <div
-      className='@container cursor-pointer rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'
-      onClick={onSelect}
-    >
+    <div className='@container rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'>
       {details.map((detail) => {
         const relatedSegment = detailSegments.filter(
           (segment) => detail.groupId === segment.groupId
@@ -60,13 +57,20 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           ?.Value.find((item) => item.LangCode === 'tr_TR')
 
         return (
-          <div key={detail.key} className='p-3'>
-            <div className='flex items-center gap-3 pb-2'>
-              <AirlineLogo
-                airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
-              />
-              <div>{airlineText?.Value}</div>
-              <div>{flightNumber}</div>
+          <div
+            key={detail.key}
+            className='cursor-pointer p-3'
+            onClick={onSelect}
+          >
+            <div className='flex justify-between'>
+              <div className='flex items-center gap-3 pb-2'>
+                <AirlineLogo
+                  airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
+                />
+                <div>{airlineText?.Value}</div>
+                <div>{flightNumber}</div>
+              </div>
+              <div className='text-xs'>8kg El Bagajı</div>
             </div>
             <div className='flex items-center gap-2'>
               <div>
@@ -138,7 +142,12 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
       <div className='flex items-center justify-between border-t p-3 pt-4'>
         <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
         <div>
-          <Button>Seç</Button>
+          <FlightDetailsSearch />
+        </div>
+        <div>
+          <Button type='button' onClick={onSelect}>
+            Seç
+          </Button>
         </div>
       </div>
     </div>
