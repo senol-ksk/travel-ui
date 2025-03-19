@@ -13,8 +13,10 @@ import 'dayjs/locale/tr'
 dayjs.locale('tr')
 
 import { Providers } from '@/app/providers'
-import Header from '@/components/header'
 import { mantineTheme } from '@/styles/mantine'
+
+import Header from '@/components/header'
+import { Footer } from '@/components/footer'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
@@ -38,11 +40,16 @@ export default function RootLayout({
           <ColorSchemeScript />
         </head>
 
-        <body>
+        <body className='flex flex-col'>
           <Providers>
             <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
-              <Header />
-              {children}
+              <div className='shrink-0 grow-0'>
+                <Header />
+              </div>
+              <main className='grow-1'>{children}</main>
+              <div className='shrink-0 grow-0'>
+                <Footer />
+              </div>
             </MantineProvider>
           </Providers>
         </body>
