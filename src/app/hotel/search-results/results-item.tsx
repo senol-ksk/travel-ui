@@ -26,12 +26,13 @@ import {
   hotelDetailSearchParams,
   hotelSearchParamParser,
 } from '@/modules/hotel/searchParams'
-import { useSearchResultParams } from '@/app/hotel/search-results/useSearchQueries'
 
 type IProps = {
   hotelInfo: HotelSearchResultHotelInfo | undefined
   resultItem: HotelSearchResultItemType
   roomDetail: RoomDetailType | undefined
+  searchToken: string
+  sessionToken: string
   onMapClick: () => void
 }
 const detailUrlSerializer = createSerializer(hotelDetailSearchParams)
@@ -40,6 +41,8 @@ const HotelSearchResultItem: React.FC<IProps> = ({
   hotelInfo,
   resultItem,
   roomDetail,
+  searchToken,
+  sessionToken,
   onMapClick,
 }) => {
   const [isImageLoading, setImageLoading] = useState(true)
@@ -47,7 +50,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
   const hotelImageUrl =
     hotelInfo?.images.at(0)?.mid ?? hotelInfo?.images.at(0)?.large
 
-  const totalPrice = resultItem.totalPrice.value
+  const totalPrice = resultItem?.totalPrice.value
   const discountValue = resultItem.discount.value
   const discountedPrice = totalPrice - discountValue
   const totalPriceWithDiscount = totalPrice + discountValue
@@ -56,12 +59,13 @@ const HotelSearchResultItem: React.FC<IProps> = ({
     ((totalPriceWithDiscount - totalPrice) / totalPriceWithDiscount) * 100
   )
 
-  const { searchParamsQuery, searchParams } = useSearchResultParams()
+  const [searchParams] = useQueryStates(hotelSearchParamParser)
+
   const detailUrl = detailUrlSerializer(`/hotel/${hotelInfo?.slug}`, {
     slug: hotelInfo?.slug,
     productKey: resultItem.key,
-    searchToken: searchParamsQuery.data?.hotelSearchApiRequest.searchToken,
-    sessionToken: searchParamsQuery.data?.hotelSearchApiRequest.sessionToken,
+    searchToken,
+    sessionToken,
     propertyName: hotelInfo?.name,
     hotelSlug: hotelInfo?.slug,
     type: searchParams.type,

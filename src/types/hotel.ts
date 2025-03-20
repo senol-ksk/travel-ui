@@ -1,15 +1,3 @@
-import { ParserBuilder } from 'nuqs'
-
-export type HotelSearchParams = {
-  checkinDate: ParserBuilder<Date>
-  checkoutDate: ParserBuilder<Date>
-  destination: ParserBuilder<string>
-  destinationId: ParserBuilder<string>
-  slug: ParserBuilder<string>
-  type: ParserBuilder<number>
-  rooms: ParserBuilder<string>
-}
-
 interface HotelInfo {
   id: ID
   name: string

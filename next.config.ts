@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/otel-listesi/:path',
+        destination: '/hotel/search-results',
+      },
+    ]
+  },
 }
 
 export default nextConfig
