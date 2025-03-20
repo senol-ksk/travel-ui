@@ -51,9 +51,15 @@ body {
   @apply mx-auto;
 }
 
-d-block {
+/* .d-block {
   @apply block;
+}
+.d-none {
+  @apply hidden;
+}
+.d-md-block {
+  @apply md:block;
 }
 .d-md-none {
   @apply md:hidden;
-}
+} */
