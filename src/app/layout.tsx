@@ -17,6 +17,7 @@ import { mantineTheme } from '@/styles/mantine'
 
 import Header from '@/components/header'
 import { Footer } from '@/components/footer'
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
@@ -47,9 +48,11 @@ export default function RootLayout({
                 <Header />
               </div>
               <main className='grow-1'>{children}</main>
-              <div className='shrink-0 grow-0'>
-                <Footer />
-              </div>
+              <Suspense>
+                <div className='shrink-0 grow-0'>
+                  <Footer />
+                </div>
+              </Suspense>
             </MantineProvider>
           </Providers>
         </body>

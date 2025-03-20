@@ -9,7 +9,7 @@ export const useCmsQuery = (slug: string) => {
     queryFn: async () => {
       const response = await serviceRequest<CmsContent>({
         axiosOptions: {
-          url: 'api/cms/getContent',
+          url: 'api/cms/content',
           params: { slug },
         },
       })

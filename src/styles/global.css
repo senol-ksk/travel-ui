@@ -50,3 +50,10 @@ body {
 @utility container {
   @apply mx-auto;
 }
+
+d-block {
+  @apply block;
+}
+.d-md-none {
+  @apply md:hidden;
+}
