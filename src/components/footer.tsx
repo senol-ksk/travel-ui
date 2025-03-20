@@ -3,34 +3,6 @@ import { Container } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 import Image from 'next/image'
 
-type FooterWidgetParams = {
-  customer_service: {
-    value: string
-  }
-  footer_menu: {
-    menus: {
-      active: boolean
-      comment: null
-      createdBy: string
-      createdDate: string
-      fileId: null
-      icon: null
-      id: ID
-      image: null
-      items: []
-      language: string
-      ordering: number
-      parentId: null
-      poolId: ID
-      title: string
-      updatedBy: string
-      updatedDate: string
-      url: string
-      urlTarget: null
-    }[]
-  }
-}
-
 const Footer = async () => {
   const widgetCollection = await getWidgetsByCollectionSlug()
   const widgetCollectionData = widgetCollection?.data
@@ -40,8 +12,6 @@ const Footer = async () => {
   const socialMenus = widgetCollectionData?.filter(
     (item) => item.point === 'social_menu'
   )
-
-  console.log(widgetCollectionData, socialMenus)
 
   return (
     <footer className='bg-gray-50 px-3 py-5 md:py-7'>
