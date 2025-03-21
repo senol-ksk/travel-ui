@@ -1613,10 +1613,105 @@ type CMSMasterWidgetParams = [
   },
 ]
 
+type CampaingCategories = {
+  id: ID
+  parentId: null
+  idMap: null
+  language: string
+  title: string
+  description: null
+  slug: string
+  redirectUrl: null
+  items: null
+}
+
+type CategoryContent = {
+  id: 813
+  contentType: string
+  defaultLayout: null
+  defaultSchema: null
+  slug: string
+  language: string
+  redirect: string
+  category: null
+  widgets: null
+  params: {
+    sub_title: {
+      value: string
+    }
+    sort_description: {
+      value: string
+    }
+    description_title: {
+      value: string
+    }
+    description: {
+      value: string
+    }
+    terms_Of_conditions_title: {
+      value: ''
+    }
+    terms_Of_conditions: {
+      value: string
+    }
+    promation: {
+      value: string
+    }
+    promation_code: {
+      value: string
+    }
+    btn_name: {
+      value: string
+    }
+    link: {
+      value: string
+    }
+    image: {
+      value: string
+    }
+    view_country_code: {
+      value: ''
+    }
+  }
+  title: string
+  description: null
+  categoryId: ID
+  widgetCollectionId: ID
+  publicationDate: null
+  publicationEndDate: null
+  metaTitle: null
+  metaDescription: null
+  metaKeyword: null
+  layout: null
+  schema: null
+  ordering: number
+  active: boolean
+  imageUrl: null
+  fileUrl: null
+}
+
 export function getWidgetsByCollectionSlug() {
   return serviceRequest<CMSMasterWidgetParams>({
     axiosOptions: {
       url: 'api/cms/getWidgetsByCollectionSlug',
+    },
+  })
+}
+
+export function getCategoriesByParent(slug = 'kampanyalar') {
+  return serviceRequest<CampaingCategories[]>({
+    axiosOptions: {
+      url: 'api/cms/getCategoriesByParent',
+      params: { slug },
+    },
+  })
+}
+
+export function getContentsByCategorySlug(categorySlug = 'kampanyalar') {
+  return serviceRequest<CategoryContent[]>({
+    axiosOptions: {
+      url: 'api/cms/getContentsByCategorySlug',
+      params: { categorySlug },
     },
   })
 }

@@ -66,7 +66,7 @@ export const Header = () => {
               ))}
             </div>
             <div className='ms-auto flex items-center gap-2'>
-              <Anchor component={Link} href='/' c={'dark'}>
+              <Anchor component={Link} href='/kampanyalar' c={'dark'}>
                 Kampanyalar
               </Anchor>
               <Button

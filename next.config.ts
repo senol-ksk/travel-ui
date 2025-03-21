@@ -26,6 +26,14 @@ const nextConfig: NextConfig = {
         source: '/otel-listesi/:path',
         destination: '/hotel/search-results',
       },
+      {
+        source: '/kampanyalar',
+        destination: '/campaigns',
+      },
+      {
+        source: '/kampanyalar/:slug/:target',
+        destination: '/campaigns/detail',
+      },
     ]
   },
 }
