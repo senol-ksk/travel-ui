@@ -34,6 +34,10 @@ const nextConfig: NextConfig = {
         source: '/kampanyalar/:slug/:target',
         destination: '/campaigns/detail',
       },
+      {
+        source: '/ucak-bileti',
+        destination: '/flight/',
+      },
     ]
   },
 }

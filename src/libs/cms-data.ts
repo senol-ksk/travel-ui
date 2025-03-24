@@ -1690,6 +1690,15 @@ type CategoryContent = {
   fileUrl: null
 }
 
+export function getContent<ContentType>(slug: string) {
+  return serviceRequest<ContentType>({
+    axiosOptions: {
+      url: 'api/cms/content',
+      params: { slug },
+    },
+  })
+}
+
 export function getWidgetsByCollectionSlug() {
   return serviceRequest<CMSMasterWidgetParams>({
     axiosOptions: {
@@ -1787,4 +1796,10 @@ export function getContentBySlugAsync(slug: string) {
       params: { slug },
     },
   })
+}
+
+export function cdnImageUrl(src: string) {
+  if (typeof window === null) return `${process.env.CMS_CDN}/${src}`
+
+  return `${process.env.NEXT_PUBLIC_CMS_CDN}/${src}`
 }

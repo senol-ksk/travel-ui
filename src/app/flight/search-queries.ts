@@ -27,7 +27,6 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
-import responseDummy from './search-results/dummy-response.json'
 import { removeDuplicateFlights } from './search-results/filter-actions'
 import router from 'next/router'
 
