@@ -1,81 +1,14 @@
-import { Image, Container, rem, Title, Button } from '@mantine/core'
+import { Image, Container, rem, Title, Button, Box } from '@mantine/core'
 import NextImage from 'next/image'
 
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
 import { Flight } from '@/modules/flight/'
-import { CmsContent } from '@/types/cms-types'
-
-type FlightLandingWidget = {
-  id: ID
-  title: string
-  typeId: ID
-  collectionId: ID
-  point: string
-  params: {
-    sort_description: {
-      value: string
-    }
-    description: {
-      value: string
-    }
-    btn_text: {
-      value: ''
-    }
-    link: {
-      value: ''
-    }
-
-    view_country: {
-      value: string
-    }
-    destinations: {
-      destinations: {
-        id: ID
-        name: string
-        slug: string
-        code: string | null
-        iata: null
-        typeId: ID
-        domestic: boolean
-      }[]
-      value: ''
-    }
-    image: {
-      value: string
-    }
-    sort_desc: {
-      value: string
-    }
-    icon: {
-      value: ''
-    }
-    search_date: {
-      value: ''
-    }
-    svg: {
-      value: string
-    }
-  }
-  ordering: null | number
-  language: string
-  active: boolean
-}
-
-type FlightLandingParams = {
-  sub_title: {
-    value: string
-  }
-  content: {
-    value: string
-  }
-  image: {
-    value: string
-  }
-  images: {
-    list: null
-    value: null
-  }
-}
+import {
+  CmsContent,
+  FlightLandingParams,
+  FlightLandingWidget,
+} from '@/types/cms-types'
+import { Link } from 'next-view-transitions'
 
 export default async function FlightLandingPage() {
   const data = (
@@ -150,10 +83,17 @@ export default async function FlightLandingPage() {
                 <Title order={4}>Yurt İçi Popüler Uçuşlar</Title>
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                   {popularDomesticFlights.map((flight) => (
-                    <div key={flight.id} className='rounded border p-3'>
+                    <Box
+                      component={Link}
+                      href={`/ucak-bileti/${flight.params.destinations.destinations
+                        .map((item) => item.slug)
+                        .join('-')}`}
+                      key={flight.id}
+                      className='rounded border p-3'
+                    >
                       <div>{flight.title}</div>
                       <div>{flight.params.sort_desc?.value}</div>
-                    </div>
+                    </Box>
                   ))}
                 </div>
               </div>
@@ -163,10 +103,17 @@ export default async function FlightLandingPage() {
                 <Title order={4}>Yurt Dışı Popüler Uçuşlar</Title>
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                   {popularInternationalFlights.map((flight) => (
-                    <div key={flight.id} className='rounded border p-3'>
+                    <Box
+                      component={Link}
+                      href={`/ucak-bileti/${flight.params.destinations.destinations
+                        .map((item) => item.slug)
+                        .join('-')}`}
+                      key={flight.id}
+                      className='rounded border p-3'
+                    >
                       <div>{flight.title}</div>
                       <div>{flight.params.sort_desc?.value}</div>
-                    </div>
+                    </Box>
                   ))}
                 </div>
               </div>

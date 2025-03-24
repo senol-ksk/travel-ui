@@ -25,3 +25,75 @@ export interface CmsContent<Widgets, Params> {
   imageUrl: null
   fileUrl: null
 }
+
+export type FlightLandingWidget = {
+  id: ID
+  title: string
+  typeId: ID
+  collectionId: ID
+  point: string
+  params: {
+    sort_description: {
+      value: string
+    }
+    description: {
+      value: string
+    }
+    btn_text: {
+      value: ''
+    }
+    link: {
+      value: ''
+    }
+
+    view_country: {
+      value: string
+    }
+    destinations: {
+      destinations: {
+        id: ID
+        name: string
+        slug: string
+        code: string | null
+        iata: null
+        typeId: ID
+        domestic: boolean
+      }[]
+      value: ''
+    }
+    image: {
+      value: string
+    }
+    sort_desc: {
+      value: string
+    }
+    icon: {
+      value: ''
+    }
+    search_date: {
+      value: ''
+    }
+    svg: {
+      value: string
+    }
+  }
+  ordering: null | number
+  language: string
+  active: boolean
+}
+
+export type FlightLandingParams = {
+  sub_title: {
+    value: string
+  }
+  content: {
+    value: string
+  }
+  image: {
+    value: string
+  }
+  images: {
+    list: null
+    value: null
+  }
+}

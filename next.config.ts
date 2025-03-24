@@ -38,6 +38,10 @@ const nextConfig: NextConfig = {
         source: '/ucak-bileti',
         destination: '/flight/',
       },
+      {
+        source: '/ucak-bileti/:slug',
+        destination: '/flight/[slug]',
+      },
     ]
   },
 }
