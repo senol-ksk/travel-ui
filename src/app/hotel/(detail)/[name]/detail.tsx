@@ -266,7 +266,7 @@ const HotelDetailSection = () => {
                 <Text size='md'>14:00</Text>{' '}
               </div>
             </div>
-            <HotelDrawers />
+            <HotelDrawers description={hotel.descriptions} />
 
             {/* <Button
               variant='white'

@@ -7,10 +7,10 @@ type IProps = {
 }
 
 const ImportantInfos: React.FC<IProps> = ({ description }) => {
-  const [opened, setOpened] = useState<string | null>('0') // İlk öğe açık
+  const [opened, setOpened] = useState<string | null>('0')
 
   const toggleAccordion = (value: string) => {
-    setOpened(opened === value ? null : value) // Aynı öğeye tıklanırsa kapanır
+    setOpened(opened === value ? null : value)
   }
 
   return (

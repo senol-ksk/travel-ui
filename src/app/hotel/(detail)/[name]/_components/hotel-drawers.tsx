@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
-import { Drawer, Button } from '@mantine/core'
+import { Drawer, Button, Title } from '@mantine/core'
+import { HotelDetailDescription } from '@/app/hotel/types'
 
-function HotelDrawers() {
+type IProps = {
+  description: HotelDetailDescription
+}
+
+const HotelDrawers: React.FC<IProps> = ({ description }) => {
   const [opened, setOpened] = useState(false)
   const [activeDrawer, setActiveDrawer] = useState<number | null>(null)
 
@@ -45,15 +50,71 @@ function HotelDrawers() {
           Kampanyalar ve Avantajlar
         </Button>
       </div>
+
       <Drawer
         position='right'
         size='xl'
-        opened={opened}
+        opened={opened && activeDrawer === 1}
         onClose={handleClose}
-        className='flex justify-start border-gray-300 p-3'
+        title={
+          <div className='flex items-center'>
+            <button
+              onClick={handleClose}
+              className='rounded-full bg-gray-200 p-2 text-gray-700'
+            >
+              ❌
+            </button>
+            <div className='px-5'>
+              <Title className='text-center' order={3}>
+                Plaj ve Havuz Bilgisi
+              </Title>
+            </div>
+          </div>
+        }
+        className='border-gray-300 p-3'
+        closeButtonProps={{
+          style: { display: 'none' },
+        }}
       >
-        {activeDrawer === 1 && <div>Plaj ve Havuz</div>}
-        {activeDrawer === 2 && <div> Kampanyalar ve Avantajlar</div>}
+        <hr className='mt-3 mb-3 border-blue-500' />
+        <div
+          dangerouslySetInnerHTML={{
+            __html: description.beachPool ? description.beachPool : '',
+          }}
+        />
+      </Drawer>
+
+      <Drawer
+        position='right'
+        size='xl'
+        opened={opened && activeDrawer === 2}
+        onClose={handleClose}
+        title={
+          <div className='flex items-center'>
+            <button
+              onClick={handleClose}
+              className='rounded-full bg-gray-200 p-2 text-gray-700'
+            >
+              ❌
+            </button>
+            <div className='px-5'>
+              <Title className='text-center' order={3}>
+                Kampanyalar ve Avantajlar
+              </Title>
+            </div>
+          </div>
+        }
+        className='border-gray-300 p-3'
+        closeButtonProps={{
+          style: { display: 'none' },
+        }}
+      >
+        <hr className='mt-3 mb-3 border-blue-500' />
+        <div
+        // dangerouslySetInnerHTML={{
+        //   __html: description.promotions ? description.promotions : '',
+        // }}
+        />
       </Drawer>
     </div>
   )

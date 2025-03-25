@@ -39,14 +39,14 @@ export default function RootLayout({
           <ColorSchemeScript />
         </head>
 
-        <body>
+        <body className='grid gap-5'>
           <Providers>
             <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
               <Header />
               {children}
+              <Footer />
             </MantineProvider>
           </Providers>
-          <Footer />
         </body>
       </html>
     </ViewTransitions>
