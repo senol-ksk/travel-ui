@@ -372,6 +372,26 @@ export interface HotelDetailRoomDetail {
   }[]
 }
 
+export interface HotelDetailDescription {
+  hotelInformation: string | null
+  hotelAmenity: string | null
+  roomAmenity: string | null
+  locationInformation: string | null
+  hotelIntroduction: string | null
+  attractionInformation: string | null
+  dining: string | null
+  areaAttractions: string | null
+  recreation: string | null
+  policy: string | null
+  spa: string | null
+  whatToExpect: string | null
+  businessAmenities: string | null
+  beachPool: string | null
+  honeymoonInformation: string | null
+  specialDays: string | null
+  activities: string | null
+  importentInfo: string | null
+}
 export interface HotelDetailApiResponseData {
   hotelDetailResponse: {
     hotelInfo: {
@@ -383,7 +403,7 @@ export interface HotelDetailApiResponseData {
         address: string
         destination: string
         country_code: string
-        location: number[]
+        location: [number, number]
         phone: string | null
         email: string | null
         currency: string
@@ -422,25 +442,7 @@ export interface HotelDetailApiResponseData {
         facility_scopes: null
         tripAdvisor: null
         price: ServicePriceType
-        descriptions: {
-          hotelInformation: string
-          hotelAmenity: string
-          roomAmenity: string
-          locationInformation: string
-          hotelIntroduction: string
-          attractionInformation: string
-          dining: string | null
-          areaAttractions: string | null
-          recreation: string | null
-          policy: null
-          spa: null
-          whatToExpect: null
-          businessAmenities: null
-          beachPool: string
-          honeymoonInformation: string | null
-          specialDays: null
-          activities: string | null
-        }
+        descriptions: HotelDetailDescription
         year_built: null
         nr_restaurants: number
         nr_bars: number
