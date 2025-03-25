@@ -16,15 +16,6 @@ import { FaRegUserCircle } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
 import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 
-const links = [
-  { href: '/', label: 'Ucak' },
-  { href: '/', label: 'Otel' },
-  { href: '/', label: 'Arac' },
-  { href: '/', label: 'Otobus' },
-  { href: '/', label: 'Transfer' },
-  { href: '/', label: 'Tur' },
-]
-
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
   const toggleDrawer = () => setDrawerOpened((prev) => !prev)
