@@ -146,3 +146,57 @@ export type HotelLandingWidgets = {
   language: string
   active: boolean
 }
+
+export type CarLandingParams = {
+  sub_title: {
+    value: string
+  }
+  content: {
+    value: string
+  }
+  image: {
+    value: string
+  }
+  images: {
+    list: null
+    value: null
+  }
+}
+
+export type CarLandingWidget = {
+  id: ID
+  title: string
+  typeId: ID
+  collectionId: null
+  point: string
+  params: {
+    sort_description: {
+      value: string
+    }
+    description: {
+      value: string
+    }
+    btn_text: {
+      value: string
+    }
+    link: {
+      value: string
+    }
+    image: {
+      value: string
+    }
+    svg: {
+      value: string
+    }
+    view_country: {
+      value: string
+    }
+    images: {
+      list: string[]
+      value: null
+    }
+  }
+  ordering: ID
+  language: string
+  active: boolean
+}

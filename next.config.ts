@@ -46,6 +46,10 @@ const nextConfig: NextConfig = {
         source: '/otel',
         destination: '/hotel/',
       },
+      {
+        source: '/arac',
+        destination: '/car/',
+      },
     ]
   },
 }
