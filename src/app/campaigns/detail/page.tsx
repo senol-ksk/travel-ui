@@ -14,8 +14,6 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
   const path = `kampanyalar/${slug}/${target}`
   const content = (await getContentBySlugAsync(path))?.data
 
-  console.log(content)
-
   if (!content) return <div>no data</div>
 
   return (
