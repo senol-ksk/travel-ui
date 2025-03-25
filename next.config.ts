@@ -50,6 +50,10 @@ const nextConfig: NextConfig = {
         source: '/arac',
         destination: '/car/',
       },
+      {
+        source: '/otobus',
+        destination: '/bus/',
+      },
     ]
   },
 }

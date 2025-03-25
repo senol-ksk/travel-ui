@@ -200,3 +200,59 @@ export type CarLandingWidget = {
   language: string
   active: boolean
 }
+
+export type BusLandingParams = {
+  sub_title: {
+    value: string
+  }
+  content: {
+    value: string
+  }
+  image: {
+    value: string
+  }
+  images: {
+    list: null
+    value: null
+  }
+}
+
+export type BusLandingWidgets = {
+  id: ID
+  title: string
+  typeId: ID
+  collectionId: null
+  point: string
+  params: {
+    destinations: {
+      destinations: {
+        id: ID
+        name: string
+        slug: string
+        code: string
+        iata: null
+        typeId: number
+        domestic: boolean
+      }[]
+      value: string
+    }
+    image: {
+      value: string
+    }
+    sort_desc: {
+      value: string
+    }
+    icon: {
+      value: string
+    }
+    search_date: {
+      value: string
+    }
+    svg: {
+      value: string
+    }
+  }
+  ordering: number
+  language: string
+  active: boolean
+}
