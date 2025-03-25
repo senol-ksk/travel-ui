@@ -36,10 +36,11 @@ import { RoomUpdateForm } from './_components/room-update-form'
 import { LuMapPinned } from 'react-icons/lu'
 import { MdOutlineRoomService } from 'react-icons/md'
 import { NavbarMenu } from './_components/navbar_menu'
-import { FacilityProps } from './_components/facility_props'
+import { FacilityProps } from './_components/facility-props'
 import { Comments } from './_components/comments'
 import { Location } from './_components/location'
 import { HotelDrawers } from './_components/hotel-drawers'
+import { ImportantInfos } from './_components/important-infos'
 const HotelDetailSection = () => {
   const router = useRouter()
 
@@ -207,7 +208,7 @@ const HotelDetailSection = () => {
                 )}
               </div>
             </div>
-            {hotel.descriptions.hotelInformation.trim() && (
+            {hotel.descriptions && hotel.descriptions.hotelInformation ? (
               <div className='pb-5'>
                 <Title order={3} fz={'h5'}>
                   Genel Bilgiler
@@ -226,7 +227,7 @@ const HotelDetailSection = () => {
                   </Spoiler>
                 </TypographyStylesProvider>
               </div>
-            )}
+            ) : null}
           </div>
 
           <div className='col-span-12 grid gap-3 rounded-sm md:col-span-4'>
@@ -385,11 +386,8 @@ const HotelDetailSection = () => {
         <Title order={2} size={'lg'} id='facility-infos'>
           Tesis Bilgileri{' '}
         </Title>
-        <div className='rounded border bg-sky-500/10 p-3'>
-          <div className='d-flex justify-content-center align-items-center w-40 rounded bg-white p-2 md:p-5'>
-            Kış Sezonu
-          </div>
-          <FacilityProps />
+        <div className='rounded border bg-sky-500/10 p-1 md:p-3'>
+          <FacilityProps descriptions={hotel.descriptions} />
         </div>
         <Title order={2} size={'lg'}>
           Değerlendirmeler{' '}
@@ -411,9 +409,9 @@ const HotelDetailSection = () => {
           Konum Bilgileri{' '}
         </Title>
         <div id='location'>
-          <Location location={[35.379585, 34.08901]} />
+          <Location location={hotel.location} />
         </div>
-        <div>
+        {/* <div>
           <Title order={5}>İletişim Bilgileri</Title>
           <address>
             {hotel.address}
@@ -424,6 +422,12 @@ const HotelDetailSection = () => {
               <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
             </div>
           </address>
+        </div> */}
+        <Title order={2} size={'lg'}>
+          Önemli Bilgiler{' '}
+        </Title>
+        <div id='location'>
+          <ImportantInfos description={hotel.descriptions} />
         </div>
       </Container>
       <Modal

@@ -27,7 +27,7 @@ function NavbarMenu() {
             Konum
           </div>
           <div
-            className='col-span-2 text-center text-xs sm:text-sm'
+            className='col-span-3 text-center text-xs sm:text-sm'
             role='button'
             onClick={() => scrollToTarget('facility-infos')}
           >
@@ -40,13 +40,13 @@ function NavbarMenu() {
           >
             Değerlendirmeler
           </div>
-          <div
+          {/* <div
             className='col-span-2 text-center text-xs sm:text-sm'
             role='button'
             onClick={() => scrollToTarget('events')}
           >
             Etkinlikler
-          </div>
+          </div> */}
         </div>
       </Stack>
     </div>

@@ -14,6 +14,7 @@ dayjs.locale('tr')
 
 import { Providers } from '@/app/providers'
 import Header from '@/components/header'
+import { Footer } from '@/components/footer'
 import { mantineTheme } from '@/styles/mantine'
 
 export const metadata: Metadata = {
@@ -45,6 +46,7 @@ export default function RootLayout({
               {children}
             </MantineProvider>
           </Providers>
+          <Footer />
         </body>
       </html>
     </ViewTransitions>
