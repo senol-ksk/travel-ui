@@ -14,7 +14,6 @@ dayjs.locale('tr')
 
 import { Providers } from '@/app/providers'
 import Header from '@/components/header'
-import { Footer } from '@/components/footer'
 import { mantineTheme } from '@/styles/mantine'
 
 export const metadata: Metadata = {
@@ -39,12 +38,11 @@ export default function RootLayout({
           <ColorSchemeScript />
         </head>
 
-        <body className='grid gap-5'>
+        <body>
           <Providers>
             <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
               <Header />
               {children}
-              <Footer />
             </MantineProvider>
           </Providers>
         </body>

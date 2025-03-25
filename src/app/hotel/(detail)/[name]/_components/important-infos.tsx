@@ -18,7 +18,7 @@ const ImportantInfos: React.FC<IProps> = ({ description }) => {
       <Accordion className='bg-white p-3' value={opened}>
         <Accordion.Item value='0'>
           <Accordion.Control onClick={() => toggleAccordion('0')}>
-            Başlık
+            Önemli Bilgiler
           </Accordion.Control>
           <Accordion.Panel>
             <div
