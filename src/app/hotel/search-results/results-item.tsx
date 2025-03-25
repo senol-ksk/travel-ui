@@ -157,8 +157,8 @@ const HotelSearchResultItem: React.FC<IProps> = ({
               </div>
               <div className='col-span-3 flex flex-col gap-3 self-end @2xl:text-end'>
                 {hotelInfo?.comment_info && (
-                  <div className=''>
-                    <Badge color='green' size='xl'>
+                  <div className='ms-auto flex items-center gap-1'>
+                    <Badge color='teal' size='xl' radius='md'>
                       {hotelInfo?.comment_info?.averageScore}
                     </Badge>
                     <span className='ps-1 text-xs font-semibold text-gray-600'>
@@ -169,7 +169,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 <div>
                   {hasDiscount && (
                     <>
-                      <div className='inline-flex items-center justify-end gap-1 rounded-lg bg-blue-500 p-2 text-end text-sm leading-none font-semibold text-white'>
+                      <div className='text-md inline-flex items-center justify-end gap-1 rounded bg-blue-600 p-2 text-end leading-none font-semibold text-white'>
                         <div className=''>%{discountRate}</div>
                         <small>İndirim</small>
                       </div>
@@ -178,7 +178,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                       </div>
                     </>
                   )}
-                  <div className='text-lg font-semibold'>
+                  <div className='text-xl font-bold'>
                     {formatCurrency(totalPrice)}
                   </div>
                 </div>
