@@ -1,4 +1,5 @@
 import {
+  createSearchParamsCache,
   createSerializer,
   parseAsArrayOf,
   parseAsFloat,
@@ -16,6 +17,10 @@ export const tourSearchResultParamParser = {
 }
 
 export const serializeTourSearchParams = createSerializer(
+  tourSearchResultParamParser
+)
+
+export const tourSearchParamCache = createSearchParamsCache(
   tourSearchResultParamParser
 )
 

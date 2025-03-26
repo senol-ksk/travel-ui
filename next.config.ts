@@ -58,6 +58,10 @@ const nextConfig: NextConfig = {
         source: '/transfer',
         destination: '/transfer/',
       },
+      {
+        source: '/tur',
+        destination: '/tour/',
+      },
     ]
   },
 }
