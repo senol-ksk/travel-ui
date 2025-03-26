@@ -256,3 +256,53 @@ export type BusLandingWidgets = {
   language: string
   active: boolean
 }
+
+export type TransferLandingParams = {
+  sub_title: {
+    value: string
+  }
+  content: {
+    value: string
+  }
+  image: {
+    value: string
+  }
+  images: {
+    list: null
+    value: null
+  }
+}
+
+export type TransferLandingWidget = {
+  id: ID
+  title: string
+  typeId: ID
+  collectionId: ID
+  point: string
+  params: {
+    sort_description: {
+      value: string
+    }
+    description: {
+      value: string
+    }
+    btn_text: {
+      value: string
+    }
+    link: {
+      value: string
+    }
+    image: {
+      value: string
+    }
+    svg: {
+      value: string
+    }
+    view_country: {
+      value: string
+    }
+  }
+  ordering: number
+  language: string
+  active: boolean
+}
