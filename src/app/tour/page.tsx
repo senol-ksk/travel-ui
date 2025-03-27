@@ -12,6 +12,7 @@ import {
 import { Link } from 'next-view-transitions'
 import dayjs from 'dayjs'
 import { LandingSliderItem } from './_components/landing-slider-item'
+import { serializeTourSearchParams } from '@/modules/tour/searchResultParams'
 
 export default async function TourLandingPage() {
   const headersList = await headers()
@@ -27,15 +28,21 @@ export default async function TourLandingPage() {
 
   const generateSearchURL = (link: string) => {
     const url = new URL(link, baseUrl)
-    const pathnames = url.pathname.split('/').filter(Boolean)
-    const checkinDate =
-      url.searchParams.get('checkinDate') ??
-      dayjs().add(10, 'D').format('YYYY-MM-DD')
-    const checkoutDate =
-      url.searchParams.get('checkoutDate') ??
-      dayjs(checkinDate).add(200, 'd').format('YYYY-MM-DD')
+    const destinationSlug = url.pathname.split('/').filter(Boolean).at(-1)
+    const checkinDate = url.searchParams.get('checkinDate')
+      ? dayjs(url.searchParams.get('checkinDate')).toDate()
+      : dayjs().add(10, 'D').toDate()
+    const checkoutDate = url.searchParams.get('checkoutDate')
+      ? dayjs(url.searchParams.get('checkoutDate')).toDate()
+      : dayjs(checkinDate).add(200, 'd').toDate()
 
-    return `/tour/search-results?destinationSlug=${pathnames[1]}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}`
+    const serializedUrl = serializeTourSearchParams('/tour/search-results', {
+      checkinDate,
+      checkoutDate,
+      destinationSlug,
+    })
+
+    return serializedUrl
   }
 
   if (!data) return null
@@ -80,6 +87,7 @@ export default async function TourLandingPage() {
                   <Button
                     component={Link}
                     href={generateSearchURL(abroadSeeAll?.params.link.value)}
+                    size='compact-sm'
                   >
                     {abroadSeeAll?.title}
                   </Button>
@@ -113,6 +121,7 @@ export default async function TourLandingPage() {
                   <Button
                     component={Link}
                     href={generateSearchURL(aidSeeAll?.params.link.value)}
+                    size='compact-sm'
                   >
                     {abroadSeeAll?.title}
                   </Button>
@@ -146,6 +155,7 @@ export default async function TourLandingPage() {
                   <Button
                     component={Link}
                     href={generateSearchURL(shipSeeAll?.params.link.value)}
+                    size='compact-sm'
                   >
                     {shipSeeAll?.title}
                   </Button>
