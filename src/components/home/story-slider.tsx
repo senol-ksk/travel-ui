@@ -3,10 +3,13 @@
 import { Link } from 'next-view-transitions'
 import { BackgroundImage, Skeleton } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
+import useEmblaCarousel from 'embla-carousel-react'
 
-import { useCmsQuery } from '@/modules/cms/useCmsQuery'
+import { Widgets } from '@/types/cms-types'
+import { useEffect, useState } from 'react'
+import clsx from 'clsx'
 
-const StorySliderSkeleton = () => {
+export const StorySliderSkeleton = () => {
   return (
     <div className='flex w-full justify-center gap-5 overflow-hidden whitespace-nowrap'>
       {new Array(10).fill(true).map((_, itemIndex) => (
@@ -20,24 +23,26 @@ const StorySliderSkeleton = () => {
   )
 }
 
-const StorySlider = () => {
-  const { cmsQuery } = useCmsQuery('ana-sayfa')
+type IProps = {
+  data: Widgets
+}
 
-  const dealsOfWeekData = cmsQuery.data?.widgets.filter(
-    (item) => item.point === 'deals_of_week'
-  )
+const StorySlider: React.FC<IProps> = ({ data }) => {
+  const dealsOfWeekData = data
+  const [isEmblaInitialized, setIsEmblaInitialized] = useState(false)
 
-  if (!cmsQuery.data && cmsQuery.isLoading) {
-    return <StorySliderSkeleton />
-  }
-  if (!dealsOfWeekData) {
-    return null
-  }
+  useEffect(() => {
+    setIsEmblaInitialized(true)
+  }, [])
 
   return (
-    <>
+    <div className='relative'>
+      {!isEmblaInitialized && (
+        <div className='absolute start-0 end-0 overflow-hidden whitespace-nowrap'>
+          <StorySliderSkeleton />
+        </div>
+      )}
       <Carousel
-        align={'center'}
         dragFree
         slideSize={{
           base: '50%',
@@ -46,8 +51,11 @@ const StorySlider = () => {
         }}
         slidesToScroll='auto'
         withControls={false}
+        className={clsx({
+          'opacity-0': !isEmblaInitialized,
+        })}
       >
-        {dealsOfWeekData.map((item) => {
+        {dealsOfWeekData?.map((item) => {
           return (
             <Carousel.Slide key={item.id}>
               <Link href={item.params.link.value} className='block'>
@@ -65,7 +73,7 @@ const StorySlider = () => {
           )
         })}
       </Carousel>
-    </>
+    </div>
   )
 }
 
