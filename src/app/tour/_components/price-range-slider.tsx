@@ -1,8 +1,9 @@
-import { formatCurrency } from '@/libs/util'
-import { filterParser } from '@/modules/tour/searchResultParams'
 import { RangeSlider } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { useEffect, useState } from 'react'
+
+import { formatCurrency } from '@/libs/util'
+import { filterParser } from '@/modules/tour/searchResultParams'
 
 type IProps = {
   minPrice: number
@@ -12,7 +13,6 @@ type IProps = {
 const PriceRangeSlider: React.FC<IProps> = ({ maxPrice, minPrice }) => {
   const [values, setValues] = useState<[number, number]>([minPrice, maxPrice])
   const [{ priceRange }, setFilterParams] = useQueryStates(filterParser)
-  console.log(minPrice, maxPrice)
 
   useEffect(() => {
     if (priceRange) {

@@ -11,6 +11,7 @@ import {
 } from '@/types/cms-types'
 import { Link } from 'next-view-transitions'
 import dayjs from 'dayjs'
+import { LandingSliderItem } from './_components/landing-slider-item'
 
 export default async function TourLandingPage() {
   const headersList = await headers()
@@ -24,10 +25,28 @@ export default async function TourLandingPage() {
     )
   )?.data
 
+  const generateSearchURL = (link: string) => {
+    const url = new URL(link, baseUrl)
+    const pathnames = url.pathname.split('/').filter(Boolean)
+    const checkinDate =
+      url.searchParams.get('checkinDate') ??
+      dayjs().add(10, 'D').format('YYYY-MM-DD')
+    const checkoutDate =
+      url.searchParams.get('checkoutDate') ??
+      dayjs(checkinDate).add(200, 'd').format('YYYY-MM-DD')
+
+    return `/tour/search-results?destinationSlug=${pathnames[1]}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}`
+  }
+
   if (!data) return null
   const { params, widgets } = data
   const abroadTours = widgets?.filter((x) => x.point == 'abroad_tours')
   const abroadSeeAll = widgets?.find((x) => x.point == 'abroad_see_all')
+  const aidTours = widgets?.filter((x) => x.point == 'aid_tours')
+  const aidTitle = widgets?.find((x) => x.point == 'aid_title')
+  const aidSeeAll = widgets?.find((x) => x.point == 'aid_see_all')
+  const shipTours = widgets?.filter((x) => x.point == 'ship_tours')
+  const shipSeeAll = widgets?.find((x) => x.point == 'ship_see_all')
 
   return (
     <div>
@@ -52,7 +71,7 @@ export default async function TourLandingPage() {
       <Container className='flex flex-col gap-3 py-5 md:gap-7 md:py-10'>
         {abroadTours.length > 0 && (
           <div>
-            <div className='flex justify-between gap-2 pb-3'>
+            <div className='flex items-center justify-between gap-2 pb-3'>
               <Title order={2} fz={'h3'}>
                 Ramazan Bayramı Turları
               </Title>
@@ -60,7 +79,7 @@ export default async function TourLandingPage() {
                 <div>
                   <Button
                     component={Link}
-                    href={abroadSeeAll?.params.link.value}
+                    href={generateSearchURL(abroadSeeAll?.params.link.value)}
                   >
                     {abroadSeeAll?.title}
                   </Button>
@@ -70,34 +89,79 @@ export default async function TourLandingPage() {
             <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
               <div className='flex gap-3'>
                 {abroadTours.map((tour) => {
-                  const url = new URL(tour.params.link.value, baseUrl)
-                  const pathnames = url.pathname.split('/').filter(Boolean)
-                  const checkinDate =
-                    url.searchParams.get('checkinDate') ??
-                    dayjs().add(10, 'D').format('YYYY-MM-DD')
-                  const checkoutDate =
-                    url.searchParams.get('checkoutDate') ??
-                    dayjs(checkinDate).add(200, 'd').format('YYYY-MM-DD')
-
                   return (
-                    <div key={tour.id} className='relative'>
-                      <Link
-                        href={`/tour/search-results?destinationSlug=${pathnames[1]}&checkinDate=${checkinDate}&checkoutDate=${checkoutDate}`}
-                      >
-                        <div className='relative size-[200px]'>
-                          <Image
-                            component={NextImage}
-                            src={cdnImageUrl(tour.params.image.value)}
-                            fill
-                            alt={tour.title}
-                            radius={'md'}
-                          />
-                        </div>
-                        <div className='leading-lg absolute start-0 end-0 bottom-0 rounded-b bg-black/35 p-3 text-lg font-semibold text-white'>
-                          {tour.title}
-                        </div>
-                      </Link>
-                    </div>
+                    <LandingSliderItem
+                      href={generateSearchURL(tour.params.link.value)}
+                      imageSrc={cdnImageUrl(tour.params.image.value)}
+                      title={tour.title}
+                      key={tour.id}
+                    />
+                  )
+                })}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+        {aidTours.length > 0 && (
+          <div>
+            <div className='flex items-center justify-between gap-2 pb-3'>
+              <Title order={3} fz={'h3'}>
+                {aidTitle?.title}
+              </Title>
+              {aidSeeAll && (
+                <div>
+                  <Button
+                    component={Link}
+                    href={generateSearchURL(aidSeeAll?.params.link.value)}
+                  >
+                    {abroadSeeAll?.title}
+                  </Button>
+                </div>
+              )}
+            </div>
+            <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
+              <div className='flex gap-3'>
+                {aidTours.map((tour) => {
+                  return (
+                    <LandingSliderItem
+                      href={generateSearchURL(tour.params.link.value)}
+                      imageSrc={cdnImageUrl(tour.params.image.value)}
+                      title={tour.title}
+                      key={tour.id}
+                    />
+                  )
+                })}
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+        {shipTours.length > 0 && (
+          <div>
+            <div className='flex items-center justify-between gap-2 pb-3'>
+              <Title order={3} fz={'h3'}>
+                Gemi Turları
+              </Title>
+              {shipSeeAll && (
+                <div>
+                  <Button
+                    component={Link}
+                    href={generateSearchURL(shipSeeAll?.params.link.value)}
+                  >
+                    {shipSeeAll?.title}
+                  </Button>
+                </div>
+              )}
+            </div>
+            <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
+              <div className='flex gap-3'>
+                {shipTours.map((tour) => {
+                  return (
+                    <LandingSliderItem
+                      href={generateSearchURL(tour.params.link.value)}
+                      imageSrc={cdnImageUrl(tour.params.image.value)}
+                      title={tour.title}
+                      key={tour.id}
+                    />
                   )
                 })}
               </div>
