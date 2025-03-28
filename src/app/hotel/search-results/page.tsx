@@ -1,18 +1,20 @@
 import { type SearchParams } from 'nuqs/server'
 
-// import { getHotelSearchResultParams } from './request-model'
 import { HotelSearchResults } from '@/app/hotel/search-results/search-result'
 import { Suspense } from 'react'
-import { Loader } from '@mantine/core'
 
 type PageProps = {
   searchParams: Promise<SearchParams>
 }
 
-const HotelSearchResultsPage: React.FC<PageProps> = async () => {
+const HotelSearchResultsPage: React.FC<PageProps> = async ({
+  searchParams,
+}) => {
+  const params = await searchParams
+
   return (
     <Suspense>
-      <HotelSearchResults />
+      <HotelSearchResults slug={params.path as string} />
     </Suspense>
   )
 }

@@ -6,12 +6,10 @@ import { Button, Skeleton } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-// import { useRouter } from 'next/navigation'
 import { useTransitionRouter } from 'next-view-transitions'
 
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { Locations } from '@/components/search-engine/locations/hotel/locations'
@@ -25,21 +23,25 @@ import {
   serializeHotelSearchParams,
 } from '@/modules/hotel/searchParams'
 
-export const HotelSearchEngine = () => {
+type IProps = {
+  defaultValues?: HotelSearchEngineSchemaType
+}
+
+const defaultDates = [
+  dayjs().add(3, 'd').toDate(),
+  dayjs().add(7, 'd').toDate(),
+]
+const defaultRoom = [
+  {
+    adult: 2,
+    child: 0,
+    childAges: [],
+  },
+]
+
+export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
   const mounted = useMounted()
   const router = useTransitionRouter()
-
-  const defaultDates = [
-    dayjs().add(3, 'd').toDate(),
-    dayjs().add(7, 'd').toDate(),
-  ]
-  const defaultRoom = [
-    {
-      adult: 2,
-      child: 0,
-      childAges: [],
-    },
-  ]
 
   const [localParams, setLocalParams] =
     useLocalStorage<HotelSearchEngineSchemaType>({
@@ -69,7 +71,7 @@ export const HotelSearchEngine = () => {
   const form = useForm<HotelSearchEngineSchemaType>({
     resolver: zodResolver(searchEngineSchema),
     mode: 'onChange',
-    defaultValues: localParams,
+    defaultValues: defaultValues ?? localParams,
   })
 
   const [destinationLocationInputValue, setDestinationLocationInputValue] =
@@ -95,13 +97,7 @@ export const HotelSearchEngine = () => {
     })
 
   const onSubmit: SubmitHandler<HotelSearchEngineSchemaType> = (data) => {
-    setLocalParams(data)
-
-    const rooms = data.rooms
-      .flatMap((room) =>
-        room.child ? room.adult + '-' + room.childAges.join('-') : room.adult
-      )
-      .toString()
+    // setLocalParams(data)
 
     const searchParams = serializeHotelSearchParams('/hotel/search-results', {
       checkinDate: data.checkinDate,
@@ -110,7 +106,7 @@ export const HotelSearchEngine = () => {
       slug: data.destination.slug,
       destinationId: '' + data.destination.id,
       type: data.destination.type,
-      rooms,
+      rooms: data.rooms,
     })
 
     router.push(searchParams)
@@ -146,7 +142,7 @@ export const HotelSearchEngine = () => {
               })
               form.trigger('destination')
             }}
-            defaultValue={localParams.destination.name}
+            defaultValue={form.formState.defaultValues?.destination?.name}
           />
         </div>
         <div className='col-span-12 sm:col-span-6 md:col-span-3'>

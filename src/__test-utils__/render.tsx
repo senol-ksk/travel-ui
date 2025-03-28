@@ -6,6 +6,15 @@ import { render as testingLibraryRender } from '@testing-library/react'
 import { MantineProvider } from '@mantine/core'
 
 import { mantineTheme } from '@/styles/mantine/index'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
 
 vi.mock('next/font/google', () => ({
   Figtree: () => ({
@@ -22,7 +31,9 @@ vi.mock('next-view-transitions', () => ({
 export function render(ui: React.ReactNode, props?: RenderOptions) {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
-      <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
+      <QueryClientProvider client={queryClient}>
+        <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
+      </QueryClientProvider>
     ),
     ...props,
   })

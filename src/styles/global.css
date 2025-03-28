@@ -10,6 +10,8 @@
 @import '@mantine/dates/styles.layer.css';
 @import '@mantine/notifications/styles.layer.css';
 
+@import '@mantine/carousel/styles.layer.css';
+
 @layer base {
   *,
   ::after,
@@ -31,6 +33,12 @@ body {
   @apply h-full;
 }
 
+.layout-wrapper {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100%;
+}
+
 .iti__selected-dial-code {
   @apply text-sm;
 }
@@ -42,3 +50,16 @@ body {
 @utility container {
   @apply mx-auto;
 }
+
+/* .d-block {
+  @apply block;
+}
+.d-none {
+  @apply hidden;
+}
+.d-md-block {
+  @apply md:block;
+}
+.d-md-none {
+  @apply md:hidden;
+} */

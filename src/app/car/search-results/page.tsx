@@ -1,7 +1,7 @@
 import { Suspense, useId } from 'react'
 
 import { Skeleton } from '@mantine/core'
-import { SearchParams } from 'nuqs'
+import { type SearchParams } from 'nuqs'
 import { SearchResult } from './search-result'
 
 type PageProps = {

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
-import { useIsFirstRender, useTimeout } from '@mantine/hooks'
+import { useLocalStorage, useTimeout } from '@mantine/hooks'
 
 import { getsecuritytoken, request, serviceRequest } from '@/network'
 import { HotelSearchRequestParams } from '@/types/hotel'
@@ -9,21 +9,32 @@ import { GetSecurityTokenResponse } from '@/types/global'
 import { HotelSearchResultApiResponse } from '@/app/hotel/types'
 import {
   hotelFilterSearchParams,
+  HotelSearchEngineSchemaType,
   hotelSearchParamParser,
 } from '@/modules/hotel/searchParams'
 import { hotelSocket } from './socket'
 import { cleanObj } from '@/libs/util'
+import dayjs from 'dayjs'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
-const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
+// const apiActionSearchResponseReadyData = '/api/Hotel/SearchResponseReadyData'
 const apiActionSearchResponse = '/api/Hotel/SearchResponse'
+const apiGetHotels = '/api/Hotel/GetHotels'
 
-export const useSearchResultParams = () => {
+type SlugParams = {
+  slug?: string
+}
+
+export const useSearchResultParams = ({ slug }: SlugParams) => {
   const searchQueryStatus = useRef<'initial' | 'loading' | 'ended'>('initial')
 
-  const [searchParams] = useQueryStates(hotelSearchParamParser)
+  const [searchParams, setSearchParams] = useQueryStates(hotelSearchParamParser)
   const [filterParams] = useQueryStates(hotelFilterSearchParams)
+  const [localParams, setLocalParams] =
+    useLocalStorage<HotelSearchEngineSchemaType>({
+      key: 'hotel-search-engine',
+    })
 
   const { start: startRequestTimeout, clear: clearRequestTimeout } = useTimeout(
     () => {
@@ -36,15 +47,79 @@ export const useSearchResultParams = () => {
 
   const searchParamsQuery = useQuery({
     enabled: !!searchParams,
-    queryKey: ['hotel-search-params', searchParams],
+    queryKey: ['hotel-search-params', searchParams, slug],
     queryFn: async ({ signal }) => {
-      const response = await serviceRequest<HotelSearchRequestParams>({
-        axiosOptions: {
-          url: 'api/hotel/searchResults',
-          params: searchParams,
-          signal,
-        },
-      })
+      let response
+      const rooms = searchParams.rooms
+        ? searchParams?.rooms
+            .flatMap((room) =>
+              room.child
+                ? room.adult + '-' + room.childAges.join('-')
+                : room.adult
+            )
+            .toString()
+        : searchParams.rooms
+
+      if (slug) {
+        response = await serviceRequest<HotelSearchRequestParams>({
+          axiosOptions: {
+            url: 'api/hotel/searchResults',
+            params: { ...searchParams, rooms, slug },
+            signal,
+          },
+        })
+      } else {
+        response = await serviceRequest<HotelSearchRequestParams>({
+          axiosOptions: {
+            url: 'api/hotel/searchResults',
+            params: { ...searchParams, rooms },
+            signal,
+          },
+        })
+      }
+
+      if (response?.data) {
+        setLocalParams({
+          checkinDate: dayjs(
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .checkInDate
+          ).toDate(),
+          checkoutDate: dayjs(
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .checkOutDate
+          ).toDate(),
+          destination: {
+            id: response.data.hotelSearchApiRequest.hotelSearchModuleRequest.id,
+            name: response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .name,
+            slug: response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .slug,
+            type: response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .type,
+          },
+          rooms:
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest.rooms,
+        })
+
+        setSearchParams({
+          checkinDate: dayjs(
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .checkInDate
+          ).toDate(),
+          checkoutDate: dayjs(
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+              .checkOutDate
+          ).toDate(),
+          destination:
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest.name,
+          slug: response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+            .slug,
+          type: response.data.hotelSearchApiRequest.hotelSearchModuleRequest
+            .type,
+          rooms:
+            response.data.hotelSearchApiRequest.hotelSearchModuleRequest.rooms,
+        })
+      }
 
       return response?.data
     },
@@ -54,7 +129,12 @@ export const useSearchResultParams = () => {
 
   const hotelSearchRequestQuery = useInfiniteQuery({
     enabled: !!searchRequestParams,
-    queryKey: ['hotel-search-results', searchRequestParams, cleanFilterParams],
+    queryKey: [
+      'hotel-search-results',
+      searchRequestParams,
+      cleanFilterParams,
+      slug,
+    ],
     initialPageParam: {
       pageNo: searchRequestParams?.hotelSearchModuleRequest.pageNo || 0,
     },
@@ -67,6 +147,7 @@ export const useSearchResultParams = () => {
         method: 'post',
         url: process.env.NEXT_PUBLIC_OL_ROUTE,
         data: {
+          // apiAction: slug ? apiGetHotels : apiActionSearchResponse,
           apiAction: apiActionSearchResponse,
           params: {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
@@ -173,7 +254,6 @@ export const useSearchResultParams = () => {
 
   return {
     hotelSearchRequestQuery,
-    searchParams,
     searchParamsQuery,
     searchQueryStatus,
   }

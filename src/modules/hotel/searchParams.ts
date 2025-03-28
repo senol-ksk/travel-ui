@@ -1,8 +1,6 @@
-import { boolean, z } from 'zod'
+import { z } from 'zod'
 
-import type { HotelSearchParams } from '@/types/hotel'
 import {
-  createParser,
   createSearchParamsCache,
   createSerializer,
   inferParserType,
@@ -14,6 +12,7 @@ import {
   parseAsString,
   parseAsStringEnum,
 } from 'nuqs/server'
+import dayjs from 'dayjs'
 
 export enum HotelSortOrderEnums {
   priceDescending = 'PriceDescending',
@@ -35,15 +34,26 @@ export type HotelRoomOptionTypes = {
   // senior: number
   // military: number
 }
+const roomSchema = z.object({
+  adult: z.number(),
+  child: z.number(),
+  childAges: z.array(z.number()),
+})
 
 export const hotelSearchParamParser = {
-  checkinDate: parseAsIsoDate,
-  checkoutDate: parseAsIsoDate,
+  checkinDate: parseAsIsoDate.withDefault(dayjs().add(10, 'days').toDate()),
+  checkoutDate: parseAsIsoDate.withDefault(dayjs().add(17, 'days').toDate()),
   destination: parseAsString,
   destinationId: parseAsString,
   slug: parseAsString,
   type: parseAsInteger,
-  rooms: parseAsString,
+  rooms: parseAsArrayOf(parseAsJson(roomSchema.parse)).withDefault([
+    {
+      adult: 2,
+      child: 0,
+      childAges: [],
+    },
+  ]),
 }
 export const hotelFilterSearchParams = {
   orderBy: parseAsStringEnum<HotelSortOrderEnums>(
@@ -57,12 +67,6 @@ export const hotelFilterSearchParams = {
   pensionTypes: parseAsArrayOf(parseAsString),
   themes: parseAsArrayOf(parseAsString),
 }
-
-const roomSchema = z.object({
-  adult: z.number(),
-  child: z.number(),
-  childAges: z.array(z.number()),
-})
 
 export const hotelDetailSearchParams = {
   propertyName: parseAsString,
@@ -86,12 +90,13 @@ export const serializeHotelDetailParams = createSearchParamsCache(
   hotelDetailSearchParams
 )
 
-export const serializeHotelSearchParams = createSerializer<HotelSearchParams>(
+export const serializeHotelSearchParams = createSerializer(
   hotelSearchParamParser
 )
 
-export const hotelSearchParamsCahce =
-  createSearchParamsCache<HotelSearchParams>(hotelSearchParamParser)
+export const hotelSearchParamsCahce = createSearchParamsCache(
+  hotelSearchParamParser
+)
 
 export const searchEngineSchema = z.object({
   destination: z.object({

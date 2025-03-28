@@ -8,7 +8,6 @@ import {
   LoadingOverlay,
   Modal,
   NativeSelect,
-  rem,
   Skeleton,
   Title,
   UnstyledButton,
@@ -21,6 +20,7 @@ import { HotelSearchEngine } from '@/modules/hotel'
 
 import {
   hotelFilterSearchParams,
+  hotelSearchParamParser,
   HotelSortOrderEnums,
 } from '@/modules/hotel/searchParams'
 import { useSearchResultParams } from './useSearchQueries'
@@ -33,10 +33,16 @@ import { DestinationIds } from './components/filters/destinationIds'
 import { PensionTypes } from './components/filters/pension-types'
 import { Themes } from './components/filters/themes'
 
-const HotelSearchResults: React.FC = () => {
+type IProps = {
+  slug?: string
+}
+
+const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   const mounted = useMounted()
+  const [searchParams] = useQueryStates(hotelSearchParamParser)
+
   const { hotelSearchRequestQuery, searchParamsQuery, searchQueryStatus } =
-    useSearchResultParams()
+    useSearchResultParams({ slug })
   const [filterParams, setFilterParams] = useQueryStates(
     hotelFilterSearchParams
   )
@@ -55,7 +61,21 @@ const HotelSearchResults: React.FC = () => {
     <>
       <div className='border-b py-4'>
         <Container>
-          <HotelSearchEngine />
+          {searchParams.destination && (
+            <HotelSearchEngine
+              defaultValues={{
+                checkinDate: searchParams.checkinDate,
+                checkoutDate: searchParams.checkoutDate,
+                destination: {
+                  id: searchParams.destinationId ?? 0,
+                  name: searchParams.destination ?? '',
+                  slug: searchParams.slug ?? '',
+                  type: searchParams.type ?? 0,
+                },
+                rooms: searchParams.rooms,
+              }}
+            />
+          )}
         </Container>
       </div>
       {(hotelSearchRequestQuery.isLoading || searchParamsQuery.isLoading) && (
@@ -293,10 +313,35 @@ const HotelSearchResults: React.FC = () => {
                 if (!page) return null
                 return (
                   page.searchResults.length &&
-                  page.searchResults.map((results) => {
+                  page.searchResults.map((results, resultIndex) => {
                     const hotelInfos = results.hotelInfos
                     const roomDetails =
                       results.roomDetails && Object.values(results.roomDetails)
+
+                    console.log(hotelInfos)
+
+                    // if (slug) {
+                    //   return hotelInfos.map((result) => {
+                    //     return (
+                    //       <HotelSearchResultItem
+                    //         searchToken={
+                    //           searchParamsQuery.data?.hotelSearchApiRequest
+                    //             .hotelSearchModuleRequest.searchToken as string
+                    //         }
+                    //         sessionToken={
+                    //           searchParamsQuery.data?.hotelSearchApiRequest
+                    //             .hotelSearchModuleRequest.sessionToken as string
+                    //         }
+                    //         key={result.id}
+                    //         hotelInfo={hotelInfo}
+                    //         onMapClick={() => {
+                    //           openMapsModal()
+                    //           setHotelInfo(hotelInfo)
+                    //         }}
+                    //       />
+                    //     )
+                    //   })
+                    // }
 
                     return results.items.map((result) => {
                       const hotelInfo = hotelInfos.find(
@@ -308,6 +353,14 @@ const HotelSearchResults: React.FC = () => {
 
                       return (
                         <HotelSearchResultItem
+                          searchToken={
+                            searchParamsQuery.data?.hotelSearchApiRequest
+                              .hotelSearchModuleRequest.searchToken as string
+                          }
+                          sessionToken={
+                            searchParamsQuery.data?.hotelSearchApiRequest
+                              .hotelSearchModuleRequest.sessionToken as string
+                          }
                           key={result.hotelId}
                           roomDetail={roomDetail}
                           hotelInfo={hotelInfo}
