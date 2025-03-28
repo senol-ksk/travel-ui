@@ -62,6 +62,18 @@ const nextConfig: NextConfig = {
         source: '/tur',
         destination: '/tour/',
       },
+      {
+        source: '/iletisim',
+        destination: '/contact-us/',
+      },
+      {
+        source: '/yardim/:slug',
+        destination: '/help-center/:slug',
+      },
+      {
+        source: '/:slug',
+        destination: '/contents/:slug',
+      },
     ]
   },
 }

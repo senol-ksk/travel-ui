@@ -1,29 +1,29 @@
 export interface CmsContent<Widgets, Params> {
-  id: ID
+  active: boolean
+  category: null
+  categoryId: null
   contentType: string
   defaultLayout: null
   defaultSchema: null
-  slug: string
-  language: string
-  redirect: string
-  category: null
-  widgets: Widgets
-  params: Params
-  title: string
   description: null
-  categoryId: null
-  widgetCollectionId: number
-  publicationDate: null
-  publicationEndDate: null
-  metaTitle: null
+  fileUrl: null
+  id: ID
+  imageUrl: null
+  language: string
+  layout: null
   metaDescription: null
   metaKeyword: null
-  layout: null
-  schema: null
+  metaTitle: null
   ordering: null
-  active: boolean
-  imageUrl: null
-  fileUrl: null
+  params: Params
+  publicationDate: null
+  publicationEndDate: null
+  redirect: string
+  schema: null
+  slug: string
+  title: string
+  widgetCollectionId: number
+  widgets: Widgets
 }
 
 export type FlightLandingWidget = {

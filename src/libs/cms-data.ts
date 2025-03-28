@@ -1,5 +1,70 @@
 import { serviceRequest } from '@/network'
 
+type ContentDetail = {
+  id: ID
+  contentType: string
+  defaultLayout: null
+  defaultSchema: null
+  slug: string
+  language: string
+  redirect: string
+  category: null
+  widgets: null
+  params: {
+    sub_title: {
+      value: string
+    }
+    sort_description: {
+      value: string
+    }
+    description_title: {
+      value: ''
+    }
+    description: {
+      value: string
+    }
+    terms_Of_conditions_title: {
+      value: string
+    }
+    terms_Of_conditions: {
+      value: string
+    }
+    promation: {
+      value: ''
+    }
+    promation_code: {
+      value: ''
+    }
+    btn_name: {
+      value: string
+    }
+    link: {
+      value: string
+    }
+    image: {
+      value: string
+    }
+    view_country_code: {
+      value: ''
+    }
+  }
+  title: string
+  description: null
+  categoryId: ID
+  widgetCollectionId: ID
+  publicationDate: null
+  publicationEndDate: null
+  metaTitle: null
+  metaDescription: null
+  metaKeyword: null
+  layout: null
+  schema: null
+  ordering: number
+  active: true
+  imageUrl: null
+  fileUrl: null
+}
+
 type CMSMasterWidgetParams = [
   {
     id: 7630
@@ -1725,70 +1790,6 @@ export function getContentsByCategorySlug(categorySlug = 'kampanyalar') {
   })
 }
 
-type ContentDetail = {
-  id: ID
-  contentType: string
-  defaultLayout: null
-  defaultSchema: null
-  slug: string
-  language: string
-  redirect: string
-  category: null
-  widgets: null
-  params: {
-    sub_title: {
-      value: string
-    }
-    sort_description: {
-      value: string
-    }
-    description_title: {
-      value: ''
-    }
-    description: {
-      value: string
-    }
-    terms_Of_conditions_title: {
-      value: string
-    }
-    terms_Of_conditions: {
-      value: string
-    }
-    promation: {
-      value: ''
-    }
-    promation_code: {
-      value: ''
-    }
-    btn_name: {
-      value: string
-    }
-    link: {
-      value: string
-    }
-    image: {
-      value: string
-    }
-    view_country_code: {
-      value: ''
-    }
-  }
-  title: string
-  description: null
-  categoryId: ID
-  widgetCollectionId: ID
-  publicationDate: null
-  publicationEndDate: null
-  metaTitle: null
-  metaDescription: null
-  metaKeyword: null
-  layout: null
-  schema: null
-  ordering: number
-  active: true
-  imageUrl: null
-  fileUrl: null
-}
 export function getContentBySlugAsync(slug: string) {
   return serviceRequest<ContentDetail>({
     axiosOptions: {
