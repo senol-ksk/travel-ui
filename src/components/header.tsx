@@ -107,7 +107,7 @@ export const Header = () => {
             </Button>
 
             <div className='flex flex-col gap-4'>
-              {headerData.data &&
+              {/* {headerData.data &&
                 headerData.data?.params.main_menu.menus.map((item) => (
                   <Anchor
                     component={Link}
@@ -117,7 +117,7 @@ export const Header = () => {
                   >
                     {item.title}
                   </Anchor>
-                ))}
+                ))} */}
             </div>
           </Drawer>
         </div>
