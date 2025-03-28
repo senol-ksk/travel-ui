@@ -67,12 +67,7 @@ export const Header = () => {
               ) : (
                 headerData.data &&
                 headerData.data?.params.main_menu.menus.map((item) => (
-                  <Anchor
-                    component={Link}
-                    href={item.url}
-                    key={item.id}
-                    c={'dark'}
-                  >
+                  <Anchor component={Link} href={item.url} key={item.id}>
                     {item.title}
                   </Anchor>
                 ))
