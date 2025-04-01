@@ -68,9 +68,7 @@ export const Header = () => {
                 headerData.data &&
                 headerData.data?.params.main_menu.menus.map((item) => (
                   <div key={item.id}>
-                    <Link href={item.url} prefetch={false}>
-                      {item.title}
-                    </Link>
+                    <Link href={item.url}>{item.title}</Link>
                   </div>
                 ))
               )}
