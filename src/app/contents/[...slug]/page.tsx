@@ -76,7 +76,7 @@ export default async function ContentPage({
           {widgets.map((widget) =>
             widget.params.menu.menus.map((menu) => (
               <div key={menu.id}>
-                <Link href={menu.url}>{menu.title}</Link>
+                <a href={menu.url}>{menu.title}</a>
               </div>
             ))
           )}

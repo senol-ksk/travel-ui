@@ -61,9 +61,9 @@ const Footer = async () => {
           >
             {widget.params.footer_menu.menus.map((menu) => (
               <div key={menu.id}>
-                <Link className='hover:text-blue-600' href={menu.url}>
+                <a className='hover:text-blue-600' href={menu.url}>
                   {menu.title}
-                </Link>
+                </a>
               </div>
             ))}
           </div>

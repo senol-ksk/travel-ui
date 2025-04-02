@@ -72,7 +72,7 @@ const PaymentPage = () => {
     isOpenInstallmentTable,
     { open: openInstallmentTableModal, close: closeInstallmentTableModal },
   ] = useDisclosure(false)
-  const formMethods = useForm<CardValidationSchemaTypes>({
+  const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
   })
   const [queryStrings] = useQueryStates(reservationParsers)

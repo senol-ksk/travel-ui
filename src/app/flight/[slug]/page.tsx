@@ -9,11 +9,13 @@ import {
 } from '@/types/cms-types'
 
 type PageProps = {
-  searchParams: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>
 }
 
-export default async function FlightLandingDetail({ searchParams }: PageProps) {
-  const { slug } = await searchParams
+export default async function FlightLandingDetail({ params }: PageProps) {
+  const { slug } = await params
+
+  console.log(slug)
 
   const data = (
     await getContent<CmsContent<FlightLandingWidget[], FlightLandingParams>>(
@@ -23,7 +25,7 @@ export default async function FlightLandingDetail({ searchParams }: PageProps) {
 
   if (!data) return null
 
-  const { params, widgets } = data
+  const { params: cmsParams, widgets } = data
   const teaser = widgets
     .filter((item) => item.point === 'teaser')
     .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
@@ -39,16 +41,16 @@ export default async function FlightLandingDetail({ searchParams }: PageProps) {
       <div className='relative border-b py-5 shadow-xs md:py-9'>
         <Image
           component={NextImage}
-          src={cdnImageUrl(params?.image.value)}
+          src={cdnImageUrl(cmsParams?.image.value)}
           fill
           priority={false}
-          alt={params.sub_title.value}
+          alt={cmsParams.sub_title.value}
           className='z-0'
         />
         <Container className='relative z-10'>
-          {params.sub_title.value && (
+          {cmsParams.sub_title.value && (
             <Title fz={'h2'} pb={rem(20)}>
-              {params.sub_title.value}
+              {cmsParams.sub_title.value}
             </Title>
           )}
           <div className='rounded-md bg-white p-3 md:p-5'>
@@ -90,7 +92,7 @@ export default async function FlightLandingDetail({ searchParams }: PageProps) {
           </div>
         )}
         <div>
-          <div dangerouslySetInnerHTML={{ __html: params.content.value }} />
+          <div dangerouslySetInnerHTML={{ __html: cmsParams.content.value }} />
         </div>
       </Container>
     </div>
