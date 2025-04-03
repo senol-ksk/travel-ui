@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Link } from 'next-view-transitions'
-
+import { useSession, signOut } from 'next-auth/react'
 import {
   Button,
   Drawer,
@@ -11,14 +11,18 @@ import {
   Anchor,
   Container,
   Skeleton,
+  Menu,
+  ActionIcon,
 } from '@mantine/core'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
 import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
+import { IoIosLogOut } from 'react-icons/io'
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
   const toggleDrawer = () => setDrawerOpened((prev) => !prev)
+  const session = useSession()
 
   const headerData = useQuery({
     queryKey: ['header-cms-data'],
@@ -77,15 +81,46 @@ export const Header = () => {
               <Anchor component={Link} href='/kampanyalar' c={'dark'}>
                 Kampanyalar
               </Anchor>
-              <Button
-                type='button'
-                variant='outline'
-                className='flex gap-3'
-                radius='xl'
-                leftSection={<FaRegUserCircle />}
-              >
-                Hesabım
-              </Button>
+              {session.status === 'authenticated' ? (
+                <Menu>
+                  <Menu.Target>
+                    <ActionIcon
+                      variant='subtle'
+                      radius='xl'
+                      // leftSection={<FaRegUserCircle />}
+                    >
+                      {/* <span className='block max-w-20 truncate'>
+                        {session.data?.user.name}
+                      </span> */}
+                      <FaRegUserCircle size={22} />
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Label>{session.data?.user.name}</Menu.Label>
+                    <Menu.Item component={Link} href={'/account/'}>
+                      Hesabım
+                    </Menu.Item>
+                    <Menu.Item
+                      onClick={() => signOut()}
+                      className='text-red-500'
+                      leftSection={<IoIosLogOut size={18} />}
+                    >
+                      Oturumu Kapatın
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              ) : (
+                <Button
+                  variant='outline'
+                  radius='xl'
+                  leftSection={<FaRegUserCircle />}
+                  component={Link}
+                  href={'/auth/login'}
+                  loading={session.status === 'loading'}
+                >
+                  Oturum Açın
+                </Button>
+              )}
             </div>
           </div>
 
@@ -96,18 +131,35 @@ export const Header = () => {
             padding='md'
             size='sm'
           >
-            <Button
-              type='button'
-              variant='outline'
-              className='mb-5 flex gap-3'
-              radius='xl'
-              leftSection={<FaRegUserCircle />}
-            >
-              Hesabım
-            </Button>
+            <div>
+              {session.status === 'authenticated' ? (
+                <Button
+                  variant='outline'
+                  radius='xl'
+                  leftSection={<FaRegUserCircle />}
+                  component={Link}
+                  href={'/account/'}
+                >
+                  <span className='block max-w-20 truncate'>
+                    {session.data?.user.name}
+                  </span>
+                </Button>
+              ) : (
+                <Button
+                  variant='outline'
+                  radius='xl'
+                  leftSection={<FaRegUserCircle />}
+                  component={Link}
+                  href={'/auth/login'}
+                  loading={session.status === 'loading'}
+                >
+                  Giriş Yap
+                </Button>
+              )}
+            </div>
 
             <div className='flex flex-col gap-4'>
-              {/* {headerData.data &&
+              {headerData.data &&
                 headerData.data?.params.main_menu.menus.map((item) => (
                   <Anchor
                     component={Link}
@@ -117,7 +169,7 @@ export const Header = () => {
                   >
                     {item.title}
                   </Anchor>
-                ))} */}
+                ))}
             </div>
           </Drawer>
         </div>

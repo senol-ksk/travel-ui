@@ -7,6 +7,7 @@ import { MantineProvider } from '@mantine/core'
 
 import { mantineTheme } from '@/styles/mantine/index'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { SessionProvider } from 'next-auth/react'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,9 +32,11 @@ vi.mock('next-view-transitions', () => ({
 export function render(ui: React.ReactNode, props?: RenderOptions) {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
-      <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
-      </QueryClientProvider>
+      <SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
+        </QueryClientProvider>
+      </SessionProvider>
     ),
     ...props,
   })
