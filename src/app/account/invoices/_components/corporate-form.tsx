@@ -18,7 +18,7 @@ const schema = z.object({
   // name: z.string().min(3).max(49),
   // lastName: z.string().min(3).max(49),
   title: z.string(),
-  type: z.number().default(0),
+  type: z.number().default(1),
   countryCode: z.string(),
   city: z.string().min(3).max(49),
   district: z.string().min(3).max(49),
@@ -27,9 +27,9 @@ const schema = z.object({
   billingInfoName: z.string().min(3).max(49),
   email: z.string().email(),
 })
-type IndividualFormSchemaType = z.infer<typeof schema>
+export type CorporateFormSchemaType = z.infer<typeof schema>
 type IProps = {
-  onFormSubmit: (data: IndividualFormSchemaType) => void
+  onFormSubmit: (data: CorporateFormSchemaType) => void
 }
 
 const CorporateForm: React.FC<IProps> = ({ onFormSubmit }) => {

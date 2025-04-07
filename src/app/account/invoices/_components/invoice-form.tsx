@@ -1,29 +1,48 @@
 'use client'
 
 import { InvoiceType } from '@/types/global'
-import { Group, Radio, RadioGroup, rem, Title } from '@mantine/core'
+import {
+  Group,
+  LoadingOverlay,
+  Radio,
+  RadioGroup,
+  rem,
+  Title,
+} from '@mantine/core'
 import { useState } from 'react'
-
-import { IndividualForm } from './individual-form'
-import { CorporateForm } from './corporate-form'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+  IndividualForm,
+  type IndividualFormSchemaType,
+} from './individual-form'
+import { CorporateForm, type CorporateFormSchemaType } from './corporate-form'
 import { useMutation } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
 
 const InvoiceForm = () => {
+  const queryClient = useQueryClient()
   const [invoiceType, setInvoiceType] = useState<InvoiceType>(
-    InvoiceType.Corporate
+    InvoiceType.Individual
   )
 
   const addBillingInfoMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (
+      data: IndividualFormSchemaType | CorporateFormSchemaType
+    ) => {
       const response = await serviceRequest({
         axiosOptions: {
           url: 'api/account/addBillingInfo',
+          method: 'post',
+          data: { ...data },
         },
       })
 
-      console.log(response)
       return response
+    },
+    onSuccess() {
+      queryClient.invalidateQueries({
+        queryKey: ['saved-invoices'],
+      })
     },
   })
 
@@ -32,6 +51,7 @@ const InvoiceForm = () => {
       <Title pb={rem(20)} fz={'h3'}>
         Fatura Bilgisi Ekle
       </Title>
+
       <RadioGroup
         name='invoiceType'
         value={invoiceType}
@@ -44,11 +64,13 @@ const InvoiceForm = () => {
           <Radio label='Kurumsal' value={InvoiceType.Corporate} />
         </Group>
       </RadioGroup>
+
       {invoiceType === InvoiceType.Individual && (
         <div>
           <IndividualForm
             onFormSubmit={(data) => {
               console.log('IndividualForm, ', data)
+              addBillingInfoMutation.mutate(data)
             }}
           />
         </div>
@@ -58,10 +80,13 @@ const InvoiceForm = () => {
           <CorporateForm
             onFormSubmit={(data) => {
               console.log('CorporateForm, ', data)
+              addBillingInfoMutation.mutate(data)
             }}
           />
         </div>
       )}
+
+      <LoadingOverlay visible={addBillingInfoMutation.isPending} />
     </>
   )
 }

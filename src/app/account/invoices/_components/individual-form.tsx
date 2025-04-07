@@ -27,7 +27,7 @@ const schema = z.object({
   name: z.string().min(3).max(49),
   lastName: z.string().min(3).max(49),
   type: z.number().default(0),
-  tcKimlikNo: z.string().refine((value) => validTCKN(value)),
+  tcKimlikNo: z.number().refine((value) => validTCKN(value.toString())),
   countryCode: z.string(),
   city: z.string().min(3).max(49),
   district: z.string().min(3).max(49),
@@ -37,7 +37,7 @@ const schema = z.object({
   email: z.string().email(),
 })
 
-type IndividualFormSchemaType = z.infer<typeof schema>
+export type IndividualFormSchemaType = z.infer<typeof schema>
 
 type IProps = {
   onFormSubmit: (data: IndividualFormSchemaType) => void
@@ -108,7 +108,6 @@ const IndividualForm: React.FC<IProps> = ({ onFormSubmit }) => {
         <Controller
           control={form.control}
           name='tcKimlikNo'
-          defaultValue=''
           render={({ field, fieldState }) => (
             <NumberInput
               hideControls
