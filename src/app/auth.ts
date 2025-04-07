@@ -1,9 +1,5 @@
 import NextAuth, { type DefaultSession } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
-import { cookies } from 'next/headers'
-
-import { serviceRequest } from '@/network'
-import dayjs from 'dayjs'
 
 declare module 'next-auth' {
   /**
@@ -23,62 +19,29 @@ declare module 'next-auth' {
   interface Session {
     user: {
       name: string
-      email: string
-      lastName: string
     } & DefaultSession['user']
   }
 }
-
-const expireDate = dayjs().add(1, 'M').toDate()
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/auth/login',
   },
+  session: {
+    maxAge: 1200,
+  },
   providers: [
     Credentials({
-      credentials: {
-        email: {},
-        password: {},
-      },
+      type: 'credentials',
+      credentials: { name: {} },
       authorize: async (credentials) => {
-        if (!credentials.email || !credentials.password) return null
-
-        const response = await serviceRequest<{
-          name: string
-          returnUrl: null
-          searchToken: null
-          sessionToken: null
-          userAuthenticationToken: string
-        }>({
-          axiosOptions: {
-            url: 'api/account/login',
-            method: 'post',
-            data: {
-              loginForm: {
-                email: credentials.email,
-                password: credentials.password,
-              },
-            },
-          },
-        })
-
-        if (!response?.success || !response.data) {
+        console.log(credentials)
+        if (!credentials || typeof credentials.name !== 'string') {
           return null
         }
 
-        const cookieStore = await cookies()
-        cookieStore.set({
-          name: 'UserAuthenticationToken',
-          value: response.data?.userAuthenticationToken,
-          httpOnly: true,
-          secure: true,
-          path: '/',
-          expires: expireDate,
-        })
-
         return {
-          name: response.data?.name,
+          name: credentials.name,
         }
       },
     }),

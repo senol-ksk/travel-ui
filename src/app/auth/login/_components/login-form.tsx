@@ -7,6 +7,7 @@ import { Alert, Button, PasswordInput, TextInput } from '@mantine/core'
 import { signIn, useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { useTransitionRouter } from 'next-view-transitions'
+import { serviceRequest } from '@/network'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -27,14 +28,36 @@ export const LoginForm = () => {
     console.log(formData)
     setAuthError(false)
 
-    const response = await signIn('credentials', {
-      ...formData,
+    const response = await serviceRequest<{
+      name: string
+      returnUrl: null
+      searchToken: null
+      sessionToken: null
+      userAuthenticationToken: string
+    }>({
+      axiosOptions: {
+        url: 'api/account/login',
+        method: 'post',
+        data: {
+          loginForm: {
+            email: formData.email,
+            password: formData.password,
+          },
+        },
+      },
+    })
+
+    console.log(response)
+
+    if (!response?.success) {
+      setAuthError(true)
+      return
+    }
+
+    await signIn('credentials', {
+      name: response.data?.name,
       redirect: false,
     })
-    console.log(response)
-    if (response?.error) {
-      setAuthError(true)
-    }
   }
 
   if (session.status === 'authenticated') router.replace('/')

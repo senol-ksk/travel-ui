@@ -214,7 +214,7 @@ const passengerValidation = z.object({
   ),
 })
 
-const phoneSchema = z
+export const phoneSchema = z
   .string()
   .optional()
   .refine((value) => isMobilePhone(value ?? ''))
