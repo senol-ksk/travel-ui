@@ -69,7 +69,6 @@ const InvoiceForm = () => {
         <div>
           <IndividualForm
             onFormSubmit={(data) => {
-              console.log('IndividualForm, ', data)
               addBillingInfoMutation.mutate(data)
             }}
           />
@@ -79,7 +78,6 @@ const InvoiceForm = () => {
         <div>
           <CorporateForm
             onFormSubmit={(data) => {
-              console.log('CorporateForm, ', data)
               addBillingInfoMutation.mutate(data)
             }}
           />

@@ -7,37 +7,57 @@ import clsx from 'clsx'
 
 import { CountryOptions } from '@/app/reservation/components/countries'
 import { phoneSchema } from '@/libs/util'
+import { SavedInvoicesResponse } from '../types'
 
 const schema = z.object({
   vergiNo: z.string().min(3),
   vergiDairesi: z.string().min(3),
-  // phoneNumber: null,
+  phoneNumber: phoneSchema,
   // hesAddress: null,
   // faxNumber: null,
   // tcKimlikNo: z.string().refine((value) => validTCKN(value)),
-  // name: z.string().min(3).max(49),
-  // lastName: z.string().min(3).max(49),
+  name: z.string().optional().default('none'),
+  lastName: z.string().optional().default('none'),
   title: z.string(),
   type: z.number().default(1),
   countryCode: z.string(),
   city: z.string().min(3).max(49),
   district: z.string().min(3).max(49),
   address: z.string().min(3).max(255),
-  mobilPhoneNumber: phoneSchema,
+  // mobilPhoneNumber: phoneSchema,
   billingInfoName: z.string().min(3).max(49),
   email: z.string().email(),
+  id: z.string().or(z.number()).optional(),
 })
 export type CorporateFormSchemaType = z.infer<typeof schema>
 type IProps = {
   onFormSubmit: (data: CorporateFormSchemaType) => void
+  defaultValues?: SavedInvoicesResponse
+  isSubmitting?: boolean
 }
 
-const CorporateForm: React.FC<IProps> = ({ onFormSubmit }) => {
+const CorporateForm: React.FC<IProps> = ({
+  onFormSubmit,
+  defaultValues,
+  isSubmitting = false,
+}) => {
   const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      address: defaultValues?.address,
+      billingInfoName: defaultValues?.billingInfoName,
+      city: defaultValues?.city,
+      countryCode: defaultValues?.countryCode,
+      district: defaultValues?.district,
+      email: defaultValues?.email,
+      phoneNumber: defaultValues?.phoneNumber,
+      title: defaultValues?.title,
+      type: defaultValues?.type,
+      vergiDairesi: defaultValues?.vergiDairesi ?? '',
+      vergiNo: defaultValues?.vergiNo ?? '',
+      id: defaultValues?.id,
+    },
   })
-
-  console.log(form.formState.errors)
 
   return (
     <form onSubmit={form.handleSubmit(onFormSubmit)}>
@@ -162,8 +182,7 @@ const CorporateForm: React.FC<IProps> = ({ onFormSubmit }) => {
           >
             <Controller
               control={form.control}
-              name='mobilPhoneNumber'
-              defaultValue=''
+              name='phoneNumber'
               render={({ field, fieldState }) => {
                 return (
                   <IntlTelInput
@@ -179,6 +198,7 @@ const CorporateForm: React.FC<IProps> = ({ onFormSubmit }) => {
                     }}
                     ref={(ref) => field.ref(ref?.getInput())}
                     onChangeNumber={field.onChange}
+                    initialValue={form.formState.defaultValues?.phoneNumber}
                     initOptions={{
                       strictMode: true,
                       containerClass: 'w-full',
@@ -206,7 +226,9 @@ const CorporateForm: React.FC<IProps> = ({ onFormSubmit }) => {
         </Input.Wrapper>
       </div>
       <div className='flex justify-center'>
-        <Button type='submit'>Kaydet</Button>
+        <Button type='submit' loading={isSubmitting}>
+          Kaydet
+        </Button>
       </div>
     </form>
   )

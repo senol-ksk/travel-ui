@@ -19,6 +19,7 @@ import { mantineTheme } from '@/styles/mantine'
 import Header from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Suspense } from 'react'
+import { Notifications } from '@mantine/notifications'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
@@ -46,6 +47,8 @@ export default function RootLayout({
           <body className='flex flex-col'>
             <Providers>
               <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
+                <Notifications />
+
                 <div className='shrink-0 grow-0'>
                   <Header />
                 </div>

@@ -16,6 +16,7 @@ import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
 import { phoneSchema } from '@/libs/util'
 import { validTCKN } from '@/libs/tckn-validate'
+import { SavedInvoicesResponse } from '../types'
 
 const schema = z.object({
   // vergiNo: null,
@@ -27,7 +28,10 @@ const schema = z.object({
   name: z.string().min(3).max(49),
   lastName: z.string().min(3).max(49),
   type: z.number().default(0),
-  tcKimlikNo: z.number().refine((value) => validTCKN(value.toString())),
+  tcKimlikNo: z
+    .string()
+    .or(z.number())
+    .refine((value) => validTCKN(value.toString())),
   countryCode: z.string(),
   city: z.string().min(3).max(49),
   district: z.string().min(3).max(49),
@@ -35,17 +39,39 @@ const schema = z.object({
   mobilPhoneNumber: phoneSchema,
   billingInfoName: z.string().min(3).max(49),
   email: z.string().email(),
+  id: z.string().or(z.number()).optional(),
 })
 
 export type IndividualFormSchemaType = z.infer<typeof schema>
 
 type IProps = {
+  defaultValues?: SavedInvoicesResponse
   onFormSubmit: (data: IndividualFormSchemaType) => void
+  isSubmitting?: boolean
 }
 
-const IndividualForm: React.FC<IProps> = ({ onFormSubmit }) => {
+const IndividualForm: React.FC<IProps> = ({
+  onFormSubmit,
+  defaultValues,
+  isSubmitting = false,
+}) => {
   const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      address: defaultValues?.address,
+      billingInfoName: defaultValues?.billingInfoName,
+      city: defaultValues?.city,
+      countryCode: defaultValues?.countryCode,
+      district: defaultValues?.district,
+      email: defaultValues?.email,
+      lastName: defaultValues?.lastName,
+      mobilPhoneNumber: defaultValues?.mobilPhoneNumber,
+      name: defaultValues?.name,
+      tcKimlikNo: defaultValues?.tcKimlikNo,
+      title: defaultValues?.title,
+      type: defaultValues?.type,
+      id: defaultValues?.id,
+    },
   })
 
   return (
@@ -115,8 +141,8 @@ const IndividualForm: React.FC<IProps> = ({ onFormSubmit }) => {
               type='tel'
               label='TC Kimlik No'
               inputMode='numeric'
-              {...field}
               error={fieldState.error?.message}
+              {...field}
             />
           )}
         />
@@ -205,6 +231,9 @@ const IndividualForm: React.FC<IProps> = ({ onFormSubmit }) => {
                       id: field.name,
                       name: field.name,
                     }}
+                    initialValue={
+                      form.formState.defaultValues?.mobilPhoneNumber
+                    }
                     ref={(ref) => field.ref(ref?.getInput())}
                     onChangeNumber={field.onChange}
                     initOptions={{
@@ -234,7 +263,9 @@ const IndividualForm: React.FC<IProps> = ({ onFormSubmit }) => {
         </Input.Wrapper>
       </div>
       <div className='flex justify-center'>
-        <Button type='submit'>Kaydet</Button>
+        <Button type='submit' loading={isSubmitting}>
+          Kaydet
+        </Button>
       </div>
     </form>
   )

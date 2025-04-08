@@ -5,14 +5,14 @@ export type SavedInvoicesResponse = {
   lastName: string
   type: number
   tcKimlikNo: string
-  vergiNo: null
-  vergiDairesi: null
+  vergiNo: null | string
+  vergiDairesi: null | string
   countryCode: string
   city: string
   district: string
   address: string
   mobilPhoneNumber: string
-  phoneNumber: null
+  phoneNumber: string
   faxNumber: null
   billingInfoName: string
   fullName: string
