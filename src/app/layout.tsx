@@ -45,8 +45,8 @@ export default function RootLayout({
           </head>
 
           <body className='flex flex-col'>
-            <Providers>
-              <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
+            <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
+              <Providers>
                 <Notifications />
 
                 <div className='shrink-0 grow-0'>
@@ -58,8 +58,8 @@ export default function RootLayout({
                     <Footer />
                   </div>
                 </Suspense>
-              </MantineProvider>
-            </Providers>
+              </Providers>
+            </MantineProvider>
           </body>
         </html>
       </SessionProvider>

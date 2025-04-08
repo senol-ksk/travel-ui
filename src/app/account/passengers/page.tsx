@@ -1,44 +1,19 @@
-import { Alert, Button, Title } from '@mantine/core'
-import { cookies } from 'next/headers'
-
-import { serviceRequest } from '@/network'
-import dayjs from 'dayjs'
+import { Title } from '@mantine/core'
 import { PassengerForm } from './_components/form'
+import { SavePassengerList } from './_components/saved-passengers'
 
 export default async function SavedPassengersPage() {
-  const cookieStore = await cookies()
-
-  const response = await serviceRequest<
-    {
-      birthdate: string
-      email: string
-      gender: number
-      id: ID
-      identityNumber: null
-      mobilePhone: string
-      name: string
-      passportNumber: null
-      passportValidity: null
-      surname: string
-    }[]
-  >({
-    axiosOptions: {
-      url: 'api/account/getSavedPassengers',
-      headers: { Cookie: cookieStore.toString() },
-    },
-  })
-
-  const savedPassengers = response?.data ?? []
-
   return (
-    <div>
-      <Title>Kayıtlı Yolcuları</Title>
-      {savedPassengers.length === 0 && (
-        <Alert color='yellow' my={'md'}>
-          Kayıtlı Yolcu bulunamadı.
-        </Alert>
-      )}
-      <PassengerForm />
+    <div className='grid gap-3 md:gap-5'>
+      <div>
+        <SavePassengerList />
+      </div>
+      <div>
+        <Title order={2} fz={'h3'}>
+          Yeni Yolcu Ekleyin
+        </Title>
+        <PassengerForm />
+      </div>
     </div>
   )
 }
