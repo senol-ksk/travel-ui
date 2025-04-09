@@ -6,10 +6,10 @@ export default function SavedPassengersPage() {
   return (
     <div className='grid gap-3 md:gap-5'>
       <div>
-        <SavedPassengerList />
-      </div>
-      <div>
         <SavePassenger />
+      </div>
+      <div className='pt-6'>
+        <SavedPassengerList />
       </div>
     </div>
   )

@@ -1,48 +1,21 @@
 'use client'
 
-import { serviceRequest } from '@/network'
-import { Alert, Card, Title } from '@mantine/core'
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { Alert, Button, Modal, Skeleton, Title } from '@mantine/core'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useDisclosure } from '@mantine/hooks'
+import { notifications } from '@mantine/notifications'
 
-export type SavePassengerServiceResponse = {
-  _passengerId: ID
-  model_PassengerId: ID
-  declaredAge: number
-  productType: number
-  checkinDate: string
-  calculationYearBased: boolean
-  calculationYearType: number
-  passengerId: ID
-  sequenceNo: number
-  type: number
-  gender: number
-  firstName: string
-  lastName: string
-  middleName: null
-  birthDate: string
-  nationality: string
-  nationality_Check: null | boolean
-  citizenNo: string
-  passportNo: null | string
-  mobilePhoneNumber: string
-  email: string
-  isContact: boolean
-  flightFrequencyNo: string
-  notes: null
-  passportValidityDate: null
-  webUserId: ID
-  passportCountry: ID
-  groupOrderIndex: number
-  passengerKey: null
-  isRecord: boolean
-  listFlightFrequencyAirline: string[]
-  listFlightFrequencyNo: string[]
-  registeredPassengerId: ID
-  isDontValidate: boolean
-  hesCode: null
-}
+import { serviceRequest } from '@/network'
+import { type SavePassengerServiceResponse } from '../types'
+import { SavedPassengerItem } from './saved-passenger-item'
+import { FormSchemaType, PassengerForm } from './form'
 
 const SavedPassengerList = () => {
+  const [selectedPassenger, setSelectedPassenger] =
+    useState<SavePassengerServiceResponse | null>(null)
+  const [isEditModalOpened, { open: openEditModal, close: closeEditModal }] =
+    useDisclosure(false)
   const savedPassengersQuery = useQuery({
     queryKey: ['saved-passengers'],
     queryFn: async () => {
@@ -56,31 +29,117 @@ const SavedPassengerList = () => {
     },
   })
 
+  const deletePassenger = useMutation({
+    mutationKey: ['delete-saved-passenger'],
+    mutationFn: async (id: ID) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: 'api/account/deleteSavedPassenger',
+          method: 'delete',
+          data: id,
+        },
+      })
+
+      return response
+    },
+    onSuccess() {
+      savedPassengersQuery.refetch()
+    },
+  })
+
+  const updatePassengerMutation = useMutation({
+    mutationKey: ['update-passenger'],
+    mutationFn: async (data: FormSchemaType) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: 'api/account/updateSavedPassenger',
+          method: 'post',
+          data: {
+            ...data,
+            _passengerId: selectedPassenger?._passengerId,
+            model_PassengerId: selectedPassenger?.model_PassengerId,
+            registeredPassengerId: selectedPassenger?.registeredPassengerId,
+            id: selectedPassenger?.registeredPassengerId,
+            passengerKey: selectedPassenger?.passengerKey,
+          },
+        },
+      })
+
+      return response
+    },
+    onSuccess(data) {
+      if (data?.success) {
+        closeEditModal()
+        savedPassengersQuery.refetch()
+        notifications.show({
+          title: 'İşlem Başarılı',
+          message: 'Yolcu güncellendi.',
+          position: 'top-right',
+          color: 'white',
+          bg: 'green',
+          withBorder: true,
+          classNames: {
+            description: 'text-black',
+            title: 'text-white',
+          },
+        })
+      }
+    },
+  })
+
   return (
-    <div>
-      <Title fz={'h3'} pb={'md'}>
-        Kayıtlı Yolcular
-      </Title>
-      {savedPassengersQuery.data?.length === 0 && (
-        <Alert color='yellow'>Kayıtlı yolcu bulunamadı.</Alert>
-      )}
-      {savedPassengersQuery.data && savedPassengersQuery.data.length > 0 && (
-        <div className='grid grid-cols-2 gap-3'>
-          {savedPassengersQuery.data.map((passenger) => (
-            <Card key={passenger.registeredPassengerId} withBorder shadow='xs'>
-              <Title order={6} className='leading-sm flex items-center gap-2'>
-                <span>
-                  {passenger.firstName} {passenger.lastName}
-                </span>
-                <small className='font-normal text-gray-600'>
-                  {passenger.email}
-                </small>
-              </Title>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      <div>
+        <Title fz={'h5'} pb={'md'}>
+          Kayıtlı Yolcular
+        </Title>
+        {!savedPassengersQuery.data && savedPassengersQuery.isLoading && (
+          <div className='grid grid-cols-2 gap-3'>
+            <Skeleton h={40} radius={'md'} />
+            <Skeleton h={40} radius={'md'} />
+            <Skeleton h={40} radius={'md'} />
+            <Skeleton h={40} radius={'md'} />
+          </div>
+        )}
+        {savedPassengersQuery.data?.length === 0 && (
+          <Alert color='yellow'>Kayıtlı yolcu bulunamadı.</Alert>
+        )}
+        {savedPassengersQuery.data && savedPassengersQuery.data.length > 0 && (
+          <div className='grid grid-cols-1 gap-3 sm:grid-cols-2'>
+            {savedPassengersQuery.data.map((passenger) => (
+              <SavedPassengerItem
+                key={passenger.registeredPassengerId}
+                passenger={passenger}
+                onDelete={() => {
+                  deletePassenger.mutate(passenger.registeredPassengerId)
+                }}
+                isDeleting={deletePassenger.isPending}
+                onSelect={() => {
+                  openEditModal()
+                  setSelectedPassenger(passenger)
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      <Modal
+        opened={isEditModalOpened}
+        onClose={closeEditModal}
+        title={`${selectedPassenger?.firstName} ${selectedPassenger?.lastName}`}
+        size={'lg'}
+      >
+        {selectedPassenger && (
+          <PassengerForm
+            defaultValues={selectedPassenger}
+            onSubmit={(data) => {
+              updatePassengerMutation.mutate(data)
+            }}
+            isSubmitting={updatePassengerMutation.isPending}
+          />
+        )}
+      </Modal>
+    </>
   )
 }
 

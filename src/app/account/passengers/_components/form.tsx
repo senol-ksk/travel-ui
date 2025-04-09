@@ -18,26 +18,24 @@ import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
 
 import { validTCKN } from '@/libs/tckn-validate'
-import { useAirlineListQuery } from '@/libs/useAirlineListQuery'
+
 import { phoneSchema } from '@/libs/util'
 
 import { CountryOptions } from '@/app/reservation/components/countries'
-import { useMutation } from '@tanstack/react-query'
-import { serviceRequest } from '@/network'
 
 const schema = z.object({
-  type: z.enum(['0', '1', '2']),
+  type: z.string().nonempty(),
   firstName: z.string().min(3).max(30),
   lastName: z.string().min(3).max(30),
   birthdate: z.coerce.date(),
-  gender: z.enum(['0', '1']),
+  gender: z.string().nonempty(),
   citizenNo: z
     .string()
     .or(z.number())
     .refine((value) => validTCKN('' + value)),
   nationality: z.string().default('tr'),
-  passportCountry: z.string().nonempty(),
-  passportNo: z.string().nonempty().max(11),
+  passportCountry: z.string().optional(),
+  passportNo: z.string().optional(),
   passportValidityDate: z.coerce.date(),
   email: z.string().email(),
   mobilePhoneNumber: phoneSchema,
@@ -46,18 +44,35 @@ const schema = z.object({
 })
 
 export type FormSchemaType = z.infer<typeof schema>
+import { type SavePassengerServiceResponse } from '../types'
 
 type IProps = {
   onSubmit?: (data: FormSchemaType) => void
   isSubmitting?: boolean
+  defaultValues?: SavePassengerServiceResponse
 }
 
 const PassengerForm: React.FC<IProps> = ({
   onSubmit = () => null,
   isSubmitting = false,
+  defaultValues,
 }) => {
   const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      birthdate: new Date(defaultValues?.birthDate ?? 0),
+      citizenNo: defaultValues?.citizenNo,
+      email: defaultValues?.email,
+      firstName: defaultValues?.firstName,
+      gender: defaultValues?.gender.toString(),
+      lastName: defaultValues?.lastName,
+      mobilePhoneNumber: defaultValues?.mobilePhoneNumber,
+      nationality: defaultValues?.nationality,
+      passportCountry: defaultValues?.passportCountry,
+      passportNo: defaultValues?.passportNo ?? '',
+      passportValidityDate: new Date(defaultValues?.passportValidityDate ?? 0),
+      type: defaultValues?.type.toString() ?? '0',
+    },
   })
 
   // const airlineList = useAirlineListQuery()
@@ -150,12 +165,11 @@ const PassengerForm: React.FC<IProps> = ({
               <NativeSelect
                 label='Cinsiyet'
                 data={[
-                  { label: 'Cinsiyet seçin', value: '' },
                   { label: 'Erkek', value: '0' },
                   { label: 'Kadın', value: '1' },
                 ]}
-                {...field}
                 error={fieldState.error?.message}
+                {...field}
               />
             )}
           />
@@ -199,8 +213,8 @@ const PassengerForm: React.FC<IProps> = ({
             render={({ field, fieldState }) => (
               <TextInput
                 label='Pasaport No'
-                {...field}
                 error={fieldState.error?.message}
+                {...field}
               />
             )}
           />

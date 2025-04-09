@@ -23,6 +23,11 @@ export const SavePassenger = () => {
 
       return response
     },
+    onSuccess(data) {
+      if (data?.success) {
+        close()
+      }
+    },
   })
 
   return (
