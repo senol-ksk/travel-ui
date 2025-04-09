@@ -1,18 +1,15 @@
 import { Title } from '@mantine/core'
-import { PassengerForm } from './_components/form'
-import { SavePassengerList } from './_components/saved-passengers'
+import { SavedPassengerList } from './_components/saved-passengers'
+import { SavePassenger } from './_components/save-passenger'
 
-export default async function SavedPassengersPage() {
+export default function SavedPassengersPage() {
   return (
     <div className='grid gap-3 md:gap-5'>
       <div>
-        <SavePassengerList />
+        <SavedPassengerList />
       </div>
       <div>
-        <Title order={2} fz={'h3'}>
-          Yeni Yolcu Ekleyin
-        </Title>
-        <PassengerForm />
+        <SavePassenger />
       </div>
     </div>
   )

@@ -42,7 +42,7 @@ export type SavePassengerServiceResponse = {
   hesCode: null
 }
 
-const SavePassengerList = () => {
+const SavedPassengerList = () => {
   const savedPassengersQuery = useQuery({
     queryKey: ['saved-passengers'],
     queryFn: async () => {
@@ -84,4 +84,4 @@ const SavePassengerList = () => {
   )
 }
 
-export { SavePassengerList }
+export { SavedPassengerList }
