@@ -9,7 +9,7 @@ import {
   PassengerTypesIndexEnum,
 } from '@/types/passengerViewModel'
 import { formatCurrency } from '@/libs/util'
-import { FlightSummary } from './products/flight'
+// import { FlightSummary } from './products/flight'
 import dayjs from 'dayjs'
 import { HotelSummary } from './products/hotel'
 import {
@@ -21,6 +21,7 @@ import {
 } from '../../types'
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
+import { FlightSummary } from '@/components/book-results/flight'
 
 type IProps = {
   searchParams: Promise<{
@@ -38,8 +39,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     await searchParams
   const getSummaryData = await serviceRequest<OperationResultType>({
     axiosOptions: {
-      // url: `api/product/summary/withshoppingfileId`,
-      url: `api/product/summary`,
+      url: `api/product/summary/withshoppingfileId`,
+      // url: `api/product/summary`,
       params: {
         searchToken,
         sessionToken,
@@ -149,16 +150,18 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
               </Title>
               <Divider />
               <div className='grid justify-between gap-3 text-sm md:grid-cols-2'>
-                <div className='text-sm'>
-                  <Title order={5}>Ödeme Aracı</Title>
-                  <div>
-                    {passengerData?.paymentInformation?.bankName}, Sonu{' '}
-                    {passengerData?.paymentInformation?.encryptedCardNumber.slice(
-                      -4
-                    )}{' '}
-                    ile biten.
+                {passengerData?.paymentInformation?.encryptedCardNumber && (
+                  <div className='text-sm'>
+                    <Title order={5}>Ödeme Aracı</Title>
+                    <div>
+                      {passengerData?.paymentInformation?.bankName}, Sonu{' '}
+                      {passengerData?.paymentInformation?.encryptedCardNumber.slice(
+                        -4
+                      )}{' '}
+                      ile biten.
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className='grid grid-cols-2 gap-2'>
                   <div>Toplam Tutar:</div>
                   <div className='text-end'>

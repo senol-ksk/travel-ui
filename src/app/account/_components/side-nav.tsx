@@ -35,13 +35,14 @@ export default function AccountSideNav() {
       <NavLink
         label='Seyahatlerim'
         component={Link}
-        href={'/account/'}
+        href={'/account/reservations'}
         leftSection={<MdModeOfTravel />}
       />
       <NavLink
         label='Oturumu Kapat'
         leftSection={<IoIosLogOut />}
         onClick={() => signOut()}
+        className='text-red-800'
       />
     </div>
   )

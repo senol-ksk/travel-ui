@@ -11,9 +11,6 @@ type IProps = {
 }
 
 export const FlightSummary: React.FC<IProps> = ({ data }) => {
-  console.log(data)
-  const isDomestic = data.flightList.some((x) => x.flightDetail.isDomestic)
-
   return (
     <div className='grid gap-3'>
       {data.flightList.map((flight) => {

@@ -43,10 +43,12 @@ export default async function AccountPage() {
 
   return (
     <div>
-      <Title>Üyelik Bilgileri</Title>
+      <Title fz={'h3'}>Üyelik Bilgileri</Title>
       <div className='pt-5'>
         <div>{`${userData?.name} ${userData?.surname}`}</div>
-        <div>{dayjs(userData?.birthdate).format('DD MMMM YYYY')}</div>
+        {userData?.birthdate && dayjs(userData?.birthdate).isValid() && (
+          <div>{dayjs(userData?.birthdate).format('DD MMMM YYYY')}</div>
+        )}
         <div>{userData?.email}</div>
         <div>{userData?.mobilePhone}</div>
       </div>
