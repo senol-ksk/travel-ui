@@ -32,7 +32,17 @@ vi.mock('next-view-transitions', () => ({
 export function render(ui: React.ReactNode, props?: RenderOptions) {
   return testingLibraryRender(<>{ui}</>, {
     wrapper: ({ children }: { children: React.ReactNode }) => (
-      <SessionProvider>
+      <SessionProvider
+        session={{
+          user: {
+            name: 'senol keskin',
+            email: 'senol@gmail.com',
+            id: '1',
+            image: '',
+          },
+          expires: new Date().toISOString(),
+        }}
+      >
         <QueryClientProvider client={queryClient}>
           <MantineProvider theme={mantineTheme}>{children}</MantineProvider>
         </QueryClientProvider>
