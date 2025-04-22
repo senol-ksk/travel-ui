@@ -1,6 +1,7 @@
 import '@/styles/global.css'
 
 import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
 import {
   ColorSchemeScript,
   MantineProvider,
@@ -18,6 +19,7 @@ import { mantineTheme } from '@/styles/mantine'
 import Header from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Suspense } from 'react'
+import { Notifications } from '@mantine/notifications'
 
 export const metadata: Metadata = {
   title: 'Fulltrip',
@@ -35,28 +37,32 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang='tr' {...mantineHtmlProps}>
-        <head>
-          <link rel='icon' href='/favicon.ico' sizes='any' />
-          <ColorSchemeScript />
-        </head>
+      <SessionProvider>
+        <html lang='tr' {...mantineHtmlProps}>
+          <head>
+            <link rel='icon' href='/favicon.ico' sizes='any' />
+            <ColorSchemeScript />
+          </head>
 
-        <body className='flex flex-col'>
-          <Providers>
+          <body className='flex flex-col'>
             <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
-              <div className='shrink-0 grow-0'>
-                <Header />
-              </div>
-              <main className='grow-1'>{children}</main>
-              <Suspense>
+              <Providers>
+                <Notifications />
+
                 <div className='shrink-0 grow-0'>
-                  <Footer />
+                  <Header />
                 </div>
-              </Suspense>
+                <main className='grow-1'>{children}</main>
+                <Suspense>
+                  <div className='shrink-0 grow-0'>
+                    <Footer />
+                  </div>
+                </Suspense>
+              </Providers>
             </MantineProvider>
-          </Providers>
-        </body>
-      </html>
+          </body>
+        </html>
+      </SessionProvider>
     </ViewTransitions>
   )
 }

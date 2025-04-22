@@ -1,6 +1,7 @@
 // In Next.js, this file would be called: app/providers.tsx
 'use client'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import 'dayjs/locale/tr'
 
 // Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
 import {
@@ -8,6 +9,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { DatesProvider } from '@mantine/dates'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -47,7 +49,11 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <NuqsAdapter>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <DatesProvider settings={{ locale: 'tr', timezone: 'GMT' }}>
+        <QueryClientProvider client={queryClient}>
+          {children}
+        </QueryClientProvider>
+      </DatesProvider>
     </NuqsAdapter>
   )
 }

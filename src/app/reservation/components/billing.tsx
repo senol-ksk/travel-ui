@@ -18,11 +18,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 import { CountryOptions } from './countries'
 import { useDisclosure } from '@mantine/hooks'
-
-enum InvoiceType {
-  Individual = '0',
-  Corporate = '1',
-}
+import { InvoiceType } from '@/types/global'
 
 const BillingForm = () => {
   const formContext = useFormContext()

@@ -9,3 +9,8 @@ export type GetSecurityTokenResponse = {
   errors: []
   messageEvents: []
 }
+
+export enum InvoiceType {
+  Individual = '0',
+  Corporate = '1',
+}

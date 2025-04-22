@@ -1,4 +1,5 @@
-import dayjs from 'dayjs'
+import { z } from 'zod'
+import { isMobilePhone } from 'validator'
 
 export const formatCurrency = (
   amount: number,
@@ -50,3 +51,8 @@ export function slugify(input: string | number): string {
 
   return slug
 }
+
+export const phoneSchema = z
+  .string()
+  .optional()
+  .refine((value) => isMobilePhone(value ?? ''))

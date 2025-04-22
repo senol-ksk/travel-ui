@@ -1,6 +1,7 @@
 import prettier from 'eslint-plugin-prettier'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import pluginQuery from '@tanstack/eslint-plugin-query'
 
 import { FlatCompat } from '@eslint/eslintrc'
 import { Linter } from 'eslint'
@@ -13,12 +14,8 @@ const compat = new FlatCompat({
 })
 
 const configs = [
-  ...compat.extends(
-    'next/core-web-vitals',
-    'next/typescript',
-    'plugin:@tanstack/eslint-plugin-query/recommended',
-    'prettier'
-  ),
+  ...pluginQuery.configs['flat/recommended'],
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
   {
     plugins: {
       prettier,
