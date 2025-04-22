@@ -210,8 +210,6 @@ export default function CheckoutPage() {
       <FormProvider {...formMethods}>
         <form
           onSubmit={formMethods.handleSubmit(async (data) => {
-            console.log('Data submitted:', data)
-
             const requestCheckout = await initCheckoutMutation.mutateAsync(data)
 
             const serialize = createSerializer(reservationParsers)

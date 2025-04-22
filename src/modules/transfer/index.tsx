@@ -106,7 +106,6 @@ const TransferSearchEngine = () => {
     })
 
   const handleSubmit = async (data: TransferSearchEngineSchemaInfer) => {
-    console.log('Transfer Search Data Submitted', data)
     setTransferSearchLocalStorage(data)
 
     const searchResultUrl = serializeTransferSearchParams(
@@ -214,7 +213,6 @@ const TransferSearchEngine = () => {
                 formActions.formState.defaultValues?.passengers?.infant ?? 0,
             }}
             onChange={(passengers) => {
-              console.log(passengers)
               formActions.setValue('passengers', {
                 adult: passengers.adult,
                 child: passengers.child,

@@ -47,8 +47,6 @@ export default async function ContactPage() {
     await getContent<CmsContent<null, CMSContactParams>>('iletisim')
   )?.data
 
-  console.log(data)
-
   if (!data) return null
 
   const { params } = data

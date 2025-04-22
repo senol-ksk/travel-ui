@@ -469,7 +469,6 @@ const BusSearchResults: React.FC = () => {
             <div className='flex gap-3 py-3'>
               {selectedSeats.length === 0 ? <div>Koltuk Seçiniz.</div> : null}
               {selectedSeats.map((seat, seatIndex) => {
-                console.log(seat)
                 const gender = seat.gender
                 const isMale = gender === BusGender.MALE
                 const isWoman = gender === BusGender.WOMAN

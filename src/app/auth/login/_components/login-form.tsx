@@ -25,7 +25,6 @@ export const LoginForm = () => {
   const router = useTransitionRouter()
 
   const submitHandler = async (formData: LoginSchemaType) => {
-    console.log(formData)
     setAuthError(false)
 
     const response = await serviceRequest<{
@@ -46,8 +45,6 @@ export const LoginForm = () => {
         },
       },
     })
-
-    console.log(response)
 
     if (!response?.success) {
       setAuthError(true)

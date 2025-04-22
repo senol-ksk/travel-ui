@@ -15,8 +15,6 @@ type PageProps = {
 export default async function FlightLandingDetail({ params }: PageProps) {
   const { slug } = await params
 
-  console.log(slug)
-
   const data = (
     await getContent<CmsContent<FlightLandingWidget[], FlightLandingParams>>(
       `ucak-bileti/${slug}`

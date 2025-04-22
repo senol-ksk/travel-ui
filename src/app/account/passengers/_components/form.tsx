@@ -84,8 +84,6 @@ const PassengerForm: React.FC<IProps> = ({
   //     }))
   //   : []
 
-  console.log(form.formState.errors)
-
   return (
     <form
       onSubmit={form.handleSubmit((data) => {
@@ -316,7 +314,6 @@ const PassengerForm: React.FC<IProps> = ({
             0 ? (
             form.formState?.defaultValues?.listFlightFrequencyAirline.map(
               (listFlightFrequencyAirline) => {
-                console.log(listFlightFrequencyAirline)
                 return (
                   <Controller
                     key={listFlightFrequencyAirline}

@@ -53,9 +53,6 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
   const getSummary = getSummaryData?.data
   const passengerData = getSummary?.passenger
 
-  // type ProductType =
-  console.log(getSummaryData)
-
   const productData = getSummary?.product.summaryResponse
 
   return (

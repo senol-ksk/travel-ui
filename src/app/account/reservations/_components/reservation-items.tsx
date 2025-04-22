@@ -69,7 +69,6 @@ export const ReservationItems: React.FC<IProps> = ({ reservations }) => {
   })
 
   const productData = detailQuery.data?.data?.product.summaryResponse
-  console.log(productData)
 
   return (
     <>

@@ -137,7 +137,6 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                               })
                             }}
                             onSearchClick={(value) => {
-                              console.log(value)
                               setFilterParams({
                                 hotelName: value,
                               })
@@ -317,8 +316,6 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     const hotelInfos = results.hotelInfos
                     const roomDetails =
                       results.roomDetails && Object.values(results.roomDetails)
-
-                    console.log(hotelInfos)
 
                     // if (slug) {
                     //   return hotelInfos.map((result) => {

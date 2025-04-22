@@ -66,14 +66,8 @@ const FlightOptionalServices: React.FC<IProps> = ({
 
     if (hasItem > -1) {
       selectedBaggages.current[hasItem] = baggageArgs
-      console.log('hasItem replaced with, ', hasItem, selectedBaggages.current)
     } else {
       selectedBaggages.current.push(baggageArgs)
-      console.log(
-        'nothing found, pushed new item, ',
-        hasItem,
-        selectedBaggages.current
-      )
     }
 
     const baggageRequestArray: BaggageRequestDataModel[] =
@@ -89,7 +83,7 @@ const FlightOptionalServices: React.FC<IProps> = ({
           uniqueIdentifier: uniqueIdentifierModified,
         }
       })
-    // console.log(baggageRequestArray)
+
     baggageMutation.mutateAsync(baggageRequestArray)
   }
 

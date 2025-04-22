@@ -12,7 +12,6 @@ type IProps = {
 const PriceRangeSlider: React.FC<IProps> = ({ maxPrice, minPrice }) => {
   const [values, setValues] = useState<[number, number]>([minPrice, maxPrice])
   const [{ priceRange }, setFilterParams] = useQueryStates(filterParser)
-  console.log(minPrice, maxPrice)
 
   useEffect(() => {
     if (priceRange) {
