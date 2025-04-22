@@ -48,7 +48,6 @@ export default function OnlineCheckInPage() {
       <form
         className='mx-auto grid max-w-3xl grid-cols-1 gap-4 pt-4 sm:grid-cols-2'
         onSubmit={form.handleSubmit((data) => {
-          console.log(data)
           pnrInfoMutation.mutate(data)
         })}
       >

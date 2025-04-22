@@ -35,7 +35,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       type: 'credentials',
       credentials: { name: {} },
       authorize: async (credentials) => {
-        console.log(credentials)
         if (!credentials || typeof credentials.name !== 'string') {
           return null
         }

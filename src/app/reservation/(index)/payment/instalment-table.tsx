@@ -119,7 +119,6 @@ const InstallmentSelect: React.FC<InstallmentSelectProps> = ({
       name='Installment'
       defaultValue={'' + data.at(0)?.installmentCount}
       onChange={(value) => {
-        console.log(value)
         onChange(value)
       }}
     >

@@ -193,8 +193,6 @@ export default function Page() {
   }
 
   const handleSubmit = (data: TransferExtrasSchmeType) => {
-    console.log('Transfer extra submited', data)
-
     reservationPageMutation.mutateAsync(data)
   }
 

@@ -356,7 +356,6 @@ const HotelDetailSection = () => {
                       })
                     }}
                     onInstallmentClick={(selectedRoomGroup) => {
-                      console.log(selectedRoomGroup)
                       handleInstallment(selectedRoomGroup)
                     }}
                   />

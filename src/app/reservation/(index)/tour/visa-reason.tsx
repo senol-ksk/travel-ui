@@ -21,9 +21,6 @@ const VisaReason: React.FC<IProps> = ({ data }) => {
       label={extraItem.description}
       data={options}
       defaultValue={options[0].value}
-      onChange={({ currentTarget: { value } }) => {
-        console.log(extraItem, value)
-      }}
     />
   )
 }

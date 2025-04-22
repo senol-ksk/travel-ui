@@ -62,7 +62,6 @@ const passengerValidation = z.object({
         moduleName: z.string().readonly(),
       })
       .superRefine((value, ctx) => {
-        console.log(value, ctx)
         const moduleName = value.moduleName.toLowerCase()
         const passengerType = +value.type
 

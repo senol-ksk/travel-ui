@@ -162,8 +162,6 @@ const PaymentPage = () => {
     )
   }
 
-  // console.log(formMethods.formState.errors)
-
   const reservationData = checkoutQueryMemoData
   const passengerData = reservationData?.treeContainer
   const firstPassengerFullName = passengerData?.childNodes[0].items[0].value
@@ -177,7 +175,6 @@ const PaymentPage = () => {
     <>
       <form
         onSubmit={formMethods.handleSubmit((data) => {
-          console.log('Data submitted:', data)
           paymentMutation.mutate(data)
         })}
         className='relative grid gap-3 md:gap-5'

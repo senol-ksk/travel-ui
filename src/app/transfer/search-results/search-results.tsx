@@ -129,7 +129,6 @@ const TransferSearchResults = () => {
                       <Checkbox.Group
                         pt={rem(12)}
                         onChange={(values) => {
-                          console.log(values)
                           setFilterParams({
                             vehicle: values.length ? values.map(String) : null,
                           })

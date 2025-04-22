@@ -87,15 +87,13 @@ export default async function HelpCenterPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  console.log(slug)
+
   const menuUrl = `yardim/${slug}`
   const data = (
     await getContent<CmsContent<CMSHelpCenterWidget[], CMSHelpCenterParams>>(
       menuUrl
     )
   )?.data
-
-  console.log(data)
 
   if (!data) return null
   const { widgets, title } = data
