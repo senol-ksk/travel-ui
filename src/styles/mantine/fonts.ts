@@ -1,12 +1,7 @@
 import { createTheme } from '@mantine/core'
-import { Figtree } from 'next/font/google'
-
-const inter = Figtree({
-  subsets: ['latin'],
-})
 
 export const fonts = createTheme({
-  fontFamily: inter.style.fontFamily,
+  fontFamily: 'var(--font-red-hat-text)',
   headings: {
     fontWeight: '600',
   },
