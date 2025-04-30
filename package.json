@@ -17,7 +17,8 @@
     "test": "pnpm run prettier:check && pnpm run lint && pnpm run typecheck && pnpm run test:staged",
     "prettier": "prettier --write **/**/*.{ts,tsx,css}",
     "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
-    "prettier:write": "prettier --write \"**/*.{ts,tsx}\""
+    "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
+    "theme": "npx tailwind-preset-mantine src/styles/mantine/index.ts -o src/styles/theme.css"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
