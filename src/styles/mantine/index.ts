@@ -10,12 +10,14 @@ import {
 } from '@mantine/core'
 
 import { fonts } from './fonts'
+import { colors } from './colors'
 
 const mantineTheme = mergeMantineTheme(
   DEFAULT_THEME,
 
   {
     ...fonts,
+    ...colors,
     components: {
       Container: {
         defaultProps: {
