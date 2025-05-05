@@ -43,13 +43,11 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         </div>
       )}
       <Carousel
-        dragFree
         slideSize={{
           base: '50%',
           sm: '30%',
           md: 150,
         }}
-        slidesToScroll='auto'
         withControls={false}
         className={clsx({
           'opacity-0': !isEmblaInitialized,

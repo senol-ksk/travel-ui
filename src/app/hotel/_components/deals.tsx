@@ -10,7 +10,6 @@ type IProps = { widgets: HotelLandingWidgets[] }
 const HotelDeals: React.FC<IProps> = ({ widgets }) => {
   return (
     <Carousel
-      align={'start'}
       slideGap={'md'}
       slideSize={{
         base: '100%',

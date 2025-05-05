@@ -2,6 +2,7 @@
   z-index: 1;
   font-weight: 600;
   transition: color 100ms ease;
+  justify-content: center;
 
   &[data-active] {
     color: var(--mantine-color-blue-filled);

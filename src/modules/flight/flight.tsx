@@ -299,7 +299,7 @@ export const Flight = () => {
           <FlightCalendar
             onDateSelect={(dates) => {
               if (dates[0]) {
-                form.setValue('DepartureDate', dates[0])
+                form.setValue('DepartureDate', new Date(dates[0]))
 
                 if (!dates[1]) {
                   form.setValue(
@@ -310,7 +310,7 @@ export const Flight = () => {
               }
 
               if (dates[1]) {
-                form.setValue('ReturnDate', dates[1])
+                form.setValue('ReturnDate', new Date(dates[1]))
               }
             }}
             tripKind={

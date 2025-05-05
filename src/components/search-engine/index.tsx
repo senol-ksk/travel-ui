@@ -47,12 +47,12 @@ export const SearchEngine = () => {
       }}
     >
       <Tabs.List
-        grow
         px={{
           sm: 'sm',
           md: 'lg',
         }}
         color='dark'
+        grow
       >
         <TabsTab
           value={searchModules.flight.value}

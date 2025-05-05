@@ -39,10 +39,8 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         const hasTransferStop = relatedSegment.length > 1
         const flightNumber = relatedSegment.at(0)?.flightNumber
 
-        const firstDepartureTime = dayjs.utc(
-          relatedSegment.at(0)?.departureTime
-        )
-        const lastArrivalTime = dayjs.utc(relatedSegment.at(-1)?.arrivalTime)
+        const firstDepartureTime = dayjs(relatedSegment.at(0)?.departureTime)
+        const lastArrivalTime = dayjs(relatedSegment.at(-1)?.arrivalTime)
         const arrivalIsAfter = lastArrivalTime.isAfter(firstDepartureTime, 'D')
 
         const totalFlightDuration = dayjs.duration(
