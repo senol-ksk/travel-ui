@@ -1,6 +1,7 @@
 import { createTheme } from '@mantine/core'
 
 export const colors = createTheme({
+  primaryShade: 8,
   colors: {
     dark: [
       '#c9c9c9',

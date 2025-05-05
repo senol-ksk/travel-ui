@@ -1,7 +1,10 @@
 'use client'
 
-import { FloatingIndicator, Skeleton, Tabs, TabsTab } from '@mantine/core'
+import { Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
+import { BiSolidPlaneAlt } from 'react-icons/bi'
+import { IoCarSharp } from 'react-icons/io5'
+import { MdHotel } from 'react-icons/md'
 
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
@@ -23,23 +26,12 @@ const searchModules = {
 import classes from '@/components/search-engine/Search.module.css'
 
 export const SearchEngine = () => {
+  const mounted = useMounted()
   const [latestSearch, setLatestSearch] = useLocalStorage({
     key: 'latest-search',
     defaultValue: searchModules.flight.value,
     getInitialValueInEffect: false,
   })
-
-  const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null)
-  const [value, setValue] = useState<string | null>(latestSearch)
-  const [controlsRefs, setControlsRefs] = useState<
-    Record<string, HTMLButtonElement | null>
-  >({})
-  const setControlRef = (val: string) => (node: HTMLButtonElement) => {
-    controlsRefs[val] = node
-    setControlsRefs(controlsRefs)
-  }
-
-  const mounted = useMounted()
 
   if (!mounted)
     return <Skeleton visible={!mounted} radius={'lg'} mih={200}></Skeleton>
@@ -48,62 +40,50 @@ export const SearchEngine = () => {
     <Tabs
       value={latestSearch}
       onChange={(val) => {
-        if (val) {
-          setLatestSearch(val)
-        }
-        setValue(val)
+        setLatestSearch(val ?? '')
       }}
-      variant='none'
+      classNames={{
+        tab: 'py-3 text-lg font-semibold border-b-4 text-dark-7',
+      }}
     >
-      <Tabs.List className={classes.list} ref={setRootRef}>
+      <Tabs.List
+        grow
+        px={{
+          sm: 'sm',
+          md: 'lg',
+        }}
+        color='dark'
+      >
         <TabsTab
           value={searchModules.flight.value}
-          ref={setControlRef(searchModules.flight.value)}
+          leftSection={<BiSolidPlaneAlt size={20} />}
           className={classes.tab}
         >
           {searchModules.flight.title}
         </TabsTab>
         <TabsTab
           value={searchModules.hotel.value}
-          ref={setControlRef(searchModules.hotel.value)}
+          leftSection={<MdHotel size={20} />}
           className={classes.tab}
         >
           {searchModules.hotel.title}
         </TabsTab>
         <TabsTab
           value={searchModules.carRental.value}
-          ref={setControlRef(searchModules.carRental.value)}
+          leftSection={<IoCarSharp size={20} />}
           className={classes.tab}
         >
           {searchModules.carRental.title}
         </TabsTab>
-        <TabsTab
-          value={searchModules.bus.value}
-          ref={setControlRef(searchModules.bus.value)}
-          className={classes.tab}
-        >
+        <TabsTab value={searchModules.bus.value} className={classes.tab}>
           {searchModules.bus.title}
         </TabsTab>
-        <TabsTab
-          value={searchModules.transfer.value}
-          ref={setControlRef(searchModules.transfer.value)}
-          className={classes.tab}
-        >
+        <TabsTab value={searchModules.transfer.value} className={classes.tab}>
           {searchModules.transfer.title}
         </TabsTab>
-        <TabsTab
-          value={searchModules.tour.value}
-          ref={setControlRef(searchModules.tour.value)}
-          className={classes.tab}
-        >
+        <TabsTab value={searchModules.tour.value} className={classes.tab}>
           {searchModules.tour.title}
         </TabsTab>
-        <FloatingIndicator
-          target={value ? controlsRefs[value] : null}
-          parent={rootRef}
-          className={classes.indicator}
-          transitionDuration={500}
-        />
       </Tabs.List>
 
       <div className='p-2 md:p-4'>
