@@ -11,5 +11,4 @@
     "**/*.less",
     "node_modules/@mantine/core/styles.css"
   ],
-  "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }
