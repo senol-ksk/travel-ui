@@ -13,11 +13,13 @@ import {
   Skeleton,
   Menu,
   ActionIcon,
+  Box,
 } from '@mantine/core'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
 import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 import { IoIosLogOut } from 'react-icons/io'
+import { IoIosArrowDown } from 'react-icons/io'
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
@@ -39,7 +41,7 @@ export const Header = () => {
   return (
     <header className='border-b bg-white'>
       <Container>
-        <div className='flex items-center py-4'>
+        <Box className='flex items-center py-4'>
           <Link href='/'>
             <Image
               src='/logo.png'
@@ -60,7 +62,7 @@ export const Header = () => {
             />
           </div>
 
-          <div className='hidden flex-1 items-center md:flex'>
+          <Box className='hidden flex-1 items-center md:flex' c={'dark-7'}>
             <div className='flex items-center gap-2 px-3 md:gap-4 md:px-5'>
               {headerData.isLoading ? (
                 <div className='flex gap-2'>
@@ -72,18 +74,76 @@ export const Header = () => {
                 headerData.data &&
                 headerData.data?.params.main_menu.menus.map((item) => (
                   <div key={item.id}>
-                    <Link href={item.url}>{item.title}</Link>
+                    <Link
+                      className='dark-7 rounded p-2 hover:bg-blue-50'
+                      href={item.url}
+                    >
+                      {item.title}
+                    </Link>
                   </div>
                 ))
               )}
             </div>
-            <div className='ms-auto flex items-center gap-2'>
-              <Anchor component={Link} href='/online-operations' c={'dark'}>
-                Online İşlemler
-              </Anchor>
-              <Anchor component={Link} href='/kampanyalar' c={'dark'}>
-                Kampanyalar
-              </Anchor>
+            <Anchor component={Link} href='/kampanyalar' c={'dark-7'}>
+              Kampanyalar
+            </Anchor>
+            <div className='ms-auto flex items-center gap-5'>
+              <Menu>
+                <Menu.Target>
+                  <Anchor c={'dark-7'} className='flex items-center gap-2'>
+                    Online İşlemler <IoIosArrowDown />
+                  </Anchor>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item>
+                    <Anchor
+                      c={'dark-7'}
+                      component={Link}
+                      href='/online-operations'
+                    >
+                      Seyahatinizi Görüntüleyin
+                    </Anchor>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Anchor
+                      component={Link}
+                      href='/online-operations/cancel-flight'
+                    >
+                      Uçak İptal İade
+                    </Anchor>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Anchor component={Link} href='/online-operations/checkin'>
+                      Online Check-in
+                    </Anchor>
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+              {/* Parafly alanı */}
+              <Menu>
+                <Menu.Target>
+                  <Anchor c={'dark-7'} className='flex items-center gap-2'>
+                    Parafly <IoIosArrowDown />
+                  </Anchor>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item>
+                    <Anchor c={'dark-7'} component={Link} href='/parafly'>
+                      ParafPara Sorgula
+                    </Anchor>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Anchor component={Link} href='/parafly/cancel-flight'>
+                      ParafPara Hesapla
+                    </Anchor>
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Anchor component={Link} href='/parafly/checkin'>
+                      Parafly Travel Nedir?
+                    </Anchor>
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
               {session.status === 'authenticated' ? (
                 <Menu>
                   <Menu.Target>
@@ -125,7 +185,7 @@ export const Header = () => {
                 </Button>
               )}
             </div>
-          </div>
+          </Box>
 
           <Drawer
             opened={drawerOpened}
@@ -175,7 +235,7 @@ export const Header = () => {
                 ))}
             </div>
           </Drawer>
-        </div>
+        </Box>
       </Container>
     </header>
   )
