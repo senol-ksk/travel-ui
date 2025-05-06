@@ -40,7 +40,6 @@ const TransferCalendar: React.FC<Props> = ({
       <div className='relative'>
         <Input
           label='Tarihler'
-          icon={'calendar'}
           onClick={() => setContainerTransitionState(true)}
           title={`${dayjs(rangeValue).format('DD MMMM')}`}
         />

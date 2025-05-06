@@ -20,7 +20,7 @@ type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
 }
-const defaultFormat = 'DD MMM ddd'
+const defaultFormat = 'DD MMM'
 
 const FlightCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
@@ -70,10 +70,9 @@ const FlightCalendar: React.FC<Props> = ({
 
   return (
     <Provider>
-      <div className='relative'>
+      <div className='relative h-full'>
         <Input
           label='Tarihler'
-          icon={'calendar'}
           onClick={() => setContainerTransitionState(true)}
           title={
             tripKind === 'round-trip'

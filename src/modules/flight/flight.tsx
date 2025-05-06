@@ -20,6 +20,7 @@ import { FlightCalendar } from '@/components/search-engine/calendar/flight'
 import { PassengerDropdown } from '@/components/search-engine/passengers/flight'
 import type { LocationResults } from '@/components/search-engine/locations/type'
 import { serializeFlightSearchParams } from './searchParams'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 const formSchema = z.object({
   DepartureDate: z.coerce.date(),
@@ -75,23 +76,14 @@ const formSchema = z.object({
   }),
 })
 
-const schema = formSchema
-
-type FlightRequestType = z.infer<typeof schema>
+type FlightRequestType = z.infer<typeof formSchema>
 
 // import { serializeFlightSearchParams } from './searchParams'
 
 export const Flight = () => {
   const mounted = useMounted()
   const router = useTransitionRouter()
-  // const [originLocationInputValue, setOriginLocationInputValue] = useState('')
-  // const [destinationLocationInputValue, setDestinationLocationInputValue] =
-  //   useState('')
 
-  const [dates, setDates] = useState<DatesRangeValue>([
-    dayjs().add(6, 'days').toDate(),
-    dayjs().add(8, 'days').toDate(),
-  ])
   const [flightLocalObj, setFlightLocalObj] =
     useLocalStorage<FlightRequestType>({
       key: 'flight-search-engine',
@@ -161,16 +153,16 @@ export const Flight = () => {
   })
 
   const handleFormSubmit = async (data: FlightRequestType) => {
-    const departurDate = data.DepartureDate
+    const departureDate = data.DepartureDate
     const returnDate =
       dayjs(data.ReturnDate).diff(data.DepartureDate, 'd') < 0
-        ? dayjs(departurDate).add(2, 'd').toDate()
+        ? dayjs(departureDate).add(2, 'd').toDate()
         : data.ReturnDate
 
     const searchUrl = serializeFlightSearchParams('/flight/search-results', {
       activeTripKind: data.ActiveTripKind,
       cabinClass: data.CabinClass,
-      departureDate: departurDate,
+      departureDate: departureDate,
       destination: {
         code: data.Destination.Code,
         iata: data.Destination.Iata,
@@ -193,7 +185,7 @@ export const Flight = () => {
       Origin: data.Origin,
       Destination: data.Destination,
       ReturnDate: returnDate,
-      DepartureDate: departurDate,
+      DepartureDate: departureDate,
       ActiveTripKind: data.ActiveTripKind,
       CabinClass: data.CabinClass,
       PassengerCounts: data.PassengerCounts,
@@ -250,10 +242,10 @@ export const Flight = () => {
           />
         </div>
       </div>
-      <div className='grid grid-cols-12 gap-2 md:gap-4'>
-        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+      <div className='grid grid-cols-16 gap-2 md:gap-4'>
+        <div className='col-span-16 sm:col-span-6 md:col-span-4'>
           <Locations
-            label='Kalkış'
+            label='Nereden'
             inputProps={{ error: !!form.formState.errors.Origin }}
             data={originLocations?.Result}
             isLoading={originLocationsIsLoading}
@@ -273,7 +265,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+        <div className='col-span-16 sm:col-span-6 md:col-span-4'>
           <Locations
             label='Nereye'
             inputProps={{ error: !!form.formState.errors.Destination }}
@@ -295,7 +287,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='col-span-6 md:col-span-3 lg:col-span-2'>
+        <div className='col-span-9 md:col-span-3 lg:col-span-3'>
           <FlightCalendar
             onDateSelect={(dates) => {
               if (dates[0]) {
@@ -322,7 +314,7 @@ export const Flight = () => {
             ]}
           />
         </div>
-        <div className='col-span-6 md:col-span-3 lg:col-span-2'>
+        <div className='col-span-7 md:col-span-3 lg:col-span-2'>
           <PassengerDropdown
             initialValues={{
               ...form.getValues('PassengerCounts'),
@@ -336,13 +328,8 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='sm:col-grid-2 col-span-12 flex grow-0 lg:col-span-2'>
-          <Button
-            type='submit'
-            className='mx-auto w-full sm:w-auto lg:h-full lg:w-full'
-          >
-            Ara
-          </Button>
+        <div className='sm:col-grid-2 col-span-16 lg:col-span-3'>
+          <SearchEngineButton title='Uçuş Ara' />
         </div>
       </div>
     </form>
