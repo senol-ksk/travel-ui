@@ -2,9 +2,12 @@
 
 import { Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
+
 import { BiSolidPlaneAlt } from 'react-icons/bi'
-import { IoCarSharp } from 'react-icons/io5'
+import { IoCarSharp, IoBus } from 'react-icons/io5'
 import { MdHotel } from 'react-icons/md'
+import { TransferIcon } from '@/modules/bus/_icon'
+import { FaSuitcase } from 'react-icons/fa'
 
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
@@ -12,7 +15,8 @@ import { CarRentSearchPanel } from '@/modules/carrent'
 import { BusSearchEngine } from '@/modules/bus'
 import { TransferSearchEngine } from '@/modules/transfer'
 import { TourSearchEngine } from '@/modules/tour'
-import { useState } from 'react'
+
+import classes from '@/components/search-engine/Search.module.css'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -22,8 +26,6 @@ const searchModules = {
   transfer: { value: 'transfer', title: 'Transfer' },
   tour: { value: 'tour', title: 'Tur' },
 }
-
-import classes from '@/components/search-engine/Search.module.css'
 
 export const SearchEngine = () => {
   const mounted = useMounted()
@@ -43,7 +45,7 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'py-3 text-lg font-semibold border-b-4 text-dark-7',
+        tab: 'py-3 text-lg font-semibold border-b-4',
       }}
     >
       <Tabs.List
@@ -51,37 +53,48 @@ export const SearchEngine = () => {
           sm: 'sm',
           md: 'lg',
         }}
-        color='dark'
         grow
       >
         <TabsTab
           value={searchModules.flight.value}
-          leftSection={<BiSolidPlaneAlt size={20} />}
+          leftSection={<BiSolidPlaneAlt />}
           className={classes.tab}
         >
           {searchModules.flight.title}
         </TabsTab>
         <TabsTab
           value={searchModules.hotel.value}
-          leftSection={<MdHotel size={20} />}
+          leftSection={<MdHotel />}
           className={classes.tab}
         >
           {searchModules.hotel.title}
         </TabsTab>
         <TabsTab
           value={searchModules.carRental.value}
-          leftSection={<IoCarSharp size={20} />}
+          leftSection={<IoCarSharp />}
           className={classes.tab}
         >
           {searchModules.carRental.title}
         </TabsTab>
-        <TabsTab value={searchModules.bus.value} className={classes.tab}>
+        <TabsTab
+          value={searchModules.bus.value}
+          leftSection={<IoBus />}
+          className={classes.tab}
+        >
           {searchModules.bus.title}
         </TabsTab>
-        <TabsTab value={searchModules.transfer.value} className={classes.tab}>
+        <TabsTab
+          value={searchModules.transfer.value}
+          leftSection={<TransferIcon />}
+          className={classes.tab}
+        >
           {searchModules.transfer.title}
         </TabsTab>
-        <TabsTab value={searchModules.tour.value} className={classes.tab}>
+        <TabsTab
+          value={searchModules.tour.value}
+          leftSection={<FaSuitcase />}
+          className={classes.tab}
+        >
           {searchModules.tour.title}
         </TabsTab>
       </Tabs.List>
