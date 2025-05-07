@@ -20,6 +20,7 @@ import {
   transferSearchEngineSchema,
   TransferSearchEngineSchemaInfer,
 } from './searchParams.client'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 const defaultDate = dayjs().add(5, 'day').toISOString()
 
@@ -222,9 +223,10 @@ const TransferSearchEngine = () => {
           />
         </div>
         <div className='col-span-12 md:col-span-1'>
-          <Button type='submit' className='mx-auto w-full md:size-full'>
+          {/* <Button type='submit' className='mx-auto w-full md:size-full'>
             Ara
-          </Button>
+          </Button> */}
+          <SearchEngineButton />
         </div>
       </div>
     </form>

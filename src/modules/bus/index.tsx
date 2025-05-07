@@ -17,6 +17,7 @@ import { getBusSearchSessionToken, request } from '@/network'
 import { BusCalendar } from '@/components/search-engine/calendar/bus'
 import { useTransitionRouter } from 'next-view-transitions'
 import { serializeBusSearchParams } from './searchParams'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
@@ -232,13 +233,14 @@ const BusSearchEngine = () => {
           </Stack>
         </div>
         <div className='col-span-12 md:col-span-2'>
-          <Button
+          {/* <Button
             type='submit'
             className='w-full md:h-full'
             loading={searchSessionTokenQuery.isPending}
           >
             Ara
-          </Button>
+          </Button> */}
+          <SearchEngineButton />
         </div>
       </div>
     </form>
