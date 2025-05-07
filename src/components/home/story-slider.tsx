@@ -43,13 +43,11 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         </div>
       )}
       <Carousel
-        dragFree
         slideSize={{
           base: '50%',
           sm: '30%',
           md: 150,
         }}
-        slidesToScroll='auto'
         withControls={false}
         className={clsx({
           'opacity-0': !isEmblaInitialized,
@@ -59,14 +57,17 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
           return (
             <Carousel.Slide key={item.id}>
               <Link href={item.params.link.value} className='block'>
-                <div className='group grid justify-center gap-1 py-3 text-center'>
-                  <div className='size-[100px] scale-100 justify-self-center overflow-hidden rounded-full border-3 border-orange-600 p-1 transition-[scale] group-hover:scale-110 group-hover:border-blue-500'>
+                <div className='group grid justify-center gap-1 pt-[50px] pb-[50px] text-center'>
+                  <div className='relative h-[240px] w-[180px] overflow-hidden rounded-full transition-[scale] group-hover:scale-115'>
+                    <div className='absolute bottom-0 left-0 h-50 w-full bg-gradient-to-t from-black to-transparent opacity-80 transition-opacity group-hover:opacity-50'></div>
                     <BackgroundImage
                       src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image.value}`}
                       className='size-full rounded-full'
                     />
+                    <div className='absolute bottom-2 left-1/2 mb-4 -translate-x-1/2 text-sm font-semibold text-white'>
+                      {item.title}
+                    </div>
                   </div>
-                  <div className='pt-2 text-sm leading-tight'>{item.title}</div>
                 </div>
               </Link>
             </Carousel.Slide>

@@ -1,13 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 
-import {
-  Transition,
-  Paper,
-  CloseButton,
-  Skeleton,
-  Button,
-  ActionIcon,
-} from '@mantine/core'
+import { Transition, Paper, Button, ActionIcon } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 
 import { FiPlus, FiMinus } from 'react-icons/fi'
@@ -90,9 +83,8 @@ export const PassengerDropdown: React.FC<Props> = ({
   }
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
-        icon={'passenger'}
         label='Yolcular'
         title={`${
           passengersState.Adult.count +

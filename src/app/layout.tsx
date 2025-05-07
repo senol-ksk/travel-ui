@@ -1,12 +1,14 @@
-import '@/styles/global.css'
-
-import type { Metadata } from 'next'
-import { SessionProvider } from 'next-auth/react'
 import {
   ColorSchemeScript,
   MantineProvider,
   mantineHtmlProps,
 } from '@mantine/core'
+
+import '@/styles/global.css'
+
+import type { Metadata } from 'next'
+import { SessionProvider } from 'next-auth/react'
+
 import { ViewTransitions } from 'next-view-transitions'
 
 import dayjs from 'dayjs'

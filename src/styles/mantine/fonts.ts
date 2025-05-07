@@ -1,13 +1,10 @@
-import { createTheme } from '@mantine/core'
-import { Figtree } from 'next/font/google'
-
-const inter = Figtree({
-  subsets: ['latin'],
-})
+import { createTheme, rem } from '@mantine/core'
 
 export const fonts = createTheme({
-  fontFamily: inter.style.fontFamily,
   headings: {
     fontWeight: '600',
+  },
+  fontSizes: {
+    xxs: rem(10),
   },
 })

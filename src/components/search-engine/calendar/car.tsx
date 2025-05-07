@@ -63,7 +63,6 @@ const CarCalendar: React.FC<Props> = ({
       <div className='relative'>
         <Input
           label='Tarihler'
-          icon={'calendar'}
           onClick={() => setContainerTransitionState(true)}
           title={`${dayjs(rangeValue[0]).format('DD MMM')} -
             ${dayjs(rangeValue[1]).format('DD MMM')}`}

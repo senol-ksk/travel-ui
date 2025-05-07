@@ -207,10 +207,10 @@ const CarRentSearchPanel: React.FC = () => {
             ]}
             onDateSelect={(dates) => {
               if (dates[0]) {
-                formActions.setValue('pickup_date', dates[0])
+                formActions.setValue('pickup_date', new Date(dates[0]))
               }
               if (dates[1]) {
-                formActions.setValue('drop_date', dates[1])
+                formActions.setValue('drop_date', new Date(dates[1]))
               }
             }}
           />

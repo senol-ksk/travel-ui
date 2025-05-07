@@ -9,7 +9,5 @@ import 'dayjs/locale/tr'
 dayjs.locale('tr')
 
 export const Provider: React.FC<Props> = ({ children }) => (
-  <DatesProvider settings={{ locale: 'tr', timezone: 'GMT' }}>
-    {children}
-  </DatesProvider>
+  <DatesProvider settings={{ locale: 'tr' }}>{children}</DatesProvider>
 )

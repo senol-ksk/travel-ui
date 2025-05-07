@@ -49,7 +49,7 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <NuqsAdapter>
-      <DatesProvider settings={{ locale: 'tr', timezone: 'GMT' }}>
+      <DatesProvider settings={{ locale: 'tr' }}>
         <QueryClientProvider client={queryClient}>
           {children}
         </QueryClientProvider>

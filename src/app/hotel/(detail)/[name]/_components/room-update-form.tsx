@@ -77,22 +77,14 @@ const RoomUpdateForm = () => {
                 dayjs().add(7, 'd').toDate(),
             ]}
             onDateSelect={(dates) => {
-              form.setValue(
-                'checkInDate',
-                dayjs(dates[0]?.toISOString()).toDate(),
-                {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                }
-              )
-              form.setValue(
-                'checkOutDate',
-                dayjs(dates[1]?.toISOString()).toDate(),
-                {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                }
-              )
+              form.setValue('checkInDate', dayjs(dates[0]).toDate(), {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+              form.setValue('checkOutDate', dayjs(dates[1]).toDate(), {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
             }}
           />
         </div>

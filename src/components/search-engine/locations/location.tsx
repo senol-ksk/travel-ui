@@ -43,7 +43,7 @@ export const Locations: React.FC<Props> = ({
     setLocationContainerOpened(false)
   )
   const [originValue, setOriginValue] = useState('')
-  const [locatioName, setLocationName] = useState<null | string>(null)
+  const [locationName, setLocationName] = useState<null | string>(null)
 
   const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -53,15 +53,14 @@ export const Locations: React.FC<Props> = ({
   }, [defaultValue])
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
         label={label}
-        icon='location'
         onClick={() => {
           setLocationContainerOpened(true)
         }}
         error={!!inputProps?.error}
-        title={locatioName}
+        title={locationName}
       />
       <Transition mounted={locationContainerOpened} transition='pop-top-right'>
         {(styles) => (

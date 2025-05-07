@@ -138,11 +138,11 @@ const TourSearchEngine = () => {
               const checkoutDate = dates[1]
 
               if (checkinDate && dayjs(checkoutDate).isValid()) {
-                formActions.setValue('checkinDate', checkinDate)
+                formActions.setValue('checkinDate', new Date(checkinDate))
               }
 
               if (checkoutDate && dayjs(checkoutDate).isValid()) {
-                formActions.setValue('checkoutDate', checkoutDate)
+                formActions.setValue('checkoutDate', new Date(checkoutDate))
               }
             }}
           />

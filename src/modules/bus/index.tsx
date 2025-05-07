@@ -197,7 +197,7 @@ const BusSearchEngine = () => {
               defaultDate={formActions.getValues('Date')}
               onDateSelect={(date) => {
                 if (date) {
-                  formActions.setValue('Date', date, {
+                  formActions.setValue('Date', new Date(date), {
                     shouldValidate: true,
                     shouldDirty: true,
                     shouldTouch: true,

@@ -160,11 +160,11 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
               const checkoutDate = dates[1]
 
               if (checkinDate && dayjs(checkoutDate).isValid()) {
-                form.setValue('checkinDate', checkinDate)
+                form.setValue('checkinDate', new Date(checkinDate))
               }
 
               if (checkoutDate && dayjs(checkoutDate).isValid()) {
-                form.setValue('checkoutDate', checkoutDate)
+                form.setValue('checkoutDate', new Date(checkoutDate))
               }
             }}
           />

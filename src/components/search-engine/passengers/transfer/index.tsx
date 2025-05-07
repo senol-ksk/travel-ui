@@ -88,7 +88,6 @@ export const PassengerDropdown: React.FC<Props> = ({
   return (
     <div className='relative'>
       <Input
-        icon={'passenger'}
         label='Kişi sayısı'
         title={`${
           passengersState.adult.count +

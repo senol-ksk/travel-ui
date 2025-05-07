@@ -56,7 +56,6 @@ export const Locations: React.FC<Props> = ({
     <div className='relative'>
       <Input
         label={label}
-        icon='location'
         onClick={() => {
           setLocationContainerOpened(true)
         }}
