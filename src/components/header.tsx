@@ -62,7 +62,7 @@ export const Header = () => {
             />
           </div>
 
-          <Box className='hidden flex-1 items-center md:flex' c={'dark-7'}>
+          <Box className='hidden flex-1 items-center md:flex'>
             <div className='flex items-center gap-2 px-3 md:gap-4 md:px-5'>
               {headerData.isLoading ? (
                 <div className='flex gap-2'>
@@ -75,7 +75,7 @@ export const Header = () => {
                 headerData.data?.params.main_menu.menus.map((item) => (
                   <div key={item.id}>
                     <Link
-                      className='dark-7 rounded p-2 hover:bg-blue-50'
+                      className='rounded p-2 hover:bg-blue-50'
                       href={item.url}
                     >
                       {item.title}
@@ -84,23 +84,19 @@ export const Header = () => {
                 ))
               )}
             </div>
-            <Anchor component={Link} href='/kampanyalar' c={'dark-7'}>
+            <Anchor component={Link} href='/kampanyalar'>
               Kampanyalar
             </Anchor>
             <div className='ms-auto flex items-center gap-5'>
               <Menu>
                 <Menu.Target>
-                  <Anchor c={'dark-7'} className='flex items-center gap-2'>
+                  <Anchor className='flex items-center gap-2'>
                     Online İşlemler <IoIosArrowDown />
                   </Anchor>
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Item>
-                    <Anchor
-                      c={'dark-7'}
-                      component={Link}
-                      href='/online-operations'
-                    >
+                    <Anchor component={Link} href='/online-operations'>
                       Seyahatinizi Görüntüleyin
                     </Anchor>
                   </Menu.Item>
@@ -122,13 +118,13 @@ export const Header = () => {
               {/* Parafly alanı */}
               <Menu>
                 <Menu.Target>
-                  <Anchor c={'dark-7'} className='flex items-center gap-2'>
+                  <Anchor className='flex items-center gap-2'>
                     Parafly <IoIosArrowDown />
                   </Anchor>
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Item>
-                    <Anchor c={'dark-7'} component={Link} href='/parafly'>
+                    <Anchor component={Link} href='/parafly'>
                       ParafPara Sorgula
                     </Anchor>
                   </Menu.Item>

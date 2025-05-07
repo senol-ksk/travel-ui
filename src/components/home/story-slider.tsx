@@ -57,7 +57,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
       >
         {dealsOfWeekData?.map((item) => {
           return (
-            <Carousel.Slide key={item.id} className='mr-[50px] last:mr-0'>
+            <Carousel.Slide key={item.id}>
               <Link href={item.params.link.value} className='block'>
                 <div className='group grid justify-center gap-1 pt-[50px] pb-[50px] text-center'>
                   <div className='relative h-[240px] w-[180px] overflow-hidden rounded-full transition-[scale] group-hover:scale-115'>
