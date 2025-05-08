@@ -13,6 +13,7 @@ import { SearchEngine } from '@/components/search-engine/'
 import { StorySlider } from '@/components/home/story-slider'
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
 import { CmsContent, Params, Widgets } from '@/types/cms-types'
+import { UpComingHolidays } from '@/components/home/upcoming-holidays'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -115,6 +116,9 @@ export default async function Home() {
           </div>
         )}
       </Container>
+      <div className='py-6'>
+        <UpComingHolidays />
+      </div>
     </>
   )
 }
