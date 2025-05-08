@@ -223,9 +223,6 @@ const TransferSearchEngine = () => {
           />
         </div>
         <div className='col-span-12 md:col-span-1'>
-          {/* <Button type='submit' className='mx-auto w-full md:size-full'>
-            Ara
-          </Button> */}
           <SearchEngineButton />
         </div>
       </div>
