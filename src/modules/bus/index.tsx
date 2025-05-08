@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Radio, Skeleton, Stack } from '@mantine/core'
+import { Radio, Skeleton, Stack } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -110,15 +110,8 @@ const BusSearchEngine = () => {
       },
     })
 
-  const searchSessionTokenQuery = useMutation({
-    mutationKey: ['bus-search-session-token', localStorageData],
-    mutationFn: getBusSearchSessionToken,
-  })
-
   const handleSubmit = async (data: BusSearchEngineInfer) => {
     setLocalStorageData(data)
-
-    // const tokens = await searchSessionTokenQuery.mutateAsync()
 
     const url = serializeBusSearchParams('/bus/search-results', {
       originId: data.Origin.Id,

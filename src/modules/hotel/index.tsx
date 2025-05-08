@@ -182,13 +182,6 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
         </div>
         <div className='col-span-12 flex grow-0 md:col-span-2'>
           <SearchEngineButton />
-          {/* <Button
-            type='submit'
-            className='mx-auto min-h-full md:w-full'
-            // loading={isRedirecting}
-          >
-            Ara
-          </Button> */}
         </div>
       </div>
     </form>

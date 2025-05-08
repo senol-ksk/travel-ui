@@ -86,7 +86,7 @@ export const PassengerDropdown: React.FC<Props> = ({
   }
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
         label='Kişi sayısı'
         title={`${

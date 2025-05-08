@@ -17,10 +17,13 @@ const CarHours: React.FC<IProps> = ({
 }) => {
   return (
     <div
-      className={clsx('relative flex h-full flex-col rounded-md bg-gray-50', {
-        'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
-        'border-slate-300': !error,
-      })}
+      className={clsx(
+        'relative flex h-full flex-col rounded-md border border-transparent bg-gray-50 hover:border-blue-800',
+        {
+          'border-red-500': error,
+          'border-slate-300': !error,
+        }
+      )}
     >
       <NativeSelect
         classNames={{
@@ -31,7 +34,6 @@ const CarHours: React.FC<IProps> = ({
         }}
         variant='unstyled'
         label={label}
-        // rightSection={<div></div>}
         data={range(0, 23).map((hour) => ({
           label: hour < 10 ? `0${hour}:00` : `${hour}:00`,
           value: hour < 10 ? `0${hour}:00` : `${hour}:00`,
