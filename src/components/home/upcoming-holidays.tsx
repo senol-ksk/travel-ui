@@ -51,14 +51,16 @@ const UpComingHolidays: React.FC = () => {
       <Carousel
         dragFree
         align='start'
-        slideSize='auto'
         slideGap='lg'
         loop
         withIndicators
         className='w-full max-w-[1200px]'
       >
         {defaultData.map((item) => (
-          <Carousel.Slide key={item.id} className='w-full md:w-1/3'>
+          <Carousel.Slide
+            key={item.id}
+            className='!basis-full sm:!basis-1/2 md:!basis-1/3'
+          >
             <Box className='p-3'>
               <div className='group relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105'>
                 <BackgroundImage

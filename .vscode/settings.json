@@ -11,4 +11,10 @@
     "**/*.less",
     "node_modules/@mantine/core/styles.css"
   ],
+  "editor.suggest.showStatusBar": true,
+  "zenMode.hideStatusBar": true,
+  "terminal.integrated.suggest.showStatusBar": true,
+  "notebook.showCellStatusBar": "visible",
+  "docker.contexts.showInStatusBar": true,
+  "errorLens.statusBarColorsEnabled": true,
 }
