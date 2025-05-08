@@ -48,7 +48,6 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
           md: 150,
         }}
         slideGap='xl'
-        align='start'
         withControls={false}
         className={clsx({
           'opacity-0': !isEmblaInitialized,
