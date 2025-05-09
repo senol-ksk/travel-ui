@@ -14,6 +14,7 @@ import { StorySlider } from '@/components/home/story-slider'
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
 import { CmsContent, Params, Widgets } from '@/types/cms-types'
 import { UpComingHolidays } from '@/components/home/upcoming-holidays'
+import { LastOpportunity } from '@/components/home/last-opportunity'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -118,6 +119,9 @@ export default async function Home() {
       </Container>
       <div className='py-6'>
         <UpComingHolidays />
+      </div>
+      <div className='py-6'>
+        <LastOpportunity />
       </div>
     </>
   )
