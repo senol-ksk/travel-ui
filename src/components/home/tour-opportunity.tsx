@@ -96,7 +96,7 @@ const TourOpportunity = () => {
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
-              <Box className='w-full rounded-lg border border-gray-300 bg-white shadow-xl'>
+              <Box className='mb-10 w-full rounded-lg border border-gray-300 bg-white shadow-xl'>
                 <div className='relative'>
                   <Image
                     src={tour.img}

@@ -83,7 +83,7 @@ const HolidayThemes = () => (
     </Container>
 
     <Container>
-      <Carousel slideGap='lg' slideSize='100%' className='relative'>
+      <Carousel slideGap='lg' slideSize='100%' className='relative mb-10'>
         {hotels.map((hotel, i) => (
           <Carousel.Slide
             key={i}
@@ -94,7 +94,7 @@ const HolidayThemes = () => (
                 <Image
                   src={hotel.img}
                   alt={hotel.name}
-                  className='mx-auto h-50 w-50 rounded-full object-cover'
+                  className='mx-auto h-50 w-50 rounded-full object-cover shadow-lg'
                 />
               </div>
               <Text size='md' fw={600} className='mt-2 text-center'>
