@@ -58,9 +58,9 @@ const hotels = [
 
 const RecommendedProducts = () => {
   return (
-    <div className='container-fluid relative py-10 md:py-20'>
+    <div className='container-fluid relative pt-10 md:pt-20'>
       <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
-        Tavsiye Ettiğimiz Oteller{' '}
+        Tavsiye Ettiğimiz Oteller
       </h2>
 
       <Container className='mb-8 gap-2 overflow-x-auto md:overflow-x-visible'>
@@ -87,7 +87,7 @@ const RecommendedProducts = () => {
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
-              <Box className='w-full rounded-lg border border-gray-300 bg-white shadow-xl'>
+              <Box className='mb-10 w-full rounded-lg border border-gray-300 bg-white shadow-xl'>
                 <div className='relative'>
                   <Image
                     src={hotel.img}
@@ -100,12 +100,12 @@ const RecommendedProducts = () => {
                     </span>
                   )}
                 </div>
-                <div className='p-5'>
-                  <h3 className='text-sm font-semibold'>{hotel.name}</h3>
-                  <p className='text-xs text-gray-500'>{hotel.location}</p>
+                <div className='grid gap-3 p-5'>
+                  <h3 className='text-md font-semibold'>{hotel.name}</h3>
+                  <p className='text-xs text-gray-900'>{hotel.location}</p>
                   <div className='flex items-center justify-between pt-5'>
                     <p className='text-md font-bold'>
-                      {hotel.price}{' '}
+                      {hotel.price}
                       <span className='text-sm font-normal'>/ Kişi</span>
                     </p>
                     <Button

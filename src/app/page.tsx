@@ -16,6 +16,9 @@ import { CmsContent, Params, Widgets } from '@/types/cms-types'
 import { UpComingHolidays } from '@/components/home/upcoming-holidays'
 import { LastOpportunity } from '@/components/home/last-opportunity'
 import { RecommendedProducts } from '@/components/home/recommended-products'
+import { TourOpportunity } from '@/components/home/tour-opportunity'
+import { TrendRegions } from '@/components/home/trend-regions'
+import { HolidayThemes } from '@/components/home/holiday-themes'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -123,6 +126,15 @@ export default async function Home() {
       </div>
       <div>
         <RecommendedProducts />
+      </div>
+      <div>
+        <TourOpportunity />
+      </div>
+      <div>
+        <TrendRegions />
+      </div>
+      <div>
+        <HolidayThemes />
       </div>
     </>
   )
