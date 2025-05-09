@@ -1,9 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useTransitionRouter } from 'next-view-transitions'
-import { DatesRangeValue } from '@mantine/dates'
 import dayjs from 'dayjs'
 
 import { z } from 'zod'
@@ -11,7 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useLocalStorage, useMounted } from '@mantine/hooks'
-import { Button, NativeSelect, Radio, Group, Skeleton } from '@mantine/core'
+import { NativeSelect, Radio, Group, Skeleton } from '@mantine/core'
 
 import { request } from '@/network'
 
@@ -77,8 +75,6 @@ const formSchema = z.object({
 })
 
 type FlightRequestType = z.infer<typeof formSchema>
-
-// import { serializeFlightSearchParams } from './searchParams'
 
 export const Flight = () => {
   const mounted = useMounted()

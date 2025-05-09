@@ -53,7 +53,7 @@ export const Locations: React.FC<Props> = ({
   }, [defaultValue])
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
         label={label}
         onClick={() => {

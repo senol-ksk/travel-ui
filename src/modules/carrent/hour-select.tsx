@@ -1,7 +1,6 @@
 import { NativeSelect } from '@mantine/core'
 import { range } from '@mantine/hooks'
 import clsx from 'clsx'
-import { BsClock } from 'react-icons/bs'
 
 type IProps = {
   error?: boolean
@@ -19,27 +18,22 @@ const CarHours: React.FC<IProps> = ({
   return (
     <div
       className={clsx(
-        'relative flex h-[54px] items-center overflow-hidden rounded border leading-none text-nowrap text-ellipsis',
+        'relative flex h-full flex-col rounded-md border border-transparent bg-gray-50 hover:border-blue-800',
         {
-          'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
+          'border-red-500': error,
           'border-slate-300': !error,
         }
       )}
     >
-      <div className='absolute start-8 top-2 block pb-1 text-xs text-gray-500'>
-        {label}
-      </div>
       <NativeSelect
-        variant='unstyled'
-        className='w-full'
-        label
-        leftSection={<BsClock />}
         classNames={{
-          root: 'p-0 h-full',
-          input: 'ps-8 h-full pt-3 text-inherit',
-          wrapper: 'h-full',
-          label: 'sr-only',
+          label: 'text-sm leading-none',
+          input: 'text-xl leading-none font-bold h-auto min-h-auto pr-0',
+          root: 'h-full truncate rounded-md bg-gray-50 px-5 py-2 md:px-6 border-slate-300',
+          section: 'hidden',
         }}
+        variant='unstyled'
+        label={label}
         data={range(0, 23).map((hour) => ({
           label: hour < 10 ? `0${hour}:00` : `${hour}:00`,
           value: hour < 10 ? `0${hour}:00` : `${hour}:00`,

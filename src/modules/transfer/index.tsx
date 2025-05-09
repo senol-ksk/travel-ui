@@ -20,6 +20,7 @@ import {
   transferSearchEngineSchema,
   TransferSearchEngineSchemaInfer,
 } from './searchParams.client'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 const defaultDate = dayjs().add(5, 'day').toISOString()
 
@@ -132,8 +133,8 @@ const TransferSearchEngine = () => {
 
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
-      <div className='grid grid-cols-12 gap-2 md:gap-4'>
-        <div className='col-span-12 grid grid-cols-12 gap-2 md:col-span-5 md:gap-4'>
+      <div className='grid grid-cols-16 gap-2 md:gap-4'>
+        <div className='col-span-16 grid grid-cols-12 gap-2 md:col-span-6 md:gap-4'>
           <div className='col-span-12 sm:col-span-6'>
             <Locations
               label='Nereden'
@@ -183,7 +184,7 @@ const TransferSearchEngine = () => {
             />
           </div>
         </div>
-        <div className='col-span-4 md:col-span-2'>
+        <div className='col-span-4 md:col-span-3'>
           <TransferCalendar
             onDateSelect={(date) => {
               if (date) {
@@ -221,10 +222,8 @@ const TransferSearchEngine = () => {
             }}
           />
         </div>
-        <div className='col-span-12 md:col-span-1'>
-          <Button type='submit' className='mx-auto w-full md:size-full'>
-            Ara
-          </Button>
+        <div className='col-span-16 md:col-span-3'>
+          <SearchEngineButton />
         </div>
       </div>
     </form>

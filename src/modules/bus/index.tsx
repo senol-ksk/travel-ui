@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button, Radio, Skeleton, Stack } from '@mantine/core'
+import { Radio, Skeleton, Stack } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -17,6 +17,7 @@ import { getBusSearchSessionToken, request } from '@/network'
 import { BusCalendar } from '@/components/search-engine/calendar/bus'
 import { useTransitionRouter } from 'next-view-transitions'
 import { serializeBusSearchParams } from './searchParams'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
@@ -109,15 +110,8 @@ const BusSearchEngine = () => {
       },
     })
 
-  const searchSessionTokenQuery = useMutation({
-    mutationKey: ['bus-search-session-token', localStorageData],
-    mutationFn: getBusSearchSessionToken,
-  })
-
   const handleSubmit = async (data: BusSearchEngineInfer) => {
     setLocalStorageData(data)
-
-    // const tokens = await searchSessionTokenQuery.mutateAsync()
 
     const url = serializeBusSearchParams('/bus/search-results', {
       originId: data.Origin.Id,
@@ -232,13 +226,14 @@ const BusSearchEngine = () => {
           </Stack>
         </div>
         <div className='col-span-12 md:col-span-2'>
-          <Button
+          {/* <Button
             type='submit'
             className='w-full md:h-full'
             loading={searchSessionTokenQuery.isPending}
           >
             Ara
-          </Button>
+          </Button> */}
+          <SearchEngineButton />
         </div>
       </div>
     </form>

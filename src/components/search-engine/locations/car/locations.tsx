@@ -49,7 +49,7 @@ export const CarLocations: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
         label={label}
         onClick={() => {
