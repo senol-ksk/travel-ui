@@ -11,6 +11,7 @@ import { IoArrowForwardSharp } from 'react-icons/io5'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
+import classes from '@/styles/Datepicker.module.css'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -176,15 +177,7 @@ const FlightCalendar: React.FC<Props> = ({
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
-                      classNames={{
-                        levelsGroup: 'flex-col p-2 md:flex-row',
-                        month: 'w-full',
-                        day: 'text-sm w-full',
-                        monthCell: 'text-center',
-                        calendarHeader: 'mx-auto max-w-full',
-                        calendarHeaderLevel: 'text-base',
-                        weekday: 'text-black',
-                      }}
+                      classNames={classes}
                       defaultValue={
                         tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
                       }

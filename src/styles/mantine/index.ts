@@ -4,7 +4,7 @@ import { DEFAULT_THEME, mergeMantineTheme, Modal, rem } from '@mantine/core'
 
 import { fonts } from './fonts'
 import { colors } from './colors'
-// import { DatePicker } from '@mantine/dates'
+import { DatePicker } from '@mantine/dates'
 
 const mantineTheme = mergeMantineTheme(
   DEFAULT_THEME,
@@ -25,12 +25,11 @@ const mantineTheme = mergeMantineTheme(
           },
         },
       }),
-
-      // DatePicker: DatePicker.extend({
-      //   classNames: {
-
-      //   },
-      // }),
+      DatePicker: DatePicker.extend({
+        defaultProps: {
+          withCellSpacing: false,
+        },
+      }),
     },
   }
 )
