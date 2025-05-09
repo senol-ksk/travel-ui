@@ -56,19 +56,11 @@ const hotels = [
   },
 ]
 
-const LastOpportunity = () => {
+const RecommendedProducts = () => {
   return (
     <div className='container-fluid relative py-10 md:py-20'>
-      <div
-        className='absolute inset-0 bg-cover bg-center brightness-75'
-        style={{
-          backgroundImage:
-            "url('https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg')",
-          zIndex: -1,
-        }}
-      />
-      <h2 className='mb-6 text-center text-2xl font-bold text-white md:text-3xl'>
-        Son Dakika Fırsatları
+      <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
+        Tavsiye Ettiğimiz Oteller{' '}
       </h2>
 
       <Container className='mb-8 gap-2 overflow-x-auto md:overflow-x-visible'>
@@ -95,7 +87,7 @@ const LastOpportunity = () => {
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
-              <Box className='w-full rounded-lg bg-white shadow-xl'>
+              <Box className='w-full rounded-lg border border-gray-300 bg-white shadow-xl'>
                 <div className='relative'>
                   <Image
                     src={hotel.img}
@@ -135,4 +127,4 @@ const LastOpportunity = () => {
   )
 }
 
-export { LastOpportunity }
+export { RecommendedProducts }
