@@ -26,13 +26,7 @@ const TrendRegions = () => {
           <div className='flex w-max gap-2 md:w-auto md:flex-wrap md:justify-center'>
             {categories.map((title, i) => (
               <Link href='#' key={i}>
-                <Button
-                  className='cursor-pointer whitespace-nowrap'
-                  variant='default'
-                  color='white'
-                  size='md'
-                  radius='md'
-                >
+                <Button variant='default' color='white' size='md' radius='md'>
                   {title}
                 </Button>
               </Link>

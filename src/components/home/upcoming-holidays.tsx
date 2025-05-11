@@ -2,6 +2,7 @@
 
 import { Carousel } from '@mantine/carousel'
 import { BackgroundImage, Badge, Box } from '@mantine/core'
+import Link from 'next/link'
 
 const defaultData = [
   {
@@ -54,7 +55,7 @@ const UpComingHolidays: React.FC = () => {
             key={item.id}
             className='!basis-full sm:!basis-1/2 md:!basis-1/3'
           >
-            <Box className='p-3'>
+            <Link href='#' className='p-3'>
               <div className='group relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-md transition-transform duration-300 group-hover:scale-105'>
                 <BackgroundImage
                   src={item.image}
@@ -80,7 +81,7 @@ const UpComingHolidays: React.FC = () => {
               >
                 %30 indirim
               </Badge>
-            </Box>
+            </Link>
           </Carousel.Slide>
         ))}
       </Carousel>

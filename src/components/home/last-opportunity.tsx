@@ -95,38 +95,41 @@ const LastOpportunity = () => {
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
-              <Box className='w-full rounded-lg bg-white shadow-xl'>
-                <div className='relative'>
-                  <Image
-                    src={hotel.img}
-                    alt={hotel.name}
-                    className='h-60 w-full rounded-lg object-cover'
-                  />
-                  {hotel.discount && (
-                    <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>
-                      {hotel.discount}
-                    </span>
-                  )}
-                </div>
-                <div className='grid gap-3 p-5'>
-                  <h3 className='text-md font-semibold'>{hotel.name}</h3>
-                  <p className='text-xs text-gray-900'>{hotel.location}</p>
-                  <div className='flex items-center justify-between pt-5'>
-                    <p className='text-md font-bold'>
-                      {hotel.price}
-                      <span className='text-sm font-normal'>/ Kişi</span>
-                    </p>
-                    <Button
-                      variant='outline'
-                      color='blue'
-                      size='xs'
-                      radius='md'
-                    >
-                      İncele
-                    </Button>
+              <Link href='#'>
+                <Box className='group w-full rounded-lg bg-white shadow-xl'>
+                  <div className='relative'>
+                    <Image
+                      src={hotel.img}
+                      alt={hotel.name}
+                      className='h-60 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
+                    />
+
+                    {hotel.discount && (
+                      <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>
+                        {hotel.discount}
+                      </span>
+                    )}
                   </div>
-                </div>
-              </Box>
+                  <div className='grid gap-3 p-5'>
+                    <h3 className='text-md font-semibold'>{hotel.name}</h3>
+                    <p className='text-xs text-gray-900'>{hotel.location}</p>
+                    <div className='flex items-center justify-between pt-5'>
+                      <p className='text-md font-bold'>
+                        {hotel.price}
+                        <span className='text-sm font-normal'>/ Kişi</span>
+                      </p>
+                      <Button
+                        variant='outline'
+                        color='blue'
+                        size='xs'
+                        radius='md'
+                      >
+                        İncele
+                      </Button>
+                    </div>
+                  </div>
+                </Box>
+              </Link>
             </Carousel.Slide>
           ))}
         </Carousel>
