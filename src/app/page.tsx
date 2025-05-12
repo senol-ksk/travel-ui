@@ -14,6 +14,11 @@ import { StorySlider } from '@/components/home/story-slider'
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
 import { CmsContent, Params, Widgets } from '@/types/cms-types'
 import { UpComingHolidays } from '@/components/home/upcoming-holidays'
+import { LastOpportunity } from '@/components/home/last-opportunity'
+import { RecommendedProducts } from '@/components/home/recommended-products'
+import { TourOpportunity } from '@/components/home/tour-opportunity'
+import { TrendRegions } from '@/components/home/trend-regions'
+import { HolidayThemes } from '@/components/home/holiday-themes'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -87,9 +92,6 @@ export default async function Home() {
                           alt={opportunity.title}
                           fill
                           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-
-                          // width={600}
-                          // height={300}
                         />
                       </AspectRatio>
                     )
@@ -116,8 +118,23 @@ export default async function Home() {
           </div>
         )}
       </Container>
-      <div className='py-6'>
+      <div>
         <UpComingHolidays />
+      </div>
+      <div>
+        <LastOpportunity />
+      </div>
+      <div>
+        <RecommendedProducts />
+      </div>
+      <div>
+        <TourOpportunity />
+      </div>
+      <div>
+        <TrendRegions />
+      </div>
+      <div>
+        <HolidayThemes />
       </div>
     </>
   )
