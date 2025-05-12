@@ -19,6 +19,7 @@ import { RecommendedProducts } from '@/components/home/recommended-products'
 import { TourOpportunity } from '@/components/home/tour-opportunity'
 import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
+import { FooterMenu } from '@/components/home/footer-menu'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -32,6 +33,18 @@ export default async function Home() {
   )
   const earlyList = cmsData?.widgets?.filter(
     (x) => x.point == 'early_rezervation'
+  )
+  const recommendedProductsData = cmsData?.widgets.filter(
+    (x) => x.point === 'hotel_deals'
+  )
+  const holidayThemesData = cmsData?.widgets.filter(
+    (x) => x.point === 'holiday_themes'
+  )
+  const footerMenuData = cmsData?.widgets.filter(
+    (x) => x.point === 'landing_menu'
+  )
+  const trendRegionsData = cmsData?.widgets.filter(
+    (x) => x.point === 'hotel_popular_regions'
   )
 
   return (
@@ -125,16 +138,35 @@ export default async function Home() {
         <LastOpportunity />
       </div>
       <div>
-        <RecommendedProducts />
+        {recommendedProductsData && (
+          <div>
+            <RecommendedProducts data={recommendedProductsData} />
+          </div>
+        )}
       </div>
       <div>
         <TourOpportunity />
       </div>
       <div>
-        <TrendRegions />
+        {trendRegionsData && (
+          <div>
+            <TrendRegions data={trendRegionsData} />
+          </div>
+        )}
       </div>
       <div>
-        <HolidayThemes />
+        {holidayThemesData && (
+          <div>
+            <HolidayThemes data={holidayThemesData} />
+          </div>
+        )}
+      </div>
+      <div>
+        {footerMenuData && (
+          <div>
+            <FooterMenu data={footerMenuData} />
+          </div>
+        )}
       </div>
     </>
   )
