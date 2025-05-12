@@ -4,7 +4,13 @@
   position: relative;
   z-index: 1;
 }
-
+.levelsGroup {
+  flex-direction: column;
+  align-items: center;
+  @media (min-width: $mantine-breakpoint-sm) {
+    flex-direction: row;
+  }
+}
 .day {
   position: relative;
   width: 100%;
