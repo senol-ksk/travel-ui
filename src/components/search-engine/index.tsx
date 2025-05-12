@@ -45,7 +45,8 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'py-3 text-lg font-semibold border-b-4',
+        tab: 'px-1 py-2 sm:py-3 md:text-lg border-b-4',
+        tabSection: 'hidden sm:flex',
       }}
     >
       <Tabs.List
@@ -99,7 +100,7 @@ export const SearchEngine = () => {
         </TabsTab>
       </Tabs.List>
 
-      <div className='p-2 md:p-4'>
+      <div className='p-4'>
         <Tabs.Panel value={searchModules.flight.value}>
           <Flight />
         </Tabs.Panel>
