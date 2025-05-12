@@ -5,7 +5,6 @@ import { Carousel } from '@mantine/carousel'
 import Link from 'next/link'
 import { Widgets } from '@/types/cms-types'
 import { useEffect, useState } from 'react'
-
 type IProps = {
   data: Widgets
 }
@@ -20,7 +19,7 @@ const categories = [
   'başar otelleri',
 ]
 
-const HolidayThemes: React.FC<IProps> = ({ data }) => {
+const FooterMenu: React.FC<IProps> = ({ data }) => {
   const [isEmblaInitialized, setIsEmblaInitialized] = useState(false)
 
   useEffect(() => {
@@ -29,32 +28,10 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
   return (
     <div className='container-fluid relative pt-10 md:pt-20'>
       <h2 className='mb-3 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
-        Tatil Temaları
+        Popüler Destinasyonlar
       </h2>
-      <p className='mb-10 text-center text-sm text-gray-600 md:text-base'>
-        Tatil planlarına başlamadan önce size fikir verebilecek farklı
-        kriterlere göre sınıflandırılmış otellere göz atabilir, detaylı bilgi
-        sahibi olabilirsiniz.
-      </p>
 
-      <Container className='mb-8 gap-2 overflow-x-auto md:overflow-x-visible'>
-        <div className='flex w-max gap-2 md:w-auto md:flex-wrap md:justify-center'>
-          {categories.map((title, i) => (
-            <Link href='#' key={i}>
-              <Button
-                variant='default'
-                size='md'
-                radius='md'
-                className='whitespace-nowrap'
-              >
-                {title}
-              </Button>
-            </Link>
-          ))}
-        </div>
-      </Container>
-
-      <Container>
+      {/* <Container>
         <Carousel slideGap='lg' slideSize='100%' className='relative mb-10'>
           {data?.map((item) => (
             <Carousel.Slide
@@ -76,15 +53,9 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
             </Carousel.Slide>
           ))}
         </Carousel>
-
-        <div className='mt-5 text-center md:mt-10'>
-          <Button variant='filled' size='md' radius='xl'>
-            Tümünü Gör
-          </Button>
-        </div>
-      </Container>
+      </Container> */}
     </div>
   )
 }
 
-export { HolidayThemes }
+export { FooterMenu }
