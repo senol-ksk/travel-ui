@@ -120,10 +120,10 @@ const TourOpportunity = () => {
                         <span className='text-sm font-normal'>/ Kişi</span>
                       </p>
                       <Button
-                        variant='outline'
+                        variant='light'
                         color='blue'
-                        size='xs'
-                        radius='md'
+                        size='sm'
+                        radius='xl'
                       >
                         İncele
                       </Button>

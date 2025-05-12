@@ -49,7 +49,7 @@ const UpComingHolidays: React.FC = () => {
       <div className='mb-5 text-center text-3xl font-bold text-blue-900'>
         Yaklaşan Tatiller
       </div>
-      <Carousel slideGap='lg' withIndicators className='w-full max-w-[1200px]'>
+      <Carousel slideGap='sm' withIndicators className='w-full max-w-[1200px]'>
         {defaultData.map((item) => (
           <Carousel.Slide
             key={item.id}
@@ -75,7 +75,7 @@ const UpComingHolidays: React.FC = () => {
               </div>
               <Badge
                 color='white'
-                className='absolute top-5 -left-0 transform bg-orange-700 p-3 text-white'
+                className='absolute top-10 -left-0 transform bg-orange-700 p-3 text-white'
                 radius='md'
                 size='xs'
               >
