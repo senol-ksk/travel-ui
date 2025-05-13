@@ -44,20 +44,20 @@ export const BusLocations: React.FC<Props> = ({
     setLocationContainerOpened(false)
   )
   const [originValue, setOriginValue] = useState('')
-  const [locatioName, setLocationName] = useState<string>(defaultValue)
+  const [locationName, setLocationName] = useState<string>(defaultValue)
 
   const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
         label={label}
         onClick={() => {
           setLocationContainerOpened(true)
         }}
         error={!!inputProps?.error}
-        title={locatioName}
+        title={locationName}
       />
       <Transition mounted={locationContainerOpened} transition='pop-top-right'>
         {(styles) => (

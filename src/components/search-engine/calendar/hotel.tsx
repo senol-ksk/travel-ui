@@ -5,10 +5,11 @@ import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
 import { useMediaQuery, useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
-import type { DatesRangeValue, DateValue } from '@mantine/dates'
+import type { DatesRangeValue } from '@mantine/dates'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
+import classes from '@/styles/Datepicker.module.css'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -135,19 +136,11 @@ const HotelCalendar: React.FC<Props> = ({
                       highlightToday
                       onChange={handleDateSelections}
                       type={'range'}
+                      classNames={classes}
                       numberOfColumns={matches ? 2 : 13}
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
-                      classNames={{
-                        levelsGroup: 'flex-col p-2 md:flex-row',
-                        month: 'w-full',
-                        day: 'text-sm w-full',
-                        monthCell: 'text-center',
-                        calendarHeader: 'mx-auto max-w-full',
-                        calendarHeaderLevel: 'text-base',
-                        weekday: 'text-black',
-                      }}
                       defaultValue={rangeValue}
                     />
                   </div>

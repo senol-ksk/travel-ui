@@ -1,16 +1,10 @@
 'use client'
 
-import {
-  DEFAULT_THEME,
-  Drawer,
-  mergeMantineTheme,
-  Modal,
-  Portal,
-  rem,
-} from '@mantine/core'
+import { DEFAULT_THEME, mergeMantineTheme, Modal, rem } from '@mantine/core'
 
 import { fonts } from './fonts'
 import { colors } from './colors'
+import { DatePicker } from '@mantine/dates'
 
 const mantineTheme = mergeMantineTheme(
   DEFAULT_THEME,
@@ -24,11 +18,6 @@ const mantineTheme = mergeMantineTheme(
           size: rem(1200),
         },
       },
-      Portal: Portal.extend({
-        defaultProps: {
-          reuseTargetNode: true,
-        },
-      }),
       Modal: Modal.extend({
         styles: {
           title: {
@@ -36,11 +25,9 @@ const mantineTheme = mergeMantineTheme(
           },
         },
       }),
-      Drawer: Drawer.extend({
-        styles: {
-          title: {
-            // fontWeight: 600,
-          },
+      DatePicker: DatePicker.extend({
+        defaultProps: {
+          withCellSpacing: false,
         },
       }),
     },

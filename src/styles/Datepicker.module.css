@@ -1,0 +1,48 @@
+.monthCell {
+  width: 46px;
+  height: 46px;
+  position: relative;
+  z-index: 1;
+}
+.levelsGroup {
+  flex-direction: column;
+  align-items: center;
+  @media (min-width: $mantine-breakpoint-sm) {
+    flex-direction: row;
+  }
+}
+.day {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  font-size: var(--mantine-font-size-md);
+
+  &[data-in-range] {
+    background-color: var(--mantine-color-blue-1);
+    border-radius: 0;
+  }
+
+  &[data-first-in-range],
+  &[data-last-in-range] {
+    background-color: var(--mantine-color-blue-8);
+    border-radius: 50%;
+
+    &::after {
+      background-color: var(--mantine-color-blue-1);
+      width: 50%;
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: -1;
+    }
+  }
+
+  &[data-first-in-range]::after {
+    right: 0;
+  }
+  &[data-last-in-range]::after {
+    left: 0;
+  }
+}

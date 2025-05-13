@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
-import { useMediaQuery, useClickOutside } from '@mantine/hooks'
+import { useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
 import type { DateValue } from '@mantine/dates'
 
@@ -47,7 +46,7 @@ const BusCalendar: React.FC<Props> = ({
 
   return (
     <Provider>
-      <div className='relative'>
+      <div className='relative h-full'>
         <Input
           label='Tarihler'
           onClick={() => setContainerTransitionState(true)}
@@ -80,15 +79,6 @@ const BusCalendar: React.FC<Props> = ({
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
-                      classNames={{
-                        levelsGroup: 'flex-col p-2 md:flex-row',
-                        month: 'w-full',
-                        day: 'text-sm w-full',
-                        monthCell: 'text-center',
-                        calendarHeader: 'mx-auto max-w-full',
-                        calendarHeaderLevel: 'text-base',
-                        weekday: 'text-black',
-                      }}
                       defaultValue={rangeValue}
                     />
                   </div>

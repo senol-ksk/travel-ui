@@ -15,6 +15,7 @@ import { TourLocations } from '@/components/search-engine/locations/tour/locatio
 import { LocationResults } from '@/components/search-engine/locations/type'
 import { request } from '@/network'
 import { serializeTourSearchParams } from './searchResultParams'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 const defaultDates = [
   dayjs().add(3, 'd').toDate(),
@@ -148,9 +149,7 @@ const TourSearchEngine = () => {
           />
         </div>
         <div className='col-span-12 grid gap-3 md:col-span-2'>
-          <Button className='mx-auto min-h-full md:w-full' type='submit'>
-            Ara
-          </Button>
+          <SearchEngineButton />
         </div>
       </div>
     </form>

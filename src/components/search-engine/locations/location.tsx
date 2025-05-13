@@ -113,16 +113,16 @@ export const Locations: React.FC<Props> = ({
                 <Skeleton height={12} mt={6} radius='xl' />
               </div>
               {data?.length > 0 && (
-                <div>
+                <div className='px-3'>
                   {data.map((location) => {
                     const { Id, Name, SubDestinations } = location
 
                     return (
                       <div key={Id}>
-                        <div className='relative'>
+                        <div className='hover:text-blue-filled hover:border-s-blue-filled relative rounded-md border-s border-s-4 border-s-transparent hover:bg-blue-100'>
                           <button
                             type='button'
-                            className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
+                            className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0'
                             onClick={() => {
                               setLocationName(Name)
                               onSelect(location)
@@ -135,7 +135,7 @@ export const Locations: React.FC<Props> = ({
                             <div className='text-2xl'>
                               <IoAirplaneSharp />
                             </div>
-                            <div className='flex flex-col text-sm'>
+                            <div className='truncate'>
                               <strong>{Name}</strong>
                             </div>
                           </div>
@@ -146,10 +146,13 @@ export const Locations: React.FC<Props> = ({
                               const { Id: subId, Name: subName } = subLocation
 
                               return (
-                                <div key={subId} className='relative'>
+                                <div
+                                  key={subId}
+                                  className='hover:text-blue-filled hover:border-s-blue-filled relative rounded-md border-s border-s-4 border-s-transparent hover:bg-blue-100'
+                                >
                                   <button
                                     type='button'
-                                    className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
+                                    className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0'
                                     onClick={() => {
                                       setLocationName(subName)
                                       onSelect(subLocation)
@@ -162,7 +165,9 @@ export const Locations: React.FC<Props> = ({
                                     <div className='text-2xl'>
                                       <MdOutlineSubdirectoryArrowRight />
                                     </div>
-                                    <div className='text-sm'>{subName}</div>
+                                    <div className='truncate text-sm'>
+                                      {subName}
+                                    </div>
                                   </div>
                                 </div>
                               )

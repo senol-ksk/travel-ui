@@ -18,6 +18,7 @@ import { CarLocations } from '@/components/search-engine/locations/car/locations
 import type { LocationResults } from '@/components/search-engine/locations/type'
 import { carSearchEngineSchema, CarSearchEngineSchemaTypeInfer } from './types'
 import { serializeCarSearchParams } from './searchParams'
+import { SearchEngineButton } from '@/components/search-engine/search-button'
 
 const defaultDates = {
   drop_date: dayjs().add(2, 'day').toDate(),
@@ -127,10 +128,10 @@ const CarRentSearchPanel: React.FC = () => {
       <input {...formActions.register('pickup_date')} type='hidden' />
       <input {...formActions.register('drop_date')} type='hidden' />
 
-      <div className='grid grid-cols-12 gap-3 md:gap-3'>
+      <div className='grid grid-cols-16 gap-3 md:gap-3'>
         <div className='col-span-12 grid gap-3 md:col-span-5 md:grid-cols-6'>
           <div
-            className={clsx('col-span-12', {
+            className={clsx('col-span-12 h-full', {
               'md:col-span-3': isDiffrentDropLocation,
               'md:col-span-12': !isDiffrentDropLocation,
             })}
@@ -196,7 +197,7 @@ const CarRentSearchPanel: React.FC = () => {
             </div>
           ) : null}
         </div>
-        <div className='col-span-12 md:col-span-2'>
+        <div className='col-span-12 md:col-span-4'>
           <CarCalendar
             defaultDates={[
               dayjs(
@@ -239,10 +240,8 @@ const CarRentSearchPanel: React.FC = () => {
             }
           />
         </div>
-        <div className='col-span-12 flex grow-0 md:col-span-1'>
-          <Button type='submit' className='mx-auto min-h-full md:w-full'>
-            Ara
-          </Button>
+        <div className='col-span-16 md:col-span-3'>
+          <SearchEngineButton />
         </div>
       </div>
       <div className='flex items-center justify-between gap-9 pt-3 md:justify-start'>
