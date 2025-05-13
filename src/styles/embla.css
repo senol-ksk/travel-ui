@@ -67,10 +67,7 @@
 .embla__button:disabled {
   color: gray;
 }
-.embla__button__svg {
-  width: 35%;
-  height: 35%;
-}
+
 .embla__dots {
   display: flex;
   flex-wrap: wrap;

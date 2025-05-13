@@ -21,7 +21,7 @@ import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
 import { PopularDestinations } from '@/components/home/popular-destinations'
 import { EbultenForm } from '@/components/home/ebulten-form'
-import { EmblaCarousel } from '@/components/home/EmblaCarousel'
+import { EmblaCarousel } from '@/components/main-banner/embla-carousel'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
