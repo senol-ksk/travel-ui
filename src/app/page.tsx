@@ -19,7 +19,9 @@ import { RecommendedProducts } from '@/components/home/recommended-products'
 import { TourOpportunity } from '@/components/home/tour-opportunity'
 import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
-import { FooterMenu } from '@/components/home/footer-menu'
+import { PopularDestinations } from '@/components/home/popular-destinations'
+import { EbultenForm } from '@/components/home/ebulten-form'
+import { EmblaCarousel } from '@/components/main-banner/embla-carousel'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -28,7 +30,7 @@ export default async function Home() {
   const dealsOfWeekData = cmsData?.widgets.filter(
     (x) => x.point === 'deals_of_week'
   )
-  const opportunities = cmsData?.widgets?.filter(
+  const emblaCarouselData = cmsData?.widgets?.filter(
     (x) => x.point == 'opportunity'
   )
   const earlyList = cmsData?.widgets?.filter(
@@ -78,62 +80,20 @@ export default async function Home() {
         </div>
       )}
 
-      <Container className='flex flex-col gap-3 py-4 md:gap-5 md:py-10'>
-        {opportunities && earlyList && (
-          <div className='gap-3 md:grid md:grid-cols-3'>
-            <div className='col-span-2'>
-              <ScrollArea
-                scrollbars='x'
-                offsetScrollbars
-                scrollbarSize={6}
-                h={300}
-              >
-                <div className='flex gap-3'>
-                  {opportunities.map((opportunity) => {
-                    return (
-                      <AspectRatio
-                        ratio={16 / 9}
-                        key={opportunity.id}
-                        className='relative h-[300px] w-[600px]'
-                      >
-                        <Image
-                          radius={'md'}
-                          src={cdnImageUrl(opportunity.params.image.value)}
-                          component={NextImage}
-                          priority={false}
-                          loading='lazy'
-                          alt={opportunity.title}
-                          fill
-                          sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                        />
-                      </AspectRatio>
-                    )
-                  })}
-                </div>
-              </ScrollArea>
-            </div>
-            <div className='gap-3 md:grid md:grid-cols-2'>
-              {earlyList.map((list) => (
-                <div key={list.id} className='relative size-full'>
-                  <Image
-                    radius={'md'}
-                    src={cdnImageUrl(list.params.image.value)}
-                    component={NextImage}
-                    fill
-                    priority={false}
-                    loading='lazy'
-                    alt={list.title}
-                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
+      <Container className='md:py-10'>
+        {emblaCarouselData && (
+          <EmblaCarousel
+            slides={emblaCarouselData.map((slide) => ({
+              ...slide,
+              id: String(slide.id),
+              Title: slide.title,
+            }))}
+          />
         )}
       </Container>
-      <div>
+      <Container>
         <UpComingHolidays />
-      </div>
+      </Container>
       <div>
         <LastOpportunity />
       </div>
@@ -147,7 +107,7 @@ export default async function Home() {
       <div>
         <TourOpportunity />
       </div>
-      <div>
+      <div className='md:pt-20'>
         {trendRegionsData && (
           <div>
             <TrendRegions data={trendRegionsData} />
@@ -164,10 +124,13 @@ export default async function Home() {
       <div>
         {footerMenuData && (
           <div>
-            <FooterMenu data={footerMenuData} />
+            <PopularDestinations data={footerMenuData} />
           </div>
         )}
       </div>
+      <Container>
+        <EbultenForm />
+      </Container>
     </>
   )
 }

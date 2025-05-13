@@ -49,7 +49,7 @@ const UpComingHolidays: React.FC = () => {
       <div className='mb-5 text-center text-3xl font-bold text-blue-900'>
         Yaklaşan Tatiller
       </div>
-      <Carousel slideGap='sm' withIndicators className='w-full max-w-[1200px]'>
+      <Carousel slideGap='lg' withIndicators className='w-full'>
         {defaultData.map((item) => (
           <Carousel.Slide
             key={item.id}
