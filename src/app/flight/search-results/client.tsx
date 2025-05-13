@@ -1,4 +1,5 @@
 'use client'
+
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   useDisclosure,
@@ -40,14 +41,13 @@ import {
 } from '@/app/flight/type'
 import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results/domestic-flight'
 import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
-import { formatCurrency } from '@/libs/util'
+
 import { filterParsers, SortOrderEnums } from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { DrawerFlight } from './components/drawer-flight'
 import dayjs from 'dayjs'
 import { Virtuoso } from 'react-virtuoso'
-import clsx from 'clsx'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -196,7 +196,7 @@ const FlightSearchView = () => {
       ) : null}
 
       <Container ref={targetRef} className='pt-5 pb-20'>
-        <div className='grid md:grid-cols-4 md:gap-3'>
+        <div className='grid md:grid-cols-5 md:gap-3'>
           <div className='md:col-span-1'>
             <Transition
               transition={'slide-right'}
@@ -421,7 +421,7 @@ const FlightSearchView = () => {
               )}
             </Transition>
           </div>
-          <div className='md:col-span-3'>
+          <div className='md:col-span-4'>
             <div className='grid grid-cols-2 pb-3'>
               <Box className='justify-self-start'>
                 <Button
@@ -763,8 +763,8 @@ const FlightSearchView = () => {
           {selectedFlightItemPackages && (
             <DrawerFlight
               data={selectedFlightItemPackages}
-              onSelect={(selectedpackage) => {
-                handlePackageSelect(selectedpackage)
+              onSelect={(selectedPackage) => {
+                handlePackageSelect(selectedPackage)
               }}
             />
           )}
