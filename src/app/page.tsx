@@ -87,7 +87,6 @@ export default async function Home() {
               ...slide,
               id: String(slide.id),
               Title: slide.title,
-              Linl: slide.params.link?.value,
             }))}
           />
         )}
