@@ -136,18 +136,15 @@ const EmblaCarousel: React.FC<PropType> = ({ slides, options }) => {
         </div>
       </div>
 
-      <div className='mt-4 grid w-full flex-col items-center justify-between md:flex md:flex-row'>
-        <div
-          className='w-full justify-start text-xl font-semibold md:flex'
-          style={{ paddingLeft: '122px' }}
-        >
+      <div className='mt-4 grid w-full flex-col items-center md:flex md:flex-row md:justify-between'>
+        <div className='banner-title flex w-full justify-center text-xl font-semibold'>
           {slides[selectedIndex]?.Title}
         </div>
 
-        <div className='embla__buttons mt-4 flex w-full justify-end md:mt-0 md:w-1/2'>
+        <div className='embla__buttons mt-4 flex w-full justify-center md:mt-0 md:w-1/2 md:justify-end'>
           <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
 
-          <div className='embla__dots px-3'>
+          <div className='embla__dots'>
             {scrollSnaps.map((_, index) => (
               <DotButton
                 key={index}
