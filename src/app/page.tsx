@@ -116,7 +116,7 @@ export default async function Home() {
             <RecommendedProducts data={recommendedProductsData} />
           )}
         </div>
-        <div>
+        <div className='hidden'>
           <TourOpportunity />
         </div>
         <div className='hidden sm:block'>

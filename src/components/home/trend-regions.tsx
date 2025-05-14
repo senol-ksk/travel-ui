@@ -27,7 +27,7 @@ const TrendRegions: React.FC<IProps> = ({ data }) => {
   }, [])
 
   return (
-    <Container className='md:pt-20'>
+    <Container>
       <div>
         <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
           Trend Tatil Bölgeleri
