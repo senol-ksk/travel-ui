@@ -51,10 +51,10 @@ export default async function Home() {
   const upcomingHolidaysData = cmsData?.widgets.filter(
     (x) => x.point === 'upcoming_holidays'
   )
-  const LastOpportunityData = cmsData?.widgets.filter(
+  const lastOpportunityData = cmsData?.widgets.filter(
     (x) => x.point === 'last_opportunity'
   )
-  const LastOpportunityContainerData = cmsData?.widgets.filter(
+  const lastOpportunityContainerData = cmsData?.widgets.filter(
     (x) => x.point === 'last_opportunity_container'
   )
 
@@ -107,8 +107,8 @@ export default async function Home() {
           )}
         </div>
         <div>
-          {LastOpportunityData && (
-            <LastOpportunity data={LastOpportunityData} />
+          {lastOpportunityData && (
+            <LastOpportunity data={lastOpportunityData} />
           )}
         </div>
         <div>
