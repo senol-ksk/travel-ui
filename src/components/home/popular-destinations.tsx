@@ -26,7 +26,7 @@ const PopularDestinations: React.FC<IProps> = ({ data }) => {
     setIsEmblaInitialized(true)
   }, [])
   return (
-    <div className='container-fluid relative'>
+    <div className='relative'>
       <h2 className='mb-3 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
         Popüler Şehirler
       </h2>

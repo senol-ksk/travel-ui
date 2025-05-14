@@ -48,89 +48,90 @@ export default async function Home() {
   const trendRegionsData = cmsData?.widgets.filter(
     (x) => x.point === 'hotel_popular_regions'
   )
+  const upcomingHolidaysData = cmsData?.widgets.filter(
+    (x) => x.point === 'upcoming_holidays'
+  )
+  const LastOpportunityData = cmsData?.widgets.filter(
+    (x) => x.point === 'last_opportunity'
+  )
+  const LastOpportunityContainerData = cmsData?.widgets.filter(
+    (x) => x.point === 'last_opportunity_container'
+  )
 
   return (
     <>
-      <Suspense fallback={<Skeleton h={20} />}>
-        <div className='relative'>
-          <Title className='text-dark hidden pt-5 text-center text-lg text-shadow-md md:pt-13 md:text-4xl md:text-white'>
-            FullTrip ile seyahat planlamak çok kolay
-          </Title>
-          <Image
-            component={NextImage}
-            src='https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg'
-            fill
-            alt='Fulltrip'
-            priority
-            className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
-          />
-          <div className='md:min-h-[280px] md:pt-10'>
-            <Container className='px-0 md:px-4'>
-              <div className='bg-white md:rounded-lg md:border'>
-                <SearchEngine />
-              </div>
-            </Container>
+      <div className='flex flex-col gap-20'>
+        <Suspense fallback={<Skeleton h={20} />}>
+          <div className='relative'>
+            <Title className='text-dark hidden pt-5 text-center text-lg text-shadow-md md:pt-13 md:text-4xl md:text-white'>
+              FullTrip ile seyahat planlamak çok kolay
+            </Title>
+            <Image
+              component={NextImage}
+              src='https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg'
+              fill
+              alt='Fulltrip'
+              priority
+              className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
+            />
+            <div className='md:min-h-[280px] md:pt-10'>
+              <Container className='px-0 md:px-4'>
+                <div className='bg-white md:rounded-lg md:border'>
+                  <SearchEngine />
+                </div>
+              </Container>
+            </div>
           </div>
-        </div>
-      </Suspense>
+        </Suspense>
 
-      {dealsOfWeekData && (
-        <div className='pt-13 pb-13'>
-          <StorySlider data={dealsOfWeekData} />
-        </div>
-      )}
-
-      <Container>
-        {emblaCarouselData && (
-          <EmblaCarousel
-            slides={emblaCarouselData.map((slide) => ({
-              ...slide,
-              id: String(slide.id),
-              Title: slide.title,
-            }))}
-          />
-        )}
-      </Container>
-      <Container className='pt-20'>
-        <UpComingHolidays />
-      </Container>
-      <div className='pt-20'>
-        <LastOpportunity />
-      </div>
-      <div className='pt-20'>
-        {recommendedProductsData && (
+        {dealsOfWeekData && (
           <div>
+            <StorySlider data={dealsOfWeekData} />
+          </div>
+        )}
+
+        <Container>
+          {emblaCarouselData && (
+            <EmblaCarousel
+              slides={emblaCarouselData.map((slide) => ({
+                ...slide,
+                id: String(slide.id),
+                Title: slide.title,
+              }))}
+            />
+          )}
+        </Container>
+        <div>
+          {upcomingHolidaysData && (
+            <UpComingHolidays data={upcomingHolidaysData} />
+          )}
+        </div>
+        <div>
+          {LastOpportunityData && (
+            <LastOpportunity data={LastOpportunityData} />
+          )}
+        </div>
+        <div>
+          {recommendedProductsData && (
             <RecommendedProducts data={recommendedProductsData} />
-          </div>
-        )}
+          )}
+        </div>
+        <div>
+          <TourOpportunity />
+        </div>
+        <div className='hidden sm:block'>
+          {trendRegionsData && <TrendRegions data={trendRegionsData} />}
+        </div>
+        <div>
+          {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
+        </div>
+        <div>
+          {footerMenuData && <PopularDestinations data={footerMenuData} />}
+        </div>
+        <div>
+          <EbultenForm />
+        </div>
       </div>
-      <div className='pt-20'>
-        <TourOpportunity />
-      </div>
-      <div className='hidden sm:block'>
-        {trendRegionsData && (
-          <div>
-            <TrendRegions data={trendRegionsData} />
-          </div>
-        )}
-      </div>
-      <div className='pt-20'>
-        {holidayThemesData && (
-          <div>
-            <HolidayThemes data={holidayThemesData} />
-          </div>
-        )}
-      </div>
-      <div className='pt-20'>
-        {footerMenuData && (
-          <div>
-            <PopularDestinations data={footerMenuData} />
-          </div>
-        )}
-      </div>
-      <Container className='pt-20'>
-        <EbultenForm />
-      </Container>
     </>
   )
 }

@@ -30,7 +30,7 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
   }, [])
 
   return (
-    <div className='container-fluid relative'>
+    <div className='relative'>
       <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
         Tavsiye Ettiğimiz Oteller
       </h2>
