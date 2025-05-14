@@ -75,7 +75,7 @@ export default async function Home() {
       </Suspense>
 
       {dealsOfWeekData && (
-        <div className='py-6'>
+        <div className='pt-10 pb-20'>
           <StorySlider data={dealsOfWeekData} />
         </div>
       )}
