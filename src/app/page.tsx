@@ -75,12 +75,12 @@ export default async function Home() {
       </Suspense>
 
       {dealsOfWeekData && (
-        <div className='pt-10 pb-20'>
+        <div className='pt-13 pb-13'>
           <StorySlider data={dealsOfWeekData} />
         </div>
       )}
 
-      <Container className='md:py-10'>
+      <Container>
         {emblaCarouselData && (
           <EmblaCarousel
             slides={emblaCarouselData.map((slide) => ({
@@ -91,44 +91,44 @@ export default async function Home() {
           />
         )}
       </Container>
-      <Container>
+      <Container className='pt-20'>
         <UpComingHolidays />
       </Container>
-      <div>
+      <div className='pt-20'>
         <LastOpportunity />
       </div>
-      <div>
+      <div className='pt-20'>
         {recommendedProductsData && (
           <div>
             <RecommendedProducts data={recommendedProductsData} />
           </div>
         )}
       </div>
-      <div>
+      <div className='pt-20'>
         <TourOpportunity />
       </div>
-      <div className='md:pt-20'>
+      <div className='hidden sm:block'>
         {trendRegionsData && (
           <div>
             <TrendRegions data={trendRegionsData} />
           </div>
         )}
       </div>
-      <div>
+      <div className='pt-20'>
         {holidayThemesData && (
           <div>
             <HolidayThemes data={holidayThemesData} />
           </div>
         )}
       </div>
-      <div>
+      <div className='pt-20'>
         {footerMenuData && (
           <div>
             <PopularDestinations data={footerMenuData} />
           </div>
         )}
       </div>
-      <Container>
+      <Container className='pt-20'>
         <EbultenForm />
       </Container>
     </>

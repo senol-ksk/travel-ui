@@ -67,7 +67,7 @@ const tours = [
 
 const TourOpportunity = () => {
   return (
-    <div className='container-fluid relative pt-10 md:pt-20'>
+    <div className='container-fluid relative'>
       <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
         Tur Fırsatları
       </h2>

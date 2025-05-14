@@ -45,7 +45,7 @@ const defaultData = [
 
 const UpComingHolidays: React.FC = () => {
   return (
-    <div className='flex flex-col items-center pt-10 md:py-20'>
+    <div className='flex flex-col items-center'>
       <div className='mb-5 text-center text-3xl font-bold text-blue-900'>
         Yaklaşan Tatiller
       </div>
