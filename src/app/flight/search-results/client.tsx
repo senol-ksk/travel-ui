@@ -726,10 +726,7 @@ const FlightSearchView = () => {
       </Container>
       <Drawer
         opened={packageDrawerOpened}
-        onClose={() => {
-          closePackageDrawer()
-          // setSelectedFlightItemPackages(null)
-        }}
+        onClose={closePackageDrawer}
         position='bottom'
         classNames={{
           title: 'flex-1 text-center font-normal',
