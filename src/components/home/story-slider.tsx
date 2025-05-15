@@ -39,7 +39,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
   const autoplay = useRef(Autoplay({ delay: 3000 }))
 
   return (
-    <div className='relative'>
+    <div className='relative px-4 sm:px-0'>
       {!isEmblaInitialized && (
         <div className='absolute start-0 end-0 overflow-hidden whitespace-nowrap'>
           <StorySliderSkeleton />
@@ -51,14 +51,14 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         onMouseLeave={() => autoplay.current.play()}
         emblaOptions={{
           loop: true,
-          dragFree: true,
+          dragFree: false,
           align: 'start',
         }}
         slideSize={{
-          base: '100%',
-          sm: '45%',
+          base: '85%',
           md: '28%',
         }}
+        slideGap='xl'
         withControls={false}
         className={clsx({
           'opacity-0': !isEmblaInitialized,
@@ -67,7 +67,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         {dealsOfWeekData?.map((item) => (
           <Carousel.Slide key={item.id}>
             <Link href={item.params.link.value} className='block'>
-              <div className='flex h-[120px] w-[400px] overflow-hidden rounded-2xl shadow-xl'>
+              <div className='flex h-[120px] overflow-hidden rounded-2xl shadow-xl'>
                 <div className='flex w-1/2 flex-col justify-between bg-yellow-400 p-3'>
                   <div>
                     <Text fw={500}>{item.title}</Text>

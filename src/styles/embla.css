@@ -22,7 +22,6 @@
 .embla__slide__img {
   border-radius: 1.8rem;
   display: block;
-  height: var(--slide-height);
   width: 100%;
   object-fit: cover;
 }
@@ -74,7 +73,6 @@
   justify-content: flex-end;
   align-items: center;
   gap: 0.3rem;
-  margin-right: calc((2.6rem - 1.4rem) / 2 * -1);
 }
 
 .embla__dot {
@@ -116,4 +114,14 @@
 .embla__parallax__img {
   flex: 0 0 calc(115% + (var(--slide-spacing) * 2));
   object-fit: cover;
+}
+.banner-title {
+  padding-left: 122px;
+  justify-content: flex-start;
+}
+@media (max-width: 768px) {
+  .banner-title {
+    padding-left: 0;
+    justify-content: center;
+  }
 }
