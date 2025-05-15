@@ -1,4 +1,4 @@
-import { Image, rem } from '@mantine/core'
+import { Image } from '@mantine/core'
 
 type IProps = {
   airlineCode: string
@@ -9,8 +9,8 @@ type IProps = {
 
 const AirlineLogo: React.FC<IProps> = ({
   airlineCode,
-  width = 24,
-  height = 24,
+  width = 32,
+  height = 32,
   alt = airlineCode,
 }) => {
   return (

@@ -17,7 +17,7 @@ const FlightDetailsSearch = () => {
         <p>Uçuş Detayları</p>
       </Drawer>
 
-      <Button variant='transparent' size='xs' onClick={open}>
+      <Button variant='transparent' fw={'normal'} onClick={open}>
         Uçuş Detayları
       </Button>
     </>
