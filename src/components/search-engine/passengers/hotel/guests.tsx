@@ -131,10 +131,8 @@ const HotelGuestsActions: React.FC<Props> = ({
         <div className='flex items-center justify-between'>
           <Text>
             Çocuk
-            <div>
-              <Text size='sm'>(2-16 Yaş arası)</Text>
-            </div>
-          </Text>{' '}
+            <Text size='sm'>(2-16 Yaş arası)</Text>
+          </Text>
           <div className='flex items-center justify-between gap-3'>
             <ActionIcon
               color='black'

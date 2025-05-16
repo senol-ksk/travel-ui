@@ -108,7 +108,7 @@ export const PassengerDropdown: React.FC<Props> = ({
             >
               <div className='grid min-w-[320px] gap-7 p-5'>
                 <div className='flex items-center justify-between'>
-                  <Text>Yetişkinler</Text>
+                  <div>Yetişkinler</div>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
                       color='black'
@@ -124,9 +124,9 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <Text aria-label='adult-count'>
+                    <div aria-label='adult-count'>
                       {passengersState.Adult.count}
-                    </Text>
+                    </div>
                     <ActionIcon
                       radius='xl'
                       variant='outline'
@@ -152,12 +152,10 @@ export const PassengerDropdown: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <Text>
+                  <div>
                     Çocuk
-                    <div>
-                      <Text size='sm'>(2-12 Yaş arası)</Text>
-                    </div>
-                  </Text>
+                    <div className='text-sm'>(2-12 Yaş arası)</div>
+                  </div>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
                       color='black'
@@ -173,9 +171,9 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <Text aria-label='child-count'>
+                    <div aria-label='child-count'>
                       {passengersState.Child.count}
-                    </Text>
+                    </div>
                     <ActionIcon
                       color='black'
                       radius='xl'
@@ -201,12 +199,10 @@ export const PassengerDropdown: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <Text>
+                  <div>
                     Bebek
-                    <div>
-                      <Text size='sm'>(0-12 Yaş arası)</Text>
-                    </div>
-                  </Text>
+                    <div className='text-sm'>(0-12 Yaş arası)</div>
+                  </div>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
                       color='black'
@@ -222,9 +218,9 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <Text aria-label='infant-count'>
+                    <div aria-label='infant-count'>
                       {passengersState.Infant.count}
-                    </Text>
+                    </div>
                     <ActionIcon
                       color='black'
                       radius='xl'
