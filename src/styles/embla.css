@@ -1,7 +1,6 @@
 .embla {
-  max-width: 358rem;
   margin: auto;
-  --slide-height: 30rem;
+  --slide-height: 32.125rem;
   --slide-spacing: 1rem;
   --slide-size: 80%;
 }
@@ -23,8 +22,16 @@
   border-radius: 1.8rem;
   display: block;
   width: 100%;
+  height: var(--slide-height);
   object-fit: cover;
 }
+
+@media (max-width: $mantine-breakpoint-sm) {
+  .embla__slide__img {
+    height: auto;
+  }
+}
+
 .embla__controls {
   display: flex;
   justify-content: flex-end;

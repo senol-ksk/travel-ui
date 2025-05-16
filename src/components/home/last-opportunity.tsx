@@ -24,7 +24,7 @@ type IProps = {
 
 const LastOpportunity: React.FC<IProps> = ({ data }) => {
   return (
-    <div className='container-fluid relative py-10 md:py-20'>
+    <div className='container-fluid relative pt-3 pb-5'>
       <div
         className='absolute inset-0 bg-cover bg-center brightness-75'
         style={{
@@ -37,7 +37,7 @@ const LastOpportunity: React.FC<IProps> = ({ data }) => {
         Son Dakika Fırsatları
       </h2>
 
-      <Container className='mb-8 gap-2 overflow-x-auto md:overflow-x-visible'>
+      <Container className='mb-5 gap-2 overflow-x-auto md:overflow-x-visible'>
         <div className='flex w-max gap-2 md:w-auto md:flex-wrap md:justify-center'>
           {data.map((item, i) => (
             <Link href='#' key={i}>
@@ -67,7 +67,7 @@ const LastOpportunity: React.FC<IProps> = ({ data }) => {
                     <Image
                       src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
                       alt={item.title}
-                      className='h-60 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
+                      className='h-50 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
                     />
 
                     {item.params.discount_price && (

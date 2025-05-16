@@ -65,7 +65,7 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
                     <Image
                       src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
                       alt={item.title}
-                      className='h-60 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
+                      className='h-50 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
                     />
                     {item.params.discount_price?.value && (
                       <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>

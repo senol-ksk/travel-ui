@@ -120,7 +120,7 @@ export const Locations: React.FC<Props> = ({
 
                     return (
                       <div key={Id}>
-                        <div className='hover:text-blue-filled hover:border-s-blue-filled relative rounded-md border-s border-s-4 border-s-transparent hover:bg-blue-100'>
+                        <div className='hover:text-blue-filled hover:border-s-blue-filled relative rounded-md border-s-4 border-s-transparent hover:bg-blue-100'>
                           <button
                             type='button'
                             className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0'
@@ -149,7 +149,7 @@ export const Locations: React.FC<Props> = ({
                               return (
                                 <div
                                   key={subId}
-                                  className='hover:text-blue-filled hover:border-s-blue-filled relative rounded-md border-s border-s-4 border-s-transparent hover:bg-blue-100'
+                                  className='hover:text-blue-filled hover:border-s-blue-filled relative rounded-md border-s-4 border-s-transparent hover:bg-blue-100'
                                 >
                                   <button
                                     type='button'

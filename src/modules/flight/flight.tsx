@@ -230,7 +230,7 @@ export const Flight = () => {
                 checkIconPosition='right'
                 radius='xl'
                 className='w-30'
-                rightSection={<MdKeyboardArrowDown size={16} />}
+                rightSection={<MdKeyboardArrowDown size={24} />}
                 defaultValue={
                   form.formState.defaultValues?.CabinClass?.value !== undefined
                     ? String(form.formState.defaultValues?.CabinClass?.value)
@@ -246,8 +246,9 @@ export const Flight = () => {
                   }
                 }}
                 classNames={{
-                  dropdown: 'min-w-[300px] py-[15px]',
-                  option: 'text-[17px] py-[12px] font-medium',
+                  input: 'bg-blue-100',
+                  dropdown: 'min-w-[265px] py-[15px] md:ml-[77px]',
+                  option: 'text-[17px] py-[12px] font-medium hover:bg-blue-100',
                 }}
               />
             )
@@ -277,6 +278,7 @@ export const Flight = () => {
             }}
           />
         </div>
+
         <div className='col-span-16 sm:col-span-6 md:col-span-5'>
           <Locations
             label='Nereye'
