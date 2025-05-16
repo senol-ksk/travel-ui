@@ -9,7 +9,7 @@ import { UnstyledButton } from '@mantine/core'
 
 type Props = {
   label: string | React.ReactNode
-  title?: string | null
+  title?: string | React.ReactNode | null
   onClick?: () => void
   error?: boolean
 }
@@ -20,14 +20,14 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
   return (
     <div
       className={clsx(
-        'relative flex h-full items-center truncate rounded-md border bg-gray-50 px-5 py-2 transition-colors hover:border-blue-800 md:px-6',
+        'relative flex h-full items-center truncate rounded-md border bg-gray-50 px-3 py-2 transition-colors hover:border-blue-800',
         {
           'border-red-500': error,
           'border-transparent': !error,
         }
       )}
     >
-      <div className='truncate'>
+      <div>
         <label
           id={labelId}
           aria-labelledby={labelId}
@@ -40,7 +40,7 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
         >
           {label}
         </label>
-        <div className='text-xl leading-none font-bold'>
+        <div className='text-xl leading-none font-semibold'>
           {!!title ? title : label}
         </div>
       </div>

@@ -184,7 +184,7 @@ const TransferSearchEngine = () => {
             />
           </div>
         </div>
-        <div className='col-span-4 md:col-span-3'>
+        <div className='col-span-6 md:col-span-3'>
           <TransferCalendar
             onDateSelect={(date) => {
               if (date) {
@@ -194,7 +194,7 @@ const TransferSearchEngine = () => {
             defaultDate={dayjs(transferSearchLocalStorage.date).toDate()}
           />
         </div>
-        <div className='col-span-4 md:col-span-2'>
+        <div className='col-span-5 md:col-span-2'>
           <TransferHours
             label='Saat'
             onChange={(event) => {
@@ -203,7 +203,7 @@ const TransferSearchEngine = () => {
             defaultValue={formActions.formState.defaultValues?.time}
           />
         </div>
-        <div className='col-span-4 md:col-span-2'>
+        <div className='col-span-5 md:col-span-2'>
           <PassengerDropdown
             initialValues={{
               adult:

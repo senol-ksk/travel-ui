@@ -90,7 +90,8 @@ export const Locations: React.FC<Props> = ({
                 autoComplete='off'
                 id='location_select'
                 placeholder={label}
-                size='lg'
+                size='xl'
+                className='font-bold'
                 rightSectionPointerEvents='all'
                 rightSection={
                   <CloseButton

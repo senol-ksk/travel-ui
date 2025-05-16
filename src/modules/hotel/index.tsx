@@ -127,7 +127,7 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
       <div className='grid grid-cols-12 gap-3 md:gap-3'>
         <div className='col-span-12 md:col-span-4'>
           <Locations
-            label='Şehir ya da otel adı seçiniz'
+            label='Nereye?'
             data={destinationLocation?.Result}
             isLoading={destinationLocationLoading}
             onChange={(value) => {

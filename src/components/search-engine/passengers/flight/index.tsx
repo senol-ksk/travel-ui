@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
-import { Transition, Paper, Button, ActionIcon } from '@mantine/core'
+import { Transition, Paper, Button, ActionIcon, Text } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
+import { useForm } from 'react-hook-form'
 
 import { FiPlus, FiMinus } from 'react-icons/fi'
 
@@ -104,9 +105,10 @@ export const PassengerDropdown: React.FC<Props> = ({
             <Paper className='flex h-full flex-col rounded-lg shadow-xl'>
               <div className='grid min-w-[320px] gap-7 p-5'>
                 <div className='flex items-center justify-between'>
-                  <div className='text-sm'>Yetişkinler</div>
+                  <Text>Yetişkinler</Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -119,13 +121,14 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='adult-count'>
+                    <Text aria-label='adult-count'>
                       {passengersState.Adult.count}
-                    </div>
+                    </Text>
                     <ActionIcon
                       radius='xl'
                       variant='outline'
                       size={'lg'}
+                      color='black'
                       onClick={() => {
                         handlePassengerSelect('Adult', 1)
                       }}
@@ -146,14 +149,15 @@ export const PassengerDropdown: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <div className='text-sm'>
+                  <Text>
                     Çocuk
                     <div>
-                      <small>(2-12 Yaş arası)</small>
+                      <Text size='sm'>(2-12 Yaş arası)</Text>
                     </div>
-                  </div>
+                  </Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -166,10 +170,11 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='child-count'>
+                    <Text aria-label='child-count'>
                       {passengersState.Child.count}
-                    </div>
+                    </Text>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -193,14 +198,15 @@ export const PassengerDropdown: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <div className='text-sm'>
+                  <Text>
                     Bebek
                     <div>
-                      <small>(0-12 Yaş arası)</small>
+                      <Text size='sm'>(0-12 Yaş arası)</Text>
                     </div>
-                  </div>
+                  </Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -213,10 +219,11 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='infant-count'>
+                    <Text aria-label='infant-count'>
                       {passengersState.Infant.count}
-                    </div>
+                    </Text>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}

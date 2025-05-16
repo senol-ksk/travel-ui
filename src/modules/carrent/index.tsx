@@ -230,7 +230,7 @@ const CarRentSearchPanel: React.FC = () => {
         </div>
         <div className='col-span-6 md:col-span-2'>
           <CarHours
-            label='Bırakış Saati'
+            label='Teslim Saati'
             onChange={(event) => {
               const value = event.currentTarget.value
               formActions.setValue('drop_time', value)

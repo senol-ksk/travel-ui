@@ -28,10 +28,11 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
     <div className='relative h-full'>
       <Input
         label='Misafir'
-        title={`${roomState.length} Oda, ${roomState.reduce(
-          (a, b) => a + b.adult + b.child,
-          0
-        )} Misafir`}
+        title={`${roomState.length} Oda, ${roomState.reduce((a, b) => a + b.adult, 0)} Yetişkin${
+          roomState.reduce((a, b) => a + b.child, 0) > 0
+            ? `, ${roomState.reduce((a, b) => a + b.child, 0)} Çocuk`
+            : ''
+        }`}
         onClick={() => setContainerTransitionState(true)}
       />
 
