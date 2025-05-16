@@ -98,11 +98,14 @@ export const PassengerDropdown: React.FC<Props> = ({
         {(styles) => (
           <div
             ref={clickOutsideRef}
-            className='fixed start-0 end-0 top-0 bottom-0 z-50 sm:absolute sm:start-auto sm:bottom-auto md:-ms-1 md:-mt-1'
+            className='fixed start-0 end-0 top-20 bottom-0 z-50 sm:absolute sm:start-auto sm:bottom-auto md:-ms-1 md:-mt-1'
             style={{ ...styles }}
             role='menu'
           >
-            <Paper className='flex h-full flex-col rounded-lg shadow-xl'>
+            <Paper
+              className='flex h-full flex-col rounded-lg shadow-xl'
+              style={{ marginRight: '-11px' }}
+            >
               <div className='grid min-w-[320px] gap-7 p-5'>
                 <div className='flex items-center justify-between'>
                   <Text>Yetişkinler</Text>

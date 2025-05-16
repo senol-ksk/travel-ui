@@ -32,7 +32,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className='flex flex-col items-start gap-2 rounded-md border border-t-6 border-t-blue-800 p-2 md:p-3'
+            className='flex flex-col items-start gap-2 rounded-md border border-l-6 border-l-blue-800 p-2 md:p-3'
           >
             <div className='flex w-full cursor-pointer justify-between gap-2'>
               <div className='font-semibold capitalize'>

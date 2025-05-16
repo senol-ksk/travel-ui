@@ -102,7 +102,7 @@ const TourOpportunity = () => {
                     <Image
                       src={tour.img}
                       alt={tour.name}
-                      className='h-60 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
+                      className='h-50 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
                     />
                     {tour.discount && (
                       <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>
