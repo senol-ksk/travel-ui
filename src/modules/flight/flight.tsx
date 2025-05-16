@@ -1,9 +1,9 @@
 'use client'
 
-import { dataTagSymbol, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useTransitionRouter } from 'next-view-transitions'
 import dayjs from 'dayjs'
-import { IconChevronDown, IconHash } from '@tabler/icons-react'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -230,7 +230,7 @@ export const Flight = () => {
                 checkIconPosition='right'
                 radius='xl'
                 className='w-30'
-                rightSection={<IconChevronDown size={16} />}
+                rightSection={<MdKeyboardArrowDown size={16} />}
                 defaultValue={
                   form.formState.defaultValues?.CabinClass?.value !== undefined
                     ? String(form.formState.defaultValues?.CabinClass?.value)
