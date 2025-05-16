@@ -76,7 +76,7 @@ export const Locations: React.FC<Props> = ({
               />
             </div>
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
-              <div className='sr-only font-bold'>{label}</div>
+              <div className='sr-only'>{label}</div>
               <TextInput
                 ref={inputRef}
                 value={originValue}

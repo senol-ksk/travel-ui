@@ -60,42 +60,42 @@ export const SearchEngine = () => {
         <TabsTab
           value={searchModules.flight.value}
           leftSection={<BiSolidPlaneAlt />}
-          className={`${classes.tab} ${classes.tabEffect}`}
+          className={classes.tab}
         >
           {searchModules.flight.title}
         </TabsTab>
         <TabsTab
           value={searchModules.hotel.value}
           leftSection={<MdHotel />}
-          className={`${classes.tab} ${classes.tabEffect}`}
+          className={classes.tab}
         >
           {searchModules.hotel.title}
         </TabsTab>
         <TabsTab
           value={searchModules.carRental.value}
           leftSection={<IoCarSharp />}
-          className={`${classes.tab} ${classes.tabEffect}`}
+          className={classes.tab}
         >
           {searchModules.carRental.title}
         </TabsTab>
         <TabsTab
           value={searchModules.bus.value}
           leftSection={<IoBus />}
-          className={`${classes.tab} ${classes.tabEffect}`}
+          className={classes.tab}
         >
           {searchModules.bus.title}
         </TabsTab>
         <TabsTab
           value={searchModules.transfer.value}
           leftSection={<TransferIcon />}
-          className={`${classes.tab} ${classes.tabEffect}`}
+          className={classes.tab}
         >
           {searchModules.transfer.title}
         </TabsTab>
         <TabsTab
           value={searchModules.tour.value}
           leftSection={<FaSuitcase />}
-          className={`${classes.tab} ${classes.tabEffect}`}
+          className={classes.tab}
         >
           {searchModules.tour.title}
         </TabsTab>

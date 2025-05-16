@@ -129,7 +129,7 @@ export const Locations: React.FC<Props> = ({
                                 setLocationContainerOpened(false)
                               }}
                             >
-                              <span className='sr-only font-bold'>{Name}</span>
+                              <span className='sr-only'>{Name}</span>
                             </button>
                             <div className='flex items-center gap-2 px-4 py-2'>
                               <div className='flex flex-col text-sm'>
