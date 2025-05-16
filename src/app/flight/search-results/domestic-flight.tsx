@@ -1,8 +1,10 @@
 import { memo } from 'react'
-import { Button, Divider } from '@mantine/core'
+import { Box, Button } from '@mantine/core'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-import { IoAirplaneSharp } from 'react-icons/io5'
+import { PiSuitcaseRolling } from 'react-icons/pi'
+import { FaAngleRight } from 'react-icons/fa6'
+import { MdOutlineAirplanemodeActive } from 'react-icons/md'
 
 import { formatCurrency } from '@/libs/util'
 import {
@@ -31,121 +33,159 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   onSelect = () => null,
 }) => {
   return (
-    <div className='@container rounded-lg border border-gray-300 hover:border-1 hover:shadow-lg'>
-      {details.map((detail) => {
-        const relatedSegment = detailSegments.filter(
-          (segment) => detail.groupId === segment.groupId
-        )
-        const hasTransferStop = relatedSegment.length > 1
-        const flightNumber = relatedSegment.at(0)?.flightNumber
-
-        const firstDepartureTime = dayjs(relatedSegment.at(0)?.departureTime)
-        const lastArrivalTime = dayjs(relatedSegment.at(-1)?.arrivalTime)
-        const arrivalIsAfter = lastArrivalTime.isAfter(firstDepartureTime, 'D')
-
-        const totalFlightDuration = dayjs.duration(
-          lastArrivalTime.diff(firstDepartureTime)
-        )
-
-        const airlineText = airlineValues
-          ?.find(
-            (airline) =>
-              airline.Code === relatedSegment[0].marketingAirline.code
+    <div className='@container items-center gap-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
+      <div className='col-span-4 grid gap-4'>
+        {details.map((detail) => {
+          const relatedSegment = detailSegments.filter(
+            (segment) => detail.groupId === segment.groupId
           )
-          ?.Value.find((item) => item.LangCode === 'tr_TR')
+          const hasTransferStop = relatedSegment.length > 1
+          const flightNumber = relatedSegment.at(0)?.flightNumber
 
-        return (
-          <div
-            key={detail.key}
-            className='cursor-pointer p-3'
-            onClick={onSelect}
-          >
-            <div className='flex justify-between'>
-              <div className='flex items-center gap-3 pb-2'>
-                <AirlineLogo
-                  airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
-                />
-                <div>{airlineText?.Value}</div>
-                <div>{flightNumber}</div>
-              </div>
-              <div className='text-xs'>8kg El Bagajı</div>
-            </div>
-            <div className='flex items-center gap-2'>
-              <div>
-                <div>{firstDepartureTime.format('HH:mm')}</div>
-                <div>{relatedSegment.at(0)?.origin.code}</div>
-              </div>
-              <div className='relative grow'>
-                <Divider color='green' />
-                <div className='absolute end-0 top-0 -translate-y-1/2 bg-white ps-2'>
-                  <IoAirplaneSharp size={18} />
-                </div>
-              </div>
-              <div>
+          const firstDepartureTime = dayjs(relatedSegment.at(0)?.departureTime)
+          const lastArrivalTime = dayjs(relatedSegment.at(-1)?.arrivalTime)
+          const arrivalIsAfter = lastArrivalTime.isAfter(
+            firstDepartureTime,
+            'D'
+          )
+
+          const totalFlightDuration = dayjs.duration(
+            lastArrivalTime.diff(firstDepartureTime)
+          )
+
+          const airlineText = airlineValues
+            ?.find(
+              (airline) =>
+                airline.Code === relatedSegment[0].marketingAirline.code
+            )
+            ?.Value.find((item) => item.LangCode === 'tr_TR')
+
+          return (
+            <div
+              key={detail.key}
+              className='relative grid p-3 md:grid-cols-3 md:p-5'
+              // onClick={onSelect}
+            >
+              <div className='start-0-0 absolute top-1/2 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400' />
+              <div className='flex gap-3 text-sm'>
                 <div>
-                  {lastArrivalTime.format('HH:mm')}
-                  {arrivalIsAfter && <sup className='text-red-700'> +1</sup>}
+                  <AirlineLogo
+                    airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
+                  />
                 </div>
-                <div>{relatedSegment.at(-1)?.destination.code}</div>
-              </div>
-            </div>
-            <div className='flex items-center justify-center gap-3 text-sm text-gray-700'>
-              <div className='flex gap-1'>
-                {totalFlightDuration.get('D') > 0 && (
-                  <div>{totalFlightDuration.format('DD')} gün</div>
-                )}
-                <div>{totalFlightDuration.format('HH')}sa</div>
-                <div>{totalFlightDuration.format('mm')}dk</div>
-              </div>
-              <div className='flex justify-center'>
-                <div className='text-sm text-gray-500'>
-                  {hasTransferStop ? (
-                    <span className='text-red-600'>
-                      {relatedSegment.length - 1} Aktarma
-                    </span>
-                  ) : (
-                    'Aktarmasız'
-                  )}
+                <div>
+                  <div>
+                    {airlineText?.Value} {flightNumber}
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <PiSuitcaseRolling />
+                    <div>8kg El Bagajı</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            {/* {hasTransferStop && (
-              <div className='flex items-center justify-center gap-1 p-1 text-xs text-gray-600'>
-                <span>{relatedSegment[0].origin.code}</span>
-                <span>&gt;</span>
-                <span>{relatedSegment[0].destination.code}</span>
-                <span>&gt;</span>
-                <span>{relatedSegment[1].destination.code}</span>
-              </div>
-            )} */}
-            {hasTransferStop && (
-              <div className='flex justify-center gap-1 text-xs text-gray-600'>
-                {relatedSegment.map((segment, segmentIndex, segmentArr) => {
-                  return (
-                    <div key={segment.key} className='flex items-center gap-1'>
-                      <span>{segment.origin.code} &gt;</span>
-                      {segmentIndex > 0 && (
-                        <span>
-                          {segmentArr.at(segmentIndex)?.destination.code}
-                        </span>
+              <div className='col-span-2'>
+                <div className='flex gap-2'>
+                  <div>
+                    <div className='text-xl leading-none font-semibold'>
+                      {firstDepartureTime.format('HH:mm')}
+                    </div>
+                    <div className='text-center'>
+                      {relatedSegment.at(0)?.origin.code}
+                    </div>
+                  </div>
+                  <div className='mt-2 grow'>
+                    <div className='relative'>
+                      <Box bg={'blue'} h={2} className='rounded' />
+                      <div
+                        className='absolute end-0 -translate-y-1/2 rotate-90 bg-white text-blue-800'
+                        style={{ top: 1, paddingBottom: 1 }}
+                      >
+                        <MdOutlineAirplanemodeActive size={18} />
+                      </div>
+                    </div>
+                    <div className='pt-3'>
+                      <div className='flex items-center justify-center gap-3 text-sm text-gray-700'>
+                        <div className='flex gap-1'>
+                          {totalFlightDuration.get('D') > 0 && (
+                            <div>{totalFlightDuration.format('DD')} gün</div>
+                          )}
+                          <div>{totalFlightDuration.format('HH')}sa</div>
+                          <div>{totalFlightDuration.format('mm')}dk</div>
+                        </div>
+                        <div className='flex justify-center'>
+                          <div className='text-sm text-gray-500'>
+                            {hasTransferStop ? (
+                              <span className='text-red-600'>
+                                {relatedSegment.length - 1} Aktarma
+                              </span>
+                            ) : (
+                              <span className='text-green-800'>Aktarmasız</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {hasTransferStop && (
+                        <div className='flex justify-center gap-2 text-xs text-gray-600'>
+                          {relatedSegment.map(
+                            (segment, segmentIndex, segmentArr) => {
+                              return (
+                                <div
+                                  key={segment.key}
+                                  className='flex items-center gap-1'
+                                >
+                                  <span>{segment.origin.code} &gt;</span>
+                                  {segmentIndex > 0 && (
+                                    <span>
+                                      {
+                                        segmentArr.at(segmentIndex)?.destination
+                                          .code
+                                      }
+                                    </span>
+                                  )}
+                                </div>
+                              )
+                            }
+                          )}
+                        </div>
                       )}
                     </div>
-                  )
-                })}
+                  </div>
+                  <div>
+                    <div className='text-xl leading-none font-semibold'>
+                      {lastArrivalTime.format('HH:mm')}
+
+                      {arrivalIsAfter && (
+                        <sup className='text-red-700'> +1</sup>
+                      )}
+                    </div>
+                    <div className='text-center'>
+                      {relatedSegment.at(-1)?.destination.code}
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        )
-      })}
-      <div className='flex items-center justify-between border-t p-3 pt-4'>
-        <div>{formatCurrency(fareInfo.totalPrice.value)}</div>
-        <div>
-          <FlightDetailsSearch />
+            </div>
+          )
+        })}
+      </div>
+      <div className='grid gap-3 border-l px-3 py-5 text-center'>
+        <div className='text-xl font-semibold'>
+          {formatCurrency(fareInfo.totalPrice.value)}
         </div>
         <div>
-          <Button type='button' onClick={onSelect}>
+          <Button
+            type='button'
+            onClick={onSelect}
+            fullWidth
+            size='md'
+            rightSection={<FaAngleRight size={12} />}
+          >
             Seç
           </Button>
+        </div>
+        <div>
+          <FlightDetailsSearch />
         </div>
       </div>
     </div>

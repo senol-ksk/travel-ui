@@ -30,6 +30,11 @@ const mantineTheme = mergeMantineTheme(
           withCellSpacing: false,
         },
       }),
+      Switch: {
+        defaultProps: {
+          withThumbIndicator: false,
+        },
+      },
     },
   }
 )

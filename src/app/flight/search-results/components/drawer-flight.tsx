@@ -32,10 +32,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className='flex cursor-pointer flex-col items-start gap-2 rounded-md border p-2 hover:border-1 hover:border-blue-500 md:p-3'
-            onClick={() => {
-              onSelect(selectedPackage)
-            }}
+            className='flex flex-col items-start gap-2 rounded-md border border-t-6 border-t-blue-800 p-2 md:p-3'
           >
             <div className='flex w-full cursor-pointer justify-between gap-2'>
               <div className='font-semibold capitalize'>
@@ -64,7 +61,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 )}
               </div>
             </div>
-            <Stack gap={rem(4)} className='text-sm'>
+            <Stack gap={rem(4)} className='mb-8 text-sm'>
               {selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
                 .value > 0 && (
                 <div>
@@ -104,7 +101,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   'PC' && (
                   <div
                     className={clsx({
-                      'text-red-500':
+                      'text-red-800':
                         selectedPackage.flightDetailSegment.bookingCode !==
                         'XF',
                     })}
@@ -312,12 +309,15 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                    </div>
                  )} */}
             </Stack>
-            <div className='mt-auto'>
+            <div className='mt-auto w-full'>
               <Button
                 type='button'
                 onClick={() => {
                   onSelect(selectedPackage)
                 }}
+                fullWidth
+                radius={'xl'}
+                size='lg'
               >
                 Seç
               </Button>

@@ -254,7 +254,7 @@ export const Flight = () => {
           }}
         />
       </div>
-      <div className='grid grid-cols-18 gap-2 md:gap-4'>
+      <div className='grid grid-cols-19 gap-2 md:gap-4'>
         <div className='col-span-17 sm:col-span-6 md:col-span-5'>
           <Locations
             label='Nereden'
@@ -299,7 +299,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='col-span-9 md:col-span-3 lg:col-span-3'>
+        <div className='col-span-9 md:col-span-3 lg:col-span-4'>
           <FlightCalendar
             onDateSelect={(dates) => {
               if (dates[0]) {

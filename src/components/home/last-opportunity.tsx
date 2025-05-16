@@ -5,6 +5,8 @@ import { Carousel } from '@mantine/carousel'
 import { Badge, Box } from '@mantine/core'
 import Link from 'next/link'
 import { Image } from '@mantine/core'
+import { Widgets } from '@/types/cms-types'
+import React from 'react'
 
 const categories = [
   'Erken Rezervasyon',
@@ -16,47 +18,11 @@ const categories = [
   'başar otelleri',
 ]
 
-const hotels = [
-  {
-    name: 'Crystal Family Resort & Spa',
-    location: 'Muğla/Bodrum, Turkey',
-    price: '2.330₺',
-    discount: '%50',
-    img: 'https://static.daktilo.com/sites/1222/uploads/2024/08/19/tatil4784515.jpg',
-  },
-  {
-    name: 'La Blanche Island Bodrum',
-    location: 'Muğla/Bodrum, Turkey',
-    price: '3.200₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-  {
-    name: 'Sueno Hotels Deluxe Belek',
-    location: 'Muğla/Bodrum, Turkey',
-    price: '2.500₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-  {
-    name: 'Leodikia Kirman Premium',
-    location: 'Muğla/Bodrum, Turkey',
-    price: '1.500₺',
-    img: 'https://static.daktilo.com/sites/1222/uploads/2024/08/19/tatil4784515.jpg',
-  },
-  {
-    name: 'basar otellerı',
-    location: 'Muğla/Bodrum, Turkey',
-    price: '4.000₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-  {
-    name: 'bılmem ne otellerı',
-    location: 'Muğla/Bodrum, Turkey',
-    price: '4.20₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-]
+type IProps = {
+  data: Widgets
+}
 
-const LastOpportunity = () => {
+const LastOpportunity: React.FC<IProps> = ({ data }) => {
   return (
     <div className='container-fluid relative py-10 md:py-20'>
       <div
@@ -73,7 +39,7 @@ const LastOpportunity = () => {
 
       <Container className='mb-8 gap-2 overflow-x-auto md:overflow-x-visible'>
         <div className='flex w-max gap-2 md:w-auto md:flex-wrap md:justify-center'>
-          {categories.map((title, i) => (
+          {data.map((item, i) => (
             <Link href='#' key={i}>
               <Button
                 className='cursor-pointer whitespace-nowrap'
@@ -82,7 +48,7 @@ const LastOpportunity = () => {
                 size='md'
                 radius='md'
               >
-                {title}
+                {item.title}
               </Button>
             </Link>
           ))}
@@ -90,32 +56,34 @@ const LastOpportunity = () => {
       </Container>
       <Container>
         <Carousel slideGap='lg' className='relative' slideSize='100%'>
-          {hotels.map((hotel, i) => (
+          {data.map((item, i) => (
             <Carousel.Slide
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
-              <Link href='#'>
+              <Link href={item.params.link?.value || '#'}>
                 <Box className='group w-full rounded-lg bg-white shadow-xl'>
                   <div className='relative'>
                     <Image
-                      src={hotel.img}
-                      alt={hotel.name}
+                      src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
+                      alt={item.title}
                       className='h-60 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
                     />
 
-                    {hotel.discount && (
+                    {item.params.discount_price && (
                       <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>
-                        {hotel.discount}
+                        {item.params.discount_price?.value}
                       </span>
                     )}
                   </div>
                   <div className='grid gap-3 p-5'>
-                    <h3 className='text-md font-semibold'>{hotel.name}</h3>
-                    <p className='text-xs text-gray-900'>{hotel.location}</p>
+                    <h3 className='text-md font-semibold'>{item.title}</h3>
+                    <p className='text-xs text-gray-900'>
+                      {item.params.location.value}
+                    </p>
                     <div className='flex items-center justify-between pt-5'>
                       <p className='text-md font-bold'>
-                        {hotel.price}
+                        {item.params.price?.value}
                         <span className='text-sm font-normal'>/ Kişi</span>
                       </p>
                       <Button
@@ -124,7 +92,7 @@ const LastOpportunity = () => {
                         size='sm'
                         radius='xl'
                       >
-                        İncele
+                        {item.params.btn_text?.value}
                       </Button>
                     </div>
                   </div>
