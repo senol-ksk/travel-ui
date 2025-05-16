@@ -47,6 +47,7 @@ export const SearchEngine = () => {
       classNames={{
         tab: 'px-1 py-2 sm:py-3 md:text-lg border-b-4',
         tabSection: 'hidden sm:flex',
+        tabLabel: 'flex-none',
       }}
     >
       <Tabs.List
