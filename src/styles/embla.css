@@ -26,15 +26,12 @@
   object-fit: cover;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $mantine-breakpoint-sm) {
   .embla__slide__img {
-    border-radius: 1.8rem;
-    display: block;
-    width: 100%;
     height: auto;
-    object-fit: cover;
   }
 }
+
 .embla__controls {
   display: flex;
   justify-content: flex-end;
