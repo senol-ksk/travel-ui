@@ -9,7 +9,7 @@ import { UnstyledButton } from '@mantine/core'
 
 type Props = {
   label: string | React.ReactNode
-  title?: string | null
+  title?: string | React.ReactNode | null
   onClick?: () => void
   error?: boolean
 }
@@ -27,7 +27,7 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
         }
       )}
     >
-      <div className='truncate'>
+      <div>
         <label
           id={labelId}
           aria-labelledby={labelId}
@@ -40,7 +40,7 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
         >
           {label}
         </label>
-        <div className='text-xl leading-none font-bold'>
+        <div className='text-xl leading-none font-semibold'>
           {!!title ? title : label}
         </div>
       </div>

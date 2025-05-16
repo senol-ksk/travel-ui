@@ -85,7 +85,8 @@ export const Locations: React.FC<Props> = ({
                 autoComplete='off'
                 id='location_select'
                 placeholder={label}
-                size='lg'
+                size='xl'
+                className='font-bold'
                 rightSectionPointerEvents='all'
                 rightSection={
                   <CloseButton
@@ -128,7 +129,9 @@ export const Locations: React.FC<Props> = ({
                                 setLocationContainerOpened(false)
                               }}
                             >
-                              <span className='sr-only'>{Name}</span>
+                              <span className='font-w-600 sr-only font-bold'>
+                                {Name}
+                              </span>
                             </button>
                             <div className='flex items-center gap-2 px-4 py-2'>
                               <div className='flex flex-col text-sm'>

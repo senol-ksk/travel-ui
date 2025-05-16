@@ -1,15 +1,16 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { dataTagSymbol, useQuery } from '@tanstack/react-query'
 import { useTransitionRouter } from 'next-view-transitions'
 import dayjs from 'dayjs'
+import { IconChevronDown, IconHash } from '@tabler/icons-react'
 
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useLocalStorage, useMounted } from '@mantine/hooks'
-import { NativeSelect, Radio, Group, Skeleton } from '@mantine/core'
+import { Select, Radio, Group, Skeleton } from '@mantine/core'
 
 import { request } from '@/network'
 
@@ -195,7 +196,7 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.handleSubmit(handleFormSubmit)}>
-      <div className='flex items-center gap-3 pb-4'>
+      <div className='flex items-center pb-4 md:gap-3'>
         <div>
           <Radio.Group
             defaultValue={form.formState.defaultValues?.ActiveTripKind}
@@ -208,38 +209,53 @@ export const Flight = () => {
             }}
           >
             <Group gap={'md'}>
-              <Radio value={'1'} label='Tek Yön' />
-              <Radio value={'2'} label='Gidiş-Dönüş' />
+              <Radio variant='outline' value={'1'} label='Tek Yön' />
+              <Radio variant='outline' value={'2'} label='Gidiş-Dönüş' />
             </Group>
           </Radio.Group>
         </div>
-        <div>
-          <Controller
-            control={form.control}
-            name='CabinClass'
-            render={({ field }) => (
-              <NativeSelect
-                data={[
-                  { label: 'Ekonomi', value: '0' },
-                  { label: 'Business', value: '2' },
-                  { label: 'First Class', value: '3' },
-                ]}
-                defaultValue={form.formState.defaultValues?.CabinClass?.value}
-                onChange={({ currentTarget }) => {
-                  field.onChange({
-                    value: +currentTarget.value,
-                    title:
-                      currentTarget.options[currentTarget.options.selectedIndex]
-                        .innerText,
-                  })
+        <Controller
+          control={form.control}
+          name='CabinClass'
+          render={({ field }) => {
+            const options = [
+              { label: 'Ekonomi', value: '0' },
+              { label: 'Business', value: '2' },
+              { label: 'First Class', value: '3' },
+            ]
+
+            return (
+              <Select
+                data={options}
+                checkIconPosition='right'
+                radius='xl'
+                className='w-30'
+                rightSection={<IconChevronDown size={16} />}
+                defaultValue={
+                  form.formState.defaultValues?.CabinClass?.value !== undefined
+                    ? String(form.formState.defaultValues?.CabinClass?.value)
+                    : undefined
+                }
+                onChange={(value) => {
+                  const selected = options.find((opt) => opt.value === value)
+                  if (value && selected) {
+                    field.onChange({
+                      value: +value,
+                      title: selected.label,
+                    })
+                  }
+                }}
+                classNames={{
+                  dropdown: 'min-w-[300px] py-[15px]',
+                  option: 'text-[17px] py-[12px] font-medium',
                 }}
               />
-            )}
-          />
-        </div>
+            )
+          }}
+        />
       </div>
-      <div className='grid grid-cols-16 gap-2 md:gap-4'>
-        <div className='col-span-16 sm:col-span-6 md:col-span-4'>
+      <div className='grid grid-cols-18 gap-2 md:gap-4'>
+        <div className='col-span-17 sm:col-span-6 md:col-span-5'>
           <Locations
             label='Nereden'
             inputProps={{ error: !!form.formState.errors.Origin }}
@@ -261,7 +277,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='col-span-16 sm:col-span-6 md:col-span-4'>
+        <div className='col-span-16 sm:col-span-6 md:col-span-5'>
           <Locations
             label='Nereye'
             inputProps={{ error: !!form.formState.errors.Destination }}

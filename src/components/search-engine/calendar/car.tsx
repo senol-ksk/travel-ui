@@ -4,6 +4,7 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
+import { BsCalendar } from 'react-icons/bs'
 
 import { useMediaQuery, useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
@@ -62,11 +63,22 @@ const CarCalendar: React.FC<Props> = ({
     <Provider>
       <div className='relative h-full'>
         <Input
-          label='Tarihler'
+          label={
+            <div className='flex w-full justify-between gap-[30px]'>
+              <span>Giriş Tarihi</span>
+              <span>Çıkış Tarihi</span>
+            </div>
+          }
           onClick={() => setContainerTransitionState(true)}
-          title={`${dayjs(rangeValue[0]).format('DD MMM')} -
-            ${dayjs(rangeValue[1]).format('DD MMM')}`}
+          title={
+            <div className='flex w-full items-center justify-between gap-[30px]'>
+              <span>{dayjs(rangeValue[0]).format('DD MMM')}</span>
+              <BsCalendar size={20} />
+              <span>{dayjs(rangeValue[1]).format('DD MMM')}</span>
+            </div>
+          }
         />
+
         <Transition
           mounted={containerTransitionState}
           transition='pop-top-right'

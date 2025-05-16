@@ -48,7 +48,7 @@ const BusCalendar: React.FC<Props> = ({
     <Provider>
       <div className='relative h-full'>
         <Input
-          label='Tarihler'
+          label='Gidiş Tarihi'
           onClick={() => setContainerTransitionState(true)}
           title={`${dayjs(rangeValue).format('DD MMMM')}`}
         />

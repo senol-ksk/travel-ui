@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import { ActionIcon, Button, NativeSelect, Select, Title } from '@mantine/core'
+import {
+  ActionIcon,
+  Button,
+  NativeSelect,
+  Select,
+  Title,
+  Text,
+} from '@mantine/core'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { range } from '@mantine/hooks'
 import { FaPlus } from 'react-icons/fa6'
@@ -76,9 +83,10 @@ const HotelGuestsActions: React.FC<Props> = ({
       >
         <Title order={5}>{index + 1}.Oda</Title>
         <div className='flex items-center justify-between'>
-          <div className='text-sm'>Yetişkinler</div>
+          <Text>Yetişkinler</Text>
           <div className='flex items-center justify-between gap-3'>
             <ActionIcon
+              color='black'
               type='button'
               radius='xl'
               variant='outline'
@@ -97,10 +105,9 @@ const HotelGuestsActions: React.FC<Props> = ({
             >
               <FiMinus />
             </ActionIcon>
-            <div className='text-sm' aria-label='adult-count'>
-              {room.adult}
-            </div>
+            <Text aria-label='adult-count'>{room.adult}</Text>
             <ActionIcon
+              color='black'
               type='button'
               radius='xl'
               variant='outline'
@@ -122,9 +129,15 @@ const HotelGuestsActions: React.FC<Props> = ({
           </div>
         </div>
         <div className='flex items-center justify-between'>
-          <div className='text-sm'>Çocuk</div>
+          <Text>
+            Çocuk
+            <div>
+              <Text size='sm'>(2-16 Yaş arası)</Text>
+            </div>
+          </Text>{' '}
           <div className='flex items-center justify-between gap-3'>
             <ActionIcon
+              color='black'
               radius='xl'
               variant='outline'
               size={'lg'}
@@ -142,10 +155,9 @@ const HotelGuestsActions: React.FC<Props> = ({
             >
               <FiMinus />
             </ActionIcon>
-            <div className='text-sm' aria-label='child-count'>
-              {room.child}
-            </div>
+            <Text aria-label='child-count'>{room.child}</Text>
             <ActionIcon
+              color='black'
               radius='xl'
               variant='outline'
               size={'lg'}
@@ -166,7 +178,7 @@ const HotelGuestsActions: React.FC<Props> = ({
           </div>
         </div>
         {room.childAges.length ? (
-          <div className='grid gap-2'>
+          <div className='mt-5 grid grid-cols-2 gap-3'>
             {room.childAges.map((child, ageIndex) => {
               return (
                 <NativeSelect
@@ -175,7 +187,9 @@ const HotelGuestsActions: React.FC<Props> = ({
                   data={range(1, 12).map(String)}
                   defaultValue={child}
                   aria-placeholder='1. Çocuk yaşı'
-                  size='xs'
+                  size='md'
+                  radius='md'
+                  className='w-30'
                   onChange={(event) => {
                     handleChildAges({
                       ageIndex,
@@ -191,7 +205,7 @@ const HotelGuestsActions: React.FC<Props> = ({
 
         <div className='pt-2 text-end'>
           <Button
-            size='xs'
+            size='sm'
             variant='subtle'
             color={roomState.length > 1 ? 'red' : 'blue'}
             type='button'

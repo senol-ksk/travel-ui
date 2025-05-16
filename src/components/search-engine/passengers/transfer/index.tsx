@@ -7,6 +7,7 @@ import {
   Skeleton,
   Button,
   ActionIcon,
+  Text,
 } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 
@@ -107,14 +108,15 @@ export const PassengerDropdown: React.FC<Props> = ({
             <Paper className='flex h-full flex-col rounded-lg shadow-xl'>
               <div className='grid min-w-[320px] gap-7 p-5'>
                 <div className='flex items-center justify-between'>
-                  <div className='text-sm'>
+                  <Text className='text-sm'>
                     Yetişkinler
                     <div>
-                      <small>12+ Yaş</small>
+                      <Text size='sm'>(12+ Yaş)</Text>
                     </div>
-                  </div>
+                  </Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -127,10 +129,11 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='adult-count'>
+                    <Text size='sm' aria-label='adult-count'>
                       {passengersState.adult.count}
-                    </div>
+                    </Text>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -147,11 +150,12 @@ export const PassengerDropdown: React.FC<Props> = ({
                   <div className='text-sm'>
                     Çocuk
                     <div>
-                      <small>(2 - 11 Yaş)</small>
+                      <Text size='sm'> (2 - 11 Yaş)</Text>
                     </div>
                   </div>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -164,10 +168,11 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='child-count'>
+                    <Text aria-label='child-count'>
                       {passengersState.child.count}
-                    </div>
+                    </Text>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -184,11 +189,12 @@ export const PassengerDropdown: React.FC<Props> = ({
                   <div className='text-sm'>
                     Bebek
                     <div>
-                      <small>(0 - 2 Yaş)</small>
+                      <Text size='sm'>(0 - 2 Yaş)</Text>
                     </div>
                   </div>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}
@@ -201,10 +207,11 @@ export const PassengerDropdown: React.FC<Props> = ({
                     >
                       <FiMinus />
                     </ActionIcon>
-                    <div className='text-sm' aria-label='infant-count'>
+                    <Text aria-label='infant-count'>
                       {passengersState.infant.count}
-                    </div>
+                    </Text>
                     <ActionIcon
+                      color='black'
                       radius='xl'
                       variant='outline'
                       size={'lg'}

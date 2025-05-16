@@ -45,7 +45,7 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'px-1 py-2 sm:py-3 md:text-lg border-b-4',
+        tab: 'md:text-lg border-b-4 mt-1 mb-1',
         tabSection: 'hidden sm:flex',
       }}
     >
@@ -59,42 +59,42 @@ export const SearchEngine = () => {
         <TabsTab
           value={searchModules.flight.value}
           leftSection={<BiSolidPlaneAlt />}
-          className={classes.tab}
+          className={`${classes.tab} ${classes.tabEffect}`}
         >
           {searchModules.flight.title}
         </TabsTab>
         <TabsTab
           value={searchModules.hotel.value}
           leftSection={<MdHotel />}
-          className={classes.tab}
+          className={`${classes.tab} ${classes.tabEffect}`}
         >
           {searchModules.hotel.title}
         </TabsTab>
         <TabsTab
           value={searchModules.carRental.value}
           leftSection={<IoCarSharp />}
-          className={classes.tab}
+          className={`${classes.tab} ${classes.tabEffect}`}
         >
           {searchModules.carRental.title}
         </TabsTab>
         <TabsTab
           value={searchModules.bus.value}
           leftSection={<IoBus />}
-          className={classes.tab}
+          className={`${classes.tab} ${classes.tabEffect}`}
         >
           {searchModules.bus.title}
         </TabsTab>
         <TabsTab
           value={searchModules.transfer.value}
           leftSection={<TransferIcon />}
-          className={classes.tab}
+          className={`${classes.tab} ${classes.tabEffect}`}
         >
           {searchModules.transfer.title}
         </TabsTab>
         <TabsTab
           value={searchModules.tour.value}
           leftSection={<FaSuitcase />}
-          className={classes.tab}
+          className={`${classes.tab} ${classes.tabEffect}`}
         >
           {searchModules.tour.title}
         </TabsTab>
