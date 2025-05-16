@@ -20,10 +20,10 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
   return (
     <div
       className={clsx(
-        'relative flex h-full items-center truncate rounded-md border border-transparent bg-gray-50 px-5 py-2 transition-colors hover:border-blue-800 md:px-6',
+        'relative flex h-full items-center truncate rounded-md border bg-gray-50 px-5 py-2 transition-colors hover:border-blue-800 md:px-6',
         {
           'border-red-500': error,
-          'border-slate-300': !error,
+          'border-transparent': !error,
         }
       )}
     >

@@ -69,7 +69,7 @@ const HotelCalendar: React.FC<Props> = ({
 
   return (
     <Provider>
-      <div className='relative'>
+      <div className='relative h-full'>
         <Input
           label='Tarihler'
           onClick={() => setContainerTransitionState(true)}

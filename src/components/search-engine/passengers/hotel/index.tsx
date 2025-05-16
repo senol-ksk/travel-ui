@@ -25,7 +25,7 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
   )
 
   return (
-    <div className='relative'>
+    <div className='relative h-full'>
       <Input
         label='Misafir'
         title={`${roomState.length} Oda, ${roomState.reduce(
