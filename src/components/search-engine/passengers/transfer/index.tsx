@@ -145,12 +145,10 @@ export const PassengerDropdown: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <div className='text-sm'>
+                  <Text className='text-sm'>
                     Çocuk
-                    <div>
-                      <Text size='sm'> (2 - 11 Yaş)</Text>
-                    </div>
-                  </div>
+                    <Text size='sm'> (2 - 11 Yaş)</Text>
+                  </Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
                       color='black'
@@ -184,12 +182,10 @@ export const PassengerDropdown: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <div className='text-sm'>
+                  <Text className='text-sm'>
                     Bebek
-                    <div>
-                      <Text size='sm'>(0 - 2 Yaş)</Text>
-                    </div>
-                  </div>
+                    <Text size='sm'>(0 - 2 Yaş)</Text>
+                  </Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
                       color='black'
