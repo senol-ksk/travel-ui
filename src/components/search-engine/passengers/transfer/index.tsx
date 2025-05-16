@@ -110,9 +110,7 @@ export const PassengerDropdown: React.FC<Props> = ({
                 <div className='flex items-center justify-between'>
                   <Text className='text-sm'>
                     Yetişkinler
-                    <div>
-                      <Text size='sm'>(12+ Yaş)</Text>
-                    </div>
+                    <Text size='sm'>(12+ Yaş)</Text>
                   </Text>
                   <div className='flex items-center justify-between gap-3'>
                     <ActionIcon
