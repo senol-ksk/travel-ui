@@ -93,7 +93,6 @@ const ReservationSummarySection = () => {
             )
           default:
             return <div>No summary section</div>
-            break
         }
       })()}
     </div>

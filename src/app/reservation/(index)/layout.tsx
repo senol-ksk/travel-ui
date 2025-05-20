@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import { Notifications } from '@mantine/notifications'
 
 import { ReservationSummarySection } from './summary-section'
 import { Container } from '@mantine/core'
