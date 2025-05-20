@@ -196,7 +196,7 @@ export const Flight = () => {
 
   return (
     <form onSubmit={form.handleSubmit(handleFormSubmit)}>
-      <div className='flex items-center pb-4 md:gap-3'>
+      <div className='flex items-center gap-4 pb-4 md:gap-3'>
         <div>
           <Radio.Group
             defaultValue={form.formState.defaultValues?.ActiveTripKind}
