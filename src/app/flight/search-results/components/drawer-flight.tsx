@@ -25,14 +25,35 @@ type IProps = {
 
 const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
   const selectedFlightItemPackages = data
+  // border colors dyanmic changing for per package
+  const dynmicborderColors = [
+    'border-l-gray-500',
+    'border-l-green-700',
+    'border-l-indigo-900',
+    'border-l-purple-600',
+  ]
+  // base price defined
+  const mainPricePackage = data.flights.at(0)?.fareInfo.totalPrice.value ?? 0
 
   return (
     <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
-      {selectedFlightItemPackages?.packages?.map((selectedPackage) => {
+      {selectedFlightItemPackages?.packages?.map((selectedPackage, index) => {
+        const dynamicBorderColor =
+          dynmicborderColors[index % dynmicborderColors.length]
+        // package price defined
+        let packagePrice = selectedPackage.flightFareInfo.totalPrice.value
+        // package base prıce calculated
+        packagePrice =
+          selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
+
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className='flex flex-col items-start gap-2 rounded-md border border-l-6 border-l-blue-800 p-2 md:p-3'
+            className={`flex cursor-pointer flex-col items-start gap-2 rounded-md border border-l-6 p-2 md:p-3 ${dynamicBorderColor}`}
+            typeof='button'
+            onClick={() => {
+              onSelect(selectedPackage)
+            }}
           >
             <div className='flex w-full cursor-pointer justify-between gap-2'>
               <div className='font-semibold capitalize'>
@@ -54,11 +75,6 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                         .freeVolatileData.BrandName
                   }
                 })()}
-              </div>
-              <div className='text-lg font-semibold'>
-                {formatCurrency(
-                  selectedPackage.flightFareInfo.totalPrice.value
-                )}
               </div>
             </div>
             <Stack gap={rem(4)} className='mb-8 text-sm'>
@@ -318,8 +334,10 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 fullWidth
                 radius={'xl'}
                 size='lg'
+                variant='outline'
+                className='hover:bg-blue-800 hover:text-white'
               >
-                Seç
+                {formatCurrency(packagePrice)}
               </Button>
             </div>
           </div>
