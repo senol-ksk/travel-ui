@@ -45,6 +45,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         // package base prıce calculated
         packagePrice =
           selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
+        packagePrice = Math.max(0, packagePrice)
 
         return (
           <div
@@ -337,7 +338,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 variant='outline'
                 className='hover:bg-blue-800 hover:text-white'
               >
-                {formatCurrency(packagePrice)}
+                +{formatCurrency(packagePrice)}
               </Button>
             </div>
           </div>
