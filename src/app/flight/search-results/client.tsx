@@ -7,6 +7,8 @@ import {
   useMounted,
   useScrollIntoView,
 } from '@mantine/hooks'
+import { MdKeyboardArrowRight } from 'react-icons/md'
+import { MdKeyboardArrowLeft } from 'react-icons/md'
 import {
   Accordion,
   Alert,
@@ -26,7 +28,7 @@ import {
   Transition,
   UnstyledButton,
 } from '@mantine/core'
-import { useQueryStates } from 'nuqs'
+import { useQueryStates, useQueryState, parseAsIsoDate } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { GoArrowRight } from 'react-icons/go'
@@ -47,6 +49,9 @@ import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { DrawerFlight } from './components/drawer-flight'
 import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import 'dayjs/locale/tr'
 import { Virtuoso } from 'react-virtuoso'
 
 type SelectedPackageStateProps = {
@@ -54,6 +59,10 @@ type SelectedPackageStateProps = {
   flightFareInfo: FlightFareInfo
   flightDetails: FlightDetail
 }
+
+dayjs.locale('tr')
+dayjs.extend(isSameOrAfter)
+dayjs.extend(isSameOrBefore)
 
 const FlightSearchView = () => {
   const {
@@ -68,6 +77,99 @@ const FlightSearchView = () => {
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
+
+  const [, setDepartureDateQueryParam] = useQueryState(
+    'departureDate',
+    parseAsIsoDate.withOptions({
+      history: 'replace', // Trying to replace history entry but its not working
+      shallow: false, // doesn't matter whether or not !
+    })
+  )
+  const [, setReturnDateQueryParam] = useQueryState(
+    'returnDate',
+    parseAsIsoDate.withOptions({
+      history: 'replace', // Trying to replace history entry but its not working !
+      shallow: false, //  doesn't matter whether or not !
+    })
+  )
+
+  const handlePrevDay = () => {
+    // default go and return dates on searchParams
+    const { departureDate, returnDate } = searchParams
+
+    const today = dayjs().startOf('day') // compare with today
+
+    if (isReturnFlightVisible && returnDate) {
+      //  only returnDate can changable
+      const currentReturnDateDayjs = dayjs(returnDate)
+      const potantielPrevReturnDateDayjs = currentReturnDateDayjs.subtract(
+        1,
+        'day'
+      )
+
+      if (potantielPrevReturnDateDayjs.isBefore(today)) {
+        return
+      }
+
+      // return date cannot be same or before from go date
+      if (
+        departureDate &&
+        potantielPrevReturnDateDayjs.isSameOrBefore(dayjs(departureDate), 'day')
+      ) {
+        return
+      }
+
+      // all of everything is okey... just return date can update.
+      setReturnDateQueryParam(potantielPrevReturnDateDayjs.toDate())
+    } else if (departureDate) {
+      const currentDepartureDateDayjs = dayjs(departureDate)
+      const potentialPrevDepartureDateDayjs =
+        currentDepartureDateDayjs.subtract(1, 'day')
+
+      // go date before then today ?
+      if (potentialPrevDepartureDateDayjs.isBefore(today)) {
+        return
+      }
+      setDepartureDateQueryParam(potentialPrevDepartureDateDayjs.toDate())
+
+      // if go flight and return flight are after or before the return date ,
+      // return date will be updated to one day after go date
+      if (
+        returnDate &&
+        potentialPrevDepartureDateDayjs.isSameOrAfter(dayjs(returnDate), 'day')
+      ) {
+        const newReturnDateAdjusted = potentialPrevDepartureDateDayjs
+          .add(1, 'day')
+          .toDate()
+        setReturnDateQueryParam(newReturnDateAdjusted)
+      }
+    }
+  }
+
+  const handleNextDay = () => {
+    const { departureDate, returnDate } = searchParams
+
+    if (isReturnFlightVisible && returnDate) {
+      const nextReturnDate = dayjs(returnDate).add(1, 'day').toDate()
+      setReturnDateQueryParam(nextReturnDate)
+    } else if (departureDate) {
+      const nextDepartureDate = dayjs(departureDate).add(1, 'day').toDate()
+      setDepartureDateQueryParam(nextDepartureDate)
+
+      // if go flight and return flight are after or before the return date ,
+      // return date will be updated to one day after go date
+      if (
+        returnDate &&
+        dayjs(nextDepartureDate).isSameOrAfter(dayjs(returnDate), 'day')
+      ) {
+        const newReturnDateAdjusted = dayjs(nextDepartureDate)
+          .add(1, 'day')
+          .toDate()
+        setReturnDateQueryParam(newReturnDateAdjusted)
+      }
+    }
+  }
+
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParsers)
   const airlineDataObj = getAirlineByCodeList.data
@@ -164,7 +266,7 @@ const FlightSearchView = () => {
     return () => {
       resetSelectedFlights()
     }
-  }, [resetSelectedFlights, searchParams])
+  }, [resetSelectedFlights])
 
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmitting = submitFlightData.isPending
@@ -538,15 +640,53 @@ const FlightSearchView = () => {
                         </Button>
                       </div>
                     </div>
-                    <div>Dönüş uçuşunuzu seçiniz.</div>
+                    <div className='text-lg font-medium'>
+                      Dönüş uçuşunuzu seçiniz.
+                    </div>
                   </div>
                 ) : (
                   <div>
-                    <span>Gidiş uçuşunuzu seçiniz.</span>
+                    <span className='text-lg font-medium'>
+                      Gidiş uçuşunuzu seçiniz.
+                    </span>
                   </div>
                 )
               ) : null
             ) : null}
+            <div className='flex items-center gap-2 md:gap-4 md:p-3'>
+              <Button
+                size='md'
+                variant='outline'
+                className='flex items-center gap-2 border-gray-300'
+                onClick={handlePrevDay}
+              >
+                <MdKeyboardArrowLeft size={18} />
+                <span>Önceki gün</span>
+              </Button>
+
+              <div className='flex-grow rounded border py-2 text-center'>
+                {(() => {
+                  const calendarDate =
+                    isReturnFlightVisible && returnDate
+                      ? returnDate
+                      : departureDate
+                  return calendarDate
+                    ? dayjs(calendarDate).format('D MMMM YYYY, ddd')
+                    : ''
+                })()}
+              </div>
+
+              <Button
+                size='md'
+                variant='outline'
+                className='flex items-center gap-2 border-gray-300'
+                onClick={handleNextDay}
+              >
+                <span>Sonraki gün</span>
+                <MdKeyboardArrowRight size={18} />
+              </Button>
+            </div>
+
             <div className='grid gap-3 pt-3 md:gap-5'>
               {!searchResultsQuery.isFetchingNextPage &&
                 isDomestic &&
