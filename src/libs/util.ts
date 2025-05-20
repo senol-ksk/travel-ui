@@ -4,12 +4,17 @@ import { isMobilePhone } from 'validator'
 export const formatCurrency = (
   amount: number,
   currency: 'TRY' | 'USD' | 'EUR' | undefined | null = 'TRY'
-) =>
-  new Intl.NumberFormat('tr', {
+) => {
+  const formatted = new Intl.NumberFormat('tr', {
     style: 'currency',
     currency: currency ?? 'TRY',
   }).format(amount)
 
+  if ((currency ?? 'TRY') === 'TRY') {
+    return formatted.replace('₺', '').trim() + ' ₺'
+  }
+  return formatted
+}
 export const days = (): string[] =>
   Array.from(Array(31).keys()).map((day) =>
     (day < 9 ? `0${++day}` : ++day).toString()
