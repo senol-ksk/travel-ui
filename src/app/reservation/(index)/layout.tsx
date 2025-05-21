@@ -1,8 +1,9 @@
 import { Suspense } from 'react'
-
-import { ReservationSummarySection } from './summary-section'
 import { Container } from '@mantine/core'
 
+import { ReservationSummarySection } from './summary-section'
+
+// import '@/styles/reservation.css'
 export default function ReservationLayout({
   children,
 }: Readonly<{
