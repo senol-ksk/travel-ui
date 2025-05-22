@@ -226,10 +226,7 @@ export default function CheckoutPage() {
           })}
           className='relative grid gap-3 md:gap-5'
         >
-          <CheckoutCard>
-            <Title order={3} size={'lg'}>
-              İletişim Bilgileri
-            </Title>
+          <CheckoutCard title={'İletişim Bilgileri'}>
             <div className='grid grid-cols-2 gap-3'>
               <div>
                 <TextInput
@@ -305,7 +302,7 @@ export default function CheckoutPage() {
               </div>
             </div>
           </CheckoutCard>
-          <CheckoutCard>
+          <CheckoutCard title={'Yolcu Bilgileri'}>
             <div className='grid gap-3'>
               {(() => {
                 switch (moduleName.toLowerCase()) {
@@ -317,7 +314,7 @@ export default function CheckoutPage() {
 
                           return (
                             <div key={childNode.orderId}>
-                              <Title order={3} size={'lg'} pb={10}>
+                              <Title order={3} size={'sm'} pb={10}>
                                 {childNodeIndex + 1}. Oda
                               </Title>
                               {childNode.childNodes.map(
@@ -423,8 +420,19 @@ export default function CheckoutPage() {
 
                           return (
                             <div key={index}>
-                              <Title order={3} size={'lg'} pb={10}>
-                                {PassengerTypesIndexEnum[passengerType]}
+                              <Title order={3} size={'sm'} pb={10}>
+                                {/* {PassengerTypesIndexEnum[passengerType]} */}
+                                {(() => {
+                                  switch (passengerType) {
+                                    case 0:
+                                      return 'Yetiskin'
+
+                                    default:
+                                      return PassengerTypesIndexEnum[
+                                        passengerType
+                                      ]
+                                  }
+                                })()}
                               </Title>
                               <PassengerInformationForm
                                 moduleName={moduleName}
@@ -483,12 +491,26 @@ export default function CheckoutPage() {
 
                           return (
                             <div key={index}>
-                              <Title order={3} size={'lg'} pb={10}>
+                              <Title order={3} size={'sm'} pb={10}>
                                 {moduleName.toLowerCase() === 'bus'
                                   ? field?.gender.toString() === '1'
                                     ? 'Kadın'
                                     : 'Erkek'
-                                  : PassengerTypesIndexEnum[passengerType]}
+                                  : (() => {
+                                      switch (passengerType) {
+                                        case 0:
+                                          return 'Yetişkin'
+                                        case 1:
+                                          return 'Çocuk'
+                                        case 2:
+                                          return 'Bebek'
+
+                                        default:
+                                          return PassengerTypesIndexEnum[
+                                            passengerType
+                                          ]
+                                      }
+                                    })()}
                               </Title>
                               <PassengerInformationForm
                                 moduleName={moduleName}
