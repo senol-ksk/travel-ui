@@ -17,10 +17,8 @@ const AirlineLogo: React.FC<IProps> = ({
     <Image
       src={`https://images.trvl-media.com/media/content/expus/graphics/static_content/fusion/v0.1b/images/airlines/vector/s/${airlineCode.toLocaleLowerCase()}_sq.svg`}
       alt={alt}
-      style={{
-        width,
-        height,
-      }}
+      w={width}
+      h={height}
     />
   )
 }

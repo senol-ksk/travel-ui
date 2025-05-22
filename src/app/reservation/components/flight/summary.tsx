@@ -1,5 +1,5 @@
-import { useDisclosure } from '@mantine/hooks'
-import { Collapse, UnstyledButton } from '@mantine/core'
+import { upperFirst, useDisclosure } from '@mantine/hooks'
+import { Collapse, Title, UnstyledButton } from '@mantine/core'
 
 import {
   MdKeyboardArrowDown,
@@ -10,7 +10,10 @@ import { FaArrowRightLong } from 'react-icons/fa6'
 
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import duration from 'dayjs/plugin/duration'
+
 dayjs.extend(relativeTime)
+dayjs.extend(duration)
 
 import {
   FlightPassengerTypes,
@@ -25,6 +28,8 @@ type IProps = {
 import { CheckoutCard } from '@/components/card'
 import { formatCurrency } from '@/libs/util'
 import NumberFlow from '@number-flow/react'
+import { IoAirplaneSharp } from 'react-icons/io5'
+import { FlightTransferSummary } from './transfer'
 
 const FlightSummary: React.FC<IProps> = ({ data }) => {
   const [openedPriceDetails, { toggle: togglePriceDetails }] =
@@ -45,24 +50,32 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
   return (
     <div className='grid gap-5'>
       <CheckoutCard>
-        <div className='grid gap-3'>
+        <div className='grid gap-4 text-sm'>
           {flightData.flightList
             .sort((a, b) => a.flightDetail.groupId - b.flightDetail.groupId)
             .map((flightItem) => {
-              const flightSegments = flightItem.flightSegments
+              const { flightDetail, flightSegments } = flightItem
+
               const flightSegmentsFirstItem = flightSegments[0]
               const flightSegmentsLastItem = flightSegments.at(
                 -1
               ) as typeof flightSegmentsFirstItem
               const hasTransfer = flightSegments.length > 1
-              const transferCount = flightSegments.length - 1
-
-              const flightFareInfo = flightItem.flightFareInfo
+              const firstDepartureTime = dayjs(
+                flightSegmentsFirstItem.departureTime
+              )
+              const lastArrivalTime = dayjs(flightSegmentsLastItem?.arrivalTime)
+              const totalFlightDuration = dayjs.duration(
+                lastArrivalTime.diff(firstDepartureTime)
+              )
 
               return (
-                <div key={flightItem.flightDetail.key} className='grid gap-1'>
+                <div key={flightDetail.key} className='grid gap-1'>
+                  <Title order={5}>
+                    {flightDetail.groupId === 0 ? 'Gidiş' : 'Dönüş'}
+                  </Title>
                   <div className='flex gap-2'>
-                    <div>
+                    <div className='leading-none'>
                       <AirlineLogo
                         airlineCode={
                           flightSegmentsFirstItem.marketingAirline.code
@@ -75,88 +88,43 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                       />
                     </div>
                     <div className='flex items-center gap-2'>
-                      <div>
-                        {
-                          airlines[
-                            flightSegmentsFirstItem.marketingAirline.code
-                          ]
-                        }
-                      </div>
-                      <small>{flightSegmentsFirstItem.flightNumber}</small>
+                      {airlines[flightSegmentsFirstItem.marketingAirline.code]}
+                      {' - '}
+                      {flightSegmentsFirstItem.flightNumber}
+                      {' - '}
+                      {upperFirst(
+                        (
+                          flightDetail.freeVolatileData?.BrandName ??
+                          flightDetail.freeVolatileData?.brandname
+                        )?.toLowerCase() ?? ''
+                      )}
                     </div>
                   </div>
-                  <div className='flex items-center gap-2 font-semibold'>
-                    <div>
-                      {airports[flightSegmentsFirstItem.origin.code].city}{' '}
-                      <small>({flightSegmentsFirstItem.origin.code})</small>
-                    </div>
-                    <div>
-                      <FaArrowRightLong size={20} />
-                    </div>
-                    <div>
-                      {airports[flightSegmentsLastItem?.destination.code].city}
-                      <small>
-                        ({flightSegmentsLastItem?.destination.code})
-                      </small>
-                    </div>
+                  <div>
+                    <strong>
+                      {firstDepartureTime.format('HH:mm')}
+                      {' - '}
+                      {lastArrivalTime.format('HH:mm')}
+                    </strong>{' '}
+                    {lastArrivalTime.format('DD MMMM YYYY dddd')} (
+                    {totalFlightDuration.format('H')}s{' '}
+                    {totalFlightDuration.format('mm')}dk)
                   </div>
-                  <div className='text-sm'>
-                    {dayjs(flightSegmentsFirstItem.departureTime).format(
-                      'DD MMMM dddd YYYY HH:mm'
-                    )}
-                  </div>
-                  <div className='text-sm'>
-                    {dayjs(flightSegmentsLastItem?.arrivalTime).format(
-                      'DD MMMM dddd YYYY HH:mm'
-                    )}
+                  <div className='flex items-center gap-2'>
+                    <div>
+                      {airports[flightSegmentsFirstItem.origin.code].city} (
+                      {flightSegmentsFirstItem.origin.code})
+                    </div>
+                    <div>
+                      <IoAirplaneSharp />
+                    </div>
+                    <div>
+                      {airports[flightSegmentsLastItem?.destination.code].city}(
+                      {flightSegmentsLastItem?.destination.code})
+                    </div>
                   </div>
                   {hasTransfer && (
-                    <div className='mt-2 rounded-md border border-yellow-300 bg-yellow-100 p-2 text-sm'>
-                      <div className='pb-2 font-semibold'>
-                        <div className='flex items-center gap-2'>
-                          <div>
-                            <MdTransferWithinAStation size={20} />
-                          </div>
-                          <div>{transferCount} Aktarma</div>
-                        </div>
-                      </div>
-                      <div>
-                        {flightSegments.map(
-                          (segment, segmentIndex, segmentArr) => {
-                            const prevSegment = segmentArr[segmentIndex]
-                            const prevDepartureTime = dayjs(
-                              prevSegment.departureTime
-                            )
-                            const prevArrivalTime = dayjs(
-                              prevSegment.arrivalTime
-                            )
-                            const departureTime = dayjs(segment.departureTime)
-                            const arrivalTime = dayjs(segment.arrivalTime)
-                            const transferDuration = prevArrivalTime.to(
-                              departureTime,
-                              true
-                            )
-
-                            if (segmentIndex === 0) return
-
-                            return (
-                              <div key={segment.key} className='grid gap-2'>
-                                <div className='flex items-center gap-3'>
-                                  {transferCount > 1 && (
-                                    <div>{segmentIndex}. Aktarma</div>
-                                  )}
-
-                                  <div>
-                                    <strong>Bekleme Süresi:</strong>{' '}
-                                    {transferDuration}
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          }
-                        )}
-                      </div>
-                    </div>
+                    <FlightTransferSummary flightSegments={flightSegments} />
                   )}
                 </div>
               )

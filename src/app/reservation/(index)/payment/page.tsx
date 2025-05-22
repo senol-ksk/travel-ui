@@ -3,15 +3,21 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
+import { notifications } from '@mantine/notifications'
+
+import NextImage from 'next/image'
+import { GrAmex } from 'react-icons/gr'
 
 import { useForm, Controller } from 'react-hook-form'
 import {
   Button,
+  Group,
   LoadingOverlay,
   Modal,
   NativeSelect,
   Skeleton,
   Stack,
+  Text,
   TextInput,
   UnstyledButton,
 } from '@mantine/core'
@@ -31,6 +37,13 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 
 import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
 import { CheckoutCard } from '@/components/card'
+import threedImage from './threed-info.png'
+import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
+import { RiVisaLine } from 'react-icons/ri'
+import { Coupon } from '../../components/coupon'
+import { useCouponQuery } from '../useCouponQuery'
+import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
+import NumberFlow from '@number-flow/react'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -87,7 +100,7 @@ const PaymentPage = () => {
   const moduleName = useMemo(
     () => checkoutQueryMemoData?.viewBag.ModuleName,
     [checkoutQueryMemoData?.viewBag.ModuleName]
-  )
+  ) as ProductPassengerApiResponseModel['viewBag']['ModuleName']
 
   const paymentMutation = useMutation<
     PaymentResponeType | null | undefined,
@@ -132,6 +145,8 @@ const PaymentPage = () => {
       totalAmount: number
     }[]
   >(null)
+  const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
+
   const listenCardNumberChange = (data: string) => {
     if (!data || data.length < 6 || !checkoutQueryMemoData) {
       installmentTableSelectOptions.current = null
@@ -150,6 +165,19 @@ const PaymentPage = () => {
       threeDformRef.current?.submit()
     }
   }, [paymentMutation.data, paymentMutation.isSuccess])
+  const isCouponUsed = useMemo(
+    () =>
+      Array.isArray(
+        checkoutQueryMemoData?.viewBag.SummaryViewDataResponser.summaryResponse
+          .couponDiscountList
+      ) &&
+      checkoutQueryMemoData?.viewBag.SummaryViewDataResponser.summaryResponse
+        .couponDiscountList.length > 0,
+    [
+      checkoutQueryMemoData?.viewBag.SummaryViewDataResponser.summaryResponse
+        .couponDiscountList,
+    ]
+  )
 
   if (checkoutQuery.isLoading) {
     return (
@@ -168,6 +196,50 @@ const PaymentPage = () => {
     ? `${upperFirst(passengerData?.childNodes[0].items[0].value.firstName.toLocaleLowerCase())} ${upperFirst(passengerData?.childNodes[0].items[0].value.lastName.toLocaleLowerCase())}`
     : `${upperFirst(passengerData?.childNodes[0]?.childNodes?.at(0)?.items.at(0)?.value?.firstName?.toLowerCase() ?? '')} ${upperFirst(passengerData?.childNodes[0].childNodes.at(0)?.items.at(0)?.value.lastName.toLocaleLowerCase() ?? '')}`
 
+  const handleCouponActions = async (promotionText?: string) => {
+    if (promotionText && !isCouponUsed) {
+      const applyResponse = await applyCouponMutation.mutateAsync({
+        promotionText,
+        moduleName,
+      })
+
+      if (applyResponse?.success) {
+        notifications.show({
+          title: 'Tebrikler!',
+          message: (
+            <div>
+              <span className='font-semibold underline'>
+                {applyResponse?.data?.discountPrice.value
+                  ? formatCurrency(applyResponse?.data?.discountPrice.value)
+                  : null}
+              </span>{' '}
+              indirim uygulandı.
+            </div>
+          ),
+          withCloseButton: true,
+          autoClose: 5000,
+          position: 'top-center',
+          color: 'green',
+          classNames: {
+            root: 'bg-green-200',
+            description: 'text-black',
+          },
+        })
+      }
+    }
+
+    if (isCouponUsed) {
+      const revokeResponse = await revokeCouponMutation.mutateAsync({
+        moduleName,
+      })
+
+      if (revokeResponse?.success) {
+      }
+    }
+
+    checkoutQuery.refetch()
+  }
+
   if (!reservationData || !queryStrings.productKey)
     return <div>Hata olustu</div>
 
@@ -181,122 +253,169 @@ const PaymentPage = () => {
       >
         <LoadingOverlay visible={paymentMutation.isPending} />
 
-        <CheckoutCard>
-          <div className='grid w-full gap-3 md:w-72'>
-            <Controller
-              control={formMethods.control}
-              name='cardOwner'
-              defaultValue={firstPassengerFullName}
-              render={({ field }) => {
-                return (
-                  <TextInput
-                    {...field}
-                    autoComplete='cc-name'
-                    label='Kart Üzerindeki İsim'
-                    placeholder='Kart Üzerindeki İsim'
-                    error={
-                      !!formMethods.formState.errors.cardOwner
-                        ? formMethods.formState.errors.cardOwner.message
-                        : null
-                    }
-                  />
-                )
-              }}
-            />
-            <Controller
-              control={formMethods.control}
-              name='cardNumber'
-              defaultValue=''
-              render={({ field }) => (
-                <TextInput
-                  {...field}
-                  autoComplete='cc-number'
-                  label='Kart Numarası'
-                  type='tel'
-                  error={
-                    !!formMethods.formState.errors.cardNumber
-                      ? formMethods.formState.errors.cardNumber.message
-                      : null
-                  }
-                  // value={creditCardNumber}
-                  onChange={({ currentTarget: { value } }) => {
-                    const formatedValue = formatCreditCard(value).trim()
-                    listenCardNumberChange(value.replaceAll(' ', ''))
-                    field.onChange(formatedValue)
+        <CheckoutCard title={'Ödeme Bilgileri'}>
+          <div className='grid items-center gap-3 sm:grid-cols-2'>
+            <div>
+              <div className='grid w-full gap-3'>
+                <Controller
+                  control={formMethods.control}
+                  name='cardOwner'
+                  defaultValue={firstPassengerFullName}
+                  render={({ field }) => {
+                    return (
+                      <TextInput
+                        {...field}
+                        autoComplete='cc-name'
+                        label='Kart Üzerindeki İsim'
+                        placeholder='Kart Üzerindeki İsim'
+                        error={
+                          !!formMethods.formState.errors.cardOwner
+                            ? formMethods.formState.errors.cardOwner.message
+                            : null
+                        }
+                      />
+                    )
                   }}
                 />
-              )}
-            />
-            <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
-              <Controller
-                control={formMethods.control}
-                name='cardExpiredMonth'
-                render={({ field }) => (
-                  <NativeSelect
-                    {...field}
-                    label='Ay'
-                    autoComplete='cc-exp-month'
-                    data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-                    error={
-                      !!formMethods.formState.errors.cardExpiredMonth
-                        ? formMethods.formState.errors.cardExpiredMonth.message
-                        : null
-                    }
+                <Controller
+                  control={formMethods.control}
+                  name='cardNumber'
+                  defaultValue=''
+                  render={({ field }) => (
+                    <TextInput
+                      {...field}
+                      autoComplete='cc-number'
+                      label='Kart Numarası'
+                      type='tel'
+                      error={
+                        !!formMethods.formState.errors.cardNumber
+                          ? formMethods.formState.errors.cardNumber.message
+                          : null
+                      }
+                      // value={creditCardNumber}
+                      onChange={({ currentTarget: { value } }) => {
+                        const formatedValue = formatCreditCard(value).trim()
+                        listenCardNumberChange(value.replaceAll(' ', ''))
+                        field.onChange(formatedValue)
+                      }}
+                    />
+                  )}
+                />
+                <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+                  <Controller
+                    control={formMethods.control}
+                    name='cardExpiredMonth'
+                    render={({ field }) => (
+                      <NativeSelect
+                        {...field}
+                        label='Ay'
+                        autoComplete='cc-exp-month'
+                        data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
+                        error={
+                          !!formMethods.formState.errors.cardExpiredMonth
+                            ? formMethods.formState.errors.cardExpiredMonth
+                                .message
+                            : null
+                        }
+                      />
+                    )}
                   />
-                )}
-              />
-              <Controller
-                control={formMethods.control}
-                name='cardExpiredYear'
-                render={({ field }) => (
-                  <NativeSelect
-                    {...field}
-                    autoComplete='cc-exp-year'
-                    label='Yıl'
-                    data={[
-                      { label: 'Yıl', value: '' },
-                      ...cardExpiredYearList(),
-                    ]}
-                    error={
-                      !!formMethods.formState.errors.cardExpiredYear
-                        ? formMethods.formState.errors.cardExpiredYear.message
-                        : null
-                    }
+                  <Controller
+                    control={formMethods.control}
+                    name='cardExpiredYear'
+                    render={({ field }) => (
+                      <NativeSelect
+                        {...field}
+                        autoComplete='cc-exp-year'
+                        label='Yıl'
+                        data={[
+                          { label: 'Yıl', value: '' },
+                          ...cardExpiredYearList(),
+                        ]}
+                        error={
+                          !!formMethods.formState.errors.cardExpiredYear
+                            ? formMethods.formState.errors.cardExpiredYear
+                                .message
+                            : null
+                        }
+                      />
+                    )}
                   />
-                )}
-              />
 
-              <Controller
-                control={formMethods.control}
-                name='cardCvv'
-                defaultValue=''
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    maxLength={
-                      cardValidation.number(formMethods.watch('cardNumber'))
-                        .card?.code.size || 3
-                    }
-                    label='CVV'
-                    placeholder='CVV'
-                    error={
-                      !!formMethods.formState.errors.cardCvv
-                        ? formMethods.formState.errors.cardCvv.message
-                        : null
-                    }
+                  <Controller
+                    control={formMethods.control}
+                    name='cardCvv'
+                    defaultValue=''
+                    render={({ field }) => (
+                      <TextInput
+                        {...field}
+                        maxLength={
+                          cardValidation.number(formMethods.watch('cardNumber'))
+                            .card?.code.size || 3
+                        }
+                        label='CVV'
+                        placeholder='CVV'
+                        error={
+                          !!formMethods.formState.errors.cardCvv
+                            ? formMethods.formState.errors.cardCvv.message
+                            : null
+                        }
+                      />
+                    )}
                   />
-                )}
-              />
+                </div>
+              </div>
+              <div className='pt-5'>
+                <Text fz={'xs'} mb={0} className='text-gray-600'>
+                  Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
+                </Text>
+                <UnstyledButton
+                  type='button'
+                  onClick={openInstallmentTableModal}
+                  className='text-xs text-blue-800'
+                >
+                  Taksit Tablosu
+                </UnstyledButton>
+              </div>
             </div>
-          </div>
-          <div className='text-end'>
-            <UnstyledButton
-              type='button'
-              onClick={openInstallmentTableModal}
-              className='text-sm text-orange-600'
-            >
-              Kartlara Göre Taksit Tablosu
-            </UnstyledButton>
+            <div className='hidden ps-10 sm:block'>
+              <div className='flex items-center gap-5'>
+                <div>
+                  <NextImage
+                    src={threedImage}
+                    width={63}
+                    height={29}
+                    alt='3D Güvenli Ödeme Sistemi'
+                  />
+                </div>
+                <div className='leading-none'>
+                  <div className='text-xs text-gray-600'>
+                    3D Güvenli Ödeme Sistemi
+                  </div>
+                  <strong>GÜVENLİ ALIŞVERİŞ</strong>
+                </div>
+              </div>
+              <div className='py-5 text-xs text-gray-600'>
+                Paraflytravel.com üzerinden yapılan işlemler, Google Trust
+                Services koruması altındadır.
+              </div>
+              <div>
+                <Group>
+                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                    <RiVisaLine size={24} color='#1434CB' />
+                  </div>
+                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                    <MasterCardLogo size={20} />
+                  </div>
+                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                    <GrAmex size={24} color='#1174CB' />
+                  </div>
+                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                    <TroyCardLogo />
+                  </div>
+                </Group>
+              </div>
+            </div>
           </div>
           {installmentTableSelectOptions.current &&
             installmentTableSelectOptions.current.length > 0 && (
@@ -311,18 +430,48 @@ const PaymentPage = () => {
               </div>
             )}
         </CheckoutCard>
+        {!checkoutQueryMemoData.viewBag.HotelCancelWarrantyPriceStatusModel
+          .hotelWarrantyDiscountSelected && (
+          <CheckoutCard>
+            <Coupon
+              loading={
+                revokeCouponMutation.isPending || applyCouponMutation.isPending
+              }
+              isCouponUsed={isCouponUsed}
+              onRevoke={handleCouponActions}
+              onCouponSubmit={handleCouponActions}
+            />
+          </CheckoutCard>
+        )}
 
         <CheckoutCard>
+          <Text className='py-5 text-center md:px-10' fz={'sm'}>
+            Ödemeyi tamamla butonuna tıkladığımda{' '}
+            <span className='text-blue-800'>Mesafeli Satış Sözleşmesini</span>
+             ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
+             okuduğumu ve kabul ettiğimi onaylıyorum.
+          </Text>
           <div className='flex justify-center'>
             {checkoutQueryMemoData ? (
-              <div className='flex gap-3'>
-                <div>
-                  <div className='text-sm'>Toplam Tutar</div>
-                  <div className='pt-1 text-lg font-semibold'>
-                    {formatCurrency(
+              <div className='flex flex-col gap-3'>
+                <div className='flex items-center gap-3'>
+                  <div className='text-sm'>Ödenecek Tutar:</div>
+                  <div className='text-xl font-semibold'>
+                    {/* {formatCurrency(
                       checkoutQueryMemoData.viewBag.SummaryViewDataResponser
                         .summaryResponse.totalPrice
-                    )}
+                    )} */}
+                    <NumberFlow
+                      format={{
+                        style: 'currency',
+                        currency: 'TRY',
+                        currencyDisplay: 'narrowSymbol',
+                      }}
+                      value={
+                        checkoutQueryMemoData.viewBag.SummaryViewDataResponser
+                          .summaryResponse.totalPrice ?? 0
+                      }
+                    />
                   </div>
                 </div>
                 <Button
@@ -330,7 +479,7 @@ const PaymentPage = () => {
                   type='submit'
                   // disabled={!isSubmittable}
                 >
-                  Ödeme Yap
+                  Ödemeyi Tamamla
                 </Button>
               </div>
             ) : null}

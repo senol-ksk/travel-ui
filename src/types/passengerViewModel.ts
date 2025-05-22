@@ -514,126 +514,128 @@ export enum FlightPassengerTypes {
   Child,
   Infant,
 }
-export interface FlightReservationSummary {
-  flightList: {
-    flightFareInfo: {
-      flightDetailKeys: string[]
-      groupId: 0 | 1
-      key: string
-      totalPrice: ServicePriceType
-      basePrice: ServicePriceType
-      taxes: ServicePriceType
-      discount: ServicePriceType
-      buyFee: ServiceFeePriceType
-      fee: ServiceFeePriceType
-      passengerPrices: {
-        unitPrice: ServicePriceType
-        unitBasePrice: ServicePriceType
-        unitFee: ServiceFeePriceType
-        unitTax: ServicePriceType
-        cancelPenalty: null
-        changePenalty: null
-        passengers: {
-          key: string
-          name: null
-          passengerType: number
-          age: number
-          birthday: string
-          gender: number
-        }[]
-        taxInfos: {
-          key: string
-          value: string
-        }[]
-        serviceCharges: null
+export interface FlightReservationFlightList {
+  flightFareInfo: {
+    flightDetailKeys: string[]
+    groupId: 0 | 1
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
       }[]
-      taxInfos: null
+      taxInfos: {
+        key: string
+        value: string
+      }[]
       serviceCharges: null
-    }
-    flightDetail: {
-      key: string
-      groupId: 0 | 1
-      flightSegmentKeys: string[]
-      travelTime: string
-      direction: number
-      isDomestic: boolean
-      isOWCCombinable: boolean
-      isPromotional: boolean
-      reservable: boolean
-      freeVolatileData: {
-        data: string
-        OfferID: string
-        Owner: string
-        ResponseID: string
-        brandname: string
-        Seq: string
-        SegmentRefs: string
-        PassengerList: string
-        StandartSeatSelection: boolean
-        AllSeatSelection: boolean
-        FreeSandwich: boolean
-        Entertainment: boolean
-        FlexibleReturnChangeRight: boolean
-      }
-    }
-    flightSegments: {
-      key: string
-      groupId: 0 | 1
-      origin: {
-        code: string
-        isDomestic: boolean
-        iata: null
-        type: number
-        id: ID
-      }
-      destination: {
-        code: string
-        isDomestic: boolean
-        iata: null
-        type: number
-        id: ID
-      }
-      departureTime: string
-      arrivalTime: string
-      flightTime: string
-      operatingAirline: {
-        code: number
-        value: null
-        countryCode: null
-      }
-      marketingAirline: {
-        code: string
-        value: null
-        countryCode: null
-      }
-      flightNumber: string
-      cabinClass: number
-      bookingCode: string
-      equipment: null
-      isMeal: boolean
-      quota: number
-      baggageAllowance: {
-        maxWeight: {
-          value: number
-          unit: number
-        }
-        piece: {
-          pieceCount: number
-        }
-      }
-      freeVolatileData: {
-        ResBookDesigID: {
-          SeatsLeft: number
-          SeatsLeftSpecified: boolean
-          Value: string
-        }
-        ResBookDesigCode: string
-        Baggage: string
-        BrandName: string
-        Seq: string
-      }
     }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  flightDetail: {
+    key: string
+    groupId: 0 | 1
+    flightSegmentKeys: string[]
+    travelTime: string
+    direction: number
+    isDomestic: boolean
+    isOWCCombinable: boolean
+    isPromotional: boolean
+    reservable: boolean
+    freeVolatileData: {
+      data: string
+      OfferID: string
+      Owner: string
+      ResponseID: string
+      BrandName: string | null
+      brandname: string | null
+      Seq: string
+      SegmentRefs: string
+      PassengerList: string
+      StandartSeatSelection: boolean
+      AllSeatSelection: boolean
+      FreeSandwich: boolean
+      Entertainment: boolean
+      FlexibleReturnChangeRight: boolean
+    }
+  }
+  flightSegments: {
+    key: string
+    groupId: 0 | 1
+    origin: {
+      code: string
+      isDomestic: boolean
+      iata: null
+      type: number
+      id: ID
+    }
+    destination: {
+      code: string
+      isDomestic: boolean
+      iata: null
+      type: number
+      id: ID
+    }
+    departureTime: string
+    arrivalTime: string
+    flightTime: string
+    operatingAirline: {
+      code: number
+      value: null
+      countryCode: null
+    }
+    marketingAirline: {
+      code: string
+      value: null
+      countryCode: null
+    }
+    flightNumber: string
+    cabinClass: number
+    bookingCode: string
+    equipment: null
+    isMeal: boolean
+    quota: number
+    baggageAllowance: {
+      maxWeight: {
+        value: number
+        unit: number
+      }
+      piece: {
+        pieceCount: number
+      }
+    }
+    freeVolatileData: {
+      ResBookDesigID: {
+        SeatsLeft: number
+        SeatsLeftSpecified: boolean
+        Value: string
+      }
+      ResBookDesigCode: string
+      Baggage: string
+      BrandName: string
+      Seq: string
+    }
   }[]
+}
+export interface FlightReservationSummary {
+  flightList: FlightReservationFlightList[]
   flightFareInfo: {
     flightDetailKeys: null
     groupId: 0 | 1 | 2

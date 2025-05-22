@@ -152,11 +152,13 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                     </div>
                   </div>
                   <div>
-                    <div className='text-xl leading-none font-semibold'>
+                    <div className='relative text-xl leading-none font-semibold'>
                       {lastArrivalTime.format('HH:mm')}
 
                       {arrivalIsAfter && (
-                        <sup className='text-red-700'> +1</sup>
+                        <sup className='absolute -end-4 -top-2 text-xs leading-none font-normal text-red-700'>
+                          +1
+                        </sup>
                       )}
                     </div>
                     <div className='text-center'>
@@ -175,8 +177,8 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         </div>
         <div>
           <Button
-            type='button'
             onClick={onSelect}
+            type='button'
             fullWidth
             size='md'
             rightSection={<FaAngleRight size={12} />}

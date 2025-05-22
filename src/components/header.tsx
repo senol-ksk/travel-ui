@@ -45,11 +45,10 @@ export const Header = () => {
           <Link href='/'>
             <Image
               src='/logo.png'
-              width={152}
+              width={118}
               height={41}
-              alt='Fulltrip'
+              alt='Paraflytravel'
               priority
-              style={{ width: 152, height: 41 }}
             />
           </Link>
 
@@ -84,9 +83,9 @@ export const Header = () => {
                 ))
               )}
             </div>
-            <Anchor component={Link} href='/kampanyalar'>
+            {/* <Anchor component={Link} href='/kampanyalar'>
               Kampanyalar
-            </Anchor>
+            </Anchor> */}
             <div className='ms-auto flex items-center gap-5'>
               <Menu>
                 <Menu.Target>
