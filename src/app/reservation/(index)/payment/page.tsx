@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
+import { notifications } from '@mantine/notifications'
 
 import NextImage from 'next/image'
 import { GrAmex } from 'react-icons/gr'
@@ -39,6 +40,10 @@ import { CheckoutCard } from '@/components/card'
 import threedImage from './threed-info.png'
 import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
 import { RiVisaLine } from 'react-icons/ri'
+import { Coupon } from '../../components/coupon'
+import { useCouponQuery } from '../useCouponQuery'
+import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
+import NumberFlow from '@number-flow/react'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -95,7 +100,7 @@ const PaymentPage = () => {
   const moduleName = useMemo(
     () => checkoutQueryMemoData?.viewBag.ModuleName,
     [checkoutQueryMemoData?.viewBag.ModuleName]
-  )
+  ) as ProductPassengerApiResponseModel['viewBag']['ModuleName']
 
   const paymentMutation = useMutation<
     PaymentResponeType | null | undefined,
@@ -140,6 +145,8 @@ const PaymentPage = () => {
       totalAmount: number
     }[]
   >(null)
+  const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
+
   const listenCardNumberChange = (data: string) => {
     if (!data || data.length < 6 || !checkoutQueryMemoData) {
       installmentTableSelectOptions.current = null
@@ -158,6 +165,19 @@ const PaymentPage = () => {
       threeDformRef.current?.submit()
     }
   }, [paymentMutation.data, paymentMutation.isSuccess])
+  const isCouponUsed = useMemo(
+    () =>
+      Array.isArray(
+        checkoutQueryMemoData?.viewBag.SummaryViewDataResponser.summaryResponse
+          .couponDiscountList
+      ) &&
+      checkoutQueryMemoData?.viewBag.SummaryViewDataResponser.summaryResponse
+        .couponDiscountList.length > 0,
+    [
+      checkoutQueryMemoData?.viewBag.SummaryViewDataResponser.summaryResponse
+        .couponDiscountList,
+    ]
+  )
 
   if (checkoutQuery.isLoading) {
     return (
@@ -175,6 +195,50 @@ const PaymentPage = () => {
   const firstPassengerFullName = passengerData?.childNodes[0].items[0].value
     ? `${upperFirst(passengerData?.childNodes[0].items[0].value.firstName.toLocaleLowerCase())} ${upperFirst(passengerData?.childNodes[0].items[0].value.lastName.toLocaleLowerCase())}`
     : `${upperFirst(passengerData?.childNodes[0]?.childNodes?.at(0)?.items.at(0)?.value?.firstName?.toLowerCase() ?? '')} ${upperFirst(passengerData?.childNodes[0].childNodes.at(0)?.items.at(0)?.value.lastName.toLocaleLowerCase() ?? '')}`
+
+  const handleCouponActions = async (promotionText?: string) => {
+    if (promotionText && !isCouponUsed) {
+      const applyResponse = await applyCouponMutation.mutateAsync({
+        promotionText,
+        moduleName,
+      })
+
+      if (applyResponse?.success) {
+        notifications.show({
+          title: 'Tebrikler!',
+          message: (
+            <div>
+              <span className='font-semibold underline'>
+                {applyResponse?.data?.discountPrice.value
+                  ? formatCurrency(applyResponse?.data?.discountPrice.value)
+                  : null}
+              </span>{' '}
+              indirim uygulandı.
+            </div>
+          ),
+          withCloseButton: true,
+          autoClose: 5000,
+          position: 'top-center',
+          color: 'green',
+          classNames: {
+            root: 'bg-green-200',
+            description: 'text-black',
+          },
+        })
+      }
+    }
+
+    if (isCouponUsed) {
+      const revokeResponse = await revokeCouponMutation.mutateAsync({
+        moduleName,
+      })
+
+      if (revokeResponse?.success) {
+      }
+    }
+
+    checkoutQuery.refetch()
+  }
 
   if (!reservationData || !queryStrings.productKey)
     return <div>Hata olustu</div>
@@ -366,6 +430,19 @@ const PaymentPage = () => {
               </div>
             )}
         </CheckoutCard>
+        {!checkoutQueryMemoData.viewBag.HotelCancelWarrantyPriceStatusModel
+          .hotelWarrantyDiscountSelected && (
+          <CheckoutCard>
+            <Coupon
+              loading={
+                revokeCouponMutation.isPending || applyCouponMutation.isPending
+              }
+              isCouponUsed={isCouponUsed}
+              onRevoke={handleCouponActions}
+              onCouponSubmit={handleCouponActions}
+            />
+          </CheckoutCard>
+        )}
 
         <CheckoutCard>
           <Text className='py-5 text-center md:px-10' fz={'sm'}>
@@ -380,10 +457,21 @@ const PaymentPage = () => {
                 <div className='flex items-center gap-3'>
                   <div className='text-sm'>Ödenecek Tutar:</div>
                   <div className='text-xl font-semibold'>
-                    {formatCurrency(
+                    {/* {formatCurrency(
                       checkoutQueryMemoData.viewBag.SummaryViewDataResponser
                         .summaryResponse.totalPrice
-                    )}
+                    )} */}
+                    <NumberFlow
+                      format={{
+                        style: 'currency',
+                        currency: 'TRY',
+                        currencyDisplay: 'narrowSymbol',
+                      }}
+                      value={
+                        checkoutQueryMemoData.viewBag.SummaryViewDataResponser
+                          .summaryResponse.totalPrice ?? 0
+                      }
+                    />
                   </div>
                 </div>
                 <Button

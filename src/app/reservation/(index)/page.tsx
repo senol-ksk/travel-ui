@@ -1,6 +1,5 @@
 'use client'
 import 'intl-tel-input/styles'
-import { notifications } from '@mantine/notifications'
 
 import { useRouter } from 'next/navigation'
 import {
@@ -48,13 +47,12 @@ import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { CheckoutCard } from '@/components/card'
 import { reservationParsers } from '../searchParams'
 import { HotelPassengerInformationForm } from '@/components/checkout/hotel/passengers'
-import { FlightSummary } from '../components/flight/summary'
+
 import { BillingForm } from '../components/billing'
-import { Coupon } from '../components/coupon'
-import { useCouponQuery } from './useCouponQuery'
+
 import { useMemo } from 'react'
 import NumberFlow from '@number-flow/react'
-import { formatCurrency } from '@/libs/util'
+
 import { FlightOptionalServices } from '@/app/reservation/(index)/flight-optional-services'
 import { TravelInsurancePackages } from './travel-insurance'
 import { EarlyReservationInsurance } from './hotel/insurance-options'
@@ -80,8 +78,7 @@ export default function CheckoutPage() {
   const router = useRouter()
   const [queryStrings] = useQueryStates(reservationParsers)
 
-  const { checkoutDataQuery, partialPaymentMutation } = useCheckoutMethods()
-  const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
+  const { checkoutDataQuery } = useCheckoutMethods()
 
   const checkQueryData = useMemo(
     () => checkoutDataQuery?.data,
@@ -101,20 +98,6 @@ export default function CheckoutPage() {
     () => checkoutDataQuery.data?.data?.viewBag.ModuleName,
     [checkoutDataQuery.data?.data?.viewBag.ModuleName]
   ) as ProductPassengerApiResponseModel['viewBag']['ModuleName']
-
-  const isCouponUsed = useMemo(
-    () =>
-      Array.isArray(
-        checkQueryData?.data?.viewBag.SummaryViewDataResponser.summaryResponse
-          .couponDiscountList
-      ) &&
-      checkQueryData.data?.viewBag.SummaryViewDataResponser.summaryResponse
-        .couponDiscountList.length > 0,
-    [
-      checkQueryData?.data?.viewBag.SummaryViewDataResponser.summaryResponse
-        .couponDiscountList,
-    ]
-  )
 
   const initCheckoutMutation = useMutation({
     mutationFn: (data: CheckoutSchemaMergedFieldTypes) => {
@@ -141,50 +124,6 @@ export default function CheckoutPage() {
     () => checkQueryData?.data?.treeContainer.childNodes,
     [checkQueryData?.data?.treeContainer.childNodes]
   )
-
-  const handleCouponActions = async (promotionText?: string) => {
-    if (promotionText && !isCouponUsed) {
-      const applyResponse = await applyCouponMutation.mutateAsync({
-        promotionText,
-        moduleName,
-      })
-
-      if (applyResponse?.success) {
-        notifications.show({
-          title: 'Tebrikler!',
-          message: (
-            <div>
-              <span className='font-semibold underline'>
-                {applyResponse?.data?.discountPrice.value
-                  ? formatCurrency(applyResponse?.data?.discountPrice.value)
-                  : null}
-              </span>{' '}
-              indirim uygulandı.
-            </div>
-          ),
-          withCloseButton: true,
-          autoClose: 5000,
-          position: 'top-center',
-          color: 'green',
-          classNames: {
-            root: 'bg-green-200',
-            description: 'text-black',
-          },
-        })
-      }
-    }
-
-    if (isCouponUsed) {
-      const revokeResponse = await revokeCouponMutation.mutateAsync({
-        moduleName,
-      })
-
-      if (revokeResponse?.success) {
-      }
-    }
-
-    checkoutDataQuery.refetch()
-  }
 
   if (checkoutDataQuery.isLoading) {
     return (
@@ -575,20 +514,6 @@ export default function CheckoutPage() {
           {/*  */}
           {/* Tour extra and optional services */}
 
-          {!checkQueryData.data.viewBag.HotelCancelWarrantyPriceStatusModel
-            .hotelWarrantyDiscountSelected && (
-            <CheckoutCard>
-              <Coupon
-                loading={
-                  revokeCouponMutation.isPending ||
-                  applyCouponMutation.isPending
-                }
-                isCouponUsed={isCouponUsed}
-                onRevoke={handleCouponActions}
-                onCouponSubmit={handleCouponActions}
-              />
-            </CheckoutCard>
-          )}
           {moduleName.toLowerCase() === 'hotel' &&
             checkQueryData?.data?.viewBag.HotelCancelWarrantyPriceStatusModel &&
             checkQueryData?.data?.viewBag.HotelCancelWarrantyPriceStatusModel

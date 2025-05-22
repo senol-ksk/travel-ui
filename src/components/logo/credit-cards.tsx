@@ -9,7 +9,7 @@ export const MasterCardLogo = ({
     width={size}
     height={size}
     viewBox='0 0 999.2 776'
-    enable-background='new 0 0 999.2 776'
+    enableBackground='new 0 0 999.2 776'
   >
     <path
       d='M181.1,774.3v-51.5c0-19.7-12-32.6-32.6-32.6
