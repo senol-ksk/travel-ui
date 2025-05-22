@@ -21,11 +21,10 @@ const Footer = async () => {
             <Link href='/'>
               <Image
                 src='/logo.png'
-                width={152}
+                width={118}
                 height={41}
-                alt='Fulltrip'
+                alt='Paraflytravel'
                 priority
-                style={{ width: 152, height: 41 }}
               />
             </Link>
           </div>
@@ -74,7 +73,7 @@ const Footer = async () => {
       </Container>
       <div className='py-6 text-center text-sm'>
         &copy; 2017 - {new Date().getFullYear()} Tüm hakları saklıdır.
-        Fulltrip.com
+        paraflytravel.com
       </div>
     </footer>
   )
