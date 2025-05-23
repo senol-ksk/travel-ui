@@ -70,7 +70,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
             >
               <div className='start-0-0 absolute top-1/2 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400' />
               <div className='flex justify-between'>
-                <div className='flex gap-3 text-sm'>
+                <div className='flex items-center gap-3 text-sm'>
                   <div>
                     <AirlineLogo
                       airlineCode={relatedSegment[0].marketingAirline.code}

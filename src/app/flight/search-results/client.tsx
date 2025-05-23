@@ -44,7 +44,11 @@ import {
 import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results/domestic-flight'
 import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
 
-import { filterParsers, SortOrderEnums } from '@/modules/flight/searchParams'
+import {
+  filterParsers,
+  flightSearchParams,
+  SortOrderEnums,
+} from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { DrawerFlight } from './components/drawer-flight'
@@ -77,21 +81,7 @@ const FlightSearchView = () => {
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
-
-  const [, setDepartureDateQueryParam] = useQueryState(
-    'departureDate',
-    parseAsIsoDate.withOptions({
-      history: 'replace', // Trying to replace history entry but its not working
-      shallow: false, // doesn't matter whether or not !
-    })
-  )
-  const [, setReturnDateQueryParam] = useQueryState(
-    'returnDate',
-    parseAsIsoDate.withOptions({
-      history: 'replace', // Trying to replace history entry but its not working !
-      shallow: false, //  doesn't matter whether or not !
-    })
-  )
+  const [_, setSearchParamsFlight] = useQueryStates(flightSearchParams)
 
   const handlePrevDay = () => {
     // default go and return dates on searchParams
@@ -120,7 +110,9 @@ const FlightSearchView = () => {
       }
 
       // all of everything is okey... just return date can update.
-      setReturnDateQueryParam(potantielPrevReturnDateDayjs.toDate())
+      setSearchParamsFlight({
+        returnDate: potantielPrevReturnDateDayjs.toDate(),
+      })
     } else if (departureDate) {
       const currentDepartureDateDayjs = dayjs(departureDate)
       const potentialPrevDepartureDateDayjs =
@@ -130,7 +122,10 @@ const FlightSearchView = () => {
       if (potentialPrevDepartureDateDayjs.isBefore(today)) {
         return
       }
-      setDepartureDateQueryParam(potentialPrevDepartureDateDayjs.toDate())
+      const DepartureDate = potentialPrevDepartureDateDayjs.toDate()
+      const updates: { departureDate: Date; returnDate?: Date } = {
+        departureDate: DepartureDate,
+      }
 
       // if go flight and return flight are after or before the return date ,
       // return date will be updated to one day after go date
@@ -138,11 +133,11 @@ const FlightSearchView = () => {
         returnDate &&
         potentialPrevDepartureDateDayjs.isSameOrAfter(dayjs(returnDate), 'day')
       ) {
-        const newReturnDateAdjusted = potentialPrevDepartureDateDayjs
+        updates.returnDate = potentialPrevDepartureDateDayjs
           .add(1, 'day')
           .toDate()
-        setReturnDateQueryParam(newReturnDateAdjusted)
       }
+      setSearchParamsFlight(updates)
     }
   }
 
@@ -151,22 +146,24 @@ const FlightSearchView = () => {
 
     if (isReturnFlightVisible && returnDate) {
       const nextReturnDate = dayjs(returnDate).add(1, 'day').toDate()
-      setReturnDateQueryParam(nextReturnDate)
+      setSearchParamsFlight({ returnDate: nextReturnDate })
     } else if (departureDate) {
-      const nextDepartureDate = dayjs(departureDate).add(1, 'day').toDate()
-      setDepartureDateQueryParam(nextDepartureDate)
+      const nextDepartureDateAsDayjs = dayjs(departureDate).add(1, 'day')
+
+      const DepartureDate = nextDepartureDateAsDayjs.toDate()
+      const updates: { departureDate: Date; returnDate?: Date } = {
+        departureDate: DepartureDate,
+      }
 
       // if go flight and return flight are after or before the return date ,
       // return date will be updated to one day after go date
       if (
         returnDate &&
-        dayjs(nextDepartureDate).isSameOrAfter(dayjs(returnDate), 'day')
+        nextDepartureDateAsDayjs.isSameOrAfter(dayjs(returnDate), 'day')
       ) {
-        const newReturnDateAdjusted = dayjs(nextDepartureDate)
-          .add(1, 'day')
-          .toDate()
-        setReturnDateQueryParam(newReturnDateAdjusted)
+        updates.returnDate = nextDepartureDateAsDayjs.add(1, 'day').toDate()
       }
+      setSearchParamsFlight(updates)
     }
   }
 
@@ -653,18 +650,18 @@ const FlightSearchView = () => {
                 )
               ) : null
             ) : null}
-            <div className='flex items-center gap-2 md:gap-4 md:p-3'>
+            <div className='flex items-center justify-between gap-2 rounded border text-center md:gap-4 md:p-2'>
               <Button
                 size='md'
-                variant='outline'
-                className='flex items-center gap-2 border-gray-300'
+                variant='subtle'
+                className='flex items-center gap-2'
                 onClick={handlePrevDay}
               >
                 <MdKeyboardArrowLeft size={18} />
                 <span>Önceki gün</span>
               </Button>
 
-              <div className='flex-grow rounded border py-2 text-center'>
+              <div className=''>
                 {(() => {
                   const calendarDate =
                     isReturnFlightVisible && returnDate
@@ -678,8 +675,8 @@ const FlightSearchView = () => {
 
               <Button
                 size='md'
-                variant='outline'
-                className='flex items-center gap-2 border-gray-300'
+                variant='subtle'
+                className='flex items-center gap-2'
                 onClick={handleNextDay}
               >
                 <span>Sonraki gün</span>
