@@ -8,7 +8,7 @@
     "dev-https-inspect": "NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_OPTIONS='--inspect' next dev --experimental-https --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "prepare": "husky",
+    "prepare": "husky && pnpm run theme",
     "test:watch": "vitest",
     "test:staged": "vitest --run",
     "lint": "next lint",

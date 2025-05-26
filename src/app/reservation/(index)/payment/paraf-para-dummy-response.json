@@ -1,0 +1,138 @@
+{
+  "data": {
+    "cardNumber": "5426940000788721",
+    "bonus": 654.72,
+    "advance": 5000.0,
+    "multiplier": 3.0,
+    "remainingFund": 42002.66,
+    "mileCode": "PC",
+    "calculatedBonus": {
+      "multiplier": 3.0,
+      "award": 1602.48,
+      "bonus": 534.16,
+      "advance": 0.0,
+      "remaining": 0.0
+    },
+    "total": 1602.48,
+    "tax": 612.14,
+    "moduleName": "Flight",
+    "calculatedInstalmentList": {
+      "installmentInfoList": [
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 1,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.0,
+          "binList": "526290,537500,535241,526289,552879,543081,540435,521378,536503,542694,527284,510056"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 1,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.0,
+          "binList": "421030,447505,401049,415515,466260,451454,478551,499821,498852,492095,492094,415514,423480,456944,416607"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 1,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.0,
+          "binList": "979212,979238,979210,979244,979282,979245,979244,97921020"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 2,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.04,
+          "binList": "526290,537500,535241,526289,552879,543081,540435,521378,536503,542694,527284,510056"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 2,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.04,
+          "binList": "421030,447505,401049,415515,466260,451454,478551,499821,498852,492095,492094,415514,423480,456944,416607"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 2,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.04,
+          "binList": "979212,979238,979210,979244,979282,979245,979244,97921020"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 4,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.08,
+          "binList": "526290,537500,535241,526289,552879,543081,540435,521378,536503,542694,527284,510056"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 4,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.08,
+          "binList": "421030,447505,401049,415515,466260,451454,478551,499821,498852,492095,492094,415514,423480,456944,416607"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 4,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.08,
+          "binList": "979212,979238,979210,979244,979282,979245,979244,97921020"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 6,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.12,
+          "binList": "526290,537500,535241,526289,552879,543081,540435,521378,536503,542694,527284,510056"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 6,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.12,
+          "binList": "421030,447505,401049,415515,466260,451454,478551,499821,498852,492095,492094,415514,423480,456944,416607"
+        },
+        {
+          "totalAmount": 0.0,
+          "amountPerInstallment": 0.0,
+          "installmentCount": 6,
+          "bankName": "HALKBANK",
+          "cardProgramName": "Classic",
+          "interestRate": 0.12,
+          "binList": "979212,979238,979210,979244,979282,979245,979244,97921020"
+        }
+      ],
+      "installmentType": 1
+    }
+  },
+  "success": true,
+  "statusCode": 0,
+  "message": null,
+  "errors": null,
+  "validModelState": null
+}

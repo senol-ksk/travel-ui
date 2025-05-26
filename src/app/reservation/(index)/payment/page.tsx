@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
@@ -17,6 +17,7 @@ import {
   NativeSelect,
   Skeleton,
   Stack,
+  Switch,
   Text,
   TextInput,
   UnstyledButton,
@@ -32,7 +33,10 @@ import { formatCreditCard } from 'cleave-zen'
 import { formatCurrency, yearList } from '@/libs/util'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
-import { PaymentResponeType } from '@/app/reservation/types'
+import {
+  ParafParaPaymentResponse,
+  PaymentResponseType,
+} from '@/app/reservation/types'
 import { reservationParsers } from '@/app/reservation/searchParams'
 
 import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
@@ -85,6 +89,8 @@ const PaymentPage = () => {
     isOpenInstallmentTable,
     { open: openInstallmentTableModal, close: closeInstallmentTableModal },
   ] = useDisclosure(false)
+  const [isPrivilegeCardCheck, setIsPrivilegeCardCheck] = useState(false)
+
   const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
   })
@@ -103,7 +109,7 @@ const PaymentPage = () => {
   ) as ProductPassengerApiResponseModel['viewBag']['ModuleName']
 
   const paymentMutation = useMutation<
-    PaymentResponeType | null | undefined,
+    PaymentResponseType | null | undefined,
     null,
     CardValidationSchemaTypes
   >({
@@ -111,9 +117,11 @@ const PaymentPage = () => {
     mutationFn: async (data) => {
       const threedCallbackURL = `${window.location.origin}/reservation/callback/api`
 
-      const paymentResponse = await serviceRequest<PaymentResponeType>({
+      const paymentResponse = await serviceRequest<PaymentResponseType>({
         axiosOptions: {
-          url: `api/payment/initProcess`,
+          url: isPrivilegeCardCheck
+            ? 'api/payment/privilegeCardHandler'
+            : `api/payment/initProcess`,
           method: 'post',
           data: {
             ...data,
@@ -127,6 +135,7 @@ const PaymentPage = () => {
             productKey: queryStrings.productKey,
             reservable: checkoutQueryMemoData?.viewBag.Reservable ?? 0,
             installment: formMethods.getValues('installment'),
+            useBonus: isPrivilegeCardCheck,
             moduleName,
           },
         },
@@ -135,6 +144,32 @@ const PaymentPage = () => {
       return paymentResponse?.data
     },
   })
+  const handlePrivilegedCardMutation = useMutation({
+    mutationFn: async (data: CardValidationSchemaTypes) => {
+      const paymentResponse = await serviceRequest<ParafParaPaymentResponse>({
+        axiosOptions: {
+          url: 'api/payment/privilegeCardHandler',
+          method: 'post',
+          data: {
+            ...data,
+            cardNumber: data.cardNumber?.replaceAll(' ', ''),
+            billingInfo: checkoutQueryMemoData?.paymentIndexModel.billingInfo,
+            threeDFailureURL: `${window.location.origin}/reservation/error/api`,
+            searchToken: queryStrings.searchToken,
+            sessionToken: queryStrings.sessionToken,
+            productKey: queryStrings.productKey,
+            reservable: checkoutQueryMemoData?.viewBag.Reservable ?? 0,
+            installment: formMethods.getValues('installment'),
+            useBonus: true,
+            moduleName,
+          },
+        },
+      })
+
+      return paymentResponse?.data
+    },
+  })
+
   const installmentTableSelectOptions = useRef<
     {
       amountPerInstallment: number
@@ -247,7 +282,9 @@ const PaymentPage = () => {
     <>
       <form
         onSubmit={formMethods.handleSubmit((data) => {
-          paymentMutation.mutate(data)
+          if (isPrivilegeCardCheck) {
+            handlePrivilegedCardMutation.mutate(data)
+          } else paymentMutation.mutate(data)
         })}
         className='relative grid gap-3 md:gap-5'
       >
@@ -256,6 +293,12 @@ const PaymentPage = () => {
         <CheckoutCard title={'Ödeme Bilgileri'}>
           <div className='grid items-center gap-3 sm:grid-cols-2'>
             <div>
+              <Switch
+                label='ParafPara İLE ÖDE'
+                onChange={(event) =>
+                  setIsPrivilegeCardCheck(event.currentTarget.checked)
+                }
+              />
               <div className='grid w-full gap-3'>
                 <Controller
                   control={formMethods.control}
@@ -417,6 +460,11 @@ const PaymentPage = () => {
               </div>
             </div>
           </div>
+          {isPrivilegeCardCheck && (
+            <div>
+              <Button type='submit'>ParafPara Sorgula</Button>
+            </div>
+          )}
           {installmentTableSelectOptions.current &&
             installmentTableSelectOptions.current.length > 0 && (
               <div>
@@ -457,10 +505,6 @@ const PaymentPage = () => {
                 <div className='flex items-center gap-3'>
                   <div className='text-sm'>Ödenecek Tutar:</div>
                   <div className='text-xl font-semibold'>
-                    {/* {formatCurrency(
-                      checkoutQueryMemoData.viewBag.SummaryViewDataResponser
-                        .summaryResponse.totalPrice
-                    )} */}
                     <NumberFlow
                       format={{
                         style: 'currency',
@@ -474,11 +518,7 @@ const PaymentPage = () => {
                     />
                   </div>
                 </div>
-                <Button
-                  size='lg'
-                  type='submit'
-                  // disabled={!isSubmittable}
-                >
+                <Button size='lg' type='submit' disabled={isPrivilegeCardCheck}>
                   Ödemeyi Tamamla
                 </Button>
               </div>
@@ -495,7 +535,7 @@ const PaymentPage = () => {
       >
         {paymentMutation.data && paymentMutation.isSuccess
           ? Object.keys(paymentMutation.data).map((input, index) => {
-              const value = input as keyof PaymentResponeType
+              const value = input as keyof PaymentResponseType
 
               return value !== 'action' ? (
                 <input
