@@ -7,8 +7,6 @@ import {
   useMounted,
   useScrollIntoView,
 } from '@mantine/hooks'
-import { MdKeyboardArrowRight } from 'react-icons/md'
-import { MdKeyboardArrowLeft } from 'react-icons/md'
 import {
   Accordion,
   Alert,
@@ -28,7 +26,7 @@ import {
   Transition,
   UnstyledButton,
 } from '@mantine/core'
-import { useQueryStates, useQueryState, parseAsIsoDate } from 'nuqs'
+import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { GoArrowRight } from 'react-icons/go'
@@ -57,6 +55,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import 'dayjs/locale/tr'
 import { Virtuoso } from 'react-virtuoso'
+import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -81,7 +80,8 @@ const FlightSearchView = () => {
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
-  const [_, setSearchParamsFlight] = useQueryStates(flightSearchParams)
+  const [searchParamsFlight, setSearchParamsFlight] =
+    useQueryStates(flightSearchParams)
 
   const handlePrevDay = () => {
     // default go and return dates on searchParams
@@ -140,6 +140,22 @@ const FlightSearchView = () => {
       setSearchParamsFlight(updates)
     }
   }
+  const handlePrevReturnDay = () => {
+    const { departureDate, returnDate } = searchParams
+    if (!returnDate) return
+    const today = dayjs().startOf('day')
+    const newReturnDate = dayjs(returnDate).subtract(1, 'day')
+    // Yeni dönüş tarihi bugünün öncesi olsmaz
+    if (newReturnDate.isBefore(today)) return
+    // Yeni dönüş tarihi, gidiş tarihinden önce olamaz!!!
+    if (
+      departureDate &&
+      newReturnDate.isSameOrBefore(dayjs(departureDate), 'day')
+    ) {
+      return
+    }
+    setSearchParamsFlight({ returnDate: newReturnDate.toDate() })
+  }
 
   const handleNextDay = () => {
     const { departureDate, returnDate } = searchParams
@@ -167,6 +183,13 @@ const FlightSearchView = () => {
     }
   }
 
+  const handleNextReturnDay = () => {
+    const { returnDate } = searchParams
+    if (!returnDate) return
+    const newReturnDate = dayjs(returnDate).add(1, 'day')
+    setSearchParamsFlight({ returnDate: newReturnDate.toDate() })
+  }
+
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParsers)
   const airlineDataObj = getAirlineByCodeList.data
@@ -187,13 +210,9 @@ const FlightSearchView = () => {
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
 
-  const isDomestic = useMemo(
-    () =>
-      searchQueryData?.every((detailSegment) =>
-        detailSegment?.details.every((detail) => detail.isDomestic)
-      ),
-    [searchQueryData]
-  )
+  const isDomestic =
+    searchParamsFlight.origin?.isDomestic &&
+    searchParamsFlight.destination?.isDomestic
 
   // if true this means Round trip, otherwise international or one way flight
   const tripKind = useMemo(
@@ -650,40 +669,17 @@ const FlightSearchView = () => {
                 )
               ) : null
             ) : null}
-            <div className='flex items-center justify-between gap-2 rounded border text-center md:gap-4 md:p-2'>
-              <Button
-                size='md'
-                variant='subtle'
-                className='flex items-center gap-2'
-                onClick={handlePrevDay}
-              >
-                <MdKeyboardArrowLeft size={18} />
-                <span>Önceki gün</span>
-              </Button>
 
-              <div className=''>
-                {(() => {
-                  const calendarDate =
-                    isReturnFlightVisible && returnDate
-                      ? returnDate
-                      : departureDate
-                  return calendarDate
-                    ? dayjs(calendarDate).format('D MMMM YYYY, ddd')
-                    : ''
-                })()}
-              </div>
-
-              <Button
-                size='md'
-                variant='subtle'
-                className='flex items-center gap-2'
-                onClick={handleNextDay}
-              >
-                <span>Sonraki gün</span>
-                <MdKeyboardArrowRight size={18} />
-              </Button>
-            </div>
-
+            <SearchPrevNextButtons
+              onPrevDay={handlePrevDay}
+              onNextDay={handleNextDay}
+              onPrevReturnDay={handlePrevReturnDay}
+              onNextReturnDay={handleNextReturnDay}
+              departureDate={searchParams.departureDate ?? ''}
+              returnDate={searchParams.returnDate ?? ''}
+              isDomestic={isDomestic ?? false}
+              isReturnFlightVisible={isReturnFlightVisible}
+            />
             <div className='grid gap-3 pt-3 md:gap-5'>
               {!searchResultsQuery.isFetchingNextPage &&
                 isDomestic &&
