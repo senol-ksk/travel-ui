@@ -30,6 +30,7 @@ import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { GoArrowRight } from 'react-icons/go'
+import { PiSuitcaseRolling } from 'react-icons/pi'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -56,6 +57,9 @@ import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import 'dayjs/locale/tr'
 import { Virtuoso } from 'react-virtuoso'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
+import { AirlineLogo } from '@/components/airline-logo'
+import { MdOutlineAirplanemodeActive } from 'react-icons/md'
+import { formatCurrency } from '@/libs/util'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -209,6 +213,18 @@ const FlightSearchView = () => {
     packageDrawerOpened,
     { open: openPackageDrawer, close: closePackageDrawer },
   ] = useDisclosure(false)
+  const departure = dayjs(
+    selectedFlightItemPackages?.flights.at(0)?.segments[0]?.departureTime
+  )
+
+  const arrival = dayjs(
+    selectedFlightItemPackages?.flights.at(0)?.segments.at(-1)?.arrivalTime
+  )
+
+  const duration = dayjs.duration(arrival.diff(departure))
+
+  const hours = duration.hours()
+  const minutes = duration.minutes()
 
   const isDomestic =
     searchParamsFlight.origin?.isDomestic &&
@@ -601,61 +617,148 @@ const FlightSearchView = () => {
               isDomestic ? (
                 isReturnFlightVisible ? (
                   <div>
-                    <div className='pb-3'>
-                      <div className='flex items-center gap-2 text-sm text-gray-600'>
-                        <div className='flex gap-1'>
-                          <span>
-                            {
-                              airlineDataObj
-                                ?.find(
-                                  (airline) =>
-                                    airline.Code ===
+                    <div className='mb-2 text-lg font-medium'>
+                      Gidiş Uçuşu Seçildi
+                    </div>
+                    <div className='@container mb-5 items-center gap-4 rounded-lg bg-blue-100 shadow md:grid md:grid-cols-5 md:py-6'>
+                      <div className='col-span-4 grid gap-4'>
+                        <div className='relative grid p-3 md:grid-cols-3 md:p-5'>
+                          <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-blue-800 md:mt-0' />
+
+                          <div className='flex items-center gap-3 text-sm'>
+                            <div>
+                              <AirlineLogo
+                                airlineCode={
+                                  selectedFlightItemPackages?.flights
+                                    .at(0)
+                                    ?.segments[0]?.marketingAirline.code?.toLowerCase() ??
+                                  ''
+                                }
+                              />
+                            </div>
+                            <div>
+                              <div className='font-medium'>
+                                {
+                                  airlineDataObj
+                                    ?.find(
+                                      (airline) =>
+                                        airline.Code ===
+                                        selectedFlightItemPackages?.flights.at(
+                                          0
+                                        )?.segments[0]?.marketingAirline.code
+                                    )
+                                    ?.Value.find(
+                                      (val) => val.LangCode === 'tr_TR'
+                                    )?.Value
+                                }
+                              </div>
+                              <div className='md:text-md flex items-center gap-1 text-xs'>
+                                <PiSuitcaseRolling />
+                                8kg El Bagajı
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className='relative col-span-2 grid'>
+                            <div className='mt-3 flex items-center justify-between text-sm text-gray-600 md:mt-0'>
+                              <div className='text-center'>
+                                <div className='text-xl font-semibold'>
+                                  {dayjs(
                                     selectedFlightItemPackages?.flights.at(0)
-                                      ?.segments[0].marketingAirline.code
-                                )
-                                ?.Value.find((val) => val.LangCode === 'tr_TR')
-                                ?.Value
-                            }
-                          </span>
-                          <span className='underline'>
-                            {dayjs(
-                              selectedFlightItemPackages?.flights
-                                .at(0)
-                                ?.segments.at(0)?.departureTime
-                            ).format('ddd DD, HH:mm')}
-                          </span>
-                        </div>
-                        <div>
-                          <GoArrowRight />
-                        </div>
-                        <div>
-                          {
-                            selectedFlightItemPackages?.flights.at(0)
-                              ?.segments[0].origin.code
-                          }
-                        </div>
-                        <div>
-                          <IoAirplaneSharp />
-                        </div>
-                        <div>
-                          {
-                            selectedFlightItemPackages?.flights
-                              .at(0)
-                              ?.segments.at(-1)?.destination.code
-                          }
+                                      ?.segments[0]?.departureTime
+                                  ).format('HH:mm')}
+                                </div>
+                                <div>
+                                  {
+                                    selectedFlightItemPackages?.flights.at(0)
+                                      ?.segments[0].origin.code
+                                  }
+                                </div>
+                              </div>
+
+                              <div className='relative mx-2 grow'>
+                                <Box bg='blue' h={2} className='rounded' />
+                                <div
+                                  className='absolute end-0 -translate-y-1/2 rotate-90 text-blue-800'
+                                  style={{ top: 1, paddingBottom: 1 }}
+                                >
+                                  <MdOutlineAirplanemodeActive size={18} />
+                                </div>
+                              </div>
+
+                              <div className='text-center'>
+                                <div className='text-xl font-semibold'>
+                                  {dayjs(
+                                    selectedFlightItemPackages?.flights
+                                      .at(0)
+                                      ?.segments.at(-1)?.arrivalTime
+                                  ).format('HH:mm')}
+                                </div>
+                                <div>
+                                  {
+                                    selectedFlightItemPackages?.flights
+                                      .at(0)
+                                      ?.segments.at(-1)?.destination.code
+                                  }
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className='md:text-md absolute start-0 end-0 mt-3 flex justify-center text-xs text-black md:mt-0'>
+                              {dayjs(
+                                selectedFlightItemPackages?.flights
+                                  .at(0)
+                                  ?.segments.at(0)?.departureTime
+                              ).format(' DD MMM YYYY, ddd')}
+                            </div>
+                            <div className='absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-black'>
+                              <div>
+                                {hours}s {minutes}d
+                              </div>
+                              <div>
+                                {(() => {
+                                  const numSegments =
+                                    selectedFlightItemPackages?.flights.at(0)
+                                      ?.segments.length ?? 0
+                                  const hasTransferStop = numSegments > 1
+                                  return hasTransferStop ? (
+                                    <span className='text-red-600'>
+                                      {numSegments - 1} Aktarma
+                                    </span>
+                                  ) : (
+                                    <span className='md-text-md text-xs text-green-800'>
+                                      Aktarmasız
+                                    </span>
+                                  )
+                                })()}
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className='pt-2'>
-                        <Button
-                          className='px-4 py-2'
-                          variant='outline'
-                          type='button'
-                          onClick={resetSelectedFlights}
-                        >
-                          Uçuşu değiştir
-                        </Button>
+                      <hr className='mt-2 flex md:hidden' />
+                      <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
+                        <div className='text-xl font-semibold'>
+                          {formatCurrency(
+                            selectedFlightItemPackages?.flights.at(0)?.fareInfo
+                              .totalPrice.value ?? 0
+                          )}
+                        </div>
+                        <div>
+                          <Button
+                            className='text-blue bg-white px-4 py-2'
+                            size='md'
+                            radius='md'
+                            variant='default'
+                            type='button'
+                            onClick={resetSelectedFlights}
+                          >
+                            Uçuşu Değiştir
+                          </Button>
+                        </div>
                       </div>
                     </div>
+
                     <div className='text-lg font-medium'>
                       Dönüş uçuşunuzu seçiniz.
                     </div>
