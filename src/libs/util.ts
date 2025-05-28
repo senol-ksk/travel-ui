@@ -5,14 +5,12 @@ export const formatCurrency = (
   amount: number,
   currency: 'TRY' | 'USD' | 'EUR' | undefined | null = 'TRY'
 ) => {
-  const formatted = new Intl.NumberFormat('tr', {
+  const formatted = new Intl.NumberFormat('ar', {
     style: 'currency',
+    currencyDisplay: 'narrowSymbol',
     currency: currency ?? 'TRY',
   }).format(amount)
 
-  if ((currency ?? 'TRY') === 'TRY') {
-    return formatted.replace('₺', '').trim() + ' ₺'
-  }
   return formatted
 }
 export const days = (): string[] =>

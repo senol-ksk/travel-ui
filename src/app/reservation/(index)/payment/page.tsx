@@ -29,7 +29,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import cardValidation from 'card-validator'
 import { formatCreditCard } from 'cleave-zen'
-
+import NumberFlow from '@number-flow/react'
 import { formatCurrency, yearList } from '@/libs/util'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
@@ -47,7 +47,8 @@ import { RiVisaLine } from 'react-icons/ri'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-import NumberFlow from '@number-flow/react'
+import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
+import { ParafParaView } from '../../components/paraf'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -166,7 +167,24 @@ const PaymentPage = () => {
         },
       })
 
-      return paymentResponse?.data
+      return paymentResponse
+      // return parafParaResponseDummyData
+    },
+    onSuccess(query) {
+      if (!query?.success) {
+        notifications.show({
+          title: 'Sonuç Bulunamadı!',
+          message: <div>Kart bilgilierinizi kontrol ediniz.</div>,
+          withCloseButton: true,
+          autoClose: 5000,
+          position: 'top-center',
+          color: 'red',
+          classNames: {
+            root: 'bg-red-200',
+            description: 'text-black',
+          },
+        })
+      }
     },
   })
 
@@ -291,192 +309,204 @@ const PaymentPage = () => {
         <LoadingOverlay visible={paymentMutation.isPending} />
 
         <CheckoutCard title={'Ödeme Bilgileri'}>
-          <div className='grid items-center gap-3 sm:grid-cols-2'>
-            <div>
-              <Switch
-                label='ParafPara İLE ÖDE'
-                onChange={(event) =>
-                  setIsPrivilegeCardCheck(event.currentTarget.checked)
-                }
-              />
-              <div className='grid w-full gap-3'>
-                <Controller
-                  control={formMethods.control}
-                  name='cardOwner'
-                  defaultValue={firstPassengerFullName}
-                  render={({ field }) => {
-                    return (
-                      <TextInput
-                        {...field}
-                        autoComplete='cc-name'
-                        label='Kart Üzerindeki İsim'
-                        placeholder='Kart Üzerindeki İsim'
-                        error={
-                          !!formMethods.formState.errors.cardOwner
-                            ? formMethods.formState.errors.cardOwner.message
-                            : null
-                        }
-                      />
-                    )
-                  }}
+          <div className='flex flex-col gap-3 md:gap-5'>
+            <div className='grid items-center gap-3 sm:grid-cols-2'>
+              <div>
+                <Switch
+                  label='ParafPara İLE ÖDE'
+                  onChange={(event) =>
+                    setIsPrivilegeCardCheck(event.currentTarget.checked)
+                  }
                 />
-                <Controller
-                  control={formMethods.control}
-                  name='cardNumber'
-                  defaultValue=''
-                  render={({ field }) => (
-                    <TextInput
-                      {...field}
-                      autoComplete='cc-number'
-                      label='Kart Numarası'
-                      type='tel'
-                      error={
-                        !!formMethods.formState.errors.cardNumber
-                          ? formMethods.formState.errors.cardNumber.message
-                          : null
-                      }
-                      // value={creditCardNumber}
-                      onChange={({ currentTarget: { value } }) => {
-                        const formatedValue = formatCreditCard(value).trim()
-                        listenCardNumberChange(value.replaceAll(' ', ''))
-                        field.onChange(formatedValue)
-                      }}
-                    />
-                  )}
-                />
-                <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+                <div className='grid w-full gap-3'>
                   <Controller
                     control={formMethods.control}
-                    name='cardExpiredMonth'
-                    render={({ field }) => (
-                      <NativeSelect
-                        {...field}
-                        label='Ay'
-                        autoComplete='cc-exp-month'
-                        data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-                        error={
-                          !!formMethods.formState.errors.cardExpiredMonth
-                            ? formMethods.formState.errors.cardExpiredMonth
-                                .message
-                            : null
-                        }
-                      />
-                    )}
+                    name='cardOwner'
+                    defaultValue={firstPassengerFullName}
+                    render={({ field }) => {
+                      return (
+                        <TextInput
+                          {...field}
+                          autoComplete='cc-name'
+                          label='Kart Üzerindeki İsim'
+                          placeholder='Kart Üzerindeki İsim'
+                          error={
+                            !!formMethods.formState.errors.cardOwner
+                              ? formMethods.formState.errors.cardOwner.message
+                              : null
+                          }
+                        />
+                      )
+                    }}
                   />
                   <Controller
                     control={formMethods.control}
-                    name='cardExpiredYear'
-                    render={({ field }) => (
-                      <NativeSelect
-                        {...field}
-                        autoComplete='cc-exp-year'
-                        label='Yıl'
-                        data={[
-                          { label: 'Yıl', value: '' },
-                          ...cardExpiredYearList(),
-                        ]}
-                        error={
-                          !!formMethods.formState.errors.cardExpiredYear
-                            ? formMethods.formState.errors.cardExpiredYear
-                                .message
-                            : null
-                        }
-                      />
-                    )}
-                  />
-
-                  <Controller
-                    control={formMethods.control}
-                    name='cardCvv'
+                    name='cardNumber'
                     defaultValue=''
                     render={({ field }) => (
                       <TextInput
                         {...field}
-                        maxLength={
-                          cardValidation.number(formMethods.watch('cardNumber'))
-                            .card?.code.size || 3
-                        }
-                        label='CVV'
-                        placeholder='CVV'
+                        autoComplete='cc-number'
+                        label='Kart Numarası'
+                        type='tel'
                         error={
-                          !!formMethods.formState.errors.cardCvv
-                            ? formMethods.formState.errors.cardCvv.message
+                          !!formMethods.formState.errors.cardNumber
+                            ? formMethods.formState.errors.cardNumber.message
                             : null
                         }
+                        // value={creditCardNumber}
+                        onChange={({ currentTarget: { value } }) => {
+                          const formatedValue = formatCreditCard(value).trim()
+                          listenCardNumberChange(value.replaceAll(' ', ''))
+                          field.onChange(formatedValue)
+                        }}
                       />
                     )}
                   />
+                  <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+                    <Controller
+                      control={formMethods.control}
+                      name='cardExpiredMonth'
+                      render={({ field }) => (
+                        <NativeSelect
+                          {...field}
+                          label='Ay'
+                          autoComplete='cc-exp-month'
+                          data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
+                          error={
+                            !!formMethods.formState.errors.cardExpiredMonth
+                              ? formMethods.formState.errors.cardExpiredMonth
+                                  .message
+                              : null
+                          }
+                        />
+                      )}
+                    />
+                    <Controller
+                      control={formMethods.control}
+                      name='cardExpiredYear'
+                      render={({ field }) => (
+                        <NativeSelect
+                          {...field}
+                          autoComplete='cc-exp-year'
+                          label='Yıl'
+                          data={[
+                            { label: 'Yıl', value: '' },
+                            ...cardExpiredYearList(),
+                          ]}
+                          error={
+                            !!formMethods.formState.errors.cardExpiredYear
+                              ? formMethods.formState.errors.cardExpiredYear
+                                  .message
+                              : null
+                          }
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      control={formMethods.control}
+                      name='cardCvv'
+                      defaultValue=''
+                      render={({ field }) => (
+                        <TextInput
+                          {...field}
+                          maxLength={
+                            cardValidation.number(
+                              formMethods.watch('cardNumber')
+                            ).card?.code.size || 3
+                          }
+                          label='CVV'
+                          placeholder='CVV'
+                          error={
+                            !!formMethods.formState.errors.cardCvv
+                              ? formMethods.formState.errors.cardCvv.message
+                              : null
+                          }
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className='pt-5'>
+                  <Text fz={'xs'} mb={0} className='text-gray-600'>
+                    Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
+                  </Text>
+                  <UnstyledButton
+                    type='button'
+                    onClick={openInstallmentTableModal}
+                    className='text-xs text-blue-800'
+                  >
+                    Taksit Tablosu
+                  </UnstyledButton>
                 </div>
               </div>
-              <div className='pt-5'>
-                <Text fz={'xs'} mb={0} className='text-gray-600'>
-                  Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
-                </Text>
-                <UnstyledButton
-                  type='button'
-                  onClick={openInstallmentTableModal}
-                  className='text-xs text-blue-800'
-                >
-                  Taksit Tablosu
-                </UnstyledButton>
-              </div>
-            </div>
-            <div className='hidden ps-10 sm:block'>
-              <div className='flex items-center gap-5'>
+              <div className='hidden ps-10 sm:block'>
+                <div className='flex items-center gap-5'>
+                  <div>
+                    <NextImage
+                      src={threedImage}
+                      width={63}
+                      height={29}
+                      alt='3D Güvenli Ödeme Sistemi'
+                    />
+                  </div>
+                  <div className='leading-none'>
+                    <div className='text-xs text-gray-600'>
+                      3D Güvenli Ödeme Sistemi
+                    </div>
+                    <strong>GÜVENLİ ALIŞVERİŞ</strong>
+                  </div>
+                </div>
+                <div className='py-5 text-xs text-gray-600'>
+                  Paraflytravel.com üzerinden yapılan işlemler, Google Trust
+                  Services koruması altındadır.
+                </div>
                 <div>
-                  <NextImage
-                    src={threedImage}
-                    width={63}
-                    height={29}
-                    alt='3D Güvenli Ödeme Sistemi'
-                  />
+                  <Group>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <RiVisaLine size={24} color='#1434CB' />
+                    </div>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <MasterCardLogo size={20} />
+                    </div>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <GrAmex size={24} color='#1174CB' />
+                    </div>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <TroyCardLogo />
+                    </div>
+                  </Group>
                 </div>
-                <div className='leading-none'>
-                  <div className='text-xs text-gray-600'>
-                    3D Güvenli Ödeme Sistemi
-                  </div>
-                  <strong>GÜVENLİ ALIŞVERİŞ</strong>
-                </div>
-              </div>
-              <div className='py-5 text-xs text-gray-600'>
-                Paraflytravel.com üzerinden yapılan işlemler, Google Trust
-                Services koruması altındadır.
-              </div>
-              <div>
-                <Group>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <RiVisaLine size={24} color='#1434CB' />
-                  </div>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <MasterCardLogo size={20} />
-                  </div>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <GrAmex size={24} color='#1174CB' />
-                  </div>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <TroyCardLogo />
-                  </div>
-                </Group>
               </div>
             </div>
-          </div>
-          {isPrivilegeCardCheck && (
-            <div>
-              <Button type='submit'>ParafPara Sorgula</Button>
-            </div>
-          )}
-          {installmentTableSelectOptions.current &&
-            installmentTableSelectOptions.current.length > 0 && (
+            {isPrivilegeCardCheck && (
               <div>
-                <InstallmentSelect
-                  data={installmentTableSelectOptions.current}
-                  onChange={(value) => {
-                    // formMethods.setValue('')
-                    formMethods.setValue('installment', value)
-                  }}
-                />
+                <Button
+                  loading={handlePrivilegedCardMutation.isPending}
+                  type='submit'
+                >
+                  ParafPara Sorgula
+                </Button>
               </div>
             )}
+            {handlePrivilegedCardMutation.data?.success &&
+              handlePrivilegedCardMutation.data?.data && (
+                <ParafParaView data={handlePrivilegedCardMutation.data?.data} />
+              )}
+            {installmentTableSelectOptions.current &&
+              installmentTableSelectOptions.current.length > 0 && (
+                <div>
+                  <InstallmentSelect
+                    data={installmentTableSelectOptions.current}
+                    onChange={(value) => {
+                      // formMethods.setValue('')
+                      formMethods.setValue('installment', value)
+                    }}
+                  />
+                </div>
+              )}
+          </div>
         </CheckoutCard>
         {!checkoutQueryMemoData.viewBag.HotelCancelWarrantyPriceStatusModel
           .hotelWarrantyDiscountSelected && (
