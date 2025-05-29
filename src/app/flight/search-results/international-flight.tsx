@@ -64,11 +64,11 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
           return (
             <div
-              className='relative grid p-3 md:grid-cols-3 md:px-5 md:py-3'
+              className='relative mt-3 grid p-3 md:mt-0 md:grid-cols-3 md:px-5 md:py-3'
               key={detail.key}
               // onClick={onSelect}
             >
-              <div className='start-0-0 absolute top-1/2 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400' />
+              <div className='start-0-0 absolute top-1/2 mt-4 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400 md:mt-0' />
               <div className='flex justify-between'>
                 <div className='flex items-center gap-3 text-sm'>
                   <div>
@@ -88,7 +88,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                 </div>
               </div>
               <div className='col-span-2'>
-                <div className='flex gap-2'>
+                <div className='mt-4 flex gap-2'>
                   <div>
                     <div className='text-xl leading-none font-semibold'>
                       {dayjs(relatedSegment.at(0)?.departureTime).format(
@@ -200,7 +200,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         })}
       </div>
 
-      <div className='grid h-full gap-3 border-l px-3 py-5 text-center'>
+      <div className='grid h-full gap-3 border-l px-3 text-center md:gap-0 md:py-5'>
         <div className='text-xl font-semibold'>
           {formatCurrency(fareInfo.totalPrice.value)}
         </div>
