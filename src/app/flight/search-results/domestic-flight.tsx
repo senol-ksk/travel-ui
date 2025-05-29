@@ -63,11 +63,11 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           return (
             <div
               key={detail.key}
-              className='relative grid p-3 md:grid-cols-3 md:p-5'
+              className='relative mt-5 grid p-3 md:mt-0 md:grid-cols-3 md:p-5'
               // onClick={onSelect}
             >
-              <div className='start-0-0 absolute top-1/2 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400' />
-              <div className='flex gap-3 text-sm'>
+              <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400 md:mt-0' />
+              <div className='mb-5 flex gap-3 text-sm md:mb-0'>
                 <div>
                   <AirlineLogo
                     airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
@@ -171,7 +171,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           )
         })}
       </div>
-      <div className='grid gap-3 border-l px-3 py-5 text-center'>
+      <div className='grid gap-3 border-l px-3 text-center md:py-5'>
         <div className='text-xl font-semibold'>
           {formatCurrency(fareInfo.totalPrice.value)}
         </div>

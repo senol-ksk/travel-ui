@@ -726,7 +726,7 @@ const FlightSearchView = () => {
                                       {numSegments - 1} Aktarma
                                     </span>
                                   ) : (
-                                    <span className='md-text-md text-xs text-green-800'>
+                                    <span className='md-text-md text-sm text-green-800'>
                                       Aktarmasız
                                     </span>
                                   )

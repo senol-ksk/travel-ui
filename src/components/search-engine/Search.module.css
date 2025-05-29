@@ -9,8 +9,6 @@
   }
 }
 .tab:hover {
-  outline: 1px solid var(--mantine-color-blue-8);
-  background-color: var(--mantine-color-white);
+  outline: 1px solid var(--mantine-color-gray-4);
   border-radius: 2rem;
-  border-bottom: 4px solid var(--mantine-color-blue-8);
 }
