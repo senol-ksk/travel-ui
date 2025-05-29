@@ -3,6 +3,7 @@ import { Alert, Image, Table } from '@mantine/core'
 import { HiExclamationCircle } from 'react-icons/hi2'
 import { ParafParaPaymentResponse } from '../types'
 import { formatCurrency } from '@/libs/util'
+import NumberFlow from '@number-flow/react'
 
 type IProps = {
   data: ParafParaPaymentResponse
@@ -121,7 +122,7 @@ export const ParafParaView: React.FC<IProps> = ({ data }) => {
             <Table.Tr>
               <Table.Td>Kullanılacak ParafPara</Table.Td>
               <Table.Td>
-                {usedToBeBonus} x {multiplier}
+                {usedToBeBonus}x{multiplier}
               </Table.Td>
               <Table.Td>{formatCurrency(tlUsedToBeBonus)}</Table.Td>
             </Table.Tr>
@@ -133,9 +134,9 @@ export const ParafParaView: React.FC<IProps> = ({ data }) => {
               <Table.Td>{formatCurrency(tlUsedToBeAdvance)}</Table.Td>
             </Table.Tr>
             <Table.Tr>
-              <Table.Td>Toplam ParafPara </Table.Td>
+              <Table.Td>Toplam ParafPara</Table.Td>
               <Table.Td>
-                {totalUsedToParafPrice}x{multiplier}
+                {parseFloat('' + totalUsedToParafPrice).toFixed(2)}x{multiplier}
               </Table.Td>
               <Table.Td>{formatCurrency(tlTotalUsedToParafPrice)}</Table.Td>
             </Table.Tr>

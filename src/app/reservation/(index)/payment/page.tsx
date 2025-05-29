@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
@@ -185,6 +185,17 @@ const PaymentPage = () => {
           },
         })
       }
+      if (query?.success && query.data) {
+        const cardNumber =
+          formMethods.getValues('cardNumber')?.replaceAll(' ', '') ?? ''
+
+        installmentTableSelectOptions.current = query.data
+          ?.calculatedInstalmentList.installmentInfoList.length
+          ? query.data.calculatedInstalmentList.installmentInfoList.filter(
+              (item) => item.binList.includes(cardNumber.substring(0, 6))
+            )
+          : null
+      }
     },
   })
 
@@ -196,12 +207,15 @@ const PaymentPage = () => {
       cardProgramName: string
       installmentCount: number
       totalAmount: number
+      interestRate: number | null | undefined
     }[]
   >(null)
   const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
 
-  const listenCardNumberChange = (data: string) => {
-    if (!data || data.length < 6 || !checkoutQueryMemoData) {
+  const handleCardNumberChange = () => {
+    const cardNumber = formMethods.getValues('cardNumber')?.replaceAll(' ', '')
+
+    if (!cardNumber || cardNumber.length < 6 || !checkoutQueryMemoData) {
       installmentTableSelectOptions.current = null
       formMethods.setValue('installment', '1')
       return
@@ -209,7 +223,7 @@ const PaymentPage = () => {
 
     installmentTableSelectOptions.current =
       checkoutQueryMemoData?.paymentIndexModel.installment.installmentInfoList.filter(
-        (item) => item.binList.includes(data.substring(0, 6))
+        (item) => item.binList.includes(cardNumber.substring(0, 6))
       )
   }
 
@@ -218,6 +232,7 @@ const PaymentPage = () => {
       threeDformRef.current?.submit()
     }
   }, [paymentMutation.data, paymentMutation.isSuccess])
+
   const isCouponUsed = useMemo(
     () =>
       Array.isArray(
@@ -306,7 +321,11 @@ const PaymentPage = () => {
         })}
         className='relative grid gap-3 md:gap-5'
       >
-        <LoadingOverlay visible={paymentMutation.isPending} />
+        <LoadingOverlay
+          visible={
+            paymentMutation.isPending || handlePrivilegedCardMutation.isPending
+          }
+        />
 
         <CheckoutCard title={'Ödeme Bilgileri'}>
           <div className='flex flex-col gap-3 md:gap-5'>
@@ -314,9 +333,30 @@ const PaymentPage = () => {
               <div>
                 <Switch
                   label='ParafPara İLE ÖDE'
-                  onChange={(event) =>
+                  disabled={handlePrivilegedCardMutation.isPending}
+                  onChange={(event) => {
                     setIsPrivilegeCardCheck(event.currentTarget.checked)
-                  }
+                    const formData = formMethods.getValues()
+
+                    if (
+                      event.currentTarget.checked &&
+                      formMethods.formState.isValid
+                    ) {
+                      handlePrivilegedCardMutation.mutate({
+                        cardCvv: formMethods.getValues('cardCvv'),
+                        cardExpiredMonth:
+                          formMethods.getValues('cardExpiredMonth'),
+                        cardExpiredYear:
+                          formMethods.getValues('cardExpiredYear'),
+                        cardOwner: formMethods.getValues('cardOwner'),
+                        installment:
+                          formMethods.getValues('installment') ?? '1',
+                        cardNumber: formMethods.getValues('cardNumber'),
+                      })
+                    } else {
+                      handleCardNumberChange()
+                    }
+                  }}
                 />
                 <div className='grid w-full gap-3'>
                   <Controller
@@ -356,9 +396,9 @@ const PaymentPage = () => {
                         }
                         // value={creditCardNumber}
                         onChange={({ currentTarget: { value } }) => {
-                          const formatedValue = formatCreditCard(value).trim()
-                          listenCardNumberChange(value.replaceAll(' ', ''))
-                          field.onChange(formatedValue)
+                          const formattedValue = formatCreditCard(value).trim()
+                          field.onChange(formattedValue)
+                          handleCardNumberChange()
                         }}
                       />
                     )}
@@ -481,19 +521,24 @@ const PaymentPage = () => {
               </div>
             </div>
             {isPrivilegeCardCheck && (
-              <div>
-                <Button
-                  loading={handlePrivilegedCardMutation.isPending}
-                  type='submit'
-                >
-                  ParafPara Sorgula
-                </Button>
+              <div className='grid gap-3'>
+                <div>
+                  <Button
+                    loading={handlePrivilegedCardMutation.isPending}
+                    type='submit'
+                  >
+                    ParafPara Sorgula
+                  </Button>
+                </div>
+                {handlePrivilegedCardMutation.data?.success &&
+                  handlePrivilegedCardMutation.data?.data && (
+                    <ParafParaView
+                      data={handlePrivilegedCardMutation.data?.data}
+                    />
+                  )}
               </div>
             )}
-            {handlePrivilegedCardMutation.data?.success &&
-              handlePrivilegedCardMutation.data?.data && (
-                <ParafParaView data={handlePrivilegedCardMutation.data?.data} />
-              )}
+
             {installmentTableSelectOptions.current &&
               installmentTableSelectOptions.current.length > 0 && (
                 <div>
@@ -548,7 +593,11 @@ const PaymentPage = () => {
                     />
                   </div>
                 </div>
-                <Button size='lg' type='submit' disabled={isPrivilegeCardCheck}>
+                <Button
+                  size='lg'
+                  type='submit'
+                  //  disabled={isPrivilegeCardCheck}
+                >
                   Ödemeyi Tamamla
                 </Button>
               </div>

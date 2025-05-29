@@ -440,6 +440,7 @@ export type ProductPassengerApiResponseModel = {
         cardProgramName: string
         installmentCount: number
         totalAmount: number
+        interestRate: number | null | undefined
       }[]
       installmentType: number
     }
