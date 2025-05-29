@@ -33,7 +33,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
     'border-l-purple-600',
   ]
   // base price defined
-  const mainPricePackage = data.flights.at(0)?.fareInfo.totalPrice.value ?? 0
+  const mainPricePackage = data.flights.at(-1)?.fareInfo.totalPrice.value ?? 0
 
   return (
     <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
@@ -329,9 +329,6 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
             <div className='mt-auto w-full'>
               <Button
                 type='button'
-                onClick={() => {
-                  onSelect(selectedPackage)
-                }}
                 fullWidth
                 radius={'xl'}
                 size='lg'

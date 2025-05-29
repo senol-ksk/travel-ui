@@ -45,7 +45,7 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'md:text-lg border-b-4 mt-3 ',
+        tab: 'md:text-lg border-b-4 mt-3 mb-2',
         tabSection: 'hidden sm:flex',
         tabLabel: 'flex-none',
       }}
