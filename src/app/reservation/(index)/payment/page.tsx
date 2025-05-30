@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
@@ -17,6 +17,7 @@ import {
   NativeSelect,
   Skeleton,
   Stack,
+  Switch,
   Text,
   TextInput,
   UnstyledButton,
@@ -28,11 +29,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import cardValidation from 'card-validator'
 import { formatCreditCard } from 'cleave-zen'
-
+import NumberFlow from '@number-flow/react'
 import { formatCurrency, yearList } from '@/libs/util'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
-import { PaymentResponeType } from '@/app/reservation/types'
+import {
+  ParafParaPaymentResponse,
+  PaymentResponseType,
+} from '@/app/reservation/types'
 import { reservationParsers } from '@/app/reservation/searchParams'
 
 import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
@@ -43,7 +47,8 @@ import { RiVisaLine } from 'react-icons/ri'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-import NumberFlow from '@number-flow/react'
+import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
+import { ParafParaView } from '../../components/paraf'
 
 let cardCvvLength = 3
 const paymentValidationSchema = z.object({
@@ -85,6 +90,8 @@ const PaymentPage = () => {
     isOpenInstallmentTable,
     { open: openInstallmentTableModal, close: closeInstallmentTableModal },
   ] = useDisclosure(false)
+  const [isPrivilegeCardCheck, setIsPrivilegeCardCheck] = useState(false)
+
   const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
   })
@@ -103,7 +110,7 @@ const PaymentPage = () => {
   ) as ProductPassengerApiResponseModel['viewBag']['ModuleName']
 
   const paymentMutation = useMutation<
-    PaymentResponeType | null | undefined,
+    PaymentResponseType | null | undefined,
     null,
     CardValidationSchemaTypes
   >({
@@ -111,9 +118,11 @@ const PaymentPage = () => {
     mutationFn: async (data) => {
       const threedCallbackURL = `${window.location.origin}/reservation/callback/api`
 
-      const paymentResponse = await serviceRequest<PaymentResponeType>({
+      const paymentResponse = await serviceRequest<PaymentResponseType>({
         axiosOptions: {
-          url: `api/payment/initProcess`,
+          url: isPrivilegeCardCheck
+            ? 'api/payment/privilegeCardHandler'
+            : `api/payment/initProcess`,
           method: 'post',
           data: {
             ...data,
@@ -127,6 +136,7 @@ const PaymentPage = () => {
             productKey: queryStrings.productKey,
             reservable: checkoutQueryMemoData?.viewBag.Reservable ?? 0,
             installment: formMethods.getValues('installment'),
+            useBonus: isPrivilegeCardCheck,
             moduleName,
           },
         },
@@ -135,6 +145,60 @@ const PaymentPage = () => {
       return paymentResponse?.data
     },
   })
+  const handlePrivilegedCardMutation = useMutation({
+    mutationFn: async (data: CardValidationSchemaTypes) => {
+      const paymentResponse = await serviceRequest<ParafParaPaymentResponse>({
+        axiosOptions: {
+          url: 'api/payment/privilegeCardHandler',
+          method: 'post',
+          data: {
+            ...data,
+            cardNumber: data.cardNumber?.replaceAll(' ', ''),
+            billingInfo: checkoutQueryMemoData?.paymentIndexModel.billingInfo,
+            threeDFailureURL: `${window.location.origin}/reservation/error/api`,
+            searchToken: queryStrings.searchToken,
+            sessionToken: queryStrings.sessionToken,
+            productKey: queryStrings.productKey,
+            reservable: checkoutQueryMemoData?.viewBag.Reservable ?? 0,
+            installment: formMethods.getValues('installment'),
+            useBonus: true,
+            moduleName,
+          },
+        },
+      })
+
+      return paymentResponse
+      // return parafParaResponseDummyData
+    },
+    onSuccess(query) {
+      if (!query?.success) {
+        notifications.show({
+          title: 'Sonuç Bulunamadı!',
+          message: <div>Kart bilgilierinizi kontrol ediniz.</div>,
+          withCloseButton: true,
+          autoClose: 5000,
+          position: 'top-center',
+          color: 'red',
+          classNames: {
+            root: 'bg-red-200',
+            description: 'text-black',
+          },
+        })
+      }
+      if (query?.success && query.data) {
+        const cardNumber =
+          formMethods.getValues('cardNumber')?.replaceAll(' ', '') ?? ''
+
+        installmentTableSelectOptions.current = query.data
+          ?.calculatedInstalmentList.installmentInfoList.length
+          ? query.data.calculatedInstalmentList.installmentInfoList.filter(
+              (item) => item.binList.includes(cardNumber.substring(0, 6))
+            )
+          : null
+      }
+    },
+  })
+
   const installmentTableSelectOptions = useRef<
     {
       amountPerInstallment: number
@@ -143,12 +207,15 @@ const PaymentPage = () => {
       cardProgramName: string
       installmentCount: number
       totalAmount: number
+      interestRate: number | null | undefined
     }[]
   >(null)
   const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
 
-  const listenCardNumberChange = (data: string) => {
-    if (!data || data.length < 6 || !checkoutQueryMemoData) {
+  const handleCardNumberChange = () => {
+    const cardNumber = formMethods.getValues('cardNumber')?.replaceAll(' ', '')
+
+    if (!cardNumber || cardNumber.length < 6 || !checkoutQueryMemoData) {
       installmentTableSelectOptions.current = null
       formMethods.setValue('installment', '1')
       return
@@ -156,7 +223,7 @@ const PaymentPage = () => {
 
     installmentTableSelectOptions.current =
       checkoutQueryMemoData?.paymentIndexModel.installment.installmentInfoList.filter(
-        (item) => item.binList.includes(data.substring(0, 6))
+        (item) => item.binList.includes(cardNumber.substring(0, 6))
       )
   }
 
@@ -165,6 +232,7 @@ const PaymentPage = () => {
       threeDformRef.current?.submit()
     }
   }, [paymentMutation.data, paymentMutation.isSuccess])
+
   const isCouponUsed = useMemo(
     () =>
       Array.isArray(
@@ -247,188 +315,243 @@ const PaymentPage = () => {
     <>
       <form
         onSubmit={formMethods.handleSubmit((data) => {
-          paymentMutation.mutate(data)
+          if (isPrivilegeCardCheck) {
+            handlePrivilegedCardMutation.mutate(data)
+          } else paymentMutation.mutate(data)
         })}
         className='relative grid gap-3 md:gap-5'
       >
-        <LoadingOverlay visible={paymentMutation.isPending} />
+        <LoadingOverlay
+          visible={
+            paymentMutation.isPending || handlePrivilegedCardMutation.isPending
+          }
+        />
 
         <CheckoutCard title={'Ödeme Bilgileri'}>
-          <div className='grid items-center gap-3 sm:grid-cols-2'>
-            <div>
-              <div className='grid w-full gap-3'>
-                <Controller
-                  control={formMethods.control}
-                  name='cardOwner'
-                  defaultValue={firstPassengerFullName}
-                  render={({ field }) => {
-                    return (
-                      <TextInput
-                        {...field}
-                        autoComplete='cc-name'
-                        label='Kart Üzerindeki İsim'
-                        placeholder='Kart Üzerindeki İsim'
-                        error={
-                          !!formMethods.formState.errors.cardOwner
-                            ? formMethods.formState.errors.cardOwner.message
-                            : null
-                        }
-                      />
-                    )
+          <div className='flex flex-col gap-3 md:gap-5'>
+            <div className='grid items-center gap-3 sm:grid-cols-2'>
+              <div>
+                <Switch
+                  label='ParafPara İLE ÖDE'
+                  disabled={handlePrivilegedCardMutation.isPending}
+                  onChange={(event) => {
+                    setIsPrivilegeCardCheck(event.currentTarget.checked)
+                    const formData = formMethods.getValues()
+
+                    if (
+                      event.currentTarget.checked &&
+                      formMethods.formState.isValid
+                    ) {
+                      handlePrivilegedCardMutation.mutate({
+                        cardCvv: formMethods.getValues('cardCvv'),
+                        cardExpiredMonth:
+                          formMethods.getValues('cardExpiredMonth'),
+                        cardExpiredYear:
+                          formMethods.getValues('cardExpiredYear'),
+                        cardOwner: formMethods.getValues('cardOwner'),
+                        installment:
+                          formMethods.getValues('installment') ?? '1',
+                        cardNumber: formMethods.getValues('cardNumber'),
+                      })
+                    } else {
+                      handleCardNumberChange()
+                    }
                   }}
                 />
-                <Controller
-                  control={formMethods.control}
-                  name='cardNumber'
-                  defaultValue=''
-                  render={({ field }) => (
-                    <TextInput
-                      {...field}
-                      autoComplete='cc-number'
-                      label='Kart Numarası'
-                      type='tel'
-                      error={
-                        !!formMethods.formState.errors.cardNumber
-                          ? formMethods.formState.errors.cardNumber.message
-                          : null
-                      }
-                      // value={creditCardNumber}
-                      onChange={({ currentTarget: { value } }) => {
-                        const formatedValue = formatCreditCard(value).trim()
-                        listenCardNumberChange(value.replaceAll(' ', ''))
-                        field.onChange(formatedValue)
-                      }}
-                    />
-                  )}
-                />
-                <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+                <div className='grid w-full gap-3'>
                   <Controller
                     control={formMethods.control}
-                    name='cardExpiredMonth'
-                    render={({ field }) => (
-                      <NativeSelect
-                        {...field}
-                        label='Ay'
-                        autoComplete='cc-exp-month'
-                        data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-                        error={
-                          !!formMethods.formState.errors.cardExpiredMonth
-                            ? formMethods.formState.errors.cardExpiredMonth
-                                .message
-                            : null
-                        }
-                      />
-                    )}
+                    name='cardOwner'
+                    defaultValue={firstPassengerFullName}
+                    render={({ field }) => {
+                      return (
+                        <TextInput
+                          {...field}
+                          autoComplete='cc-name'
+                          label='Kart Üzerindeki İsim'
+                          placeholder='Kart Üzerindeki İsim'
+                          error={
+                            !!formMethods.formState.errors.cardOwner
+                              ? formMethods.formState.errors.cardOwner.message
+                              : null
+                          }
+                        />
+                      )
+                    }}
                   />
                   <Controller
                     control={formMethods.control}
-                    name='cardExpiredYear'
-                    render={({ field }) => (
-                      <NativeSelect
-                        {...field}
-                        autoComplete='cc-exp-year'
-                        label='Yıl'
-                        data={[
-                          { label: 'Yıl', value: '' },
-                          ...cardExpiredYearList(),
-                        ]}
-                        error={
-                          !!formMethods.formState.errors.cardExpiredYear
-                            ? formMethods.formState.errors.cardExpiredYear
-                                .message
-                            : null
-                        }
-                      />
-                    )}
-                  />
-
-                  <Controller
-                    control={formMethods.control}
-                    name='cardCvv'
+                    name='cardNumber'
                     defaultValue=''
                     render={({ field }) => (
                       <TextInput
                         {...field}
-                        maxLength={
-                          cardValidation.number(formMethods.watch('cardNumber'))
-                            .card?.code.size || 3
-                        }
-                        label='CVV'
-                        placeholder='CVV'
+                        autoComplete='cc-number'
+                        label='Kart Numarası'
+                        type='tel'
                         error={
-                          !!formMethods.formState.errors.cardCvv
-                            ? formMethods.formState.errors.cardCvv.message
+                          !!formMethods.formState.errors.cardNumber
+                            ? formMethods.formState.errors.cardNumber.message
                             : null
                         }
+                        // value={creditCardNumber}
+                        onChange={({ currentTarget: { value } }) => {
+                          const formattedValue = formatCreditCard(value).trim()
+                          field.onChange(formattedValue)
+                          handleCardNumberChange()
+                        }}
                       />
                     )}
                   />
+                  <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
+                    <Controller
+                      control={formMethods.control}
+                      name='cardExpiredMonth'
+                      render={({ field }) => (
+                        <NativeSelect
+                          {...field}
+                          label='Ay'
+                          autoComplete='cc-exp-month'
+                          data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
+                          error={
+                            !!formMethods.formState.errors.cardExpiredMonth
+                              ? formMethods.formState.errors.cardExpiredMonth
+                                  .message
+                              : null
+                          }
+                        />
+                      )}
+                    />
+                    <Controller
+                      control={formMethods.control}
+                      name='cardExpiredYear'
+                      render={({ field }) => (
+                        <NativeSelect
+                          {...field}
+                          autoComplete='cc-exp-year'
+                          label='Yıl'
+                          data={[
+                            { label: 'Yıl', value: '' },
+                            ...cardExpiredYearList(),
+                          ]}
+                          error={
+                            !!formMethods.formState.errors.cardExpiredYear
+                              ? formMethods.formState.errors.cardExpiredYear
+                                  .message
+                              : null
+                          }
+                        />
+                      )}
+                    />
+
+                    <Controller
+                      control={formMethods.control}
+                      name='cardCvv'
+                      defaultValue=''
+                      render={({ field }) => (
+                        <TextInput
+                          {...field}
+                          maxLength={
+                            cardValidation.number(
+                              formMethods.watch('cardNumber')
+                            ).card?.code.size || 3
+                          }
+                          label='CVV'
+                          placeholder='CVV'
+                          error={
+                            !!formMethods.formState.errors.cardCvv
+                              ? formMethods.formState.errors.cardCvv.message
+                              : null
+                          }
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className='pt-5'>
+                  <Text fz={'xs'} mb={0} className='text-gray-600'>
+                    Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
+                  </Text>
+                  <UnstyledButton
+                    type='button'
+                    onClick={openInstallmentTableModal}
+                    className='text-xs text-blue-800'
+                  >
+                    Taksit Tablosu
+                  </UnstyledButton>
                 </div>
               </div>
-              <div className='pt-5'>
-                <Text fz={'xs'} mb={0} className='text-gray-600'>
-                  Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
-                </Text>
-                <UnstyledButton
-                  type='button'
-                  onClick={openInstallmentTableModal}
-                  className='text-xs text-blue-800'
-                >
-                  Taksit Tablosu
-                </UnstyledButton>
-              </div>
-            </div>
-            <div className='hidden ps-10 sm:block'>
-              <div className='flex items-center gap-5'>
+              <div className='hidden ps-10 sm:block'>
+                <div className='flex items-center gap-5'>
+                  <div>
+                    <NextImage
+                      src={threedImage}
+                      width={63}
+                      height={29}
+                      alt='3D Güvenli Ödeme Sistemi'
+                    />
+                  </div>
+                  <div className='leading-none'>
+                    <div className='text-xs text-gray-600'>
+                      3D Güvenli Ödeme Sistemi
+                    </div>
+                    <strong>GÜVENLİ ALIŞVERİŞ</strong>
+                  </div>
+                </div>
+                <div className='py-5 text-xs text-gray-600'>
+                  Paraflytravel.com üzerinden yapılan işlemler, Google Trust
+                  Services koruması altındadır.
+                </div>
                 <div>
-                  <NextImage
-                    src={threedImage}
-                    width={63}
-                    height={29}
-                    alt='3D Güvenli Ödeme Sistemi'
-                  />
+                  <Group>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <RiVisaLine size={24} color='#1434CB' />
+                    </div>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <MasterCardLogo size={20} />
+                    </div>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <GrAmex size={24} color='#1174CB' />
+                    </div>
+                    <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
+                      <TroyCardLogo />
+                    </div>
+                  </Group>
                 </div>
-                <div className='leading-none'>
-                  <div className='text-xs text-gray-600'>
-                    3D Güvenli Ödeme Sistemi
-                  </div>
-                  <strong>GÜVENLİ ALIŞVERİŞ</strong>
-                </div>
-              </div>
-              <div className='py-5 text-xs text-gray-600'>
-                Paraflytravel.com üzerinden yapılan işlemler, Google Trust
-                Services koruması altındadır.
-              </div>
-              <div>
-                <Group>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <RiVisaLine size={24} color='#1434CB' />
-                  </div>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <MasterCardLogo size={20} />
-                  </div>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <GrAmex size={24} color='#1174CB' />
-                  </div>
-                  <div className='flex h-[30px] w-[50px] items-center justify-center rounded border'>
-                    <TroyCardLogo />
-                  </div>
-                </Group>
               </div>
             </div>
-          </div>
-          {installmentTableSelectOptions.current &&
-            installmentTableSelectOptions.current.length > 0 && (
-              <div>
-                <InstallmentSelect
-                  data={installmentTableSelectOptions.current}
-                  onChange={(value) => {
-                    // formMethods.setValue('')
-                    formMethods.setValue('installment', value)
-                  }}
-                />
+            {isPrivilegeCardCheck && (
+              <div className='grid gap-3'>
+                <div>
+                  <Button
+                    loading={handlePrivilegedCardMutation.isPending}
+                    type='submit'
+                  >
+                    ParafPara Sorgula
+                  </Button>
+                </div>
+                {handlePrivilegedCardMutation.data?.success &&
+                  handlePrivilegedCardMutation.data?.data && (
+                    <ParafParaView
+                      data={handlePrivilegedCardMutation.data?.data}
+                    />
+                  )}
               </div>
             )}
+
+            {installmentTableSelectOptions.current &&
+              installmentTableSelectOptions.current.length > 0 && (
+                <div>
+                  <InstallmentSelect
+                    data={installmentTableSelectOptions.current}
+                    onChange={(value) => {
+                      // formMethods.setValue('')
+                      formMethods.setValue('installment', value)
+                    }}
+                  />
+                </div>
+              )}
+          </div>
         </CheckoutCard>
         {!checkoutQueryMemoData.viewBag.HotelCancelWarrantyPriceStatusModel
           .hotelWarrantyDiscountSelected && (
@@ -457,10 +580,6 @@ const PaymentPage = () => {
                 <div className='flex items-center gap-3'>
                   <div className='text-sm'>Ödenecek Tutar:</div>
                   <div className='text-xl font-semibold'>
-                    {/* {formatCurrency(
-                      checkoutQueryMemoData.viewBag.SummaryViewDataResponser
-                        .summaryResponse.totalPrice
-                    )} */}
                     <NumberFlow
                       format={{
                         style: 'currency',
@@ -477,7 +596,7 @@ const PaymentPage = () => {
                 <Button
                   size='lg'
                   type='submit'
-                  // disabled={!isSubmittable}
+                  //  disabled={isPrivilegeCardCheck}
                 >
                   Ödemeyi Tamamla
                 </Button>
@@ -495,7 +614,7 @@ const PaymentPage = () => {
       >
         {paymentMutation.data && paymentMutation.isSuccess
           ? Object.keys(paymentMutation.data).map((input, index) => {
-              const value = input as keyof PaymentResponeType
+              const value = input as keyof PaymentResponseType
 
               return value !== 'action' ? (
                 <input

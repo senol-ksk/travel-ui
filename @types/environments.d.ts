@@ -29,5 +29,6 @@ namespace NodeJS {
     GET_SESSION_TOKEN: string
     SCOPE_NAME: string
     API_GW_KEY: string
+    APP_TITLE: string
   }
 }

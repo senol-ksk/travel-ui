@@ -1049,7 +1049,7 @@ const FlightSearchView = () => {
           <div>
             <Loader />
           </div>
-          <div className='text-lg'>Lutfen bekleyiniz</div>
+          <div className='text-lg'>Lütfen bekleyiniz</div>
         </div>
       </Modal>
     </>

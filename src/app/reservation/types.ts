@@ -46,7 +46,7 @@ export enum ResponseStatus {
   Forbidden,
 }
 
-export type PaymentResponeType = {
+export type PaymentResponseType = {
   okUrl: string
   callbackUrl: string
   failUrl: string
@@ -1370,4 +1370,35 @@ export interface TransferSummaryResponseViewDataResponser {
   couponDiscountList: null
   extraCharges: object
   financellDiscount: ServicePriceType
+}
+
+export interface ParafParaPaymentResponse {
+  cardNumber: string
+  bonus: number
+  advance: number
+  multiplier: number
+  remainingFund: number
+  mileCode: string
+  calculatedBonus: {
+    multiplier: number
+    award: number
+    bonus: number
+    advance: number
+    remaining: number
+  }
+  total: number
+  tax: number
+  moduleName: string
+  calculatedInstalmentList: {
+    installmentInfoList: {
+      totalAmount: number
+      amountPerInstallment: number
+      installmentCount: number
+      bankName: string
+      cardProgramName: string
+      interestRate: number
+      binList: string
+    }[]
+    installmentType: number
+  }
 }

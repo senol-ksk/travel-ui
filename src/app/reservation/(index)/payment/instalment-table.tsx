@@ -122,27 +122,39 @@ const InstallmentSelect: React.FC<InstallmentSelectProps> = ({
         onChange(value)
       }}
     >
-      <div className='grid gap-3 md:flex'>
+      <div className='grid gap-3'>
         {data.map((installment, installmentIndex) => (
           <Radio.Card
-            className='p-2'
+            className='rounded border-0 bg-gray-50 p-4'
             key={installmentIndex}
             value={'' + installment.installmentCount}
           >
-            <Group wrap='nowrap' align='flex-start'>
+            <Group>
               <Radio.Indicator />
-              <div>
-                {installment.installmentCount === 1 ? (
-                  'Tek Çekim'
-                ) : (
-                  <div className='flex gap-1'>
+              <div className='flex flex-1 items-center justify-between'>
+                <div className='leading-lg'>
+                  {installment.installmentCount === 1 ? (
                     <div>
-                      {formatCurrency(installment.amountPerInstallment)}
+                      <div className='font-semibold text-blue-800'>
+                        Peşin Ödeme
+                      </div>
+                      <div>Tek Çekim</div>
                     </div>
-                    <div>x</div>
-                    <div>{installment.installmentCount}</div>
-                  </div>
-                )}
+                  ) : (
+                    <div>
+                      <div className='font-semibold'>
+                        {installment.installmentCount} Taksit
+                      </div>
+                      <div className='flex'>
+                        <div>{installment.installmentCount}</div>
+                        <div>x</div>
+                        <div>
+                          {formatCurrency(installment.amountPerInstallment)}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <div>{formatCurrency(installment.totalAmount)}</div>
               </div>
             </Group>
