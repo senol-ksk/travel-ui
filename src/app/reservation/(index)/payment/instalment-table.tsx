@@ -114,6 +114,10 @@ const InstallmentSelect: React.FC<InstallmentSelectProps> = ({
   data,
   onChange,
 }) => {
+  const installmentData = data.filter((item) => item.totalAmount > 0)
+
+  if (installmentData.length === 0) return
+
   return (
     <Radio.Group
       name='Installment'
@@ -123,7 +127,7 @@ const InstallmentSelect: React.FC<InstallmentSelectProps> = ({
       }}
     >
       <div className='grid gap-3'>
-        {data.map((installment, installmentIndex) => (
+        {installmentData.map((installment, installmentIndex) => (
           <Radio.Card
             className='rounded border-0 bg-gray-50 p-4'
             key={installmentIndex}
