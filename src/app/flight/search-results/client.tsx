@@ -627,18 +627,18 @@ const FlightSearchView = () => {
               isDomestic ? (
                 isReturnFlightVisible ? (
                   <div>
-                    <div className='mb-2 grid grid-cols-12 items-center gap-5'>
-                      <div className='col-span-12 text-lg font-medium md:col-span-4'>
+                    <div className='mb-2 flex items-center gap-3'>
+                      <div className='text-lg font-medium'>
                         Gidiş Uçuşu Seçildi
                       </div>
-                      <div className='col-span-12 hidden items-center gap-2 text-sm font-semibold text-gray-600 md:col-span-6 md:flex md:justify-end md:px-5'>
+                      <div className='hidden items-center gap-1 text-sm font-semibold text-gray-600 md:flex md:justify-end'>
                         <div>
                           {
                             selectedFlightItemPackages?.flights.at(0)
                               ?.segments[0].origin.code
                           }
                         </div>{' '}
-                        <FaLongArrowAltRight size={18} />
+                        <div>-</div>
                         <div>
                           {
                             selectedFlightItemPackages?.flights
