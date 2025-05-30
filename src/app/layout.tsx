@@ -24,9 +24,9 @@ import { Suspense } from 'react'
 import { Notifications } from '@mantine/notifications'
 
 export const metadata: Metadata = {
-  title: 'Fulltrip',
+  title: process.env.APP_TITLE,
   description: `Seyahat planı yapmadan biraz ilham almaya ne dersiniz? Seyahatin En İyilerini sizin için topluyoruz.`,
-  metadataBase: new URL('https://fulltrip.com'),
+  metadataBase: new URL('https://www.paraflytravel.com'),
   alternates: {
     canonical: './',
   },
