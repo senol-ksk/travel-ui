@@ -28,7 +28,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
   return (
     <>
       {isDomestic && (
-        <div className='sticky top-0 z-10 flex items-center justify-between gap-1 text-center'>
+        <div className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'>
           <Button
             size='md'
             variant='outline'

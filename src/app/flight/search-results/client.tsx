@@ -60,6 +60,7 @@ import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
 import { MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
+import { FaLongArrowAltRight } from 'react-icons/fa'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -338,7 +339,7 @@ const FlightSearchView = () => {
             >
               {(styles) => (
                 <div
-                  className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static'
+                  className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white md:static'
                   style={styles}
                 >
                   <div className='flex justify-end md:hidden'>
@@ -366,7 +367,11 @@ const FlightSearchView = () => {
                   ) : (
                     <>
                       <div className='flex justify-between gap-2'>
-                        <Title order={2} fz={'h4'} mb={rem(20)}>
+                        <Title
+                          className='text-xl font-semibold'
+                          order={2}
+                          mb={rem(10)}
+                        >
                           Filtreler
                         </Title>
                         <div>
@@ -383,11 +388,16 @@ const FlightSearchView = () => {
                         </div>
                       </div>
                       <Accordion
-                        defaultValue={['numOfStops', 'airlines']}
+                        defaultValue={[
+                          'numOfStops',
+                          'airlines',
+                          'airports',
+                          'departureHours',
+                        ]}
                         multiple
                         classNames={{
-                          control: 'p-2 text-sm',
-                          label: 'p-0',
+                          control: 'p-2 text-md font-semibold',
+                          label: 'p-0 font-semibold',
                         }}
                       >
                         <Accordion.Item value='numOfStops'>
@@ -407,7 +417,7 @@ const FlightSearchView = () => {
                                   : []
                               }
                             >
-                              <Stack gap={6}>
+                              <Stack gap={6} className='text-lg'>
                                 {searchQueryData?.find((result) =>
                                   isDomestic
                                     ? result.segments.length === 1
@@ -506,7 +516,7 @@ const FlightSearchView = () => {
                                 })
                               }}
                               value={
-                                filterParams.airports?.length
+                                filterParams?.airports?.length
                                   ? filterParams.airports?.map(String)
                                   : []
                               }
@@ -617,8 +627,33 @@ const FlightSearchView = () => {
               isDomestic ? (
                 isReturnFlightVisible ? (
                   <div>
-                    <div className='mb-2 text-lg font-medium'>
-                      Gidiş Uçuşu Seçildi
+                    <div className='mb-2 flex items-center gap-3'>
+                      <div className='text-lg font-medium'>
+                        Gidiş Uçuşu Seçildi
+                      </div>
+                      <div className='hidden items-center gap-1 text-sm font-semibold text-gray-600 md:flex md:justify-end'>
+                        <div>
+                          {
+                            selectedFlightItemPackages?.flights.at(0)
+                              ?.segments[0].origin.code
+                          }
+                        </div>{' '}
+                        <div>-</div>
+                        <div>
+                          {
+                            selectedFlightItemPackages?.flights
+                              .at(0)
+                              ?.segments.at(-1)?.destination.code
+                          }
+                        </div>
+                        <div>
+                          {dayjs(
+                            selectedFlightItemPackages?.flights
+                              .at(0)
+                              ?.segments.at(0)?.departureTime
+                          ).format(' DD MMM YYYY, ddd')}
+                        </div>
+                      </div>
                     </div>
                     <div className='@container mb-5 items-center gap-4 rounded-lg bg-blue-100 shadow md:grid md:grid-cols-5 md:py-6'>
                       <div className='col-span-4 grid gap-4'>
@@ -746,7 +781,7 @@ const FlightSearchView = () => {
                         </div>
                         <div>
                           <Button
-                            className='text-blue bg-white px-4 py-2'
+                            className='text-blue border-0 bg-white px-4 py-2'
                             size='md'
                             radius='md'
                             variant='default'
