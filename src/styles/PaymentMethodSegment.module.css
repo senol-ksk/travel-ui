@@ -3,15 +3,23 @@
   background-color: var(--mantine-color-blue-1);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  padding: 5px;
+  padding: 0;
+  @media (min-width: $mantine-breakpoint-md) {
+    /* padding: 5px; */
+  }
 }
 
 .label {
-  font-size: var(--mantine-font-size-md);
-  padding: 12px 44px 12px 22px;
+  font-size: var(--mantine-font-size-sm);
+  padding: 8px;
+  color: var(--mantine-color-blue-9);
 
   &[data-active='true'] {
     color: white;
+  }
+
+  @media (min-width: $mantine-breakpoint-md) {
+    padding: 12px 44px 12px 22px;
   }
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
@@ -16,24 +16,24 @@ import {
   LoadingOverlay,
   Modal,
   NativeSelect,
-  rem,
   SegmentedControl,
   Skeleton,
   Stack,
-  Switch,
   Text,
   TextInput,
   UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
 import { range, upperFirst, useDisclosure } from '@mantine/hooks'
-
+import clsx from 'clsx'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import cardValidation from 'card-validator'
 import { formatCreditCard } from 'cleave-zen'
 import NumberFlow from '@number-flow/react'
-import { delayCodeExecution, formatCurrency, yearList } from '@/libs/util'
+import { RiCheckboxCircleFill, RiVisaLine } from 'react-icons/ri'
+
+import { formatCurrency, yearList } from '@/libs/util'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
 import {
@@ -46,17 +46,13 @@ import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
 import { CheckoutCard } from '@/components/card'
 import threedImage from './threed-info.png'
 import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
-import { RiCheckboxCircleFill, RiVisaLine } from 'react-icons/ri'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
+// import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
 import { ParafParaView } from '../../components/paraf'
 
 import paymentSegmentClasses from '@/styles/PaymentMethodSegment.module.css'
-import { AiFillCheckCircle } from 'react-icons/ai'
-import { IoCheckmarkCircleSharp } from 'react-icons/io5'
-import clsx from 'clsx'
 
 let cardCvvLength = 3
 enum PaymentMethodEnums {
@@ -405,7 +401,7 @@ const PaymentPage = () => {
                     label: (
                       <Center className='gap-2'>
                         <span
-                          className={clsx({
+                          className={clsx('hidden md:block', {
                             'opacity-0':
                               paymentMethod === PaymentMethodEnums.Bonus,
                           })}
@@ -421,7 +417,7 @@ const PaymentPage = () => {
                     label: (
                       <Center className='gap-2'>
                         <span
-                          className={clsx({
+                          className={clsx('hidden md:block', {
                             'opacity-0':
                               paymentMethod === PaymentMethodEnums.CreditCard,
                           })}
