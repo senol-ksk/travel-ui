@@ -39,7 +39,6 @@ const Coupon: React.FC<IProps> = ({
               event.preventDefault()
             }
           }}
-          maxLength={10}
           minLength={3}
           disabled={isCouponUsed}
         />

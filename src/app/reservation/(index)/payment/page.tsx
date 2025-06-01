@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
@@ -11,25 +11,28 @@ import { GrAmex } from 'react-icons/gr'
 import { useForm, Controller } from 'react-hook-form'
 import {
   Button,
+  Center,
   Group,
   LoadingOverlay,
   Modal,
   NativeSelect,
+  SegmentedControl,
   Skeleton,
   Stack,
-  Switch,
   Text,
   TextInput,
   UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
 import { range, upperFirst, useDisclosure } from '@mantine/hooks'
-
+import clsx from 'clsx'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import cardValidation from 'card-validator'
 import { formatCreditCard } from 'cleave-zen'
 import NumberFlow from '@number-flow/react'
+import { RiCheckboxCircleFill, RiVisaLine } from 'react-icons/ri'
+
 import { formatCurrency, yearList } from '@/libs/util'
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { serviceRequest } from '@/network'
@@ -43,14 +46,20 @@ import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
 import { CheckoutCard } from '@/components/card'
 import threedImage from './threed-info.png'
 import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
-import { RiVisaLine } from 'react-icons/ri'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
+// import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
 import { ParafParaView } from '../../components/paraf'
 
+import paymentSegmentClasses from '@/styles/PaymentMethodSegment.module.css'
+
 let cardCvvLength = 3
+enum PaymentMethodEnums {
+  CreditCard,
+  Bonus,
+}
+
 const paymentValidationSchema = z.object({
   cardOwner: z.string().min(3).max(50),
   cardNumber: z
@@ -90,7 +99,9 @@ const PaymentPage = () => {
     isOpenInstallmentTable,
     { open: openInstallmentTableModal, close: closeInstallmentTableModal },
   ] = useDisclosure(false)
-  const [isPrivilegeCardCheck, setIsPrivilegeCardCheck] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnums>(
+    PaymentMethodEnums.CreditCard
+  )
 
   const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
@@ -104,6 +115,7 @@ const PaymentPage = () => {
     () => checkoutQuery.data?.data,
     [checkoutQuery.data?.data]
   )
+
   const moduleName = useMemo(
     () => checkoutQueryMemoData?.viewBag.ModuleName,
     [checkoutQueryMemoData?.viewBag.ModuleName]
@@ -120,9 +132,10 @@ const PaymentPage = () => {
 
       const paymentResponse = await serviceRequest<PaymentResponseType>({
         axiosOptions: {
-          url: isPrivilegeCardCheck
-            ? 'api/payment/privilegeCardHandler'
-            : `api/payment/initProcess`,
+          url:
+            paymentMethod === PaymentMethodEnums.Bonus
+              ? 'api/payment/privilegeCardHandler'
+              : `api/payment/initProcess`,
           method: 'post',
           data: {
             ...data,
@@ -136,7 +149,7 @@ const PaymentPage = () => {
             productKey: queryStrings.productKey,
             reservable: checkoutQueryMemoData?.viewBag.Reservable ?? 0,
             installment: formMethods.getValues('installment'),
-            useBonus: isPrivilegeCardCheck,
+            useBonus: paymentMethod === PaymentMethodEnums.Bonus,
             moduleName,
           },
         },
@@ -200,18 +213,19 @@ const PaymentPage = () => {
   })
 
   const installmentTableSelectOptions = useRef<
-    {
-      amountPerInstallment: number
-      bankName: string
-      binList: string
-      cardProgramName: string
-      installmentCount: number
-      totalAmount: number
-      interestRate: number | null | undefined
-    }[]
+    | {
+        amountPerInstallment: number
+        bankName: string
+        binList: string
+        cardProgramName: string
+        installmentCount: number
+        totalAmount: number
+        interestRate: number | null | undefined
+      }[]
+    | undefined
   >(null)
   const { applyCouponMutation, revokeCouponMutation } = useCouponQuery()
-
+  const cardNumber = formMethods.watch('cardNumber')
   const handleCardNumberChange = () => {
     const cardNumber = formMethods.getValues('cardNumber')?.replaceAll(' ', '')
 
@@ -272,6 +286,8 @@ const PaymentPage = () => {
       })
 
       if (applyResponse?.success) {
+        handlePrivilegedCardMutation.reset()
+        setPaymentMethod(PaymentMethodEnums.CreditCard)
         notifications.show({
           title: 'Tebrikler!',
           message: (
@@ -302,6 +318,8 @@ const PaymentPage = () => {
       })
 
       if (revokeResponse?.success) {
+        setPaymentMethod(PaymentMethodEnums.CreditCard)
+        handlePrivilegedCardMutation.reset()
       }
     }
 
@@ -315,9 +333,11 @@ const PaymentPage = () => {
     <>
       <form
         onSubmit={formMethods.handleSubmit((data) => {
-          if (isPrivilegeCardCheck) {
+          if (paymentMethod === PaymentMethodEnums.Bonus) {
             handlePrivilegedCardMutation.mutate(data)
-          } else paymentMutation.mutate(data)
+          } else {
+            paymentMutation.mutate(data)
+          }
         })}
         className='relative grid gap-3 md:gap-5'
       >
@@ -327,16 +347,29 @@ const PaymentPage = () => {
           }
         />
 
+        {!checkoutQueryMemoData.viewBag.HotelCancelWarrantyPriceStatusModel
+          .hotelWarrantyDiscountSelected && (
+          <CheckoutCard>
+            <Coupon
+              loading={
+                revokeCouponMutation.isPending || applyCouponMutation.isPending
+              }
+              isCouponUsed={isCouponUsed}
+              onRevoke={handleCouponActions}
+              onCouponSubmit={handleCouponActions}
+            />
+          </CheckoutCard>
+        )}
+
         <CheckoutCard title={'Ödeme Bilgileri'}>
           <div className='flex flex-col gap-3 md:gap-5'>
-            <div className='grid items-center gap-3 sm:grid-cols-2'>
-              <div>
-                <Switch
+            <div>
+              {/* <Switch
                   label='ParafPara İLE ÖDE'
                   disabled={handlePrivilegedCardMutation.isPending}
+                  checked={isPrivilegeCardCheck}
                   onChange={(event) => {
                     setIsPrivilegeCardCheck(event.currentTarget.checked)
-                    const formData = formMethods.getValues()
 
                     if (
                       event.currentTarget.checked &&
@@ -357,7 +390,55 @@ const PaymentPage = () => {
                       handleCardNumberChange()
                     }
                   }}
-                />
+                /> */}
+
+              <SegmentedControl
+                withItemsBorders={false}
+                classNames={paymentSegmentClasses}
+                transitionDuration={400}
+                data={[
+                  {
+                    label: (
+                      <Center className='gap-2'>
+                        <span
+                          className={clsx('hidden md:block', {
+                            'opacity-0':
+                              paymentMethod === PaymentMethodEnums.Bonus,
+                          })}
+                        >
+                          <RiCheckboxCircleFill size={22} />
+                        </span>
+                        <span>KREDİ/BANKA KARTI İLE ÖDE</span>
+                      </Center>
+                    ),
+                    value: '' + PaymentMethodEnums.CreditCard,
+                  },
+                  {
+                    label: (
+                      <Center className='gap-2'>
+                        <span
+                          className={clsx('hidden md:block', {
+                            'opacity-0':
+                              paymentMethod === PaymentMethodEnums.CreditCard,
+                          })}
+                        >
+                          <RiCheckboxCircleFill size={22} />
+                        </span>
+                        <span>ParafPara İLE ÖDE</span>
+                      </Center>
+                    ),
+                    value: '' + PaymentMethodEnums.Bonus,
+                  },
+                ]}
+                value={'' + paymentMethod}
+                onChange={(value) => {
+                  setPaymentMethod(+value)
+                }}
+              />
+              <div className='-mt-[1px] border-b border-blue-200' />
+            </div>
+            <div className='grid items-center gap-3 sm:grid-cols-2'>
+              <div>
                 <div className='grid w-full gap-3'>
                   <Controller
                     control={formMethods.control}
@@ -520,12 +601,33 @@ const PaymentPage = () => {
                 </div>
               </div>
             </div>
-            {isPrivilegeCardCheck && (
+            {paymentMethod === PaymentMethodEnums.Bonus && (
               <div className='grid gap-3'>
                 <div>
                   <Button
                     loading={handlePrivilegedCardMutation.isPending}
-                    type='submit'
+                    type='button'
+                    onClick={async () => {
+                      const formData = formMethods.getValues()
+                      const isFormValid = await formMethods.trigger([
+                        'cardCvv',
+                        'cardExpiredMonth',
+                        'cardExpiredYear',
+                        'cardExpiredYear',
+                        'cardNumber',
+                      ])
+
+                      if (isFormValid) {
+                        handlePrivilegedCardMutation.mutate({
+                          cardCvv: formData.cardCvv,
+                          cardExpiredMonth: formData.cardExpiredMonth,
+                          cardExpiredYear: formData.cardExpiredYear,
+                          cardOwner: formData.cardOwner,
+                          cardNumber: formData.cardNumber,
+                          installment: '1',
+                        })
+                      }
+                    }}
                   >
                     ParafPara Sorgula
                   </Button>
@@ -539,33 +641,41 @@ const PaymentPage = () => {
               </div>
             )}
 
-            {installmentTableSelectOptions.current &&
-              installmentTableSelectOptions.current.length > 0 && (
-                <div>
-                  <InstallmentSelect
-                    data={installmentTableSelectOptions.current}
-                    onChange={(value) => {
-                      // formMethods.setValue('')
-                      formMethods.setValue('installment', value)
-                    }}
-                  />
-                </div>
+            {checkoutQueryMemoData.paymentIndexModel &&
+              checkoutQueryMemoData?.paymentIndexModel?.installment &&
+              cardNumber && (
+                <InstallmentSelect
+                  data={
+                    handlePrivilegedCardMutation.data?.data
+                      ?.calculatedInstalmentList.installmentInfoList.length &&
+                    paymentMethod === PaymentMethodEnums.Bonus
+                      ? handlePrivilegedCardMutation.data?.data?.calculatedInstalmentList.installmentInfoList.filter(
+                          (item) =>
+                            item.binList.includes(
+                              cardNumber
+                                .trim()
+                                .replaceAll(' ', '')
+                                .substring(0, 6)
+                            )
+                        )
+                      : checkoutQueryMemoData?.paymentIndexModel.installment.installmentInfoList.filter(
+                          (item) =>
+                            item.binList.includes(
+                              cardNumber
+                                .trim()
+                                .replaceAll(' ', '')
+                                .substring(0, 6)
+                            )
+                        )
+                  }
+                  onChange={(value) => {
+                    // formMethods.setValue('')
+                    formMethods.setValue('installment', value)
+                  }}
+                />
               )}
           </div>
         </CheckoutCard>
-        {!checkoutQueryMemoData.viewBag.HotelCancelWarrantyPriceStatusModel
-          .hotelWarrantyDiscountSelected && (
-          <CheckoutCard>
-            <Coupon
-              loading={
-                revokeCouponMutation.isPending || applyCouponMutation.isPending
-              }
-              isCouponUsed={isCouponUsed}
-              onRevoke={handleCouponActions}
-              onCouponSubmit={handleCouponActions}
-            />
-          </CheckoutCard>
-        )}
 
         <CheckoutCard>
           <Text className='py-5 text-center md:px-10' fz={'sm'}>
