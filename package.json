@@ -39,6 +39,7 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "i18next": "^25.2.1",
     "intl-tel-input": "^25.3.1",
     "md5": "^2.3.0",
     "next": "15.3.3",
@@ -53,7 +54,8 @@
     "socket.io-client": "^4.8.1",
     "tailwind-preset-mantine": "^2.1.0",
     "validator": "^13.15.15",
-    "zod": "^3.25.41"
+    "zod": "^3.25.41",
+    "zod-i18n-map": "^2.27.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
