@@ -15,7 +15,7 @@ const convertBaggageLabel = (data: string) => {
   const price = +dataArr[0]
   const priceFormated = formatCurrency(+dataArr[0]) // first item is price
 
-  if (!price || price === 0) return 'Bagaj İstemiyorum'
+  if (!price || price === 0) return 'Bagaj Ekle'
 
   const baggage =
     dataArr[4] && dataArr[5]
@@ -58,6 +58,7 @@ const BaggageSelect: React.FC<IProps> = ({ data, onChange, label }) => {
 
   return (
     <NativeSelect
+      size='md'
       label={label}
       // default value is `indexNo` of data
       defaultValue={selectedOption}

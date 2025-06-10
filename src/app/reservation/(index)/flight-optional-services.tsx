@@ -91,13 +91,13 @@ const FlightOptionalServices: React.FC<IProps> = ({
 
   return (
     <CheckoutCard>
-      <div className='grid gap-5'>
+      <div className='grid'>
         <UnstyledButton
           className='text-lg font-semibold'
           onClick={toggle}
           type='button'
         >
-          İsteğe Bağlı Özel Tercihler
+          Bagaj hakkını yükseltin
         </UnstyledButton>
         <Collapse in={opened} className='relative'>
           <LoadingOverlay visible={isLoading || baggageMutation.isPending} />
@@ -106,7 +106,7 @@ const FlightOptionalServices: React.FC<IProps> = ({
               ?.filter((passenger) => passenger.key !== 'Infant') // Infant passengers can not select baggage
               .map((passenger, passengerIndex) => (
                 <div key={passenger.orderId} className='grid gap-1'>
-                  <Title order={6} fz='h5'>
+                  <Title order={6} fz='h5' className='mt-4'>
                     {passenger.orderId}.Yolcu
                   </Title>
 
@@ -116,7 +116,7 @@ const FlightOptionalServices: React.FC<IProps> = ({
                         flightInfos.flightList[flightIndex]
                       return (
                         item.length > 0 && (
-                          <div key={flightIndex}>
+                          <div key={flightIndex} className='text-gray-600'>
                             <BaggageSelect
                               label={
                                 relatedFlightData.flightDetail.groupId === 0

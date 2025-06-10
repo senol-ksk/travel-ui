@@ -278,14 +278,16 @@ const FlightSearchView = () => {
 
     if (!tripKind) {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
-    }
-
-    if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
-      scrollIntoView()
-      setIsReturnFlightVisible(true)
     } else {
-      await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
-      selectedFlightKeys.current = []
+      if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
+        scrollIntoView()
+        setIsReturnFlightVisible(true)
+      } else {
+        await submitFlightData.mutateAsync(
+          selectedFlightKeys.current.toString()
+        )
+        selectedFlightKeys.current = []
+      }
     }
   }
 
@@ -746,7 +748,7 @@ const FlightSearchView = () => {
                                   ?.segments.at(0)?.departureTime
                               ).format(' DD MMM YYYY, ddd')}
                             </div>
-                            <div className='absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-black'>
+                            <div className='md:text-md absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-xs text-black'>
                               <div>
                                 {hours}s {minutes}d
                               </div>
@@ -774,10 +776,17 @@ const FlightSearchView = () => {
                       <hr className='mt-2 flex md:hidden' />
                       <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
                         <div className='text-xl font-semibold'>
-                          {formatCurrency(
-                            selectedFlightItemPackages?.flights.at(0)?.fareInfo
-                              .totalPrice.value ?? 0
-                          )}
+                          {(() => {
+                            const packagePrice =
+                              selectedFlightItemPackages?.flights?.[0]?.package.find(
+                                (pckK) =>
+                                  pckK.fareInfo.key ===
+                                  selectedFlightKeys.current?.[0]
+                              )?.fareInfo.totalPrice.value
+                            return packagePrice !== undefined
+                              ? formatCurrency(packagePrice)
+                              : ''
+                          })()}
                         </div>
                         <div>
                           <Button

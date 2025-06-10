@@ -1,4 +1,4 @@
-import { Group, Modal, Radio, Title, UnstyledButton } from '@mantine/core'
+import { Group, Modal, Radio, Title, UnstyledButton, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 
 import { CheckoutCard } from '@/components/card'
@@ -20,7 +20,7 @@ const TravelInsurancePackages = () => {
 
         <Radio.Group name='callCenterSupport_radio' defaultValue={'2'}>
           <div className='flex gap-5'>
-            <Radio.Card value='2' className='p-2 md:p-4'>
+            <Radio.Card value='2' className='col-8 p-2 md:p-4'>
               <Group wrap='nowrap'>
                 <Radio.Indicator />
                 <div>Hayır, İstemiyorum</div>
@@ -34,20 +34,23 @@ const TravelInsurancePackages = () => {
             </Radio.Card>
           </div>
         </Radio.Group>
-        <div className='pt-4'>
-          <small className='text-gray-700'>
+
+        <div className='grid pt-4 md:flex'>
+          <Text
+            size='xs'
+            className='grid items-center text-gray-700 md:flex md:gap-2'
+          >
             * Seyahat Sağlık Güvence Paketi ,Tamamliyo Teknoloji A.Ş. tarafından
             sunulmaktadır.
-          </small>
-        </div>
-        <div className='pt-4'>
-          <UnstyledButton
-            onClick={open}
-            type='button'
-            className='text-orange-500'
-          >
-            Detaylı bilgi
-          </UnstyledButton>
+            <UnstyledButton
+              onClick={open}
+              type='button'
+              size='xs'
+              className='text-sm text-blue-500'
+            >
+              Detaylı bilgi
+            </UnstyledButton>
+          </Text>
         </div>
       </CheckoutCard>
       <Modal
