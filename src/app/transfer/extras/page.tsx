@@ -62,25 +62,25 @@ const transferExtraRequeireFields = z.object({
 
 type TransferExtrasSchmeType = z.infer<typeof transferExtraRequeireFields>
 
-function useZodForm<TSchema extends z.ZodType>(
-  props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
-    schema: TSchema
-  }
-) {
-  const form = useForm<TSchema['_input']>({
-    ...props,
-    resolver: zodResolver(props.schema, undefined, {
-      raw: true,
-    }),
-  })
+// function useZodForm<TSchema extends z.ZodType>(
+//   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
+//     schema: TSchema
+//   }
+// ) {
+//   const form = useForm<TSchema['_input']>({
+//     ...props,
+//     resolver: zodResolver(props.schema, undefined, {
+//       raw: true,
+//     }),
+//   })
 
-  return form
-}
+//   return form
+// }
 
 export default function Page() {
   const router = useRouter()
-  const formActions = useZodForm({
-    schema: transferExtraRequeireFields,
+  const formActions = useForm({
+    resolver: zodResolver(transferExtraRequeireFields),
   })
 
   useFieldArray({

@@ -58,20 +58,20 @@ import { TravelInsurancePackages } from './travel-insurance'
 import { EarlyReservationInsurance } from './hotel/insurance-options'
 import { TourExtraServices } from './tour/extras'
 
-function useZodForm<TSchema extends z.ZodType>(
-  props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
-    schema: TSchema
-  }
-) {
-  const form = useForm<TSchema['_input']>({
-    ...props,
-    resolver: zodResolver(props.schema, undefined, {
-      raw: true,
-    }),
-  })
+// function useZodForm<TSchema extends z.ZodType>(
+//   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
+//     schema: TSchema
+//   }
+// ) {
+//   const form = useForm<TSchema['_input']>({
+//     ...props,
+//     resolver: zodResolver(props.schema, undefined, {
+//       raw: true,
+//     }),
+//   })
 
-  return form
-}
+//   return form
+// }
 
 export default function CheckoutPage() {
   const queryClient = useQueryClient()
@@ -85,8 +85,8 @@ export default function CheckoutPage() {
     [checkoutDataQuery?.data]
   )
 
-  const formMethods = useZodForm({
-    schema: checkoutSchemaMerged,
+  const formMethods = useForm({
+    resolver: zodResolver(checkoutSchemaMerged),
   })
 
   useFieldArray({
@@ -290,7 +290,9 @@ export default function CheckoutPage() {
                                               '' + fields.declaredAge,
                                             checkinDate: fields.checkinDate,
                                             moduleName,
-                                            birthDate: fields?.birthDate,
+                                            birthDate: new Date(
+                                              fields?.birthDate
+                                            ),
                                             calculationYearType:
                                               fields.calculationYearType,
                                             birthDate_day: '',
@@ -382,7 +384,7 @@ export default function CheckoutPage() {
                                   calculationYearType:
                                     field.calculationYearType,
                                   firstName: field?.firstName || '',
-                                  birthDate: field?.birthDate || '',
+                                  birthDate: new Date(field?.birthDate || ''),
                                   birthDate_day: '',
                                   birthDate_month: '',
                                   birthDate_year: '',
@@ -460,7 +462,7 @@ export default function CheckoutPage() {
                                   calculationYearType:
                                     field.calculationYearType,
                                   firstName: field?.firstName || '',
-                                  birthDate: field?.birthDate || '',
+                                  birthDate: new Date(field?.birthDate || ''),
                                   birthDate_day: '',
                                   birthDate_month: '',
                                   birthDate_year: '',
