@@ -170,6 +170,7 @@ export default function CheckoutPage() {
               <div>
                 <TextInput
                   label='E-Posta'
+                  size='sm'
                   type='email'
                   {...formMethods.register('contactEmail')}
                   error={
@@ -241,6 +242,7 @@ export default function CheckoutPage() {
               </div>
             </div>
           </CheckoutCard>
+
           <CheckoutCard title={'Yolcu Bilgileri'}>
             <div className='grid gap-3'>
               {(() => {
@@ -257,7 +259,7 @@ export default function CheckoutPage() {
                                 {childNodeIndex + 1}. Oda
                               </Title>
                               {childNode.childNodes.map(
-                                (innerChildNode, innerChildNodeIndex) => {
+                                (innerChildNode, innerChildNodeIndex, arr) => {
                                   const fields =
                                     innerChildNode.items.at(0)?.value
                                   const nodeIndex =
@@ -280,8 +282,25 @@ export default function CheckoutPage() {
                                   return (
                                     <div key={innerChildNode.orderId}>
                                       <div className='ps-4'>
-                                        <Title order={5} pb={10}>
-                                          {innerChildNode.key}
+                                        <Title
+                                          order={5}
+                                          pb={10}
+                                          className='font-semibold'
+                                        >
+                                          {Number(innerChildNodeIndex) + 1}.{' '}
+                                          {(() => {
+                                            switch (passengerType) {
+                                              case PassengerTypesEnum.Adult:
+                                                return 'Yetişkin'
+                                              case PassengerTypesEnum.Child:
+                                                return 'Çocuk'
+                                              case PassengerTypesEnum.Infant:
+                                                return 'Bebek'
+                                              default:
+                                                return innerChildNode.key
+                                            }
+                                          })()}{' '}
+                                          Bilgileri
                                         </Title>
                                         <HotelPassengerInformationForm
                                           moduleName={moduleName}
@@ -334,6 +353,9 @@ export default function CheckoutPage() {
                                           index={nodeIndex}
                                         />
                                       </div>
+                                      {innerChildNodeIndex < arr.length - 1 && (
+                                        <hr className='m-5'></hr>
+                                      )}
                                     </div>
                                   )
                                 }
@@ -375,6 +397,7 @@ export default function CheckoutPage() {
                                   }
                                 })()}
                               </Title>
+
                               <PassengerInformationForm
                                 moduleName={moduleName}
                                 fieldProps={{
@@ -420,7 +443,7 @@ export default function CheckoutPage() {
                             </div>
                           )
                         })
-                      : passengerData?.map((item, index) => {
+                      : passengerData?.map((item, index, arr) => {
                           const field = item.items[0].value
                           const passengerType =
                             field?.type || PassengerTypesEnum.Adult
@@ -432,27 +455,30 @@ export default function CheckoutPage() {
 
                           return (
                             <div key={index}>
-                              <Title order={3} size={'sm'} pb={10}>
-                                {moduleName.toLowerCase() === 'bus'
-                                  ? field?.gender.toString() === '1'
-                                    ? 'Kadın'
-                                    : 'Erkek'
-                                  : (() => {
-                                      switch (passengerType) {
-                                        case 0:
-                                          return 'Yetişkin'
-                                        case 1:
-                                          return 'Çocuk'
-                                        case 2:
-                                          return 'Bebek'
+                              <div className='mb-3 flex items-center gap-1 font-semibold'>
+                                <div>{index + 1}.</div>
+                                <div>
+                                  {moduleName.toLowerCase() === 'bus'
+                                    ? field?.gender.toString() === '1'
+                                      ? 'Kadın'
+                                      : 'Erkek'
+                                    : (() => {
+                                        switch (passengerType) {
+                                          case 0:
+                                            return 'Yetişkin'
+                                          case 1:
+                                            return 'Çocuk'
+                                          case 2:
+                                            return 'Bebek'
 
-                                        default:
-                                          return PassengerTypesIndexEnum[
-                                            passengerType
-                                          ]
-                                      }
-                                    })()}
-                              </Title>
+                                          default:
+                                            return PassengerTypesIndexEnum[
+                                              passengerType
+                                            ]
+                                        }
+                                      })()}
+                                </div>
+                              </div>
                               <PassengerInformationForm
                                 moduleName={moduleName}
                                 fieldProps={{
@@ -494,6 +520,9 @@ export default function CheckoutPage() {
                                 index={index}
                                 error={fieldErrors}
                               />
+                              {index < passengerData.length - 1 && (
+                                <hr className='m-4'></hr>
+                              )}
                             </div>
                           )
                         })
@@ -555,23 +584,24 @@ export default function CheckoutPage() {
                 }
               />
             )}
-          <CheckoutCard>
-            <BillingForm />
-          </CheckoutCard>
+
           {moduleName !== 'TRANSFER' && moduleName !== 'TOUR' && (
             <TravelInsurancePackages />
           )}
           <CheckoutCard>
+            <BillingForm />
+          </CheckoutCard>
+          <CheckoutCard>
             <div className='text-sm'>
-              <Title order={4} pb='md'>
+              {/* <Title order={4} pb='md'>
                 Seyahatinizi inceleyin ve rezervasyon yapın
-              </Title>
-              <List type='ordered'>
-                <List.Item>
+              </Title> */}
+              <List type='ordered' className='mt-3'>
+                <List.Item className='text-center text-sm'>
                   Tarihlerin ve saatlerin doğru olduğundan emin olmak için
                   seyahat bilgilerinizi inceleyin.
                 </List.Item>
-                <List.Item>
+                <List.Item className='text-center text-sm'>
                   Yazımınızı kontrol edin. Uçuş yolcularının isimleri, devlet
                   tarafından verilen fotoğraflı kimlikle tam olarak
                   eşleşmelidir.
@@ -580,7 +610,7 @@ export default function CheckoutPage() {
             </div>
             <div className='flex justify-center'>
               {checkQueryData.data ? (
-                <div className='relative flex gap-3'>
+                <div>
                   <div className='relative'>
                     <LoadingOverlay
                       overlayProps={{ radius: 'sm', blur: 2 }}
@@ -590,31 +620,36 @@ export default function CheckoutPage() {
                         checkoutDataQuery.isRefetching
                       }
                     />
-                    <div className='text-sm'>Toplam Tutar</div>
-                    <div>
-                      <NumberFlow
-                        className='pt-1 text-lg font-semibold'
-                        format={{
-                          style: 'currency',
-                          currency: 'TRY',
-                          currencyDisplay: 'narrowSymbol',
-                        }}
-                        value={
-                          checkQueryData.data?.viewBag.SummaryViewDataResponser
-                            .summaryResponse.totalPrice ?? 0
-                        }
-                      />
+                    <div className='mt-5 mb-1 flex items-center justify-center gap-3'>
+                      <div className='text-center text-sm'>Ödenecek Tutar:</div>
+                      <div className='text-center'>
+                        <NumberFlow
+                          className='pt-1 text-center text-lg font-semibold'
+                          format={{
+                            style: 'currency',
+                            currency: 'TRY',
+                            currencyDisplay: 'narrowSymbol',
+                          }}
+                          value={
+                            checkQueryData.data?.viewBag
+                              .SummaryViewDataResponser.summaryResponse
+                              .totalPrice ?? 0
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                   <Button
-                    size='lg'
+                    className='min-w-[200px]'
+                    size='md'
+                    radius='md'
                     type='submit'
                     disabled={
                       checkoutDataQuery.isLoading ||
                       checkoutDataQuery.isRefetching
                     }
                   >
-                    Devam et
+                    Ödemeye İlerle
                   </Button>
                 </div>
               ) : null}

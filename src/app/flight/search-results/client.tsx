@@ -205,6 +205,9 @@ const FlightSearchView = () => {
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
   const { departureDate, returnDate } = searchParams
   const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
+  const [firstLegPackagePrice, setFirstLegPackagePrice] = useState<
+    number | null
+  >(null) // drawer flıghttakı secılmış paket fıyatını almak için koyduk
 
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
     packages: SelectedPackageStateProps[] | undefined | null
@@ -278,14 +281,17 @@ const FlightSearchView = () => {
 
     if (!tripKind) {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
-    }
-
-    if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
-      scrollIntoView()
-      setIsReturnFlightVisible(true)
     } else {
-      await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
-      selectedFlightKeys.current = []
+      if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
+        setFirstLegPackagePrice(data.flightFareInfo.totalPrice.value)
+        scrollIntoView()
+        setIsReturnFlightVisible(true)
+      } else {
+        await submitFlightData.mutateAsync(
+          selectedFlightKeys.current.toString()
+        )
+        selectedFlightKeys.current = []
+      }
     }
   }
 
@@ -293,6 +299,7 @@ const FlightSearchView = () => {
     setIsReturnFlightVisible(false)
     setSelectedFlightItemPackages(null)
     selectedFlightKeys.current = []
+    setFirstLegPackagePrice(null)
   }, [])
 
   useEffect(() => {
@@ -746,7 +753,7 @@ const FlightSearchView = () => {
                                   ?.segments.at(0)?.departureTime
                               ).format(' DD MMM YYYY, ddd')}
                             </div>
-                            <div className='absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-black'>
+                            <div className='md:text-md absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-xs text-black'>
                               <div>
                                 {hours}s {minutes}d
                               </div>
@@ -774,10 +781,9 @@ const FlightSearchView = () => {
                       <hr className='mt-2 flex md:hidden' />
                       <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
                         <div className='text-xl font-semibold'>
-                          {formatCurrency(
-                            selectedFlightItemPackages?.flights.at(0)?.fareInfo
-                              .totalPrice.value ?? 0
-                          )}
+                          {firstLegPackagePrice !== null
+                            ? formatCurrency(firstLegPackagePrice)
+                            : ''}
                         </div>
                         <div>
                           <Button
