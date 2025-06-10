@@ -205,9 +205,6 @@ const FlightSearchView = () => {
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
   const { departureDate, returnDate } = searchParams
   const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
-  const [firstLegPackagePrice, setFirstLegPackagePrice] = useState<
-    number | null
-  >(null) // drawer flıghttakı secılmış paket fıyatını almak için koyduk
 
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
     packages: SelectedPackageStateProps[] | undefined | null
@@ -283,7 +280,6 @@ const FlightSearchView = () => {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     } else {
       if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
-        setFirstLegPackagePrice(data.flightFareInfo.totalPrice.value)
         scrollIntoView()
         setIsReturnFlightVisible(true)
       } else {
@@ -299,7 +295,6 @@ const FlightSearchView = () => {
     setIsReturnFlightVisible(false)
     setSelectedFlightItemPackages(null)
     selectedFlightKeys.current = []
-    setFirstLegPackagePrice(null)
   }, [])
 
   useEffect(() => {
