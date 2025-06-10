@@ -259,7 +259,11 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               return (
                 <TextInput
                   {...field}
-                  label='Ad'
+                  label={
+                    <span>
+                      Ad <span style={{ color: 'red' }}>*</span>
+                    </span>
+                  }
                   error={error?.firstName ? error?.firstName?.message : null}
                   autoComplete='given-name'
                 />
