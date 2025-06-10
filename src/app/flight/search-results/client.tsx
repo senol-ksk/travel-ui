@@ -781,9 +781,29 @@ const FlightSearchView = () => {
                       <hr className='mt-2 flex md:hidden' />
                       <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
                         <div className='text-xl font-semibold'>
-                          {firstLegPackagePrice !== null
-                            ? formatCurrency(firstLegPackagePrice)
-                            : ''}
+                          {(() => {
+                            // ılk uçuşu al ama secilen
+                            const firstFlight =
+                              selectedFlightItemPackages?.flights?.[0]
+                            //  ılk uçuş paket key i ama secilen
+                            const firstPackageKey =
+                              selectedFlightKeys.current?.[0]
+                            if (firstFlight && firstPackageKey) {
+                              //ilk ucus key i secilen paket keyı eş mi
+                              const firstSelectedPackage =
+                                firstFlight.package.find(
+                                  (pckK) =>
+                                    pckK.fareInfo.key === firstPackageKey
+                                )
+                              // eşse fiyatı yazsın yoksa zaten gerek yok boş dönebilir.
+                              if (firstSelectedPackage) {
+                                return formatCurrency(
+                                  firstSelectedPackage.fareInfo.totalPrice.value
+                                )
+                              }
+                            }
+                            return ''
+                          })()}
                         </div>
                         <div>
                           <Button
