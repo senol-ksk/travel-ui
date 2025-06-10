@@ -1,4 +1,5 @@
-import { z } from 'zod'
+// import { z } from 'zod'
+import { z } from '@/libs/zod'
 import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -33,14 +34,14 @@ const baseDateSchema = z.string().date()
 const passengerValidation = z.object({
   passengers: z.array(
     z
-      .object<PassengerValidationType>({
+      .object({
         declaredAge: z.string().readonly(),
         // declaredAge: z.number().readonly(),
         checkinDate: z.string().readonly(),
         birthDate_day: z.string().min(1).max(2),
         birthDate_month: z.string().min(2).max(2),
         birthDate_year: z.string().min(4).max(4),
-        birthDate: z.string().date(),
+        birthDate: z.coerce.date(),
         calculationYearType: z.nativeEnum(AgeCalculationType).readonly(),
         citizenNo: z.string().optional(),
         firstName: z.string().min(3).max(50),
@@ -115,7 +116,7 @@ const passengerValidation = z.object({
           const dateDiff = dayjsToday.diff(dayjsBirthDay, 'day')
           const checkinDate = dayjs(value.checkinDate)
           const declaredAge = +value.declaredAge
-          const adultMinBirthDate = dayjs(checkinDate).subtract(18, 'year')
+
           let minBirthDay
           let maxBirthDay
           if (moduleName === 'hotel' && passengerType === 1) {
