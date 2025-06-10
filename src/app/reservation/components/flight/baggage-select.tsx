@@ -1,13 +1,15 @@
 import { NativeSelect, type NativeSelectProps } from '@mantine/core'
+import React from 'react'
 
 import { FlightOptionalServicesDataItem } from '@/types/passengerViewModel'
 import { upperFirst } from '@mantine/hooks'
 import { formatCurrency } from '@/libs/util'
+import { ReactNode } from 'react'
 
 type IProps = {
   data: FlightOptionalServicesDataItem[]
   onChange: (data: FlightOptionalServicesDataItem) => void
-  label?: string
+  label?: ReactNode
 }
 
 const convertBaggageLabel = (data: string) => {

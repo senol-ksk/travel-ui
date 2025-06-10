@@ -208,7 +208,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
         type='hidden'
       />
 
-      <div className='grid grid-cols-2 gap-3'>
+      <div className='grid grid-cols-2 gap-3 md:gap-5'>
         <div
           className={clsx(`col-span-2`, {
             hidden: moduleName.toLowerCase() === 'bus',
@@ -259,8 +259,9 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               return (
                 <TextInput
                   {...field}
+                  size='md'
                   label={
-                    <span>
+                    <span className='font-normal'>
                       Ad <span style={{ color: 'red' }}>*</span>
                     </span>
                   }
@@ -279,7 +280,8 @@ export const PassengerInformationForm: React.FC<IProps> = ({
             render={({ field }) => (
               <TextInput
                 {...field}
-                label='Soyad'
+                size='md'
+                label={<span className='font-normal'>Soyad</span>}
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
               />
@@ -288,7 +290,9 @@ export const PassengerInformationForm: React.FC<IProps> = ({
         </div>
         <div>
           <Input.Wrapper>
-            <Input.Label htmlFor={name_birthDate_day}>Doğum Tarihi</Input.Label>
+            <Input.Label className='font-normal' htmlFor={name_birthDate_day}>
+              Doğum Tarihi
+            </Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
                 control={methods.control}
@@ -296,6 +300,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     id={name_birthDate_day}
                     onChange={(e) => {
                       field.onChange(e)
@@ -312,6 +317,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -327,6 +333,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -358,7 +365,8 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               render={({ field }) => (
                 <TextInput
                   {...field}
-                  label='TC Kimlik No'
+                  size='md'
+                  label={<span className='font-normal'>TC Kimlik No</span>}
                   inputMode='numeric'
                   type='tel'
                   error={
@@ -410,6 +418,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               render={({ field }) => (
                 <NativeSelect
                   {...field}
+                  size='md'
                   label='Pasaportu Veren Ülke'
                   error={
                     !!error?.passportCountry
@@ -432,6 +441,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               render={({ field }) => (
                 <TextInput
                   {...field}
+                  size='md'
                   label='Pasaport No'
                   error={!!error?.passportNo ? error?.passportNo.message : null}
                 />
@@ -450,6 +460,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     id={`${namePrefix}_${name_passportValid_day}`}
                     onChange={(event) => {
                       field.onChange(event)
@@ -469,6 +480,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(event) => {
                       field.onChange(event)
                       handlePassportDateSelect(event, 'month')
@@ -486,6 +498,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(event) => {
                       field.onChange(event)
                       handlePassportDateSelect(event, 'year')

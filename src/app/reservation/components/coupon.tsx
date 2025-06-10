@@ -27,11 +27,14 @@ const Coupon: React.FC<IProps> = ({
         <span>
           <MdOutlineConfirmationNumber size={26} />
         </span>
-        <span>İndirim Kodu Kullan</span>
+        <span className='text-lg font-semibold'>İndirim Kodu Kullan</span>
       </div>
       <div className='flex gap-2 pt-3'>
         <TextInput
+          style={{ width: '49%' }}
           ref={inputRef}
+          size='md'
+          placeholder='Kodu giriniz'
           value={couponValue}
           onChange={setCouponValue}
           onKeyDown={(event) => {
@@ -45,6 +48,8 @@ const Coupon: React.FC<IProps> = ({
         <Button
           color={isCouponUsed ? 'red' : 'green'}
           type='button'
+          radius='md'
+          size='md'
           loading={loading}
           onClick={() => {
             if (couponValue.length < 3 && !isCouponUsed) {
@@ -60,7 +65,7 @@ const Coupon: React.FC<IProps> = ({
             onCouponSubmit(couponValue)
           }}
         >
-          {isCouponUsed ? 'Geri Al' : 'Kullan'}
+          {isCouponUsed ? 'Geri Al' : 'Uygula'}
         </Button>
       </div>
     </div>

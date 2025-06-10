@@ -408,7 +408,10 @@ const PaymentPage = () => {
                         >
                           <RiCheckboxCircleFill size={22} />
                         </span>
-                        <span>KREDİ/BANKA KARTI İLE ÖDE</span>
+                        <span>
+                          <span className='font-bold'>KREDİ/BANKA KARTI</span>
+                           İLE ÖDE
+                        </span>
                       </Center>
                     ),
                     value: '' + PaymentMethodEnums.CreditCard,
@@ -424,7 +427,10 @@ const PaymentPage = () => {
                         >
                           <RiCheckboxCircleFill size={22} />
                         </span>
-                        <span>ParafPara İLE ÖDE</span>
+                        <span>
+                          {' '}
+                          <span className='font-bold'>ParafPara </span>İLE ÖDE
+                        </span>
                       </Center>
                     ),
                     value: '' + PaymentMethodEnums.Bonus,
@@ -447,9 +453,16 @@ const PaymentPage = () => {
                     render={({ field }) => {
                       return (
                         <TextInput
+                          className='grid gap-1'
                           {...field}
                           autoComplete='cc-name'
-                          label='Kart Üzerindeki İsim'
+                          size='md'
+                          label={
+                            <span className='font-normal'>
+                              Kart üzerindeki isim {''}
+                              <span style={{ color: 'red' }}>*</span>
+                            </span>
+                          }
                           placeholder='Kart Üzerindeki İsim'
                           error={
                             !!formMethods.formState.errors.cardOwner
@@ -466,10 +479,16 @@ const PaymentPage = () => {
                     defaultValue=''
                     render={({ field }) => (
                       <TextInput
+                        className='grid gap-1'
                         {...field}
                         autoComplete='cc-number'
-                        label='Kart Numarası'
+                        label={
+                          <span className='font-normal'>
+                            Kart Numarası {''}
+                          </span>
+                        }
                         type='tel'
+                        size='md'
                         error={
                           !!formMethods.formState.errors.cardNumber
                             ? formMethods.formState.errors.cardNumber.message
@@ -484,69 +503,90 @@ const PaymentPage = () => {
                       />
                     )}
                   />
-                  <div className='grid grid-cols-2 gap-3 md:grid-cols-3'>
-                    <Controller
-                      control={formMethods.control}
-                      name='cardExpiredMonth'
-                      render={({ field }) => (
-                        <NativeSelect
-                          {...field}
-                          label='Ay'
-                          autoComplete='cc-exp-month'
-                          data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-                          error={
-                            !!formMethods.formState.errors.cardExpiredMonth
-                              ? formMethods.formState.errors.cardExpiredMonth
-                                  .message
-                              : null
-                          }
-                        />
-                      )}
-                    />
-                    <Controller
-                      control={formMethods.control}
-                      name='cardExpiredYear'
-                      render={({ field }) => (
-                        <NativeSelect
-                          {...field}
-                          autoComplete='cc-exp-year'
-                          label='Yıl'
-                          data={[
-                            { label: 'Yıl', value: '' },
-                            ...cardExpiredYearList(),
-                          ]}
-                          error={
-                            !!formMethods.formState.errors.cardExpiredYear
-                              ? formMethods.formState.errors.cardExpiredYear
-                                  .message
-                              : null
-                          }
-                        />
-                      )}
-                    />
-
-                    <Controller
-                      control={formMethods.control}
-                      name='cardCvv'
-                      defaultValue=''
-                      render={({ field }) => (
-                        <TextInput
-                          {...field}
-                          maxLength={
-                            cardValidation.number(
-                              formMethods.watch('cardNumber')
-                            ).card?.code.size || 3
-                          }
-                          label='CVV'
-                          placeholder='CVV'
-                          error={
-                            !!formMethods.formState.errors.cardCvv
-                              ? formMethods.formState.errors.cardCvv.message
-                              : null
-                          }
-                        />
-                      )}
-                    />
+                  <div className='grid grid-cols-3 gap-3'>
+                    <div className='col-span-2'>
+                      <div className='grid gap-1'>
+                        <div>Son kullanma tarihi</div>
+                        <div className='flex gap-3'>
+                          <div className='w-full'>
+                            <Controller
+                              control={formMethods.control}
+                              name='cardExpiredMonth'
+                              render={({ field }) => (
+                                <NativeSelect
+                                  className='w-full'
+                                  {...field}
+                                  size='md'
+                                  autoComplete='cc-exp-month'
+                                  data={[
+                                    { label: 'Ay', value: '' },
+                                    ...cardMonths(),
+                                  ]}
+                                  error={
+                                    !!formMethods.formState.errors
+                                      .cardExpiredMonth
+                                      ? formMethods.formState.errors
+                                          .cardExpiredMonth.message
+                                      : null
+                                  }
+                                />
+                              )}
+                            />
+                          </div>
+                          <div className='w-full'>
+                            <Controller
+                              control={formMethods.control}
+                              name='cardExpiredYear'
+                              render={({ field }) => (
+                                <NativeSelect
+                                  className='w-full'
+                                  {...field}
+                                  size='md'
+                                  autoComplete='cc-exp-year'
+                                  data={[
+                                    { label: 'Yıl', value: '' },
+                                    ...cardExpiredYearList(),
+                                  ]}
+                                  error={
+                                    !!formMethods.formState.errors
+                                      .cardExpiredYear
+                                      ? formMethods.formState.errors
+                                          .cardExpiredYear.message
+                                      : null
+                                  }
+                                />
+                              )}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <Controller
+                        control={formMethods.control}
+                        name='cardCvv'
+                        defaultValue=''
+                        render={({ field }) => (
+                          <TextInput
+                            className='grid w-full gap-1'
+                            {...field}
+                            maxLength={
+                              cardValidation.number(
+                                formMethods.watch('cardNumber')
+                              ).card?.code.size || 3
+                            }
+                            label={<span className='font-normal'>CVV</span>}
+                            placeholder='CVV'
+                            size='md'
+                            error={
+                              !!formMethods.formState.errors.cardCvv
+                                ? formMethods.formState.errors.cardCvv.message
+                                : null
+                            }
+                          />
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className='pt-5'>
@@ -704,7 +744,9 @@ const PaymentPage = () => {
                   </div>
                 </div>
                 <Button
+                  className='my-3'
                   size='lg'
+                  radius='md'
                   type='submit'
                   //  disabled={isPrivilegeCardCheck}
                 >

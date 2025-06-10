@@ -91,7 +91,7 @@ const FlightOptionalServices: React.FC<IProps> = ({
 
   return (
     <CheckoutCard>
-      <div className='grid'>
+      <div className='grid py-2 md:p-0'>
         <UnstyledButton
           className='text-lg font-semibold'
           onClick={toggle}
@@ -106,7 +106,7 @@ const FlightOptionalServices: React.FC<IProps> = ({
               ?.filter((passenger) => passenger.key !== 'Infant') // Infant passengers can not select baggage
               .map((passenger, passengerIndex) => (
                 <div key={passenger.orderId} className='grid gap-1'>
-                  <Title order={6} fz='h5' className='mt-4'>
+                  <Title order={6} fz='h5' className='mt-3'>
                     {passenger.orderId}.Yolcu
                   </Title>
 
@@ -116,12 +116,18 @@ const FlightOptionalServices: React.FC<IProps> = ({
                         flightInfos.flightList[flightIndex]
                       return (
                         item.length > 0 && (
-                          <div key={flightIndex} className='text-gray-600'>
+                          <div key={flightIndex}>
                             <BaggageSelect
                               label={
-                                relatedFlightData.flightDetail.groupId === 0
-                                  ? 'Gidiş Uçuşu'
-                                  : 'Dönüş Uçuşu'
+                                relatedFlightData.flightDetail.groupId === 0 ? (
+                                  <span className='font-normal'>
+                                    Gidiş Uçuşu
+                                  </span>
+                                ) : (
+                                  <span className='font-normal'>
+                                    Dönüş Uçuşu
+                                  </span>
+                                )
                               }
                               data={item}
                               onChange={(item) => {

@@ -74,6 +74,7 @@ export const LoginForm = () => {
             return (
               <TextInput
                 {...field}
+                size='md'
                 label='E-posta'
                 error={fieldState.error?.message}
                 autoComplete='email'
@@ -89,6 +90,7 @@ export const LoginForm = () => {
             return (
               <PasswordInput
                 {...field}
+                size='md'
                 label='Şifre'
                 error={fieldState.error?.message}
                 autoComplete='current-password'

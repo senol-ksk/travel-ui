@@ -197,6 +197,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               return (
                 <TextInput
                   {...field}
+                  size='md'
                   label='Ad'
                   error={error?.firstName ? error?.firstName?.message : null}
                   autoComplete='given-name'
@@ -213,6 +214,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
             render={({ field }) => (
               <TextInput
                 {...field}
+                size='md'
                 label='Soyad'
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
@@ -230,6 +232,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -245,6 +248,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -260,6 +264,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
                 render={({ field }) => (
                   <NativeSelect
                     {...field}
+                    size='md'
                     onChange={(e) => {
                       field.onChange(e)
                       handleBirthdateSelect(e)
@@ -290,6 +295,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
             render={({ field }) => (
               <TextInput
                 {...field}
+                size='md'
                 label='TC Kimlik No'
                 inputMode='numeric'
                 type='tel'
@@ -335,6 +341,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               render={({ field }) => (
                 <NativeSelect
                   {...field}
+                  size='md'
                   label='Pasaportu Veren Ülke'
                   error={
                     !!error?.passportCountry
@@ -357,6 +364,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               render={({ field }) => (
                 <TextInput
                   {...field}
+                  size='md'
                   label='Pasaport No'
                   error={!!error?.passportNo ? error?.passportNo.message : null}
                 />
