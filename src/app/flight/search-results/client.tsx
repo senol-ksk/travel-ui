@@ -205,9 +205,6 @@ const FlightSearchView = () => {
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
   const { departureDate, returnDate } = searchParams
   const isSameDay = dayjs(departureDate).isSame(returnDate, 'd')
-  const [firstLegPackagePrice, setFirstLegPackagePrice] = useState<
-    number | null
-  >(null) // drawer flıghttakı secılmış paket fıyatını almak için koyduk
 
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
     packages: SelectedPackageStateProps[] | undefined | null
@@ -283,7 +280,6 @@ const FlightSearchView = () => {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     } else {
       if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
-        setFirstLegPackagePrice(data.flightFareInfo.totalPrice.value)
         scrollIntoView()
         setIsReturnFlightVisible(true)
       } else {
@@ -299,7 +295,6 @@ const FlightSearchView = () => {
     setIsReturnFlightVisible(false)
     setSelectedFlightItemPackages(null)
     selectedFlightKeys.current = []
-    setFirstLegPackagePrice(null)
   }, [])
 
   useEffect(() => {
@@ -781,9 +776,17 @@ const FlightSearchView = () => {
                       <hr className='mt-2 flex md:hidden' />
                       <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
                         <div className='text-xl font-semibold'>
-                          {firstLegPackagePrice !== null
-                            ? formatCurrency(firstLegPackagePrice)
-                            : ''}
+                          {(() => {
+                            const packagePrice =
+                              selectedFlightItemPackages?.flights?.[0]?.package.find(
+                                (pckK) =>
+                                  pckK.fareInfo.key ===
+                                  selectedFlightKeys.current?.[0]
+                              )?.fareInfo.totalPrice.value
+                            return packagePrice !== undefined
+                              ? formatCurrency(packagePrice)
+                              : ''
+                          })()}
                         </div>
                         <div>
                           <Button
