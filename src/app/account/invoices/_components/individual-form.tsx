@@ -97,6 +97,7 @@ const IndividualForm: React.FC<IProps> = ({
           name='name'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Ad'
               {...field}
               error={fieldState.error?.message}
@@ -109,6 +110,7 @@ const IndividualForm: React.FC<IProps> = ({
           name='lastName'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Soyad'
               {...field}
               error={fieldState.error?.message}
@@ -124,6 +126,7 @@ const IndividualForm: React.FC<IProps> = ({
             <NativeSelect
               label='Unvan'
               {...field}
+              size='md'
               data={[
                 { label: 'Bay', value: 'Bay' },
                 { label: 'Bayan', value: 'Bayan' },
@@ -136,6 +139,7 @@ const IndividualForm: React.FC<IProps> = ({
           name='tcKimlikNo'
           render={({ field, fieldState }) => (
             <NumberInput
+              size='md'
               hideControls
               maxLength={11}
               type='tel'
@@ -151,7 +155,7 @@ const IndividualForm: React.FC<IProps> = ({
           name='countryCode'
           defaultValue='TR'
           render={({ field }) => (
-            <NativeSelect label='Ülke' {...field}>
+            <NativeSelect label='Ülke' {...field} size='md'>
               <CountryOptions />
             </NativeSelect>
           )}
@@ -162,6 +166,7 @@ const IndividualForm: React.FC<IProps> = ({
           defaultValue=''
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Şehir'
               {...field}
               error={fieldState.error?.message}
@@ -174,6 +179,7 @@ const IndividualForm: React.FC<IProps> = ({
           defaultValue=''
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='İlçe'
               {...field}
               error={fieldState.error?.message}
@@ -188,6 +194,7 @@ const IndividualForm: React.FC<IProps> = ({
             defaultValue=''
             render={({ field, fieldState }) => (
               <Textarea
+                size='md'
                 label='Adres'
                 {...field}
                 error={fieldState.error?.message}
@@ -201,6 +208,7 @@ const IndividualForm: React.FC<IProps> = ({
           name='email'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='E-Posta'
               type='email'
               {...field}
@@ -224,7 +232,7 @@ const IndividualForm: React.FC<IProps> = ({
                     {...field}
                     usePreciseValidation
                     inputProps={{
-                      className: clsx('m_8fb7ebe7 mantine-Input-input', {
+                      className: clsx('m_8fb7ebe7 mantine-Input-input py-5', {
                         'border-rose-500': !!fieldState.error?.message,
                       }),
                       'data-variant': 'default',

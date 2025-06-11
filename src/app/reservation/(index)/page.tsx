@@ -166,11 +166,11 @@ export default function CheckoutPage() {
           className='relative grid gap-3 md:gap-5'
         >
           <CheckoutCard title={'İletişim Bilgileri'}>
-            <div className='grid grid-cols-2 gap-3'>
+            <div className='grid grid-cols-2 gap-1 md:gap-3'>
               <div>
                 <TextInput
-                  label='E-Posta'
-                  size='sm'
+                  label={<span className='font-normal'>E-posta</span>}
+                  size='md'
                   type='email'
                   {...formMethods.register('contactEmail')}
                   error={
@@ -182,7 +182,9 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <Input.Wrapper>
-                  <Input.Label htmlFor='contactGSM'>GSM No</Input.Label>
+                  <Input.Label htmlFor='contactGSM' className='font-normal'>
+                    GSM No
+                  </Input.Label>
                   <div
                     className='m_6c018570 mantine-Input-wrapper'
                     data-variant='default'
@@ -197,10 +199,13 @@ export default function CheckoutPage() {
                           ref={(ref) => field.ref(ref?.getInput())}
                           onChangeNumber={field.onChange}
                           inputProps={{
-                            className: clsx('m_8fb7ebe7 mantine-Input-input', {
-                              'border-rose-500':
-                                !!formMethods.formState?.errors?.contactGSM,
-                            }),
+                            className: clsx(
+                              'm_8fb7ebe7 mantine-Input-input py-5',
+                              {
+                                'border-rose-500':
+                                  !!formMethods.formState?.errors?.contactGSM,
+                              }
+                            ),
                             'data-variant': 'default',
                             name: field.name,
                             id: 'contactGSM',
@@ -640,7 +645,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                   <Button
-                    className='min-w-[200px]'
+                    className='my-4 min-w-[200px]'
                     size='md'
                     radius='md'
                     type='submit'

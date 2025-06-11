@@ -67,6 +67,7 @@ const BillingForm = () => {
                 <div className='col-span-12 grid grid-cols-12 gap-3'>
                   <div className='col-span-6'>
                     <TextInput
+                      size='md'
                       label='Faturaya bir ad verin'
                       {...formContext.register(
                         'billingIndiviual.billingInfoName'
@@ -77,6 +78,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-6'>
                   <TextInput
+                    size='md'
                     label='Ad'
                     {...formContext.register('billingIndiviual.name')}
                     error={!!formContext.formState.errors.name}
@@ -84,6 +86,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-6'>
                   <TextInput
+                    size='md'
                     label='Soyad'
                     {...formContext.register('billingIndiviual.lastName')}
                     error={!!formContext.formState.errors.lastName}
@@ -92,6 +95,7 @@ const BillingForm = () => {
                 <div className='col-span-6'>
                   <NativeSelect
                     label='Unvan'
+                    size='md'
                     defaultValue={'Bay'}
                     {...formContext.register('billingIndiviual.title')}
                     error={!!formContext.formState.errors.Title}
@@ -102,6 +106,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-6'>
                   <TextInput
+                    size='md'
                     label='TC Kimlik No'
                     type='tel'
                     {...formContext.register('billingIndiviual.tcKimlikNo')}
@@ -110,6 +115,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-6'>
                   <NativeSelect
+                    size='md'
                     label='Ülke'
                     {...formContext.register('billingIndiviual.countryCode')}
                     error={!!formContext.formState.errors.countryCode}
@@ -119,6 +125,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-6'>
                   <TextInput
+                    size='md'
                     label='Şehir'
                     {...formContext.register('billingIndiviual.city')}
                     error={!!formContext.formState.errors.city}
@@ -126,6 +133,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-12 md:col-span-6'>
                   <TextInput
+                    size='md'
                     label='İlçe'
                     {...formContext.register('billingIndiviual.district')}
                     error={!!formContext.formState.errors.district}
@@ -133,6 +141,7 @@ const BillingForm = () => {
                 </div>
                 <div className='col-span-12'>
                   <TextInput
+                    size='md'
                     label='Adres'
                     {...formContext.register('billingIndiviual.address')}
                     error={!!formContext.formState.errors.address}
@@ -148,6 +157,7 @@ const BillingForm = () => {
                     }
                     render={({ field, fieldState, formState }) => (
                       <TextInput
+                        size='md'
                         label='E-Posta'
                         type='email'
                         {...field}
@@ -176,7 +186,7 @@ const BillingForm = () => {
                               usePreciseValidation
                               inputProps={{
                                 className: clsx(
-                                  'm_8fb7ebe7 mantine-Input-input',
+                                  'm_8fb7ebe7 mantine-Input-input py-5',
                                   {
                                     'border-rose-500':
                                       !!formContext.formState?.errors
@@ -184,6 +194,7 @@ const BillingForm = () => {
                                   }
                                 ),
                                 'data-variant': 'default',
+
                                 id: field.name,
                                 name: field.name,
                               }}
@@ -194,6 +205,7 @@ const BillingForm = () => {
                                 containerClass: 'w-full',
                                 separateDialCode: true,
                                 initialCountry: 'auto',
+
                                 i18n: {
                                   tr: 'Türkiye',
                                   searchPlaceholder: 'Ülke adı giriniz',
@@ -228,6 +240,7 @@ const BillingForm = () => {
                       render={({ field, formState }) => {
                         return (
                           <TextInput
+                            size='md'
                             label='Faturaya bir ad verin'
                             {...field}
                             error={!!formState.errors.billingInfoName}
@@ -245,6 +258,7 @@ const BillingForm = () => {
                     render={({ field, formState }) => {
                       return (
                         <TextInput
+                          size='md'
                           label='Şirket Ünvanı'
                           {...field}
                           error={!!formState.errors.title}
@@ -261,6 +275,7 @@ const BillingForm = () => {
                     render={({ field, formState }) => {
                       return (
                         <TextInput
+                          size='md'
                           label='Vergi Dairesi'
                           {...field}
                           error={!!formState.errors.vergiDairesi}
@@ -277,6 +292,7 @@ const BillingForm = () => {
                     render={({ field, formState }) => {
                       return (
                         <TextInput
+                          size='md'
                           label='Vergi Numarası'
                           {...field}
                           error={!!formState.errors.vergiNo}
@@ -292,7 +308,7 @@ const BillingForm = () => {
                     name='billingCorporate.countryCode'
                     render={({ field }) => {
                       return (
-                        <NativeSelect label='Ülke' {...field}>
+                        <NativeSelect label='Ülke' {...field} size='md'>
                           <CountryOptions />
                         </NativeSelect>
                       )
@@ -306,6 +322,7 @@ const BillingForm = () => {
                     defaultValue={''}
                     render={({ field, formState }) => (
                       <TextInput
+                        size='md'
                         label='Şehir'
                         {...field}
                         error={!!formState.errors.city}
@@ -320,6 +337,7 @@ const BillingForm = () => {
                     defaultValue={''}
                     render={({ field, formState }) => (
                       <TextInput
+                        size='md'
                         label='İlçe'
                         {...field}
                         error={!!formState.errors.district}
@@ -334,6 +352,7 @@ const BillingForm = () => {
                     defaultValue={''}
                     render={({ field, formState }) => (
                       <TextInput
+                        size='md'
                         label='Adres'
                         {...field}
                         error={!!formState.errors.address}
@@ -348,6 +367,7 @@ const BillingForm = () => {
                     defaultValue={''}
                     render={({ field, formState }) => (
                       <TextInput
+                        size='md'
                         type='email'
                         label='E-Posta'
                         {...field}
@@ -374,7 +394,7 @@ const BillingForm = () => {
                             usePreciseValidation
                             inputProps={{
                               className: clsx(
-                                'm_8fb7ebe7 mantine-Input-input',
+                                'm_8fb7ebe7 mantine-Input-input py-5',
                                 {
                                   'border-rose-500':
                                     !!formContext.formState?.errors.phoneNumber,

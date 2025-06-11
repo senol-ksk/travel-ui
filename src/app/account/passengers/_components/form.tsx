@@ -242,8 +242,9 @@ const PassengerForm: React.FC<IProps> = ({
             defaultValue={form.formState.defaultValues?.email ?? ''}
             render={({ field, fieldState }) => (
               <TextInput
+                size='md'
                 type='email'
-                label='E-posta'
+                label={<span className='font-normal'>E-posta</span>}
                 {...field}
                 error={fieldState.error?.message}
               />
@@ -252,7 +253,9 @@ const PassengerForm: React.FC<IProps> = ({
         </div>
         <div>
           <Input.Wrapper>
-            <Input.Label htmlFor='mobilPhoneNumber'>GSM No</Input.Label>
+            <Input.Label htmlFor='mobilPhoneNumber' className='font-normal'>
+              GSM No
+            </Input.Label>
             <div
               className='m_6c018570 mantine-Input-wrapper'
               data-variant='default'
@@ -267,7 +270,7 @@ const PassengerForm: React.FC<IProps> = ({
                       {...field}
                       usePreciseValidation
                       inputProps={{
-                        className: clsx('m_8fb7ebe7 mantine-Input-input', {
+                        className: clsx('m_8fb7ebe7 mantine-Input-input py-5', {
                           'border-rose-500': !!fieldState.error?.message,
                         }),
                         'data-variant': 'default',

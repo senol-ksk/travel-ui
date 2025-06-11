@@ -78,6 +78,7 @@ const CorporateForm: React.FC<IProps> = ({
           name='title'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Şirket Ünvanı'
               {...field}
               error={fieldState.error?.message}
@@ -91,6 +92,7 @@ const CorporateForm: React.FC<IProps> = ({
           name='vergiDairesi'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Vergi Dairesi'
               {...field}
               error={fieldState.error?.message}
@@ -103,6 +105,7 @@ const CorporateForm: React.FC<IProps> = ({
           name='vergiNo'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Vergi Numarası'
               {...field}
               error={fieldState.error?.message}
@@ -125,6 +128,7 @@ const CorporateForm: React.FC<IProps> = ({
           defaultValue=''
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='Şehir'
               {...field}
               error={fieldState.error?.message}
@@ -137,6 +141,7 @@ const CorporateForm: React.FC<IProps> = ({
           defaultValue=''
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='İlçe'
               {...field}
               error={fieldState.error?.message}
@@ -150,6 +155,7 @@ const CorporateForm: React.FC<IProps> = ({
             defaultValue=''
             render={({ field, fieldState }) => (
               <Textarea
+                size='md'
                 label='Adres'
                 {...field}
                 error={fieldState.error?.message}
@@ -163,6 +169,7 @@ const CorporateForm: React.FC<IProps> = ({
           name='email'
           render={({ field, fieldState }) => (
             <TextInput
+              size='md'
               label='E-Posta'
               type='email'
               {...field}
@@ -185,7 +192,7 @@ const CorporateForm: React.FC<IProps> = ({
                     {...field}
                     usePreciseValidation
                     inputProps={{
-                      className: clsx('m_8fb7ebe7 mantine-Input-input', {
+                      className: clsx('m_8fb7ebe7 mantine-Input-input py-5', {
                         'border-rose-500': !!fieldState.error?.message,
                       }),
                       'data-variant': 'default',
