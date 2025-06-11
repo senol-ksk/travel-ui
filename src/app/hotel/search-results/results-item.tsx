@@ -240,6 +240,14 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                       <div className='rounded-md border-l-4 border-l-blue-800 bg-blue-100 px-3 py-2'>
                         {campaign.title}
                       </div>
+                      {/* <Box
+                        component='a'
+                        href={campaign.params.link.value}
+                        target='_blank'
+                        className='block rounded-md border-l-4 border-l-blue-800 bg-blue-100 px-3 py-2'
+                      >
+                        {campaign.title}
+                      </Box> */}
                     </Carousel.Slide>
                   ))}
                 </Carousel>
