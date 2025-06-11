@@ -41,11 +41,16 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   const mounted = useMounted()
   const [searchParams] = useQueryStates(hotelSearchParamParser)
 
-  const { hotelSearchRequestQuery, searchParamsQuery, searchQueryStatus } =
-    useSearchResultParams({ slug })
+  const {
+    hotelSearchRequestQuery,
+    searchParamsQuery,
+    searchQueryStatus,
+    hotelCampaignsQuery,
+  } = useSearchResultParams({ slug })
   const [filterParams, setFilterParams] = useQueryStates(
     hotelFilterSearchParams
   )
+
   const [isMapsModalOpened, { open: openMapsModal, close: closeMapsModal }] =
     useDisclosure(false)
 
@@ -85,7 +90,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
           </div>
         </div>
       )}
-      <Container>
+      <Container className='px-0'>
         <div className='py-5 lg:py-10'>
           <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
             <div className='md:col-span-1'>
@@ -317,29 +322,6 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     const roomDetails =
                       results.roomDetails && Object.values(results.roomDetails)
 
-                    // if (slug) {
-                    //   return hotelInfos.map((result) => {
-                    //     return (
-                    //       <HotelSearchResultItem
-                    //         searchToken={
-                    //           searchParamsQuery.data?.hotelSearchApiRequest
-                    //             .hotelSearchModuleRequest.searchToken as string
-                    //         }
-                    //         sessionToken={
-                    //           searchParamsQuery.data?.hotelSearchApiRequest
-                    //             .hotelSearchModuleRequest.sessionToken as string
-                    //         }
-                    //         key={result.id}
-                    //         hotelInfo={hotelInfo}
-                    //         onMapClick={() => {
-                    //           openMapsModal()
-                    //           setHotelInfo(hotelInfo)
-                    //         }}
-                    //       />
-                    //     )
-                    //   })
-                    // }
-
                     return results.items.map((result) => {
                       const hotelInfo = hotelInfos.find(
                         (hotelInfo) => hotelInfo.id === result.hotelId
@@ -366,6 +348,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                             openMapsModal()
                             setHotelInfo(hotelInfo)
                           }}
+                          campaignContents={hotelCampaignsQuery?.data}
                         />
                       )
                     })

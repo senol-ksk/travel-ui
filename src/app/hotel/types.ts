@@ -1002,3 +1002,40 @@ export interface HotelDetailInstallmentData {
     }
   }[]
 }
+
+export interface HotelCampaignsResponse {
+  id: ID
+  title: string
+  typeId: ID
+  collectionId: ID
+  point: string
+  params: {
+    sort_description: {
+      value: string
+    }
+    description: {
+      value: string
+    }
+    btn_text: {
+      value: string
+    }
+    link: {
+      value: string
+    }
+    image: {
+      value: string
+    }
+    svg: {
+      value: string
+    }
+    view_country: {
+      value: string
+    }
+    slug: {
+      value: string
+    }
+  }
+  ordering: number
+  language: string
+  active: boolean
+}
