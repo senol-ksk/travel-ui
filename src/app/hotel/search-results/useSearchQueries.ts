@@ -6,7 +6,10 @@ import { useLocalStorage, useTimeout } from '@mantine/hooks'
 import { getsecuritytoken, request, serviceRequest } from '@/network'
 import { HotelSearchRequestParams } from '@/types/hotel'
 import { GetSecurityTokenResponse } from '@/types/global'
-import { HotelSearchResultApiResponse } from '@/app/hotel/types'
+import {
+  HotelCampaignsResponse,
+  HotelSearchResultApiResponse,
+} from '@/app/hotel/types'
 import {
   hotelFilterSearchParams,
   HotelSearchEngineSchemaType,
@@ -15,6 +18,7 @@ import {
 import { hotelSocket } from './socket'
 import { cleanObj } from '@/libs/util'
 import dayjs from 'dayjs'
+import axios from 'axios'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 
@@ -232,6 +236,26 @@ export const useSearchResultParams = ({ slug }: SlugParams) => {
     searchQueryStatus.current = 'ended'
   }
 
+  const hotelCampaignsQuery = useQuery({
+    enabled: !!searchRequestParams?.hotelSearchModuleRequest.countryCode,
+    queryKey: [
+      'hotel-search-campaigns',
+      searchRequestParams?.hotelSearchModuleRequest.countryCode,
+    ],
+    queryFn: async () => {
+      const response = await request({
+        url: `${process.env.NEXT_PUBLIC_SERVICE_PATH}/hotel/GetCampaigns`,
+        method: 'get',
+        params: {
+          countryCode:
+            searchRequestParams?.hotelSearchModuleRequest.countryCode,
+        },
+      })
+
+      return response as HotelCampaignsResponse[]
+    },
+  })
+
   const socketOnAvailability = ({ status }: { status: number }) => {
     clearRequestTimeout()
     searchQueryStatus.current = 'ended'
@@ -256,5 +280,6 @@ export const useSearchResultParams = ({ slug }: SlugParams) => {
     hotelSearchRequestQuery,
     searchParamsQuery,
     searchQueryStatus,
+    hotelCampaignsQuery,
   }
 }
