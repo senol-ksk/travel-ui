@@ -1,16 +1,14 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import {
   Alert,
-  AspectRatio,
   Button,
   Container,
   Image,
   Loader,
   LoadingOverlay,
   Modal,
-  rem,
   ScrollArea,
   Skeleton,
   Spoiler,
@@ -31,16 +29,18 @@ import { HotelDetailRoomItem } from '../../types'
 import { InstallmentTable } from './installment'
 import { FaExclamationCircle } from 'react-icons/fa'
 
-import dayjs from 'dayjs'
 import { RoomUpdateForm } from './_components/room-update-form'
 import { LuMapPinned } from 'react-icons/lu'
-import { MdOutlineRoomService } from 'react-icons/md'
-import { NavbarMenu } from './_components/navbar_menu'
+import { MdOutlineCameraAlt, MdOutlineRoomService } from 'react-icons/md'
+// import { NavbarMenu } from './_components/navbar_menu'
+import { HotelTableOfContents } from './_components/table-of-contents'
 import { FacilityProps } from './_components/facility-props'
 import { Comments } from './_components/comments'
 import { Location } from './_components/location'
 import { HotelDrawers } from './_components/hotel-drawers'
 import { ImportantInfos } from './_components/important-infos'
+import { IoMapOutline } from 'react-icons/io5'
+import { Link } from 'next-view-transitions'
 const HotelDetailSection = () => {
   const router = useRouter()
 
@@ -49,7 +49,6 @@ const HotelDetailSection = () => {
     roomInstallmentQuery,
     roomsQuery,
     selectedRoomMutation,
-    searchParams,
   } = useHotelDataQuery()
 
   const [
@@ -143,50 +142,89 @@ const HotelDetailSection = () => {
   }
 
   if (!hotel || !hotelDetailData?.success) {
-    return <div>Error or Something happened bad</div>
+    return (
+      <Container className='pt-5 text-center' maw={600}>
+        <Alert color='yellow'>
+          <Text>Otel bilgileri alınırken bir hata oldu.</Text>
+          <div className='flex justify-center pt-3'>
+            <Button component={Link} href={'/'}>
+              Ana Sayfa
+            </Button>
+          </div>
+        </Alert>
+      </Container>
+    )
   }
 
   return (
     <>
-      <Container className='px-0 pt-5 pb-5 sm:px-4 md:pt-8'>
-        {hotel?.documents && hotel?.documents?.length > 0 && (
-          <div className='pb-3 text-end text-xs text-gray-700/85'>
-            <span>
-              Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
-            </span>
-            <strong>{hotel.documents.at(0)?.no}</strong>
+      <Container
+        className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-8'
+        id='mdx'
+      >
+        <div>
+          {hotel?.documents && hotel?.documents?.length > 0 && (
+            <div className='pb-3 text-end text-xs'>
+              <span>
+                Kültür ve Turizm Bakanlığı - Kısmı Turizm İşletme Belgesi:{' '}
+              </span>
+              <strong>{hotel.documents.at(0)?.no}</strong>
+            </div>
+          )}
+          <div className='relative'>
+            <div className='absolute end-2 top-2 z-10'>
+              <Button
+                bg={'white'}
+                c='dark'
+                variant='light'
+                leftSection={<IoMapOutline />}
+              >
+                Harita Görünümü
+              </Button>
+            </div>
+            <div className='absolute end-2 bottom-2 z-10'>
+              <Button
+                color={'black'}
+                opacity={'.75'}
+                leftSection={<MdOutlineCameraAlt />}
+              >
+                Galeri ({hotel.images.length})
+              </Button>
+            </div>
+            <div className='grid auto-cols-fr gap-4 sm:grid-cols-4 md:grid-rows-2'>
+              <figure
+                style={{ contentVisibility: 'auto' }}
+                className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
+              >
+                <Image
+                  className='aspect-16/9 h-full w-full rounded-md object-cover'
+                  src={hotel.images.at(0)?.original}
+                  alt={hotel.name}
+                />
+              </figure>
+
+              {hotel.images.slice(1, 5).map((image, imageIndex) => (
+                <figure
+                  key={imageIndex}
+                  className='relative hidden gap-3 place-self-stretch rounded-md sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
+                  style={{ contentVisibility: 'auto' }}
+                >
+                  <Image
+                    src={image.original}
+                    alt={hotel.name}
+                    className='absolute aspect-16/9 h-full w-full object-cover'
+                  />
+                </figure>
+              ))}
+            </div>
           </div>
-        )}
-        <div className='grid auto-cols-fr gap-3 sm:grid-cols-4 md:grid-rows-2'>
-          <figure
-            style={{ contentVisibility: 'auto' }}
-            className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
-          >
-            <Image
-              className='aspect-16/9 h-full w-full rounded object-cover'
-              src={hotel.images.at(0)?.original}
-              alt={hotel.name}
-            />
-          </figure>
-
-          {hotel.images.slice(1, 5).map((image, imageIndex) => (
-            <figure
-              key={imageIndex}
-              className='relative hidden gap-3 place-self-stretch rounded sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
-              style={{ contentVisibility: 'auto' }}
-            >
-              <Image
-                src={image.original}
-                alt={hotel.name}
-                className='absolute aspect-16/9 h-full w-full object-cover'
-              />
-            </figure>
-          ))}
         </div>
-      </Container>
 
-      <Container className='grid gap-2 md:gap-7'>
-        <NavbarMenu />
+        {/* <NavbarMenu /> */}
+        <div className='sticky top-0 z-30 hidden rounded bg-gray-50 shadow-xs sm:block'>
+          <HotelTableOfContents />
+        </div>
+
         <div className='grid grid-cols-2 gap-5 rounded-sm border border-gray-300 md:grid-cols-12 md:p-3'>
           <div className='col-span-12 grid gap-2 rounded-sm border border-gray-300 p-3 md:col-span-8'>
             <div className='grid'>
@@ -289,8 +327,8 @@ const HotelDetailSection = () => {
             </Button> */}
           </div>
         </div>
-        <Title order={2} size={'lg'}>
-          Odanızı Seçin
+        <Title fz={'xxl'} id='rooms'>
+          Odalar
         </Title>
         <div className='rounded-sm border border-gray-300 p-3'>
           <RoomUpdateForm />
@@ -317,7 +355,7 @@ const HotelDetailSection = () => {
           iptal hakkın olsun!
         </Text>
 
-        <div className='relative grid gap-3 @lg:gap-5' id='rooms'>
+        <div className='relative grid gap-3 @lg:gap-5'>
           {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
             <div>
               <div className='text-center text-gray-500'>Odalar yükleniyor</div>
@@ -383,13 +421,13 @@ const HotelDetailSection = () => {
           />
         </div>
         <Title order={2} size={'lg'} id='facility-infos'>
-          Tesis Bilgileri{' '}
+          Tesis Bilgileri
         </Title>
         <div className='rounded border bg-sky-500/10 p-1 md:p-3'>
           <FacilityProps descriptions={hotel.descriptions} />
         </div>
-        <Title order={2} size={'lg'}>
-          Değerlendirmeler{' '}
+        <Title order={2} size={'lg'} id='ratings'>
+          Değerlendirmeler
         </Title>
         <div className='gap-2 rounded bg-sky-500/10 p-3'>
           <div className='flex items-center justify-between rounded bg-white p-3'>
@@ -404,10 +442,10 @@ const HotelDetailSection = () => {
             <Comments />
           </div>
         </div>
-        <Title order={2} size={'lg'}>
+        <Title order={2} size={'lg'} id='location'>
           Konum Bilgileri{' '}
         </Title>
-        <div id='location'>
+        <div>
           <Location location={hotel.location} />
         </div>
         {/* <div>
@@ -425,7 +463,7 @@ const HotelDetailSection = () => {
         <Title order={2} size={'lg'}>
           Önemli Bilgiler{' '}
         </Title>
-        <div id='location'>
+        <div>
           <ImportantInfos description={hotel.descriptions} />
         </div>
       </Container>

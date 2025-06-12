@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  padding: 0 15px;
+}
+
+.control {
+  font-size: 16px;
+  padding: 16px;
+  position: relative;
+
+  &[data-active] {
+    background-color: transparent;
+    color: var(--mantine-color-blue-filled);
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      height: 6px;
+      border-radius: 8px;
+      background-color: var(--mantine-color-blue-filled);
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
