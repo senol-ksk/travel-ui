@@ -16,31 +16,34 @@ import {
   Badge,
   TypographyStylesProvider,
   Text,
+  Divider,
 } from '@mantine/core'
+import { IoMapOutline } from 'react-icons/io5'
+import { Link } from 'next-view-transitions'
+import { BiChevronRight } from 'react-icons/bi'
+import { useDisclosure, useScrollIntoView } from '@mantine/hooks'
+import { createSerializer } from 'nuqs'
+import { useRouter } from 'next/navigation'
+import { FaExclamationCircle } from 'react-icons/fa'
+import { LuMapPinned, LuShieldCheck } from 'react-icons/lu'
+import { MdOutlineCameraAlt, MdOutlineRoomService } from 'react-icons/md'
+
 import { useHotelDataQuery } from '../detailDataQuery'
 import { HotelDetailSkeleton } from './skeletonLoader'
 import { HotelRoom } from './room'
-import { useDisclosure } from '@mantine/hooks'
 import { formatCurrency } from '@/libs/util'
-import { createSerializer } from 'nuqs'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { useRouter } from 'next/navigation'
 import { HotelDetailRoomItem } from '../../types'
 import { InstallmentTable } from './installment'
-import { FaExclamationCircle } from 'react-icons/fa'
-
 import { RoomUpdateForm } from './_components/room-update-form'
-import { LuMapPinned } from 'react-icons/lu'
-import { MdOutlineCameraAlt, MdOutlineRoomService } from 'react-icons/md'
-// import { NavbarMenu } from './_components/navbar_menu'
 import { HotelTableOfContents } from './_components/table-of-contents'
 import { FacilityProps } from './_components/facility-props'
 import { Comments } from './_components/comments'
 import { Location } from './_components/location'
 import { HotelDrawers } from './_components/hotel-drawers'
 import { ImportantInfos } from './_components/important-infos'
-import { IoMapOutline } from 'react-icons/io5'
-import { Link } from 'next-view-transitions'
+import { IconCheckIn, IconCheckOut } from './_components/icons'
+
 const HotelDetailSection = () => {
   const router = useRouter()
 
@@ -136,10 +139,16 @@ const HotelDetailSection = () => {
 
     router.push(url)
   }
+  const { scrollIntoView: scrollIntoRatings, targetRef: ratingTargetRef } =
+    useScrollIntoView({
+      offset: 60,
+    })
 
   if (!hotelDetailData && hotelDetailQuery.isLoading) {
     return <HotelDetailSkeleton />
   }
+
+  console.log(hotel)
 
   if (!hotel || !hotelDetailData?.success) {
     return (
@@ -220,28 +229,27 @@ const HotelDetailSection = () => {
           </div>
         </div>
 
-        {/* <NavbarMenu /> */}
         <div className='sticky top-0 z-30 hidden rounded bg-gray-50 shadow-xs sm:block'>
           <HotelTableOfContents />
         </div>
 
-        <div className='grid grid-cols-2 gap-5 rounded-sm border border-gray-300 md:grid-cols-12 md:p-3'>
-          <div className='col-span-12 grid gap-2 rounded-sm border border-gray-300 p-3 md:col-span-8'>
+        <div className='grid grid-cols-2 gap-5 rounded bg-gray-50 md:grid-cols-12 md:p-3'>
+          <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
               <Title fz={'h2'}>{hotel.name.trim()}</Title>
-              <div className='grid grid-cols-2 gap-4 pt-3 text-sm'>
+              <div className='grid grid-cols-2 gap-4 pt-3 text-sm text-blue-800'>
                 <div className='flex gap-1'>
                   <span>
                     <LuMapPinned size={22} />
                   </span>
-                  <span className='font-semibold'>{hotel.destination}</span>
+                  <span>{hotel.destination}</span>
                 </div>
                 {hotel.meal_type && (
                   <div className='flex gap-1'>
                     <span>
                       <MdOutlineRoomService size={22} />
                     </span>
-                    <span className='font-semibold'>{hotel.meal_type}</span>
+                    <span>{hotel.meal_type}</span>
                   </div>
                 )}
               </div>
@@ -268,17 +276,23 @@ const HotelDetailSection = () => {
             ) : null}
           </div>
 
-          <div className='col-span-12 grid gap-3 rounded-sm md:col-span-4'>
-            <div className='flex items-center justify-between rounded-sm border border-gray-300 p-3'>
+          <div className='col-span-12 flex flex-col gap-3 md:col-span-4'>
+            <div className='flex items-center justify-between rounded bg-white p-3'>
               <Badge color='green' size='xl' radius='md'>
-                7
+                {hotel.comment_info?.averageScore}
               </Badge>
-              <Button variant='white' color='blue' size='md' radius='md'>
-                5 değerlendirme
+              <Button
+                variant='white'
+                color='blue'
+                size='sm'
+                rightSection={<BiChevronRight size={20} />}
+                onClick={() => scrollIntoRatings()}
+              >
+                {hotel.comment_info?.comments.length} değerlendirme
               </Button>
             </div>
             <div
-              className='grid gap-3 rounded-sm border border-gray-300 p-3'
+              className='grid gap-3 rounded bg-white p-3'
               data-heading='Konum'
             >
               <div className='col-span-4 flex gap-3'>
@@ -294,37 +308,27 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             </div>
-            <div className='flex gap-3 rounded-sm border border-gray-300 p-3'>
-              <div className='grid w-1/2 gap-1'>
-                <Text size='md'>Check-in</Text>
-                <Text size='md'>14:00</Text>
+            <div className='flex justify-between gap-5 rounded bg-white px-8 py-3'>
+              <div className='flex items-center gap-2'>
+                <div>
+                  <IconCheckIn />
+                </div>
+                <div>
+                  <Text size='md'>Check-in</Text>
+                  <Text size='md'>{hotel.checkin_from}</Text>
+                </div>
               </div>
-              <div className='grid w-1/2 gap-1'>
-                <Text size='md'>Check-out</Text>
-                <Text size='md'>14:00</Text>{' '}
+              <div className='flex items-center gap-2 border-s ps-5'>
+                <div>
+                  <IconCheckOut />
+                </div>
+                <div>
+                  <Text size='md'>Check-out</Text>
+                  <Text size='md'>{hotel.checkout_to}</Text>
+                </div>
               </div>
             </div>
             <HotelDrawers description={hotel.descriptions} />
-
-            {/* <Button
-              variant='white'
-              color='black'
-              size='md'
-              radius='md'
-              className='flex justify-start border-gray-300 p-3'
-            >
-              Plaj ve havuz
-            </Button>
-
-            <Button
-              variant='white'
-              color='black'
-              size='md'
-              radius='md'
-              className='flex justify-start border-gray-300 p-3'
-            >
-              Kampanyalar ve Avantajlar
-            </Button> */}
           </div>
         </div>
         <Title fz={'xxl'} id='rooms'>
@@ -350,10 +354,18 @@ const HotelDetailSection = () => {
               )
             }
           )} */}
-        <Text size='md' className='rounded-sm bg-green-200 p-3'>
-          İptal Güvence Paketi ekle, tatiline 72 saat kalaya kadar koşulsuz
-          iptal hakkın olsun!
-        </Text>
+        <Alert
+          color='green'
+          icon={<LuShieldCheck size={22} />}
+          classNames={{
+            icon: 'me-1',
+          }}
+        >
+          <span className='font-semibold'>
+            İptal Güvence Paketi ekle, tatiline 72 saat kalaya kadar koşulsuz
+            iptal hakkın olsun!
+          </span>
+        </Alert>
 
         <div className='relative grid gap-3 @lg:gap-5'>
           {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
@@ -426,22 +438,26 @@ const HotelDetailSection = () => {
         <div className='rounded border bg-sky-500/10 p-1 md:p-3'>
           <FacilityProps descriptions={hotel.descriptions} />
         </div>
-        <Title order={2} size={'lg'} id='ratings'>
-          Değerlendirmeler
-        </Title>
-        <div className='gap-2 rounded bg-sky-500/10 p-3'>
-          <div className='flex items-center justify-between rounded bg-white p-3'>
-            <Badge color='green' size='xl' radius='md'>
-              7
-            </Badge>
-            <Button variant='white' color='blue' size='md' radius='md'>
-              5 değerlendirme
-            </Button>
+        {(hotel.comment_info || hotel.reviews) && (
+          <div ref={ratingTargetRef}>
+            <Title order={2} size={'lg'} id='ratings' pb={'md'}>
+              Değerlendirmeler
+            </Title>
+            <div className='gap-2 rounded bg-sky-500/10 p-3'>
+              <div className='flex items-center justify-between rounded bg-white p-3'>
+                <Badge color='green' size='xl' radius='md'>
+                  {hotel.comment_info?.averageScore}
+                </Badge>
+                <Button variant='white' color='blue' size='md' radius='md'>
+                  {hotel.comment_info?.comments.length} değerlendirme
+                </Button>
+              </div>
+              <div className='mt-3 rounded bg-white'>
+                {hotel.comment_info && <Comments data={hotel.comment_info} />}
+              </div>
+            </div>
           </div>
-          <div className='mt-3 rounded bg-white'>
-            <Comments />
-          </div>
-        </div>
+        )}
         <Title order={2} size={'lg'} id='location'>
           Konum Bilgileri{' '}
         </Title>

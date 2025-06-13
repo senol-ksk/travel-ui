@@ -21,36 +21,34 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
   }
 
   return (
-    <div className='grid gap-3'>
-      <div
-        className='cursor-pointer rounded border border-gray-300 p-3'
-        onClick={() => handleDrawerOpen(1)}
-      >
-        <Button
-          variant='white'
-          color='black'
-          size='md'
-          radius='md'
-          className='flex justify-start'
-        >
-          Plaj ve havuz
-        </Button>
+    <>
+      <div className='grid gap-3'>
+        <div>
+          <Button
+            fullWidth
+            onClick={() => handleDrawerOpen(1)}
+            variant='white'
+            color='black'
+            size='md'
+            className='flex justify-start'
+          >
+            Plaj ve havuz
+          </Button>
+        </div>
+        <div>
+          <Button
+            fullWidth
+            onClick={() => handleDrawerOpen(2)}
+            variant='white'
+            color='black'
+            size='md'
+            radius='md'
+            className='flex justify-start'
+          >
+            Kampanyalar ve Avantajlar
+          </Button>
+        </div>
       </div>
-      <div
-        className='cursor-pointer rounded border border-gray-300 p-3'
-        onClick={() => handleDrawerOpen(2)}
-      >
-        <Button
-          variant='white'
-          color='black'
-          size='md'
-          radius='md'
-          className='flex justify-start'
-        >
-          Kampanyalar ve Avantajlar
-        </Button>
-      </div>
-
       <Drawer
         position='right'
         size='xl'
@@ -116,7 +114,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
         // }}
         />
       </Drawer>
-    </div>
+    </>
   )
 }
 

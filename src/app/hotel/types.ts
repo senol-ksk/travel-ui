@@ -66,6 +66,27 @@ export interface HotelSearchResultHotelInfo {
   food_drinks: null
 }
 
+export interface HotelCommentInfo {
+  comments: {
+    startDate: string
+    endDate: string
+    commentDate: string
+    name: string
+    surname: string
+    averageScore: number
+    positiveCotent: string
+    negativeCotent: string | null
+    isSuggested: boolean
+    reasonLabel: string
+    withWhoLabel: string
+    userCountryCode: string
+    userCountry: string
+    userCity: 'Bursa'
+  }[]
+  totalComments: number
+  averageScore: number
+}
+
 export interface HotelSearchResultItemType {
   hotelId: ID
   hotelKey: string
@@ -461,7 +482,7 @@ export interface HotelDetailApiResponseData {
         search_rate: number
         reviews: null
         nearby_restaurants: null
-        comment_info: null
+        comment_info: null | HotelCommentInfo
         documents:
           | {
               no: string
