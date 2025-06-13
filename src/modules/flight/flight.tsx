@@ -3,7 +3,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTransitionRouter } from 'next-view-transitions'
 import dayjs from 'dayjs'
-import { MdKeyboardArrowDown } from 'react-icons/md'
+import {
+  MdKeyboardArrowDown,
+  MdOutlineLocationOn,
+  MdOutlinePersonOutline,
+} from 'react-icons/md'
 
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -256,7 +260,11 @@ export const Flight = () => {
         />
       </div>
       <div className='grid grid-cols-18 gap-2 md:gap-4'>
-        <div className='col-span-17 sm:col-span-6 md:col-span-5'>
+        <div className='relative col-span-17 sm:col-span-6 md:col-span-4'>
+          <MdOutlineLocationOn
+            size={22}
+            className='absolute top-1/2 left-0 z-10 mx-1 -translate-y-1/2'
+          />
           <Locations
             label='Nereden'
             inputProps={{ error: !!form.formState.errors.Origin }}
@@ -279,10 +287,17 @@ export const Flight = () => {
           />
         </div>
 
-        <div className='col-span-16 sm:col-span-6 md:col-span-5'>
+        <div className='relative col-span-16 sm:col-span-6 md:col-span-4'>
+          <MdOutlineLocationOn
+            size={22}
+            className='absolute top-1/2 left-0 z-10 mx-1 -translate-y-1/2'
+          />
+
           <Locations
             label='Nereye'
-            inputProps={{ error: !!form.formState.errors.Destination }}
+            inputProps={{
+              error: !!form.formState.errors.Destination,
+            }}
             defaultValue={form.formState.defaultValues?.Destination?.Name}
             data={destinationLocation?.Result}
             isLoading={destinationLocationLoading}
@@ -301,7 +316,8 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='col-span-9 md:col-span-3'>
+
+        <div className='col-span-9 md:col-span-4'>
           <FlightCalendar
             onDateSelect={(dates) => {
               if (dates[0]) {
@@ -328,7 +344,11 @@ export const Flight = () => {
             ]}
           />
         </div>
-        <div className='col-span-7 md:col-span-3 lg:col-span-2'>
+        <div className='relative col-span-7 md:col-span-3 lg:col-span-3'>
+          <MdOutlinePersonOutline
+            size={23}
+            className='absolute top-1/2 left-0 z-10 mx-1 -translate-y-1/2'
+          />
           <PassengerDropdown
             initialValues={{
               ...form.getValues('PassengerCounts'),

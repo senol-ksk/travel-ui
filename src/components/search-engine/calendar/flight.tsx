@@ -12,6 +12,7 @@ import { IoArrowForwardSharp } from 'react-icons/io5'
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import classes from '@/styles/Datepicker.module.css'
+import { FaRegCalendarAlt } from 'react-icons/fa'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -73,12 +74,27 @@ const FlightCalendar: React.FC<Props> = ({
     <Provider>
       <div className='relative h-full'>
         <Input
-          label='Tarihler'
+          label={
+            tripKind === 'round-trip' ? (
+              <div className='flex w-full justify-between gap-[55px]'>
+                <span>Gidiş Tarihi</span>
+                <span>Çıkış Tarihi</span>
+              </div>
+            ) : (
+              'Gidiş Tarihi'
+            )
+          }
           onClick={() => setContainerTransitionState(true)}
           title={
-            tripKind === 'round-trip'
-              ? formatedValues.join(' - ')
-              : formatedValues[0]
+            tripKind === 'round-trip' ? (
+              <div className='flex w-full items-center justify-between'>
+                <span>{formatedValues[0] ?? 'Gidiş'}</span>
+                <FaRegCalendarAlt size={20} />
+                <span>{formatedValues[1] ?? 'Dönüş'}</span>
+              </div>
+            ) : (
+              <span>{formatedValues[0] ?? 'Gidiş'}</span>
+            )
           }
         />
         <Transition

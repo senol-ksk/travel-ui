@@ -1,13 +1,14 @@
 import { memo } from 'react'
 import { Box, Button } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 import { PiSuitcaseRolling } from 'react-icons/pi'
 import { FaAngleRight } from 'react-icons/fa6'
 import { MdOutlineAirplanemodeActive } from 'react-icons/md'
-
 import { formatCurrency } from '@/libs/util'
 import {
+  AirportCode,
   AirlineCode,
   FlightDetail,
   FlightDetailSegment,
@@ -15,6 +16,7 @@ import {
 } from '@/app/flight/type'
 import { AirlineLogo } from '@/components/airline-logo'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
+import { IoIosClose } from 'react-icons/io'
 dayjs.extend(duration)
 
 type IProps = {
@@ -23,6 +25,7 @@ type IProps = {
   detailSegments: FlightDetailSegment[]
   onSelect: () => void
   airlineValues: AirlineCode[] | undefined
+  airportValues?: AirportCode[]
 }
 
 const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
@@ -30,10 +33,12 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
   details,
   detailSegments,
   airlineValues,
+  airportValues,
   onSelect = () => null,
 }) => {
+  const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
   return (
-    <div className='@container items-center gap-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
+    <div className='@container items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
       <div className='col-span-4 grid gap-4'>
         {details.map((detail) => {
           const relatedSegment = detailSegments.filter(
@@ -79,7 +84,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                   </div>
                   <div className='flex items-center gap-1'>
                     <PiSuitcaseRolling />
-                    <div>8kg El Bagajı</div>
+                    <div>8 kg El Bagajı</div>
                   </div>
                 </div>
               </div>
@@ -171,7 +176,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           )
         })}
       </div>
-      <div className='grid gap-3 border-l px-3 text-center md:py-5'>
+      <div className='grid gap-3 px-3 text-center md:pt-6'>
         <div className='text-xl font-semibold'>
           {formatCurrency(fareInfo.totalPrice.value)}
         </div>
@@ -186,9 +191,29 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
             Seç
           </Button>
         </div>
-        <div>
-          <FlightDetailsSearch />
-        </div>
+        <Button
+          className='border-0 bg-white px-0 text-sm text-blue-500'
+          onClick={toggleDetails}
+        >
+          {detailsOpened ? (
+            <>
+              Uçuş Detayını Kapat <IoIosClose size={25} />
+            </>
+          ) : (
+            'Uçuş Detayları'
+          )}
+        </Button>
+      </div>
+
+      <div className='col-span-5 rounded bg-gray-100 text-start md:mr-5 md:mb-5 md:ml-5'>
+        <FlightDetailsSearch
+          details={details}
+          detailSegments={detailSegments}
+          airlineValues={airlineValues}
+          airportValues={airportValues}
+          opened={detailsOpened}
+          isDomestic={true}
+        />
       </div>
     </div>
   )
