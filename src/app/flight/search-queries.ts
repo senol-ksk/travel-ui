@@ -382,10 +382,10 @@ const useSearchResultsQueries = () => {
   const airportQueryParamsCodeArr = () => {
     const airports = searchResultsQuery?.data
       ?.flatMap((item) =>
-        [
-          item.segments[0].origin.code,
-          item?.segments?.at(-1)?.destination.code,
-        ].flat()
+        item.segments.flatMap((segment) => [
+          segment.origin.code,
+          segment.destination.code,
+        ])
       )
       .flat()
 

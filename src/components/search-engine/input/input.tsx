@@ -20,14 +20,14 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
   return (
     <div
       className={clsx(
-        'relative flex h-full items-center truncate rounded-md border bg-gray-50 px-3 py-2 transition-colors hover:border-blue-800',
+        'relative flex h-full items-center truncate rounded-md border bg-gray-50 px-1 py-2 transition-colors hover:border-blue-800',
         {
           'border-red-500': error,
           'border-transparent': !error,
         }
       )}
     >
-      <div>
+      <div className='px-7'>
         <label
           id={labelId}
           aria-labelledby={labelId}
@@ -40,7 +40,7 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
         >
           {label}
         </label>
-        <div className='text-xl leading-none font-semibold'>
+        <div className='text-lg leading-none font-medium'>
           {!!title ? title : label}
         </div>
       </div>

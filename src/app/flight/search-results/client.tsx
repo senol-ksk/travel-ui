@@ -28,8 +28,6 @@ import {
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { CiFilter } from 'react-icons/ci'
-import { IoAirplaneSharp } from 'react-icons/io5'
-import { GoArrowRight } from 'react-icons/go'
 import { PiSuitcaseRolling } from 'react-icons/pi'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
@@ -956,6 +954,7 @@ const FlightSearchView = () => {
                     return (
                       <MemoizedFlightSearchResultsDomestic
                         airlineValues={airlineValues}
+                        airportValues={getAirportsByCodeList.data}
                         detailSegments={result.segments}
                         details={result.details}
                         fareInfo={result.fareInfo}
@@ -988,6 +987,7 @@ const FlightSearchView = () => {
                       <div className='pb-3 md:pb-5'>
                         <MemoizedFlightSearchResultsInternational
                           airlineValues={airlineValues}
+                          airportValues={getAirportsByCodeList.data}
                           detailSegments={result.segments}
                           details={result.details}
                           fareInfo={result.fareInfo}
