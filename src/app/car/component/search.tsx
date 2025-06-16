@@ -57,7 +57,16 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
   }
 
   const allPages = carSearchResult?.data?.pages.flatMap((page) =>
-    page.data.searchResults.flatMap((searchResult) => searchResult.items)
+    page.data.searchResults.flatMap((searchResult) => {
+      const items = searchResult.items
+
+      items?.forEach((element) => {
+        element.pickupStation = searchResult.pickupStation
+        element.returnStation = searchResult.returnStation
+      })
+
+      return searchResult.items
+    })
   ) as CarSearchResultItemType[] | null
 
   const fuelTypeChecks = [
@@ -93,7 +102,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
           ) : null}
         </div>
 
-        <Container>
+        <Container className='md:px-md px-0'>
           <div className='py-10'>
             <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
               <div className='md:col-span-1'>
@@ -387,9 +396,9 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                           <Skeleton h={150} />
                         </div>
                         <div className='col-span-3 grid gap-3 align-baseline'>
-                          <Skeleton h={16} w={250} />
-                          <Skeleton h={16} w={120} />
-                          <Skeleton h={16} w={180} />
+                          <Skeleton h={16} maw={250} />
+                          <Skeleton h={16} maw={120} />
+                          <Skeleton h={16} maw={180} />
                         </div>
                       </div>
                     ))}

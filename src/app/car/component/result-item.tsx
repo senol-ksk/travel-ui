@@ -31,11 +31,10 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
     'day'
   )
 
-  console.log(item)
   return (
     <div className='rounded-lg border border-gray-300 shadow'>
       <div className='grid gap-3 p-3 md:grid-cols-12 md:p-4'>
-        <div className='grid items-center justify-center md:col-span-3'>
+        <div className='col-span-6 grid items-center justify-center md:col-span-3'>
           {item.carDetail.imageUrl ? (
             <div className='relative'>
               <Transition
@@ -130,7 +129,7 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
             </div>
           </div>
         </div>
-        <div className='col-span-3 grid'>
+        <div className='col-span-6 grid md:col-span-3'>
           <div className='text-end'>
             <div className='text-sm'>{dayCount} günlük fiyat</div>
             <div className='text-xl font-semibold'>
@@ -148,18 +147,27 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
           </div>
         </div>
       </div>
-      <div className='flex justify-between border-t p-3 md:p-4'>
-        <div>
-          <Image
-            src={item.carDetail.vendorUrl}
-            w={rem(70)}
-            alt={item.carDetail.vendorName}
-          />
+      <div className='block items-center justify-between border-t p-3 md:flex md:p-4'>
+        <div className='flex items-center gap-3 pb-3 md:pb-0'>
+          <div>
+            <Image
+              src={item.carDetail.vendorUrl}
+              w={rem(70)}
+              alt={item.carDetail.vendorName}
+            />
+          </div>
+          <div className='text-sm'>
+            Araç teslim yeri:{' '}
+            <span className='font-semibold text-blue-800'>
+              {item.pickupStation?.location.name}
+            </span>{' '}
+          </div>
         </div>
         <div>
           <Button
             onClick={() => onSelect(item)}
             rightSection={<IoArrowForward />}
+            fullWidth
           >
             Hemen Kirala
           </Button>
