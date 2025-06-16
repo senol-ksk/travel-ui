@@ -50,4 +50,6 @@ body {
   --color-dark-700: var(--mantine-color-dark-7);
   --color-dark-800: var(--mantine-color-dark-8);
   --color-dark-900: var(--mantine-color-dark-9);
+
+  --breakpoint-2xl: 96em;
 }

@@ -413,130 +413,132 @@ export interface HotelDetailDescription {
   activities: string | null
   importentInfo: string | null
 }
+
+export interface HotelDetailResponseHotelInfo {
+  hotel: {
+    id: ID
+    name: string
+    slug: string
+    zip_code: string
+    address: string
+    destination: string
+    country_code: string
+    location: [number, number]
+    phone: string | null
+    email: string | null
+    currency: string
+    meal_type: string
+    nearby: string[]
+    nearby_info: {
+      place_id: null
+      type: string
+      location: null
+      name: string
+      icon: null
+      direction_mode: string
+      distance: string
+      duration: null
+    }[]
+    checkin_from: string
+    checkout_to: string
+    fax: null
+    nr_rooms: number
+    stars: number
+    availability_score: null
+    max_free_child_age: number
+    min_free_child_age: null
+    images: {
+      category: number | null
+      tag: string | null
+      original: string
+      large: null | string
+      small: null | string
+      mid: null | string
+      default: boolean
+      priority: number
+    }[]
+    themes: number[]
+    facilities: number[]
+    facility_scopes: null
+    tripAdvisor: null
+    price: ServicePriceType
+    descriptions: HotelDetailDescription
+    year_built: null
+    nr_restaurants: number
+    nr_bars: number
+    nr_halls: null | number
+    last_update: string
+    video_list: string[]
+    web_site: string
+    deleted: boolean
+    destination_slug: string
+    old_destination_slug: null
+    rating: number
+    listing_rate: number
+    sales_rate: number
+    destination_id: ID
+    destination_map: number[]
+    search_rate: number
+    reviews: null
+    nearby_restaurants: null
+    comment_info: null | HotelCommentInfo
+    documents:
+      | {
+          no: string
+          type: string
+          description: string
+        }[]
+      | null
+    food_drinks: {
+      area: string
+      area_type: string
+      service: string
+      description: string
+      start_time: string
+      end_time: string
+      season: string
+      is_paid: boolean
+      priority: number
+    }[]
+  }
+  mapping: {
+    value: string
+    field: null | string
+    provider: string
+  }[]
+  facilityTypes: {
+    id: ID
+    name: string
+    priority: number
+    facilities:
+      | {
+          id: ID
+          name: string
+          scope_id: number
+          type_id: number
+          isPaid: boolean
+          featured: boolean
+          icon_key: null | string
+          priority: number
+        }[]
+      | []
+  }[]
+  themes: {
+    id: ID
+    themeName: string
+    icon: string | null
+    priority: number
+  }[]
+  imageCategories: {
+    id: ID
+    name: string
+    priority: number
+  }[]
+  tripAdvisor: null
+}
 export interface HotelDetailApiResponseData {
   hotelDetailResponse: {
-    hotelInfo: {
-      hotel: {
-        id: ID
-        name: string
-        slug: string
-        zip_code: string
-        address: string
-        destination: string
-        country_code: string
-        location: [number, number]
-        phone: string | null
-        email: string | null
-        currency: string
-        meal_type: string
-        nearby: string[]
-        nearby_info: {
-          place_id: null
-          type: string
-          location: null
-          name: string
-          icon: null
-          direction_mode: string
-          distance: string
-          duration: null
-        }[]
-        checkin_from: string
-        checkout_to: string
-        fax: null
-        nr_rooms: number
-        stars: number
-        availability_score: null
-        max_free_child_age: number
-        min_free_child_age: null
-        images: {
-          category: number | null
-          tag: string | null
-          original: string
-          large: null | string
-          small: null | string
-          mid: null | string
-          default: boolean
-          priority: number
-        }[]
-        themes: number[]
-        facilities: number[]
-        facility_scopes: null
-        tripAdvisor: null
-        price: ServicePriceType
-        descriptions: HotelDetailDescription
-        year_built: null
-        nr_restaurants: number
-        nr_bars: number
-        nr_halls: null | number
-        last_update: string
-        video_list: string[]
-        web_site: string
-        deleted: boolean
-        destination_slug: string
-        old_destination_slug: null
-        rating: number
-        listing_rate: number
-        sales_rate: number
-        destination_id: ID
-        destination_map: number[]
-        search_rate: number
-        reviews: null
-        nearby_restaurants: null
-        comment_info: null | HotelCommentInfo
-        documents:
-          | {
-              no: string
-              type: string
-              description: string
-            }[]
-          | null
-        food_drinks: {
-          area: string
-          area_type: string
-          service: string
-          description: string
-          start_time: string
-          end_time: string
-          season: string
-          is_paid: boolean
-          priority: number
-        }[]
-      }
-      mapping: {
-        value: string
-        field: null | string
-        provider: string
-      }[]
-      facilityTypes: {
-        id: ID
-        name: string
-        priority: number
-        facilities:
-          | {
-              id: ID
-              name: string
-              scope_id: number
-              type_id: number
-              isPaid: boolean
-              featured: boolean
-              icon_key: null | string
-              priority: number
-            }[]
-          | []
-      }[]
-      themes: {
-        id: ID
-        themeName: string
-        icon: string | null
-        priority: number
-      }[]
-      imageCategories: {
-        id: ID
-        name: string
-        priority: number
-      }[]
-      tripAdvisor: null
-    }
+    hotelInfo: HotelDetailResponseHotelInfo
     hotelMinPrice: ServicePriceType
     roomDetails: null | { [key: string]: HotelDetailRoomDetail }
     isLoadProducts: boolean

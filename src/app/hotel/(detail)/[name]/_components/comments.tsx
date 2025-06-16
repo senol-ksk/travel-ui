@@ -13,7 +13,7 @@ const Comments: React.FC<IProps> = ({ data }) => {
       {comments.map((comment, index) => (
         <Card
           key={index}
-          className='xl:w-/5 w-50 flex-shrink-0 text-sm sm:w-1/2 lg:w-1/5'
+          className='xl:w-/5 w-50 flex-shrink-0 bg-blue-50 text-sm sm:w-1/2 lg:w-1/5'
           padding='lg'
           shadow='sm'
           radius='md'

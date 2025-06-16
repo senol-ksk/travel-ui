@@ -8,12 +8,11 @@ interface LocationProps {
 const Location: React.FC<LocationProps> = ({ location }) => {
   return (
     <>
-      <div className='bg-sky-50 p-3'>
-        <AspectRatio ratio={24 / 6} style={{ width: '100%', height: 'auto' }}>
+      <div className='rounded bg-gray-50 p-3'>
+        <AspectRatio ratio={24 / 6} className='overflow-hidden rounded-md'>
           <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
             <Map
               defaultCenter={{ lat: location[0], lng: location[1] }}
-              style={{ width: '100%', height: '100%' }}
               defaultZoom={17}
               gestureHandling={'greedy'}
               disableDefaultUI={true}
@@ -22,7 +21,7 @@ const Location: React.FC<LocationProps> = ({ location }) => {
             </Map>
           </APIProvider>
         </AspectRatio>
-        <div className='mt-3 flex p-3 text-xs md:text-sm'>
+        <div className='mt-3 flex hidden p-3 text-xs md:text-sm'>
           <div className='col-4'>
             <div className='font-bold'>Yerleşim Merkezi</div>
             <div>

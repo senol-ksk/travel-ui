@@ -1,6 +1,7 @@
-import { HotelDetailDescription } from '@/app/hotel/types'
 import { Accordion } from '@mantine/core'
-import React, { useState } from 'react'
+import { useState } from 'react'
+
+import { HotelDetailDescription } from '@/app/hotel/types'
 
 type IProps = {
   description: HotelDetailDescription
@@ -14,7 +15,7 @@ const ImportantInfos: React.FC<IProps> = ({ description }) => {
   }
 
   return (
-    <div className='bg-sky-50 p-3'>
+    <div className='rounded bg-gray-50 p-3'>
       <Accordion className='bg-white p-3' value={opened}>
         <Accordion.Item value='0'>
           <Accordion.Control onClick={() => toggleAccordion('0')}>

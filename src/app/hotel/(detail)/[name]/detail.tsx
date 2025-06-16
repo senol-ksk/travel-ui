@@ -70,7 +70,6 @@ const HotelDetailSection = () => {
   const selectedRoomPrice = useRef(0)
 
   const hotelDetailData = hotelDetailQuery.data
-  const hotelSearchPanel = hotelDetailData?.data?.searchPanel
 
   const hotelInfo = hotelDetailData?.data?.hotelDetailResponse?.hotelInfo
   const hotel = hotelInfo?.hotel
@@ -397,6 +396,7 @@ const HotelDetailSection = () => {
               return (
                 <div key={roomGroup.key}>
                   <HotelRoom
+                    hotelInfo={page?.data?.hotelDetailResponse?.hotelInfo}
                     roomGroup={roomGroup}
                     roomDetails={roomDetails}
                     onSelect={(selectedRoomGroup) => {
@@ -435,7 +435,7 @@ const HotelDetailSection = () => {
         <Title order={2} size={'lg'} id='facility-infos'>
           Tesis Bilgileri
         </Title>
-        <div className='rounded border bg-sky-500/10 p-1 md:p-3'>
+        <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
           <FacilityProps descriptions={hotel.descriptions} />
         </div>
         {(hotel.comment_info || hotel.reviews) && (
@@ -443,7 +443,7 @@ const HotelDetailSection = () => {
             <Title order={2} size={'lg'} id='ratings' pb={'md'}>
               Değerlendirmeler
             </Title>
-            <div className='gap-2 rounded bg-sky-500/10 p-3'>
+            <div className='gap-2 rounded bg-gray-50 p-3'>
               <div className='flex items-center justify-between rounded bg-white p-3'>
                 <Badge color='green' size='xl' radius='md'>
                   {hotel.comment_info?.averageScore}

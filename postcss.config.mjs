@@ -12,6 +12,7 @@ const config = {
         'mantine-breakpoint-md': '62em',
         'mantine-breakpoint-lg': '75em',
         'mantine-breakpoint-xl': '88em',
+        'mantine-breakpoint-2xl': '96em',
       },
     },
   },
