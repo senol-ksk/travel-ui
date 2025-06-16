@@ -37,8 +37,16 @@ const FacilityProps: React.FC<IProps> = ({ descriptions }) => {
   return (
     <>
       <div className='grid gap-3'>
-        <div className='flex w-40 items-center justify-center rounded bg-white p-2 text-lg font-medium md:p-5'>
-          <FaSnowflake className='mr-2 text-blue-500' /> Kış Sezonu
+        <div className='flex'>
+          <div className='leading-lg inline-flex items-center gap-3 rounded-md bg-gray-200 px-3 py-2'>
+            <div>
+              <FaSnowflake />
+            </div>
+            <div>
+              <div className='font-semibold'>Kış Sezonu</div>
+              <div>13.03.2025 - 23.11.2025</div>
+            </div>
+          </div>
         </div>
         <Accordion className='grid gap-3 rounded'>
           {featureValues.map(([key, value], itemIndex) => {

@@ -6,5 +6,6 @@ export const fonts = createTheme({
   },
   fontSizes: {
     xxs: rem(10),
+    xxl: rem(28),
   },
 })

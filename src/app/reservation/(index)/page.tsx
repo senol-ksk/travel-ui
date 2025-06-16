@@ -4,7 +4,6 @@ import 'intl-tel-input/styles'
 import { useRouter } from 'next/navigation'
 import {
   useForm,
-  UseFormProps,
   useFieldArray,
   FormProvider,
   Controller,

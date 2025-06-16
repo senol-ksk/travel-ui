@@ -59,10 +59,11 @@ const passportYears = () =>
   }))
 
 const birth_date_months = () =>
-  dayjs.monthsShort().map((month, index) => {
+  dayjs.months().map((month, index) => {
     const currentIndex = index + 1
     const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
     const label = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex} ${month}`
+
     return {
       label,
       value,
@@ -70,7 +71,7 @@ const birth_date_months = () =>
   })
 
 const passportMonths = () =>
-  dayjs.monthsShort().map((month, index) => {
+  dayjs.months().map((month, index) => {
     const currentIndex = index + 1
     const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
     const label = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex} ${month}`
@@ -290,7 +291,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
         </div>
         <div>
           <Input.Wrapper>
-            <Input.Label className='font-normal' htmlFor={name_birthDate_day}>
+            <Input.Label fz='md' htmlFor={name_birthDate_day}>
               Doğum Tarihi
             </Input.Label>
             <div className='grid grid-cols-3 gap-2'>

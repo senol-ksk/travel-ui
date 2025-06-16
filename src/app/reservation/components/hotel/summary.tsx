@@ -175,16 +175,17 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
           {!data.HotelCancelWarrantyPriceStatusModel.hasHotelWarranty && (
             <div>
               {roomGroup.nonRefundable ? (
-                <div className='text-red-500'>Bu oda iptal edilemez.</div>
+                <div className='text-red'>Bu oda iptal edilemez.</div>
               ) : (
-                <div className='text-green-500'>Ücretsiz iptal </div>
+                <div className='text-green'>Ücretsiz iptal </div>
               )}
             </div>
           )}
           {roomGroup.cancellationPolicies &&
             roomGroup.cancellationPolicies.length > 0 &&
-            roomGroup.cancellationPolicies.map(
-              (cancelPolicy, cancelPolicyIndex) => (
+            roomGroup.cancellationPolicies
+              .filter((item) => item.description)
+              .map((cancelPolicy, cancelPolicyIndex) => (
                 <Alert
                   color='yellow'
                   key={cancelPolicyIndex}
@@ -192,8 +193,7 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
                 >
                   {cancelPolicy.description}
                 </Alert>
-              )
-            )}
+              ))}
         </div>
       </CheckoutCard>
     </div>

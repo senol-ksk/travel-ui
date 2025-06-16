@@ -52,7 +52,7 @@ const years_18_selectData = () =>
   }))
 
 const birth_date_months = () =>
-  dayjs.monthsShort().map((month, index) => {
+  dayjs.months().map((month, index) => {
     const currentIndex = index + 1
     const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
     const label = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex} ${month}`
@@ -224,7 +224,9 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
         </div>
         <div>
           <Input.Wrapper>
-            <Input.Label htmlFor={name_birthDate_day}>Doğum Tarihi</Input.Label>
+            <Input.Label htmlFor={name_birthDate_day} fz={'md'}>
+              Doğum Tarihi
+            </Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
                 control={methods.control}
