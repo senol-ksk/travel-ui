@@ -129,54 +129,23 @@ const CarRentSearchPanel: React.FC = () => {
       <input {...formActions.register('drop_date')} type='hidden' />
 
       <div className='grid grid-cols-16 gap-3 md:gap-3'>
-        <div className='col-span-12 grid gap-3 md:col-span-5 md:grid-cols-6'>
-          <div
-            className={clsx('col-span-12 h-full', {
-              'md:col-span-3': isDiffrentDropLocation,
-              'md:col-span-12': !isDiffrentDropLocation,
-            })}
-          >
-            <CarLocations
-              inputProps={{
-                error: !!formActions.formState.errors.pickup,
-              }}
-              label='Alış Yeri'
-              data={pickupLocationData?.Result}
-              isLoading={pickupLocationDataIsLoading}
-              onChange={(value) => {
-                setPickupLocation(value)
-              }}
-              onSelect={(data) => {
-                const value = {
-                  Code: data.Code,
-                  CountryCode: data.CountryCode,
-                  Id: data.Id,
-                  IsDomestic: data.IsDomestic,
-                  Name: data.Name,
-                  Slug: data.Slug,
-                }
-
-                if (!isDiffrentDropLocation) {
-                  formActions.setValue('dropoff', value)
-                  formActions.trigger('dropoff')
-                }
-                formActions.setValue('pickup', value)
-                formActions.trigger('pickup')
-              }}
-              defaultValue={formActions.formState.defaultValues?.pickup?.Name}
-            />
-          </div>
-          {isDiffrentDropLocation ? (
-            <div className='col-span-12 md:col-span-3'>
+        <div className='col-span-16 h-full md:col-span-5'>
+          <div className='grid h-full grid-cols-6 gap-3'>
+            <div
+              className={clsx('col-span-6 h-full', {
+                'md:col-span-3': isDiffrentDropLocation,
+                'md:col-span-6': !isDiffrentDropLocation,
+              })}
+            >
               <CarLocations
                 inputProps={{
-                  error: !!formActions.formState.errors.dropoff,
+                  error: !!formActions.formState.errors.pickup,
                 }}
-                isLoading={dropoffLocationIsLoading}
-                label='Bırakılış Yeri'
-                data={dropoffLocationData?.Result}
+                label='Alış Yeri'
+                data={pickupLocationData?.Result}
+                isLoading={pickupLocationDataIsLoading}
                 onChange={(value) => {
-                  setDropoffLocation(value)
+                  setPickupLocation(value)
                 }}
                 onSelect={(data) => {
                   const value = {
@@ -184,20 +153,53 @@ const CarRentSearchPanel: React.FC = () => {
                     CountryCode: data.CountryCode,
                     Id: data.Id,
                     IsDomestic: data.IsDomestic,
-                    Slug: data.Slug,
                     Name: data.Name,
+                    Slug: data.Slug,
                   }
-                  formActions.setValue('dropoff', value)
-                  formActions.trigger('dropoff')
+
+                  if (!isDiffrentDropLocation) {
+                    formActions.setValue('dropoff', value)
+                    formActions.trigger('dropoff')
+                  }
+                  formActions.setValue('pickup', value)
+                  formActions.trigger('pickup')
                 }}
-                defaultValue={
-                  formActions.formState.defaultValues?.dropoff?.Name
-                }
+                defaultValue={formActions.formState.defaultValues?.pickup?.Name}
               />
             </div>
-          ) : null}
+            {isDiffrentDropLocation ? (
+              <div className='col-span-6 md:col-span-3'>
+                <CarLocations
+                  inputProps={{
+                    error: !!formActions.formState.errors.dropoff,
+                  }}
+                  isLoading={dropoffLocationIsLoading}
+                  label='Bırakılış Yeri'
+                  data={dropoffLocationData?.Result}
+                  onChange={(value) => {
+                    setDropoffLocation(value)
+                  }}
+                  onSelect={(data) => {
+                    const value = {
+                      Code: data.Code,
+                      CountryCode: data.CountryCode,
+                      Id: data.Id,
+                      IsDomestic: data.IsDomestic,
+                      Slug: data.Slug,
+                      Name: data.Name,
+                    }
+                    formActions.setValue('dropoff', value)
+                    formActions.trigger('dropoff')
+                  }}
+                  defaultValue={
+                    formActions.formState.defaultValues?.dropoff?.Name
+                  }
+                />
+              </div>
+            ) : null}
+          </div>
         </div>
-        <div className='col-span-12 md:col-span-4'>
+        <div className='col-span-16 md:col-span-4'>
           <CarCalendar
             defaultDates={[
               dayjs(
@@ -216,7 +218,7 @@ const CarRentSearchPanel: React.FC = () => {
             }}
           />
         </div>
-        <div className='col-span-6 md:col-span-2'>
+        <div className='col-span-8 md:col-span-2'>
           <CarHours
             label='Alış Saati'
             onChange={(event) => {
@@ -228,7 +230,7 @@ const CarRentSearchPanel: React.FC = () => {
             }
           />
         </div>
-        <div className='col-span-6 md:col-span-2'>
+        <div className='col-span-8 md:col-span-2'>
           <CarHours
             label='Teslim Saati'
             onChange={(event) => {

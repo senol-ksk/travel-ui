@@ -1,3 +1,39 @@
+export interface StationType {
+  location: {
+    id: ID
+    code: string
+    countryCode: string
+    name: string
+    isDomestic: boolean
+    providerName: string
+  }
+  address: {
+    addressName: null
+    street: null
+    city: null
+    country: {
+      iataCode: null
+      id: ID
+      parentRegion: null
+      label: null
+    }
+    postalCode: ''
+  }
+  phoneNumbers: {
+    countryCode: number
+    areaCode: number
+    number: null
+    type: number
+  }[]
+  times: {
+    day: string
+    openingTime: string
+    closingTime: string
+  }[]
+  direction: null
+  mailAddress: null
+}
+
 export interface CarSearchResult {
   code: number
   message: null
@@ -26,8 +62,8 @@ export interface SearchResult {
   items: CarSearchResultItemType[] | null
   logSearchToken: null
   logSessionToken: null
-  pickupStation: null
-  returnStation: null
+  pickupStation: null | StationType
+  returnStation: null | StationType
   scopeCode: string
   sessionToken: null
   traceId: string
@@ -138,6 +174,8 @@ export interface CarSearchResultItemType {
   passengerPrices: PassengerPrice[]
   taxInfos: null
   serviceCharges: null
+  pickupStation: null | StationType
+  returnStation: null | StationType
 }
 
 export interface NavigationSystem {
