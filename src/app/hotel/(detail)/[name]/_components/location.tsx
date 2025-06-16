@@ -21,7 +21,7 @@ const Location: React.FC<LocationProps> = ({ location }) => {
             </Map>
           </APIProvider>
         </AspectRatio>
-        <div className='mt-3 flex hidden p-3 text-xs md:text-sm'>
+        <div className='mt-3 hidden p-3 text-xs md:text-sm'>
           <div className='col-4'>
             <div className='font-bold'>Yerleşim Merkezi</div>
             <div>
