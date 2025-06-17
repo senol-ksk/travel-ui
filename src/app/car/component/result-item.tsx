@@ -8,16 +8,17 @@ import {
   MdElectricalServices,
   MdOutlineAccountBalanceWallet,
 } from 'react-icons/md'
-import { TbManualGearboxFilled } from 'react-icons/tb'
+import { TbManualGearbox } from 'react-icons/tb'
 
 import { CarSearchResultItemType } from '@/app/car/types'
 import { formatCurrency } from '@/libs/util'
 import { useState } from 'react'
-import { BsFuelPump } from 'react-icons/bs'
+
 import { FuelTypes } from '@/modules/carrent/types'
 import { BiTachometer } from 'react-icons/bi'
 import dayjs from 'dayjs'
 import { IoIosCheckmarkCircle } from 'react-icons/io'
+import { LuFuel } from 'react-icons/lu'
 
 type Props = {
   item: CarSearchResultItemType
@@ -81,14 +82,14 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
                   {item.carDetail.fuelType === FuelTypes['Elektirikli'] ? (
                     <MdElectricalServices />
                   ) : (
-                    <BsFuelPump />
+                    <LuFuel />
                   )}
                 </div>
                 <div>{FuelTypes[item.carDetail.fuelType]}</div>
               </div>
               <div className='flex items-center gap-2'>
                 <div>
-                  <TbManualGearboxFilled />
+                  <TbManualGearbox />
                 </div>
                 <div>
                   {item.carDetail.automaticTransmission

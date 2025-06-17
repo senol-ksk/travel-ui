@@ -13,6 +13,8 @@ import {
   Title,
 } from '@mantine/core'
 import { useRouter } from 'next/navigation'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 import { carDetailParams } from '@/app/car/searchParams'
 import { serviceRequest } from '@/network'
@@ -30,10 +32,14 @@ import { FuelTypes } from '@/modules/carrent/types'
 import {
   MdAirlineSeatReclineNormal,
   MdElectricalServices,
+  MdOutlineAccountBalanceWallet,
 } from 'react-icons/md'
-import { BsFuelPump } from 'react-icons/bs'
-import { TbManualGearboxFilled } from 'react-icons/tb'
+import { TbManualGearbox } from 'react-icons/tb'
 import dayjs from 'dayjs'
+import { LuFuel } from 'react-icons/lu'
+import { BiTachometer } from 'react-icons/bi'
+import { IoIosCheckmarkCircle } from 'react-icons/io'
+import { BsInfoCircle } from 'react-icons/bs'
 
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
@@ -172,51 +178,56 @@ export const DetailClient = () => {
   if (!detailItem) return <div>no data </div>
 
   return (
-    <div className='xs:grid-cols-6 grid gap-5'>
+    <div className='flex flex-col items-start gap-5 md:grid md:grid-cols-6'>
       <div className='col-span-4 grid gap-4'>
         <div>
           <Alert
             color='green'
             radius={'md'}
             icon={<FaCheckCircle size={70} />}
-            classNames={{
-              root: 'border border-green-200',
-            }}
+            p={'sm'}
           >
-            <div className='md:text-md font-semibold text-green-800'>
+            <div className='text-md text-green-800'>
               Teslim almadan 24 saat öncesine kadar ÜCRETSİZ iptal
             </div>
           </Alert>
         </div>
-        <div className='grid grid-cols-5'>
-          <div className='col-span-2'>
+        <div className='grid gap-5 rounded-md border p-3 md:p-5'>
+          <div className='md:col-span-2'>
             <Image
               src={detailItem.carDetail.imageUrl}
               alt={detailItem.carDetail.name}
             />
+            <Image
+              my={'sm'}
+              className='block md:hidden'
+              w={60}
+              src={detailItem.carDetail.vendorUrl}
+              alt={detailItem.carDetail.vendorName}
+            />
           </div>
-          <div className='col-span-3'>
-            <Title fz={'h3'}>
-              {detailItem.carDetail.name}{' '}
-              <small className='text-gray-700'>
-                - {detailItem.carDetail.category}
-              </small>
-            </Title>
-            <div className='grid grid-cols-2 gap-2 pt-3 text-sm'>
+          <div className='flex flex-col gap-3 md:col-span-3'>
+            <div className='flex items-center gap-2'>
+              <Title fz={'h3'}>{detailItem.carDetail.name}</Title>
+              <div className='text-sm'>
+                veya benzeri - {detailItem.carDetail.category}
+              </div>
+            </div>
+            <div className='flex gap-4 text-sm'>
               <div className='flex items-center gap-2'>
                 <div>
                   {detailItem.carDetail.fuelType ===
                   FuelTypes['Elektirikli'] ? (
                     <MdElectricalServices />
                   ) : (
-                    <BsFuelPump />
+                    <LuFuel />
                   )}
                 </div>
                 <div>{FuelTypes[detailItem.carDetail.fuelType]}</div>
               </div>
               <div className='flex items-center gap-2'>
                 <div>
-                  <TbManualGearboxFilled />
+                  <TbManualGearbox />
                 </div>
                 <div>
                   {detailItem.carDetail.automaticTransmission
@@ -228,92 +239,136 @@ export const DetailClient = () => {
                 <div>
                   <MdAirlineSeatReclineNormal />
                 </div>
-                <div>{detailItem.carDetail.seatCount}</div>
+                <div>{detailItem.carDetail.seatCount} Koltuk</div>
               </div>
             </div>
+            <div className='flex gap-4 text-sm'>
+              {detailItem.carDetail.deposit.value > 0 && (
+                <div className='flex items-center gap-2'>
+                  <div>
+                    <MdOutlineAccountBalanceWallet />
+                  </div>
+                  Depozito:
+                  <span className='font-semibold'>
+                    {formatCurrency(detailItem.carDetail.deposit.value)}
+                  </span>
+                </div>
+              )}
+              <div className='flex items-center gap-2'>
+                <div>
+                  <BiTachometer />
+                </div>
+                Toplam Km sınır:
+                <span className='font-semibold'>
+                  {detailItem.carDetail.kminCluded
+                    ? detailItem.carDetail.kminCluded
+                    : 'Belirtilmemiş'}
+                </span>
+              </div>
+            </div>
+            <div className='flex items-center gap-2 text-sm font-semibold text-green-800'>
+              <div>
+                <IoIosCheckmarkCircle size={20} />
+              </div>
+              <div>Ücretsiz iptal</div>
+            </div>
           </div>
-          <div>
+          <div className='hidden'>
             <Image
               src={detailItem.carDetail.vendorUrl}
               alt={detailItem.carDetail.vendorName}
             />
           </div>
-        </div>
-        <div className='grid gap-3 md:grid-cols-2'>
-          <div>
-            <Title order={6} fz={'h5'}>
-              Teslim Alış
-            </Title>
-            <div className='font-semibold'>
-              {dayjs
-                .utc(detailItem.carDetail.pickupDate)
-                .format('DD MMMM YYYY, HH:mm')}
-            </div>
-            <div className='text-sm'>
-              {carDetailQuery.data?.pickupStation.address.addressName}
-            </div>
-          </div>
+          <div className='md:col-span-5'>
+            <div className='grid gap-3 rounded-md bg-gray-50 p-3 md:grid-cols-2'>
+              <div>
+                <div className='text-sm'>Teslim Alış</div>
+                <div className='text-md font-semibold'>
+                  {dayjs
+                    .utc(detailItem.carDetail.pickupDate)
+                    .format('DD MMMM YYYY, HH:mm')}
+                </div>
+                <div className='text-sm'>
+                  {carDetailQuery.data?.pickupStation.address.addressName}
+                </div>
+              </div>
 
-          <div>
-            <Title order={6} fz={'h5'}>
-              Teslim ediş
-            </Title>
-            <div className='font-semibold'>
-              {dayjs
-                .utc(detailItem.carDetail.returnDate)
-                .format('DD MMMM YYYY, HH:mm')}
-            </div>
-            <div className='text-sm'>
-              {carDetailQuery.data?.returnStation.address.addressName}
+              <div>
+                <div className='text-sm'>Teslim ediş</div>
+                <div className='text-md font-semibold'>
+                  {dayjs
+                    .utc(detailItem.carDetail.returnDate)
+                    .format('DD MMMM YYYY, HH:mm')}
+                </div>
+                <div className='text-sm'>
+                  {carDetailQuery.data?.returnStation.address.addressName}
+                </div>
+              </div>
             </div>
           </div>
         </div>
         {detailItem && detailItem.carExtraOption?.length > 0 && (
-          <div className='pt-5'>
-            <Title order={5}>Ekstralar Ekleyin</Title>
-            <div className='grid gap-3 pt-2 md:grid-cols-2'>
+          <div className='flex flex-col gap-3 rounded-md border p-4'>
+            <Title order={3} fz='lg'>
+              Önerilen Ürünler
+            </Title>
+            <div className='text-xs'>
+              Aşağıdaki seçeneklerden herhangi birini talep edebilirsiniz. Bu
+              talepler garanti edilemez ve Ek hizmetlerin ücreti araç teslimi
+              sırasında firmaya ödenir.
+            </div>
+            <div className='flex flex-col gap-3'>
               {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
                 .filter((item) => item.isSelectable)
-                .map((extraOption) => (
-                  <div key={extraOption.code}>
-                    <Checkbox.Card
-                      p={12}
-                      checked={extraOption.selected || extraOption.isFree}
-                      disabled={extraOption.isFree}
-                      onChange={(checked) => {
-                        handleAdditionalOptionSelect({
-                          data: extraOption,
-                          checked,
-                          type: 'extra',
-                        })
-                      }}
-                      className={clsx({
-                        'border-green-200 bg-green-50': extraOption.selected,
-                      })}
-                    >
-                      <Group>
-                        <Checkbox.Indicator disabled={extraOption.isFree} />
-                        <div className='flex-1 text-sm'>
-                          <div>{extraOption.name}</div>
-                          <div className='font-semibold text-blue-700'>
-                            {formatCurrency(extraOption.totalPrice.value)}
+                .map((extraOption, extraOptionIndex) => {
+                  return (
+                    <div key={extraOptionIndex}>
+                      <Checkbox.Card
+                        p={12}
+                        checked={extraOption.selected || extraOption.isFree}
+                        disabled={extraOption.isFree}
+                        onChange={(checked) => {
+                          handleAdditionalOptionSelect({
+                            data: extraOption,
+                            checked,
+                            type: 'extra',
+                          })
+                        }}
+                        className={clsx({
+                          'border-blue-800': extraOption.selected,
+                        })}
+                      >
+                        <Group>
+                          <div>
+                            <Checkbox.Indicator
+                              size='md'
+                              disabled={extraOption.isFree}
+                            />
                           </div>
-                        </div>
-                      </Group>
-                    </Checkbox.Card>
-                  </div>
-                ))}
+                          <div className='flex flex-1 justify-between'>
+                            <div>{extraOption.name}</div>
+                            <div className='font-semibold text-blue-700'>
+                              {formatCurrency(extraOption.totalPrice.value)}
+                            </div>
+                          </div>
+                        </Group>
+                      </Checkbox.Card>
+                    </div>
+                  )
+                })}
             </div>
           </div>
         )}
         {detailItem && detailItem.carInsurances.length > 0 && (
-          <div className='pt-5'>
-            <Title order={5}>Güvence Paketi Ekleyin</Title>
-            <div className='grid gap-3 pt-2 md:grid-cols-2'>
+          <div className='flex flex-col gap-3 rounded-md border p-4'>
+            <Title order={3} fz='lg'>
+              Güvence Paketi Ekleyin
+            </Title>
+            <div className='flex flex-col gap-3'>
               {detailItem.carInsurances
                 .filter((item) => item.isSelectable)
-                .map((insuranceOption) => (
-                  <div key={insuranceOption.code}>
+                .map((insuranceOption, insuranceOptionIndex) => (
+                  <div key={insuranceOptionIndex}>
                     <Checkbox.Card
                       p={12}
                       checked={
@@ -328,8 +383,7 @@ export const DetailClient = () => {
                         })
                       }}
                       className={clsx({
-                        'border-green-200 bg-green-50':
-                          insuranceOption.selected,
+                        'border-blue-800': insuranceOption.selected,
                       })}
                     >
                       <Group>
@@ -348,10 +402,12 @@ export const DetailClient = () => {
           </div>
         )}
       </div>
-      <div className='col-span-2'>
-        <div className='grid gap-3'>
-          <Title order={4}>Fiyat Özeti</Title>
-          <div className='flex items-center justify-between rounded-md bg-red-100 p-3 font-semibold'>
+      <div className='sticky grid w-full md:top-1 md:col-span-2'>
+        <div className='flex flex-col gap-3 rounded-md border bg-white p-4'>
+          <Title order={4} fw='normal'>
+            Fiyat Özeti
+          </Title>
+          <div className='flex items-center justify-between rounded bg-gray-50 p-3'>
             <div>Kartınızdan Çekilecek Tutar</div>
             <div>{formatCurrency(detailItem.totalPrice.value)}</div>
           </div>
@@ -359,7 +415,7 @@ export const DetailClient = () => {
             {formatCurrency(detailItem.basePrice.value)} / Günlük{' '}
           </div>
           {(selectedExtraOptionPrice || selectedInsurancePrice) > 0 && (
-            <div className='flex items-center justify-between rounded-md bg-blue-100 p-3 font-semibold'>
+            <div className='flex items-center justify-between rounded bg-gray-50 p-3'>
               <div>Ofiste Ödenecek Tutar</div>
               <div>
                 {formatCurrency(
@@ -380,6 +436,16 @@ export const DetailClient = () => {
             </Button>
           </div>
         </div>
+        <Alert
+          color='orange'
+          className='border border-yellow-500'
+          mt={'md'}
+          icon={<BsInfoCircle />}
+        >
+          Aracı teslim alırken yanınızda kimliğiniz, ehliyetiniz ve üzerinde
+          adınız, soyadınız ve kart numaranızın yazdığı bir kredi kartı
+          bulunmalıdır.
+        </Alert>
       </div>
     </div>
   )
