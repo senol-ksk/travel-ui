@@ -245,9 +245,9 @@ export const DetailClient = () => {
               Teslim Alış
             </Title>
             <div className='font-semibold'>
-              {dayjs
-                .utc(detailItem.carDetail.pickupDate)
-                .format('DD MMMM YYYY, HH:mm')}
+              {dayjs(detailItem.carDetail.pickupDate).format(
+                'DD MMMM YYYY, HH:mm'
+              )}
             </div>
             <div className='text-sm'>
               {carDetailQuery.data?.pickupStation.address.addressName}
@@ -259,9 +259,9 @@ export const DetailClient = () => {
               Teslim ediş
             </Title>
             <div className='font-semibold'>
-              {dayjs
-                .utc(detailItem.carDetail.returnDate)
-                .format('DD MMMM YYYY, HH:mm')}
+              {dayjs(detailItem.carDetail.returnDate).format(
+                'DD MMMM YYYY, HH:mm'
+              )}
             </div>
             <div className='text-sm'>
               {carDetailQuery.data?.returnStation.address.addressName}
@@ -274,8 +274,8 @@ export const DetailClient = () => {
             <div className='grid gap-3 pt-2 md:grid-cols-2'>
               {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
                 .filter((item) => item.isSelectable)
-                .map((extraOption) => (
-                  <div key={extraOption.code}>
+                .map((extraOption, extraOptionIndex) => (
+                  <div key={extraOptionIndex}>
                     <Checkbox.Card
                       p={12}
                       checked={extraOption.selected || extraOption.isFree}
@@ -312,8 +312,8 @@ export const DetailClient = () => {
             <div className='grid gap-3 pt-2 md:grid-cols-2'>
               {detailItem.carInsurances
                 .filter((item) => item.isSelectable)
-                .map((insuranceOption) => (
-                  <div key={insuranceOption.code}>
+                .map((insuranceOption, insuranceOptionIndex) => (
+                  <div key={insuranceOptionIndex}>
                     <Checkbox.Card
                       p={12}
                       checked={
