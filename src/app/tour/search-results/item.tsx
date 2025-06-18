@@ -24,6 +24,8 @@ import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchRe
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { TourDropdown } from './_components/dropdown'
+import { IoArrowForward } from 'react-icons/io5'
+import { MdOutlineChevronRight } from 'react-icons/md'
 
 type Props = {
   // data: TourSearchResultSearchItem
@@ -47,17 +49,11 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
   })
 
   return (
-    <div className='rounded-md border border-gray-300 shadow'>
-      <div className='grid gap-3 p-3 md:gap-5 lg:p-5'>
-        <Title order={3} className='text-md font-semibold lg:text-lg'>
-          {data.region.title}
-        </Title>
+    <div className='grid grid-cols-1 rounded-md border border-gray-300 shadow md:grid-cols-5'>
+      <div className='grid gap-3 p-3 md:col-span-4 md:gap-5 lg:p-5'>
         <div className='grid grid-cols-12 items-start gap-4'>
           <div className='col-span-12 md:col-span-3'>
-            <Box
-              // h={150}
-              className='relative'
-            >
+            <Box className='relative'>
               <Transition
                 mounted={isImageLoading}
                 transition='fade'
@@ -75,6 +71,7 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
               </Transition>
               <AspectRatio>
                 <Image
+                  mah={200}
                   loading='lazy'
                   src={data.imageUrl}
                   alt={data.title}
@@ -86,8 +83,11 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
               </AspectRatio>
             </Box>
           </div>
-          <div className='col-span-12 grid gap-1 md:col-span-9'>
-            <div className='pb-3 font-semibold'>{data.description}</div>
+          <div className='col-span-12 flex flex-col gap-3 md:col-span-9'>
+            <Title order={3} className='text-md font-semibold lg:text-lg'>
+              {data.region.title}
+            </Title>
+            <div className='text-sm'>{data.description}</div>
 
             <div className='flex gap-2 text-sm text-gray-700'>
               <div>
@@ -96,33 +96,33 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
               <div>{data.title}</div>
             </div>
 
-            <TourDropdown
-              data={sortedRelatedItems}
-              onSelect={setSelectedTour}
-              defaultItem={selectedTour}
-            />
+            <div>
+              <TourDropdown
+                data={sortedRelatedItems}
+                onSelect={setSelectedTour}
+                defaultItem={selectedTour}
+              />
+            </div>
           </div>
         </div>
       </div>
-      <Divider />
-      <div className='grid grid-cols-1 items-end justify-between gap-3 p-3 lg:grid-cols-7 lg:p-5'>
+      <div className='flex items-center justify-between gap-3 p-3 md:col-span-1 md:flex-col md:items-end md:justify-end md:border-l md:text-end'>
         <div className='leading-tight lg:col-span-6'>
-          <small className='text-gray-600'>
+          <small>
             {formatCurrency(
               selectedTour.totalPrice.value,
               selectedTour.totalPrice.currency ?? 'TRY'
             )}
           </small>
-          <div className='text-lg font-semibold'>
+          <div className='text-xl font-semibold'>
             {formatCurrency(selectedTour.tlPrice.value)}
           </div>
         </div>
-        <div>
+        <div className='md:w-full'>
           <Button
             component={Link}
             href={detailUrl}
-            // onClick={() => onClick(data)}
-
+            rightSection={<MdOutlineChevronRight />}
             fullWidth
           >
             Seç

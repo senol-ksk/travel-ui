@@ -58,7 +58,7 @@ const TourDropdown: React.FC<IProps> = ({ data, onSelect, defaultItem }) => {
       </Combobox.Target>
       <Combobox.Dropdown>
         <Combobox.Options>
-          <ScrollArea.Autosize mah={250} type='scroll'>
+          <ScrollArea.Autosize mah={250}>
             {data.map((item, index) => (
               <Combobox.Option
                 key={item.key}

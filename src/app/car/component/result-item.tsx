@@ -1,24 +1,24 @@
 import { Image, rem, Skeleton, Transition } from '@mantine/core'
 import { Button, Title } from '@mantine/core'
 
-import { IoArrowForward } from 'react-icons/io5'
 import { PiImageBroken } from 'react-icons/pi'
 import {
   MdAirlineSeatReclineNormal,
   MdElectricalServices,
   MdOutlineAccountBalanceWallet,
+  MdOutlineChevronRight,
 } from 'react-icons/md'
 import { TbManualGearbox } from 'react-icons/tb'
-
-import { CarSearchResultItemType } from '@/app/car/types'
-import { formatCurrency } from '@/libs/util'
 import { useState } from 'react'
-
-import { FuelTypes } from '@/modules/carrent/types'
 import { BiTachometer } from 'react-icons/bi'
 import dayjs from 'dayjs'
 import { IoIosCheckmarkCircle } from 'react-icons/io'
 import { LuFuel } from 'react-icons/lu'
+
+import { CarSearchResultItemType } from '@/app/car/types'
+import { formatCurrency } from '@/libs/util'
+
+import { FuelTypes } from '@/modules/carrent/types'
 
 type Props = {
   item: CarSearchResultItemType
@@ -167,7 +167,7 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
         <div>
           <Button
             onClick={() => onSelect(item)}
-            rightSection={<IoArrowForward />}
+            rightSection={<MdOutlineChevronRight />}
             fullWidth
           >
             Hemen Kirala
