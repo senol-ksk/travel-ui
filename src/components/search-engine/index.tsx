@@ -3,12 +3,6 @@
 import { Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 
-import { BiSolidPlaneAlt } from 'react-icons/bi'
-import { IoCarSharp, IoBus } from 'react-icons/io5'
-import { MdHotel } from 'react-icons/md'
-import { TransferIcon } from '@/modules/bus/_icon'
-import { FaSuitcase } from 'react-icons/fa'
-
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
 import { CarRentSearchPanel } from '@/modules/carrent'
@@ -17,6 +11,15 @@ import { TransferSearchEngine } from '@/modules/transfer'
 import { TourSearchEngine } from '@/modules/tour'
 
 import classes from '@/components/search-engine/Search.module.css'
+import {
+  RiBuilding4Line,
+  RiBusFill,
+  RiCarLine,
+  RiPlaneLine,
+  RiRouteLine,
+  RiShip2Line,
+  RiSuitcaseLine,
+} from 'react-icons/ri'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -45,7 +48,7 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'md:text-lg border-b-4 mt-3',
+        tab: 'md:text-lg border-b-4 p-4',
         tabSection: 'hidden sm:flex',
         tabLabel: 'flex-none',
       }}
@@ -59,42 +62,49 @@ export const SearchEngine = () => {
       >
         <TabsTab
           value={searchModules.flight.value}
-          leftSection={<BiSolidPlaneAlt />}
+          leftSection={<RiPlaneLine size={20} />}
           className={classes.tab}
         >
           {searchModules.flight.title}
         </TabsTab>
         <TabsTab
           value={searchModules.hotel.value}
-          leftSection={<MdHotel />}
+          leftSection={<RiBuilding4Line size={20} />}
           className={classes.tab}
         >
           {searchModules.hotel.title}
         </TabsTab>
         <TabsTab
           value={searchModules.carRental.value}
-          leftSection={<IoCarSharp />}
+          leftSection={<RiCarLine size={20} />}
           className={classes.tab}
         >
           {searchModules.carRental.title}
         </TabsTab>
         <TabsTab
+          value={'feribot'}
+          leftSection={<RiShip2Line size={20} />}
+          className={classes.tab}
+        >
+          <div>Feribot</div>
+        </TabsTab>
+        <TabsTab
           value={searchModules.bus.value}
-          leftSection={<IoBus />}
+          leftSection={<RiBusFill size={20} />}
           className={classes.tab}
         >
           {searchModules.bus.title}
         </TabsTab>
         <TabsTab
           value={searchModules.transfer.value}
-          leftSection={<TransferIcon />}
+          leftSection={<RiRouteLine size={20} />}
           className={classes.tab}
         >
           {searchModules.transfer.title}
         </TabsTab>
         <TabsTab
           value={searchModules.tour.value}
-          leftSection={<FaSuitcase />}
+          leftSection={<RiSuitcaseLine size={20} />}
           className={classes.tab}
         >
           {searchModules.tour.title}

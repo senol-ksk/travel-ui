@@ -3,12 +3,9 @@
   font-weight: 600;
   transition: color 100ms ease;
   justify-content: center;
+  font-size: 14px;
 
   &[data-active] {
     color: var(--mantine-color-blue-filled);
   }
-}
-.tab:hover {
-  outline: 1px solid var(--mantine-color-gray-4);
-  border-radius: 2rem;
 }

@@ -186,7 +186,7 @@ const BusSearchEngine = () => {
           </div>
         </div>
         <div className='relative col-span-12 md:col-span-2'>
-          <div className='relative'>
+          <div className='relative h-full'>
             <BusCalendar
               defaultDate={formActions.getValues('Date')}
               onDateSelect={(date) => {

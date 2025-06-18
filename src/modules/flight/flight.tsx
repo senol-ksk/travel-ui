@@ -3,11 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useTransitionRouter } from 'next-view-transitions'
 import dayjs from 'dayjs'
-import {
-  MdKeyboardArrowDown,
-  MdOutlineLocationOn,
-  MdOutlinePersonOutline,
-} from 'react-icons/md'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -24,6 +20,7 @@ import { PassengerDropdown } from '@/components/search-engine/passengers/flight'
 import type { LocationResults } from '@/components/search-engine/locations/type'
 import { serializeFlightSearchParams } from './searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
+import { RiCalendarEventLine, RiMapPin2Line, RiUserLine } from 'react-icons/ri'
 
 const formSchema = z.object({
   DepartureDate: z.coerce.date(),
@@ -213,8 +210,18 @@ export const Flight = () => {
             }}
           >
             <Group gap={'md'}>
-              <Radio variant='outline' value={'1'} label='Tek Yön' />
-              <Radio variant='outline' value={'2'} label='Gidiş-Dönüş' />
+              <Radio
+                className='font-medium'
+                variant='outline'
+                value={'2'}
+                label='Gidiş-Dönüş'
+              />
+              <Radio
+                className='font-medium'
+                variant='outline'
+                value={'1'}
+                label='Tek Yön'
+              />
             </Group>
           </Radio.Group>
         </div>
@@ -250,20 +257,22 @@ export const Flight = () => {
                   }
                 }}
                 classNames={{
-                  input: 'bg-blue-100',
-                  dropdown: 'min-w-[265px] py-[15px] md:ml-[77px]',
-                  option: 'text-[17px] py-[12px] font-medium hover:bg-blue-100',
+                  input: 'bg-blue-100 text-sm font-semibold border-gray-700',
+                  dropdown:
+                    'min-w-[265px] py-[15px] md:ml-[77px] text-xs font-semibold',
+                  option:
+                    'text-[17px] py-[12px] font-semibold hover:bg-blue-100 text-xs',
                 }}
               />
             )
           }}
         />
       </div>
-      <div className='grid grid-cols-18 gap-2 md:gap-4'>
-        <div className='relative col-span-17 sm:col-span-6 md:col-span-4'>
-          <MdOutlineLocationOn
+      <div className='grid grid-cols-19 gap-2 md:gap-4'>
+        <div className='relative col-span-17 sm:col-span-6 md:col-span-5'>
+          <RiMapPin2Line
             size={22}
-            className='absolute top-1/2 left-0 z-10 mx-1 -translate-y-1/2'
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <Locations
             label='Nereden'
@@ -287,14 +296,14 @@ export const Flight = () => {
           />
         </div>
 
-        <div className='relative col-span-16 sm:col-span-6 md:col-span-4'>
-          <MdOutlineLocationOn
+        <div className='relative col-span-16 sm:col-span-6 md:col-span-5'>
+          <RiMapPin2Line
             size={22}
-            className='absolute top-1/2 left-0 z-10 mx-1 -translate-y-1/2'
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
 
           <Locations
-            label='Nereye'
+            label='Nereye?'
             inputProps={{
               error: !!form.formState.errors.Destination,
             }}
@@ -317,7 +326,11 @@ export const Flight = () => {
           />
         </div>
 
-        <div className='col-span-9 md:col-span-4'>
+        <div className='relative col-span-9 md:col-span-4'>
+          <RiCalendarEventLine
+            size={23}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
           <FlightCalendar
             onDateSelect={(dates) => {
               if (dates[0]) {
@@ -345,9 +358,9 @@ export const Flight = () => {
           />
         </div>
         <div className='relative col-span-7 md:col-span-3 lg:col-span-3'>
-          <MdOutlinePersonOutline
+          <RiUserLine
             size={23}
-            className='absolute top-1/2 left-0 z-10 mx-1 -translate-y-1/2'
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <PassengerDropdown
             initialValues={{
@@ -362,7 +375,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='sm:col-grid-2 col-span-16 lg:col-span-3'>
+        <div className='sm:col-grid-2 col-span-16 p-0 lg:col-span-2'>
           <SearchEngineButton title='Uçuş Ara' />
         </div>
       </div>
