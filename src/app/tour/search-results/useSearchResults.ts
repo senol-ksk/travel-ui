@@ -11,6 +11,7 @@ import { getsecuritytoken, request, serviceRequest } from '@/network'
 import {
   TourSearchApiParamsResponse,
   TourSearchResultApiResponse,
+  TourSearchResultSearchItem,
 } from '@/modules/tour/type'
 import { GetSecurityTokenResponse } from '@/types/global'
 import { delayCodeExecution } from '@/libs/util'

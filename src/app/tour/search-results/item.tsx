@@ -1,9 +1,15 @@
-import { TourSearchResultSearchItem } from '@/modules/tour/type'
 import {
+  TourSearchResultGroupedItem,
+  TourSearchResultRelatedItems,
+  TourSearchResultSearchItem,
+} from '@/modules/tour/type'
+import {
+  AspectRatio,
   Box,
   Button,
   Divider,
   Image,
+  Select,
   Skeleton,
   Title,
   Transition,
@@ -17,30 +23,37 @@ import { serializeTourDetailPageParams } from '@/modules/tour/detailSearchParams
 import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchResults'
 import dayjs from 'dayjs'
 import { useState } from 'react'
+import { TourDropdown } from './_components/dropdown'
+import { IoArrowForward } from 'react-icons/io5'
+import { MdOutlineChevronRight } from 'react-icons/md'
 
 type Props = {
-  data: TourSearchResultSearchItem
+  // data: TourSearchResultSearchItem
+  data: TourSearchResultGroupedItem
 }
 export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
+  const sortedRelatedItems = data.relatedItems.sort((a, b) =>
+    dayjs(a.startDate).diff(b.startDate)
+  )
   const { searchParamsQuery } = useTourSearchResultsQuery()
   const [isImageLoading, setImageLoading] = useState(true)
+  const [selectedTour, setSelectedTour] = useState<TourSearchResultSearchItem>(
+    sortedRelatedItems[0]
+  )
 
   const detailUrl = serializeTourDetailPageParams('/tour/detail', {
-    productKey: data.key,
-    slug: data.slug,
+    productKey: selectedTour.key,
+    slug: selectedTour.slug,
     searchToken: searchParamsQuery.data?.data?.params.searchToken,
     sessionToken: searchParamsQuery.data?.data?.sessionToken,
   })
 
   return (
-    <div className='@container rounded-lg border border-gray-300'>
-      <div className='grid gap-3 p-3 md:gap-5 @lg:p-5'>
-        <Title order={3} className='text-md font-semibold @lg:text-lg'>
-          {data.region.title}
-        </Title>
+    <div className='grid grid-cols-1 rounded-md border border-gray-300 shadow md:grid-cols-5'>
+      <div className='grid gap-3 p-3 md:col-span-4 md:gap-5 lg:p-5'>
         <div className='grid grid-cols-12 items-start gap-4'>
           <div className='col-span-12 md:col-span-3'>
-            <Box h={150} className='relative'>
+            <Box className='relative'>
               <Transition
                 mounted={isImageLoading}
                 transition='fade'
@@ -56,56 +69,60 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
                   </div>
                 )}
               </Transition>
-              <Image
-                loading='lazy'
-                src={data.imageUrl}
-                alt={data.title}
-                radius={'md'}
-                onLoad={() => {
-                  setImageLoading(false)
-                }}
-              />
+              <AspectRatio>
+                <Image
+                  mah={200}
+                  loading='lazy'
+                  src={data.imageUrl}
+                  alt={data.title}
+                  radius={'md'}
+                  onLoad={() => {
+                    setImageLoading(false)
+                  }}
+                />
+              </AspectRatio>
             </Box>
           </div>
-          <div className='col-span-12 grid gap-1 md:col-span-9'>
-            <div className='pb-3 font-semibold'>{data.description}</div>
-            <div className='flex items-center gap-2 text-sm text-gray-700'>
-              <div>
-                <HiOutlineCalendarDays size={22} />
-              </div>
-              <div>{dayjs(data.startDate).format('DD MMMM YYYY')}</div>
-              <div>{'-'}</div>
-              <div>{dayjs(data.endDate).format('DD MMMM YYYY')}</div>
-            </div>
+          <div className='col-span-12 flex flex-col gap-3 md:col-span-9'>
+            <Title order={3} className='text-md font-semibold lg:text-lg'>
+              {data.region.title}
+            </Title>
+            <div className='text-sm'>{data.description}</div>
+
             <div className='flex gap-2 text-sm text-gray-700'>
               <div>
                 <LiaInfoCircleSolid size={22} />
               </div>
-
               <div>{data.title}</div>
+            </div>
+
+            <div>
+              <TourDropdown
+                data={sortedRelatedItems}
+                onSelect={setSelectedTour}
+                defaultItem={selectedTour}
+              />
             </div>
           </div>
         </div>
       </div>
-      <Divider />
-      <div className='grid grid-cols-1 items-end justify-between gap-3 p-3 lg:p-5 @lg:grid-cols-7'>
-        <div className='leading-tight @lg:col-span-6'>
-          <small className='text-gray-600'>
+      <div className='flex items-center justify-between gap-3 p-3 md:col-span-1 md:flex-col md:items-end md:justify-end md:border-l md:text-end'>
+        <div className='leading-tight lg:col-span-6'>
+          <small>
             {formatCurrency(
-              data.totalPrice.value,
-              data.totalPrice.currency ?? 'TRY'
+              selectedTour.totalPrice.value,
+              selectedTour.totalPrice.currency ?? 'TRY'
             )}
           </small>
-          <div className='text-lg font-semibold'>
-            {formatCurrency(data.tlPrice.value)}
+          <div className='text-xl font-semibold'>
+            {formatCurrency(selectedTour.tlPrice.value)}
           </div>
         </div>
-        <div>
+        <div className='md:w-full'>
           <Button
             component={Link}
             href={detailUrl}
-            // onClick={() => onClick(data)}
-
+            rightSection={<MdOutlineChevronRight />}
             fullWidth
           >
             Seç

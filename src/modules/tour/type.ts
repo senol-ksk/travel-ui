@@ -101,6 +101,12 @@ export interface TourSearchResultSearchItem {
   taxInfos: null
   serviceCharges: null
 }
+export interface TourSearchResultRelatedItems {
+  relatedItems: TourSearchResultSearchItem[]
+}
+export interface TourSearchResultGroupedItem
+  extends TourSearchResultSearchItem,
+    TourSearchResultRelatedItems {}
 
 export interface TourSearchResultApiResponse {
   code: number
