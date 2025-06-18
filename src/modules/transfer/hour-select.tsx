@@ -37,7 +37,7 @@ const TransferHours: React.FC<IProps> = ({
         classNames={{
           label: 'text-sm leading-none',
           input: 'text-xl leading-none font-semibold h-auto min-h-auto pr-0',
-          root: 'h-full truncate rounded-md bg-gray-50 px-5 py-2 md:px-6 border-slate-300',
+          root: 'h-full truncate rounded-md border border-gray-600 bg-white px-5 py-2 md:px-6',
           section: 'hidden',
         }}
         data={hourRange}

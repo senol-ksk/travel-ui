@@ -20,14 +20,14 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
   return (
     <div
       className={clsx(
-        'relative flex h-full items-center truncate rounded-md border bg-gray-50 px-1 py-2 transition-colors hover:border-blue-800',
+        'relative flex h-full items-center truncate rounded-md border border-gray-600 p-1 transition-colors hover:border-blue-800',
         {
           'border-red-500': error,
-          'border-transparent': !error,
+          'border-gray-600': !error,
         }
       )}
     >
-      <div className='px-7'>
+      <div className='px-8'>
         <label
           id={labelId}
           aria-labelledby={labelId}
@@ -35,14 +35,12 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
             {
               'sr-only': !title,
             },
-            'relative block pb-1 text-sm leading-none'
+            'relative block pb-1 text-xs leading-none'
           )}
         >
           {label}
         </label>
-        <div className='text-lg leading-none font-medium'>
-          {!!title ? title : label}
-        </div>
+        <div className='leading-none'>{!!title ? title : label}</div>
       </div>
 
       <UnstyledButton

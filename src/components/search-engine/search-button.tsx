@@ -6,7 +6,7 @@ export const SearchEngineButton = ({
   title?: React.ReactNode
 }) => {
   return (
-    <Button w={'100%'} type='submit' className='rounded-lg' size='xl'>
+    <Button w={'100%'} type='submit' className='rounded-lg px-0' size='xl'>
       {title}
     </Button>
   )

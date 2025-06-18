@@ -38,7 +38,6 @@ function FlightDetailsSearch({
 
     const airport = airportValues.find((a) => a.Code === code)
     if (!airport) return code
-    console.log(airport)
     return airport.Value[0]?.Value
   }
   const [activeLegGroupId, setActiveLegGroupId] = React.useState<number>(0)
