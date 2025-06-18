@@ -22,7 +22,7 @@ type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
 }
-const defaultFormat = 'DD MMM'
+const defaultFormat = 'DD MMM ddd'
 
 const FlightCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
@@ -76,24 +76,24 @@ const FlightCalendar: React.FC<Props> = ({
         <Input
           label={
             tripKind === 'round-trip' ? (
-              <div className='flex w-full justify-between gap-[20px] px-3'>
-                <span>Gidiş Tarihi</span>
-                <span>Çıkış Tarihi</span>
+              <div className='flex w-full gap-[80px] md:px-3'>
+                <span>Gidiş</span>
+                <span>Dönüş</span>
               </div>
             ) : (
-              <div className='px-3'>Gidiş Tarihi</div>
+              <div className='md:px-3'>Gidiş</div>
             )
           }
           onClick={() => setContainerTransitionState(true)}
           title={
             tripKind === 'round-trip' ? (
-              <div className='flex w-full items-center justify-between px-3'>
+              <div className='flex w-full items-center justify-between gap-2 md:px-3'>
                 <span>{formatedValues[0] ?? 'Gidiş'}</span>
                 <span>-</span>
                 <span>{formatedValues[1] ?? 'Dönüş'}</span>
               </div>
             ) : (
-              <span className='px-3'>{formatedValues[0] ?? 'Gidiş'}</span>
+              <span className='md:px-3'>{formatedValues[0] ?? 'Gidiş'}</span>
             )
           }
         />
@@ -124,11 +124,11 @@ const FlightCalendar: React.FC<Props> = ({
                     />
                   </div>
                   <div className='flex items-center gap-3 px-3 md:pt-3'>
-                    <div className='flex-1'>
+                    <div className='flex'>
                       <button
                         type='button'
                         className={clsx(
-                          'w-full border-b-4 px-2 text-start text-lg font-bold',
+                          'w-50 border-b-4 px-2 text-start text-lg font-bold',
                           {
                             'border-cyan-500': !formatedValues[0],
                           }
@@ -150,7 +150,7 @@ const FlightCalendar: React.FC<Props> = ({
                           <button
                             type='button'
                             className={clsx(
-                              'w-full border-b-4 px-2 text-start text-lg font-bold',
+                              'w-50 border-b-4 px-2 text-start text-lg font-bold',
                               {
                                 'border-cyan-500': !formatedValues[1],
                               }

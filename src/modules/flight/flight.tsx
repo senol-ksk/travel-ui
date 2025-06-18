@@ -268,10 +268,10 @@ export const Flight = () => {
           }}
         />
       </div>
-      <div className='grid grid-cols-19 gap-2 md:gap-3'>
-        <div className='relative col-span-17 sm:col-span-6 md:col-span-5'>
+      <div className='grid grid-cols-16 gap-2 md:grid-cols-21 md:gap-3'>
+        <div className='relative col-span-16 sm:col-span-6 md:col-span-5'>
           <RiMapPin2Line
-            size={22}
+            size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <Locations
@@ -298,7 +298,7 @@ export const Flight = () => {
 
         <div className='relative col-span-16 sm:col-span-6 md:col-span-5'>
           <RiMapPin2Line
-            size={22}
+            size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
 
@@ -326,9 +326,9 @@ export const Flight = () => {
           />
         </div>
 
-        <div className='relative col-span-9 md:col-span-4'>
+        <div className='relative col-span-16 md:col-span-5'>
           <RiCalendarEventLine
-            size={23}
+            size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <FlightCalendar
@@ -357,9 +357,9 @@ export const Flight = () => {
             ]}
           />
         </div>
-        <div className='relative col-span-7 md:col-span-3 lg:col-span-3'>
+        <div className='relative col-span-16 md:col-span-3 lg:col-span-3'>
           <RiUserLine
-            size={23}
+            size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <PassengerDropdown
@@ -375,7 +375,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='sm:col-grid-2 col-span-16 p-0 lg:col-span-2'>
+        <div className='sm:col-grid-2 col-span-16 p-0 lg:col-span-3'>
           <SearchEngineButton title='Uçuş Ara' />
         </div>
       </div>
