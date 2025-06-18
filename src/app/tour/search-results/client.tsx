@@ -24,13 +24,17 @@ import { TourSearchResultItem } from './item'
 import { filterParser, SortOrderEnums } from '@/modules/tour/searchResultParams'
 import { useQueryStates } from 'nuqs'
 import { useFilterActions } from './useFilteractions'
-import { TourSearchResultSearchItem } from '@/modules/tour/type'
+import {
+  TourSearchResultGroupedItem,
+  TourSearchResultSearchItem,
+} from '@/modules/tour/type'
 import { useWindowScroll } from '@mantine/hooks'
 import { GoMoveToTop } from 'react-icons/go'
 import { useMemo, useRef } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
 import dayjs from 'dayjs'
+import { a } from 'vitest/dist/chunks/suite.d.FvehnV49.js'
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
@@ -61,6 +65,29 @@ const TourSearchResultClient = () => {
         .filter(Boolean) as TourSearchResultSearchItem[],
     [searchResultsQuery.data?.pages]
   )
+  const groupTitles: string[] = []
+  const searchGroupedData: (TourSearchResultGroupedItem | undefined)[] =
+    searchData
+      // .sort((a, b) => {
+      //   return a.totalPrice.value - b.totalPrice.value
+      // })
+      ?.map((item, itemIndex, itemArr) => {
+        if (!item) return
+        if (groupTitles.includes(item.region.title.trim())) {
+          return
+        }
+
+        groupTitles.push(item.region.title.trim())
+
+        return {
+          ...item,
+          relatedItems: itemArr.filter(
+            (relatedItem) =>
+              relatedItem?.region.title.trim() === item.region.title.trim()
+          ),
+        }
+      })
+      .filter(Boolean)
 
   const minPrice =
     searchData && searchData.length
@@ -86,7 +113,7 @@ const TourSearchResultClient = () => {
     .sort()
     .filter(Boolean)
 
-  const filteredData = useFilterActions(searchData ?? [])
+  const filteredData = useFilterActions(searchGroupedData)
 
   if (
     !searchParamsQuery.data &&
@@ -288,7 +315,7 @@ const TourSearchResultClient = () => {
             <div className='grid gap-5'>
               {!searchRequestIsLoading &&
                 searchResultsQuery.data &&
-                filteredData.length === 0 && (
+                filteredData?.length === 0 && (
                   <Alert>
                     <div>Sonuç bulunamadı</div>{' '}
                     {filterParams && (
@@ -306,7 +333,7 @@ const TourSearchResultClient = () => {
                   </Alert>
                 )}
 
-              {filteredData.length === 0 &&
+              {filteredData?.length === 0 &&
                 (searchResultsQuery.isFetching ||
                   searchResultsQuery.isLoading ||
                   !searchResultsQuery.data) && (
@@ -350,12 +377,19 @@ const TourSearchResultClient = () => {
                   </>
                 )}
 
-              {filteredData && filteredData.length > 0 && (
+              {filteredData &&
+                filteredData.length > 0 &&
+                filteredData.map((data) => {
+                  if (!data) return
+                  return <TourSearchResultItem data={data} key={data?.key} />
+                })}
+
+              {/* {filteredData && filteredData.length > 0 && (
                 <Virtuoso
                   ref={virtuoso}
                   useWindowScroll
                   totalCount={filteredData.length}
-                  data={filteredData}
+                  data={searchGroupedData}
                   itemContent={(_, data) => {
                     if (!data) return <span> </span>
                     return (
@@ -365,7 +399,7 @@ const TourSearchResultClient = () => {
                     )
                   }}
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>
