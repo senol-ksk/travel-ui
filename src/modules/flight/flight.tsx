@@ -268,7 +268,7 @@ export const Flight = () => {
           }}
         />
       </div>
-      <div className='grid grid-cols-19 gap-2 md:gap-4'>
+      <div className='grid grid-cols-19 gap-2 md:gap-3'>
         <div className='relative col-span-17 sm:col-span-6 md:col-span-5'>
           <RiMapPin2Line
             size={22}
