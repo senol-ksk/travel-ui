@@ -18,6 +18,7 @@ import { BusCalendar } from '@/components/search-engine/calendar/bus'
 import { useTransitionRouter } from 'next-view-transitions'
 import { serializeBusSearchParams } from './searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
+import { RiMapPin2Line } from 'react-icons/ri'
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
@@ -132,7 +133,11 @@ const BusSearchEngine = () => {
     <form className='block' onSubmit={formActions.handleSubmit(handleSubmit)}>
       <div className='grid grid-cols-12 gap-3 md:gap-3'>
         <div className='col-span-12 grid gap-3 md:col-span-7 md:grid-cols-6'>
-          <div className='col-span-3'>
+          <div className='relative col-span-3'>
+            <RiMapPin2Line
+              size={20}
+              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+            />
             <BusLocations
               label='Nereden'
               data={pickupLocationData?.Result}
@@ -158,6 +163,10 @@ const BusSearchEngine = () => {
             />
           </div>
           <div className='relative col-span-3'>
+            <RiMapPin2Line
+              size={20}
+              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+            />
             <BusLocations
               label='Nereye'
               data={targeLocationData?.Result}

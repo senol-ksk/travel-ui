@@ -10,6 +10,7 @@ import type { DateValue } from '@mantine/dates'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
+import { RiCalendarEventLine } from 'react-icons/ri'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -47,6 +48,10 @@ const BusCalendar: React.FC<Props> = ({
   return (
     <Provider>
       <div className='relative h-full'>
+        <RiCalendarEventLine
+          size={20}
+          className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+        />{' '}
         <Input
           label='Gidiş Tarihi'
           onClick={() => setContainerTransitionState(true)}

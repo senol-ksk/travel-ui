@@ -23,6 +23,7 @@ type Props = {
 const defaultFormat = 'DD MMM ddd'
 
 import { MdOutlineArrowForward } from 'react-icons/md'
+import { RiCalendarEventLine } from 'react-icons/ri'
 
 const HotelCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
@@ -71,19 +72,24 @@ const HotelCalendar: React.FC<Props> = ({
   return (
     <Provider>
       <div className='relative h-full'>
+        <RiCalendarEventLine
+          size={20}
+          className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+        />
+
         <Input
           label={
-            <div className='flex w-full justify-between gap-[30px]'>
-              <span>Giriş Tarihi</span>
-              <span>Çıkış Tarihi</span>
+            <div className='flex w-full gap-[80px] md:px-3'>
+              <span>Giriş</span>
+              <span>Çıkış</span>
             </div>
           }
           onClick={() => setContainerTransitionState(true)}
           title={
-            <div className='flex w-full items-center justify-between gap-[30px]'>
-              <span>{dayjs(rangeValue[0]).format('DD MMM')}</span>
-              <FaRegCalendarAlt size={20} />
-              <span>{dayjs(rangeValue[1]).format('DD MMM')}</span>
+            <div className='flex w-full items-center justify-between gap-[10px] md:px-3'>
+              <span>{dayjs(rangeValue[0]).format('DD MMM, ddd')}</span>
+              <span>-</span>
+              <span>{dayjs(rangeValue[1]).format('DD MMM, ddd')}</span>
             </div>
           }
         />

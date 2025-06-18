@@ -16,6 +16,7 @@ import { LocationResults } from '@/components/search-engine/locations/type'
 import { request } from '@/network'
 import { serializeTourSearchParams } from './searchResultParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
+import { RiMapPin2Line } from 'react-icons/ri'
 
 const defaultDates = [
   dayjs().add(3, 'd').toDate(),
@@ -105,7 +106,11 @@ const TourSearchEngine = () => {
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
       <div className='grid grid-cols-12 gap-3 md:gap-3'>
-        <div className='col-span-12 grid gap-3 md:col-span-7'>
+        <div className='relative col-span-12 grid gap-3 md:col-span-7'>
+          <RiMapPin2Line
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
           <TourLocations
             label='Şehir, Ülke veya Tur Adı'
             isLoading={destinationLocationLoading}

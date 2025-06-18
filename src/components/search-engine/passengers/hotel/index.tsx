@@ -6,6 +6,7 @@ import { useClickOutside } from '@mantine/hooks'
 import { Input } from '@/components/search-engine/input'
 import { HotelGuestsActions } from './guests'
 import { HotelRoomOptionTypes } from '@/modules/hotel/searchParams'
+import { RiUserLine } from 'react-icons/ri'
 
 type Props = {
   onChange?: (params: HotelRoomOptionTypes[]) => void
@@ -26,8 +27,12 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
 
   return (
     <div className='relative h-full'>
+      <RiUserLine
+        size={20}
+        className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+      />
       <Input
-        label='Misafir'
+        label='Oda ve Kişi Sayısı'
         title={`${roomState.length} Oda, ${roomState.reduce((a, b) => a + b.adult, 0)} Yetişkin${
           roomState.reduce((a, b) => a + b.child, 0) > 0
             ? `, ${roomState.reduce((a, b) => a + b.child, 0)} Çocuk`

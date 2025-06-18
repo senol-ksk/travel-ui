@@ -21,6 +21,12 @@ import {
   TransferSearchEngineSchemaInfer,
 } from './searchParams.client'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
+import {
+  RiCalendarEventLine,
+  RiMapPin2Line,
+  RiTimeLine,
+  RiUserLine,
+} from 'react-icons/ri'
 
 const defaultDate = dayjs().add(5, 'day').toISOString()
 
@@ -135,7 +141,11 @@ const TransferSearchEngine = () => {
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
       <div className='grid grid-cols-16 gap-2 md:gap-4'>
         <div className='col-span-16 grid grid-cols-12 gap-2 md:col-span-6 md:gap-4'>
-          <div className='col-span-12 sm:col-span-6'>
+          <div className='relative col-span-12 sm:col-span-6'>
+            <RiMapPin2Line
+              size={20}
+              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+            />
             <Locations
               label='Nereden'
               inputProps={{ error: !!formActions.formState.errors.origin }}
@@ -159,7 +169,11 @@ const TransferSearchEngine = () => {
               }}
             />
           </div>
-          <div className='col-span-12 sm:col-span-6'>
+          <div className='relative col-span-12 sm:col-span-6'>
+            <RiMapPin2Line
+              size={20}
+              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+            />
             <Locations
               label='Nereye'
               inputProps={{ error: !!formActions.formState.errors.destination }}
@@ -184,7 +198,11 @@ const TransferSearchEngine = () => {
             />
           </div>
         </div>
-        <div className='col-span-6 md:col-span-3'>
+        <div className='relative col-span-6 md:col-span-3'>
+          <RiCalendarEventLine
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />{' '}
           <TransferCalendar
             onDateSelect={(date) => {
               if (date) {
@@ -194,16 +212,24 @@ const TransferSearchEngine = () => {
             defaultDate={dayjs(transferSearchLocalStorage.date).toDate()}
           />
         </div>
-        <div className='col-span-5 md:col-span-2'>
+        <div className='relative col-span-5 md:col-span-2'>
+          <RiTimeLine
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
           <TransferHours
-            label='Saat'
+            label={<div className='px-3'>Saat</div>}
             onChange={(event) => {
               formActions.setValue('time', event.currentTarget.value)
             }}
             defaultValue={formActions.formState.defaultValues?.time}
           />
         </div>
-        <div className='col-span-5 md:col-span-2'>
+        <div className='relative col-span-5 md:col-span-2'>
+          <RiUserLine
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
           <PassengerDropdown
             initialValues={{
               adult:
