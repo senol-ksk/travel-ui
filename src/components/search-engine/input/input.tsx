@@ -40,7 +40,7 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
         >
           {label}
         </label>
-        <div className='text-lg leading-none'>{!!title ? title : label}</div>
+        <div className='leading-none'>{!!title ? title : label}</div>
       </div>
 
       <UnstyledButton
