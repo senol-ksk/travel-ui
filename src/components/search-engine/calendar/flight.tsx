@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
@@ -12,7 +12,6 @@ import { IoArrowForwardSharp } from 'react-icons/io5'
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import classes from '@/styles/Datepicker.module.css'
-import { RiCalendarEventLine } from 'react-icons/ri'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -130,7 +129,7 @@ const FlightCalendar: React.FC<Props> = ({
                         className={clsx(
                           'w-50 border-b-4 px-2 text-start text-lg font-bold',
                           {
-                            'border-cyan-500': !formatedValues[0],
+                            'border-blue-800': !formatedValues[0],
                           }
                         )}
                       >
@@ -152,7 +151,7 @@ const FlightCalendar: React.FC<Props> = ({
                             className={clsx(
                               'w-50 border-b-4 px-2 text-start text-lg font-bold',
                               {
-                                'border-cyan-500': !formatedValues[1],
+                                'border-blue-800': !formatedValues[1],
                               }
                             )}
                           >

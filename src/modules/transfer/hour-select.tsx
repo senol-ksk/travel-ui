@@ -5,7 +5,7 @@ import { BsClock } from 'react-icons/bs'
 
 type IProps = {
   error?: boolean
-  label: string
+  label: React.ReactNode
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
   defaultValue?: string
 }
@@ -35,8 +35,8 @@ const TransferHours: React.FC<IProps> = ({
         variant='unstyled'
         label={label}
         classNames={{
-          label: 'text-sm leading-none',
-          input: 'text-xl leading-none font-semibold h-auto min-h-auto pr-0',
+          label: 'text-sm leading-none font-normal',
+          input: 'leading-none h-auto min-h-auto pr-0 px-3',
           root: 'h-full truncate rounded-md border border-gray-600 bg-white px-5 py-2 md:px-6',
           section: 'hidden',
         }}

@@ -19,6 +19,8 @@ import type { LocationResults } from '@/components/search-engine/locations/type'
 import { carSearchEngineSchema, CarSearchEngineSchemaTypeInfer } from './types'
 import { serializeCarSearchParams } from './searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
+import { RiMapPin2Line, RiTimeLine } from 'react-icons/ri'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 
 const defaultDates = {
   drop_date: dayjs().add(2, 'day').toDate(),
@@ -128,15 +130,19 @@ const CarRentSearchPanel: React.FC = () => {
       <input {...formActions.register('pickup_date')} type='hidden' />
       <input {...formActions.register('drop_date')} type='hidden' />
 
-      <div className='grid grid-cols-16 gap-3 md:gap-3'>
-        <div className='col-span-16 h-full md:col-span-5'>
+      <div className='grid grid-cols-16 gap-3 md:grid-cols-19 md:gap-3'>
+        <div className='col-span-16 h-full md:col-span-6'>
           <div className='grid h-full grid-cols-6 gap-3'>
             <div
-              className={clsx('col-span-6 h-full', {
-                'md:col-span-3': isDiffrentDropLocation,
-                'md:col-span-6': !isDiffrentDropLocation,
+              className={clsx('relative col-span-6 h-full', {
+                'relative md:col-span-3': isDiffrentDropLocation,
+                'relative md:col-span-6': !isDiffrentDropLocation,
               })}
             >
+              <RiMapPin2Line
+                size={20}
+                className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+              />
               <CarLocations
                 inputProps={{
                   error: !!formActions.formState.errors.pickup,
@@ -168,7 +174,11 @@ const CarRentSearchPanel: React.FC = () => {
               />
             </div>
             {isDiffrentDropLocation ? (
-              <div className='col-span-6 md:col-span-3'>
+              <div className='relative col-span-6 md:col-span-3'>
+                <RiMapPin2Line
+                  size={20}
+                  className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+                />
                 <CarLocations
                   inputProps={{
                     error: !!formActions.formState.errors.dropoff,
@@ -199,7 +209,7 @@ const CarRentSearchPanel: React.FC = () => {
             ) : null}
           </div>
         </div>
-        <div className='col-span-16 md:col-span-4'>
+        <div className='col-span-16 md:col-span-5'>
           <CarCalendar
             defaultDates={[
               dayjs(
@@ -218,9 +228,18 @@ const CarRentSearchPanel: React.FC = () => {
             }}
           />
         </div>
-        <div className='col-span-8 md:col-span-2'>
+        <div className='relative col-span-8 font-normal md:col-span-3'>
+          <RiTimeLine
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
+          <MdKeyboardArrowDown
+            size={20}
+            className='absolute top-1/2 right-0 z-10 mx-2 -translate-y-1/2'
+          />
+
           <CarHours
-            label='Alış Saati'
+            label={<div className='px-3'>Alış Saati</div>}
             onChange={(event) => {
               const value = event.currentTarget.value
               formActions.setValue('pickup_time', value)
@@ -230,9 +249,17 @@ const CarRentSearchPanel: React.FC = () => {
             }
           />
         </div>
-        <div className='col-span-8 md:col-span-2'>
+        <div className='relative col-span-8 md:col-span-3'>
+          <RiTimeLine
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
+          <MdKeyboardArrowDown
+            size={20}
+            className='absolute top-1/2 right-0 z-10 mx-2 -translate-y-1/2'
+          />
           <CarHours
-            label='Teslim Saati'
+            label={<div className='px-3'>Teslim Saati</div>}
             onChange={(event) => {
               const value = event.currentTarget.value
               formActions.setValue('drop_time', value)
@@ -242,7 +269,7 @@ const CarRentSearchPanel: React.FC = () => {
             }
           />
         </div>
-        <div className='col-span-16 md:col-span-3'>
+        <div className='col-span-16 md:col-span-2'>
           <SearchEngineButton />
         </div>
       </div>

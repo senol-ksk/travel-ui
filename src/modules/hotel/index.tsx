@@ -23,6 +23,7 @@ import {
   serializeHotelSearchParams,
 } from '@/modules/hotel/searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
+import { RiMapPin2Line } from 'react-icons/ri'
 
 type IProps = {
   defaultValues?: HotelSearchEngineSchemaType
@@ -125,9 +126,13 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
       <input type='hidden' {...form.register('rooms')} />
 
       <div className='grid grid-cols-12 gap-3 md:gap-3'>
-        <div className='col-span-12 md:col-span-4'>
+        <div className='relative col-span-12 md:col-span-4'>
+          <RiMapPin2Line
+            size={20}
+            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+          />
           <Locations
-            label='Nereye?'
+            label='Nereye gitmek istersiniz?'
             data={destinationLocation?.Result}
             isLoading={destinationLocationLoading}
             onChange={(value) => {

@@ -4,7 +4,7 @@ import clsx from 'clsx'
 
 type IProps = {
   error?: boolean
-  label: string
+  label: React.ReactNode
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
   defaultValue: string
 }
@@ -27,9 +27,9 @@ const CarHours: React.FC<IProps> = ({
     >
       <NativeSelect
         classNames={{
-          label: 'text-sm leading-none',
-          input: 'text-xl leading-none font-semibold h-auto min-h-auto pr-0',
-          root: 'h-full truncate rounded-md border border-gray-600 bg-white p-1 px-5 py-2 md:px-6',
+          label: ' font-normal',
+          input: 'leading-none h-auto min-h-auto pr-0 px-3',
+          root: ' rounded-md border border-gray-600 bg-white p-1 px-5 md:px-6',
           section: 'hidden',
         }}
         variant='unstyled'
