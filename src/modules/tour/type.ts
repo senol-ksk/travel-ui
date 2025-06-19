@@ -202,7 +202,12 @@ export interface TourDetailApiResponse {
     startDate: string
     endDate: string
     tourTime: number
-    hotelInformations: null
+    hotelInformations:
+      | null
+      | {
+          name: string
+          rating: number
+        }[]
     priceInformations: {
       priceForDouble: ServicePriceType
       priceForSingle: ServicePriceType
