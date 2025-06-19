@@ -55,6 +55,7 @@ export const SearchEngine = () => {
         tabSection: 'hidden sm:flex',
         tabLabel: 'flex-none',
       }}
+      keepMounted={false}
     >
       <Tabs.List
         px={{
