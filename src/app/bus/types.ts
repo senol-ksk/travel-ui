@@ -152,6 +152,6 @@ export enum SeatColors {
   AVAILABLE = '--mantine-colors-white',
   NOTAVAILABLE = '--mantine-color-gray-4',
   SELECTED = '--mantine-color-green-3',
-  WOMAN = '--mantine-color-grape-2',
+  WOMAN = '--mantine-color-orange-2',
   MALE = '--mantine-color-blue-2',
 }

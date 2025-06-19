@@ -6,6 +6,7 @@ import {
   Alert,
   Button,
   Checkbox,
+  CloseButton,
   Container,
   Drawer,
   NativeSelect,
@@ -13,10 +14,11 @@ import {
   Skeleton,
   Stack,
   Title,
+  Transition,
   UnstyledButton,
 } from '@mantine/core'
 import { useState } from 'react'
-import { useDisclosure } from '@mantine/hooks'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useTransitionRouter } from 'next-view-transitions'
 import { createSerializer, useQueryStates } from 'nuqs'
 
@@ -32,11 +34,16 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 import { filterParsers, SortOrderEnums } from '@/modules/bus/searchParams'
 import { useFilterActions } from './filter-actions'
 import { cleanObj } from '@/libs/util'
+import { CiFilter } from 'react-icons/ci'
+import { PriceNumberFlow } from '@/components/price-numberflow'
+
 const skeltonLoader = new Array(3).fill(true)
 
 const BusSearchResults: React.FC = () => {
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParsers)
+  const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
+  const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
 
   const {
     searchRequestQuery,
@@ -170,182 +177,227 @@ const BusSearchResults: React.FC = () => {
           <Container>
             <div className='grid items-start gap-4 pb-10 md:grid-cols-4 md:gap-6 md:pb-20'>
               <div className='md:col-span-1'>
-                {searchRequestQuery.isLoading ||
-                searchRequestQuery.isFetching ? (
-                  <div>
-                    <Skeleton h={20} />
-                  </div>
-                ) : (
-                  <>
-                    <div className='flex justify-between'>
-                      <Title order={2} fz={'h4'} mb={rem(20)}>
-                        Filtreler
-                      </Title>
-
+                <div>
+                  <Transition
+                    transition={'slide-right'}
+                    mounted={filterSectionIsOpened || !!isBreakPointMatchesMd}
+                  >
+                    {(styles) => (
                       <div
-                        hidden={
-                          Object.keys(cleanObj(filterParams)).length === 0
-                        }
+                        className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static md:p-0'
+                        style={styles}
                       >
-                        <UnstyledButton
-                          fz='xs'
-                          className='font-semibold text-blue-500'
-                          onClick={() => {
-                            setFilterParams(null)
-                          }}
-                        >
-                          Temizle
-                        </UnstyledButton>
+                        <div className='flex justify-end md:hidden'>
+                          <CloseButton
+                            size={'lg'}
+                            onClick={() => setFilterSectionIsOpened(false)}
+                          />
+                        </div>
+                        {searchRequestQuery.isLoading ||
+                        searchRequestQuery.isFetching ? (
+                          <div>
+                            <Skeleton h={20} />
+                          </div>
+                        ) : (
+                          <>
+                            <div className='flex justify-between'>
+                              <Title order={2} fz={'h4'} mb={rem(20)}>
+                                Filtreler
+                              </Title>
+
+                              <div
+                                hidden={
+                                  Object.keys(cleanObj(filterParams)).length ===
+                                  0
+                                }
+                              >
+                                <UnstyledButton
+                                  fz='xs'
+                                  className='font-semibold text-blue-500'
+                                  onClick={() => {
+                                    setFilterParams(null)
+                                  }}
+                                >
+                                  Temizle
+                                </UnstyledButton>
+                              </div>
+                            </div>
+                            <Accordion
+                              multiple
+                              defaultValue={['busType', 'origin']}
+                              classNames={{
+                                control: 'p-2 text-sm',
+                                label: 'p-0',
+                                content: 'p-2',
+                              }}
+                            >
+                              <Accordion.Item value='busType'>
+                                <Accordion.Control>
+                                  Oturma Düzeni{' '}
+                                </Accordion.Control>
+                                <Accordion.Panel>
+                                  <Checkbox.Group
+                                    onChange={(values) => {
+                                      setFilterParams({
+                                        type: values.length ? values : null,
+                                      })
+                                    }}
+                                    value={
+                                      filterParams.type ? filterParams.type : []
+                                    }
+                                  >
+                                    <Stack gap={rem(6)}>
+                                      {busTypeChecks.map((item, itemIndex) => {
+                                        return (
+                                          <Checkbox
+                                            key={itemIndex}
+                                            label={item}
+                                            value={item}
+                                          />
+                                        )
+                                      })}
+                                    </Stack>
+                                  </Checkbox.Group>
+                                </Accordion.Panel>
+                              </Accordion.Item>
+                              <Accordion.Item value='origin'>
+                                <Accordion.Control>
+                                  Kalkış Noktası
+                                </Accordion.Control>
+                                <Accordion.Panel>
+                                  <Checkbox.Group
+                                    onChange={(values) => {
+                                      setFilterParams({
+                                        origin: values.length ? values : null,
+                                      })
+                                    }}
+                                    value={
+                                      filterParams.origin
+                                        ? filterParams.origin
+                                        : []
+                                    }
+                                  >
+                                    <Stack gap={rem(6)}>
+                                      {originChecks
+                                        .filter(
+                                          (item, itemIndex, itemArr) =>
+                                            itemArr.findIndex(
+                                              (item2) => item.id === item2.id
+                                            ) === itemIndex
+                                        )
+                                        .map((item, itemIndex) => {
+                                          return (
+                                            <Checkbox
+                                              key={itemIndex}
+                                              label={item.label}
+                                              value={item.id.toString()}
+                                            />
+                                          )
+                                        })}
+                                    </Stack>
+                                  </Checkbox.Group>
+                                </Accordion.Panel>
+                              </Accordion.Item>
+                              <Accordion.Item value='destination'>
+                                <Accordion.Control>
+                                  Varış Noktası
+                                </Accordion.Control>
+                                <Accordion.Panel>
+                                  <Checkbox.Group
+                                    onChange={(values) => {
+                                      setFilterParams({
+                                        destination: values.length
+                                          ? values
+                                          : null,
+                                      })
+                                    }}
+                                    value={
+                                      filterParams.destination
+                                        ? filterParams.destination
+                                        : []
+                                    }
+                                  >
+                                    <Stack gap={rem(6)}>
+                                      {destinationChecks
+                                        .filter(
+                                          (item, itemIndex, itemArr) =>
+                                            itemArr.findIndex(
+                                              (item2) => item.id === item2.id
+                                            ) === itemIndex
+                                        )
+                                        .map((item, itemIndex) => {
+                                          return (
+                                            <Checkbox
+                                              key={itemIndex}
+                                              label={item.label}
+                                              value={item.id.toString()}
+                                            />
+                                          )
+                                        })}
+                                    </Stack>
+                                  </Checkbox.Group>
+                                </Accordion.Panel>
+                              </Accordion.Item>
+                              <Accordion.Item value='companies'>
+                                <Accordion.Control>Firmalar</Accordion.Control>
+                                <Accordion.Panel>
+                                  <Checkbox.Group
+                                    onChange={(values) => {
+                                      setFilterParams({
+                                        company: values.length ? values : null,
+                                      })
+                                    }}
+                                    value={
+                                      filterParams.company
+                                        ? filterParams.company
+                                        : []
+                                    }
+                                  >
+                                    <Stack gap={rem(6)}>
+                                      {companyIdChecks
+                                        ?.filter(
+                                          (item, itemIndex, itemArr) =>
+                                            itemArr.findIndex(
+                                              (item2) => item.id === item2.id
+                                            ) === itemIndex
+                                        )
+                                        .map((item, itemIndex) => {
+                                          return (
+                                            <Checkbox
+                                              key={itemIndex}
+                                              label={item.label}
+                                              value={item.id.toString()}
+                                            />
+                                          )
+                                        })}
+                                    </Stack>
+                                  </Checkbox.Group>
+                                </Accordion.Panel>
+                              </Accordion.Item>
+                            </Accordion>
+                          </>
+                        )}
                       </div>
-                    </div>
-                    <Accordion
-                      multiple
-                      defaultValue={['busType', 'origin']}
-                      classNames={{
-                        control: 'p-2 text-sm',
-                        label: 'p-0',
-                        content: 'p-2',
-                      }}
-                    >
-                      <Accordion.Item value='busType'>
-                        <Accordion.Control>Oturma Düzeni </Accordion.Control>
-                        <Accordion.Panel>
-                          <Checkbox.Group
-                            onChange={(values) => {
-                              setFilterParams({
-                                type: values.length ? values : null,
-                              })
-                            }}
-                            value={filterParams.type ? filterParams.type : []}
-                          >
-                            <Stack gap={rem(6)}>
-                              {busTypeChecks.map((item, itemIndex) => {
-                                return (
-                                  <Checkbox
-                                    key={itemIndex}
-                                    label={item}
-                                    value={item}
-                                  />
-                                )
-                              })}
-                            </Stack>
-                          </Checkbox.Group>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='origin'>
-                        <Accordion.Control>Kalkış Noktası</Accordion.Control>
-                        <Accordion.Panel>
-                          <Checkbox.Group
-                            onChange={(values) => {
-                              setFilterParams({
-                                origin: values.length ? values : null,
-                              })
-                            }}
-                            value={
-                              filterParams.origin ? filterParams.origin : []
-                            }
-                          >
-                            <Stack gap={rem(6)}>
-                              {originChecks
-                                .filter(
-                                  (item, itemIndex, itemArr) =>
-                                    itemArr.findIndex(
-                                      (item2) => item.id === item2.id
-                                    ) === itemIndex
-                                )
-                                .map((item, itemIndex) => {
-                                  return (
-                                    <Checkbox
-                                      key={itemIndex}
-                                      label={item.label}
-                                      value={item.id.toString()}
-                                    />
-                                  )
-                                })}
-                            </Stack>
-                          </Checkbox.Group>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='destination'>
-                        <Accordion.Control>Varış Noktası</Accordion.Control>
-                        <Accordion.Panel>
-                          <Checkbox.Group
-                            onChange={(values) => {
-                              setFilterParams({
-                                destination: values.length ? values : null,
-                              })
-                            }}
-                            value={
-                              filterParams.destination
-                                ? filterParams.destination
-                                : []
-                            }
-                          >
-                            <Stack gap={rem(6)}>
-                              {destinationChecks
-                                .filter(
-                                  (item, itemIndex, itemArr) =>
-                                    itemArr.findIndex(
-                                      (item2) => item.id === item2.id
-                                    ) === itemIndex
-                                )
-                                .map((item, itemIndex) => {
-                                  return (
-                                    <Checkbox
-                                      key={itemIndex}
-                                      label={item.label}
-                                      value={item.id.toString()}
-                                    />
-                                  )
-                                })}
-                            </Stack>
-                          </Checkbox.Group>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='companies'>
-                        <Accordion.Control>Firmalar</Accordion.Control>
-                        <Accordion.Panel>
-                          <Checkbox.Group
-                            onChange={(values) => {
-                              setFilterParams({
-                                company: values.length ? values : null,
-                              })
-                            }}
-                            value={
-                              filterParams.company ? filterParams.company : []
-                            }
-                          >
-                            <Stack gap={rem(6)}>
-                              {companyIdChecks
-                                ?.filter(
-                                  (item, itemIndex, itemArr) =>
-                                    itemArr.findIndex(
-                                      (item2) => item.id === item2.id
-                                    ) === itemIndex
-                                )
-                                .map((item, itemIndex) => {
-                                  return (
-                                    <Checkbox
-                                      key={itemIndex}
-                                      label={item.label}
-                                      value={item.id.toString()}
-                                    />
-                                  )
-                                })}
-                            </Stack>
-                          </Checkbox.Group>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    </Accordion>
-                  </>
-                )}
+                    )}
+                  </Transition>
+                </div>
               </div>
               <div className='md:col-span-3'>
-                <div className='flex justify-between'>
-                  <div></div>
+                <div className='flex items-center gap-2 pb-3'>
+                  <div>
+                    <Button
+                      size='sm'
+                      leftSection={<CiFilter size={23} />}
+                      color='green'
+                      onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                      hiddenFrom='md'
+                    >
+                      Filtreler
+                    </Button>
+                  </div>
                   <div>
                     <NativeSelect
-                      size='xs'
+                      size='sm'
                       data={[
                         {
                           label: 'Fiyat Artan',
@@ -443,6 +495,44 @@ const BusSearchResults: React.FC = () => {
         radius={'lg'}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
       >
+        <div className='flex justify-evenly gap-4 pb-5 text-xs leading-none'>
+          <div className='flex items-center gap-2'>
+            <div>
+              <div
+                className='inline-block size-[20px] items-center justify-center rounded-t-lg border-t border-r border-b-4 border-l border-gray-600 border-b-gray-600 pt-1'
+                style={{ backgroundColor: `var(${SeatColors.MALE})` }}
+              ></div>
+            </div>
+            <span>Erkek (Dolu)</span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <div>
+              <div
+                className='inline-block size-[20px] items-center justify-center rounded-t-lg border-t border-r border-b-4 border-l border-gray-600 border-b-gray-600 pt-1'
+                style={{ backgroundColor: `var(${SeatColors.WOMAN})` }}
+              ></div>
+            </div>
+            <span>Kadın (Dolu)</span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <div>
+              <div
+                className='inline-block size-[20px] items-center justify-center rounded-t-lg border-t border-r border-b-4 border-l border-gray-600 border-b-gray-600 pt-1'
+                style={{ backgroundColor: `var(${SeatColors.AVAILABLE})` }}
+              ></div>
+            </div>
+            <span>Boş Koltuk</span>
+          </div>
+          <div className='flex items-center gap-2'>
+            <div>
+              <div
+                className='inline-block size-[20px] items-center justify-center rounded-t-lg border-t border-r border-b-4 border-l border-gray-600 border-b-gray-600 pt-1'
+                style={{ backgroundColor: `var(${SeatColors.SELECTED})` }}
+              ></div>
+            </div>
+            <span>Seçilen Koltuk</span>
+          </div>
+        </div>
         {seatRequestMutation.isPending ? (
           <Skeleton h={600} w={'75%'} radius={'xl'} mx='auto' />
         ) : null}
@@ -466,7 +556,7 @@ const BusSearchResults: React.FC = () => {
                 })
               }}
             />
-            <div className='flex gap-3 py-3'>
+            <div className='flex items-center gap-3 py-3'>
               {selectedSeats.length === 0 ? <div>Koltuk Seçiniz.</div> : null}
               {selectedSeats.map((seat, seatIndex) => {
                 const gender = seat.gender
@@ -492,8 +582,20 @@ const BusSearchResults: React.FC = () => {
                 )
               })}
             </div>
-            <div className='flex justify-end pt-4'>
-              <div>
+            <small className='text-dark-200'>
+              (Tek seferde en fazla 4 koltuk seçebilirsiniz)
+            </small>
+            <div className='flex items-center pt-4'>
+              {selectedSeats.length > 0 && (
+                <div className='text-lg font-semibold'>
+                  <PriceNumberFlow
+                    value={selectedSeats.reduce((a, b) => {
+                      return b.totalPrice.value + a
+                    }, 0)}
+                  />
+                </div>
+              )}
+              <div className='ms-auto'>
                 <Button
                   disabled={!selectedSeats.length}
                   onClick={handleCheckSeatStatus}
