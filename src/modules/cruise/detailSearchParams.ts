@@ -1,7 +1,6 @@
 import {
   createSearchParamsCache,
   createSerializer,
-  parseAsBoolean,
   parseAsString,
   type inferParserType,
 } from 'nuqs/server'
@@ -11,7 +10,6 @@ export const tourDetailPageParamParser = {
   slug: parseAsString,
   searchToken: parseAsString,
   sessionToken: parseAsString,
-  isCruise: parseAsBoolean.withDefault(false),
 }
 
 export const serializeTourDetailPageParams = createSerializer(

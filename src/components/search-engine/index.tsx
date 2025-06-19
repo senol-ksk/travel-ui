@@ -3,6 +3,16 @@
 import { Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 
+import {
+  RiBuilding4Line,
+  RiBusFill,
+  RiCarLine,
+  RiPlaneLine,
+  RiRouteLine,
+  RiShip2Line,
+  RiShipLine,
+  RiSuitcaseLine,
+} from 'react-icons/ri'
 import { Flight } from '@/modules/flight/'
 import { HotelSearchEngine } from '@/modules/hotel'
 import { CarRentSearchPanel } from '@/modules/carrent'
@@ -11,15 +21,7 @@ import { TransferSearchEngine } from '@/modules/transfer'
 import { TourSearchEngine } from '@/modules/tour'
 
 import classes from '@/components/search-engine/Search.module.css'
-import {
-  RiBuilding4Line,
-  RiBusFill,
-  RiCarLine,
-  RiPlaneLine,
-  RiRouteLine,
-  RiShip2Line,
-  RiSuitcaseLine,
-} from 'react-icons/ri'
+import { CruiseSearchEngine } from '@/modules/cruise'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -28,6 +30,7 @@ const searchModules = {
   bus: { value: 'bus', title: 'Otobüs' },
   transfer: { value: 'transfer', title: 'Transfer' },
   tour: { value: 'tour', title: 'Tur' },
+  cruise: { value: 'cruise', title: 'Gemi' },
 }
 
 export const SearchEngine = () => {
@@ -103,6 +106,13 @@ export const SearchEngine = () => {
           {searchModules.transfer.title}
         </TabsTab>
         <TabsTab
+          value={searchModules.cruise.value}
+          leftSection={<RiShipLine size={20} />}
+          className={classes.tab}
+        >
+          {searchModules.cruise.title}
+        </TabsTab>
+        <TabsTab
           value={searchModules.tour.value}
           leftSection={<RiSuitcaseLine size={20} />}
           className={classes.tab}
@@ -129,6 +139,9 @@ export const SearchEngine = () => {
         </Tabs.Panel>
         <Tabs.Panel value={searchModules.tour.value}>
           <TourSearchEngine />
+        </Tabs.Panel>
+        <Tabs.Panel value={searchModules.cruise.value}>
+          <CruiseSearchEngine />
         </Tabs.Panel>
       </div>
     </Tabs>

@@ -48,13 +48,17 @@ const TourDetail: React.FC<Props> = ({ data }) => {
             </div>
           </div>
           {data.detail.flightInformation &&
-            data.detail.flightInformation.length && (
+            data.detail.flightInformation.length > 0 && (
               <div className='flex items-center gap-4'>
                 <div className='text-blue-800'>
                   <IoIosAirplane size={20} />
                 </div>
                 <div className='font-semibold'>
-                  {data.detail.flightInformation.at(0)}
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: data.detail.flightInformation[0],
+                    }}
+                  />
                 </div>
               </div>
             )}

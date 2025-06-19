@@ -25,6 +25,7 @@ import { TourExtraServicesApiResponse } from '@/modules/tour/type'
 import { ExtraServicePanel } from './extra-services'
 import { reservationParsers } from '@/app/reservation/searchParams'
 import { tourDetailPageParamParser } from '@/modules/tour/detailSearchParams'
+import { CruiseSearchEngine } from '@/modules/cruise'
 
 const TourDetailClient = () => {
   const router = useTransitionRouter()
@@ -257,7 +258,11 @@ const TourDetailClient = () => {
     <>
       <div className='border-b p-4'>
         <Container>
-          <TourSearchEngine />
+          {searchParams.isCruise ? (
+            <CruiseSearchEngine />
+          ) : (
+            <TourSearchEngine />
+          )}
         </Container>
       </div>
       <Container className='px-0'>

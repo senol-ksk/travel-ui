@@ -1,17 +1,11 @@
 import { useQueryStates } from 'nuqs'
-import {
-  useInfiniteQuery,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 import { tourSearchResultParamParser } from '@/modules/tour/searchResultParams'
 import { getsecuritytoken, request, serviceRequest } from '@/network'
 import {
   TourSearchApiParamsResponse,
   TourSearchResultApiResponse,
-  TourSearchResultSearchItem,
 } from '@/modules/tour/type'
 import { GetSecurityTokenResponse } from '@/types/global'
 import { delayCodeExecution } from '@/libs/util'
