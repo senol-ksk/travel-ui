@@ -64,7 +64,7 @@ const TourDetailPriceSection: React.FC<Props> = ({
     <div className='@container relative'>
       <div className='grid gap-3'>
         <Title order={3} fz={'h4'}>
-          Rezervasyon Detayları
+          Tura katılacak Kişi Sayısı
         </Title>
         <div className='text-sm text-gray-700'>
           {passengersFormValues?.adultCount?.split('').at(0)} Yetişkin
@@ -77,6 +77,9 @@ const TourDetailPriceSection: React.FC<Props> = ({
           shadow='xl'
           onChange={setPassengerPopoverOpened}
           opened={passengerPopoverOpened}
+          transitionProps={{
+            transition: 'pop',
+          }}
         >
           <Popover.Target>
             <Button

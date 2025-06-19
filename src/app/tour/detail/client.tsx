@@ -7,6 +7,7 @@ import {
   Modal,
   Group,
   Container,
+  Image,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useEffect, useRef, useState } from 'react'
@@ -245,6 +246,12 @@ const TourDetailClient = () => {
     extraServicesMutation.data?.data?.childAges?.filter((num) => num >= 0)
       ?.length ?? 0
   const extraMaxCount = extraServiceAdultCount + extraServiceChildCount
+  const images = detailQuery.data?.detail.images.filter(
+    (item) => !item.includes('youtube')
+  )
+  const videos = detailQuery.data?.detail.images.filter((item) =>
+    item.includes('youtube')
+  )
 
   return (
     <>
@@ -253,7 +260,7 @@ const TourDetailClient = () => {
           <TourSearchEngine />
         </Container>
       </div>
-      <Container>
+      <Container className='px-0'>
         <div className='grid gap-4 py-4 lg:py-7'>
           {!detailQuery.isLoading && !detailQuery.data ? (
             <div>no data</div>
@@ -263,58 +270,81 @@ const TourDetailClient = () => {
               <Skeleton h={20} radius={'xl'} />
               <Skeleton h={20} radius={'xl'} className='max-w-6xl' />
             </div>
-          ) : (
-            <div className='@container'>
-              {detailQuery.data ? (
-                <div className='grid gap-4 md:grid-cols-12'>
-                  <div className='col-span-12 md:col-span-8 lg:col-span-9'>
-                    <TourDetail data={detailQuery.data} />
-                  </div>
-                  <div className='col-span-12 md:col-span-4 lg:col-span-3'>
-                    <div className='relative'>
-                      <LoadingOverlay
-                        visible={calculateTotalPriceQuery.isPending}
-                        zIndex={1000}
-                        overlayProps={{ radius: 'sm', blur: 2 }}
-                        loaderProps={{ color: 'indigo', type: 'bars' }}
+          ) : detailQuery.data ? (
+            <>
+              <div className='grid auto-cols-fr gap-4 px-3 sm:grid-cols-4 md:grid-rows-2'>
+                <figure
+                  style={{ contentVisibility: 'auto' }}
+                  className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
+                >
+                  <Image
+                    className='aspect-16/9 h-full w-full rounded-md object-cover'
+                    src={images?.at(0)}
+                    alt={detailQuery.data.package.title}
+                  />
+                </figure>
+                {images?.slice(1, 5).map((image, imageIndex) => (
+                  <figure
+                    key={imageIndex}
+                    className='relative hidden gap-3 place-self-stretch rounded-md sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
+                    style={{ contentVisibility: 'auto' }}
+                  >
+                    <Image
+                      src={image}
+                      alt={detailQuery.data?.package.title}
+                      className='absolute aspect-16/9 h-full w-full object-cover'
+                    />
+                  </figure>
+                ))}
+              </div>
+              <div className='grid gap-4 py-4 md:grid-cols-12 md:py-6'>
+                <div className='order-1 col-span-12 md:order-0 md:col-span-8'>
+                  <TourDetail data={detailQuery.data} />
+                </div>
+                <div className='order-0 col-span-12 md:order-1 md:col-span-4'>
+                  <div className='relative'>
+                    <LoadingOverlay
+                      visible={calculateTotalPriceQuery.isPending}
+                      zIndex={1000}
+                      overlayProps={{ radius: 'sm', blur: 2 }}
+                      loaderProps={{ color: 'indigo', type: 'bars' }}
+                    />
+                    <div className='flex flex-col gap-5 rounded-lg border p-5 shadow-sm'>
+                      <TourDetailPriceSection
+                        calculatedTotalPrice={
+                          calculateTotalPriceQuery.data?.success &&
+                          typeof calculateTotalPriceQuery.data?.data?.value
+                            .value === 'number'
+                            ? calculateTotalPriceQuery.data?.data?.value.value
+                            : 0
+                        }
+                        data={detailQuery.data}
+                        onPassengerChange={setPassengers}
                       />
-                      <div className='rounded border p-3 @lg:p-5'>
-                        <TourDetailPriceSection
-                          calculatedTotalPrice={
-                            calculateTotalPriceQuery.data?.success &&
-                            typeof calculateTotalPriceQuery.data?.data?.value
-                              .value === 'number'
-                              ? calculateTotalPriceQuery.data?.data?.value.value
-                              : 0
+                      <div className='py-4'>
+                        <Button
+                          type='button'
+                          fullWidth
+                          size='lg'
+                          disabled={
+                            !calculateTotalPriceQuery.data?.success ||
+                            extraServicesMutation.isPending
                           }
-                          data={detailQuery.data}
-                          onPassengerChange={setPassengers}
-                        />
-                        <div className='py-4'>
-                          <Button
-                            type='button'
-                            fullWidth
-                            size='lg'
-                            disabled={
-                              !calculateTotalPriceQuery.data?.success ||
-                              extraServicesMutation.isPending
-                            }
-                            loading={extraServicesMutation.isPending}
-                            onClick={() => {
-                              extraServicesMutation.mutate()
-                            }}
-                          >
-                            Rezervasyon Yap
-                          </Button>
-                        </div>
+                          loading={extraServicesMutation.isPending}
+                          onClick={() => {
+                            extraServicesMutation.mutate()
+                          }}
+                        >
+                          Rezervasyon Yap
+                        </Button>
                       </div>
                     </div>
                   </div>
                 </div>
-              ) : (
-                <div>no data</div>
-              )}
-            </div>
+              </div>
+            </>
+          ) : (
+            <div>no data</div>
           )}
         </div>
       </Container>
