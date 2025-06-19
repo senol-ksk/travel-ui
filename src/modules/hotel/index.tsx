@@ -125,8 +125,8 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
       <input type='hidden' {...form.register('checkoutDate')} />
       <input type='hidden' {...form.register('rooms')} />
 
-      <div className='grid grid-cols-12 gap-3 md:gap-3'>
-        <div className='relative col-span-12 md:col-span-4'>
+      <div className='grid grid-cols-17 gap-3 md:gap-3'>
+        <div className='relative col-span-17 md:col-span-5'>
           <RiMapPin2Line
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -151,7 +151,7 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
             defaultValue={form.formState.defaultValues?.destination?.name}
           />
         </div>
-        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+        <div className='col-span-17 sm:col-span-6 md:col-span-5'>
           <HotelCalendar
             defaultDates={[
               new Date(
@@ -175,7 +175,7 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
             }}
           />
         </div>
-        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+        <div className='col-span-17 sm:col-span-6 md:col-span-5'>
           <HotelPassengerDropdown
             initialValues={
               form.formState.defaultValues?.rooms as HotelRoomOptionTypes[]
@@ -185,7 +185,7 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
             }}
           />
         </div>
-        <div className='col-span-12 flex grow-0 md:col-span-2'>
+        <div className='col-span-17 flex grow-0 md:col-span-2'>
           <SearchEngineButton />
         </div>
       </div>

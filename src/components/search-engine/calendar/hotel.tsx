@@ -79,14 +79,14 @@ const HotelCalendar: React.FC<Props> = ({
 
         <Input
           label={
-            <div className='flex w-full gap-[80px] md:px-3'>
+            <div className='flex w-full gap-[83px] md:px-2'>
               <span>Giriş</span>
               <span>Çıkış</span>
             </div>
           }
           onClick={() => setContainerTransitionState(true)}
           title={
-            <div className='flex w-full items-center justify-between gap-[10px] md:px-3'>
+            <div className='flex w-full items-center justify-between gap-[10px] md:px-2'>
               <span>{dayjs(rangeValue[0]).format('DD MMM, ddd')}</span>
               <span>-</span>
               <span>{dayjs(rangeValue[1]).format('DD MMM, ddd')}</span>

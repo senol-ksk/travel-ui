@@ -20,7 +20,7 @@ export const Input: React.FC<Props> = ({ label, title, onClick, error }) => {
   return (
     <div
       className={clsx(
-        'relative flex h-full items-center truncate rounded-md border border-gray-600 p-1 transition-colors hover:border-blue-800',
+        'relative flex h-14 items-center truncate rounded-md border border-gray-600 p-2 transition-colors hover:border-blue-800',
         {
           'border-red-500': error,
           'border-gray-600': !error,
