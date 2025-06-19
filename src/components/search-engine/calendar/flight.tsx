@@ -21,7 +21,7 @@ type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
 }
-const defaultFormat = 'DD MMM ddd'
+const defaultFormat = 'DD MMM, ddd'
 
 const FlightCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
@@ -75,24 +75,24 @@ const FlightCalendar: React.FC<Props> = ({
         <Input
           label={
             tripKind === 'round-trip' ? (
-              <div className='flex w-full gap-[80px] md:px-3'>
+              <div className='flex w-full gap-[75px] md:px-2'>
                 <span>Gidiş</span>
                 <span>Dönüş</span>
               </div>
             ) : (
-              <div className='md:px-3'>Gidiş</div>
+              <div className='md:px-2'>Gidiş</div>
             )
           }
           onClick={() => setContainerTransitionState(true)}
           title={
             tripKind === 'round-trip' ? (
-              <div className='flex w-full items-center justify-between gap-2 md:px-3'>
+              <div className='flex w-full items-center justify-between gap-2 md:px-2'>
                 <span>{formatedValues[0] ?? 'Gidiş'}</span>
                 <span>-</span>
                 <span>{formatedValues[1] ?? 'Dönüş'}</span>
               </div>
             ) : (
-              <span className='md:px-3'>{formatedValues[0] ?? 'Gidiş'}</span>
+              <span className='md:px-2'>{formatedValues[0] ?? 'Gidiş'}</span>
             )
           }
         />

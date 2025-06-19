@@ -130,8 +130,8 @@ const CarRentSearchPanel: React.FC = () => {
       <input {...formActions.register('pickup_date')} type='hidden' />
       <input {...formActions.register('drop_date')} type='hidden' />
 
-      <div className='grid grid-cols-16 gap-3 md:grid-cols-19 md:gap-3'>
-        <div className='col-span-16 h-full md:col-span-6'>
+      <div className='grid grid-cols-16 gap-3 md:grid-cols-25 md:gap-3'>
+        <div className='col-span-16 h-full md:col-span-7'>
           <div className='grid h-full grid-cols-6 gap-3'>
             <div
               className={clsx('relative col-span-6 h-full', {
@@ -209,7 +209,7 @@ const CarRentSearchPanel: React.FC = () => {
             ) : null}
           </div>
         </div>
-        <div className='col-span-16 md:col-span-5'>
+        <div className='col-span-16 md:col-span-7'>
           <CarCalendar
             defaultDates={[
               dayjs(
@@ -228,7 +228,7 @@ const CarRentSearchPanel: React.FC = () => {
             }}
           />
         </div>
-        <div className='relative col-span-8 font-normal md:col-span-3'>
+        <div className='relative col-span-8 font-normal md:col-span-4'>
           <RiTimeLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -249,7 +249,7 @@ const CarRentSearchPanel: React.FC = () => {
             }
           />
         </div>
-        <div className='relative col-span-8 md:col-span-3'>
+        <div className='relative col-span-8 md:col-span-4'>
           <RiTimeLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -269,11 +269,11 @@ const CarRentSearchPanel: React.FC = () => {
             }
           />
         </div>
-        <div className='col-span-16 md:col-span-2'>
+        <div className='col-span-16 md:col-span-3'>
           <SearchEngineButton />
         </div>
       </div>
-      <div className='flex items-center justify-between gap-9 pt-3 md:justify-start'>
+      <div className='grid items-center justify-between gap-3 pt-3 md:flex md:justify-start md:gap-9'>
         <Checkbox
           label='Araç farklı bir yerde teslim edilecek'
           defaultChecked={isDiffrentDropLocation}

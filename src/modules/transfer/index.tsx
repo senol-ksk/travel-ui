@@ -139,9 +139,9 @@ const TransferSearchEngine = () => {
 
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
-      <div className='grid grid-cols-16 gap-2 md:gap-4'>
-        <div className='col-span-16 grid grid-cols-12 gap-2 md:col-span-6 md:gap-4'>
-          <div className='relative col-span-12 sm:col-span-6'>
+      <div className='grid grid-cols-1 gap-3 md:grid-cols-34 md:gap-4'>
+        <div className='col-span-16 grid grid-cols-12 gap-2 md:col-span-15'>
+          <div className='relative col-span-13 sm:col-span-6'>
             <RiMapPin2Line
               size={20}
               className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -169,7 +169,7 @@ const TransferSearchEngine = () => {
               }}
             />
           </div>
-          <div className='relative col-span-12 sm:col-span-6'>
+          <div className='relative col-span-13 sm:col-span-6'>
             <RiMapPin2Line
               size={20}
               className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -198,7 +198,7 @@ const TransferSearchEngine = () => {
             />
           </div>
         </div>
-        <div className='relative col-span-6 md:col-span-3'>
+        <div className='relative col-span-8 md:col-span-5'>
           <RiCalendarEventLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -212,20 +212,20 @@ const TransferSearchEngine = () => {
             defaultDate={dayjs(transferSearchLocalStorage.date).toDate()}
           />
         </div>
-        <div className='relative col-span-5 md:col-span-2'>
+        <div className='relative col-span-8 md:col-span-5'>
           <RiTimeLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <TransferHours
-            label={<div className='px-3'>Saat</div>}
+            label={<div className='px-3'>Alış Saati</div>}
             onChange={(event) => {
               formActions.setValue('time', event.currentTarget.value)
             }}
             defaultValue={formActions.formState.defaultValues?.time}
           />
         </div>
-        <div className='relative col-span-5 md:col-span-2'>
+        <div className='relative col-span-16 md:col-span-5'>
           <RiUserLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -248,7 +248,7 @@ const TransferSearchEngine = () => {
             }}
           />
         </div>
-        <div className='col-span-16 md:col-span-3'>
+        <div className='col-span-16 md:col-span-4'>
           <SearchEngineButton />
         </div>
       </div>

@@ -131,9 +131,9 @@ const BusSearchEngine = () => {
 
   return (
     <form className='block' onSubmit={formActions.handleSubmit(handleSubmit)}>
-      <div className='grid grid-cols-12 gap-3 md:gap-3'>
-        <div className='col-span-12 grid gap-3 md:col-span-7 md:grid-cols-6'>
-          <div className='relative col-span-3'>
+      <div className='grid grid-cols-12 gap-3 md:grid-cols-25 md:gap-3'>
+        <div className='col-span-12 grid gap-3 md:col-span-15 md:grid-cols-14'>
+          <div className='relative col-span-7'>
             <RiMapPin2Line
               size={20}
               className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -162,7 +162,7 @@ const BusSearchEngine = () => {
               }}
             />
           </div>
-          <div className='relative col-span-3'>
+          <div className='relative col-span-7'>
             <RiMapPin2Line
               size={20}
               className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -194,7 +194,7 @@ const BusSearchEngine = () => {
             />
           </div>
         </div>
-        <div className='relative col-span-12 md:col-span-2'>
+        <div className='relative col-span-12 md:col-span-5'>
           <div className='relative h-full'>
             <BusCalendar
               defaultDate={formActions.getValues('Date')}
@@ -210,8 +210,8 @@ const BusSearchEngine = () => {
             />
           </div>
         </div>
-        <div className='col-span-12 md:col-span-1'>
-          <Stack gap={10}>
+        <div className='col-span-12 md:col-span-2'>
+          <div className='flex flex-row gap-8 md:flex-col md:gap-3'>
             <Radio
               checked={dayjs(formActions.getValues('Date')).isToday()}
               label='Bugün'
@@ -232,9 +232,9 @@ const BusSearchEngine = () => {
                 }
               }}
             />
-          </Stack>
+          </div>
         </div>
-        <div className='col-span-12 md:col-span-2'>
+        <div className='col-span-12 md:col-span-3'>
           {/* <Button
             type='submit'
             className='w-full md:h-full'

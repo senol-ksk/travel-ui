@@ -24,10 +24,10 @@ const TransferHours: React.FC<IProps> = ({
   return (
     <div
       className={clsx(
-        'relative flex h-full flex-col rounded-md border border-transparent bg-gray-50 hover:border-blue-800',
+        'relative flex h-14 flex-col rounded-md border border-gray-600 bg-white hover:border-blue-800',
         {
           'border-red-500 shadow-[0_0_0_1px] shadow-red-500': error,
-          'border-slate-300': !error,
+          'border-gray-600': !error,
         }
       )}
     >
@@ -37,7 +37,7 @@ const TransferHours: React.FC<IProps> = ({
         classNames={{
           label: 'text-sm leading-none font-normal',
           input: 'leading-none h-auto min-h-auto pr-0 px-3',
-          root: 'h-full truncate rounded-md border border-gray-600 bg-white px-5 py-2 md:px-6',
+          root: 'h-14 truncate rounded-md px-5 md:px-6',
           section: 'hidden',
         }}
         data={hourRange}
