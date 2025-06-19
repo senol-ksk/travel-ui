@@ -16,7 +16,7 @@ export default function ReservationLayout({
     useDisclosure(false)
   return (
     <Suspense>
-      <Container className='px-0 py-2 md:px-3 md:py-5'>
+      <Container className='px-0 py-2 md:px-2 md:py-5'>
         <div className='grid gap-3 md:grid-cols-3 md:gap-4'>
           <div className='order-1 md:col-span-2'>{children}</div>
           <div className='sticky top-0 z-10 order-2 flex h-fit flex-col gap-3 md:order-1'>

@@ -65,17 +65,17 @@ const TourCalendar: React.FC<Props> = ({
         />{' '}
         <Input
           label={
-            <div className='flex w-full gap-[40px] md:px-3'>
+            <div className='flex w-full gap-[40px] md:px-2'>
               <span>Giriş Tarihi</span>
               <span>Çıkış Tarihi</span>
             </div>
           }
           onClick={() => setContainerTransitionState(true)}
           title={
-            <div className='flex w-full items-center gap-[20px] md:px-3'>
-              <span>{dayjs(rangeValue[0]).format('DD MMM')}</span>
+            <div className='flex w-full items-center gap-[5px] md:px-2'>
+              <span>{dayjs(rangeValue[0]).format('DD MMM, ddd')}</span>
               <span>-</span>
-              <span>{dayjs(rangeValue[1]).format('DD MMM')}</span>
+              <span>{dayjs(rangeValue[1]).format('DD MMM, ddd')}</span>
             </div>
           }
         />

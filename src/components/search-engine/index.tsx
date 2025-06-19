@@ -1,6 +1,6 @@
 'use client'
 
-import { Skeleton, Tabs, TabsTab } from '@mantine/core'
+import { ScrollArea, Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 
 import { Flight } from '@/modules/flight/'
@@ -48,68 +48,75 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'md:text-lg border-b-4 p-4',
+        tab: 'md:text-lg border-b-4 p-4 md:grow',
         tabSection: 'hidden sm:flex',
         tabLabel: 'flex-none',
       }}
     >
-      <Tabs.List
-        px={{
-          sm: 'sm',
-          md: 'lg',
-        }}
-        grow
+      <ScrollArea
+        type='auto'
+        scrollbars='x'
+        scrollbarSize={0}
+        className='whitespace-nowrap'
       >
-        <TabsTab
-          value={searchModules.flight.value}
-          leftSection={<RiPlaneLine size={20} />}
-          className={classes.tab}
+        <Tabs.List
+          px={{
+            sm: 'sm',
+            md: 'lg',
+          }}
+          className='flex-nowrap'
         >
-          {searchModules.flight.title}
-        </TabsTab>
-        <TabsTab
-          value={searchModules.hotel.value}
-          leftSection={<RiBuilding4Line size={20} />}
-          className={classes.tab}
-        >
-          {searchModules.hotel.title}
-        </TabsTab>
-        <TabsTab
-          value={searchModules.carRental.value}
-          leftSection={<RiCarLine size={20} />}
-          className={classes.tab}
-        >
-          {searchModules.carRental.title}
-        </TabsTab>
-        <TabsTab
-          value={'feribot'}
-          leftSection={<RiShip2Line size={20} />}
-          className={classes.tab}
-        >
-          <div>Feribot</div>
-        </TabsTab>
-        <TabsTab
-          value={searchModules.bus.value}
-          leftSection={<RiBusFill size={20} />}
-          className={classes.tab}
-        >
-          {searchModules.bus.title}
-        </TabsTab>
-        <TabsTab
-          value={searchModules.transfer.value}
-          leftSection={<RiRouteLine size={20} />}
-          className={classes.tab}
-        >
-          {searchModules.transfer.title}
-        </TabsTab>
-        <TabsTab
-          value={searchModules.tour.value}
-          leftSection={<RiSuitcaseLine size={20} />}
-          className={classes.tab}
-        >
-          {searchModules.tour.title}
-        </TabsTab>
-      </Tabs.List>
+          <TabsTab
+            value={searchModules.flight.value}
+            leftSection={<RiPlaneLine size={20} />}
+            className={classes.tab}
+          >
+            {searchModules.flight.title}
+          </TabsTab>
+          <TabsTab
+            value={searchModules.hotel.value}
+            leftSection={<RiBuilding4Line size={20} />}
+            className={classes.tab}
+          >
+            {searchModules.hotel.title}
+          </TabsTab>
+          <TabsTab
+            value={searchModules.carRental.value}
+            leftSection={<RiCarLine size={20} />}
+            className={classes.tab}
+          >
+            {searchModules.carRental.title}
+          </TabsTab>
+          <TabsTab
+            value={'feribot'}
+            leftSection={<RiShip2Line size={20} />}
+            className={classes.tab}
+          >
+            <div>Feribot</div>
+          </TabsTab>
+          <TabsTab
+            value={searchModules.bus.value}
+            leftSection={<RiBusFill size={20} />}
+            className={classes.tab}
+          >
+            {searchModules.bus.title}
+          </TabsTab>
+          <TabsTab
+            value={searchModules.transfer.value}
+            leftSection={<RiRouteLine size={20} />}
+            className={classes.tab}
+          >
+            {searchModules.transfer.title}
+          </TabsTab>
+          <TabsTab
+            value={searchModules.tour.value}
+            leftSection={<RiSuitcaseLine size={20} />}
+            className={classes.tab}
+          >
+            {searchModules.tour.title}
+          </TabsTab>
+        </Tabs.List>
+      </ScrollArea>
 
       <div className='p-4'>
         <Tabs.Panel value={searchModules.flight.value}>

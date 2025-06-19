@@ -18,10 +18,10 @@ const CarHours: React.FC<IProps> = ({
   return (
     <div
       className={clsx(
-        'relative flex h-full flex-col rounded-md border border-transparent bg-gray-50 hover:border-blue-800',
+        'relative flex h-14 flex-col rounded-md border border-gray-600 hover:border-blue-800',
         {
           'border-red-500': error,
-          'border-slate-300': !error,
+          'border-gray-600': !error,
         }
       )}
     >
@@ -29,7 +29,7 @@ const CarHours: React.FC<IProps> = ({
         classNames={{
           label: ' font-normal',
           input: 'leading-none h-auto min-h-auto pr-0 px-3',
-          root: ' rounded-md border border-gray-600 bg-white p-1 px-5 md:px-6',
+          root: ' rounded-md bg-white p-1 px-5 md:px-6',
           section: 'hidden',
         }}
         variant='unstyled'

@@ -105,14 +105,14 @@ const TourSearchEngine = () => {
 
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
-      <div className='grid grid-cols-12 gap-3 md:gap-3'>
-        <div className='relative col-span-12 grid gap-3 md:col-span-7'>
+      <div className='grid grid-cols-16 gap-3 md:gap-3'>
+        <div className='relative col-span-16 grid gap-3 md:col-span-7'>
           <RiMapPin2Line
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
           />
           <TourLocations
-            label='Şehir, Ülke veya Tur Adı'
+            label='Şehir, Ülke veya Tur Adı?'
             isLoading={destinationLocationLoading}
             data={destinationLocation?.Result}
             onChange={(value) => {
@@ -133,7 +133,7 @@ const TourSearchEngine = () => {
             }
           />
         </div>
-        <div className='col-span-12 grid gap-3 md:col-span-3'>
+        <div className='col-span-16 grid gap-3 md:col-span-7'>
           <TourCalendar
             defaultDates={[
               dayjs(formActions.formState.defaultValues?.checkinDate).toDate(),
@@ -153,7 +153,7 @@ const TourSearchEngine = () => {
             }}
           />
         </div>
-        <div className='col-span-12 grid gap-3 md:col-span-2'>
+        <div className='col-span-16 grid gap-3 md:col-span-2'>
           <SearchEngineButton />
         </div>
       </div>

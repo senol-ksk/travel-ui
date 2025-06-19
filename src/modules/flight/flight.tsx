@@ -268,8 +268,8 @@ export const Flight = () => {
           }}
         />
       </div>
-      <div className='grid grid-cols-16 gap-2 md:grid-cols-21 md:gap-3'>
-        <div className='relative col-span-16 sm:col-span-6 md:col-span-5'>
+      <div className='grid grid-cols-16 gap-2 md:grid-cols-25 md:gap-3'>
+        <div className='relative col-span-16 sm:col-span-6 md:col-span-6'>
           <RiMapPin2Line
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -296,7 +296,7 @@ export const Flight = () => {
           />
         </div>
 
-        <div className='relative col-span-16 sm:col-span-6 md:col-span-5'>
+        <div className='relative col-span-16 sm:col-span-6 md:col-span-6'>
           <RiMapPin2Line
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -326,7 +326,7 @@ export const Flight = () => {
           />
         </div>
 
-        <div className='relative col-span-16 md:col-span-5'>
+        <div className='relative col-span-16 md:col-span-6'>
           <RiCalendarEventLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
@@ -357,7 +357,7 @@ export const Flight = () => {
             ]}
           />
         </div>
-        <div className='relative col-span-16 md:col-span-3 lg:col-span-3'>
+        <div className='relative col-span-16 md:col-span-3 lg:col-span-4'>
           <RiUserLine
             size={20}
             className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
