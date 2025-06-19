@@ -1,4 +1,5 @@
 import {
+  createLoader,
   createSearchParamsCache,
   createSerializer,
   parseAsArrayOf,
@@ -25,6 +26,8 @@ export const serializeTourSearchParams = createSerializer(
 export const tourSearchParamCache = createSearchParamsCache(
   tourSearchResultParamParser
 )
+
+export const loadTourSearchParams = createLoader(tourSearchResultParamParser)
 
 export type TourSearchResultParamsType = inferParserType<
   typeof tourSearchResultParamParser

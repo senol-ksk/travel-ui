@@ -70,7 +70,9 @@ export const TourLocations: React.FC<Props> = ({
             <div className='flex justify-end md:hidden'>
               <CloseButton
                 size={'xl'}
-                onClick={() => setLocationContainerOpened(false)}
+                onClick={() => {
+                  setLocationContainerOpened(false)
+                }}
               />
             </div>
             <div className='sticky top-0 p-2' ref={focusTrapRef}>
@@ -95,6 +97,7 @@ export const TourLocations: React.FC<Props> = ({
                   <CloseButton
                     onClick={() => {
                       inputRef.current?.focus()
+                      onChange('')
                       setOriginValue('')
                     }}
                     aria-label='Aramayı temizle'

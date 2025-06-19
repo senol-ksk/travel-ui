@@ -17,8 +17,6 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 
-import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso'
-
 import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchResults'
 
 import { TourSearchResultItem } from './item'
@@ -34,14 +32,11 @@ import { GoMoveToTop } from 'react-icons/go'
 import { useMemo, useRef, useState } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
-import dayjs from 'dayjs'
-import { a } from 'vitest/dist/chunks/suite.d.FvehnV49.js'
 import { CiFilter } from 'react-icons/ci'
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
   const [scroll, scrollTo] = useWindowScroll()
-  const virtuoso = useRef<VirtuosoHandle>(null)
 
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParser)
@@ -450,9 +445,6 @@ const TourSearchResultClient = () => {
             <ActionIcon
               style={transitionStyles}
               onClick={() => {
-                virtuoso.current?.scrollToIndex({
-                  index: 0,
-                })
                 scrollTo({ y: 0 })
               }}
               radius={'xl'}

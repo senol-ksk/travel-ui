@@ -26,12 +26,16 @@ import { useState } from 'react'
 import { TourDropdown } from './_components/dropdown'
 import { IoArrowForward } from 'react-icons/io5'
 import { MdOutlineChevronRight } from 'react-icons/md'
+import { useQueryStates } from 'nuqs'
+import { tourSearchResultParamParser } from '@/modules/tour/searchResultParams'
 
 type Props = {
   // data: TourSearchResultSearchItem
   data: TourSearchResultGroupedItem
 }
 export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
+  const [searchParams] = useQueryStates(tourSearchResultParamParser)
+
   const sortedRelatedItems = data.relatedItems.sort((a, b) =>
     dayjs(a.startDate).diff(b.startDate)
   )
@@ -46,6 +50,7 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
     slug: selectedTour.slug,
     searchToken: searchParamsQuery.data?.data?.params.searchToken,
     sessionToken: searchParamsQuery.data?.data?.sessionToken,
+    isCruise: searchParams.isCruise,
   })
 
   return (
