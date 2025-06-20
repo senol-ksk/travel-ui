@@ -45,6 +45,7 @@ const HotelCalendar: React.FC<Props> = ({
   const matches = useMediaQuery('(min-width: 48em)')
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
+  const [numberOfNights, setNumberOfNights] = useState<number | null>(null)
 
   const clickOutsideRef = useClickOutside(() => {
     setContainerTransitionState(false)
@@ -68,7 +69,24 @@ const HotelCalendar: React.FC<Props> = ({
   useEffect(() => {
     setContainerTransitionState(showCalendar)
   }, [showCalendar])
-
+  useEffect(() => {
+    if (rangeValue && rangeValue[0] && rangeValue[1]) {
+      const startDate = dayjs(rangeValue[0])
+      const endDate = dayjs(rangeValue[1])
+      if (
+        startDate.isValid() &&
+        endDate.isValid() &&
+        endDate.isAfter(startDate, 'day')
+      ) {
+        const nights = endDate.diff(startDate, 'day')
+        setNumberOfNights(nights)
+      } else {
+        setNumberOfNights(null)
+      }
+    } else {
+      setNumberOfNights(null)
+    }
+  }, [rangeValue])
   return (
     <Provider>
       <div className='relative h-full'>
@@ -154,7 +172,7 @@ const HotelCalendar: React.FC<Props> = ({
                       onChange={handleDateSelections}
                       type={'range'}
                       classNames={classes}
-                      numberOfColumns={matches ? 2 : 13}
+                      numberOfColumns={matches ? 2 : 1}
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
@@ -162,11 +180,19 @@ const HotelCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-end md:p-3'>
+                <div className='flex items-center justify-end gap-3 border-t p-2 md:p-3'>
+                  <div>
+                    {numberOfNights !== null && numberOfNights > 0 && (
+                      <span className='text-md rounded-2xl bg-gray-100 p-2 px-4 font-medium text-gray-700'>
+                        {numberOfNights} gece
+                      </span>
+                    )}
+                  </div>{' '}
                   <Button
                     type='button'
+                    radius='xl'
                     className='w-full md:w-auto'
-                    size='lg'
+                    size='sm'
                     onClick={() => setContainerTransitionState(false)}
                   >
                     Tamam

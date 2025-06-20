@@ -17,7 +17,7 @@
   width: 100%;
   height: 100%;
   font-size: var(--mantine-font-size-md);
-
+  border-radius: 50%;
   &[data-in-range] {
     background-color: var(--mantine-color-blue-1);
     border-radius: 0;
@@ -46,4 +46,12 @@
   &[data-last-in-range]::after {
     left: 0;
   }
+}
+.calendarHeaderControl {
+  border: 1px solid black;
+  border-radius: 50%;
+}
+.calendarHeader {
+  padding-left: 10px;
+  padding-right: 10px;
 }

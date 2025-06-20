@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 import { DatePicker, type DateValue } from '@mantine/dates'
+import classes from '@/styles/Datepicker.module.css'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
@@ -70,15 +71,7 @@ const TransferCalendar: React.FC<Props> = ({
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
-                      classNames={{
-                        levelsGroup: 'flex-col p-2 md:flex-row',
-                        month: 'w-full',
-                        day: 'text-sm w-full',
-                        monthCell: 'text-center',
-                        calendarHeader: 'mx-auto max-w-full',
-                        calendarHeaderLevel: 'text-base',
-                        weekday: 'text-black',
-                      }}
+                      classNames={classes}
                       defaultValue={rangeValue}
                     />
                   </div>
@@ -86,8 +79,9 @@ const TransferCalendar: React.FC<Props> = ({
                 <div className='flex border-t p-2 md:justify-end md:p-3'>
                   <Button
                     type='button'
+                    radius='xl'
                     className='w-full md:w-auto'
-                    size='lg'
+                    size='sm'
                     onClick={() => setContainerTransitionState(false)}
                   >
                     Tamam
