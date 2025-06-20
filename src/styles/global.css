@@ -11,7 +11,7 @@
 @import '@mantine/notifications/styles.layer.css';
 
 @import '@mantine/carousel/styles.layer.css';
-@import './customFonts.css';
+@import './Fonts.css';
 
 @layer base {
   *,
