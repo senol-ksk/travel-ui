@@ -90,7 +90,7 @@ const CruiseSearchEngine = () => {
 
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
-      <div className='grid grid-cols-12 gap-3 md:gap-3'>
+      <div className='grid grid-cols-16 gap-3 md:gap-3'>
         <div className='relative col-span-12 grid gap-3 md:col-span-7'>
           <RiMapPin2Line
             size={20}
@@ -127,7 +127,7 @@ const CruiseSearchEngine = () => {
             }
           />
         </div>
-        <div className='col-span-12 grid gap-3 md:col-span-3'>
+        <div className='col-span-12 grid gap-3 md:col-span-7'>
           <TourCalendar
             defaultDates={[
               dayjs(formActions.formState.defaultValues?.checkinDate).toDate(),
