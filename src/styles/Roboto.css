@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'CentraNo2';
+  src: url('/fonts/Roboto/CentraNo2-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CentraNo2';
+  src: url('/fonts/Roboto/CentraNo2-Book.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CentraNo2';
+  src: url('/fonts/Roboto/CentraNo2-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CentraNo2';
+  src: url('/fonts/Roboto/CentraNo2-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CentraNo2';
+  src: url('/fonts/Roboto/CentraNo2-Extrabold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}

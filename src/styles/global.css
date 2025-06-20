@@ -11,6 +11,7 @@
 @import '@mantine/notifications/styles.layer.css';
 
 @import '@mantine/carousel/styles.layer.css';
+@import './Roboto.css';
 
 @layer base {
   *,
