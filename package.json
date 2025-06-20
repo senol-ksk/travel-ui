@@ -18,7 +18,7 @@
     "prettier": "prettier --write **/**/*.{ts,tsx,css}",
     "prettier:check": "prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "prettier --write \"**/*.{ts,tsx}\"",
-    "theme": "npx tailwind-preset-mantine src/styles/mantine/index.ts -o src/styles/theme.css"
+    "theme": "pnpm dlx tailwind-preset-mantine src/styles/mantine/index.ts -o src/styles/theme.css"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -84,7 +84,7 @@
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.12",
+    "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4.1.10",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
