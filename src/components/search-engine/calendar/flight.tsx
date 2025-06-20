@@ -75,7 +75,7 @@ const FlightCalendar: React.FC<Props> = ({
         <Input
           label={
             tripKind === 'round-trip' ? (
-              <div className='flex w-full gap-[75px] md:px-2'>
+              <div className='flex w-full gap-[80px] md:px-2'>
                 <span>Gidiş</span>
                 <span>Dönüş</span>
               </div>
