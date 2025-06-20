@@ -1,9 +1,9 @@
 import { createTheme, DEFAULT_THEME, rem } from '@mantine/core'
 
 export const fonts = createTheme({
-  fontFamily: 'Roboto, sans-serif',
+  fontFamily: 'CentraNo2, Roboto, sans-serif',
   headings: {
-    fontFamily: `Roboto, ${DEFAULT_THEME.fontFamily}`,
+    fontFamily: `CentraNo2, ${DEFAULT_THEME.fontFamily}`,
   },
   fontSizes: {
     xxs: rem(10),
