@@ -202,8 +202,9 @@ const FlightCalendar: React.FC<Props> = ({
                 <div className='flex border-t p-2 md:justify-end md:p-3'>
                   <Button
                     type='button'
+                    radius='xl'
                     className='w-full md:w-auto'
-                    size='lg'
+                    size='sm'
                     onClick={() => setContainerTransitionState(false)}
                   >
                     Tamam
