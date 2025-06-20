@@ -7,6 +7,12 @@ dayjs.extend(duration)
 import { BusSearchResultItem } from '@/app/bus/types'
 import { formatCurrency } from '@/libs/util'
 import { CiClock2 } from 'react-icons/ci'
+import { GoChevronRight } from 'react-icons/go'
+import {
+  MdOutlineAirlineSeatReclineExtra,
+  MdOutlineChevronRight,
+} from 'react-icons/md'
+import { LuClock } from 'react-icons/lu'
 
 type Props = {
   searchItem: BusSearchResultItem
@@ -31,24 +37,38 @@ const BusSearchItem: React.FC<Props> = ({
               alt={searchItem.company}
             />
           </div>
-          <div className='pt-2 text-sm text-gray-600'>{searchItem.busType}</div>
+          <div className='flex items-center gap-2 pt-2'>
+            <div>
+              <MdOutlineAirlineSeatReclineExtra size={22} />
+            </div>
+            <div className='text-sm'>{searchItem.busType}</div>
+          </div>
         </div>
         <div className='flex items-center gap-5 pt-3'>
-          <div>{dayjs(searchItem.bus.departureDate).format('HH:mm')}</div>
+          <div className='text-lg font-semibold'>
+            {dayjs(searchItem.bus.departureDate).format('HH:mm')}
+          </div>
           <div className='relative flex-1'>
-            <div className='absolute start-0 end-0 -top-6 flex justify-center'>
-              <div className='flex items-center gap-1 text-sm text-gray-600'>
+            <div className='absolute start-0 end-0 -top-7 flex justify-center'>
+              <div className='flex items-center gap-1'>
                 <div>
-                  <CiClock2 size={18} />
+                  <LuClock />
                 </div>
-                <div>{travelDuration.format('HH[sa] mm[dk]')}</div>
+                <div className='text-sm'>
+                  {travelDuration.format('HH[sa] mm[dk]')}
+                </div>
               </div>
             </div>
-            <div className='h-[2px] rounded-3xl bg-green-500'></div>
+            <div className='h-[2px] rounded-3xl bg-blue-800'></div>
+            <div className='absolute end-0 top-1/2 -me-2 -translate-y-1/2 text-blue-800'>
+              <MdOutlineChevronRight size={20} />
+            </div>
           </div>
-          <div>{dayjs(searchItem.bus.arrivalDate).format('HH:mm')}</div>
+          <div className='text-lg'>
+            {dayjs(searchItem.bus.arrivalDate).format('HH:mm')}
+          </div>
         </div>
-        <div className='flex justify-between pt-2'>
+        <div className='flex justify-between text-sm'>
           <div>{searchItem.origin}</div>
           <div>{searchItem.destination}</div>
         </div>

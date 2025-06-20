@@ -80,8 +80,9 @@ const BusFrame: React.FC<Props> = ({
   return (
     <>
       <BusSeatIcons />
+
       <div className='flex justify-center'>
-        <div className='bus-wrapper relative rounded-3xl border-4 border-gray-500 bg-gray-50 p-4 text-gray-600'>
+        <div className='bus-wrapper relative rounded-3xl border-3 p-4 text-gray-600'>
           <div className='flex w-1/3 flex-col items-center justify-center'>
             <div className='pb-3'>
               <PiSteeringWheelLight strokeWidth={5} size={40} />
