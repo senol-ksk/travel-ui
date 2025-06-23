@@ -1,6 +1,6 @@
 'use client'
 
-import { ScrollArea, Skeleton, Tabs, TabsTab } from '@mantine/core'
+import { Box, Button, ScrollArea, Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 
 import {
@@ -91,13 +91,19 @@ export const SearchEngine = () => {
           >
             {searchModules.carRental.title}
           </TabsTab>
-          <TabsTab
-            value={'feribot'}
-            leftSection={<RiShip2Line size={20} />}
-            className={classes.tab}
+          <a
+            href='https://feribot.paraflytravel.com/'
+            className='relative block'
           >
-            <div>Feribot</div>
-          </TabsTab>
+            <div className='absolute start-0 end-0 top-0 bottom-0 z-10' />
+            <TabsTab
+              value={'feribot'}
+              leftSection={<RiShip2Line size={20} />}
+              className={classes.tab}
+            >
+              <div>Feribot</div>
+            </TabsTab>
+          </a>
           <TabsTab
             value={searchModules.bus.value}
             leftSection={<RiBusFill size={20} />}
