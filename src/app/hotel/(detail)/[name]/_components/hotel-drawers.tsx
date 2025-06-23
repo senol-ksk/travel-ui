@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Drawer, Button, Title } from '@mantine/core'
+import { Drawer, Button, Title, Loader, Accordion } from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
+import { useQuery } from '@tanstack/react-query'
+import { serviceRequest } from '@/network'
 
 type IProps = {
   description: HotelDetailDescription
@@ -20,10 +22,36 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
     setActiveDrawer(null)
   }
 
+  const campaignDataQuery = useQuery({
+    enabled: activeDrawer === 2,
+    queryKey: ['hotel-detail-campaigns'],
+    queryFn: async () => {
+      const response = await serviceRequest<
+        {
+          id: ID
+          params: {
+            terms_Of_conditions: {
+              value: string
+            }
+          }
+          title: string
+
+          categoryId: ID
+        }[]
+      >({
+        axiosOptions: {
+          url: 'api/hotel/campaings',
+        },
+      })
+
+      return response?.data
+    },
+  })
+
   return (
     <>
       <div className='grid gap-3'>
-        <div>
+        {/* <div>
           <Button
             fullWidth
             onClick={() => handleDrawerOpen(1)}
@@ -34,7 +62,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
           >
             Plaj ve havuz
           </Button>
-        </div>
+        </div> */}
         <div>
           <Button
             fullWidth
@@ -108,11 +136,31 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
         }}
       >
         <hr className='mt-3 mb-3 border-blue-500' />
-        <div
-        // dangerouslySetInnerHTML={{
-        //   __html: description.promotions ? description.promotions : '',
-        // }}
-        />
+        <div>
+          {campaignDataQuery.isLoading ? (
+            <div className='flex items-center justify-center p-8'>
+              <Loader size={'xl'} />
+            </div>
+          ) : null}
+        </div>
+        {campaignDataQuery.data && campaignDataQuery.data.length && (
+          <Accordion>
+            {campaignDataQuery.data.map((campaign) => {
+              return (
+                <Accordion.Item key={campaign.id} value={'' + campaign.id}>
+                  <Accordion.Control>{campaign.title}</Accordion.Control>
+                  <Accordion.Panel>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: campaign.params.terms_Of_conditions.value,
+                      }}
+                    />
+                  </Accordion.Panel>
+                </Accordion.Item>
+              )
+            })}
+          </Accordion>
+        )}
       </Drawer>
     </>
   )
