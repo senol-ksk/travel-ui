@@ -17,6 +17,7 @@ import {
   TypographyStylesProvider,
   Text,
   Divider,
+  Drawer,
 } from '@mantine/core'
 import { IoMapOutline } from 'react-icons/io5'
 import { Link } from 'next-view-transitions'
@@ -43,6 +44,7 @@ import { Location } from './_components/location'
 import { HotelDrawers } from './_components/hotel-drawers'
 import { ImportantInfos } from './_components/important-infos'
 import { IconCheckIn, IconCheckOut } from './_components/icons'
+import { HotelMediaGallery } from './_components/media-gallery/media-gallery'
 
 const HotelDetailSection = () => {
   const router = useRouter()
@@ -57,6 +59,10 @@ const HotelDetailSection = () => {
   const [
     roomStateModalOpened,
     { open: openRoomStateModal, close: closeRoomStateModal },
+  ] = useDisclosure(false)
+  const [
+    isMediaGalleryOpened,
+    { open: openMediaGallery, close: closeMediaGallery },
   ] = useDisclosure(false)
 
   const [
@@ -147,8 +153,6 @@ const HotelDetailSection = () => {
     return <HotelDetailSkeleton />
   }
 
-  console.log(hotel)
-
   if (!hotel || !hotelDetailData?.success) {
     return (
       <Container className='pt-5 text-center' maw={600}>
@@ -180,7 +184,7 @@ const HotelDetailSection = () => {
             </div>
           )}
           <div className='relative'>
-            <div className='absolute end-2 top-2 z-10'>
+            <div className='absolute end-2 top-2 z-10 hidden'>
               <Button
                 bg={'white'}
                 c='dark'
@@ -195,6 +199,7 @@ const HotelDetailSection = () => {
                 color={'black'}
                 opacity={'.75'}
                 leftSection={<MdOutlineCameraAlt />}
+                onClick={openMediaGallery}
               >
                 Galeri ({hotel.images.length})
               </Button>
@@ -584,6 +589,11 @@ const HotelDetailSection = () => {
           />
         )}
       </Modal>
+      <HotelMediaGallery
+        data={hotelInfo}
+        isMediaGalleryOpened={isMediaGalleryOpened}
+        closeMediaGallery={closeMediaGallery}
+      />
     </>
   )
 }

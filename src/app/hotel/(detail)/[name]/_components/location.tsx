@@ -1,5 +1,5 @@
 import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps'
-import { AspectRatio, Modal } from '@mantine/core'
+import { AspectRatio } from '@mantine/core'
 
 interface LocationProps {
   location: [number, number]
