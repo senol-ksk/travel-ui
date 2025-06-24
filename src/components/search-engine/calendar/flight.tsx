@@ -1,17 +1,33 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import clsx from 'clsx'
-import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
-import { useMediaQuery, useClickOutside } from '@mantine/hooks'
+import clsx from 'clsx'
+import {
+  Button,
+  CloseButton,
+  Paper,
+  Transition,
+  Portal,
+  Indicator,
+  Tooltip,
+} from '@mantine/core'
+
+import { useMediaQuery, useClickOutside, range } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
-import type { DatesRangeValue, DateValue } from '@mantine/dates'
+import type {
+  DatePickerProps,
+  DatesRangeValue,
+  DateValue,
+} from '@mantine/dates'
 
 import { IoArrowForwardSharp } from 'react-icons/io5'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import classes from '@/styles/Datepicker.module.css'
+import { useOfficialHolidayQuery } from './useOfficialHolidayQuery'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -28,6 +44,7 @@ const FlightCalendar: React.FC<Props> = ({
   tripKind = 'one-way',
   defaultDates,
 }) => {
+  const officialDayQuery = useOfficialHolidayQuery()
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
     defaultDates?.at(0) || null,
     defaultDates?.at(1) || null,
@@ -69,6 +86,40 @@ const FlightCalendar: React.FC<Props> = ({
     }
   }
 
+  const dayRenderer: DatePickerProps['renderDay'] = (date) => {
+    const day = dayjs(date)
+    const officialDayDates = dayjs(
+      officialDayQuery.data?.result.find((officialDay) =>
+        dayjs(officialDay.day).isSame(day)
+      )?.day ?? null
+    )
+    const officialDay = officialDayQuery.data?.result.find((officialDay) =>
+      dayjs(officialDay.day).isSame(day)
+    )
+
+    return (
+      <Tooltip
+        label={officialDay?.description}
+        disabled={officialDayDates.date() !== day.date()}
+        withArrow
+        transitionProps={{
+          transition: matches ? 'fade-down' : 'pop-bottom-right',
+        }}
+        offset={12}
+      >
+        <Indicator
+          size={8}
+          color='orange'
+          offset={-2}
+          disabled={officialDayDates.date() !== day.date()}
+        >
+          {day.date()}
+        </Indicator>
+      </Tooltip>
+    )
+  }
+  const numberOfColumns = matches ? 2 : 13
+
   return (
     <Provider>
       <div className='relative h-full'>
@@ -98,7 +149,7 @@ const FlightCalendar: React.FC<Props> = ({
         />
         <Transition
           mounted={containerTransitionState}
-          transition='pop-top-right'
+          transition={matches ? 'fade-up' : 'pop-top-right'}
           onExit={() => {
             handleDateSelections([
               rangeValue[0],
@@ -188,14 +239,15 @@ const FlightCalendar: React.FC<Props> = ({
                       }}
                       type={tripKind === 'one-way' ? 'default' : 'range'}
                       allowSingleDateInRange
-                      numberOfColumns={matches ? 2 : 13}
+                      numberOfColumns={numberOfColumns}
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
                       classNames={classes}
-                      defaultValue={
+                      value={
                         tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
                       }
+                      renderDay={dayRenderer}
                     />
                   </div>
                 </div>
