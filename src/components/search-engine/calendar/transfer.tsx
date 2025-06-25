@@ -28,7 +28,7 @@ const TransferCalendar: React.FC<Props> = ({
   )
 
   const { dayRenderer, handleOfficialDates, officialDayRenderer } =
-    useOfficialDays({ numberOfColumns: 2 })
+    useOfficialDays({ numberOfColumns: 1 })
 
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
