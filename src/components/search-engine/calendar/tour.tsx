@@ -22,6 +22,7 @@ const defaultFormat = 'DD MMM ddd'
 
 import { MdOutlineArrowForward } from 'react-icons/md'
 import { RiCalendarEventLine } from 'react-icons/ri'
+import { useOfficialDays } from './useOfficialDays'
 
 const TourCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
@@ -31,6 +32,8 @@ const TourCalendar: React.FC<Props> = ({
     defaultDates[0],
     defaultDates[1],
   ])
+  const { dayRenderer, handleOfficialDates, officialDayRenderer } =
+    useOfficialDays({ numberOfColumns: 2 })
 
   const [formatedValues, setFormatedValues] = useState<
     [string | null, string | null]
@@ -145,10 +148,17 @@ const TourCalendar: React.FC<Props> = ({
                       maxLevel='month'
                       classNames={classes}
                       defaultValue={rangeValue}
+                      renderDay={dayRenderer}
+                      onDateChange={handleOfficialDates}
+                      onNextMonth={handleOfficialDates}
+                      onPreviousMonth={handleOfficialDates}
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-end md:p-3'>
+                <div className='flex items-center border-t p-2 md:justify-between md:p-3'>
+                  <div className='hidden flex-col gap-1 md:flex'>
+                    {officialDayRenderer()}
+                  </div>
                   <Button
                     type='button'
                     radius='xl'

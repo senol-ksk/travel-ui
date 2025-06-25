@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
@@ -9,6 +9,7 @@ import classes from '@/styles/Datepicker.module.css'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
+import { useOfficialDays } from './useOfficialDays'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -25,6 +26,9 @@ const TransferCalendar: React.FC<Props> = ({
   const [rangeValue, setRangeValue] = useState<DateValue | undefined>(
     defaultDate
   )
+
+  const { dayRenderer, handleOfficialDates, officialDayRenderer } =
+    useOfficialDays({ numberOfColumns: 1 })
 
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
@@ -63,7 +67,7 @@ const TransferCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
+                <div className='relative mx-auto grow overflow-y-auto overscroll-contain scroll-smooth'>
                   <div>
                     <DatePicker
                       highlightToday
@@ -73,10 +77,17 @@ const TransferCalendar: React.FC<Props> = ({
                       maxLevel='month'
                       classNames={classes}
                       defaultValue={rangeValue}
+                      renderDay={dayRenderer}
+                      onDateChange={handleOfficialDates}
+                      onNextMonth={handleOfficialDates}
+                      onPreviousMonth={handleOfficialDates}
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-end md:p-3'>
+                <div className='flex items-center border-t p-2 md:justify-between md:p-3'>
+                  <div className='hidden flex-col gap-1 md:flex'>
+                    {officialDayRenderer()}
+                  </div>
                   <Button
                     type='button'
                     radius='xl'

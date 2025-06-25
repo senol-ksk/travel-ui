@@ -4,6 +4,10 @@
   position: relative;
   z-index: 1;
 }
+.month {
+  margin: auto;
+}
+
 .levelsGroup {
   flex-direction: column;
   padding-top: 12px;
@@ -50,8 +54,13 @@
 .calendarHeaderControl {
   border: 1px solid black;
   border-radius: 50%;
+  display: none;
+  @media (min-width: $mantine-breakpoint-sm) {
+    display: flex;
+  }
 }
 .calendarHeader {
   padding-left: 10px;
   padding-right: 10px;
+  margin: auto;
 }

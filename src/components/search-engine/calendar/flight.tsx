@@ -1,17 +1,35 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import clsx from 'clsx'
-import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
-import { useMediaQuery, useClickOutside } from '@mantine/hooks'
+import clsx from 'clsx'
+import {
+  Button,
+  CloseButton,
+  Paper,
+  Transition,
+  Portal,
+  Indicator,
+  Tooltip,
+} from '@mantine/core'
+
+import { useMediaQuery, useClickOutside, range } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
-import type { DatesRangeValue, DateValue } from '@mantine/dates'
+import type {
+  DatePickerProps,
+  DatesRangeValue,
+  DateValue,
+} from '@mantine/dates'
 
 import { IoArrowForwardSharp } from 'react-icons/io5'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import classes from '@/styles/Datepicker.module.css'
+import { useOfficialHolidayQuery } from './useOfficialHolidayQuery'
+import { OfficialHolidayServiceResponse } from '@/types/global'
+import { useOfficialDays } from './useOfficialDays'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -47,6 +65,9 @@ const FlightCalendar: React.FC<Props> = ({
     setContainerTransitionState(false)
   )
 
+  const { dayRenderer, handleOfficialDates, officialDayRenderer } =
+    useOfficialDays({ numberOfColumns: 2 })
+
   const handleDateSelections = (dates: DatesRangeValue | DateValue) => {
     let departurDate
     let returnDate
@@ -68,6 +89,8 @@ const FlightCalendar: React.FC<Props> = ({
       ])
     }
   }
+
+  const numberOfColumns = matches ? 2 : 13
 
   return (
     <Provider>
@@ -98,7 +121,7 @@ const FlightCalendar: React.FC<Props> = ({
         />
         <Transition
           mounted={containerTransitionState}
-          transition='pop-top-right'
+          transition={matches ? 'pop-top-left' : 'pop'}
           onExit={() => {
             handleDateSelections([
               rangeValue[0],
@@ -188,18 +211,25 @@ const FlightCalendar: React.FC<Props> = ({
                       }}
                       type={tripKind === 'one-way' ? 'default' : 'range'}
                       allowSingleDateInRange
-                      numberOfColumns={matches ? 2 : 13}
+                      numberOfColumns={numberOfColumns}
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
                       classNames={classes}
-                      defaultValue={
+                      value={
                         tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
                       }
+                      renderDay={dayRenderer}
+                      onDateChange={handleOfficialDates}
+                      onNextMonth={handleOfficialDates}
+                      onPreviousMonth={handleOfficialDates}
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-end md:p-3'>
+                <div className='flex items-center border-t p-2 md:justify-between md:p-3'>
+                  <div className='hidden flex-col gap-1 md:flex'>
+                    {officialDayRenderer()}
+                  </div>
                   <Button
                     type='button'
                     radius='xl'

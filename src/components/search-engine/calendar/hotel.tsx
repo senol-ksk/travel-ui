@@ -24,6 +24,7 @@ const defaultFormat = 'DD MMM ddd'
 
 import { MdOutlineArrowForward } from 'react-icons/md'
 import { RiCalendarEventLine } from 'react-icons/ri'
+import { useOfficialDays } from './useOfficialDays'
 
 const HotelCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
@@ -34,6 +35,8 @@ const HotelCalendar: React.FC<Props> = ({
     defaultDates[0],
     defaultDates[1],
   ])
+  const { dayRenderer, handleOfficialDates, officialDayRenderer } =
+    useOfficialDays({ numberOfColumns: 2 })
 
   const [formattedValues, setFormattedValues] = useState<
     [string | null, string | null]
@@ -177,26 +180,35 @@ const HotelCalendar: React.FC<Props> = ({
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
                       defaultValue={rangeValue}
+                      renderDay={dayRenderer}
+                      onDateChange={handleOfficialDates}
+                      onNextMonth={handleOfficialDates}
+                      onPreviousMonth={handleOfficialDates}
                     />
                   </div>
                 </div>
-                <div className='flex items-center justify-end gap-3 border-t p-2 md:p-3'>
-                  <div>
-                    {numberOfNights !== null && numberOfNights > 0 && (
-                      <span className='text-md rounded-2xl bg-gray-100 p-2 px-4 font-medium text-gray-700'>
-                        {numberOfNights} gece
-                      </span>
-                    )}
-                  </div>{' '}
-                  <Button
-                    type='button'
-                    radius='xl'
-                    className='w-full md:w-auto'
-                    size='sm'
-                    onClick={() => setContainerTransitionState(false)}
-                  >
-                    Tamam
-                  </Button>
+                <div className='flex items-center justify-between gap-3 border-t p-2 md:p-3'>
+                  <div className='hidden flex-col gap-1 md:flex'>
+                    {officialDayRenderer()}
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <div>
+                      {numberOfNights !== null && numberOfNights > 0 && (
+                        <span className='text-md rounded-2xl bg-gray-100 p-2 px-4 font-medium text-gray-700'>
+                          {numberOfNights} gece
+                        </span>
+                      )}
+                    </div>
+                    <Button
+                      type='button'
+                      radius='xl'
+                      className='w-full md:w-auto'
+                      size='sm'
+                      onClick={() => setContainerTransitionState(false)}
+                    >
+                      Tamam
+                    </Button>
+                  </div>
                 </div>
               </Paper>
             </div>

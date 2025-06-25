@@ -12,6 +12,7 @@ import classes from '@/styles/Datepicker.module.css'
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import { RiCalendarEventLine } from 'react-icons/ri'
+import { useOfficialDays } from './useOfficialDays'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -30,20 +31,19 @@ const BusCalendar: React.FC<Props> = ({
   useEffect(() => {
     setRangeValue(defaultDate)
   }, [defaultDate])
-  const [formatedValues, setFormatedValues] = useState<string | null>(
-    dayjs(rangeValue).format(defaultFormat)
-  )
+
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
   const clickOutsideRef = useClickOutside(() =>
     setContainerTransitionState(false)
   )
+  const { dayRenderer, handleOfficialDates, officialDayRenderer } =
+    useOfficialDays({ numberOfColumns: 1 })
 
   const handleDateSelections = (date: DateValue) => {
     setRangeValue(date)
 
     onDateSelect(date)
-    setFormatedValues(dayjs(date).format(defaultFormat))
   }
 
   return (
@@ -77,7 +77,7 @@ const BusCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
+                <div className='relative mx-auto grow overflow-y-auto overscroll-contain scroll-smooth'>
                   <div>
                     <DatePicker
                       highlightToday
@@ -87,10 +87,17 @@ const BusCalendar: React.FC<Props> = ({
                       maxLevel='month'
                       classNames={classes}
                       defaultValue={rangeValue}
+                      renderDay={dayRenderer}
+                      onDateChange={handleOfficialDates}
+                      onNextMonth={handleOfficialDates}
+                      onPreviousMonth={handleOfficialDates}
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-end md:p-3'>
+                <div className='flex border-t p-2 md:justify-between md:p-3'>
+                  <div className='hidden flex-col gap-1 md:flex'>
+                    {officialDayRenderer()}
+                  </div>
                   <Button
                     type='button'
                     radius='xl'
