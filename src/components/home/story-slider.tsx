@@ -52,12 +52,14 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         onMouseLeave={() => autoplay.current.play()}
         emblaOptions={{
           dragFree: true,
-          align: 'start',
+          align: 'center',
+          containScroll: false,
+          startIndex: dealsOfWeekData.length / 2,
         }}
         slideSize={'auto'}
         slideGap={{ base: 30, md: 40 }}
         withControls={false}
-        className={clsx({
+        className={clsx('mx-auto', {
           'opacity-0': !isEmblaInitialized,
         })}
       >

@@ -83,8 +83,8 @@ export default async function Home() {
           </div>
         )}
 
-        <Container>
-          {emblaCarouselData && (
+        {emblaCarouselData && (
+          <div className='container'>
             <EmblaCarousel
               slides={emblaCarouselData.map((slide) => ({
                 ...slide,
@@ -92,23 +92,25 @@ export default async function Home() {
                 Title: slide.title,
               }))}
             />
-          )}
-        </Container>
-        <div>
-          {upcomingHolidaysData && (
+          </div>
+        )}
+
+        {upcomingHolidaysData && (
+          <div>
             <UpComingHolidays data={upcomingHolidaysData} />
-          )}
-        </div>
-        <div>
-          {lastOpportunityData && (
+          </div>
+        )}
+        {lastOpportunityData && (
+          <div>
             <LastOpportunity data={lastOpportunityData} />
-          )}
-        </div>
-        <div>
-          {recommendedProductsData && (
+          </div>
+        )}
+        {recommendedProductsData && (
+          <div>
             <RecommendedProducts data={recommendedProductsData} />
-          )}
-        </div>
+          </div>
+        )}
+
         <div className='hidden'>
           <TourOpportunity />
         </div>

@@ -1,23 +1,21 @@
 'use client'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { Image } from '@mantine/core'
-import Link from 'next/link'
-
+import { useCallback, useEffect, useState } from 'react'
 import {
-  EmblaCarouselType,
-  EmblaEventType,
-  EmblaOptionsType,
-} from 'embla-carousel'
-import useEmblaCarousel from 'embla-carousel-react'
-import {
-  NextButton,
-  PrevButton,
-  usePrevNextButtons,
-} from './embla-carousel-arrow-buttons'
-import { DotButton, useDotButton } from './embla-carousel-dot-button'
-import '@/styles/embla.css'
+  ActionIcon,
+  AspectRatio,
+  Box,
+  Container,
+  Image,
+  Skeleton,
+} from '@mantine/core'
+import { Link } from 'next-view-transitions'
 
-const TWEEN_FACTOR_BASE = 0.2
+import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
+
+import { Carousel } from '@mantine/carousel'
+import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
+import clsx from 'clsx'
+import { cdnImageUrl } from '@/libs/cms-data'
 
 type SlideType = {
   id: string
@@ -30,131 +28,110 @@ type SlideType = {
 
 type PropType = {
   slides: SlideType[]
-  options?: EmblaOptionsType
 }
 
-const EmblaCarousel: React.FC<PropType> = ({ slides, options }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel(options)
-  const tweenFactor = useRef(0)
-  const tweenNodes = useRef<HTMLElement[]>([])
+const EmblaCarousel: React.FC<PropType> = ({ slides }) => {
+  const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | null>(null)
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
-  const { selectedIndex, scrollSnaps, onDotButtonClick } =
-    useDotButton(emblaApi)
-
-  const {
-    prevBtnDisabled,
-    nextBtnDisabled,
-    onPrevButtonClick,
-    onNextButtonClick,
-  } = usePrevNextButtons(emblaApi)
-
-  const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
-    tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
-      return slideNode.querySelector('.embla__parallax__layer') as HTMLElement
-    })
+  const emblaInit = useCallback(() => {
+    console.log('initialized')
   }, [])
-
-  const setTweenFactor = useCallback((emblaApi: EmblaCarouselType) => {
-    tweenFactor.current = TWEEN_FACTOR_BASE * emblaApi.scrollSnapList().length
-  }, [])
-
-  const tweenParallax = useCallback(
-    (emblaApi: EmblaCarouselType, eventName?: EmblaEventType) => {
-      const engine = emblaApi.internalEngine()
-      const scrollProgress = emblaApi.scrollProgress()
-      const slidesInView = emblaApi.slidesInView()
-      const isScrollEvent = eventName === 'scroll'
-
-      emblaApi.scrollSnapList().forEach((scrollSnap, snapIndex) => {
-        let diffToTarget = scrollSnap - scrollProgress
-        const slidesInSnap = engine.slideRegistry[snapIndex]
-
-        slidesInSnap.forEach((slideIndex) => {
-          if (isScrollEvent && !slidesInView.includes(slideIndex)) return
-
-          if (engine.options.loop) {
-            engine.slideLooper.loopPoints.forEach((loopItem) => {
-              const target = loopItem.target()
-              if (slideIndex === loopItem.index && target !== 0) {
-                const sign = Math.sign(target)
-                if (sign === -1) {
-                  diffToTarget = scrollSnap - (1 + scrollProgress)
-                }
-                if (sign === 1) {
-                  diffToTarget = scrollSnap + (1 - scrollProgress)
-                }
-              }
-            })
-          }
-
-          const translate = diffToTarget * (-1 * tweenFactor.current) * 100
-          const tweenNode = tweenNodes.current[slideIndex]
-          tweenNode.style.transform = `translateX(${translate}%)`
-        })
-      })
-    },
-    []
-  )
 
   useEffect(() => {
     if (!emblaApi) return
 
-    setTweenNodes(emblaApi)
-    setTweenFactor(emblaApi)
-    tweenParallax(emblaApi)
-    emblaApi.scrollTo(1)
+    emblaApi?.on('reInit', emblaInit).on('select', (event) => {
+      const scrollProgress = emblaApi.selectedScrollSnap()
 
-    emblaApi
-      .on('reInit', setTweenNodes)
-      .on('reInit', setTweenFactor)
-      .on('reInit', tweenParallax)
-      .on('scroll', tweenParallax)
-      .on('slideFocus', tweenParallax)
-  }, [emblaApi, tweenParallax, setTweenFactor, setTweenNodes])
+      setCurrentSlideIndex(scrollProgress)
+    })
+  }, [emblaApi, emblaInit])
 
   return (
-    <div className='embla'>
-      <div className='embla__viewport' ref={emblaRef}>
-        <div className='embla__container'>
-          {slides.map((item) => (
-            <Link
-              href={item.params.link?.value || '#'}
-              className='embla__slide'
-              key={item.id}
-            >
-              <div className='embla__parallax'>
-                <div className='embla__parallax__layer'>
+    <div className='relative'>
+      {!emblaApi && (
+        <div className='absolute start-0 end-0 top-0 bottom-0 z-10 h-full'>
+          <Skeleton h={'100%'} />
+        </div>
+      )}
+      <Carousel
+        withIndicators={false}
+        withControls={false}
+        getEmblaApi={setEmblaApi}
+        className={clsx('w-full', {
+          'opacity-100': !!emblaApi,
+          'opacity-0': !emblaApi,
+        })}
+      >
+        {slides.map((slide) => {
+          return (
+            <Carousel.Slide key={slide.id}>
+              <Box
+                component={Link}
+                href={slide.params.link?.value || '#'}
+                display={'block'}
+                w={'100%'}
+              >
+                <AspectRatio
+                  ratio={16 / 9}
+                  h={{
+                    base: 190,
+                    md: 487,
+                  }}
+                >
                   <Image
-                    className='embla__slide__img embla__parallax__img'
-                    src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
-                    alt='Carousel image'
+                    src={cdnImageUrl(slide.params.image.value)}
+                    alt={slide.Title}
+                    h={'100%'}
+                    pos={'absolute'}
+                    bdrs={'lg'}
                   />
-                </div>
-              </div>
-            </Link>
-          ))}
+                </AspectRatio>
+              </Box>
+            </Carousel.Slide>
+          )
+        })}
+      </Carousel>
+      <div className='flex justify-center gap-4 pt-5'>
+        <div>
+          <ActionIcon
+            bg={'blue.1'}
+            c='blue.8'
+            bdrs={'100%'}
+            onClick={() => emblaApi?.scrollPrev()}
+            size={'40'}
+          >
+            <RiArrowLeftLine />
+          </ActionIcon>
         </div>
-      </div>
-
-      <div className='mt-4 grid w-full flex-col items-center md:flex md:flex-row md:justify-between'>
-        <div className='banner-title flex w-full justify-center text-xl font-semibold'>
-          {slides[selectedIndex]?.Title}
-        </div>
-
-        <div className='embla__buttons mt-4 flex w-full justify-center md:mt-0 md:w-1/2 md:justify-end'>
-          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-
-          <div className='embla__dots'>
-            {scrollSnaps.map((_, index) => (
-              <DotButton
-                key={index}
-                onClick={() => onDotButtonClick(index)}
-                className={`embla__dot ${index === selectedIndex ? 'embla__dot--selected' : ''}`}
+        <div className='flex items-center gap-2'>
+          {emblaApi?.scrollSnapList().map((snap, snapIndex) => {
+            const isActiveState = currentSlideIndex === snapIndex
+            return (
+              <ActionIcon
+                key={snap}
+                bg={isActiveState ? 'blue.8' : 'blue.2'}
+                bdrs={'100%'}
+                size={isActiveState ? 16 : 12}
+                onClick={() => {
+                  emblaApi.scrollTo(snapIndex)
+                }}
+                className='transition-all ease-in'
               />
-            ))}
-          </div>
-
-          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+            )
+          })}
+        </div>
+        <div>
+          <ActionIcon
+            bg={'blue.1'}
+            c='blue.8'
+            bdrs={'100%'}
+            onClick={() => emblaApi?.scrollNext()}
+            size={'40'}
+          >
+            <RiArrowRightLine />
+          </ActionIcon>
         </div>
       </div>
     </div>
