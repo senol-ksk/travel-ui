@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from 'next-view-transitions'
-import { AspectRatio, Box, Image, Skeleton, Text } from '@mantine/core'
+import { AspectRatio, Box, Button, Image, Skeleton, Text } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { Widgets } from '@/types/cms-types'
 import { useEffect, useState } from 'react'
@@ -85,6 +85,11 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
           </Carousel.Slide>
         ))}
       </Carousel>
+      <div className='flex justify-center pt-7'>
+        <Button component={Link} href='/kampanyalar'>
+          Tüm Kampanyaları Gör
+        </Button>
+      </div>
     </div>
   )
 }
