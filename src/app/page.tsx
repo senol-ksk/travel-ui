@@ -1,17 +1,10 @@
 import { Suspense } from 'react'
-import {
-  Skeleton,
-  Container,
-  Title,
-  Image,
-  ScrollArea,
-  AspectRatio,
-} from '@mantine/core'
+import { Skeleton, Container, Title, Image } from '@mantine/core'
 import NextImage from 'next/image'
 
 import { SearchEngine } from '@/components/search-engine/'
 import { StorySlider } from '@/components/home/story-slider'
-import { cdnImageUrl, getContent } from '@/libs/cms-data'
+import { getContent } from '@/libs/cms-data'
 import { CmsContent, Params, Widgets } from '@/types/cms-types'
 import { UpComingHolidays } from '@/components/home/upcoming-holidays'
 import { LastOpportunity } from '@/components/home/last-opportunity'
@@ -60,7 +53,7 @@ export default async function Home() {
 
   return (
     <>
-      <div className='flex flex-col gap-20'>
+      <div className='flex flex-col gap-6 md:gap-20'>
         <Suspense fallback={<Skeleton h={20} />}>
           <div className='relative'>
             <Title className='text-dark hidden pt-5 text-center text-lg text-shadow-md md:pt-13 md:text-4xl md:text-white'>

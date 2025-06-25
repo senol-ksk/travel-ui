@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from 'next-view-transitions'
-import { BackgroundImage, Skeleton, Text } from '@mantine/core'
+import { AspectRatio, Box, Image, Skeleton, Text } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { Widgets } from '@/types/cms-types'
 import { useEffect, useState } from 'react'
@@ -9,7 +9,8 @@ import clsx from 'clsx'
 import Autoplay from 'embla-carousel-autoplay'
 import { useRef } from 'react'
 
-import { GoArrowRight } from 'react-icons/go'
+import aspectRatioClasses from './storyitems.module.css'
+import { cdnImageUrl } from '@/libs/cms-data'
 
 export const StorySliderSkeleton = () => {
   return (
@@ -50,15 +51,11 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         onMouseEnter={autoplay.current.stop}
         onMouseLeave={() => autoplay.current.play()}
         emblaOptions={{
-          loop: true,
-          dragFree: false,
+          dragFree: true,
           align: 'start',
         }}
-        slideSize={{
-          base: '85%',
-          md: '28%',
-        }}
-        slideGap='xl'
+        slideSize={'auto'}
+        slideGap={{ base: 30, md: 40 }}
         withControls={false}
         className={clsx({
           'opacity-0': !isEmblaInitialized,
@@ -66,28 +63,23 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
       >
         {dealsOfWeekData?.map((item) => (
           <Carousel.Slide key={item.id}>
-            <Link href={item.params.link.value} className='block'>
-              <div className='flex h-[120px] overflow-hidden rounded-2xl shadow-xl'>
-                <div className='flex w-1/2 flex-col justify-between bg-yellow-400 p-3'>
-                  <div>
-                    <Text fw={500}>{item.title}</Text>
-                  </div>
-                  <Text
-                    size='sm'
-                    fw={500}
-                    className='flex items-center hover:underline'
-                  >
-                    İncele <GoArrowRight />
+            <Box
+              component={Link}
+              href={item.params.link.value}
+              className='block h-full'
+            >
+              <div className='flex h-full w-[90px] flex-col md:w-[160px]'>
+                <AspectRatio classNames={aspectRatioClasses}>
+                  <Image src={cdnImageUrl(item.params.image.value)} alt='' />
+                </AspectRatio>
+                <div className='leading-md py-4 text-center text-sm'>
+                  <Text lineClamp={3} component='div'>
+                    {item.title}
                   </Text>
                 </div>
-                <div className='h-full w-1/2'>
-                  <BackgroundImage
-                    src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image.value}`}
-                    className='h-full w-full bg-cover bg-center object-cover'
-                  />
-                </div>
+                <div className='mx-auto mt-auto h-[4px] w-[69px] rounded bg-blue-200' />
               </div>
-            </Link>
+            </Box>
           </Carousel.Slide>
         ))}
       </Carousel>
