@@ -67,7 +67,7 @@ export default async function Home() {
               priority
               className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
             />
-            <div className='md:min-h-[280px] md:pt-10'>
+            <div className='flex flex-col justify-center md:min-h-[280px] md:py-10'>
               <Container className='px-0 md:px-4'>
                 <div className='bg-white md:rounded-lg md:border'>
                   <SearchEngine />
