@@ -30,7 +30,7 @@ type PropType = {
   slides: SlideType[]
 }
 
-const EmblaCarousel: React.FC<PropType> = ({ slides }) => {
+const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | null>(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
@@ -138,4 +138,4 @@ const EmblaCarousel: React.FC<PropType> = ({ slides }) => {
   )
 }
 
-export { EmblaCarousel }
+export { MainBannerCarousel }

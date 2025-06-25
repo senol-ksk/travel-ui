@@ -14,7 +14,7 @@ import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
 import { PopularDestinations } from '@/components/home/popular-destinations'
 import { EbultenForm } from '@/components/home/ebulten-form'
-import { EmblaCarousel } from '@/components/main-banner/embla-carousel'
+import { MainBannerCarousel } from '@/components/main-banner'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -85,7 +85,7 @@ export default async function Home() {
 
         {emblaCarouselData && (
           <div className='container'>
-            <EmblaCarousel
+            <MainBannerCarousel
               slides={emblaCarouselData.map((slide) => ({
                 ...slide,
                 id: String(slide.id),
