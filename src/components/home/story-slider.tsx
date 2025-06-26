@@ -1,23 +1,26 @@
 'use client'
 
-import { Link } from 'next-view-transitions'
-import { BackgroundImage, Skeleton, Text } from '@mantine/core'
-import { Carousel } from '@mantine/carousel'
-import { Widgets } from '@/types/cms-types'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
-import Autoplay from 'embla-carousel-autoplay'
-import { useRef } from 'react'
+import { Link } from 'next-view-transitions'
+import { AspectRatio, Box, Button, Image, Skeleton, Text } from '@mantine/core'
+import { Carousel } from '@mantine/carousel'
 
-import { GoArrowRight } from 'react-icons/go'
+import { Widgets } from '@/types/cms-types'
+import aspectRatioClasses from './storyitems.module.css'
+import { cdnImageUrl } from '@/libs/cms-data'
 
 export const StorySliderSkeleton = () => {
   return (
-    <div className='flex w-full justify-start gap-5 overflow-hidden whitespace-nowrap'>
-      {new Array(10).fill(true).map((_, itemIndex) => (
-        <div key={itemIndex} className='flex flex-col gap-2'>
-          <Skeleton h={110} w={410} />
-          <Skeleton h={16} radius='xs' />
+    <div className='flex w-full justify-center gap-5 overflow-hidden whitespace-nowrap'>
+      {new Array(5).fill(true).map((_, itemIndex) => (
+        <div key={itemIndex} className='flex flex-col gap-2 md:gap-8'>
+          <Skeleton
+            w={{ base: 90, md: 160 }}
+            h={{ base: 90, md: 160 }}
+            circle
+          />
+
           <Skeleton h={16} radius='md' w='65%' mx='auto' />
         </div>
       ))}
@@ -36,7 +39,6 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
   useEffect(() => {
     setIsEmblaInitialized(true)
   }, [])
-  const autoplay = useRef(Autoplay({ delay: 3000 }))
 
   return (
     <div className='relative px-4 sm:px-0'>
@@ -46,51 +48,46 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         </div>
       )}
       <Carousel
-        plugins={[autoplay.current]}
-        onMouseEnter={autoplay.current.stop}
-        onMouseLeave={() => autoplay.current.play()}
         emblaOptions={{
-          loop: true,
-          dragFree: false,
-          align: 'start',
+          dragFree: true,
+          align: 'center',
+          containScroll: false,
+          startIndex: dealsOfWeekData.length / 2,
         }}
-        slideSize={{
-          base: '85%',
-          md: '28%',
-        }}
-        slideGap='xl'
+        slideSize={'auto'}
+        slideGap={{ base: 30, md: 40 }}
         withControls={false}
-        className={clsx({
+        className={clsx('mx-auto', {
           'opacity-0': !isEmblaInitialized,
         })}
       >
         {dealsOfWeekData?.map((item) => (
           <Carousel.Slide key={item.id}>
-            <Link href={item.params.link.value} className='block'>
-              <div className='flex h-[120px] overflow-hidden rounded-2xl shadow-xl'>
-                <div className='flex w-1/2 flex-col justify-between bg-yellow-400 p-3'>
-                  <div>
-                    <Text fw={500}>{item.title}</Text>
-                  </div>
-                  <Text
-                    size='sm'
-                    fw={500}
-                    className='flex items-center hover:underline'
-                  >
-                    İncele <GoArrowRight />
+            <Box
+              component={Link}
+              href={item.params.link.value}
+              className='block h-full'
+            >
+              <div className='flex h-full w-[90px] flex-col md:w-[160px]'>
+                <AspectRatio classNames={aspectRatioClasses}>
+                  <Image src={cdnImageUrl(item.params.image.value)} alt='' />
+                </AspectRatio>
+                <div className='leading-md py-4 text-center text-sm'>
+                  <Text lineClamp={3} component='div'>
+                    {item.title}
                   </Text>
                 </div>
-                <div className='h-full w-1/2'>
-                  <BackgroundImage
-                    src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image.value}`}
-                    className='h-full w-full bg-cover bg-center object-cover'
-                  />
-                </div>
+                <div className='mx-auto mt-auto h-[4px] w-[69px] rounded bg-blue-200' />
               </div>
-            </Link>
+            </Box>
           </Carousel.Slide>
         ))}
       </Carousel>
+      <div className='flex justify-center pt-7'>
+        <Button component={Link} href='/kampanyalar'>
+          Tüm Kampanyaları Gör
+        </Button>
+      </div>
     </div>
   )
 }
