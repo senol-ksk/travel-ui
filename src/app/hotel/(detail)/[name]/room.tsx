@@ -8,6 +8,7 @@ import {
   Title,
   Drawer,
   AspectRatio,
+  Tooltip,
 } from '@mantine/core'
 
 import type {
@@ -19,6 +20,11 @@ import type {
 import { formatCurrency } from '@/libs/util'
 import { PriceNumberFlow } from '@/components/price-numberflow'
 import dayjs from 'dayjs'
+import { RiUserLine } from 'react-icons/ri'
+import { PiAngle, PiCoffee } from 'react-icons/pi'
+import { FaCheck } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
+import { HiPercentBadge } from 'react-icons/hi2'
 
 type IProps = {
   roomGroup: HotelDetailRoomItem
@@ -35,9 +41,7 @@ const HotelRoom: React.FC<IProps> = ({
   onInstallmentClick = () => null,
   hotelInfo,
 }) => {
-  const [isCancelWarrantyChecked, setWarrantyCheck] = useState(
-    roomGroup.useCancelWarranty
-  )
+  const [isCancelWarrantyChecked, setWarrantyCheck] = useState(false)
   const rooms = roomGroup.rooms
   const diffPriceGaranty = hotelInfo?.themes.find((item) => item.id === 385)
   const roomKeys = rooms.map((x) => x.key)
@@ -62,6 +66,10 @@ const HotelRoom: React.FC<IProps> = ({
 
   if (details && !details?.length) return null
   // const themesPriceDiff = roomGroup.provider == 'JollyHotel' && details?.find(item => item.)
+  const timeDiff = dayjs(roomGroup.checkOutDate).diff(
+    dayjs(roomGroup.checkInDate),
+    'day'
+  )
 
   return (
     <div className='rounded-lg border shadow-sm'>
@@ -77,170 +85,207 @@ const HotelRoom: React.FC<IProps> = ({
         if (!detail) return null
 
         return (
-          <div
-            className='grid gap-2 p-3 lg:gap-3 xl:grid-cols-12'
-            key={room.key}
-          >
-            <div className='xl:col-span-3 2xl:row-span-2'>
-              <AspectRatio>
-                <Image
-                  loading='lazy'
-                  fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
-                  src={images?.at(0)}
-                  alt={detail.roomType}
-                  className='h-full cursor-pointer rounded'
-                  onClick={() => setDrawerOpened(true)}
-                />
-              </AspectRatio>
-            </div>
-            <div className='2xl:col-span-7'>
-              <Title order={5}>{detail.roomType}</Title>
-              {!roomGroup.nonRefundable && (
-                <div className='text-green text-sm'>
-                  {roomGroup.cancellationPolicies
-                    .sort((a, b) => {
-                      return (
-                        new Date(a.optionDate).getDate() -
-                        new Date(b.optionDate).getDate()
-                      )
-                    })
-                    .map((cancelPolicy, cancelPolicyIndex) => (
-                      <div key={cancelPolicyIndex}>
-                        {cancelPolicy.description}
-                      </div>
-                    ))}
-                </div>
-              )}
-              <Drawer
-                position='right'
-                opened={drawerOpened}
-                onClose={() => setDrawerOpened(false)}
-                title={detail.roomType}
-                size='md'
-              >
-                {
-                  <div>
-                    <Image
-                      loading='lazy'
-                      fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
-                      src={images?.at(0)}
-                      alt={detail.roomType}
-                      className='mb-6 h-full max-h-52 rounded pb-6'
-                    />
+          <>
+            {/* <input value={JSON.stringify(roomGroup, null, 2)} readOnly /> */}
+            <div
+              className='grid gap-2 p-3 lg:gap-3 xl:grid-cols-12'
+              key={room.key}
+            >
+              <div className='xl:col-span-3 2xl:row-span-2'>
+                <AspectRatio>
+                  <Image
+                    loading='lazy'
+                    fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
+                    src={images?.at(0)}
+                    alt={detail.roomType}
+                    className='h-full cursor-pointer rounded'
+                    onClick={() => setDrawerOpened(true)}
+                  />
+                </AspectRatio>
+              </div>
+              <div className='2xl:col-span-7'>
+                <Title order={5} size={'xl'}>
+                  {detail.roomType}
+                </Title>
 
-                    {detail.size > 0 && (
-                      <div>
-                        {' '}
-                        <div className='mb-4 w-15 rounded bg-gray-300 p-2 text-center text-xs font-bold'>
-                          {detail.size} m²{' '}
-                        </div>
-                      </div>
-                    )}
+                <Drawer
+                  position='right'
+                  opened={drawerOpened}
+                  onClose={() => setDrawerOpened(false)}
+                  title={detail.roomType}
+                  size='md'
+                >
+                  {
+                    <div>
+                      <Image
+                        loading='lazy'
+                        fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
+                        src={images?.at(0)}
+                        alt={detail.roomType}
+                        className='mb-6 h-full max-h-52 rounded pb-6'
+                      />
 
-                    <div
-                      dangerouslySetInnerHTML={{ __html: detail.description }}
-                    />
-                  </div>
-                }
-              </Drawer>
-              {detail.size > 0 && (
-                <div>
-                  {' '}
-                  <div className='mt-4 rounded text-xs font-bold'>
-                    {detail.size} m²{' '}
-                  </div>
-                </div>
-              )}
-              {detail.pensionType}
-              <div>Max {detail.quantity} Kişilik</div>
-              {themesPriceDiff && <div>Fiyat Farkı İade Garantisi</div>}
-              {!roomGroup.nonRefundable && (
-                <div>
-                  <span className='text-green font-semibold'>
-                    Ücretsiz İptal:{' '}
-                  </span>
-                  {dayjs(
-                    roomGroup.cancellationPolicies
-                      .sort(
-                        (a, b) =>
-                          new Date(a.optionDate).getDate() -
-                          new Date(b.optionDate).getDate()
-                      )
-                      .at(0)?.optionDate
-                  ).format('DD.MM.YYYY')}
-                  tarihine kadar
-                </div>
-              )}
-            </div>
-            {isLastItem && (
-              <div className='item-center grid justify-center self-end 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
-                <div>
-                  <div>
-                    {discountRate > 0 && (
-                      <div className='grid items-center justify-center'>
-                        <div className='flex w-30 items-center rounded bg-orange-700 p-2 text-center leading-none font-bold text-white'>
-                          %{discountRate} indirim
+                      {detail.size > 0 && (
+                        <div>
+                          {' '}
+                          <div className='mb-4 w-15 rounded bg-gray-300 p-2 text-center text-xs font-bold'>
+                            {detail.size} m²{' '}
+                          </div>
                         </div>
-                        <div className='pt-1 text-center text-sm line-through'>
-                          {formatCurrency(discountPrice)}
-                        </div>
-                      </div>
-                    )}
-                    <div className='text-center text-xl font-bold'>
-                      <PriceNumberFlow
-                        value={
-                          isCancelWarrantyChecked
-                            ? totalPriceWithCancelWarranty
-                            : roomGroup.totalPrice.value
-                        }
+                      )}
+
+                      <div
+                        dangerouslySetInnerHTML={{ __html: detail.description }}
                       />
                     </div>
-                    {hasCancelWarranty && (
-                      <div className='pt-4'>
-                        <Checkbox
-                          label={
-                            <span>
-                              <strong>
-                                {formatCurrency(cancelWarrantyPrice)}
-                              </strong>{' '}
-                              İptal Güvence Paketi Ekle
-                            </span>
+                  }
+                </Drawer>
+                <div className='my-3 grid gap-2'>
+                  {detail.size > 0 && (
+                    <div>
+                      {' '}
+                      <div className='flex items-center'>
+                        <RiUserLine size={16} className='mr-2' />
+                        <div>Max {detail.quantity} Kişilik</div>
+                      </div>
+                    </div>
+                  )}
+                  <div className='flex items-center'>
+                    <PiCoffee size={16} className='mr-2' />
+                    {detail.pensionType}
+                  </div>
+                  <div className='flex items-center'>
+                    <PiAngle size={16} className='mr-2' />
+                    {detail.size} m²
+                  </div>
+                </div>
+                {themesPriceDiff && <div>Fiyat Farkı İade Garantisi</div>}
+                {!roomGroup.nonRefundable && !isCancelWarrantyChecked && (
+                  <div className='flex items-center gap-1'>
+                    <span className='text-green flex items-center font-semibold'>
+                      <FaCheck size={15} className='mr-2' /> Ücretsiz
+                      İptal:{' '}
+                    </span>
+                    {dayjs(
+                      roomGroup.cancellationPolicies
+                        .sort(
+                          (a, b) =>
+                            new Date(a.optionDate).getDate() -
+                            new Date(b.optionDate).getDate()
+                        )
+                        .at(0)?.optionDate
+                    ).format('DD.MM.YYYY')}{' '}
+                    tarihine kadar
+                    <Tooltip
+                      label={
+                        !roomGroup.nonRefundable && (
+                          <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
+                            {roomGroup.cancellationPolicies
+                              .sort((a, b) => {
+                                return (
+                                  new Date(a.optionDate).getDate() -
+                                  new Date(b.optionDate).getDate()
+                                )
+                              })
+                              .map((cancelPolicy, cancelPolicyIndex) => (
+                                <div key={cancelPolicyIndex}>
+                                  {cancelPolicy.description}
+                                </div>
+                              ))}
+                          </div>
+                        )
+                      }
+                    >
+                      <span>
+                        <IoMdInformationCircleOutline />
+                      </span>
+                    </Tooltip>
+                  </div>
+                )}
+                {hasCancelWarranty && (
+                  <div className='my-2 flex w-80 items-center rounded-md border p-2'>
+                    <Checkbox
+                      label={<span></span>}
+                      defaultChecked={isCancelWarrantyChecked}
+                      size='sm'
+                      radius={'xl'}
+                      onChange={({ currentTarget }) => {
+                        setWarrantyCheck(currentTarget.checked)
+                        roomGroup.useCancelWarranty = currentTarget.checked
+                      }}
+                    />
+                    <div className='grid items-center'>
+                      <div className='flex items-center gap-1 text-blue-800'>
+                        <div>İptal Güvence Paketi Ekle </div>
+                        <Tooltip
+                          className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'
+                          label='İptal Güvence Paketi ile rezervasyonunuzu konaklama tarihine son 72 saat kalaya kadar koşulsuz iptal edebilirsiniz.'
+                        >
+                          <IoMdInformationCircleOutline />
+                        </Tooltip>
+                      </div>
+                      <strong>
+                        {formatCurrency(cancelWarrantyPrice)}
+                      </strong>{' '}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {isLastItem && (
+                <div className='item-center grid justify-center self-end 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
+                  <div>
+                    <div>
+                      {discountRate > 0 && (
+                        <div className='grid items-center justify-end'>
+                          <div className='text-md flex w-30 items-center rounded bg-orange-700 p-1 text-end leading-none font-semibold text-white'>
+                            <HiPercentBadge size={18} />%{discountRate} indirim
+                          </div>
+                          <div className='text-md text-end text-gray-600'>
+                            {timeDiff} gece fiyatı
+                          </div>
+                          <div className='text-md pt-1 text-end line-through'>
+                            {formatCurrency(discountPrice)}
+                          </div>
+                        </div>
+                      )}
+                      <div className='text-end text-2xl font-bold'>
+                        <PriceNumberFlow
+                          value={
+                            isCancelWarrantyChecked
+                              ? totalPriceWithCancelWarranty
+                              : roomGroup.totalPrice.value
                           }
-                          defaultChecked={isCancelWarrantyChecked}
-                          size='xs'
-                          onChange={({ currentTarget }) => {
-                            setWarrantyCheck(currentTarget.checked)
-                            roomGroup.useCancelWarranty = currentTarget.checked
-                          }}
                         />
                       </div>
-                    )}
-                  </div>
-                  <div className='grid'>
-                    <Button
-                      size='sm'
-                      type='button'
-                      fullWidth
-                      onClick={() => onSelect(roomGroup)}
-                    >
-                      Rezervasyon Yap
-                    </Button>
-                    <div>
+                    </div>
+                    <div className='grid'>
                       <Button
-                        fullWidth
+                        size='md'
                         type='button'
-                        size='xs'
-                        variant='white'
-                        onClick={() => onInstallmentClick(roomGroup)}
+                        fullWidth
+                        radius={'md'}
+                        onClick={() => onSelect(roomGroup)}
                       >
-                        Taksit Seçenekleri
+                        Rezervasyon Yap
                       </Button>
+                      <div>
+                        <Button
+                          className='font-medium'
+                          fullWidth
+                          type='button'
+                          size='sm'
+                          variant='white'
+                          onClick={() => onInstallmentClick(roomGroup)}
+                        >
+                          Taksit Seçenekleri
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          </>
         )
       })}
     </div>
