@@ -46,7 +46,7 @@ const GeneralDrawer: React.FC<IProps> = ({ description, data }) => {
                 ))}
             </ul>
           </div>
-          <input value={JSON.stringify(data?.hotel, null, 2)} readOnly />
+          {/* <input value={JSON.stringify(data?.hotel, null, 2)} readOnly /> */}
           <div className='my-10'>
             <ul className='grid-cols-auto flex gap-2'>
               {/* <li className='flex items-center gap-3 rounded border bg-gray-200 p-1 px-4'>

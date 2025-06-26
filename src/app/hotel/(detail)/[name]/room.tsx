@@ -154,10 +154,12 @@ const HotelRoom: React.FC<IProps> = ({
                     <PiCoffee size={16} className='mr-2' />
                     {detail.pensionType}
                   </div>
-                  <div className='flex items-center'>
-                    <PiAngle size={16} className='mr-2' />
-                    {detail.size} m²
-                  </div>
+                  {detail.size > 0 && (
+                    <div className='flex items-center'>
+                      <PiAngle size={16} className='mr-2' />
+                      {detail.size} m²
+                    </div>
+                  )}
                 </div>
                 {themesPriceDiff && <div>Fiyat Farkı İade Garantisi</div>}
                 {!roomGroup.nonRefundable && !isCancelWarrantyChecked && (
@@ -176,30 +178,32 @@ const HotelRoom: React.FC<IProps> = ({
                         .at(0)?.optionDate
                     ).format('DD.MM.YYYY')}{' '}
                     tarihine kadar
-                    <Tooltip
-                      label={
-                        !roomGroup.nonRefundable && (
-                          <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
-                            {roomGroup.cancellationPolicies
-                              .sort((a, b) => {
-                                return (
-                                  new Date(a.optionDate).getDate() -
-                                  new Date(b.optionDate).getDate()
-                                )
-                              })
-                              .map((cancelPolicy, cancelPolicyIndex) => (
-                                <div key={cancelPolicyIndex}>
-                                  {cancelPolicy.description}
-                                </div>
-                              ))}
-                          </div>
-                        )
-                      }
-                    >
-                      <span>
-                        <IoMdInformationCircleOutline />
-                      </span>
-                    </Tooltip>
+                    {roomGroup.nonRefundable && (
+                      <Tooltip
+                        label={
+                          !roomGroup.nonRefundable && (
+                            <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
+                              {roomGroup.cancellationPolicies
+                                .sort((a, b) => {
+                                  return (
+                                    new Date(a.optionDate).getDate() -
+                                    new Date(b.optionDate).getDate()
+                                  )
+                                })
+                                .map((cancelPolicy, cancelPolicyIndex) => (
+                                  <div key={cancelPolicyIndex}>
+                                    {cancelPolicy.description}
+                                  </div>
+                                ))}
+                            </div>
+                          )
+                        }
+                      >
+                        <span>
+                          <IoMdInformationCircleOutline />
+                        </span>
+                      </Tooltip>
+                    )}
                   </div>
                 )}
                 {hasCancelWarranty && (

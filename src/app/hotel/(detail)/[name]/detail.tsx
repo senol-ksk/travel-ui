@@ -340,24 +340,26 @@ const HotelDetailSection = () => {
           </div>
 
           <div className='col-span-12 flex flex-col gap-3 md:col-span-4'>
-            <div className='flex items-center justify-between rounded bg-white p-3'>
-              <div className='hidden items-center gap-2 self-end text-blue-800 md:flex'>
-                <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
-                  {hotel.comment_info?.averageScore}
+            {hotel.comment_info && (
+              <div className='flex items-center justify-between rounded bg-white p-3'>
+                <div className='hidden items-center gap-2 self-end text-blue-800 md:flex'>
+                  <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
+                    {hotel.comment_info?.averageScore}
+                  </div>
+                  <div className='text-xl font-normal'>Mükemmel</div>
                 </div>
-                <div className='text-xl font-normal'>Mükemmel</div>
+                <div className='flex items-center'>
+                  <Button
+                    className='border-0 bg-transparent p-0 font-normal text-blue-700'
+                    size='sm'
+                    onClick={() => scrollIntoRatings()}
+                  >
+                    {hotel.comment_info?.comments.length} değerlendirme
+                  </Button>
+                  <BiChevronRight size={20} color='blue' />
+                </div>
               </div>
-              <div className='flex items-center'>
-                <Button
-                  className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                  size='sm'
-                  onClick={() => scrollIntoRatings()}
-                >
-                  {hotel.comment_info?.comments.length} değerlendirme
-                </Button>
-                <BiChevronRight size={20} color='blue' />
-              </div>
-            </div>
+            )}
             <div
               className='grid gap-3 rounded bg-white p-3'
               data-heading='Konum'
@@ -541,7 +543,8 @@ const HotelDetailSection = () => {
         <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
           <FacilityProps descriptions={hotel.descriptions} data={hotelInfo} />
         </div>
-        {(hotel.comment_info || hotel.reviews) && (
+
+        {(hotel.comment_info?.comments?.length ?? 0) > 0 && (
           <div ref={ratingTargetRef}>
             <Title order={2} size={'lg'} id='ratings' pb={'md'}>
               Değerlendirmeler
@@ -560,7 +563,7 @@ const HotelDetailSection = () => {
                     size='sm'
                     onClick={() => scrollIntoRatings()}
                   >
-                    {hotel.comment_info?.comments.length} değerlendirme
+                    {hotel.comment_info?.comments?.length ?? 0} değerlendirme
                   </Button>
                   <BiChevronRight size={20} color='blue' />
                 </div>
@@ -571,6 +574,7 @@ const HotelDetailSection = () => {
             </div>
           </div>
         )}
+
         <Title order={2} size={'lg'} id='location'>
           Konum Bilgileri{' '}
         </Title>
@@ -589,12 +593,16 @@ const HotelDetailSection = () => {
             </div>
           </address>
         </div> */}
-        <Title order={2} size={'lg'}>
-          Önemli Bilgiler{' '}
-        </Title>
-        <div>
-          <ImportantInfos description={hotel.descriptions} />
-        </div>
+        {hotel.descriptions.importentInfo && (
+          <>
+            <Title order={2} size={'lg'}>
+              Önemli Bilgiler{' '}
+            </Title>
+            <div>
+              <ImportantInfos description={hotel.descriptions} />
+            </div>
+          </>
+        )}
       </Container>
       <Modal
         opened={roomStateModalOpened}
