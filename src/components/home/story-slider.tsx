@@ -1,24 +1,26 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import clsx from 'clsx'
 import { Link } from 'next-view-transitions'
 import { AspectRatio, Box, Button, Image, Skeleton, Text } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
-import { Widgets } from '@/types/cms-types'
-import { useEffect, useState } from 'react'
-import clsx from 'clsx'
-import Autoplay from 'embla-carousel-autoplay'
-import { useRef } from 'react'
 
+import { Widgets } from '@/types/cms-types'
 import aspectRatioClasses from './storyitems.module.css'
 import { cdnImageUrl } from '@/libs/cms-data'
 
 export const StorySliderSkeleton = () => {
   return (
-    <div className='flex w-full justify-start gap-5 overflow-hidden whitespace-nowrap'>
-      {new Array(10).fill(true).map((_, itemIndex) => (
-        <div key={itemIndex} className='flex flex-col gap-2'>
-          <Skeleton h={110} w={410} />
-          <Skeleton h={16} radius='xs' />
+    <div className='flex w-full justify-center gap-5 overflow-hidden whitespace-nowrap'>
+      {new Array(5).fill(true).map((_, itemIndex) => (
+        <div key={itemIndex} className='flex flex-col gap-2 md:gap-8'>
+          <Skeleton
+            w={{ base: 90, md: 160 }}
+            h={{ base: 90, md: 160 }}
+            circle
+          />
+
           <Skeleton h={16} radius='md' w='65%' mx='auto' />
         </div>
       ))}
@@ -37,7 +39,6 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
   useEffect(() => {
     setIsEmblaInitialized(true)
   }, [])
-  const autoplay = useRef(Autoplay({ delay: 3000 }))
 
   return (
     <div className='relative px-4 sm:px-0'>
@@ -47,9 +48,6 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         </div>
       )}
       <Carousel
-        plugins={[autoplay.current]}
-        onMouseEnter={autoplay.current.stop}
-        onMouseLeave={() => autoplay.current.play()}
         emblaOptions={{
           dragFree: true,
           align: 'center',
