@@ -34,19 +34,15 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | null>(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
 
-  const emblaInit = useCallback(() => {
-    console.log('initialized')
-  }, [])
-
   useEffect(() => {
     if (!emblaApi) return
 
-    emblaApi?.on('reInit', emblaInit).on('select', (event) => {
+    emblaApi.on('select', (event) => {
       const scrollProgress = emblaApi.selectedScrollSnap()
 
       setCurrentSlideIndex(scrollProgress)
     })
-  }, [emblaApi, emblaInit])
+  }, [emblaApi])
 
   return (
     <div className='relative'>

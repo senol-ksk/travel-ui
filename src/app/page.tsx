@@ -62,8 +62,6 @@ export default async function Home() {
     (x) => x.point === 'last_opportunity'
   )
 
-  console.log(hotelPopularRegionsBtns)
-
   return (
     <div>
       <Suspense fallback={<Skeleton h={20} />}>

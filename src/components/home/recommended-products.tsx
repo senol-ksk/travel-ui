@@ -11,7 +11,6 @@ type IProps = {
 }
 
 const RecommendedProducts: React.FC<IProps> = ({ data }) => {
-  console.log(data)
   return (
     <Carousel
       slideGap='lg'
