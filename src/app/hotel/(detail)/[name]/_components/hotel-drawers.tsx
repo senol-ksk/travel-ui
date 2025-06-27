@@ -3,6 +3,8 @@ import { Drawer, Button, Title, Loader, Accordion } from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
 import { useQuery } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
+import { BiChevronRight } from 'react-icons/bi'
+import { MdBeachAccess } from 'react-icons/md'
 
 type IProps = {
   description: HotelDetailDescription
@@ -51,18 +53,46 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
   return (
     <>
       <div className='grid gap-3'>
-        {/* <div>
-          <Button
-            fullWidth
-            onClick={() => handleDrawerOpen(1)}
-            variant='white'
-            color='black'
-            size='md'
-            className='flex justify-start'
-          >
-            Plaj ve havuz
-          </Button>
-        </div> */}
+        {description?.beachPool?.trim() && (
+          <div>
+            <Button
+              fullWidth
+              onClick={() => handleDrawerOpen(1)}
+              variant='white'
+              color='black'
+              size='md'
+              className='flex justify-start'
+            >
+              <MdBeachAccess color='blue' size={20} />
+              Plaj ve havuz
+            </Button>
+
+            <div className='flex justify-between gap-5 rounded bg-white p-3'>
+              <div className='flex items-center gap-2'>
+                <div>
+                  <div
+                    className='text-sm'
+                    dangerouslySetInnerHTML={{
+                      __html: description.beachPool
+                        ? description.beachPool.substring(0, 90)
+                        : '',
+                    }}
+                  />
+                  <div className='flex items-center'>
+                    <Button
+                      className='border-0 bg-transparent p-0 font-normal text-blue-700'
+                      size='sm'
+                      onClick={() => handleDrawerOpen(1)}
+                    >
+                      Devamını Göster
+                    </Button>
+                    <BiChevronRight size={20} color='blue' />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div>
           <Button
             fullWidth
@@ -71,12 +101,13 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
             color='black'
             size='md'
             radius='md'
-            className='flex justify-start'
+            className='flex justify-start font-normal'
           >
             Kampanyalar ve Avantajlar
           </Button>
         </div>
       </div>
+
       <Drawer
         position='right'
         size='xl'

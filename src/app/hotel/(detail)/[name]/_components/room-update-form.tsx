@@ -103,8 +103,9 @@ const RoomUpdateForm = () => {
         </div>
         <div className='col-span-1'>
           <Button
-            className='h-full'
+            className='h-full px-8'
             type='submit'
+            radius='xl'
             color={isFormDirty ? 'green' : 'blue'}
             onClick={() => {
               if (!isFormDirty) {
