@@ -2,10 +2,12 @@
 
 import { Button, Container, TextInput, Title } from '@mantine/core'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from '@/libs/zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
+import { MdOutlineChevronRight } from 'react-icons/md'
 
 const schema = z.object({
   bookingCode: z.string().nonempty(),
@@ -39,28 +41,45 @@ export default function OnlineCheckInPage() {
   })
 
   return (
-    <Container className='py-4'>
+    <div>
       <Title>Online Check-in</Title>
-      <p>
+      <div className='pt-4 pb-7 text-lg md:pt-6 md:pb-9'>
         Satın aldığınız uçak biletleri için hava yolu web sitesi online check-in
         linkine kolayca yönlendirilirsiniz.
-      </p>
+      </div>
       <form
-        className='mx-auto grid max-w-3xl grid-cols-1 gap-4 pt-4 sm:grid-cols-2'
         onSubmit={form.handleSubmit((data) => {
           pnrInfoMutation.mutate(data)
         })}
       >
-        <div>
-          <TextInput label='PNR No' {...form.register('bookingCode')} />
+        <div className='mx-auto grid max-w-3xl grid-cols-1 gap-4 pt-4 sm:grid-cols-2'>
+          <div>
+            <TextInput
+              label='PNR No'
+              {...form.register('bookingCode')}
+              error={form.formState.errors.bookingCode?.message}
+              size='md'
+            />
+          </div>
+          <div>
+            <TextInput
+              label='Soyad'
+              {...form.register('surname')}
+              error={form.formState.errors.surname?.message}
+              size='md'
+            />
+          </div>
         </div>
-        <div>
-          <TextInput label='Soyad' {...form.register('surname')} />
-        </div>
-        <div className='flex justify-center sm:col-span-2'>
-          <Button type='submit'>Sorgula</Button>
+        <div className='flex justify-center pt-4 md:pt-7'>
+          <Button
+            type='submit'
+            size='lg'
+            rightSection={<MdOutlineChevronRight />}
+          >
+            Sorgula
+          </Button>
         </div>
       </form>
-    </Container>
+    </div>
   )
 }

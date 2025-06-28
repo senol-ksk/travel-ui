@@ -14,6 +14,7 @@ import {
   Menu,
   ActionIcon,
   Box,
+  UnstyledButton,
 } from '@mantine/core'
 import { FaRegUserCircle } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
@@ -89,53 +90,47 @@ export const Header = () => {
             <div className='ms-auto flex items-center gap-5'>
               <Menu>
                 <Menu.Target>
-                  <Anchor className='flex items-center gap-2'>
-                    Online İşlemler <IoIosArrowDown />
-                  </Anchor>
+                  <UnstyledButton className='flex items-center gap-2'>
+                    <div>Online İşlemler</div>
+                    <div>
+                      <IoIosArrowDown />
+                    </div>
+                  </UnstyledButton>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item>
-                    <Anchor component={Link} href='/online-operations'>
-                      Seyahatinizi Görüntüleyin
-                    </Anchor>
+                  <Menu.Item component={Link} href='/online-operations'>
+                    Seyahatinizi Görüntüleyin
                   </Menu.Item>
-                  <Menu.Item>
-                    <Anchor
-                      component={Link}
-                      href='/online-operations/cancel-flight'
-                    >
-                      Uçak İptal İade
-                    </Anchor>
+                  <Menu.Item
+                    component={Link}
+                    href='/online-operations/cancel-flight'
+                  >
+                    Uçak İptal İade
                   </Menu.Item>
-                  <Menu.Item>
-                    <Anchor component={Link} href='/online-operations/checkin'>
-                      Online Check-in
-                    </Anchor>
+                  <Menu.Item component={Link} href='/online-operations/checkin'>
+                    Online Check-in
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
               {/* Parafly alanı */}
               <Menu>
                 <Menu.Target>
-                  <Anchor className='flex items-center gap-2'>
-                    Parafly <IoIosArrowDown />
-                  </Anchor>
+                  <UnstyledButton className='flex items-center gap-2'>
+                    <div>Parafly</div>
+                    <div>
+                      <IoIosArrowDown />
+                    </div>
+                  </UnstyledButton>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item>
-                    <Anchor component={Link} href='/parafly'>
-                      ParafPara Sorgula
-                    </Anchor>
+                  <Menu.Item component={Link} href='/parafly'>
+                    ParafPara Sorgula
                   </Menu.Item>
-                  <Menu.Item>
-                    <Anchor component={Link} href='/parafly/cancel-flight'>
-                      ParafPara Hesapla
-                    </Anchor>
+                  <Menu.Item component={Link} href='/parafly/cancel-flight'>
+                    ParafPara Hesapla
                   </Menu.Item>
-                  <Menu.Item>
-                    <Anchor component={Link} href='/parafly/checkin'>
-                      Parafly Travel Nedir?
-                    </Anchor>
+                  <Menu.Item component={Link} href='/parafly/checkin'>
+                    Parafly Travel Nedir?
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>
