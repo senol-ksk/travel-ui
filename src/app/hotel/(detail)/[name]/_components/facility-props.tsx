@@ -67,9 +67,14 @@ const titleIcons: Record<string, JSX.Element> = {
 type IProps = {
   descriptions: HotelDetailDescription
   data: HotelDetailResponseHotelInfo | undefined
+  onOpenDrawer: () => void
 }
 
-const FacilityProps: React.FC<IProps> = ({ descriptions, data }) => {
+const FacilityProps: React.FC<IProps> = ({
+  descriptions,
+  data,
+  onOpenDrawer,
+}) => {
   const featureValues = Object.entries(descriptions)
   const hotelInfos = Object.entries(data ?? {})
 
@@ -87,7 +92,11 @@ const FacilityProps: React.FC<IProps> = ({ descriptions, data }) => {
         </div>
       </div>
 
-      <GeneralDrawer description={descriptions} data={data} />
+      <GeneralDrawer
+        description={descriptions}
+        data={data}
+        onOpenDrawer={onOpenDrawer}
+      />
 
       <Accordion className='grid gap-3 rounded'>
         {featureValues.map(([key, value], itemIndex) => {

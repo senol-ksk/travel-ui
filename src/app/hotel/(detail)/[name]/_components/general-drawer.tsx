@@ -1,27 +1,96 @@
-import React, { useState } from 'react'
+import React, { JSX, useState } from 'react'
 import { HotelDetailResponseHotelInfo } from '@/app/hotel/types'
-
-import { Drawer, Button, Title, TypographyStylesProvider } from '@mantine/core'
+import {
+  FaBed,
+  FaCircle,
+  FaUtensils,
+  FaHeart,
+  FaStar,
+  FaSpa,
+  FaLocationPin,
+  FaBriefcase,
+  FaSnowflake,
+  FaBellConcierge,
+} from 'react-icons/fa6'
+import {
+  FaCalendarAlt,
+  FaRegFileAlt,
+  FaRunning,
+  FaSwimmer,
+} from 'react-icons/fa'
+import { MdNotificationImportant, MdOutlineCalendarMonth } from 'react-icons/md'
+import { PiConfettiBold } from 'react-icons/pi'
+const titleTranslations = {
+  hotelInformation: 'Otel Bilgisi',
+  hotelAmenity: 'Otel Olanakları',
+  roomAmenity: 'Oda Olanakları',
+  locationInformation: 'Konum Bilgisi',
+  hotelIntroduction: 'Otel Tanıtımı',
+  attractionInformation: 'Çekim Bilgileri',
+  dining: 'Yemek Bilgileri',
+  areaAttractions: 'Bölge Çekim Alanları',
+  recreation: 'Rekreasyon',
+  policy: 'Politikalar',
+  spa: 'Spa Bilgileri',
+  whatToExpect: 'Beklentiler',
+  businessAmenities: 'İşletme Olanakları',
+  beachPool: 'Plaj ve Havuz',
+  honeymoonInformation: 'Balayı Bilgileri',
+  specialDays: 'Özel Günler',
+  activities: 'Aktiviteler',
+  importentInfo: 'Önemli Bilgiler',
+}
+const titleIcons: Record<string, JSX.Element> = {
+  hotelInformation: <FaBellConcierge />,
+  hotelAmenity: <FaStar />,
+  roomAmenity: <FaBed />,
+  locationInformation: <FaLocationPin />,
+  hotelIntroduction: <FaCircle />,
+  attractionInformation: <FaCalendarAlt />,
+  dining: <FaUtensils />,
+  areaAttractions: <MdOutlineCalendarMonth />,
+  recreation: <FaRunning />,
+  policy: <FaRegFileAlt />,
+  spa: <FaSpa />,
+  whatToExpect: <FaCircle />,
+  businessAmenities: <FaBriefcase />,
+  beachPool: <FaSwimmer />,
+  honeymoonInformation: <FaHeart />,
+  specialDays: <PiConfettiBold />,
+  activities: <FaRunning />,
+  importentInfo: <MdNotificationImportant />,
+}
+import {
+  Drawer,
+  Button,
+  Title,
+  TypographyStylesProvider,
+  Tabs,
+  Accordion,
+} from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
-import { useDisclosure, useElementSize } from '@mantine/hooks'
+import { useElementSize } from '@mantine/hooks'
 import { MdKeyboardArrowRight, MdOutlineBed } from 'react-icons/md'
 import { FaDoorOpen, FaGlassMartiniAlt, FaRegBuilding } from 'react-icons/fa'
-import { LuScan } from 'react-icons/lu'
-import { FaBellConcierge } from 'react-icons/fa6'
+import { MainDrawer } from './main-drawer'
 
 type IProps = {
   description: HotelDetailDescription
   data: HotelDetailResponseHotelInfo | undefined
+  onOpenDrawer: () => void
 }
 
-const GeneralDrawer: React.FC<IProps> = ({ description, data }) => {
+const GeneralDrawer: React.FC<IProps> = ({
+  description,
+  data,
+  onOpenDrawer,
+}) => {
   const { ref: generalInfoContentRef, height: generalInfoContentHeight } =
     useElementSize()
   const GENERAL_INFO_MAX_HEIGHT = 150
-  const [
-    generalInfoDrawerOpened,
-    { open: openGeneralInfoDrawer, close: closeGeneralInfoDrawer },
-  ] = useDisclosure(false)
+
+  const featureValues = Object.entries(description)
+  if (featureValues.length === 0) return null
 
   return (
     <>
@@ -88,7 +157,7 @@ const GeneralDrawer: React.FC<IProps> = ({ description, data }) => {
                   </div>
                 </li>
               )}
-              {data?.hotel.nr_bars && (
+              {data?.hotel.nr_bars && data?.hotel.nr_bars > 0 && (
                 <li className='flex items-center gap-3 rounded border bg-gray-200 p-1 px-4'>
                   <FaGlassMartiniAlt size={24} className='text-blue-700' />
                   <div className='grid gap-0'>
@@ -97,7 +166,7 @@ const GeneralDrawer: React.FC<IProps> = ({ description, data }) => {
                   </div>
                 </li>
               )}
-              {data?.hotel.nr_halls && (
+              {data?.hotel.nr_halls && data?.hotel.nr_halls > 0 && (
                 <li className='flex items-center gap-3 rounded border bg-gray-200 p-1 px-4'>
                   <FaDoorOpen size={24} className='text-blue-700' />
                   <div className='grid gap-0'>
@@ -130,7 +199,7 @@ const GeneralDrawer: React.FC<IProps> = ({ description, data }) => {
 
           {generalInfoContentHeight > GENERAL_INFO_MAX_HEIGHT && (
             <Button
-              onClick={openGeneralInfoDrawer}
+              onClick={onOpenDrawer}
               className='bg-transparent p-0 font-normal text-blue-700'
             >
               Tesisin tüm olanaklarını görün
@@ -139,23 +208,7 @@ const GeneralDrawer: React.FC<IProps> = ({ description, data }) => {
           )}
         </div>
       ) : null}
-      {description && description.hotelInformation && (
-        <Drawer
-          opened={generalInfoDrawerOpened}
-          onClose={closeGeneralInfoDrawer}
-          title='Genel Bilgiler'
-          position='right'
-          size='xl'
-        >
-          <TypographyStylesProvider>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: description.hotelInformation.trim(),
-              }}
-            />
-          </TypographyStylesProvider>
-        </Drawer>
-      )}
+      {/* <MainDrawer description={description} data={data} /> */}
     </>
   )
 }

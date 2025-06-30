@@ -18,6 +18,7 @@ import {
   Text,
   Divider,
   Drawer,
+  Tabs,
 } from '@mantine/core'
 import { IoMapOutline } from 'react-icons/io5'
 import { Link } from 'next-view-transitions'
@@ -49,6 +50,7 @@ import { RoomUpdateForm } from './_components/room-update-form'
 import { HotelTableOfContents } from './_components/table-of-contents'
 import { FacilityProps } from './_components/facility-props'
 import { GeneralDrawer } from './_components/general-drawer'
+
 import { Comments } from './_components/comments'
 import { Location } from './_components/location'
 import { HotelDrawers } from './_components/hotel-drawers'
@@ -57,6 +59,8 @@ import { IconCheckIn, IconCheckOut } from './_components/icons'
 import { HotelMediaGallery } from './_components/media-gallery/media-gallery'
 import { HotelSearchEngine } from '@/modules/hotel'
 import { RiMapPin2Line } from 'react-icons/ri'
+import { CommentsDrawer } from './_components/comments-drawer'
+import { MainDrawer } from './_components/main-drawer'
 
 const HotelDetailSection = () => {
   const router = useRouter()
@@ -412,23 +416,12 @@ const HotelDetailSection = () => {
             <HotelDrawers description={hotel.descriptions} />
           </div>
         </div>
-        {hotel.descriptions && hotel.descriptions.hotelInformation && (
-          <Drawer
-            opened={generalInfoDrawerOpened}
-            onClose={closeGeneralInfoDrawer}
-            title='Genel Bilgiler'
-            position='right'
-            size='xl'
-          >
-            <TypographyStylesProvider>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: hotel.descriptions.hotelInformation.trim(),
-                }}
-              />
-            </TypographyStylesProvider>
-          </Drawer>
-        )}
+        <MainDrawer
+          opened={generalInfoDrawerOpened}
+          onClose={closeGeneralInfoDrawer}
+          data={hotelInfo}
+          description={hotel.descriptions}
+        />
         <Title fz={'xxl'} id='rooms'>
           Odalar
         </Title>
@@ -541,7 +534,11 @@ const HotelDetailSection = () => {
           Tesis Bilgileri
         </Title>
         <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
-          <FacilityProps descriptions={hotel.descriptions} data={hotelInfo} />
+          <FacilityProps
+            descriptions={hotel.descriptions}
+            data={hotelInfo}
+            onOpenDrawer={openGeneralInfoDrawer}
+          />
         </div>
 
         {(hotel.comment_info?.comments?.length ?? 0) > 0 && (
@@ -561,7 +558,7 @@ const HotelDetailSection = () => {
                   <Button
                     className='border-0 bg-transparent p-0 font-normal text-blue-700'
                     size='sm'
-                    onClick={() => scrollIntoRatings()}
+                    onClick={openGeneralInfoDrawer}
                   >
                     {hotel.comment_info?.comments?.length ?? 0} değerlendirme
                   </Button>
