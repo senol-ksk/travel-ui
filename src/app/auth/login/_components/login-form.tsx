@@ -1,7 +1,7 @@
 'use client'
 
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from '@/libs/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Alert, Button, PasswordInput, TextInput } from '@mantine/core'
 import { signIn, useSession } from 'next-auth/react'
