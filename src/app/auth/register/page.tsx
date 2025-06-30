@@ -9,7 +9,7 @@ import {
   PasswordInput,
   Checkbox,
 } from '@mantine/core'
-import { Controller, Form, useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
@@ -62,7 +62,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <Container size={600}>
+    <Container
+      size={600}
+      py={{
+        base: 'md',
+        md: 'xl',
+      }}
+    >
       <form
         onSubmit={form.handleSubmit((data) => {
           console.log(data)
@@ -73,6 +79,7 @@ export default function RegisterPage() {
           <div>
             <TextInput
               {...form.register('name')}
+              label='Ad'
               error={form.formState.errors.name?.message}
               autoComplete='given-name'
             />
@@ -80,12 +87,14 @@ export default function RegisterPage() {
           <div>
             <TextInput
               {...form.register('surname')}
+              label='Soyad'
               error={form.formState.errors.surname?.message}
               autoComplete='family-name'
             />
           </div>
           <div className='col-span-2'>
             <TextInput
+              label='E-posta'
               type='email'
               {...form.register('email')}
               error={form.formState.errors.email?.message}
@@ -94,6 +103,7 @@ export default function RegisterPage() {
           </div>
           <div className='col-span-2'>
             <Input.Wrapper>
+              <Input.Label>Cep Telefonu</Input.Label>
               <div
                 className='m_6c018570 mantine-Input-wrapper'
                 data-variant='default'
@@ -152,15 +162,17 @@ export default function RegisterPage() {
               )}
             </Input.Wrapper>
           </div>
-          <div className='col-span-2'>
+          <div>
             <PasswordInput
               {...form.register('password')}
+              label='Şifre'
               error={form.formState.errors.password?.message}
             />
           </div>
-          <div className='col-span-2'>
+          <div>
             <PasswordInput
               {...form.register('passwordRepeat')}
+              label='Şifre Tekrar'
               error={form.formState.errors.password?.message}
             />
           </div>
