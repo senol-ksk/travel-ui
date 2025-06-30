@@ -2,9 +2,12 @@
 
 import { Button, Container, TextInput, Title } from '@mantine/core'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from '@/libs/zod'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+import { MdOutlineChevronRight } from 'react-icons/md'
+
 import { serviceRequest } from '@/network'
 import { OperationResultWithBookingCodeResponse } from './types'
 
@@ -36,12 +39,21 @@ export default function OnlineOperationsPage() {
   })
 
   return (
-    <Container py={'md'}>
-      <Title fz={'xl'}>Seyahatinizi Görüntüleyin</Title>
-      <p>
+    <div>
+      <Title
+        fz={{
+          base: 'h3',
+          md: 'h1',
+        }}
+      >
+        Seyahatinizi Görüntüleyin
+      </Title>
+
+      <div className='text-md pt-4 pb-7 md:pt-6 md:pb-9 md:text-lg'>
         Yapmış olduğunuz tüm rezervasyonlarınıza ait detayları, bu alandan
         görüntüleyebilirsiniz.
-      </p>
+      </div>
+
       <form
         onSubmit={form.handleSubmit((data) => {
           handleMutation.mutate(data)
@@ -53,6 +65,7 @@ export default function OnlineOperationsPage() {
               label='PNR No'
               {...form.register('bookingCode')}
               error={form.formState.errors.bookingCode?.message}
+              size={'md'}
             />
           </div>
           <div>
@@ -60,6 +73,7 @@ export default function OnlineOperationsPage() {
               label='Ad'
               {...form.register('firstName')}
               error={form.formState.errors.firstName?.message}
+              size={'md'}
             />
           </div>
           <div>
@@ -67,15 +81,21 @@ export default function OnlineOperationsPage() {
               label='Soyad'
               {...form.register('lastName')}
               error={form.formState.errors.lastName?.message}
+              size={'md'}
             />
           </div>
         </div>
-        <div className='flex justify-center pt-4'>
-          <Button type='submit' loading={handleMutation.isPending}>
-            Devam et
+        <div className='flex justify-center pt-4 md:pt-7'>
+          <Button
+            type='submit'
+            size='lg'
+            loading={handleMutation.isPending}
+            rightSection={<MdOutlineChevronRight />}
+          >
+            Görüntüle
           </Button>
         </div>
       </form>
-    </Container>
+    </div>
   )
 }

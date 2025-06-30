@@ -400,6 +400,18 @@ export type Widgets = {
     time: {
       value: string
     }
+    destinations: {
+      destinations: {
+        id: ID
+        name: string
+        slug: string
+        code: string | null
+        iata: null
+        typeId: ID
+        domestic: boolean
+      }[]
+      value: ''
+    } | null
   }
   ordering: number
   language: string
