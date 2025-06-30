@@ -1,8 +1,7 @@
 'use client'
 
-import { Button, Container, TextInput, Title } from '@mantine/core'
+import { Button, TextInput, Title } from '@mantine/core'
 import { useForm } from 'react-hook-form'
-import { z } from '@/libs/zod'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -10,22 +9,22 @@ import { MdOutlineChevronRight } from 'react-icons/md'
 
 import { serviceRequest } from '@/network'
 import { OperationResultWithBookingCodeResponse } from './types'
-
-const schema = z.object({
-  firstName: z.string().min(3).nonempty(),
-  lastName: z.string().min(3).nonempty(),
-  bookingCode: z.string().nonempty().min(3),
-})
-
-type SchemaType = z.infer<typeof schema>
+import {
+  operationResultFormSchema,
+  OperationResultFormSchemaType,
+  operationResultParams,
+} from '@/libs/onlineOperations/searchParams'
+import { createSerializer } from 'nuqs'
+import { useTransitionRouter } from 'next-view-transitions'
 
 export default function OnlineOperationsPage() {
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(operationResultFormSchema),
   })
+  const router = useTransitionRouter()
 
   const handleMutation = useMutation({
-    mutationFn: async (data: SchemaType) => {
+    mutationFn: async (data: OperationResultFormSchemaType) => {
       const response =
         await serviceRequest<OperationResultWithBookingCodeResponse>({
           axiosOptions: {
@@ -35,7 +34,24 @@ export default function OnlineOperationsPage() {
         })
       return response
     },
-    mutationKey: ['result-mutation'],
+    mutationKey: ['booking-result-mutation'],
+    onSuccess(query) {
+      if (
+        query?.success &&
+        query.data?.productDataViewResponser &&
+        query.data?.productDataViewResponser?.dataViewResponsers?.length > 0
+      ) {
+        const moduleName =
+          query.data?.productDataViewResponser?.dataViewResponsers[0].summaryResponse.moduleName.toLocaleLowerCase()
+        const resultUrlSerializer = createSerializer(operationResultParams)
+        const resultUrl = resultUrlSerializer(`order-details/${moduleName}`, {
+          bookingCode: form.getValues('bookingCode').toLocaleLowerCase(),
+          firstName: form.getValues('firstName').toLocaleLowerCase(),
+          lastName: form.getValues('lastName').toLocaleLowerCase(),
+        })
+        router.push(resultUrl)
+      }
+    },
   })
 
   return (

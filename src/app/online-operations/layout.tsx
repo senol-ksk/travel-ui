@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { OnlineOperationButtonLinks } from './_componets/links'
+import { OnlineOperationButtonLinks } from './_components/links'
 import { Container, ScrollArea } from '@mantine/core'
 
 export default function OnlineOperationsLayout({
