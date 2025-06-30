@@ -2,6 +2,7 @@ import { HotelCommentInfo } from '@/app/hotel/types'
 import { Carousel } from '@mantine/carousel'
 import { Card, Badge, Text, Group, Divider } from '@mantine/core'
 import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
 
 type IProps = {
   data: HotelCommentInfo
@@ -9,11 +10,24 @@ type IProps = {
 
 const Comments: React.FC<IProps> = ({ data }) => {
   const { comments } = data
+  const [slideSize, setSlideSize] = useState('100%')
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSlideSize(window.innerWidth >= 768 ? '30%' : '100%')
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
-    <div className=''>
+    <div>
       <Carousel
         withIndicators
-        slideSize='30%'
+        slideSize={slideSize}
         slideGap='md'
         emblaOptions={{ align: 'start' }}
       >
