@@ -38,11 +38,12 @@ export default function OnlineOperationsPage() {
     onSuccess(query) {
       if (
         query?.success &&
-        query.data?.productDataViewResponser &&
-        query.data?.productDataViewResponser?.dataViewResponsers?.length > 0
+        query.data?.operationResultWithBookingCode.productDataViewResponser &&
+        query.data?.operationResultWithBookingCode.productDataViewResponser
+          ?.dataViewResponsers?.length > 0
       ) {
         const moduleName =
-          query.data?.productDataViewResponser?.dataViewResponsers[0].summaryResponse.moduleName.toLocaleLowerCase()
+          query.data?.operationResultWithBookingCode.productDataViewResponser?.dataViewResponsers[0].summaryResponse.moduleName.toLocaleLowerCase()
         const resultUrlSerializer = createSerializer(operationResultParams)
         const resultUrl = resultUrlSerializer(`order-details/${moduleName}`, {
           bookingCode: form.getValues('bookingCode').toLocaleLowerCase(),

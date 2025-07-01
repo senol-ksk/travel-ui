@@ -1,13 +1,24 @@
 export type OperationResultWithBookingCodeResponse = {
-  productDataViewResponser: {
-    dataViewResponsers:
-      | CarBookingDetailApiResponse
-      | HotelBookingDetailApiResponse
+  hotelCancelWarrantyPriceStatus: {
+    selectingCancelWarranty: boolean
+    hasHotelWarranty: boolean
+    cancelWarrantyPrice: number
+    hotelWarrantyDiscountSelected: boolean
     totalPrice: number
-    totalPriceCurrency: number
+    dayCount: number
+    couponActive: boolean
+  } | null
+  operationResultWithBookingCode: {
+    productDataViewResponser: {
+      dataViewResponsers:
+        | CarBookingDetailApiResponse
+        | HotelBookingDetailApiResponse
+      totalPrice: number
+      totalPriceCurrency: number
+    }
+    flightETicketViewDataModel: null
+    flightTicketNumber: string | null
   }
-  flightETicketViewDataModel: null
-  flightTicketNumber: string | null
 }
 
 export type CarBookingDetailApiResponse = [

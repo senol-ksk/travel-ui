@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
+import cardValidation from 'card-validator'
 
 import NextImage from 'next/image'
 import { GrAmex } from 'react-icons/gr'
@@ -27,8 +28,7 @@ import { useMutation } from '@tanstack/react-query'
 import { range, upperFirst, useDisclosure } from '@mantine/hooks'
 import clsx from 'clsx'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import cardValidation from 'card-validator'
+
 import { formatCreditCard } from 'cleave-zen'
 import NumberFlow from '@number-flow/react'
 import { RiCheckboxCircleFill, RiVisaLine } from 'react-icons/ri'
@@ -53,38 +53,21 @@ import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
 import { ParafParaView } from '../../components/paraf'
 
 import paymentSegmentClasses from '@/styles/PaymentMethodSegment.module.css'
+import {
+  CardValidationSchemaTypes,
+  paymentValidationSchema,
+} from '@/libs/credit-card-utils'
 
-let cardCvvLength = 3
 enum PaymentMethodEnums {
   CreditCard,
   Bonus,
 }
-
-const paymentValidationSchema = z.object({
-  cardOwner: z.string().min(3).max(50),
-  cardNumber: z
-    .string()
-    .optional()
-    .refine((value) => {
-      cardCvvLength = cardValidation.number(value).card?.code.size || 3
-
-      return cardValidation.number(value).isValid
-    }, 'Gecersiz Kart Numarası'),
-  cardExpiredMonth: z.string(),
-  cardExpiredYear: z.string(),
-  cardCvv: z.string().refine((val) => {
-    return val.length === cardCvvLength
-  }),
-  installment: z.string().default('1'),
-})
 
 const cardExpiredYearList = () =>
   yearList(dayjs().get('year'), dayjs().get('year') + 20).map((year) => ({
     label: '' + year,
     value: '' + year,
   }))
-
-export type CardValidationSchemaTypes = z.infer<typeof paymentValidationSchema>
 
 const cardMonths = () =>
   range(1, 12).map((month) => {
