@@ -178,32 +178,30 @@ const HotelRoom: React.FC<IProps> = ({
                         .at(0)?.optionDate
                     ).format('DD.MM.YYYY')}{' '}
                     tarihine kadar
-                    {roomGroup.nonRefundable && (
-                      <Tooltip
-                        label={
-                          !roomGroup.nonRefundable && (
-                            <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
-                              {roomGroup.cancellationPolicies
-                                .sort((a, b) => {
-                                  return (
-                                    new Date(a.optionDate).getDate() -
-                                    new Date(b.optionDate).getDate()
-                                  )
-                                })
-                                .map((cancelPolicy, cancelPolicyIndex) => (
-                                  <div key={cancelPolicyIndex}>
-                                    {cancelPolicy.description}
-                                  </div>
-                                ))}
-                            </div>
-                          )
-                        }
-                      >
-                        <span>
-                          <IoMdInformationCircleOutline />
-                        </span>
-                      </Tooltip>
-                    )}
+                    <Tooltip
+                      label={
+                        !roomGroup.nonRefundable && (
+                          <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
+                            {roomGroup.cancellationPolicies
+                              .sort((a, b) => {
+                                return (
+                                  new Date(a.optionDate).getDate() -
+                                  new Date(b.optionDate).getDate()
+                                )
+                              })
+                              .map((cancelPolicy, cancelPolicyIndex) => (
+                                <div key={cancelPolicyIndex}>
+                                  {cancelPolicy.description}
+                                </div>
+                              ))}
+                          </div>
+                        )
+                      }
+                    >
+                      <span>
+                        <IoMdInformationCircleOutline />
+                      </span>
+                    </Tooltip>
                   </div>
                 )}
                 {hasCancelWarranty && (

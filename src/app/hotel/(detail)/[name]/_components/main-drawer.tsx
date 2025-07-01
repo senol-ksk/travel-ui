@@ -67,8 +67,8 @@ import {
   Accordion,
 } from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
-import { useDisclosure } from '@mantine/hooks'
 import { CommentsDrawer } from './comments-drawer'
+import { IoClose } from 'react-icons/io5'
 
 type IProps = {
   description: HotelDetailDescription
@@ -94,12 +94,12 @@ const MainDrawer: React.FC<IProps> = ({
             opened={opened}
             onClose={onClose}
             title={
-              <div className='flex items-center'>
+              <div className='mb-4 flex items-center border-b pb-2'>
                 <button
                   onClick={onClose}
-                  className='rounded-full bg-gray-200 p-2 text-gray-700'
+                  className='rounded-full bg-red-800 p-2 text-white'
                 >
-                  ❌
+                  <IoClose color='white' />
                 </button>
               </div>
             }
@@ -111,13 +111,23 @@ const MainDrawer: React.FC<IProps> = ({
             }}
           >
             <div className='flex gap-5'>
-              <Tabs defaultValue='gallery'>
+              <Tabs defaultValue='facilityInfos'>
                 <Tabs.List className='text-3xl font-bold'>
-                  <Tabs.Tab value='gallery'> Tesis Bilgileri</Tabs.Tab>
-                  <Tabs.Tab value='messages'> Yorumlar</Tabs.Tab>
+                  <Tabs.Tab
+                    value='facilityInfos'
+                    className='text-2xl font-bold'
+                  >
+                    Tesis Bilgileri
+                  </Tabs.Tab>
+                  <Tabs.Tab
+                    value='drawerComments'
+                    className='text-2xl font-bold'
+                  >
+                    Yorumlar
+                  </Tabs.Tab>
                 </Tabs.List>
 
-                <Tabs.Panel value='gallery' className='p-4'>
+                <Tabs.Panel value='facilityInfos' className='p-4'>
                   <div className='grid gap-3'>
                     <div className='flex'>
                       <div className='leading-lg inline-flex items-center gap-3 rounded-md bg-gray-200 px-3 py-2'>
@@ -176,7 +186,7 @@ const MainDrawer: React.FC<IProps> = ({
                   </div>
                 </Tabs.Panel>
 
-                <Tabs.Panel value='messages'>
+                <Tabs.Panel value='drawerComments'>
                   {' '}
                   {data?.hotel.comment_info && (
                     <div>
