@@ -277,7 +277,7 @@ const HotelDetailSection = () => {
               <div className='my-5 flex items-center gap-20 text-sm text-blue-800'>
                 <div className='flex gap-1'>
                   <span>
-                    <RiMapPin2Line size={20} color='blue' />
+                    <RiMapPin2Line size={20} className='text-blue-800' />
                   </span>
                   <span>{hotel.destination}</span>
                 </div>
@@ -425,7 +425,7 @@ const HotelDetailSection = () => {
         <Title fz={'xxl'} id='rooms'>
           Odalar
         </Title>
-        <div className='rounded-sm border border-gray-300 p-3'>
+        <div className='rounded-sm border p-3'>
           <RoomUpdateForm />
         </div>
         {/* {selectedRoomMutation.data?.data?.status.length &&

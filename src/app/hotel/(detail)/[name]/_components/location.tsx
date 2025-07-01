@@ -31,13 +31,13 @@ const Location: React.FC<LocationProps> = ({ location, data }) => {
           {data?.hotel?.descriptions?.locationInformation?.trim() &&
             data?.hotel?.descriptions?.locationInformation?.trim().length >
               0 && (
-              <div className='col-4 p-3'>
+              <div className='col-auto p-3'>
                 <div className='font-bold'>Yerleşim Merkezi</div>
                 <div>{data.hotel.descriptions.locationInformation.trim()}</div>
               </div>
             )}
           {data?.hotel?.nearby_info && data?.hotel?.nearby_info.length > 0 && (
-            <div className='col-4 p-3'>
+            <div className='col-auto p-3'>
               <div className='font-bold'>Yerleşim Merkezi</div>
               <div>
                 {data.hotel.nearby_info.map((item, index) => (
@@ -49,7 +49,7 @@ const Location: React.FC<LocationProps> = ({ location, data }) => {
             </div>
           )}
           {data?.hotel?.nearby && data?.hotel?.nearby.length > 0 && (
-            <div className='col-4 p-3'>
+            <div className='col-auto p-3'>
               <div className='font-bold'>Yerleşim Merkezi</div>
               <div>{data.hotel.nearby}</div>
             </div>

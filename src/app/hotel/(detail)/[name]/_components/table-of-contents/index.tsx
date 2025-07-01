@@ -23,7 +23,7 @@ function HotelTableOfContents() {
         })}
       />
       <Button size='sm' radius='md' className='m-3 px-13'>
-        Odalar
+        Odaları Gör
       </Button>
     </>
   )

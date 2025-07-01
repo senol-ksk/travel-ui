@@ -25,6 +25,7 @@ import { PiAngle, PiCoffee } from 'react-icons/pi'
 import { FaCheck } from 'react-icons/fa'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import { HiPercentBadge } from 'react-icons/hi2'
+import { IoClose } from 'react-icons/io5'
 
 type IProps = {
   roomGroup: HotelDetailRoomItem
@@ -88,32 +89,58 @@ const HotelRoom: React.FC<IProps> = ({
           <>
             {/* <input value={JSON.stringify(roomGroup, null, 2)} readOnly /> */}
             <div
-              className='grid gap-2 p-3 lg:gap-3 xl:grid-cols-12'
+              className='grid gap-7 p-3 lg:gap-6 xl:grid-cols-12'
               key={room.key}
             >
-              <div className='xl:col-span-3 2xl:row-span-2'>
-                <AspectRatio>
+              <div className='relative xl:col-span-4 2xl:row-span-2'>
+                <AspectRatio ratio={4 / 3} className='w-full max-w-md'>
                   <Image
                     loading='lazy'
                     fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
                     src={images?.at(0)}
                     alt={detail.roomType}
-                    className='h-full cursor-pointer rounded'
+                    className='h-full w-full cursor-pointer rounded'
                     onClick={() => setDrawerOpened(true)}
                   />
                 </AspectRatio>
+                <Button
+                  className='absolute right-0 bottom-0 m-2'
+                  radius='md'
+                  onClick={() => setDrawerOpened(true)}
+                >
+                  Odayı İncele
+                </Button>
               </div>
-              <div className='2xl:col-span-7'>
-                <Title order={5} size={'xl'}>
+              <div className='2xl:col-span-6'>
+                <Title order={5} className='text-2xl'>
                   {detail.roomType}
                 </Title>
 
                 <Drawer
-                  position='right'
                   opened={drawerOpened}
                   onClose={() => setDrawerOpened(false)}
-                  title={detail.roomType}
-                  size='md'
+                  title={
+                    <div className='flex items-center gap-3'>
+                      <button
+                        onClick={() => setDrawerOpened(false)}
+                        className='rounded-r-xl bg-red-800 p-2 px-5 text-white'
+                      >
+                        <IoClose color='white' />
+                      </button>
+                      <div className='text-2xl font-bold'>
+                        {detail.roomType}
+                      </div>
+                    </div>
+                  }
+                  position='right'
+                  size='xl'
+                  radius='sm'
+                  closeButtonProps={{
+                    style: { display: 'none' },
+                  }}
+                  classNames={{
+                    header: 'p-0',
+                  }}
                 >
                   {
                     <div>
@@ -122,7 +149,7 @@ const HotelRoom: React.FC<IProps> = ({
                         fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
                         src={images?.at(0)}
                         alt={detail.roomType}
-                        className='mb-6 h-full max-h-52 rounded pb-6'
+                        className='relative mb-6 h-full max-h-52 rounded pb-6'
                       />
 
                       {detail.size > 0 && (
@@ -161,7 +188,14 @@ const HotelRoom: React.FC<IProps> = ({
                     </div>
                   )}
                 </div>
-                {themesPriceDiff && <div>Fiyat Farkı İade Garantisi</div>}
+                {themesPriceDiff && (
+                  <div className='flex items-center gap-1'>
+                    <div className='text-green flex items-center font-semibold'>
+                      <FaCheck size={15} className='mr-2' />
+                      <div>Fiyat Farkı İade Garantisi</div>
+                    </div>
+                  </div>
+                )}
                 {!roomGroup.nonRefundable && !isCancelWarrantyChecked && (
                   <div className='flex items-center gap-1'>
                     <span className='text-green flex items-center font-semibold'>
@@ -178,30 +212,32 @@ const HotelRoom: React.FC<IProps> = ({
                         .at(0)?.optionDate
                     ).format('DD.MM.YYYY')}{' '}
                     tarihine kadar
-                    <Tooltip
-                      label={
-                        !roomGroup.nonRefundable && (
-                          <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
-                            {roomGroup.cancellationPolicies
-                              .sort((a, b) => {
-                                return (
-                                  new Date(a.optionDate).getDate() -
-                                  new Date(b.optionDate).getDate()
-                                )
-                              })
-                              .map((cancelPolicy, cancelPolicyIndex) => (
-                                <div key={cancelPolicyIndex}>
-                                  {cancelPolicy.description}
-                                </div>
-                              ))}
-                          </div>
-                        )
-                      }
-                    >
-                      <span>
-                        <IoMdInformationCircleOutline />
-                      </span>
-                    </Tooltip>
+                    {roomGroup.cancellationPolicies?.length > 1 && (
+                      <Tooltip
+                        label={
+                          !roomGroup.nonRefundable && (
+                            <div className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'>
+                              {roomGroup.cancellationPolicies
+                                .sort((a, b) => {
+                                  return (
+                                    new Date(a.optionDate).getDate() -
+                                    new Date(b.optionDate).getDate()
+                                  )
+                                })
+                                .map((cancelPolicy, cancelPolicyIndex) => (
+                                  <div key={cancelPolicyIndex}>
+                                    {cancelPolicy.description}
+                                  </div>
+                                ))}
+                            </div>
+                          )
+                        }
+                      >
+                        <span>
+                          <IoMdInformationCircleOutline />
+                        </span>
+                      </Tooltip>
+                    )}
                   </div>
                 )}
                 {hasCancelWarranty && (
@@ -234,7 +270,7 @@ const HotelRoom: React.FC<IProps> = ({
                 )}
               </div>
               {isLastItem && (
-                <div className='item-center grid justify-center self-end 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
+                <div className='item-center m-2 grid justify-center self-end 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
                   <div>
                     <div>
                       {discountRate > 0 && (
@@ -260,28 +296,29 @@ const HotelRoom: React.FC<IProps> = ({
                         />
                       </div>
                     </div>
-                    <div className='grid'>
+                  </div>
+                  <div>
+                    <Button
+                      className='p-2'
+                      size='lg'
+                      type='button'
+                      fullWidth
+                      radius={'md'}
+                      onClick={() => onSelect(roomGroup)}
+                    >
+                      Rezervasyon Yap
+                    </Button>
+                    <div>
                       <Button
-                        size='md'
-                        type='button'
+                        className='font-medium'
                         fullWidth
-                        radius={'md'}
-                        onClick={() => onSelect(roomGroup)}
+                        type='button'
+                        size='sm'
+                        variant='white'
+                        onClick={() => onInstallmentClick(roomGroup)}
                       >
-                        Rezervasyon Yap
+                        Taksit Seçenekleri
                       </Button>
-                      <div>
-                        <Button
-                          className='font-medium'
-                          fullWidth
-                          type='button'
-                          size='sm'
-                          variant='white'
-                          onClick={() => onInstallmentClick(roomGroup)}
-                        >
-                          Taksit Seçenekleri
-                        </Button>
-                      </div>
                     </div>
                   </div>
                 </div>
