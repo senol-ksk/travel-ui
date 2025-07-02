@@ -23,6 +23,7 @@ import { PopularDestinations } from '@/components/home/popular-destinations'
 import { EbultenForm } from '@/components/home/ebulten-form'
 import { MainBannerCarousel } from '@/components/main-banner'
 import { Link } from 'next-view-transitions'
+import { _size } from 'zod/v4/core'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -71,15 +72,25 @@ export default async function Home() {
           </Title>
           <Image
             component={NextImage}
-            src='https://ykmturizm.mncdn.com/11/Files/638575144464859102.jpg'
+            src='https://ykmturizm.mncdn.com/11/Files/638737370698225204.jpg'
             fill
             alt='Fulltrip'
             priority
             className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
+            style={{
+              clipPath: 'ellipse(90% 90% at 50% 00%)',
+            }}
           />
-          <div className='md:py-20'>
-            <Container className='px-0 md:px-4'>
-              <div className='bg-white md:rounded-lg md:border'>
+          <div>
+            <Container className='px-0 md:px-4 md:pt-[58px]'>
+              <Title
+                className='text-center font-medium text-white md:mb-10'
+                style={{ fontSize: '32px' }}
+              >
+                Parafly ile ParafPara&apos;ların keyfini çıkarın!
+              </Title>
+
+              <div className='z-50 bg-white md:rounded-lg md:border'>
                 <SearchEngine />
               </div>
             </Container>
@@ -88,7 +99,7 @@ export default async function Home() {
       </Suspense>
 
       {dealsOfWeekData && (
-        <div className='py-3 md:py-8'>
+        <div className='mt-3 py-3 md:py-8'>
           <StorySlider data={dealsOfWeekData} />
         </div>
       )}

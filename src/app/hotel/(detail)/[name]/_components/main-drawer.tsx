@@ -14,11 +14,18 @@ import {
 } from 'react-icons/fa6'
 import {
   FaCalendarAlt,
+  FaDoorOpen,
+  FaGlassMartiniAlt,
+  FaRegBuilding,
   FaRegFileAlt,
   FaRunning,
   FaSwimmer,
 } from 'react-icons/fa'
-import { MdNotificationImportant, MdOutlineCalendarMonth } from 'react-icons/md'
+import {
+  MdNotificationImportant,
+  MdOutlineBed,
+  MdOutlineCalendarMonth,
+} from 'react-icons/md'
 import { PiConfettiBold } from 'react-icons/pi'
 const titleTranslations = {
   hotelInformation: 'Otel Bilgisi',
@@ -65,10 +72,12 @@ import {
   TypographyStylesProvider,
   Tabs,
   Accordion,
+  Spoiler,
+  Title,
 } from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
-import { useDisclosure } from '@mantine/hooks'
 import { CommentsDrawer } from './comments-drawer'
+import { IoClose } from 'react-icons/io5'
 
 type IProps = {
   description: HotelDetailDescription
@@ -97,45 +106,188 @@ const MainDrawer: React.FC<IProps> = ({
               <div className='flex items-center'>
                 <button
                   onClick={onClose}
-                  className='rounded-full bg-gray-200 p-2 text-gray-700'
+                  className='rounded-r-xl bg-red-800 p-2 px-5 text-white'
                 >
-                  ❌
+                  <IoClose color='white' />
                 </button>
               </div>
             }
             position='right'
             size='xl'
-            className='border-gray-300 p-3'
+            radius='sm'
             closeButtonProps={{
               style: { display: 'none' },
             }}
+            classNames={{
+              header: 'p-0',
+            }}
           >
             <div className='flex gap-5'>
-              <Tabs defaultValue='gallery'>
-                <Tabs.List className='text-3xl font-bold'>
-                  <Tabs.Tab value='gallery'> Tesis Bilgileri</Tabs.Tab>
-                  <Tabs.Tab value='messages'> Yorumlar</Tabs.Tab>
+              <Tabs
+                defaultValue='facilityInfos'
+                classNames={{
+                  tab: 'border-b-5 rounded p-3',
+                  tabSection: 'hidden sm:flex',
+                  tabLabel: 'flex-none',
+                }}
+              >
+                <Tabs.List className='text-2xl font-bold'>
+                  <Tabs.Tab
+                    value='facilityInfos'
+                    className='text-2xl font-bold'
+                  >
+                    Tesis Bilgileri
+                  </Tabs.Tab>
+                  {(data?.hotel.comment_info?.comments?.length ?? 0) > 0 && (
+                    <Tabs.Tab
+                      value='drawerComments'
+                      className='text-2xl font-bold'
+                    >
+                      Yorumlar
+                    </Tabs.Tab>
+                  )}
                 </Tabs.List>
 
-                <Tabs.Panel value='gallery' className='p-4'>
-                  <div className='grid gap-3'>
-                    <div className='flex'>
-                      <div className='leading-lg inline-flex items-center gap-3 rounded-md bg-gray-200 px-3 py-2'>
-                        <FaSnowflake />
-                        <div>
-                          <div className='font-semibold'>Kış Sezonu</div>
-                          <div>13.03.2025 - 23.11.2025</div>
+                <Tabs.Panel value='facilityInfos' className='p-4'>
+                  <div className='rounded bg-gray-50 p-3'>
+                    <div className='grid rounded'>
+                      <div className='mb-5 flex'>
+                        <div className='leading-lg inline-flex items-center gap-3 rounded-md bg-gray-200 px-3 py-2'>
+                          <FaSnowflake />
+                          <div>
+                            <div className='font-semibold'>Kış Sezonu</div>
+                            <div>13.03.2025 - 23.11.2025</div>
+                          </div>
                         </div>
                       </div>
+
+                      <div className='rounded bg-white p-3'>
+                        <div className='my-5'>
+                          <Title
+                            order={3}
+                            fz={'h4'}
+                            className='flex items-center gap-2 py-2 font-medium'
+                          >
+                            <FaRegBuilding />
+                            <div>Otel Özellikleri</div>
+                          </Title>
+                          <div className='my-4 border-t'></div>
+                          <Spoiler
+                            className='ms-auto mb-20 pb-3'
+                            showLabel='Daha fazla göster'
+                            hideLabel='Daha az göster'
+                          >
+                            <ul className='grid grid-cols-5 gap-2'>
+                              {data?.facilityTypes &&
+                                data.facilityTypes
+                                  .slice(0, 100)
+                                  .map((facility, index) => (
+                                    <li className='truncate' key={index}>
+                                      {facility.name}
+                                    </li>
+                                  ))}
+                            </ul>
+                          </Spoiler>
+                        </div>
+                        <ul className='grid-cols-auto my-10 flex gap-2'>
+                          {data?.hotel.year_built && (
+                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                              <FaRegBuilding
+                                size={24}
+                                className='text-blue-700'
+                              />
+                              <div className='grid gap-0'>
+                                <div className='font-medium text-blue-800'>
+                                  Bina Yaşı
+                                </div>
+                                <div className='font-semibold'>
+                                  {' '}
+                                  {data?.hotel.year_built}
+                                </div>
+                              </div>
+                            </li>
+                          )}
+                          {data?.hotel.nr_rooms && (
+                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                              <MdOutlineBed
+                                size={24}
+                                className='text-blue-700'
+                              />
+                              <div className='grid gap-0'>
+                                <div className='font-medium text-blue-800'>
+                                  Oda
+                                </div>
+                                <div className='font-semibold'>
+                                  {' '}
+                                  {data?.hotel.nr_rooms}
+                                </div>
+                              </div>
+                            </li>
+                          )}
+                          {data?.hotel.nr_restaurants &&
+                            data?.hotel.nr_restaurants > 0 && (
+                              <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                                <FaBellConcierge
+                                  size={24}
+                                  className='text-blue-700'
+                                />
+                                <div className='grid gap-0'>
+                                  <div className='font-medium text-blue-800'>
+                                    Restaurant
+                                  </div>
+                                  <div className='font-semibold'>
+                                    {data?.hotel.nr_restaurants}
+                                  </div>
+                                </div>
+                              </li>
+                            )}
+                          {data?.hotel.nr_bars && data?.hotel.nr_bars > 0 && (
+                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                              <FaGlassMartiniAlt
+                                size={24}
+                                className='text-blue-700'
+                              />
+                              <div className='grid gap-0'>
+                                <div className='font-medium text-blue-800'>
+                                  Bar
+                                </div>
+                                <div className='font-semibold'>
+                                  {data?.hotel.nr_bars}
+                                </div>
+                              </div>
+                            </li>
+                          )}
+                          {data?.hotel.nr_halls && data?.hotel.nr_halls > 0 && (
+                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                              <FaDoorOpen size={24} className='text-blue-700' />
+                              <div className='grid gap-0'>
+                                <div className='font-medium text-blue-800'>
+                                  Salon
+                                </div>
+                                <div className='font-semibold'>
+                                  {data?.hotel.nr_halls}
+                                </div>
+                              </div>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                      <TypographyStylesProvider className='rounded bg-white p-3'>
+                        <Spoiler
+                          className='mb-10 pb-3'
+                          maxHeight={120}
+                          showLabel='Daha fazla göster'
+                          hideLabel='Daha az göster'
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: description.hotelInformation.trim(),
+                            }}
+                          />
+                        </Spoiler>
+                      </TypographyStylesProvider>
                     </div>
-                    <TypographyStylesProvider>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: description.hotelInformation.trim(),
-                        }}
-                      />
-                    </TypographyStylesProvider>
-                    <Accordion className='grid gap-3 rounded'>
+                    <Accordion className='grid gap-3 rounded bg-gray-50 py-3'>
                       {featureValues.map(([key, value], itemIndex) => {
                         if (!value?.trim()) return null
 
@@ -176,7 +328,7 @@ const MainDrawer: React.FC<IProps> = ({
                   </div>
                 </Tabs.Panel>
 
-                <Tabs.Panel value='messages'>
+                <Tabs.Panel value='drawerComments'>
                   {' '}
                   {data?.hotel.comment_info && (
                     <div>
