@@ -81,7 +81,7 @@ export default async function Home() {
               clipPath: 'ellipse(90% 90% at 50% 00%)',
             }}
           />
-          <div className='overflow-hidden'>
+          <div>
             <Container className='px-0 md:mt-[58px] md:px-4'>
               <Title
                 className='text-center font-medium text-white md:mb-10'
@@ -90,7 +90,7 @@ export default async function Home() {
                 Parafly ile ParafPara&apos;ların keyfini çıkarın!
               </Title>
 
-              <div className='bg-white md:rounded-lg md:border'>
+              <div className='z-50 bg-white md:rounded-lg md:border'>
                 <SearchEngine />
               </div>
             </Container>
