@@ -49,14 +49,14 @@ import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-// import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
 import { ParafParaView } from '../../components/paraf'
 
 import paymentSegmentClasses from '@/styles/PaymentMethodSegment.module.css'
 import {
-  CardValidationSchemaTypes,
+  PaymentValidationSchemaTypes,
   paymentValidationSchema,
 } from '@/libs/credit-card-utils'
+// import { CreditCardForm } from '@/components/payment/credit-card'
 
 enum PaymentMethodEnums {
   CreditCard,
@@ -107,7 +107,7 @@ const PaymentPage = () => {
   const paymentMutation = useMutation<
     PaymentResponseType | null | undefined,
     null,
-    CardValidationSchemaTypes
+    PaymentValidationSchemaTypes
   >({
     mutationKey: ['payment-mutation'],
     mutationFn: async (data) => {
@@ -142,7 +142,7 @@ const PaymentPage = () => {
     },
   })
   const handlePrivilegedCardMutation = useMutation({
-    mutationFn: async (data: CardValidationSchemaTypes) => {
+    mutationFn: async (data: PaymentValidationSchemaTypes) => {
       const paymentResponse = await serviceRequest<ParafParaPaymentResponse>({
         axiosOptions: {
           url: 'api/payment/privilegeCardHandler',
@@ -428,6 +428,8 @@ const PaymentPage = () => {
             </div>
             <div className='grid items-center gap-3 sm:grid-cols-2'>
               <div>
+                {/* <CreditCardForm form={formMethods} /> */}
+
                 <div className='grid w-full gap-3'>
                   <Controller
                     control={formMethods.control}
@@ -638,6 +640,7 @@ const PaymentPage = () => {
                         'cardExpiredYear',
                         'cardExpiredYear',
                         'cardNumber',
+                        'cardOwner',
                       ])
 
                       if (isFormValid) {

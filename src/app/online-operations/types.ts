@@ -1,4 +1,4 @@
-export type OperationResultWithBookingCodeResponse = {
+export type OperationResultWithBookingCodeResponse<T> = {
   hotelCancelWarrantyPriceStatus: {
     selectingCancelWarranty: boolean
     hasHotelWarranty: boolean
@@ -10,9 +10,7 @@ export type OperationResultWithBookingCodeResponse = {
   } | null
   operationResultWithBookingCode: {
     productDataViewResponser: {
-      dataViewResponsers:
-        | CarBookingDetailApiResponse
-        | HotelBookingDetailApiResponse
+      dataViewResponsers: T
       totalPrice: number
       totalPriceCurrency: number
     }

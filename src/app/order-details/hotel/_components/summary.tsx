@@ -25,9 +25,19 @@ dayjs.locale(dayjsLocale)
 import { IoInformationCircle } from 'react-icons/io5'
 import { useDisclosure } from '@mantine/hooks'
 import { CreditCardForm } from '@/components/payment/credit-card'
-import { CardValidationSchemaTypes } from '@/libs/credit-card-utils'
+import {
+  PaymentValidationSchemaTypes,
+  paymentValidationSchema,
+} from '@/libs/credit-card-utils'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { InstallmentApiResponse } from '@/types/global'
+import { InstallmentSelect } from '@/app/reservation/(index)/payment/instalment-table'
 
 export const HotelBookingSummary = () => {
+  const form = useForm({
+    resolver: zodResolver(paymentValidationSchema),
+  })
   const [searchParams] = useQueryStates(operationResultParams)
   const [
     paymentModalOpened,
@@ -38,30 +48,39 @@ export const HotelBookingSummary = () => {
     enabled: !!searchParams,
     queryKey: ['booking-detail', searchParams],
     queryFn: async () => {
-      const response =
-        await serviceRequest<OperationResultWithBookingCodeResponse>({
-          axiosOptions: {
-            url: 'api/product/handleOperationResultWithBookingCode',
-            params: searchParams,
-          },
-        })
+      const response = await serviceRequest<
+        OperationResultWithBookingCodeResponse<HotelBookingDetailApiResponse>
+      >({
+        axiosOptions: {
+          url: 'api/product/handleOperationResultWithBookingCode',
+          params: searchParams,
+        },
+      })
       return response
     },
   })
 
   const partialPaymentMutation = useMutation({
     mutationKey: ['partial-payment-mutation'],
-    mutationFn: async (data: CardValidationSchemaTypes) => {
+    mutationFn: async (data: PaymentValidationSchemaTypes) => {
       const response = await serviceRequest({
         axiosOptions: {
           url: 'api/payment/partialPayment',
           method: 'post',
           data: {
             ...data,
-
-            SessionToken: dataViewResponsers[0].summaryResponse.sessionToken,
-            SearchToken: dataViewResponsers[0].summaryResponse.searchToken,
-            ProductKey: dataViewResponsers[0].summaryResponse.productKey,
+            SessionToken:
+              bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+                .productDataViewResponser.dataViewResponsers[0].summaryResponse
+                .sessionToken,
+            SearchToken:
+              bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+                .productDataViewResponser.dataViewResponsers[0].summaryResponse
+                .searchToken,
+            ProductKey:
+              bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+                .productDataViewResponser.dataViewResponsers[0].summaryResponse
+                .productKey,
           },
         },
       })
@@ -69,6 +88,46 @@ export const HotelBookingSummary = () => {
       return response
     },
   })
+  const cardNumber = form.watch('cardNumber')?.trim().replaceAll(' ', '')
+
+  const searchToken =
+    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+      .productDataViewResponser.dataViewResponsers[0].summaryResponse
+      .searchToken
+  const sessionToken =
+    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+      .productDataViewResponser.dataViewResponsers[0].summaryResponse
+      .sessionToken
+
+  const productKey =
+    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+      .productDataViewResponser.dataViewResponsers[0].summaryResponse.productKey
+
+  const installmentListQuery = useQuery({
+    queryKey: ['installment-list', sessionToken, searchToken, productKey],
+    enabled: paymentModalOpened,
+    queryFn: async () => {
+      const response = await serviceRequest<InstallmentApiResponse>({
+        axiosOptions: {
+          url: 'api/payment/partialPaymentInstallmentList',
+          params: {
+            sessionToken: sessionToken,
+            searchToken: searchToken,
+            productKey: productKey,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+
+  const installmentList =
+    cardNumber && cardNumber.length > 5
+      ? installmentListQuery?.data?.data?.installment.installmentInfoList.filter(
+          (item) => item.binList.includes(cardNumber?.substring(0, 6) ?? 0)
+        )
+      : null
 
   if (!bookingDetailsDataQuery.data && bookingDetailsDataQuery.isLoading)
     return (
@@ -85,23 +144,28 @@ export const HotelBookingSummary = () => {
         <Alert color='red'>Sonuç bulunamadı</Alert>
       </Container>
     )
+  const dataViewResponsers =
+    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
+      ?.productDataViewResponser.dataViewResponsers
 
-  const dataViewResponsers = bookingDetailsDataQuery.data?.data
-    ?.operationResultWithBookingCode?.productDataViewResponser
-    .dataViewResponsers as HotelBookingDetailApiResponse
   const productDataViewResponser =
-    dataViewResponsers[1]?.operationResultViewData
-  const summaryViewDataResponserForHotel = dataViewResponsers[0]
+    dataViewResponsers?.[1].operationResultViewData
+  const summaryViewDataResponserForHotel = dataViewResponsers?.[0]
   const insuranceFee =
-    summaryViewDataResponserForHotel.summaryResponse.roomGroup
+    summaryViewDataResponserForHotel?.summaryResponse.roomGroup
       .cancelWarrantyPrice.value ?? 0
 
-  const hotelDataSummaryData = dataViewResponsers[0].summaryResponse
-  const roomGroup = hotelDataSummaryData.roomGroup
+  const hotelDataSummaryData = dataViewResponsers?.[0].summaryResponse
+  const roomGroup = hotelDataSummaryData?.roomGroup
   const isHotelPartialPayment =
     bookingDetailsDataQuery?.data?.data?.hotelCancelWarrantyPriceStatus
       ?.couponActive
-
+  if (
+    !productDataViewResponser ||
+    !roomGroup ||
+    !summaryViewDataResponserForHotel
+  )
+    return <div>no data</div>
   return (
     <>
       <Container
@@ -337,12 +401,51 @@ export const HotelBookingSummary = () => {
           title='Ödeme Bilgileri'
           closeOnEscape={false}
         >
-          <CreditCardForm
-            onFormSubmit={(data) => {
-              partialPaymentMutation.mutate(data)
-            }}
-            isFormPending={partialPaymentMutation.isPending}
-          />
+          <form
+            onSubmit={form.handleSubmit((data) => {
+              console.log(data)
+              partialPaymentMutation.mutate({
+                ...data,
+              })
+            })}
+          >
+            <div className='grid gap-5'>
+              <CreditCardForm form={form} />
+
+              {installmentList && installmentList.length > 0 && (
+                <InstallmentSelect
+                  onChange={(value) => {
+                    form.setValue('installment', value)
+                  }}
+                  data={installmentList}
+                />
+              )}
+            </div>
+            <div className='flex flex-col items-center justify-center gap-3 sm:pt-8'>
+              <div className='leading-md text-center text-sm sm:px-8'>
+                Ödemeyi tamamla butonuna tıkladığımda{' '}
+                <span className='text-blue-800'>
+                  Mesafeli Satış Sözleşmesini
+                </span>
+                 ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
+                 okuduğumu ve kabul ettiğimi onaylıyorum.
+              </div>
+              <div className='flex flex-wrap items-center gap-2'>
+                <div className='text-sm'>Ödenecek Tutar:</div>
+                <div className='text-xl font-bold'>
+                  {formatCurrency(
+                    productDataViewResponser.paymentInformation
+                      .basketDiscountTotal
+                  )}
+                </div>
+              </div>
+              <div className='max-w-full min-w-xs'>
+                <Button fullWidth type='submit'>
+                  Ödemeyi Tamamla
+                </Button>
+              </div>
+            </div>
+          </form>
         </Modal>
       )}
     </>

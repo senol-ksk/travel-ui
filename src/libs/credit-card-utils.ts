@@ -3,7 +3,7 @@ import { z } from '@/libs/zod'
 
 let cardCvvLength = 3
 
-export const paymentValidationSchema = z.object({
+export const creditCardSchema = z.object({
   cardOwner: z.string().min(3).max(50),
   cardNumber: z
     .string()
@@ -13,11 +13,20 @@ export const paymentValidationSchema = z.object({
 
       return cardValidation.number(value).isValid
     }, 'Gecersiz Kart Numarası'),
-  cardExpiredMonth: z.string(),
-  cardExpiredYear: z.string(),
+  cardExpiredMonth: z.string().nonempty(),
+  cardExpiredYear: z.string().nonempty(),
   cardCvv: z.string().refine((val) => {
     return val.length === cardCvvLength
   }),
-  installment: z.string().default('1'),
 })
-export type CardValidationSchemaTypes = z.infer<typeof paymentValidationSchema>
+
+export const paymentValidationSchema = creditCardSchema.merge(
+  z.object({
+    installment: z.string().default('1'),
+  })
+)
+
+export type PaymentValidationSchemaTypes = z.infer<
+  typeof paymentValidationSchema
+>
+export type CreditCardSchemaType = z.infer<typeof creditCardSchema>

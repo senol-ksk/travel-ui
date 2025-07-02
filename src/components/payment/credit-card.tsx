@@ -1,14 +1,15 @@
 import cardValidation from 'card-validator'
 import { yearList } from '@/libs/util'
-import { Button, Input, NativeSelect, TextInput } from '@mantine/core'
+import { Input, NativeSelect, TextInput } from '@mantine/core'
 import { range } from '@mantine/hooks'
 import { formatCreditCard } from 'cleave-zen'
 import dayjs from 'dayjs'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
+  CreditCardSchemaType,
   paymentValidationSchema,
-  CardValidationSchemaTypes,
+  PaymentValidationSchemaTypes,
 } from '@/libs/credit-card-utils'
 
 const cardExpiredYearList = () =>
@@ -25,29 +26,14 @@ const cardMonths = () =>
   })
 
 type IProps = {
-  onFormSubmit: (data: CardValidationSchemaTypes) => void
-  isFormPending: boolean
+  form: UseFormReturn<CreditCardSchemaType>
 }
 
-export const CreditCardForm: React.FC<IProps> = ({
-  onFormSubmit,
-  isFormPending = false,
-}) => {
-  const form = useForm({
-    resolver: zodResolver(paymentValidationSchema),
-  })
-
+export const CreditCardForm: React.FC<IProps> = ({ form }) => {
   return (
-    <form
-      onSubmit={form.handleSubmit((data) => {
-        console.log(data)
-        onFormSubmit(data)
-      })}
-      className='grid gap-3 md:grid-cols-3'
-    >
-      <div className='md:col-span-3'>
+    <div className='grid gap-3 md:grid-cols-3'>
+      <div className='sm:col-span-3'>
         <TextInput
-          withAsterisk
           label='Kart üzerindeki isim'
           autoComplete='cc-name'
           defaultValue=''
@@ -56,14 +42,13 @@ export const CreditCardForm: React.FC<IProps> = ({
           error={form.formState.errors.cardOwner?.message}
         />
       </div>
-      <div className='md:col-span-3'>
+      <div className='sm:col-span-3'>
         <Controller
           control={form.control}
           name='cardNumber'
           defaultValue=''
           render={({ field, fieldState }) => (
             <TextInput
-              withAsterisk
               label='Kart Numarası'
               type='tel'
               autoComplete='cc-number'
@@ -77,25 +62,29 @@ export const CreditCardForm: React.FC<IProps> = ({
           )}
         />
       </div>
-      <div className='md:col-span-2'>
+      <div className='sm:col-span-2'>
         <Input.Label htmlFor='cardExpiredMonth'>
           Son kullanma tarihi
         </Input.Label>
         <div className='grid w-full grid-cols-2 gap-2'>
-          <NativeSelect
-            {...form.register('cardExpiredMonth')}
-            id='cardExpiredMonth'
-            data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-            error={form.formState.errors.cardExpiredMonth?.message}
-          />
-          <NativeSelect
-            {...form.register('cardExpiredYear')}
-            error={form.formState.errors.cardExpiredYear?.message}
-            data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList()]}
-          />
+          <div>
+            <NativeSelect
+              {...form.register('cardExpiredMonth')}
+              id='cardExpiredMonth'
+              data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
+              error={form.formState.errors.cardExpiredMonth?.message}
+            />
+          </div>
+          <div>
+            <NativeSelect
+              {...form.register('cardExpiredYear')}
+              error={form.formState.errors.cardExpiredYear?.message}
+              data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList()]}
+            />
+          </div>
         </div>
       </div>
-      <div className='md:col-span-1'>
+      <div className='sm:col-span-1'>
         <TextInput
           label='CVV'
           {...form.register('cardCvv')}
@@ -105,9 +94,6 @@ export const CreditCardForm: React.FC<IProps> = ({
           }
         />
       </div>
-      {/* <Button type='submit' loading={isFormPending}>
-        Ödemeyi Tamamla
-      </Button> */}
-    </form>
+    </div>
   )
 }

@@ -8,7 +8,10 @@ import { useMutation } from '@tanstack/react-query'
 import { MdOutlineChevronRight } from 'react-icons/md'
 
 import { serviceRequest } from '@/network'
-import { OperationResultWithBookingCodeResponse } from './types'
+import {
+  HotelBookingDetailApiResponse,
+  OperationResultWithBookingCodeResponse,
+} from './types'
 import {
   operationResultFormSchema,
   OperationResultFormSchemaType,
@@ -25,13 +28,14 @@ export default function OnlineOperationsPage() {
 
   const handleMutation = useMutation({
     mutationFn: async (data: OperationResultFormSchemaType) => {
-      const response =
-        await serviceRequest<OperationResultWithBookingCodeResponse>({
-          axiosOptions: {
-            url: 'api/product/handleOperationResultWithBookingCode',
-            params: data,
-          },
-        })
+      const response = await serviceRequest<
+        OperationResultWithBookingCodeResponse<HotelBookingDetailApiResponse>
+      >({
+        axiosOptions: {
+          url: 'api/product/handleOperationResultWithBookingCode',
+          params: data,
+        },
+      })
       return response
     },
     mutationKey: ['booking-result-mutation'],
