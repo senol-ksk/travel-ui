@@ -82,7 +82,7 @@ export default async function Home() {
             }}
           />
           <div>
-            <Container className='px-0 md:mt-[58px] md:px-4'>
+            <Container className='px-0 md:px-4 md:pt-[58px]'>
               <Title
                 className='text-center font-medium text-white md:mb-10'
                 style={{ fontSize: '32px' }}
