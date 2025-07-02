@@ -90,7 +90,7 @@ export default async function Home() {
                 Parafly ile ParafPara&apos;ların keyfini çıkarın!
               </Title>
 
-              <div className='z-50 bg-white md:rounded-lg md:border'>
+              <div className='z-50 bg-white shadow-lg md:rounded-lg md:border'>
                 <SearchEngine />
               </div>
             </Container>
