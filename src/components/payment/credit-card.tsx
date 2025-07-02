@@ -43,8 +43,9 @@ export const CreditCardForm: React.FC<IProps> = ({
         console.log(data)
         onFormSubmit(data)
       })}
+      className='grid gap-3 md:grid-cols-3'
     >
-      <div>
+      <div className='md:col-span-3'>
         <TextInput
           withAsterisk
           label='Kart üzerindeki isim'
@@ -55,7 +56,7 @@ export const CreditCardForm: React.FC<IProps> = ({
           error={form.formState.errors.cardOwner?.message}
         />
       </div>
-      <div>
+      <div className='md:col-span-3'>
         <Controller
           control={form.control}
           name='cardNumber'
@@ -76,23 +77,25 @@ export const CreditCardForm: React.FC<IProps> = ({
           )}
         />
       </div>
-      <div>
+      <div className='md:col-span-2'>
         <Input.Label htmlFor='cardExpiredMonth'>
           Son kullanma tarihi
         </Input.Label>
-        <NativeSelect
-          {...form.register('cardExpiredMonth')}
-          id='cardExpiredMonth'
-          data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
-          error={form.formState.errors.cardExpiredMonth?.message}
-        />
-        <NativeSelect
-          {...form.register('cardExpiredYear')}
-          error={form.formState.errors.cardExpiredYear?.message}
-          data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList()]}
-        />
+        <div className='grid w-full grid-cols-2 gap-2'>
+          <NativeSelect
+            {...form.register('cardExpiredMonth')}
+            id='cardExpiredMonth'
+            data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
+            error={form.formState.errors.cardExpiredMonth?.message}
+          />
+          <NativeSelect
+            {...form.register('cardExpiredYear')}
+            error={form.formState.errors.cardExpiredYear?.message}
+            data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList()]}
+          />
+        </div>
       </div>
-      <div>
+      <div className='md:col-span-1'>
         <TextInput
           label='CVV'
           {...form.register('cardCvv')}
@@ -102,9 +105,9 @@ export const CreditCardForm: React.FC<IProps> = ({
           }
         />
       </div>
-      <Button type='submit' loading={isFormPending}>
+      {/* <Button type='submit' loading={isFormPending}>
         Ödemeyi Tamamla
-      </Button>
+      </Button> */}
     </form>
   )
 }

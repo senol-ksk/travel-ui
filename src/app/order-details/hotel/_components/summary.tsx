@@ -296,9 +296,7 @@ export const HotelBookingSummary = () => {
                     {formatCurrency(
                       productDataViewResponser.paymentInformation.basketTotal -
                         productDataViewResponser.paymentInformation
-                          .basketDiscountTotal,
-                      productDataViewResponser.paymentInformation
-                        .sellingCurrency
+                          .basketDiscountTotal
                     )}
                   </div>
                   <div>
