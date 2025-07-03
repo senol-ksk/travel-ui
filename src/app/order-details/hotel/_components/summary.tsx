@@ -14,6 +14,7 @@ import {
   Image,
   Modal,
   Skeleton,
+  Text,
   Title,
 } from '@mantine/core'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -33,6 +34,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InstallmentApiResponse } from '@/types/global'
 import { InstallmentSelect } from '@/app/reservation/(index)/payment/instalment-table'
+import { useMemo } from 'react'
 
 export const HotelBookingSummary = () => {
   const form = useForm({
@@ -60,6 +62,21 @@ export const HotelBookingSummary = () => {
     },
   })
 
+  const bookingDetailData = useMemo(
+    () => bookingDetailsDataQuery.data?.data,
+    [bookingDetailsDataQuery.data?.data]
+  )
+  const dataViewResponsers =
+    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
+      .dataViewResponsers
+  const summaryResponse = dataViewResponsers?.[0].summaryResponse
+  const searchToken = summaryResponse?.searchToken
+  const sessionToken = summaryResponse?.sessionToken
+
+  const productKey =
+    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
+      .dataViewResponsers[0].summaryResponse.productKey
+
   const partialPaymentMutation = useMutation({
     mutationKey: ['partial-payment-mutation'],
     mutationFn: async (data: PaymentValidationSchemaTypes) => {
@@ -69,18 +86,9 @@ export const HotelBookingSummary = () => {
           method: 'post',
           data: {
             ...data,
-            SessionToken:
-              bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-                .productDataViewResponser.dataViewResponsers[0].summaryResponse
-                .sessionToken,
-            SearchToken:
-              bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-                .productDataViewResponser.dataViewResponsers[0].summaryResponse
-                .searchToken,
-            ProductKey:
-              bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-                .productDataViewResponser.dataViewResponsers[0].summaryResponse
-                .productKey,
+            SessionToken: sessionToken,
+            SearchToken: searchToken,
+            ProductKey: productKey,
           },
         },
       })
@@ -89,19 +97,6 @@ export const HotelBookingSummary = () => {
     },
   })
   const cardNumber = form.watch('cardNumber')?.trim().replaceAll(' ', '')
-
-  const searchToken =
-    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-      .productDataViewResponser.dataViewResponsers[0].summaryResponse
-      .searchToken
-  const sessionToken =
-    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-      .productDataViewResponser.dataViewResponsers[0].summaryResponse
-      .sessionToken
-
-  const productKey =
-    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-      .productDataViewResponser.dataViewResponsers[0].summaryResponse.productKey
 
   const installmentListQuery = useQuery({
     queryKey: ['installment-list', sessionToken, searchToken, productKey],
@@ -144,16 +139,14 @@ export const HotelBookingSummary = () => {
         <Alert color='red'>Sonuç bulunamadı</Alert>
       </Container>
     )
-  const dataViewResponsers =
-    bookingDetailsDataQuery.data?.data?.operationResultWithBookingCode
-      ?.productDataViewResponser.dataViewResponsers
+  // const dataViewResponsers =
+  //   bookingDetailData?.operationResultWithBookingCode?.productDataViewResponser
+  //     .dataViewResponsers
 
   const productDataViewResponser =
     dataViewResponsers?.[1].operationResultViewData
-  const summaryViewDataResponserForHotel = dataViewResponsers?.[0]
-  const insuranceFee =
-    summaryViewDataResponserForHotel?.summaryResponse.roomGroup
-      .cancelWarrantyPrice.value ?? 0
+  const summaryViewDataResponserForHotel = summaryResponse
+  const insuranceFee = summaryResponse?.roomGroup.cancelWarrantyPrice.value ?? 0
 
   const hotelDataSummaryData = dataViewResponsers?.[0].summaryResponse
   const roomGroup = hotelDataSummaryData?.roomGroup
@@ -202,10 +195,7 @@ export const HotelBookingSummary = () => {
                 )}
               </strong>{' '}
               lik tutarı, otele giriş gününüze 4 gün kalaya (
-              {dayjs(
-                summaryViewDataResponserForHotel.summaryResponse.roomGroup
-                  .checkInDate
-              )
+              {dayjs(summaryResponse?.roomGroup.checkInDate)
                 .subtract(4, 'days')
                 .format('DD MMMM YYYY')}
               ) kadar, rezervasyonlarım sayfasına giderek tamamlayabilirsiniz.
@@ -400,6 +390,9 @@ export const HotelBookingSummary = () => {
           size={772}
           title='Ödeme Bilgileri'
           closeOnEscape={false}
+          classNames={{
+            body: 'p-6 md:p-8',
+          }}
         >
           <form
             onSubmit={form.handleSubmit((data) => {
@@ -411,7 +404,9 @@ export const HotelBookingSummary = () => {
           >
             <div className='grid gap-5'>
               <CreditCardForm form={form} />
-
+              <Text fz={'xs'} mb={0} className='text-gray-600'>
+                Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
+              </Text>
               {installmentList && installmentList.length > 0 && (
                 <InstallmentSelect
                   onChange={(value) => {
