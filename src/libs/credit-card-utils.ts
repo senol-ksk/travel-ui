@@ -16,7 +16,7 @@ export const creditCardSchema = z.object({
   cardExpiredMonth: z.string().nonempty(),
   cardExpiredYear: z.string().nonempty(),
   cardCvv: z.string().refine((val) => {
-    return val.length === cardCvvLength
+    return val.length === cardCvvLength && typeof Number(val) === 'number'
   }),
 })
 

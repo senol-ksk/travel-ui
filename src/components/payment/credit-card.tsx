@@ -86,6 +86,8 @@ export const CreditCardForm: React.FC<IProps> = ({ form }) => {
       </div>
       <div className='sm:col-span-1'>
         <TextInput
+          type='tel'
+          inputMode='numeric'
           label='CVV'
           {...form.register('cardCvv')}
           error={form.formState.errors.cardCvv?.message}
