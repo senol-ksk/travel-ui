@@ -1,7 +1,7 @@
 .root {
   @apply overflow-hidden rounded-full;
 
-  border: 6px solid transparent;
+  border: 7px solid transparent;
 
   background:
     linear-gradient(white, white) padding-box,
@@ -12,12 +12,13 @@
         var(--mantine-color-blue-2)
       )
       border-box;
-}
-.root:hover {
-  transform: scale(1.1);
   transition:
     transform 0.3s ease,
     border 0.3s ease;
-  border: 3px solid;
-  border-color: var(--mantine-color-primary, #007bff);
+}
+.root {
+  transition: transform 0.4s ease-in-out;
+}
+.root:hover {
+  transform: scale(1.2);
 }
