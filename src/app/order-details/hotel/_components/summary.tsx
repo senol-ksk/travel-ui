@@ -393,6 +393,7 @@ export const HotelBookingSummary = () => {
           classNames={{
             body: 'p-6 md:p-8',
           }}
+          closeOnClickOutside={false}
         >
           <form
             onSubmit={form.handleSubmit((data) => {
