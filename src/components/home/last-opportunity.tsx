@@ -1,12 +1,14 @@
 'use client'
 
-import { Button, Container } from '@mantine/core'
+import { AspectRatio, Button, Container, Title } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { Badge, Box } from '@mantine/core'
 import Link from 'next/link'
 import { Image } from '@mantine/core'
 import { Widgets } from '@/types/cms-types'
 import React from 'react'
+import { cdnImageUrl } from '@/libs/cms-data'
+import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
 
 const categories = [
   'Erken Rezervasyon',
@@ -55,44 +57,72 @@ const LastOpportunity: React.FC<IProps> = ({ data }) => {
         </div>
       </Container>
       <Container>
-        <Carousel slideGap='lg' className='relative' slideSize='100%'>
+        <Carousel
+          slideGap='lg'
+          slideSize={{ base: '100%', sm: `${100 / 4}%` }}
+          controlSize={48}
+          emblaOptions={{
+            dragFree: true,
+          }}
+          controlsOffset={0}
+          nextControlIcon={
+            <div className='text-blue-800'>
+              <RiArrowRightLine size={24} />
+            </div>
+          }
+          previousControlIcon={
+            <div className='text-blue-800'>
+              <RiArrowLeftLine size={24} />
+            </div>
+          }
+        >
           {data.map((item, i) => (
             <Carousel.Slide
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
               <Link href={item.params.link?.value || '#'}>
-                <Box className='group w-full rounded-lg bg-white shadow-xl'>
+                <Box
+                  href={`/hotel/${item.params.link?.value.split('/').at(-1)}`}
+                  component={Link}
+                  className='group block h-full w-full'
+                >
                   <div className='relative'>
-                    <Image
-                      src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
-                      alt={item.title}
-                      className='h-50 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
-                    />
+                    <AspectRatio>
+                      <Image
+                        src={cdnImageUrl(item.params.image?.value)}
+                        alt={item.title}
+                        className='rounded-t-xl'
+                      />
+                    </AspectRatio>
 
-                    {item.params.discount_price && (
+                    {item.params.discount_price?.value && (
                       <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>
-                        {item.params.discount_price?.value}
+                        %{item.params.discount_price.value}
                       </span>
                     )}
                   </div>
-                  <div className='grid gap-3 p-5'>
-                    <h3 className='text-md font-semibold'>{item.title}</h3>
+                  <div className='-top-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
+                    <Title order={3} fz='md' lineClamp={1}>
+                      {item.title}
+                    </Title>
                     <p className='text-xs text-gray-900'>
-                      {item.params.location.value}
+                      {item.params.location?.value}
                     </p>
                     <div className='flex items-center justify-between pt-5'>
                       <p className='text-md font-bold'>
-                        {item.params.price?.value}
+                        {item.params.discount_price?.value}
                         <span className='text-sm font-normal'>/ Kişi</span>
                       </p>
                       <Button
+                        component='div'
                         variant='light'
                         color='blue'
                         size='sm'
                         radius='xl'
+                        className='transition-all ease-linear group-hover:bg-blue-800 group-hover:text-white'
                       >
-                        {item.params.btn_text?.value}
+                        İncele
                       </Button>
                     </div>
                   </div>

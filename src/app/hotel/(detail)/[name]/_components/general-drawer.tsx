@@ -118,13 +118,6 @@ const GeneralDrawer: React.FC<IProps> = ({
           {/* <input value={JSON.stringify(data?.hotel, null, 2)} readOnly /> */}
           <div className='my-10'>
             <ul className='grid-cols-auto flex gap-2'>
-              {/* <li className='flex items-center gap-3 rounded border bg-gray-200 p-1 px-4'>
-                <LuScan size={24} className='text-blue-700' />
-                <div className='grid gap-0'>
-                  <div className='font-medium text-blue-800'>Alan (m2)</div>
-                  <div className='font-semibold'>{} </div>
-                </div>
-              </li> */}
               {data?.hotel.year_built && (
                 <li className='flex items-center gap-3 rounded border bg-gray-200 p-1 px-4'>
                   <FaRegBuilding size={24} className='text-blue-700' />

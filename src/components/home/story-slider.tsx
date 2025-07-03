@@ -13,7 +13,7 @@ import { cdnImageUrl } from '@/libs/cms-data'
 export const StorySliderSkeleton = () => {
   return (
     <div className='flex w-full justify-center gap-5 overflow-hidden whitespace-nowrap'>
-      {new Array(5).fill(true).map((_, itemIndex) => (
+      {new Array(8).fill(true).map((_, itemIndex) => (
         <div key={itemIndex} className='flex flex-col gap-2 md:gap-8'>
           <Skeleton
             w={{ base: 90, md: 160 }}
@@ -66,10 +66,10 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
             <Box
               component={Link}
               href={item.params.link.value}
-              className='block h-full'
+              className='group block h-full'
             >
               <div className='flex h-full w-[90px] flex-col md:w-[160px]'>
-                <AspectRatio classNames={aspectRatioClasses}>
+                <AspectRatio classNames={aspectRatioClasses} className='mt-4'>
                   <Image src={cdnImageUrl(item.params.image.value)} alt='' />
                 </AspectRatio>
                 <div className='leading-md py-4 text-center text-sm'>
@@ -77,13 +77,13 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
                     {item.title}
                   </Text>
                 </div>
-                <div className='mx-auto mt-auto h-[4px] w-[69px] rounded bg-blue-200' />
+                <div className='mx-auto mt-auto mb-15 h-[5px] w-[69px] rounded bg-blue-200 opacity-100 transition-opacity duration-400 group-hover:opacity-0' />
               </div>
             </Box>
           </Carousel.Slide>
         ))}
       </Carousel>
-      <div className='flex justify-center pt-7'>
+      <div className='flex justify-center'>
         <Button component={Link} href='/kampanyalar'>
           Tüm Kampanyaları Gör
         </Button>

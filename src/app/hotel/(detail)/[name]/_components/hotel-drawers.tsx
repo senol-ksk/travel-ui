@@ -4,7 +4,9 @@ import { HotelDetailDescription } from '@/app/hotel/types'
 import { useQuery } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
 import { BiChevronRight } from 'react-icons/bi'
-import { MdBeachAccess } from 'react-icons/md'
+import { MdOutlineBeachAccess } from 'react-icons/md'
+import { IoClose } from 'react-icons/io5'
+import { CiDiscount1 } from 'react-icons/ci'
 
 type IProps = {
   description: HotelDetailDescription
@@ -54,39 +56,42 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
     <>
       <div className='grid gap-3'>
         {description?.beachPool?.trim() && (
-          <div>
-            <Button
-              fullWidth
-              onClick={() => handleDrawerOpen(1)}
-              variant='white'
-              color='black'
-              size='md'
-              className='flex justify-start'
-            >
-              <MdBeachAccess color='blue' size={20} />
-              Plaj ve havuz
-            </Button>
+          <div className='flex bg-white'>
+            <div className='mt-1 px-2 py-3'>
+              <MdOutlineBeachAccess className='text-blue-800' size={20} />
+            </div>
+            <div className='grid items-center'>
+              <Button
+                onClick={() => handleDrawerOpen(1)}
+                variant='white'
+                color='black'
+                size='lg'
+                className='flex justify-start p-0 font-medium'
+              >
+                Plaj ve havuz
+              </Button>
 
-            <div className='flex justify-between gap-5 rounded bg-white p-3'>
-              <div className='flex items-center gap-2'>
-                <div>
-                  <div
-                    className='text-sm'
-                    dangerouslySetInnerHTML={{
-                      __html: description.beachPool
-                        ? description.beachPool.substring(0, 90)
-                        : '',
-                    }}
-                  />
-                  <div className='flex items-center'>
-                    <Button
-                      className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                      size='sm'
-                      onClick={() => handleDrawerOpen(1)}
-                    >
-                      Devamını Göster
-                    </Button>
-                    <BiChevronRight size={20} color='blue' />
+              <div className='flex justify-between gap-5 rounded bg-white'>
+                <div className='flex items-center gap-2'>
+                  <div>
+                    <div
+                      className='text-sm'
+                      dangerouslySetInnerHTML={{
+                        __html: description.beachPool
+                          ? description.beachPool.substring(0, 90)
+                          : '',
+                      }}
+                    />
+                    <div className='flex items-center'>
+                      <Button
+                        className='border-0 bg-transparent p-0 font-normal text-blue-700'
+                        size='sm'
+                        onClick={() => handleDrawerOpen(1)}
+                      >
+                        Devamını Göster
+                      </Button>
+                      <BiChevronRight size={20} color='blue' />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -101,7 +106,8 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
             color='black'
             size='md'
             radius='md'
-            className='flex justify-start font-normal'
+            className='flex justify-start p-2 font-medium'
+            leftSection={<CiDiscount1 size={26} className='text-blue-800' />}
           >
             Kampanyalar ve Avantajlar
           </Button>
@@ -117,9 +123,9 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
           <div className='flex items-center'>
             <button
               onClick={handleClose}
-              className='rounded-full bg-gray-200 p-2 text-gray-700'
+              className='rounded-r-xl bg-red-800 p-2 px-5 text-white'
             >
-              ❌
+              <IoClose color='white' />
             </button>
             <div className='px-5'>
               <Title className='text-center' order={3}>
@@ -131,6 +137,9 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
         className='border-gray-300 p-3'
         closeButtonProps={{
           style: { display: 'none' },
+        }}
+        classNames={{
+          header: 'p-0',
         }}
       >
         <hr className='mt-3 mb-3 border-blue-500' />

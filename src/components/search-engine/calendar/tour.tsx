@@ -68,7 +68,7 @@ const TourCalendar: React.FC<Props> = ({
         />{' '}
         <Input
           label={
-            <div className='flex w-full gap-[45px] md:px-2'>
+            <div className='flex w-full gap-[55px] md:px-2'>
               <span>Giriş Tarihi</span>
               <span>Çıkış Tarihi</span>
             </div>
