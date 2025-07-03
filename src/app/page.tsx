@@ -117,17 +117,26 @@ export default async function Home() {
             }))}
           />
         )}
-
+      </Container>
+      <Container
+        display={'flex'}
+        className='flex-col gap-3 py-3 md:gap-10 md:py-10'
+      >
         {upcomingHolidaysData && upcomingHolidaysData.length > 0 && (
           <div>
             <UpComingHolidays data={upcomingHolidaysData} />
           </div>
         )}
-        {lastOpportunityData && lastOpportunityData?.length > 0 && (
-          <div>
-            <LastOpportunity data={lastOpportunityData} />
-          </div>
-        )}
+      </Container>
+      {lastOpportunityData && lastOpportunityData?.length > 0 && (
+        <div>
+          <LastOpportunity data={lastOpportunityData} />
+        </div>
+      )}
+      <Container
+        display={'flex'}
+        className='flex-col gap-3 py-3 md:gap-10 md:py-10'
+      >
         {recommendedProductsData && recommendedProductsData.length > 0 && (
           <div>
             <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:mb-10 md:text-3xl'>
@@ -154,10 +163,11 @@ export default async function Home() {
             <RecommendedProducts data={recommendedProductsData} />
           </div>
         )}
-
-        <div className='hidden'>
-          <TourOpportunity />
-        </div>
+      </Container>
+      <div className='hidden'>
+        <TourOpportunity />
+      </div>
+      <Container display={'flex'} className='flex-col gap-3 py-3'>
         {trendRegionsData && trendRegionsData.length > 0 && (
           <div className='hidden sm:block'>
             <Title order={4} c={'blue.9'} fz={'h2'} className='text-center'>
@@ -188,19 +198,19 @@ export default async function Home() {
             <TrendRegions data={trendRegionsData} />
           </div>
         )}
-        {/* <div>
-          {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
-        </div> */}
-
+      </Container>
+      <div>
+        {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
+      </div>
+      <Container display={'flex'} className='flex-col gap-3 py-3 md:gap-10'>
         {footerMenuData && footerMenuData.length > 0 && (
           <div>
             <PopularDestinations data={footerMenuData} />
           </div>
         )}
-
-        <div>
-          <EbultenForm />
-        </div>
+      </Container>
+      <Container display={'flex'} className='mb-10 flex-col gap-3 py-3'>
+        <EbultenForm />
       </Container>
     </div>
   )
