@@ -4,8 +4,8 @@ import { Carousel, CarouselSlide } from '@mantine/carousel'
 import {
   AspectRatio,
   Button,
-  Drawer,
   Image,
+  Modal,
   Progress,
   SimpleGrid,
   Title,
@@ -69,14 +69,14 @@ export const HotelMediaGallery: React.FC<IProps> = ({
 
   return (
     <>
-      <Drawer
-        size='100%'
+      <Modal
+        size='80%'
+        radius={'md'}
         opened={isMediaGalleryOpened}
         onClose={closeMediaGallery}
-        title={`${hotel.name}`}
-        position='bottom'
+        title={<div className='py-0 text-2xl font-bold'>{hotel.name}</div>}
         classNames={{
-          body: 'px-0 md:px-3',
+          body: 'px-0 md:px-2 py-0',
         }}
         withinPortal
         closeOnEscape={!isCategoryCarouselOpened}
@@ -89,6 +89,7 @@ export const HotelMediaGallery: React.FC<IProps> = ({
           slideGap={'sm'}
           emblaOptions={{ dragFree: true }}
           classNames={categoryCarouselClasses}
+          className='sticky top-10 z-20 bg-white py-7'
         >
           {imageCategories.map((category) => (
             <Carousel.Slide key={category.id}>
@@ -119,60 +120,60 @@ export const HotelMediaGallery: React.FC<IProps> = ({
           {Object.entries(groupedImages).map((category, categoryIndex) => (
             <div
               key={categoryIndex}
-              className='relative items-stretch py-7 md:flex md:flex-row md:flex-wrap'
+              className='relative flex justify-center py-7 md:flex md:flex-row md:flex-wrap'
               id={`category-wrapper-${category[0]}`}
             >
-              <div className='px-4 pb-3 md:w-1/3 md:px-0'>
-                <div className='sticky top-20'>
-                  <Title order={6} fz={'h4'}>
-                    {
-                      imageCategories.find(
-                        (imageCategory) => imageCategory.id === +category[0]
-                      )?.name
-                    }
-                  </Title>
-                </div>
+              <div className='px-4 pb-3 text-center'>
+                <Title order={6} fz={'h2'}>
+                  {
+                    imageCategories.find(
+                      (imageCategory) => imageCategory.id === +category[0]
+                    )?.name
+                  }
+                </Title>
               </div>
-              <div className='md:w-2/3'>
-                <SimpleGrid
-                  cols={{ base: 2, md: 3 }}
-                  spacing={'md'}
-                  verticalSpacing={'md'}
-                >
-                  {category[1]?.map((image, imageIndex) => (
-                    <div key={imageIndex}>
-                      <UnstyledButton
-                        type='button'
-                        onClick={() => {
-                          openCategoryCarouselOpened()
-                          categoryCarouselSliderPosition.current = imageIndex
-                          setSelectedCategoryImages(
-                            images.filter(
-                              (hotelImage) =>
-                                hotelImage.category === image.category
+              <div className='grid'>
+                <div>
+                  <SimpleGrid
+                    cols={{ base: 2, md: 3 }}
+                    spacing={'md'}
+                    verticalSpacing={'md'}
+                  >
+                    {category[1]?.map((image, imageIndex) => (
+                      <div key={imageIndex}>
+                        <UnstyledButton
+                          type='button'
+                          onClick={() => {
+                            openCategoryCarouselOpened()
+                            categoryCarouselSliderPosition.current = imageIndex
+                            setSelectedCategoryImages(
+                              images.filter(
+                                (hotelImage) =>
+                                  hotelImage.category === image.category
+                              )
                             )
-                          )
-                        }}
-                      >
-                        <AspectRatio>
-                          <Image
-                            src={image.original}
-                            alt={
-                              imageCategories.find(
-                                (category) => category.id == image.category
-                              )?.name
-                            }
-                          />
-                        </AspectRatio>
-                      </UnstyledButton>
-                    </div>
-                  ))}
-                </SimpleGrid>
+                          }}
+                        >
+                          <AspectRatio>
+                            <Image
+                              src={image.original}
+                              alt={
+                                imageCategories.find(
+                                  (category) => category.id == image.category
+                                )?.name
+                              }
+                            />
+                          </AspectRatio>
+                        </UnstyledButton>
+                      </div>
+                    ))}
+                  </SimpleGrid>
+                </div>
               </div>
             </div>
           ))}
         </div>
-      </Drawer>
+      </Modal>
       <Transition
         mounted={isCategoryCarouselOpened}
         transition='fade-up'
@@ -187,13 +188,13 @@ export const HotelMediaGallery: React.FC<IProps> = ({
               style={styles}
               className='z-overlay fixed start-0 end-0 top-0 bottom-0 bg-black text-white'
             >
-              <div className='p-4'>
+              <div className='p-0 text-end'>
                 <div>
                   <Button
                     c={'white'}
                     variant='light'
                     leftSection={<IoClose size={22} />}
-                    size='sm'
+                    size='xl'
                     onClick={closeCategoryCarouselOpened}
                   >
                     Kapat

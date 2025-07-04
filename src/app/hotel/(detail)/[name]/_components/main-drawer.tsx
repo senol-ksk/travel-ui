@@ -189,7 +189,7 @@ const MainDrawer: React.FC<IProps> = ({
                             </ul>
                           </Spoiler>
                         </div>
-                        <ul className='grid-cols-auto my-10 flex gap-2'>
+                        <ul className='grid-cols-auto my-5 flex gap-2'>
                           {data?.hotel.year_built && (
                             <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                               <FaRegBuilding
@@ -207,7 +207,7 @@ const MainDrawer: React.FC<IProps> = ({
                               </div>
                             </li>
                           )}
-                          {data?.hotel.nr_rooms && (
+                          {Number(data?.hotel.nr_rooms) > 0 && (
                             <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                               <MdOutlineBed
                                 size={24}
@@ -224,24 +224,23 @@ const MainDrawer: React.FC<IProps> = ({
                               </div>
                             </li>
                           )}
-                          {data?.hotel.nr_restaurants &&
-                            data?.hotel.nr_restaurants > 0 && (
-                              <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
-                                <FaBellConcierge
-                                  size={24}
-                                  className='text-blue-700'
-                                />
-                                <div className='grid gap-0'>
-                                  <div className='font-medium text-blue-800'>
-                                    Restaurant
-                                  </div>
-                                  <div className='font-semibold'>
-                                    {data?.hotel.nr_restaurants}
-                                  </div>
+                          {Number(data?.hotel.nr_restaurants) > 0 && (
+                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                              <FaBellConcierge
+                                size={24}
+                                className='text-blue-700'
+                              />
+                              <div className='grid gap-0'>
+                                <div className='font-medium text-blue-800'>
+                                  Restaurant
                                 </div>
-                              </li>
-                            )}
-                          {data?.hotel.nr_bars && data?.hotel.nr_bars > 0 && (
+                                <div className='font-semibold'>
+                                  {data?.hotel.nr_restaurants}
+                                </div>
+                              </div>
+                            </li>
+                          )}
+                          {Number(data?.hotel.nr_bars) > 0 && (
                             <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                               <FaGlassMartiniAlt
                                 size={24}
@@ -272,9 +271,9 @@ const MainDrawer: React.FC<IProps> = ({
                           )}
                         </ul>
                       </div>
-                      <TypographyStylesProvider className='rounded bg-white p-3'>
+                      <TypographyStylesProvider className='mb-3 rounded bg-white p-3'>
                         <Spoiler
-                          className='mb-10 pb-3'
+                          className='mb-5 pb-3'
                           maxHeight={120}
                           showLabel='Daha fazla göster'
                           hideLabel='Daha az göster'
@@ -287,7 +286,7 @@ const MainDrawer: React.FC<IProps> = ({
                         </Spoiler>
                       </TypographyStylesProvider>
                     </div>
-                    <Accordion className='grid gap-3 rounded bg-gray-50 py-3'>
+                    <Accordion className='grid gap-3 rounded bg-gray-50'>
                       {featureValues.map(([key, value], itemIndex) => {
                         if (!value?.trim()) return null
 
@@ -303,7 +302,7 @@ const MainDrawer: React.FC<IProps> = ({
                             value={String(itemIndex)}
                             className='rounded bg-white shadow-sm'
                           >
-                            <Accordion.Control className='flex w-full items-center gap-5 text-lg font-semibold'>
+                            <Accordion.Control className='flex w-full items-center gap-5 bg-white p-3 text-lg font-semibold'>
                               <div className='flex items-center gap-3'>
                                 {Icon && (
                                   <span className='inline-flex items-center justify-center gap-5'>

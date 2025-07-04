@@ -26,34 +26,39 @@ const Location: React.FC<LocationProps> = ({ location, data }) => {
             </Map>
           </APIProvider>
         </AspectRatio>
-
-        <div className='mt-3 flex p-3 text-xs md:text-sm'>
-          {data?.hotel?.descriptions?.locationInformation?.trim() &&
-            data?.hotel?.descriptions?.locationInformation?.trim().length >
-              0 && (
-              <div className='col-auto p-3'>
+        <div className='my-3 rounded-md bg-white py-3'>
+          <div className='grid grid-cols-3 gap-3'>
+            {data?.hotel?.nearby_info &&
+              data?.hotel?.nearby_info.length > 0 && (
+                <div className='p-3'>
+                  <div className='font-bold'>Yakın Çevreyi Tanıyın</div>
+                  <div>
+                    {data.hotel.nearby_info.map((item, index) => (
+                      <div key={index}>
+                        {item.name} {item.distance}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            {data?.hotel?.nearby && data?.hotel?.nearby.length > 0 && (
+              <div className='p-3'>
                 <div className='font-bold'>Yerleşim Merkezi</div>
-                <div>{data.hotel.descriptions.locationInformation.trim()}</div>
+                <div>{data.hotel.nearby}</div>
               </div>
             )}
-          {data?.hotel?.nearby_info && data?.hotel?.nearby_info.length > 0 && (
-            <div className='col-auto p-3'>
-              <div className='font-bold'>Yerleşim Merkezi</div>
-              <div>
-                {data.hotel.nearby_info.map((item, index) => (
-                  <div key={index}>
-                    {item.name} {item.distance}
+
+            {data?.hotel?.descriptions?.locationInformation?.trim() &&
+              data?.hotel?.descriptions?.locationInformation?.trim().length >
+                0 && (
+                <div className='p-3'>
+                  <div className='font-bold'>Gezilecek Yerler </div>
+                  <div>
+                    {data.hotel.descriptions.locationInformation.trim()}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {data?.hotel?.nearby && data?.hotel?.nearby.length > 0 && (
-            <div className='col-auto p-3'>
-              <div className='font-bold'>Yerleşim Merkezi</div>
-              <div>{data.hotel.nearby}</div>
-            </div>
-          )}
+                </div>
+              )}
+          </div>
         </div>
       </div>
     </>

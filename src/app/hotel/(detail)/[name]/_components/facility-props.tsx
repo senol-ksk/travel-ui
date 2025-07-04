@@ -112,7 +112,7 @@ const FacilityProps: React.FC<IProps> = ({
               value={String(itemIndex)}
               className='rounded bg-white shadow-sm'
             >
-              <Accordion.Control className='flex w-full items-center gap-5 text-lg font-semibold'>
+              <Accordion.Control className='flex w-full items-center gap-5 bg-white p-3 text-lg font-semibold'>
                 <div className='flex items-center gap-3'>
                   {Icon && (
                     <span className='inline-flex items-center justify-center gap-5'>

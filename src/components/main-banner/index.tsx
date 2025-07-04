@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ActionIcon,
   AspectRatio,
@@ -62,7 +62,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
       >
         {slides.map((slide) => {
           return (
-            <Carousel.Slide key={slide.id}>
+            <Carousel.Slide key={slide.id} className='rounded'>
               <Box
                 component={Link}
                 href={slide.params.link?.value || '#'}
@@ -92,6 +92,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
       <div className='flex justify-center gap-4 pt-5'>
         <div>
           <ActionIcon
+            radius={'xl'}
             bg={'blue.1'}
             c='blue.8'
             bdrs={'100%'}
@@ -106,6 +107,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
             const isActiveState = currentSlideIndex === snapIndex
             return (
               <ActionIcon
+                radius='xl'
                 key={snap}
                 bg={isActiveState ? 'blue.8' : 'blue.2'}
                 bdrs={'100%'}
@@ -120,6 +122,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
         </div>
         <div>
           <ActionIcon
+            radius='xl'
             bg={'blue.1'}
             c='blue.8'
             bdrs={'100%'}

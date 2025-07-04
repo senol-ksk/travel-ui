@@ -99,7 +99,7 @@ const HotelRoom: React.FC<IProps> = ({
                     fallbackSrc='/default-room.jpg'
                     src={images?.at(0)}
                     alt={detail.roomType}
-                    className='cursor-pointer rounded object-cover'
+                    className='cursor-pointer rounded'
                     onClick={() => setDrawerOpened(true)}
                   />
                 </AspectRatio>

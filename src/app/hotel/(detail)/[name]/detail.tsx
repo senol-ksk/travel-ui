@@ -355,7 +355,7 @@ const HotelDetailSection = () => {
                 <div className='flex items-center'>
                   <Button
                     className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                    size='sm'
+                    size='md'
                     onClick={() => scrollIntoRatings()}
                   >
                     {hotel.comment_info?.comments.length} değerlendirme
@@ -364,10 +364,7 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             )}
-            <div
-              className='grid gap-3 rounded bg-white p-3'
-              data-heading='Konum'
-            >
+            <div className='grid gap-3 rounded p-3' data-heading='Konum'>
               <div className='col-span-4 flex gap-3'>
                 <iframe
                   src='https://maps.google.com/maps?q=35.379585,34.08901&amp;output=embed&amp;hl=en'
@@ -422,7 +419,7 @@ const HotelDetailSection = () => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms'>
+        <Title fz={'xxl'} id='rooms' className='md:mt-10'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
@@ -530,7 +527,8 @@ const HotelDetailSection = () => {
             overlayProps={{ radius: 'sm', blur: 2 }}
           />
         </div>
-        <Title order={2} size={'lg'} id='facility-infos'>
+
+        <Title order={2} fz={'xxl'} id='facility-infos' className='md:mt-10'>
           Tesis Bilgileri
         </Title>
         <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
@@ -543,7 +541,13 @@ const HotelDetailSection = () => {
 
         {(hotel.comment_info?.comments?.length ?? 0) > 0 && (
           <div ref={ratingTargetRef}>
-            <Title order={2} size={'lg'} id='ratings' pb={'md'}>
+            <Title
+              order={2}
+              fz={'xxl'}
+              id='ratings'
+              pb={'md'}
+              className='md:mt-10'
+            >
               Değerlendirmeler
             </Title>
             <div className='gap-2 rounded bg-gray-50 p-3'>
@@ -552,18 +556,27 @@ const HotelDetailSection = () => {
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
                   </div>
-                  <div className='text-xl font-normal'>Mükemmel</div>
+                  <div className='grid'>
+                    <div className='text-xl font-normal'>Mükemmel</div>
+                    <div className='flex items-center'>
+                      <Button
+                        className='border-0 bg-transparent p-0 font-normal text-black'
+                        size='md'
+                        onClick={openGeneralInfoDrawer}
+                      >
+                        {hotel.comment_info?.comments?.length ?? 0}{' '}
+                        değerlendirme
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className='flex items-center'>
-                  <Button
-                    className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                    size='sm'
-                    onClick={openGeneralInfoDrawer}
-                  >
-                    {hotel.comment_info?.comments?.length ?? 0} değerlendirme
-                  </Button>
-                  <BiChevronRight size={20} color='blue' />
-                </div>
+
+                <Button
+                  onClick={openGeneralInfoDrawer}
+                  className='bg-transparent p-0 font-normal text-blue-700'
+                >
+                  Tüm yorumları Göster <MdKeyboardArrowRight size={20} />
+                </Button>
               </div>
               <div className='mt-3 rounded bg-white'>
                 {hotel.comment_info && <Comments data={hotel.comment_info} />}
@@ -572,33 +585,24 @@ const HotelDetailSection = () => {
           </div>
         )}
 
-        <Title order={2} size={'lg'} id='location'>
+        <Title order={2} fz={'xxl'} id='location' className='md:mt-10'>
           Konum Bilgileri{' '}
         </Title>
         <div ref={locationTargetRef}>
           <Location location={hotel.location} data={hotelInfo} />
         </div>
-        {/* <div>
-          <Title order={5}>İletişim Bilgileri</Title>
-          <address>
-            {hotel.address}
-            <div>
-              <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
-            </div>
-            <div>
-              <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
-            </div>
-          </address>
-        </div> */}
         {hotel.descriptions.importentInfo && (
-          <>
-            <Title order={2} size={'lg'}>
+          <div className='grid gap-3 md:mt-10 md:mb-20'>
+            <Title order={2} fz={'xxl'}>
               Önemli Bilgiler{' '}
             </Title>
             <div>
-              <ImportantInfos description={hotel.descriptions} />
+              <ImportantInfos
+                description={hotel.descriptions}
+                data={hotelInfo}
+              />
             </div>
-          </>
+          </div>
         )}
       </Container>
       <Modal
