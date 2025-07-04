@@ -28,3 +28,17 @@ export type OfficialHolidayServiceResponse = {
     languageCode: string
   }[]
 }
+
+export interface InstallmentApiResponse {
+  installment: {
+    installmentInfoList: {
+      amountPerInstallment: number
+      bankName: string
+      binList: string
+      cardProgramName: string
+      installmentCount: number
+      totalAmount: number
+    }[]
+    installmentType: number
+  }
+}
