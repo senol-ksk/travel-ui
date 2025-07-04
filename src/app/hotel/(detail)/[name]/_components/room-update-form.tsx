@@ -101,9 +101,9 @@ const RoomUpdateForm = () => {
             }}
           />
         </div>
-        <div className='col-span-1'>
+        <div className='col-span-1 flex justify-end md:justify-start'>
           <Button
-            className='h-full px-8'
+            className='h-full md:px-8'
             type='submit'
             radius='xl'
             color={isFormDirty ? 'green' : 'blue'}
