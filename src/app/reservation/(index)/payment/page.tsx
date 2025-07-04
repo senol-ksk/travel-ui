@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
 import { notifications } from '@mantine/notifications'
+import cardValidation from 'card-validator'
 
 import NextImage from 'next/image'
 import { GrAmex } from 'react-icons/gr'
@@ -27,8 +28,7 @@ import { useMutation } from '@tanstack/react-query'
 import { range, upperFirst, useDisclosure } from '@mantine/hooks'
 import clsx from 'clsx'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import cardValidation from 'card-validator'
+
 import { formatCreditCard } from 'cleave-zen'
 import NumberFlow from '@number-flow/react'
 import { RiCheckboxCircleFill, RiVisaLine } from 'react-icons/ri'
@@ -49,42 +49,25 @@ import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
-// import parafParaResponseDummyData from '@/app/reservation/(index)/paraf/paraf-para-dummy-response.json'
 import { ParafParaView } from '../../components/paraf'
 
 import paymentSegmentClasses from '@/styles/PaymentMethodSegment.module.css'
+import {
+  PaymentValidationSchemaTypes,
+  paymentValidationSchema,
+} from '@/libs/credit-card-utils'
+// import { CreditCardForm } from '@/components/payment/credit-card'
 
-let cardCvvLength = 3
 enum PaymentMethodEnums {
   CreditCard,
   Bonus,
 }
-
-const paymentValidationSchema = z.object({
-  cardOwner: z.string().min(3).max(50),
-  cardNumber: z
-    .string()
-    .optional()
-    .refine((value) => {
-      cardCvvLength = cardValidation.number(value).card?.code.size || 3
-
-      return cardValidation.number(value).isValid
-    }, 'Gecersiz Kart Numarası'),
-  cardExpiredMonth: z.string(),
-  cardExpiredYear: z.string(),
-  cardCvv: z.string().refine((val) => {
-    return val.length === cardCvvLength
-  }),
-  installment: z.string().default('1'),
-})
 
 const cardExpiredYearList = () =>
   yearList(dayjs().get('year'), dayjs().get('year') + 20).map((year) => ({
     label: '' + year,
     value: '' + year,
   }))
-
-export type CardValidationSchemaTypes = z.infer<typeof paymentValidationSchema>
 
 const cardMonths = () =>
   range(1, 12).map((month) => {
@@ -124,7 +107,7 @@ const PaymentPage = () => {
   const paymentMutation = useMutation<
     PaymentResponseType | null | undefined,
     null,
-    CardValidationSchemaTypes
+    PaymentValidationSchemaTypes
   >({
     mutationKey: ['payment-mutation'],
     mutationFn: async (data) => {
@@ -159,7 +142,7 @@ const PaymentPage = () => {
     },
   })
   const handlePrivilegedCardMutation = useMutation({
-    mutationFn: async (data: CardValidationSchemaTypes) => {
+    mutationFn: async (data: PaymentValidationSchemaTypes) => {
       const paymentResponse = await serviceRequest<ParafParaPaymentResponse>({
         axiosOptions: {
           url: 'api/payment/privilegeCardHandler',
@@ -445,6 +428,8 @@ const PaymentPage = () => {
             </div>
             <div className='grid items-center gap-3 sm:grid-cols-2'>
               <div>
+                {/* <CreditCardForm form={formMethods} /> */}
+
                 <div className='grid w-full gap-3'>
                   <Controller
                     control={formMethods.control}
@@ -655,6 +640,7 @@ const PaymentPage = () => {
                         'cardExpiredYear',
                         'cardExpiredYear',
                         'cardNumber',
+                        'cardOwner',
                       ])
 
                       if (isFormValid) {
