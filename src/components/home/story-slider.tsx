@@ -66,7 +66,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
             <Box
               component={Link}
               href={item.params.link.value}
-              className='block h-full'
+              className='group block h-full'
             >
               <div className='flex h-full w-[90px] flex-col md:w-[160px]'>
                 <AspectRatio classNames={aspectRatioClasses} className='mt-4'>
@@ -77,7 +77,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
                     {item.title}
                   </Text>
                 </div>
-                <div className='mx-auto mt-auto mb-15 h-[5px] w-[69px] rounded bg-blue-200' />
+                <div className='mx-auto mt-auto mb-15 h-[5px] w-[69px] rounded bg-blue-200 opacity-100 transition-opacity duration-400 group-hover:opacity-0' />
               </div>
             </Box>
           </Carousel.Slide>
