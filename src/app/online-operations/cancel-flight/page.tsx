@@ -1,12 +1,15 @@
 'use client'
 
-import { Button, Container, TextInput, Title } from '@mantine/core'
+import { Button, TextInput, Title } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { MdOutlineChevronRight } from 'react-icons/md'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+
+import { z } from '@/libs/zod'
 import { serviceRequest } from '@/network'
-import { MdOutlineChevronRight } from 'react-icons/md'
+import { RiErrorWarningFill, RiErrorWarningLine } from 'react-icons/ri'
 
 const schema = z.object({
   bookingCode: z.string().nonempty(),
@@ -21,6 +24,7 @@ export default function CancelFlightPage() {
   })
 
   const submitMutation = useMutation({
+    mutationKey: ['book-refund-mutation'],
     mutationFn: async (params: FormSchemaType) => {
       const response = await serviceRequest<{
         modules: number[]
@@ -77,7 +81,25 @@ export default function CancelFlightPage() {
       })
       return response
     },
-    mutationKey: ['book-refund-mutation'],
+    onSuccess: (query) => {
+      if (!query?.success || !query.data) {
+        notifications.show({
+          title: 'PNR bulunamadı.',
+          message: 'Lutfen PNR ve Soyad bilgilerini gözden geçirin',
+          icon: <RiErrorWarningLine size={20} />,
+          position: 'top-right',
+          color: 'white',
+          autoClose: 5000,
+          classNames: {
+            icon: 'bg-transparent size-[auto]',
+            root: 'bg-red-600 text-white',
+            title: 'text-white',
+            description: 'text-white',
+            closeButton: 'text-white',
+          },
+        })
+      }
+    },
   })
 
   return (
