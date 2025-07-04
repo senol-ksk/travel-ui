@@ -364,10 +364,7 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             )}
-            <div
-              className='grid gap-3 rounded bg-white p-3'
-              data-heading='Konum'
-            >
+            <div className='grid gap-3 rounded p-3' data-heading='Konum'>
               <div className='col-span-4 flex gap-3'>
                 <iframe
                   src='https://maps.google.com/maps?q=35.379585,34.08901&amp;output=embed&amp;hl=en'

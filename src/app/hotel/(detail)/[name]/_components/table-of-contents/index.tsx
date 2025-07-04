@@ -3,6 +3,12 @@ import { Button, TableOfContents } from '@mantine/core'
 import classes from './Toc.module.css'
 
 function HotelTableOfContents() {
+  const ScrollRooms = () => {
+    const roomsSection = document.getElementById('rooms')
+    if (roomsSection) {
+      roomsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
   return (
     <>
       <TableOfContents
@@ -22,7 +28,7 @@ function HotelTableOfContents() {
           children: data.value,
         })}
       />
-      <Button size='sm' radius='md' className='m-3 px-13'>
+      <Button size='sm' radius='md' className='m-3 px-13' onClick={ScrollRooms}>
         Odaları Gör
       </Button>
     </>

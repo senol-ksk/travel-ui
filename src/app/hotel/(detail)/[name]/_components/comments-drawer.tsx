@@ -24,7 +24,7 @@ const CommentsDrawer: React.FC<IProps> = ({ data }) => {
 
   return (
     <div>
-      <div className='mt-10 gap-2 rounded bg-gray-50 p-3'>
+      <div className='mt-5 gap-2 rounded bg-gray-50 p-3'>
         <div className='flex items-center justify-between rounded border-b-20 border-b-gray-50 bg-white p-5'>
           <div className='hidden items-center gap-2 self-end text-blue-800 md:grid'>
             <div className='flex items-center gap-2'>

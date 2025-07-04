@@ -72,7 +72,7 @@ const GeneralDrawer: React.FC<IProps> = ({
                   </div>
                 </li>
               )}
-              {data?.hotel.nr_restaurants && data?.hotel.nr_restaurants > 0 && (
+              {Number(data?.hotel.nr_restaurants) > 0 && (
                 <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                   <FaBellConcierge size={24} className='text-blue-700' />
                   <div className='grid gap-0'>
@@ -83,7 +83,8 @@ const GeneralDrawer: React.FC<IProps> = ({
                   </div>
                 </li>
               )}
-              {data?.hotel.nr_bars && data?.hotel.nr_bars > 0 && (
+
+              {Number(data?.hotel.nr_bars) > 0 && (
                 <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                   <FaGlassMartiniAlt size={24} className='text-blue-700' />
                   <div className='grid gap-0'>
@@ -123,15 +124,13 @@ const GeneralDrawer: React.FC<IProps> = ({
             )}
           </div>
 
-          {generalInfoContentHeight > GENERAL_INFO_MAX_HEIGHT && (
-            <Button
-              onClick={onOpenDrawer}
-              className='bg-transparent p-0 font-normal text-blue-700'
-            >
-              Tesisin tüm olanaklarını görün
-              <MdKeyboardArrowRight size={20} />
-            </Button>
-          )}
+          <Button
+            onClick={onOpenDrawer}
+            className='bg-transparent p-0 font-normal text-blue-700'
+          >
+            Tesisin tüm olanaklarını görün
+            <MdKeyboardArrowRight size={20} />
+          </Button>
         </div>
       ) : null}
       {/* <MainDrawer description={description} data={data} /> */}
