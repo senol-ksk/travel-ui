@@ -1,9 +1,7 @@
 import { HotelCommentInfo } from '@/app/hotel/types'
-import { Carousel } from '@mantine/carousel'
-import { Card, Badge, Text, Group, Divider, Title, Button } from '@mantine/core'
+import { Card, Badge, Text, Group, Divider, Button } from '@mantine/core'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { BiChevronRight } from 'react-icons/bi'
 
 type IProps = {
   data: HotelCommentInfo
@@ -38,8 +36,8 @@ const CommentsDrawer: React.FC<IProps> = ({ data }) => {
                   Mükemmel
                 </div>
                 <Button
-                  className='border-0 bg-transparent p-0 font-normal'
-                  size='sm'
+                  className='border-0 bg-white p-0 font-normal text-black'
+                  size='md'
                 >
                   {data?.comments?.length ?? 0} değerlendirme
                 </Button>

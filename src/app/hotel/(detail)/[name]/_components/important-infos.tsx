@@ -20,11 +20,13 @@ const ImportantInfos: React.FC<IProps> = ({ description, data }) => {
             <div className='grid grid-cols-2'>
               <div>
                 <div className='text-xl font-semibold'>Check-in</div>
-                <strong>{data?.hotel.checkin_from}</strong>
+                <strong>
+                  En erken saat {data?.hotel.checkin_from} ve sonrası
+                </strong>
               </div>
               <div>
                 <div className='text-xl font-semibold'>Check-out</div>
-                <strong>{data?.hotel.checkout_to}</strong>
+                <strong>En geç saat {data?.hotel.checkout_to} ve öncesi</strong>
               </div>
             </div>
           </Accordion.Control>

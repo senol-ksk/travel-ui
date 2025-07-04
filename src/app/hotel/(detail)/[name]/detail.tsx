@@ -355,7 +355,7 @@ const HotelDetailSection = () => {
                 <div className='flex items-center'>
                   <Button
                     className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                    size='sm'
+                    size='md'
                     onClick={() => scrollIntoRatings()}
                   >
                     {hotel.comment_info?.comments.length} değerlendirme
@@ -559,18 +559,27 @@ const HotelDetailSection = () => {
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
                   </div>
-                  <div className='text-xl font-normal'>Mükemmel</div>
+                  <div className='grid'>
+                    <div className='text-xl font-normal'>Mükemmel</div>
+                    <div className='flex items-center'>
+                      <Button
+                        className='border-0 bg-transparent p-0 font-normal text-black'
+                        size='md'
+                        onClick={openGeneralInfoDrawer}
+                      >
+                        {hotel.comment_info?.comments?.length ?? 0}{' '}
+                        değerlendirme
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className='flex items-center'>
-                  <Button
-                    className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                    size='sm'
-                    onClick={openGeneralInfoDrawer}
-                  >
-                    {hotel.comment_info?.comments?.length ?? 0} değerlendirme
-                  </Button>
-                  <BiChevronRight size={20} color='blue' />
-                </div>
+
+                <Button
+                  onClick={openGeneralInfoDrawer}
+                  className='bg-transparent p-0 font-normal text-blue-700'
+                >
+                  Tüm yorumları Göster <MdKeyboardArrowRight size={20} />
+                </Button>
               </div>
               <div className='mt-3 rounded bg-white'>
                 {hotel.comment_info && <Comments data={hotel.comment_info} />}
