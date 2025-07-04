@@ -100,7 +100,7 @@ const HotelCalendar: React.FC<Props> = ({
 
         <Input
           label={
-            <div className='flex w-full gap-[90px] md:px-2'>
+            <div className='flex w-full gap-[84px] md:px-2'>
               <span>Giriş</span>
               <span>Çıkış</span>
             </div>

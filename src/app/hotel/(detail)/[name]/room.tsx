@@ -89,20 +89,21 @@ const HotelRoom: React.FC<IProps> = ({
           <>
             {/* <input value={JSON.stringify(roomGroup, null, 2)} readOnly /> */}
             <div
-              className='grid gap-7 p-3 lg:gap-6 xl:grid-cols-12'
+              className='gap-7 p-3 lg:flex lg:gap-6 xl:grid xl:grid-cols-12'
               key={room.key}
             >
               <div className='relative xl:col-span-4 2xl:row-span-2'>
-                <AspectRatio ratio={4 / 3} className='w-full max-w-md'>
+                <AspectRatio ratio={4 / 3} className='w-full'>
                   <Image
                     loading='lazy'
-                    fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
+                    fallbackSrc='/default-room.jpg'
                     src={images?.at(0)}
                     alt={detail.roomType}
-                    className='h-full w-full cursor-pointer rounded'
+                    className='cursor-pointer rounded object-cover'
                     onClick={() => setDrawerOpened(true)}
                   />
                 </AspectRatio>
+
                 <Button
                   className='absolute right-0 bottom-0 m-2'
                   radius='md'
@@ -270,23 +271,23 @@ const HotelRoom: React.FC<IProps> = ({
                 )}
               </div>
               {isLastItem && (
-                <div className='item-center m-2 grid justify-center self-end 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
+                <div className='item-center m-2 grid justify-center self-end lg:col-span-4 lg:ms-auto 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
                   <div>
                     <div>
                       {discountRate > 0 && (
-                        <div className='grid items-center justify-end'>
-                          <div className='text-md flex w-30 items-center rounded bg-orange-700 p-1 text-end leading-none font-semibold text-white'>
+                        <div className='grid items-center justify-center md:justify-end'>
+                          <div className='text-md flex w-30 items-center rounded bg-orange-700 p-1 text-center leading-none font-semibold text-white md:text-end'>
                             <HiPercentBadge size={18} />%{discountRate} indirim
                           </div>
-                          <div className='text-md text-end text-gray-600'>
+                          <div className='text-md text-center text-gray-600 md:text-end'>
                             {timeDiff} gece fiyatı
                           </div>
-                          <div className='text-md pt-1 text-end line-through'>
+                          <div className='text-md pt-1 text-center line-through md:text-end'>
                             {formatCurrency(discountPrice)}
                           </div>
                         </div>
                       )}
-                      <div className='text-end text-2xl font-bold'>
+                      <div className='text-center text-2xl font-bold md:text-end'>
                         <PriceNumberFlow
                           value={
                             isCancelWarrantyChecked

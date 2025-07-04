@@ -274,7 +274,7 @@ const HotelDetailSection = () => {
           <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
               <div className='text-3xl font-semibold'>{hotel.name.trim()}</div>
-              <div className='my-5 flex items-center gap-20 text-sm text-blue-800'>
+              <div className='flex items-center gap-20 text-sm text-blue-800'>
                 <div className='flex gap-1'>
                   <span>
                     <RiMapPin2Line size={20} className='text-blue-800' />
