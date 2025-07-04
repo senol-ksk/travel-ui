@@ -287,7 +287,7 @@ const MainDrawer: React.FC<IProps> = ({
                         </Spoiler>
                       </TypographyStylesProvider>
                     </div>
-                    <Accordion className='grid gap-3 rounded bg-gray-50 py-3'>
+                    <Accordion className='grid gap-3 rounded bg-gray-50'>
                       {featureValues.map(([key, value], itemIndex) => {
                         if (!value?.trim()) return null
 

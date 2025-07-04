@@ -422,7 +422,7 @@ const HotelDetailSection = () => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms'>
+        <Title fz={'xxl'} id='rooms' className='md:mt-10'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
@@ -530,7 +530,8 @@ const HotelDetailSection = () => {
             overlayProps={{ radius: 'sm', blur: 2 }}
           />
         </div>
-        <Title order={2} size={'lg'} id='facility-infos'>
+
+        <Title order={2} fz={'xxl'} id='facility-infos' className='md:mt-10'>
           Tesis Bilgileri
         </Title>
         <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
@@ -543,7 +544,13 @@ const HotelDetailSection = () => {
 
         {(hotel.comment_info?.comments?.length ?? 0) > 0 && (
           <div ref={ratingTargetRef}>
-            <Title order={2} size={'lg'} id='ratings' pb={'md'}>
+            <Title
+              order={2}
+              fz={'xxl'}
+              id='ratings'
+              pb={'md'}
+              className='md:mt-10'
+            >
               Değerlendirmeler
             </Title>
             <div className='gap-2 rounded bg-gray-50 p-3'>
@@ -572,33 +579,24 @@ const HotelDetailSection = () => {
           </div>
         )}
 
-        <Title order={2} size={'lg'} id='location'>
+        <Title order={2} fz={'xxl'} id='location' className='md:mt-10'>
           Konum Bilgileri{' '}
         </Title>
         <div ref={locationTargetRef}>
           <Location location={hotel.location} data={hotelInfo} />
         </div>
-        {/* <div>
-          <Title order={5}>İletişim Bilgileri</Title>
-          <address>
-            {hotel.address}
-            <div>
-              <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
-            </div>
-            <div>
-              <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
-            </div>
-          </address>
-        </div> */}
         {hotel.descriptions.importentInfo && (
-          <>
-            <Title order={2} size={'lg'}>
+          <div className='grid gap-3 md:mt-10 md:mb-20'>
+            <Title order={2} fz={'xxl'}>
               Önemli Bilgiler{' '}
             </Title>
             <div>
-              <ImportantInfos description={hotel.descriptions} />
+              <ImportantInfos
+                description={hotel.descriptions}
+                data={hotelInfo}
+              />
             </div>
-          </>
+          </div>
         )}
       </Container>
       <Modal
