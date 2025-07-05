@@ -1065,3 +1065,254 @@ export type HotelBookingDetailApiResponse = [
     }
   },
 ]
+
+export enum ActiveFlightTripKind {
+  ONEWAY,
+  ROUNDTRIP,
+}
+
+export type FlightRefundApiResponse = [
+  {
+    operationResultViewData: {
+      modules: [1]
+      passengers: {
+        type: number
+        gender: number
+        fullName: string
+        birthday: string
+        identityNumber: string
+        bookingCode: string
+        campaignCode: null | string
+        eTicketNumber: string
+        firstName: string
+        lastName: string
+        mobilePhoneNumber: string
+        email: string
+        marketingAirlineCode: string
+        isRoundedTrip: boolean
+        module: number
+        groupOrderIndex: number
+        localPassengerSequenceNo: number
+        localRelatedPassengerSequenceNo: null
+        discount: ServicePriceType
+        productItemId: ID
+      }[]
+      billingInformation: null
+      paymentInformation: {
+        basketTotal: number
+        basketDiscountTotal: number
+        collectingTotal: number
+        financellTotal: null
+        mlTotal: number
+        rateOfInterest: number
+        installmentCount: number
+        bankName: string
+        encryptedCardHolder: string | null
+        encryptedCardNumber: string | null
+        sellingCurrency: 'TRY'
+      }
+      ssrList: null
+      passengerCargoAddress: null
+      bookingDateTime: string
+      fromSession: boolean
+      authorizeKey: string
+      shoppingFileId: ID
+      taxAmount: number
+      shippingAmount: number
+      operationResultPromotionUsageList: null
+    }
+  },
+  {
+    summaryResponse: {
+      flightList: {
+        flightFareInfo: {
+          flightDetailKeys: string[]
+          groupId: null | 0 | 1
+          key: string
+          totalPrice: ServicePriceType
+          basePrice: ServicePriceType
+          taxes: ServicePriceType
+          discount: ServicePriceType
+          buyFee: ServiceFeePriceType
+          fee: ServiceFeePriceType
+          passengerPrices: {
+            unitPrice: ServicePriceType
+            unitBasePrice: ServicePriceType
+            unitFee: ServiceFeePriceType
+            unitTax: ServicePriceType
+            cancelPenalty: null
+            changePenalty: null
+            passengers: {
+              key: null
+              name: null
+              passengerType: number
+              age: number
+              birthday: string
+              gender: number
+            }[]
+            taxInfos: {
+              key: string
+              value: string
+            }[]
+            serviceCharges: {
+              code: string
+              canApplyAmount: boolean
+              confirmPassenger: boolean
+              price: ServicePriceType
+              desciption: null | string
+            }[]
+          }[]
+          taxInfos: null
+          serviceCharges: {
+            code: string
+            canApplyAmount: boolean
+            confirmPassenger: boolean
+            price: ServicePriceType
+            desciption: null | string
+          }[]
+        }
+        flightDetail: {
+          key: string
+          groupId: 0 | 1 | null
+          flightSegmentKeys: string[]
+          travelTime: string
+          direction: number
+          isDomestic: boolean
+          isOWCCombinable: boolean
+          isPromotional: boolean
+          reservable: boolean
+          freeVolatileData: object
+        }
+        flightSegments: {
+          key: string
+          groupId: 0 | 1 | null
+          origin: {
+            code: '' | string
+            isDomestic: boolean
+            iata: []
+            type: number
+            id: ID
+          }
+          destination: {
+            code: '' | string
+            isDomestic: boolean
+            iata: []
+            type: number
+            id: ID
+          }
+          departureTime: string
+          arrivalTime: string
+          flightTime: string
+          operatingAirline: {
+            code: string
+            value: string
+            countryCode: string
+          }
+          marketingAirline: {
+            code: string
+            value: string
+            countryCode: string
+          }
+          flightNumber: string
+          cabinClass: number
+          bookingCode: string
+          equipment: string | null
+          isMeal: boolean
+          quota: number
+          baggageAllowance: {
+            maxWeight: {
+              value: number
+              unit: number
+            }
+            piece: {
+              pieceCount: number
+            }
+          }
+          freeVolatileData: object
+        }[]
+        flightPackageInfos: []
+      }[]
+      flightFareInfo: {
+        flightDetailKeys: string[]
+        groupId: 0 | 1 | null
+        key: string
+        totalPrice: ServicePriceType
+        basePrice: ServicePriceType
+        taxes: ServicePriceType
+        discount: ServicePriceType
+        buyFee: ServiceFeePriceType
+        fee: ServiceFeePriceType
+        passengerPrices: {
+          unitPrice: ServicePriceType
+          unitBasePrice: ServicePriceType
+          unitFee: ServiceFeePriceType
+          unitTax: ServicePriceType
+          cancelPenalty: null
+          changePenalty: null
+          passengers: {
+            key: null
+            name: null
+            passengerType: number
+            age: number
+            birthday: string
+            gender: number
+          }[]
+          taxInfos: {
+            key: string
+            value: string
+          }[]
+          serviceCharges: {
+            code: string
+            canApplyAmount: boolean
+            confirmPassenger: boolean
+            price: ServicePriceType
+            desciption: null | string
+          }[]
+        }[]
+        taxInfos: null
+        serviceCharges: {
+          code: string
+          canApplyAmount: boolean
+          confirmPassenger: boolean
+          price: ServicePriceType
+          desciption: null | string
+        }[]
+      }
+      flightPackageInfos: []
+      isReservable: boolean
+      hasOwc: boolean
+      activeFlightTripKind: ActiveFlightTripKind
+      sessionToken: string
+      airportList: {
+        [key: string]: {
+          id: ID
+          code: string
+          value: {
+            langCode: string
+            value: string
+          }[]
+          countryCode: string
+          country: string
+          city: string
+        }
+      }
+      airlineList: {
+        [key: string]: string
+      }
+      applyCancelationInsurance: boolean
+      buyInsurancePrice: number
+      sellInsurancePrice: number
+      showOnlyInsurancePrice: number
+      productKey: string
+      moduleName: 'Flight'
+      totalPrice: number
+      priceCurrency: 'TRY'
+      loyaltyMultiple: number
+      couponDiscountList: null
+      extraCharges: {
+        [key: string]: ServicePriceType
+      }
+      financellDiscount: ServicePriceType
+    }
+  },
+]
