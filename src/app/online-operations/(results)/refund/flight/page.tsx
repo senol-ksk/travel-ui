@@ -2,22 +2,36 @@
 
 import { FlightRefundApiResponse } from '@/app/online-operations/types'
 import { flightRefundParams } from '@/libs/onlineOperations/searchParams'
-import { serviceRequest } from '@/network'
-import { Alert, Container, Skeleton } from '@mantine/core'
+import { serviceRequest, ServiceResponse } from '@/network'
+import {
+  Alert,
+  Checkbox,
+  Container,
+  Group,
+  Skeleton,
+  Stack,
+  Title,
+} from '@mantine/core'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import dayjs from 'dayjs'
 import { useQueryStates } from 'nuqs'
+import 'dayjs/locale/tr'
+import { useState } from 'react'
+dayjs.locale('tr')
 
 export default function FlightRefundPage() {
   const queryClient = useQueryClient()
   const [searchParams] = useQueryStates(flightRefundParams)
-  console.log(searchParams)
+  const [eTicketNumbers, setETicketNumbers] = useState<string[]>()
 
   const flightDataCache = queryClient.getMutationCache().find({
     mutationKey: ['book-refund-mutation'],
-  })?.state.data as FlightRefundApiResponse | undefined
+  })?.state.data as ServiceResponse<FlightRefundApiResponse> | undefined
+
+  let flightData = flightDataCache?.data
 
   const flightDataQuery = useQuery({
-    enabled: !flightDataCache,
+    enabled: !flightData,
     queryKey: ['book-refund-query', searchParams],
     queryFn: async () => {
       const response = await serviceRequest<FlightRefundApiResponse>({
@@ -29,6 +43,13 @@ export default function FlightRefundPage() {
       return response
     },
   })
+
+  if (!flightData) {
+    flightData = flightDataQuery.data?.data as
+      | FlightRefundApiResponse
+      | undefined
+  }
+
   if (flightDataQuery.isLoading)
     return (
       <Container py={'lg'} className='grid gap-3'>
@@ -38,11 +59,81 @@ export default function FlightRefundPage() {
       </Container>
     )
 
-  if (!flightDataCache && !flightDataQuery.data)
+  if (!flightData)
     return (
       <Container py={'lg'}>
         <Alert color='red'>Pnr no bulunamadı.</Alert>
       </Container>
     )
-  return <Container py={'lg'}>sadas</Container>
+
+  const { summaryResponse } = flightData[1]
+  const { operationResultViewData } = flightData[0]
+
+  return (
+    <Container py={'lg'}>
+      <Title fw={'normal'} mb={'lg'}>
+        Uçak İptal ve İade
+      </Title>
+      <div className='rounded-md border p-3 md:p-5'>
+        {flightData[1].summaryResponse.flightList.map(
+          (flightList, flightListIndex) => {
+            const relatedSegment = flightList.flightSegments.find((segment) =>
+              flightList.flightDetail.flightSegmentKeys.find(
+                (detailSegmentKey) => detailSegmentKey === segment.key
+              )
+            )
+
+            return (
+              <div key={flightListIndex}>
+                <div className='text-sm'>
+                  <strong>
+                    {dayjs(relatedSegment?.departureTime).format(
+                      'hh:mm - DD MMMM YYYY'
+                    )}
+                  </strong>{' '}
+                  {relatedSegment?.origin.code && (
+                    <div>
+                      {
+                        summaryResponse.airportList[relatedSegment?.origin.code]
+                          .city
+                      }{' '}
+                      {' - '}
+                    </div>
+                  )}
+                  {' - '}
+                  <strong>
+                    {dayjs(relatedSegment?.arrivalTime).format(
+                      'hh:mm - DD MMMM YYYY'
+                    )}
+                  </strong>
+                  {' - '}
+                  {relatedSegment?.destination.code &&
+                    summaryResponse.airportList[
+                      relatedSegment?.destination.code
+                    ].value.at(0)?.value}
+                </div>
+              </div>
+            )
+          }
+        )}
+
+        <div className='mt-6'>
+          <Checkbox.Group value={eTicketNumbers} onChange={setETicketNumbers}>
+            <Stack gap={'sm'}>
+              {operationResultViewData.passengers.map((passenger) => (
+                <div key={passenger.eTicketNumber}>
+                  <Checkbox.Card value={passenger.eTicketNumber} p={'md'}>
+                    <Group wrap='nowrap'>
+                      <Checkbox.Indicator />
+                      <div>{passenger.fullName}</div>
+                    </Group>
+                  </Checkbox.Card>
+                </div>
+              ))}
+            </Stack>
+          </Checkbox.Group>
+        </div>
+      </div>
+    </Container>
+  )
 }
