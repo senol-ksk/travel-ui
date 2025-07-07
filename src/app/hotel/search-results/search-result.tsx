@@ -92,7 +92,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
       )}
       <Container className='px-0'>
         <div className='py-5 lg:py-10'>
-          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
+          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
             <div className='md:col-span-1'>
               {mounted && (
                 <div className='relative'>
@@ -107,7 +107,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     loaderProps={{ color: 'yellow', type: 'bars' }}
                   />
                   <div className='flex justify-between'>
-                    <Title order={2} fz='h4'>
+                    <Title order={2} className='text-xl font-bold'>
                       Filtreler
                     </Title>
                     <UnstyledButton
@@ -123,12 +123,18 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                   </div>
                   <div className='pt-3'>
                     <Accordion
-                      defaultValue={['byName', 'priceRange']}
+                      defaultValue={[
+                        'byName',
+                        'priceRange',
+                        'destinationIds',
+                        'pensionTypes',
+                        'themes',
+                      ]}
                       multiple
                       classNames={{
-                        control: 'p-2 text-sm',
-                        label: 'p-0',
-                        content: 'p-2',
+                        control: 'p-2',
+                        label: 'p-0 text-md font-semibold',
+                        content: 'p-0 text-xl',
                       }}
                     >
                       <Accordion.Item value='byName'>

@@ -355,7 +355,7 @@ const HotelDetailSection = () => {
                 <div className='flex items-center'>
                   <Button
                     className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                    size='sm'
+                    size='md'
                     onClick={() => scrollIntoRatings()}
                   >
                     {hotel.comment_info?.comments.length} değerlendirme
@@ -393,7 +393,7 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             </div>
-            <div className='flex justify-between gap-5 rounded bg-white px-8 py-3'>
+            <div className='flex justify-between gap-5 rounded bg-white px-6 py-3'>
               <div className='flex items-center gap-2'>
                 <div>
                   <IconCheckIn />
@@ -422,7 +422,7 @@ const HotelDetailSection = () => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms'>
+        <Title fz={'xxl'} id='rooms' className='pt-6 md:mt-6 md:p-0'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
@@ -467,10 +467,20 @@ const HotelDetailSection = () => {
           {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
             <div>
               <div className='text-center text-gray-500'>Odalar yükleniyor</div>
-              <div className='flex gap-2 rounded border p-2'>
-                <Skeleton h={120} radius={'md'} />
-                <Skeleton h={120} radius={'md'} />
-                <Skeleton h={120} radius={'md'} />
+              <div className='grid gap-2 rounded p-2'>
+                <div className='flex gap-3'>
+                  <Skeleton height={140} radius='md' width='35%' />
+                  <div className='grid items-center' style={{ width: '33%' }}>
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                  </div>
+                  <div className='grid items-center' style={{ width: '32%' }}>
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                  </div>{' '}
+                </div>
               </div>
             </div>
           )}
@@ -530,7 +540,13 @@ const HotelDetailSection = () => {
             overlayProps={{ radius: 'sm', blur: 2 }}
           />
         </div>
-        <Title order={2} size={'lg'} id='facility-infos'>
+
+        <Title
+          order={2}
+          fz={'xxl'}
+          id='facility-infos'
+          className='pt-6 md:mt-6 md:p-0'
+        >
           Tesis Bilgileri
         </Title>
         <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
@@ -543,7 +559,13 @@ const HotelDetailSection = () => {
 
         {(hotel.comment_info?.comments?.length ?? 0) > 0 && (
           <div ref={ratingTargetRef}>
-            <Title order={2} size={'lg'} id='ratings' pb={'md'}>
+            <Title
+              order={2}
+              fz={'xxl'}
+              id='ratings'
+              pb={'md'}
+              className='pt-6 md:mt-6 md:p-0'
+            >
               Değerlendirmeler
             </Title>
             <div className='gap-2 rounded bg-gray-50 p-3'>
@@ -552,18 +574,27 @@ const HotelDetailSection = () => {
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
                   </div>
-                  <div className='text-xl font-normal'>Mükemmel</div>
+                  <div className='grid'>
+                    <div className='text-xl font-normal'>Mükemmel</div>
+                    <div className='flex items-center'>
+                      <Button
+                        className='border-0 bg-transparent p-0 font-normal text-black'
+                        size='md'
+                        onClick={openGeneralInfoDrawer}
+                      >
+                        {hotel.comment_info?.comments?.length ?? 0}{' '}
+                        değerlendirme
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className='flex items-center'>
-                  <Button
-                    className='border-0 bg-transparent p-0 font-normal text-blue-700'
-                    size='sm'
-                    onClick={openGeneralInfoDrawer}
-                  >
-                    {hotel.comment_info?.comments?.length ?? 0} değerlendirme
-                  </Button>
-                  <BiChevronRight size={20} color='blue' />
-                </div>
+
+                <Button
+                  onClick={openGeneralInfoDrawer}
+                  className='bg-transparent p-0 font-normal text-blue-700'
+                >
+                  Tüm yorumları Göster <MdKeyboardArrowRight size={20} />
+                </Button>
               </div>
               <div className='mt-3 rounded bg-white'>
                 {hotel.comment_info && <Comments data={hotel.comment_info} />}
@@ -572,33 +603,29 @@ const HotelDetailSection = () => {
           </div>
         )}
 
-        <Title order={2} size={'lg'} id='location'>
+        <Title
+          order={2}
+          fz={'xxl'}
+          id='location'
+          className='pt-6 md:mt-6 md:p-0'
+        >
           Konum Bilgileri{' '}
         </Title>
         <div ref={locationTargetRef}>
           <Location location={hotel.location} data={hotelInfo} />
         </div>
-        {/* <div>
-          <Title order={5}>İletişim Bilgileri</Title>
-          <address>
-            {hotel.address}
-            <div>
-              <a href={`mailto:${hotel.email}`}>{hotel.email}</a>
-            </div>
-            <div>
-              <a href={`tel:${hotel.phone}`}>{hotel.phone}</a>
-            </div>
-          </address>
-        </div> */}
         {hotel.descriptions.importentInfo && (
-          <>
-            <Title order={2} size={'lg'}>
+          <div className='grid gap-3 pt-6 md:mt-6 md:mb-20 md:p-0'>
+            <Title order={2} fz={'xxl'}>
               Önemli Bilgiler{' '}
             </Title>
             <div>
-              <ImportantInfos description={hotel.descriptions} />
+              <ImportantInfos
+                description={hotel.descriptions}
+                data={hotelInfo}
+              />
             </div>
-          </>
+          </div>
         )}
       </Container>
       <Modal
