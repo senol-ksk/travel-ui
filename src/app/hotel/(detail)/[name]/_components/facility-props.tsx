@@ -156,7 +156,6 @@ const FacilityProps: React.FC<IProps> = ({
             {mealType && (
               <div className='mb-3 text-lg font-medium text-blue-600'>
                 {mealType}
-                deeen
               </div>
             )}
 
