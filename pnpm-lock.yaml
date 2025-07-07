@@ -36,8 +36,8 @@ importers:
         specifier: ^5.81.5
         version: 5.81.5(react@19.1.0)
       '@vis.gl/react-google-maps':
-        specifier: ^1.5.3
-        version: 1.5.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^1.5.4
+        version: 1.5.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       axios:
         specifier: ^1.10.0
         version: 1.10.0
@@ -1389,8 +1389,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@vis.gl/react-google-maps@1.5.3':
-    resolution: {integrity: sha512-3EX3fXuEnNneuYlg5E3w6G5/o24H5vp/gH068q6tkdWss0M3/dSPVhRCnhUBagT14M8lqvPShjayWOLsLBkLiw==}
+  '@vis.gl/react-google-maps@1.5.4':
+    resolution: {integrity: sha512-pD3e2wDtOfd439mamkacRgrM6I2B/lue61QCR0pGQT8MVaG9pz9/LajHbsjZW2lms8Ao8mf2PQJeiGC2FxI0Fw==}
     peerDependencies:
       react: '>=16.8.0 || ^19.0 || ^19.0.0-rc'
       react-dom: '>=16.8.0 || ^19.0 || ^19.0.0-rc'
@@ -4740,7 +4740,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.10.1':
     optional: true
 
-  '@vis.gl/react-google-maps@1.5.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@vis.gl/react-google-maps@1.5.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@types/google.maps': 3.58.1
       fast-deep-equal: 3.1.3
