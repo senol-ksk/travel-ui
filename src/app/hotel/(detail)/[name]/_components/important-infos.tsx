@@ -14,10 +14,14 @@ const ImportantInfos: React.FC<IProps> = ({ description, data }) => {
 
   return (
     <div className='rounded bg-gray-50 p-3'>
-      <Accordion className='bg-white p-3' value={opened} onChange={setOpened}>
+      <Accordion
+        className='bg-white md:p-3'
+        value={opened}
+        onChange={setOpened}
+      >
         <Accordion.Item value='0'>
           <Accordion.Control>
-            <div className='grid grid-cols-2'>
+            <div className='grid grid-cols-2 gap-3 text-sm'>
               <div>
                 <div className='text-xl font-semibold'>Check-in</div>
                 <strong>

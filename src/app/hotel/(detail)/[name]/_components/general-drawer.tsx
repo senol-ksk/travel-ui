@@ -28,7 +28,7 @@ const GeneralDrawer: React.FC<IProps> = ({
   return (
     <>
       {description && description.hotelInformation ? (
-        <div className='rounded bg-white p-3'>
+        <div className='rounded bg-white md:p-3'>
           <div ref={generalInfoContentRef}>
             <Title
               order={3}

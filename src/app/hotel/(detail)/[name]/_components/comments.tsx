@@ -49,7 +49,7 @@ const Comments: React.FC<IProps> = ({ data }) => {
                 {comment.withWhoLabel} {comment.reasonLabel}
               </Text>
 
-              <div className='h-[150px] overflow-hidden pt-2 text-sm'>
+              <div className='pt-2 text-sm'>
                 <Text lineClamp={6} fz={'sm'}>
                   {comment.positiveCotent}
                 </Text>

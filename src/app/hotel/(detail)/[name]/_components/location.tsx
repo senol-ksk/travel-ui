@@ -27,7 +27,7 @@ const Location: React.FC<LocationProps> = ({ location, data }) => {
           </APIProvider>
         </AspectRatio>
         <div className='my-3 rounded-md bg-white py-3'>
-          <div className='grid grid-cols-3 gap-3'>
+          <div className='gap-3 md:grid md:grid-cols-3'>
             {data?.hotel?.nearby_info &&
               data?.hotel?.nearby_info.length > 0 && (
                 <div className='p-3'>

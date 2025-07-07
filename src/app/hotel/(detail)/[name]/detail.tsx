@@ -364,7 +364,10 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             )}
-            <div className='grid gap-3 rounded p-3' data-heading='Konum'>
+            <div
+              className='grid gap-3 rounded bg-white p-3'
+              data-heading='Konum'
+            >
               <div className='col-span-4 flex gap-3'>
                 <iframe
                   src='https://maps.google.com/maps?q=35.379585,34.08901&amp;output=embed&amp;hl=en'
@@ -390,7 +393,7 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             </div>
-            <div className='flex justify-between gap-5 rounded bg-white px-8 py-3'>
+            <div className='flex justify-between gap-5 rounded bg-white px-6 py-3'>
               <div className='flex items-center gap-2'>
                 <div>
                   <IconCheckIn />
@@ -419,7 +422,7 @@ const HotelDetailSection = () => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms' className='md:mt-10'>
+        <Title fz={'xxl'} id='rooms' className='pt-6 md:mt-6 md:p-0'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
@@ -464,10 +467,20 @@ const HotelDetailSection = () => {
           {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
             <div>
               <div className='text-center text-gray-500'>Odalar yükleniyor</div>
-              <div className='flex gap-2 rounded border p-2'>
-                <Skeleton h={120} radius={'md'} />
-                <Skeleton h={120} radius={'md'} />
-                <Skeleton h={120} radius={'md'} />
+              <div className='grid gap-2 rounded p-2'>
+                <div className='flex gap-3'>
+                  <Skeleton height={140} radius='md' width='35%' />
+                  <div className='grid items-center' style={{ width: '33%' }}>
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                  </div>
+                  <div className='grid items-center' style={{ width: '32%' }}>
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                    <Skeleton height={35} radius='xl' width='100%' />
+                  </div>{' '}
+                </div>
               </div>
             </div>
           )}
@@ -528,7 +541,12 @@ const HotelDetailSection = () => {
           />
         </div>
 
-        <Title order={2} fz={'xxl'} id='facility-infos' className='md:mt-10'>
+        <Title
+          order={2}
+          fz={'xxl'}
+          id='facility-infos'
+          className='pt-6 md:mt-6 md:p-0'
+        >
           Tesis Bilgileri
         </Title>
         <div className='border-md rounded bg-gray-50 p-1 md:p-3'>
@@ -546,7 +564,7 @@ const HotelDetailSection = () => {
               fz={'xxl'}
               id='ratings'
               pb={'md'}
-              className='md:mt-10'
+              className='pt-6 md:mt-6 md:p-0'
             >
               Değerlendirmeler
             </Title>
@@ -585,14 +603,19 @@ const HotelDetailSection = () => {
           </div>
         )}
 
-        <Title order={2} fz={'xxl'} id='location' className='md:mt-10'>
+        <Title
+          order={2}
+          fz={'xxl'}
+          id='location'
+          className='pt-6 md:mt-6 md:p-0'
+        >
           Konum Bilgileri{' '}
         </Title>
         <div ref={locationTargetRef}>
           <Location location={hotel.location} data={hotelInfo} />
         </div>
         {hotel.descriptions.importentInfo && (
-          <div className='grid gap-3 md:mt-10 md:mb-20'>
+          <div className='grid gap-3 pt-6 md:mt-6 md:mb-20 md:p-0'>
             <Title order={2} fz={'xxl'}>
               Önemli Bilgiler{' '}
             </Title>

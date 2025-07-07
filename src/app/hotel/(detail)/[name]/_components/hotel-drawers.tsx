@@ -106,7 +106,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
             color='black'
             size='md'
             radius='md'
-            className='flex justify-start p-2 font-medium'
+            className='mb-2 flex justify-start py-3 font-medium md:mb-0'
             leftSection={<CiDiscount1 size={26} className='text-blue-800' />}
           >
             Kampanyalar ve Avantajlar

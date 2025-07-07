@@ -89,17 +89,17 @@ const HotelRoom: React.FC<IProps> = ({
           <>
             {/* <input value={JSON.stringify(roomGroup, null, 2)} readOnly /> */}
             <div
-              className='gap-7 p-3 lg:flex lg:gap-6 xl:grid xl:grid-cols-12'
+              className='gap-7 p-3 md:grid md:grid-cols-14 md:gap-6'
               key={room.key}
             >
-              <div className='relative xl:col-span-4 2xl:row-span-2'>
-                <AspectRatio ratio={4 / 3} className='w-full'>
+              <div className='relative md:col-span-5'>
+                <AspectRatio ratio={16 / 11}>
                   <Image
                     loading='lazy'
                     fallbackSrc='/default-room.jpg'
                     src={images?.at(0)}
                     alt={detail.roomType}
-                    className='cursor-pointer rounded'
+                    className='h-full w-full cursor-pointer rounded object-cover'
                     onClick={() => setDrawerOpened(true)}
                   />
                 </AspectRatio>
@@ -112,8 +112,8 @@ const HotelRoom: React.FC<IProps> = ({
                   Odayı İncele
                 </Button>
               </div>
-              <div className='2xl:col-span-6'>
-                <Title order={5} className='text-2xl'>
+              <div className='md:col-span-6'>
+                <Title order={5} className='text-xl'>
                   {detail.roomType}
                 </Title>
 
@@ -150,7 +150,7 @@ const HotelRoom: React.FC<IProps> = ({
                         fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
                         src={images?.at(0)}
                         alt={detail.roomType}
-                        className='relative mb-6 h-full max-h-52 rounded pb-6'
+                        className='mb-6 h-full max-h-52 rounded'
                       />
 
                       {detail.size > 0 && (
@@ -271,7 +271,7 @@ const HotelRoom: React.FC<IProps> = ({
                 )}
               </div>
               {isLastItem && (
-                <div className='item-center m-2 grid justify-center self-end lg:col-span-4 lg:ms-auto 2xl:col-span-2 2xl:row-span-2 2xl:justify-self-end'>
+                <div className='item-center m-2 justify-center self-end md:col-span-3 md:justify-self-end'>
                   <div>
                     <div>
                       {discountRate > 0 && (

@@ -77,7 +77,7 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
           ))}
         </Carousel>
 
-        <div className='mt-5 text-center md:mt-10'>
+        <div className='mt-5 pt-6 text-center md:mt-6'>
           <Button variant='filled' size='md' radius='xl'>
             Tümünü Gör
           </Button>

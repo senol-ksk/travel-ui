@@ -28,7 +28,7 @@ function HotelTableOfContents() {
           children: data.value,
         })}
       />
-      <Button size='sm' radius='md' className='m-3 px-13' onClick={ScrollRooms}>
+      <Button size='sm' radius='md' className='m-3 px-7' onClick={ScrollRooms}>
         Odaları Gör
       </Button>
     </>
