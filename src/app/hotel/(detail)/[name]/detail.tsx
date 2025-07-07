@@ -61,6 +61,7 @@ import { HotelSearchEngine } from '@/modules/hotel'
 import { RiMapPin2Line } from 'react-icons/ri'
 import { CommentsDrawer } from './_components/comments-drawer'
 import { MainDrawer } from './_components/main-drawer'
+import { BsCheck } from 'react-icons/bs'
 
 const HotelDetailSection = () => {
   const router = useRouter()
@@ -317,14 +318,24 @@ const HotelDetailSection = () => {
                 </div>
 
                 <div ref={generalInfoContentRef} className='mt-10 mb-3'>
-                  <Title order={3} fz={'h4'} className='mb-4 font-medium'>
+                  <Title
+                    order={3}
+                    fz={'h4'}
+                    className='mb-4 hidden font-medium md:block'
+                  >
                     Otel Özellikleri
                   </Title>
-                  <ul className='grid grid-cols-4 gap-4'>
+                  <ul className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
                     {hotelInfo.facilityTypes
                       .slice(0, 8)
                       .map((facility, index) => (
-                        <li className='truncate' key={index}>
+                        <li
+                          key={index}
+                          className={`truncate ${
+                            index > 3 ? 'hidden sm:list-item' : ''
+                          }`}
+                        >
+                          <BsCheck className='mr-1 inline-block text-blue-800' />
                           {facility.name}
                         </li>
                       ))}
