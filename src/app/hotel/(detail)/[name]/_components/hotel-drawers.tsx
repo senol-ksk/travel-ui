@@ -106,7 +106,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
             color='black'
             size='md'
             radius='md'
-            className='flex justify-start p-2 font-medium'
+            className='mb-2 flex justify-start py-3 font-medium md:mb-0'
             leftSection={<CiDiscount1 size={26} className='text-blue-800' />}
           >
             Kampanyalar ve Avantajlar
@@ -159,9 +159,9 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
           <div className='flex items-center'>
             <button
               onClick={handleClose}
-              className='rounded-full bg-gray-200 p-2 text-gray-700'
+              className='rounded-r-xl bg-red-800 p-2 px-5 text-white'
             >
-              ❌
+              <IoClose color='white' />
             </button>
             <div className='px-5'>
               <Title className='text-center' order={3}>
@@ -173,6 +173,9 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
         className='border-gray-300 p-3'
         closeButtonProps={{
           style: { display: 'none' },
+        }}
+        classNames={{
+          header: 'p-0',
         }}
       >
         <hr className='mt-3 mb-3 border-blue-500' />
