@@ -278,12 +278,17 @@ const HotelDetailSection = () => {
                   <span>{hotel.destination}</span>
                 </div>
 
-                <div className='flex gap-1'>
-                  <span>
-                    <MdOutlineRoomService size={22} className='text-blue-800' />
-                  </span>
-                  <span> {hotel.meal_type}</span>
-                </div>
+                {hotel.meal_type && (
+                  <div className='flex gap-1'>
+                    <span>
+                      <MdOutlineRoomService
+                        size={22}
+                        className='text-blue-800'
+                      />
+                    </span>
+                    <span> {hotel.meal_type}</span>
+                  </div>
+                )}
               </div>
             </div>
             {hotel.descriptions && hotel.descriptions.hotelInformation ? (
