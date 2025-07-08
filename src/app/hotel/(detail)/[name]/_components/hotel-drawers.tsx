@@ -128,7 +128,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
               <IoClose color='white' />
             </button>
             <div className='px-5'>
-              <Title className='text-center' order={3}>
+              <Title className='text-md text-center md:text-2xl' order={3}>
                 Plaj ve Havuz Bilgisi
               </Title>
             </div>
@@ -164,7 +164,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
               <IoClose color='white' />
             </button>
             <div className='px-5'>
-              <Title className='text-center' order={3}>
+              <Title className='text-md text-center md:text-2xl' order={3}>
                 Kampanyalar ve Avantajlar
               </Title>
             </div>

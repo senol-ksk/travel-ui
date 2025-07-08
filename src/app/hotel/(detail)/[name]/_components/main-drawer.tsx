@@ -98,7 +98,7 @@ const MainDrawer: React.FC<IProps> = ({
 
   return (
     <>
-      <>
+      <div>
         {description && description.hotelInformation && (
           <Drawer
             opened={opened}
@@ -133,7 +133,7 @@ const MainDrawer: React.FC<IProps> = ({
                   tabLabel: 'flex-none',
                 }}
               >
-                <Tabs.List className='text-2xl font-bold'>
+                <Tabs.List className='d-flex justify-around text-2xl font-bold'>
                   <Tabs.Tab
                     value='facilityInfos'
                     className='text-2xl font-bold'
@@ -342,7 +342,7 @@ const MainDrawer: React.FC<IProps> = ({
             </div>
           </Drawer>
         )}
-      </>
+      </div>
     </>
   )
 }

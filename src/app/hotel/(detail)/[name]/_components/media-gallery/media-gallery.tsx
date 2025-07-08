@@ -113,10 +113,7 @@ export const HotelMediaGallery: React.FC<IProps> = ({
         <Progress maw={600} mx='auto' value={scrollProgress} size='sm' />
         {/* Categories section ends /> */}
 
-        <div
-          className='mx-auto h-full max-w-[1120px]'
-          style={{ contentVisibility: 'auto' }}
-        >
+        <div className='mx-auto h-full' style={{ contentVisibility: 'auto' }}>
           {Object.entries(groupedImages).map((category, categoryIndex) => (
             <div
               key={categoryIndex}

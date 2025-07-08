@@ -262,9 +262,7 @@ const HotelDetailSection = () => {
           </div>
         </div>
 
-        <div className='sticky top-0 z-30 hidden justify-between rounded bg-gray-50 shadow-xs sm:block md:flex'>
-          <HotelTableOfContents />
-        </div>
+        <HotelTableOfContents hotelInfo={hotelInfo} />
 
         <div className='grid grid-cols-2 gap-2 rounded bg-gray-50 md:grid-cols-12 md:gap-5 md:p-3'>
           <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
@@ -430,7 +428,7 @@ const HotelDetailSection = () => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms' className='p-2 pt-6 md:mt-6 md:p-0'>
+        <Title fz={'xxl'} id='rooms' className='p-2 md:p-0'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
@@ -616,10 +614,7 @@ const HotelDetailSection = () => {
         </div>
         {hotel.descriptions.importentInfo && (
           <div>
-            <Title
-              order={2}
-              className='grid gap-3 p-2 pt-6 md:mt-6 md:mb-20 md:p-0'
-            >
+            <Title order={2} className='mb-3 p-2 pt-6 md:mt-6 md:p-0'>
               Önemli Bilgiler{' '}
             </Title>
             <div>
