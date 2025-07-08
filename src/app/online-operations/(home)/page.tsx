@@ -7,11 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { MdOutlineChevronRight } from 'react-icons/md'
 
-import { serviceRequest } from '@/network'
-import {
-  HotelBookingDetailApiResponse,
-  OperationResultWithBookingCodeResponse,
-} from './types'
 import {
   operationResultFormSchema,
   OperationResultFormSchemaType,
@@ -19,6 +14,11 @@ import {
 } from '@/libs/onlineOperations/searchParams'
 import { createSerializer } from 'nuqs'
 import { useTransitionRouter } from 'next-view-transitions'
+import {
+  HotelBookingDetailApiResponse,
+  OperationResultWithBookingCodeResponse,
+} from '@/app/online-operations/types'
+import { serviceRequest } from '@/network'
 
 export default function OnlineOperationsPage() {
   const form = useForm({
@@ -39,7 +39,7 @@ export default function OnlineOperationsPage() {
       return response
     },
     mutationKey: ['booking-result-mutation'],
-    onSuccess(query) {
+    onSuccess(query, { bookingCode, firstName, lastName }) {
       if (
         query?.success &&
         query.data?.operationResultWithBookingCode.productDataViewResponser &&
@@ -49,11 +49,15 @@ export default function OnlineOperationsPage() {
         const moduleName =
           query.data?.operationResultWithBookingCode.productDataViewResponser?.dataViewResponsers[0].summaryResponse.moduleName.toLocaleLowerCase()
         const resultUrlSerializer = createSerializer(operationResultParams)
-        const resultUrl = resultUrlSerializer(`order-details/${moduleName}`, {
-          bookingCode: form.getValues('bookingCode').toLocaleLowerCase(),
-          firstName: form.getValues('firstName').toLocaleLowerCase(),
-          lastName: form.getValues('lastName').toLocaleLowerCase(),
-        })
+        // https://localhost:3000/online-operations/order-details/hotel?bookingCode=HD-2506RK9L&firstName=ESIN&lastName=AKCAY+ALAN
+        const resultUrl = resultUrlSerializer(
+          `online-operations/order-details/${moduleName}`,
+          {
+            bookingCode,
+            firstName,
+            lastName,
+          }
+        )
         router.push(resultUrl)
       }
     },

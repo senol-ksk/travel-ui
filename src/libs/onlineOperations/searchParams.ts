@@ -22,3 +22,10 @@ export type OperationResultFormSchemaType = z.infer<
 export type OperationResultParamTypes = inferParserType<
   typeof operationResultParams
 >
+
+export const flightRefundParams = {
+  bookingCode: parseAsString,
+  surname: parseAsString,
+}
+
+export const loadFlightRefundParams = createLoader(flightRefundParams)

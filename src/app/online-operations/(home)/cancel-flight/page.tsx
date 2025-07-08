@@ -1,12 +1,19 @@
 'use client'
 
-import { Button, Container, TextInput, Title } from '@mantine/core'
+import { Button, TextInput, Title } from '@mantine/core'
+import { notifications } from '@mantine/notifications'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { MdOutlineChevronRight } from 'react-icons/md'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+
+import { z } from '@/libs/zod'
 import { serviceRequest } from '@/network'
-import { MdOutlineChevronRight } from 'react-icons/md'
+import { RiErrorWarningLine } from 'react-icons/ri'
+import { FlightRefundApiResponse } from '@/app/online-operations/types'
+import { createSerializer } from 'nuqs'
+import { flightRefundParams } from '@/libs/onlineOperations/searchParams'
+import { useTransitionRouter } from 'next-view-transitions'
 
 const schema = z.object({
   bookingCode: z.string().nonempty(),
@@ -19,57 +26,12 @@ export default function CancelFlightPage() {
   const form = useForm({
     resolver: zodResolver(schema),
   })
+  const router = useTransitionRouter()
 
   const submitMutation = useMutation({
+    mutationKey: ['book-refund-mutation'],
     mutationFn: async (params: FormSchemaType) => {
-      const response = await serviceRequest<{
-        modules: number[]
-        passengers: {
-          type: number
-          gender: number
-          fullName: string
-          birthday: string
-          identityNumber: string
-          bookingCode: string
-          campaignCode: null
-          eTicketNumber: string
-          firstName: string
-          lastName: string
-          mobilePhoneNumber: string
-          email: string
-          marketingAirlineCode: string
-          isRoundedTrip: boolean
-          module: number
-          groupOrderIndex: number
-          localPassengerSequenceNo: number
-          localRelatedPassengerSequenceNo: null
-          discount: ServicePriceType
-          productItemId: ID
-        }[]
-        billingInformation: null
-        paymentInformation: {
-          basketTotal: number
-          basketDiscountTotal: number
-          collectingTotal: number
-          financellTotal: null
-          mlTotal: number
-          rateOfInterest: number
-          installmentCount: number
-          bankName: string
-          encryptedCardHolder: string
-          encryptedCardNumber: string
-          sellingCurrency: string
-        }
-        ssrList: null
-        passengerCargoAddress: null
-        bookingDateTime: string
-        fromSession: boolean
-        authorizeKey: string
-        shoppingFileId: ID
-        taxAmount: number
-        shippingAmount: number
-        operationResultPromotionUsageList: null
-      }>({
+      const response = await serviceRequest<FlightRefundApiResponse>({
         axiosOptions: {
           url: 'api/product/bookRefundData',
           params,
@@ -77,7 +39,37 @@ export default function CancelFlightPage() {
       })
       return response
     },
-    mutationKey: ['book-refund-mutation'],
+    onSuccess: (query, { bookingCode, surname }) => {
+      if (!query?.success || !query.data) {
+        notifications.show({
+          title: 'PNR bulunamadı.',
+          message: 'Lutfen PNR ve Soyad bilgilerini gözden geçirin',
+          icon: <RiErrorWarningLine size={20} />,
+          position: 'top-right',
+          color: 'white',
+          autoClose: 5000,
+          classNames: {
+            icon: 'bg-transparent size-[auto]',
+            root: 'bg-red-600 text-white',
+            title: 'text-white',
+            description: 'text-white',
+            closeButton: 'text-white',
+          },
+        })
+      }
+
+      if (!!query?.data && query.success) {
+        const refundPageSerializer = createSerializer(flightRefundParams)
+        const refundUrl = refundPageSerializer(
+          `/online-operations/refund/${query.data[1].summaryResponse.moduleName.toLocaleLowerCase()}`,
+          {
+            bookingCode,
+            surname,
+          }
+        )
+        router.push(refundUrl)
+      }
+    },
   })
 
   return (
@@ -115,6 +107,7 @@ export default function CancelFlightPage() {
             type='submit'
             size='lg'
             rightSection={<MdOutlineChevronRight />}
+            loading={submitMutation.isPending}
           >
             Sorgula
           </Button>
