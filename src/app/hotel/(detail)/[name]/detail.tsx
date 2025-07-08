@@ -569,7 +569,7 @@ const HotelDetailSection = () => {
               Değerlendirmeler
             </Title>
             <div className='gap-2 rounded bg-gray-50 p-3'>
-              <div className='flex items-center justify-between rounded bg-white p-3'>
+              <div className='flex items-center justify-between rounded bg-white px-3'>
                 <div className='hidden items-center gap-2 self-end text-blue-800 md:flex'>
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
