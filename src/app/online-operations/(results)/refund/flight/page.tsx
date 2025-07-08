@@ -5,6 +5,7 @@ import { flightRefundParams } from '@/libs/onlineOperations/searchParams'
 import { serviceRequest, ServiceResponse } from '@/network'
 import {
   Alert,
+  Button,
   Checkbox,
   Container,
   Group,
@@ -12,7 +13,7 @@ import {
   Stack,
   Title,
 } from '@mantine/core'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useQueryStates } from 'nuqs'
 import 'dayjs/locale/tr'
@@ -22,7 +23,7 @@ dayjs.locale('tr')
 export default function FlightRefundPage() {
   const queryClient = useQueryClient()
   const [searchParams] = useQueryStates(flightRefundParams)
-  const [eTicketNumbers, setETicketNumbers] = useState<string[]>()
+  const [selectedETicketNumbers, setETicketNumbers] = useState<string[]>([])
 
   const flightDataCache = queryClient.getMutationCache().find({
     mutationKey: ['book-refund-mutation'],
@@ -40,6 +41,25 @@ export default function FlightRefundPage() {
           params: searchParams,
         },
       })
+      return response
+    },
+  })
+
+  const validateRefundMutation = useMutation({
+    mutationFn: async () => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: 'api/product/validateFlightRefund',
+          method: 'post',
+          data: {
+            surname: searchParams.surname,
+            bookingCode: searchParams.bookingCode,
+            key: operationResultViewData.authorizeKey,
+            eTicketNumber: selectedETicketNumbers,
+          },
+        },
+      })
+
       return response
     },
   })
@@ -88,7 +108,7 @@ export default function FlightRefundPage() {
                 <div className='text-sm'>
                   <strong>
                     {dayjs(relatedSegment?.departureTime).format(
-                      'hh:mm - DD MMMM YYYY'
+                      'DD MMMM YYYY - hh:mm'
                     )}
                   </strong>{' '}
                   {relatedSegment?.origin.code && (
@@ -103,7 +123,7 @@ export default function FlightRefundPage() {
                   {' - '}
                   <strong>
                     {dayjs(relatedSegment?.arrivalTime).format(
-                      'hh:mm - DD MMMM YYYY'
+                      'DD MMMM YYYY - hh:mm'
                     )}
                   </strong>
                   {' - '}
@@ -118,11 +138,18 @@ export default function FlightRefundPage() {
         )}
 
         <div className='mt-6'>
-          <Checkbox.Group value={eTicketNumbers} onChange={setETicketNumbers}>
+          <Checkbox.Group
+            value={selectedETicketNumbers}
+            onChange={setETicketNumbers}
+          >
             <Stack gap={'sm'}>
               {operationResultViewData.passengers.map((passenger) => (
                 <div key={passenger.eTicketNumber}>
-                  <Checkbox.Card value={passenger.eTicketNumber} p={'md'}>
+                  <Checkbox.Card
+                    value={passenger.eTicketNumber}
+                    p={'md'}
+                    className='hover:bg-gray-50'
+                  >
                     <Group wrap='nowrap'>
                       <Checkbox.Indicator />
                       <div>{passenger.fullName}</div>
@@ -132,6 +159,16 @@ export default function FlightRefundPage() {
               ))}
             </Stack>
           </Checkbox.Group>
+        </div>
+        <div className='pt-6'>
+          <Button
+            onClick={() => {
+              validateRefundMutation.mutate()
+            }}
+            disabled={!selectedETicketNumbers?.length}
+          >
+            Devam
+          </Button>
         </div>
       </div>
     </Container>
