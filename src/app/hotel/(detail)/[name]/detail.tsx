@@ -11,14 +11,9 @@ import {
   Modal,
   ScrollArea,
   Skeleton,
-  Spoiler,
   Title,
-  Badge,
   TypographyStylesProvider,
   Text,
-  Divider,
-  Drawer,
-  Tabs,
 } from '@mantine/core'
 import { IoMapOutline } from 'react-icons/io5'
 import { Link } from 'next-view-transitions'
@@ -31,13 +26,14 @@ import {
 import { createSerializer } from 'nuqs'
 import { useRouter } from 'next/navigation'
 import { FaExclamationCircle } from 'react-icons/fa'
-import { LuMapPinned, LuShieldCheck } from 'react-icons/lu'
+import { LuShieldCheck } from 'react-icons/lu'
 import {
   MdKeyboardArrowDown,
   MdKeyboardArrowRight,
   MdOutlineCameraAlt,
   MdOutlineRoomService,
 } from 'react-icons/md'
+import { BottomSticky } from './_components/bottom-sticky'
 
 import { useHotelDataQuery } from '../detailDataQuery'
 import { HotelDetailSkeleton } from './skeletonLoader'
@@ -49,7 +45,6 @@ import { InstallmentTable } from './installment'
 import { RoomUpdateForm } from './_components/room-update-form'
 import { HotelTableOfContents } from './_components/table-of-contents'
 import { FacilityProps } from './_components/facility-props'
-import { GeneralDrawer } from './_components/general-drawer'
 
 import { Comments } from './_components/comments'
 import { Location } from './_components/location'
@@ -59,7 +54,6 @@ import { IconCheckIn, IconCheckOut } from './_components/icons'
 import { HotelMediaGallery } from './_components/media-gallery/media-gallery'
 import { HotelSearchEngine } from '@/modules/hotel'
 import { RiMapPin2Line } from 'react-icons/ri'
-import { CommentsDrawer } from './_components/comments-drawer'
 import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
 
@@ -207,7 +201,6 @@ const HotelDetailSection = () => {
         className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-3'
         id='mdx'
       >
-        {/* <input value={JSON.stringify(hotel, null, 2)} readOnly /> */}
         <div>
           {hotel?.documents && hotel?.documents?.length > 0 && (
             <div className='pb-3 text-end text-xs'>
@@ -232,37 +225,39 @@ const HotelDetailSection = () => {
               <Button
                 color={'black'}
                 opacity={'.75'}
-                leftSection={<MdOutlineCameraAlt />}
+                leftSection={<MdOutlineCameraAlt size={20} />}
                 onClick={openMediaGallery}
               >
                 Galeri ({hotel.images.length})
               </Button>
             </div>
-            <div className='grid auto-cols-fr gap-4 sm:grid-cols-4 md:grid-rows-2'>
-              <figure
-                style={{ contentVisibility: 'auto' }}
-                className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
-              >
-                <Image
-                  className='aspect-16/9 h-full w-full rounded-md object-cover'
-                  src={hotel.images.at(0)?.original}
-                  alt={hotel.name}
-                />
-              </figure>
-
-              {hotel.images.slice(1, 5).map((image, imageIndex) => (
+            <div onClick={openMediaGallery} className='cursor-pointer'>
+              <div className='grid auto-cols-fr gap-4 sm:grid-cols-4 md:grid-rows-2'>
                 <figure
-                  key={imageIndex}
-                  className='relative hidden gap-3 place-self-stretch rounded-md sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
                   style={{ contentVisibility: 'auto' }}
+                  className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
                 >
                   <Image
-                    src={image.original}
+                    className='aspect-16/9 h-full w-full rounded-md object-cover'
+                    src={hotel.images.at(0)?.original}
                     alt={hotel.name}
-                    className='absolute aspect-16/9 h-full w-full object-cover'
                   />
                 </figure>
-              ))}
+
+                {hotel.images.slice(1, 5).map((image, imageIndex) => (
+                  <figure
+                    key={imageIndex}
+                    className='relative hidden gap-3 place-self-stretch rounded-md sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
+                    style={{ contentVisibility: 'auto' }}
+                  >
+                    <Image
+                      src={image.original}
+                      alt={hotel.name}
+                      className='absolute aspect-16/9 h-full w-full object-cover'
+                    />
+                  </figure>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -271,41 +266,41 @@ const HotelDetailSection = () => {
           <HotelTableOfContents />
         </div>
 
-        <div className='grid grid-cols-2 gap-5 rounded bg-gray-50 md:grid-cols-12 md:p-3'>
+        <div className='grid grid-cols-2 gap-2 rounded bg-gray-50 md:grid-cols-12 md:gap-5 md:p-3'>
           <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
               <div className='text-3xl font-semibold'>{hotel.name.trim()}</div>
-              <div className='flex items-center gap-20 text-sm text-blue-800'>
+              <div className='flex items-center gap-20 py-2 text-sm text-blue-800'>
                 <div className='flex gap-1'>
                   <span>
                     <RiMapPin2Line size={20} className='text-blue-800' />
                   </span>
                   <span>{hotel.destination}</span>
                 </div>
-                {hotel.meal_type && (
-                  <div className='flex gap-1'>
-                    <span>
-                      <MdOutlineRoomService size={22} />
-                    </span>
-                    <span>{hotel.meal_type}</span>
-                  </div>
-                )}
+
+                <div className='flex gap-1'>
+                  <span>
+                    <MdOutlineRoomService size={22} className='text-blue-800' />
+                  </span>
+                  <span> {hotel.meal_type}</span>
+                </div>
               </div>
             </div>
             {hotel.descriptions && hotel.descriptions.hotelInformation ? (
               <div>
-                <Title order={3} fz={'h4'} className='mb-4 font-medium'>
+                <Title order={3} className='mb-4 text-sm font-medium'>
                   Genel Bilgiler
                 </Title>
                 <div
                   style={{
-                    maxHeight: `70px`,
+                    maxHeight: `80px`,
                     overflow: 'hidden',
                     position: 'relative',
                   }}
                 >
                   <TypographyStylesProvider>
                     <div
+                      className='text-sm'
                       ref={generalInfoContentRef}
                       dangerouslySetInnerHTML={{
                         __html: hotel.descriptions.hotelInformation.trim(),
@@ -317,15 +312,14 @@ const HotelDetailSection = () => {
                   )}
                 </div>
 
-                <div ref={generalInfoContentRef} className='mt-10 mb-3'>
+                <div ref={generalInfoContentRef} className='mt-5 mb-3'>
                   <Title
                     order={3}
-                    fz={'h4'}
-                    className='mb-4 hidden font-medium md:block'
+                    className='mb-4 hidden text-sm font-medium md:block'
                   >
                     Otel Özellikleri
                   </Title>
-                  <ul className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
+                  <ul className='grid grid-cols-2 gap-4 text-sm sm:grid-cols-4'>
                     {hotelInfo.facilityTypes
                       .slice(0, 8)
                       .map((facility, index) => (
@@ -344,7 +338,7 @@ const HotelDetailSection = () => {
                 {generalInfoContentHeight > GENERAL_INFO_MAX_HEIGHT && (
                   <Button
                     onClick={openGeneralInfoDrawer}
-                    className='bg-transparent p-0 font-normal text-blue-700'
+                    className='bg-transparent p-0 font-normal text-blue-700 md:my-0'
                   >
                     Tesisin tüm olanaklarını görün
                     <MdKeyboardArrowRight size={20} />
@@ -356,7 +350,7 @@ const HotelDetailSection = () => {
 
           <div className='col-span-12 flex flex-col gap-3 md:col-span-4'>
             {hotel.comment_info && (
-              <div className='flex items-center justify-between rounded bg-white p-3'>
+              <div className='hidden items-center justify-between rounded bg-white p-3 md:flex'>
                 <div className='hidden items-center gap-2 self-end text-blue-800 md:flex'>
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
@@ -376,10 +370,10 @@ const HotelDetailSection = () => {
               </div>
             )}
             <div
-              className='grid gap-3 rounded bg-white p-3'
+              className='hidden gap-3 rounded bg-white p-3 md:grid'
               data-heading='Konum'
             >
-              <div className='col-span-4 flex gap-3'>
+              <div className='col-span-4 hidden gap-3 md:flex'>
                 <iframe
                   src='https://maps.google.com/maps?q=35.379585,34.08901&amp;output=embed&amp;hl=en'
                   style={{ width: '116px', height: '110px' }}
@@ -387,9 +381,7 @@ const HotelDetailSection = () => {
                   allowFullScreen
                 ></iframe>
                 <div className='grid'>
-                  <Text size='md' fw={'semibold'}>
-                    Konum
-                  </Text>
+                  <Text className='font-medium'>Konum</Text>
                   <div className='text-sm font-normal'>{hotel.address}</div>
                   <div className='flex items-center'>
                     <Button
@@ -404,14 +396,14 @@ const HotelDetailSection = () => {
                 </div>
               </div>
             </div>
-            <div className='flex justify-between gap-5 rounded bg-white px-6 py-3'>
+            <div className='hidden justify-between gap-5 rounded bg-white px-6 py-3 md:flex'>
               <div className='flex items-center gap-2'>
                 <div>
                   <IconCheckIn />
                 </div>
                 <div>
-                  <Text size='md'>Check-in</Text>
-                  <Text size='md'>{hotel.checkin_from}</Text>
+                  <Text>Check-in</Text>
+                  <Text size='sm'>{hotel.checkin_from}</Text>
                 </div>
               </div>
               <div className='flex items-center gap-2 border-s ps-5'>
@@ -419,8 +411,8 @@ const HotelDetailSection = () => {
                   <IconCheckOut />
                 </div>
                 <div>
-                  <Text size='md'>Check-out</Text>
-                  <Text size='md'>{hotel.checkout_to}</Text>
+                  <Text>Check-out</Text>
+                  <Text size='sm'>{hotel.checkout_to}</Text>
                 </div>
               </div>
             </div>
@@ -433,33 +425,12 @@ const HotelDetailSection = () => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms' className='pt-6 md:mt-6 md:p-0'>
+        <Title fz={'xxl'} id='rooms' className='p-2 pt-6 md:mt-6 md:p-0'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
           <RoomUpdateForm />
         </div>
-        {/* {selectedRoomMutation.data?.data?.status.length &&
-          selectedRoomMutation.data?.data?.status.map(
-            (roomStatus, roomStatusIndex) => {
-              return (
-                !roomStatus.nonRefundable && (
-                  <Text
-                    size='md'
-                    className='rounded-sm bg-green-200 p-3'
-                    key={roomStatusIndex}
-                  >
-                    İptal Güvence Paketi ekle, tatiline 72 saat kalaya kadar
-                    koşulsuz iptal hakkın olsun!
-                  </Text>
-                )
-              )
-            }
-          )} */}
-        {/* <input
-          value={JSON.stringify(selectedRoomMutation.data?.data, null, 2)}
-          readOnly
-        /> */}
 
         <Alert
           color='green'
@@ -512,25 +483,38 @@ const HotelDetailSection = () => {
 
             return roomGroups?.map((roomGroup) => {
               return (
-                <div key={roomGroup.key}>
-                  <HotelRoom
-                    hotelInfo={page?.data?.hotelDetailResponse?.hotelInfo}
-                    roomGroup={roomGroup}
-                    roomDetails={roomDetails}
-                    onSelect={(selectedRoomGroup) => {
-                      handleRoomSelect({
-                        productKey: roomGroup.key,
-                        cancelWarranty: selectedRoomGroup.useCancelWarranty,
-                      })
-                    }}
-                    onInstallmentClick={(selectedRoomGroup) => {
-                      handleInstallment(selectedRoomGroup)
-                    }}
-                  />
-                </div>
+                <>
+                  <div key={roomGroup.key}>
+                    <HotelRoom
+                      hotelInfo={page?.data?.hotelDetailResponse?.hotelInfo}
+                      roomGroup={roomGroup}
+                      roomDetails={roomDetails}
+                      onSelect={(selectedRoomGroup) => {
+                        handleRoomSelect({
+                          productKey: roomGroup.key,
+                          cancelWarranty: selectedRoomGroup.useCancelWarranty,
+                        })
+                      }}
+                      onInstallmentClick={(selectedRoomGroup) => {
+                        handleInstallment(selectedRoomGroup)
+                      }}
+                    />
+                  </div>
+                </>
               )
             })
           })}
+          <div>
+            {roomsQuery.data?.pages?.[0]?.data?.hotelDetailResponse
+              ?.items?.[0] && (
+              <BottomSticky
+                roomGroup={
+                  roomsQuery.data?.pages?.[0]?.data?.hotelDetailResponse
+                    ?.items?.[0]
+                }
+              />
+            )}
+          </div>
           {roomsQuery.hasNextPage && (
             <div className='flex justify-center'>
               <Button
@@ -556,7 +540,7 @@ const HotelDetailSection = () => {
           order={2}
           fz={'xxl'}
           id='facility-infos'
-          className='pt-6 md:mt-6 md:p-0'
+          className='p-2 pt-6 md:mt-6 md:p-0'
         >
           Tesis Bilgileri
         </Title>
@@ -575,7 +559,7 @@ const HotelDetailSection = () => {
               fz={'xxl'}
               id='ratings'
               pb={'md'}
-              className='pt-6 md:mt-6 md:p-0'
+              className='p-2 pt-6 md:mt-6 md:p-0'
             >
               Değerlendirmeler
             </Title>
@@ -618,7 +602,7 @@ const HotelDetailSection = () => {
           order={2}
           fz={'xxl'}
           id='location'
-          className='pt-6 md:mt-6 md:p-0'
+          className='p-2 pt-6 md:mt-6 md:p-0'
         >
           Konum Bilgileri{' '}
         </Title>
@@ -626,8 +610,11 @@ const HotelDetailSection = () => {
           <Location location={hotel.location} data={hotelInfo} />
         </div>
         {hotel.descriptions.importentInfo && (
-          <div className='grid gap-3 pt-6 md:mt-6 md:mb-20 md:p-0'>
-            <Title order={2} fz={'xxl'}>
+          <div>
+            <Title
+              order={2}
+              className='grid gap-3 p-2 pt-6 md:mt-6 md:mb-20 md:p-0'
+            >
               Önemli Bilgiler{' '}
             </Title>
             <div>

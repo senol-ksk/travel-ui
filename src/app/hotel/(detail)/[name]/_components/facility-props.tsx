@@ -141,7 +141,7 @@ const FacilityProps: React.FC<IProps> = ({
           )
         })}
       </Accordion>
-      <Accordion multiple defaultValue={['otel-konsepti']}>
+      <Accordion multiple>
         <Accordion.Item
           value='otel-konsepti'
           className='rounded bg-white shadow-sm'

@@ -70,7 +70,7 @@ export const HotelMediaGallery: React.FC<IProps> = ({
   return (
     <>
       <Modal
-        size='80%'
+        size='100%'
         radius={'md'}
         opened={isMediaGalleryOpened}
         onClose={closeMediaGallery}
@@ -89,7 +89,7 @@ export const HotelMediaGallery: React.FC<IProps> = ({
           slideGap={'sm'}
           emblaOptions={{ dragFree: true }}
           classNames={categoryCarouselClasses}
-          className='sticky top-10 z-20 bg-white py-7'
+          className='sticky top-10 z-20 flex justify-start bg-white py-7 md:justify-center'
         >
           {imageCategories.map((category) => (
             <Carousel.Slide key={category.id}>
@@ -120,7 +120,7 @@ export const HotelMediaGallery: React.FC<IProps> = ({
           {Object.entries(groupedImages).map((category, categoryIndex) => (
             <div
               key={categoryIndex}
-              className='relative flex justify-center py-7 md:flex md:flex-row md:flex-wrap'
+              className='relative justify-center px-2 py-7 md:flex md:flex-row md:flex-wrap'
               id={`category-wrapper-${category[0]}`}
             >
               <div className='px-4 pb-3 text-center'>

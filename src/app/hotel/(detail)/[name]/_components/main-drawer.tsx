@@ -78,6 +78,7 @@ import {
 import { HotelDetailDescription } from '@/app/hotel/types'
 import { CommentsDrawer } from './comments-drawer'
 import { IoClose } from 'react-icons/io5'
+import { BsCheck } from 'react-icons/bs'
 
 type IProps = {
   description: HotelDetailDescription
@@ -103,7 +104,7 @@ const MainDrawer: React.FC<IProps> = ({
             opened={opened}
             onClose={onClose}
             title={
-              <div className='flex items-center'>
+              <div className='flex items-center p-0'>
                 <button
                   onClick={onClose}
                   className='rounded-r-xl bg-red-800 p-2 px-5 text-white'
@@ -120,13 +121,14 @@ const MainDrawer: React.FC<IProps> = ({
             }}
             classNames={{
               header: 'p-0',
+              body: 'p-0 md:p-3',
             }}
           >
             <div className='flex gap-5'>
               <Tabs
                 defaultValue='facilityInfos'
                 classNames={{
-                  tab: 'border-b-5 rounded p-3',
+                  tab: 'border-b-5 rounded md:p-3',
                   tabSection: 'hidden sm:flex',
                   tabLabel: 'flex-none',
                 }}
@@ -148,8 +150,8 @@ const MainDrawer: React.FC<IProps> = ({
                   )}
                 </Tabs.List>
 
-                <Tabs.Panel value='facilityInfos' className='p-4'>
-                  <div className='rounded bg-gray-50 p-3'>
+                <Tabs.Panel value='facilityInfos' className='py-2 md:p-4'>
+                  <div className='rounded bg-gray-50 p-1 md:p-3'>
                     <div className='grid rounded'>
                       <div className='mb-5 flex'>
                         <div className='leading-lg inline-flex items-center gap-3 rounded-md bg-gray-200 px-3 py-2'>
@@ -161,7 +163,7 @@ const MainDrawer: React.FC<IProps> = ({
                         </div>
                       </div>
 
-                      <div className='rounded bg-white p-3'>
+                      <div className='rounded bg-white md:p-3'>
                         <div className='my-5'>
                           <Title
                             order={3}
@@ -177,12 +179,13 @@ const MainDrawer: React.FC<IProps> = ({
                             showLabel='Daha fazla göster'
                             hideLabel='Daha az göster'
                           >
-                            <ul className='grid grid-cols-5 gap-2'>
+                            <ul className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
                               {data?.facilityTypes &&
                                 data.facilityTypes
                                   .slice(0, 100)
                                   .map((facility, index) => (
                                     <li className='truncate' key={index}>
+                                      <BsCheck className='mr-1 inline-block text-blue-800' />
                                       {facility.name}
                                     </li>
                                   ))}

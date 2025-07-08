@@ -128,7 +128,7 @@ const GeneralDrawer: React.FC<IProps> = ({
 
           <Button
             onClick={onOpenDrawer}
-            className='bg-transparent p-0 font-normal text-blue-700'
+            className='my-3 bg-transparent p-0 font-normal text-blue-700 md:my-0'
           >
             Tesisin tüm olanaklarını görün
             <MdKeyboardArrowRight size={20} />

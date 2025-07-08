@@ -66,7 +66,7 @@ const RoomUpdateForm = () => {
       <input type='hidden' {...form.register('checkOutDate')} />
       <input type='hidden' {...form.register('rooms')} />
 
-      <div className='grid grid-cols-3 gap-3'>
+      <div className='grid gap-3 md:grid-cols-3'>
         <div>
           <HotelCalendar
             showCalendar={showCalendar}
@@ -101,9 +101,9 @@ const RoomUpdateForm = () => {
             }}
           />
         </div>
-        <div className='col-span-1 flex justify-end md:justify-start'>
+        <div className='col-span-1 flex justify-center md:justify-start'>
           <Button
-            className='h-full md:px-8'
+            className='h-full p-3 px-8'
             type='submit'
             radius='xl'
             color={isFormDirty ? 'green' : 'blue'}

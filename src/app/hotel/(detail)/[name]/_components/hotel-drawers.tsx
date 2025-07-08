@@ -56,7 +56,7 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
     <>
       <div className='grid gap-3'>
         {description?.beachPool?.trim() && (
-          <div className='flex bg-white'>
+          <div className='hidden bg-white md:flex'>
             <div className='mt-1 px-2 py-3'>
               <MdOutlineBeachAccess className='text-blue-800' size={20} />
             </div>
@@ -65,17 +65,17 @@ const HotelDrawers: React.FC<IProps> = ({ description }) => {
                 onClick={() => handleDrawerOpen(1)}
                 variant='white'
                 color='black'
-                size='lg'
+                size='md'
                 className='flex justify-start p-0 font-medium'
               >
-                Plaj ve havuz
+                Plaj Bilgisi
               </Button>
 
               <div className='flex justify-between gap-5 rounded bg-white'>
                 <div className='flex items-center gap-2'>
                   <div>
                     <div
-                      className='text-sm'
+                      className='text-xs'
                       dangerouslySetInnerHTML={{
                         __html: description.beachPool
                           ? description.beachPool.substring(0, 90)
