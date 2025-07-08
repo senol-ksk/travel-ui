@@ -6,6 +6,7 @@ import { HotelDetailDescription } from '@/app/hotel/types'
 import { useElementSize } from '@mantine/hooks'
 import { MdKeyboardArrowRight, MdOutlineBed } from 'react-icons/md'
 import { FaDoorOpen, FaGlassMartiniAlt, FaRegBuilding } from 'react-icons/fa'
+import { BsCheck } from 'react-icons/bs'
 
 type IProps = {
   description: HotelDetailDescription
@@ -39,10 +40,11 @@ const GeneralDrawer: React.FC<IProps> = ({
               <div>Otel Özellikleri</div>
             </Title>
             <div className='my-5 border-t'></div>
-            <ul className='grid grid-cols-4 gap-2'>
+            <ul className='grid grid-cols-2 gap-4 sm:grid-cols-4'>
               {data?.facilityTypes &&
-                data.facilityTypes.slice(0, 16).map((facility, index) => (
+                data.facilityTypes.slice(0, 12).map((facility, index) => (
                   <li className='small truncate' key={index}>
+                    <BsCheck className='mr-1 inline-block text-blue-800' />
                     {facility.name}
                   </li>
                 ))}
@@ -126,7 +128,7 @@ const GeneralDrawer: React.FC<IProps> = ({
 
           <Button
             onClick={onOpenDrawer}
-            className='bg-transparent p-0 font-normal text-blue-700'
+            className='my-3 bg-transparent p-0 font-normal text-blue-700 md:my-0'
           >
             Tesisin tüm olanaklarını görün
             <MdKeyboardArrowRight size={20} />
