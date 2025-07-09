@@ -391,10 +391,7 @@ const PaymentPage = () => {
                         >
                           <RiCheckboxCircleFill size={22} />
                         </span>
-                        <span>
-                          <span className='font-bold'>KREDİ/BANKA KARTI</span>
-                           İLE ÖDE
-                        </span>
+                        <span>Kredi Kartı İle Ödeme</span>
                       </Center>
                     ),
                     value: '' + PaymentMethodEnums.CreditCard,
@@ -410,10 +407,7 @@ const PaymentPage = () => {
                         >
                           <RiCheckboxCircleFill size={22} />
                         </span>
-                        <span>
-                          {' '}
-                          <span className='font-bold'>ParafPara </span>İLE ÖDE
-                        </span>
+                        <span>ParafPara İle Ödeme</span>
                       </Center>
                     ),
                     value: '' + PaymentMethodEnums.Bonus,
@@ -424,7 +418,6 @@ const PaymentPage = () => {
                   setPaymentMethod(+value)
                 }}
               />
-              <div className='-mt-[1px] border-b border-blue-200' />
             </div>
             <div className='grid items-center gap-3 sm:grid-cols-2'>
               <div>
