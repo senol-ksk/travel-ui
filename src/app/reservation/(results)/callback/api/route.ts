@@ -24,6 +24,8 @@ export async function POST(request: NextRequest) {
     },
   })
 
+  console.log(bookResult)
+
   if (bookResult && bookResult?.success) {
     const bookResultParams = new URLSearchParams(bookResult.data || '')
 
