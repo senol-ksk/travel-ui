@@ -5,6 +5,7 @@ export const operationResultParams = {
   bookingCode: parseAsString,
   firstName: parseAsString,
   lastName: parseAsString,
+  partialPaymentError: parseAsString,
 }
 
 export const operationResultFormSchema = z.object({
