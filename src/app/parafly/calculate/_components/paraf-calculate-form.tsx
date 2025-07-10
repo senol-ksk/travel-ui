@@ -1,0 +1,153 @@
+'use client'
+
+import NextImage from 'next/image'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Button,
+  Grid,
+  Group,
+  Image,
+  LoadingOverlay,
+  NativeSelect,
+  NativeSelectProps,
+  NumberInput,
+  Radio,
+  Stack,
+} from '@mantine/core'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from '@/libs/zod'
+import { useMutation } from '@tanstack/react-query'
+import { serviceRequest } from '@/network'
+import NumberFlow from '@number-flow/react'
+import { useMemo } from 'react'
+
+const productTypes: NativeSelectProps['data'] = [
+  { label: 'Uçak', value: 'Flight' },
+  { label: 'Otel', value: 'Hotel' },
+  { label: 'Araç Kiralama', value: 'CarRental' },
+  { label: 'Tur', value: 'Tour' },
+]
+
+const schema = z.object({
+  isDomestic: z.boolean(),
+  moduleName: z.string(),
+  amount: z.number(),
+
+  //   Amount
+  // ModuleName
+  // IsDomestic
+})
+
+type SchemaType = z.infer<typeof schema>
+
+export const ParafCalculate = () => {
+  const form = useForm({
+    resolver: zodResolver(schema),
+  })
+
+  console.log(form.formState.errors)
+
+  const calculateMutation = useMutation({
+    mutationFn: async (params: SchemaType) => {
+      const response = await serviceRequest<number>({
+        axiosOptions: {
+          url: 'api/prodcut/calculateBonus',
+          method: 'get',
+          params,
+        },
+      })
+
+      return response
+    },
+  })
+
+  const calculatedPrice = calculateMutation.data?.data ?? 0
+
+  return (
+    <Grid gutter={'lg'} mt={'xl'}>
+      <Grid.Col span={{ base: 12, md: 5 }} pos={'relative'}>
+        <Stack
+          component={'form'}
+          onSubmit={form.handleSubmit((data) => {
+            console.log(data)
+            calculateMutation.mutate(data)
+          })}
+        >
+          <Controller
+            control={form.control}
+            name='isDomestic'
+            defaultValue={true}
+            render={({ field }) => (
+              <Radio.Group
+                size='md'
+                onChange={(value) => {
+                  field.onChange(value === '1')
+                }}
+                defaultValue={'1'}
+              >
+                <Group>
+                  <Radio value='1' label='Yurt içi' />
+                  <Radio value='2' label='Yurtdışı' />
+                </Group>
+              </Radio.Group>
+            )}
+          />
+          <div>
+            <NativeSelect
+              label='Seyahat ürünü Seçiniz'
+              data={productTypes}
+              size='md'
+              {...form.register('moduleName')}
+            />
+          </div>
+          <div>
+            <Controller
+              name='amount'
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <NumberInput
+                  {...field}
+                  label='Ürün Fiyatını Yazınız'
+                  hideControls
+                  size='md'
+                  maxLength={8}
+                  error={fieldState.error?.message}
+                />
+              )}
+            />
+          </div>
+          <div className='relative flex gap-4 rounded-md bg-gray-50 px-5 py-2 text-lg'>
+            ParafPara Değeri:{' '}
+            <div>
+              <NumberFlow
+                format={{
+                  style: 'decimal',
+                }}
+                value={calculatedPrice}
+                animated={!calculateMutation.isPending}
+                suffix=' pp'
+              />
+            </div>
+          </div>
+          <div className='grid'>
+            <Button type='submit' size='md'>
+              Hesapla
+            </Button>
+          </div>
+        </Stack>
+        <LoadingOverlay visible={calculateMutation.isPending} />
+      </Grid.Col>
+      <Grid.Col span={{ base: 12, md: 5 }} offset={{ md: 2 }} visibleFrom='md'>
+        <Image
+          component={NextImage}
+          src={'/paraf_kart_2x.webp'}
+          alt='paraf card'
+          width={304}
+          height={204}
+          placeholder='blur'
+          blurDataURL='...'
+        />
+      </Grid.Col>
+    </Grid>
+  )
+}

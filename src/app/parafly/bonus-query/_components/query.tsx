@@ -88,17 +88,15 @@ function ParafQuery() {
           offset={{ md: 2 }}
           visibleFrom='md'
         >
-          <div className='p-12'>
-            <Image
-              component={NextImage}
-              src={'/paraf_kart_2x.webp'}
-              alt='paraf card'
-              width={304}
-              height={204}
-              placeholder='blur'
-              blurDataURL='...'
-            />
-          </div>
+          <Image
+            component={NextImage}
+            src={'/paraf_kart_2x.webp'}
+            alt='paraf card'
+            width={304}
+            height={204}
+            placeholder='blur'
+            blurDataURL='...'
+          />
         </Grid.Col>
       </Grid>
     </div>
