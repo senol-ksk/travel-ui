@@ -123,7 +123,7 @@ export const Header = () => {
                   </UnstyledButton>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item component={Link} href='/parafly'>
+                  <Menu.Item component={Link} href='/parafly/bonus-query'>
                     ParafPara Sorgula
                   </Menu.Item>
                   <Menu.Item component={Link} href='/parafly/cancel-flight'>
