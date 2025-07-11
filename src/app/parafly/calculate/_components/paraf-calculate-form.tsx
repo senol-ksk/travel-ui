@@ -15,10 +15,11 @@ import {
   Stack,
 } from '@mantine/core'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from '@/libs/zod'
 import { useMutation } from '@tanstack/react-query'
-import { serviceRequest } from '@/network'
 import NumberFlow from '@number-flow/react'
+
+import { z } from '@/libs/zod'
+import { serviceRequest } from '@/network'
 
 const productTypes: NativeSelectProps['data'] = [
   { label: 'Uçak', value: 'Flight' },
@@ -34,7 +35,9 @@ const schema = z.object({
     .number({
       message: 'Geçerli bir tutar giriniz.',
     })
-    .refine((value) => value > 0, { message: 'Geçerli bir tutar giriniz.' }),
+    .refine((value) => value >= 1000, {
+      message: 'En az 1000TL girmelisiniz.',
+    }),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -69,7 +72,7 @@ export const ParafCalculate = () => {
         <Stack
           component={'form'}
           onSubmit={form.handleSubmit((data) => {
-            calculateMutation.mutate(data)
+            if (calculateMutation.isSuccess) calculateMutation.mutate(data)
           })}
         >
           <Controller
