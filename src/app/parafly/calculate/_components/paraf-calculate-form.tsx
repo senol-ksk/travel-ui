@@ -19,7 +19,6 @@ import { z } from '@/libs/zod'
 import { useMutation } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
 import NumberFlow from '@number-flow/react'
-import { useMemo } from 'react'
 
 const productTypes: NativeSelectProps['data'] = [
   { label: 'Uçak', value: 'Flight' },
@@ -31,11 +30,11 @@ const productTypes: NativeSelectProps['data'] = [
 const schema = z.object({
   isDomestic: z.boolean(),
   moduleName: z.string(),
-  amount: z.number(),
-
-  //   Amount
-  // ModuleName
-  // IsDomestic
+  amount: z
+    .number({
+      message: 'Geçerli bir tutar giriniz.',
+    })
+    .refine((value) => value > 0, { message: 'Geçerli bir tutar giriniz.' }),
 })
 
 type SchemaType = z.infer<typeof schema>
@@ -43,9 +42,10 @@ type SchemaType = z.infer<typeof schema>
 export const ParafCalculate = () => {
   const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      amount: 2000.0,
+    },
   })
-
-  console.log(form.formState.errors)
 
   const calculateMutation = useMutation({
     mutationFn: async (params: SchemaType) => {
@@ -69,7 +69,6 @@ export const ParafCalculate = () => {
         <Stack
           component={'form'}
           onSubmit={form.handleSubmit((data) => {
-            console.log(data)
             calculateMutation.mutate(data)
           })}
         >
@@ -107,11 +106,22 @@ export const ParafCalculate = () => {
               render={({ field, fieldState }) => (
                 <NumberInput
                   {...field}
+                  type='tel'
+                  inputMode='decimal'
+                  allowNegative={false}
                   label='Ürün Fiyatını Yazınız'
                   hideControls
                   size='md'
-                  maxLength={8}
+                  maxLength={20}
                   error={fieldState.error?.message}
+                  decimalScale={2}
+                  fixedDecimalScale
+                  thousandSeparator='.'
+                  decimalSeparator=','
+                  suffix=' TL'
+                  classNames={{
+                    input: 'text-center',
+                  }}
                 />
               )}
             />
