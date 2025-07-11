@@ -1,4 +1,4 @@
-import { AspectRatio, Button, Image, Title } from '@mantine/core'
+import { Button, Image, Title } from '@mantine/core'
 import NextImage from 'next/image'
 
 import parafImage from './about-paraf.jpeg'
