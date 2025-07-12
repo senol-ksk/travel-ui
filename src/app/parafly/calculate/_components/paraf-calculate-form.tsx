@@ -20,6 +20,7 @@ import NumberFlow from '@number-flow/react'
 
 import { z } from '@/libs/zod'
 import { serviceRequest } from '@/network'
+import { delayCodeExecution } from '@/libs/util'
 
 const productTypes: NativeSelectProps['data'] = [
   { label: 'Uçak', value: 'Flight' },
@@ -60,6 +61,8 @@ export const ParafCalculate = () => {
         },
       })
 
+      await delayCodeExecution(2000)
+
       return response
     },
   })
@@ -72,7 +75,7 @@ export const ParafCalculate = () => {
         <Stack
           component={'form'}
           onSubmit={form.handleSubmit((data) => {
-            if (calculateMutation.isSuccess) calculateMutation.mutate(data)
+            if (!calculateMutation.isPending) calculateMutation.mutate(data)
           })}
         >
           <Controller
