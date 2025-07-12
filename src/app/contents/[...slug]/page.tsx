@@ -1,7 +1,7 @@
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
 import { Container, Title, TypographyStylesProvider } from '@mantine/core'
-import { Link } from 'next-view-transitions'
+import { notFound } from 'next/navigation'
 
 type CmsParams = {
   content: {
@@ -59,7 +59,7 @@ export default async function ContentPage({
     await getContent<CmsContent<CMSWidgets[], CmsParams>>(slug.join('/'))
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound() // or we can redirect custom not-fount page, see =>> https://nextjs.org/docs/app/api-reference/file-conventions/not-found
   const { params: cmsParams, widgets, title } = data
 
   return (
