@@ -1,13 +1,12 @@
 'use client'
 
 import {
-  HotelBookingDetailApiResponse,
   OperationResultWithBookingCodeResponse,
   TourBookingDetailApiResponse,
 } from '@/app/online-operations/types'
 import { operationResultParams } from '@/libs/onlineOperations/searchParams'
 import { serviceRequest } from '@/network'
-import { Container, Grid, Image, Skeleton, Title } from '@mantine/core'
+import { Alert, Container, Grid, Image, Skeleton, Title } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 
 import dayjs from 'dayjs'
@@ -38,9 +37,6 @@ export const TourOrderDetail = () => {
     () => bookDetailsDataQuery.data?.data,
     [bookDetailsDataQuery.data?.data]
   )
-  const dataViewResponsers =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers
 
   if (!bookDetailsDataQuery.data && bookDetailsDataQuery.isLoading)
     return (
@@ -52,11 +48,17 @@ export const TourOrderDetail = () => {
     )
 
   const productDataViewResponser =
-    dataViewResponsers?.[1].operationResultViewData
-  const summaryResponse = dataViewResponsers?.[0].summaryResponse
+    bookingDetailData?.operationViewData.operationResultViewData
+  const summaryResponse = bookingDetailData?.summaryResponse.summaryResponse
 
   if (!summaryResponse || !productDataViewResponser) {
-    return <div>no data</div>
+    return (
+      <Container mt={'xl'} maw={500}>
+        <Alert variant='light' color='red'>
+          Sonuç bulunamadı.
+        </Alert>
+      </Container>
+    )
   }
 
   const { package: tourPackage } = summaryResponse

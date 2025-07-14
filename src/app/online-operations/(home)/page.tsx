@@ -40,14 +40,11 @@ export default function OnlineOperationsPage() {
     },
     mutationKey: ['booking-result-mutation'],
     onSuccess(query, { bookingCode, firstName, lastName }) {
-      if (
-        query?.success &&
-        query.data?.operationResultWithBookingCode.productDataViewResponser &&
-        query.data?.operationResultWithBookingCode.productDataViewResponser
-          ?.dataViewResponsers?.length > 0
-      ) {
+      if (query?.success) {
+        // query.data.operationResultWithBookingCode.productDataViewResponser.dataViewResponsers[1].summaryResponse.moduleName
         const moduleName =
-          query.data?.operationResultWithBookingCode.productDataViewResponser?.dataViewResponsers[0].summaryResponse.moduleName.toLocaleLowerCase()
+          query.data?.summaryResponse.summaryResponse.moduleName.toLowerCase()
+
         const resultUrlSerializer = createSerializer(operationResultParams)
         // https://localhost:3000/online-operations/order-details/hotel?bookingCode=HD-2506RK9L&firstName=ESIN&lastName=AKCAY+ALAN
         const resultUrl = resultUrlSerializer(
@@ -58,6 +55,7 @@ export default function OnlineOperationsPage() {
             lastName,
           }
         )
+
         router.push(resultUrl)
       }
     },

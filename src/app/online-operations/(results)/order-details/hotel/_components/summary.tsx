@@ -71,16 +71,12 @@ export const HotelBookingSummary = () => {
     () => bookingDetailsDataQuery.data?.data,
     [bookingDetailsDataQuery.data?.data]
   )
-  const dataViewResponsers =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers
-  const summaryResponse = dataViewResponsers?.[0].summaryResponse
+
+  const summaryResponse = bookingDetailData?.summaryResponse.summaryResponse
   const searchToken = summaryResponse?.searchToken
   const sessionToken = summaryResponse?.sessionToken
 
-  const productKey =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers[0].summaryResponse.productKey
+  const productKey = summaryResponse?.productKey
 
   const threeDFormRef = useRef<HTMLFormElement>(null)
   const partialPaymentMutation = useMutation({
@@ -208,11 +204,11 @@ export const HotelBookingSummary = () => {
     )
 
   const productDataViewResponser =
-    dataViewResponsers?.[1].operationResultViewData
+    bookingDetailData?.operationViewData.operationResultViewData
   const summaryViewDataResponserForHotel = summaryResponse
   const insuranceFee = summaryResponse?.roomGroup.cancelWarrantyPrice.value ?? 0
 
-  const hotelDataSummaryData = dataViewResponsers?.[0].summaryResponse
+  const hotelDataSummaryData = summaryResponse
   const roomGroup = hotelDataSummaryData?.roomGroup
   const isHotelPartialPayment =
     bookingDetailsDataQuery?.data?.data?.hotelCancelWarrantyPriceStatus

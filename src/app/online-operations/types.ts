@@ -8,14 +8,9 @@ export type OperationResultWithBookingCodeResponse<T> = {
     dayCount: number
     couponActive: boolean
   } | null
-  operationResultWithBookingCode: {
-    productDataViewResponser: {
-      dataViewResponsers: T
-      totalPrice: number
-      totalPriceCurrency: number
-    }
-    flightETicketViewDataModel: null
-    flightTicketNumber: string | null
+  operationViewData: { operationResultViewData: OperationResultViewData }
+  summaryResponse: {
+    summaryResponse: T
   }
 }
 export type OperationResultViewData = {
@@ -106,11 +101,7 @@ export type CarBookingDetailApiResponse = [
             }
             carGroupName: 'Dacia Sandero Manuel veya Benzeri'
             seatCount: null
-            deposit: {
-              value: 0
-              currency: null
-              rateValue: null
-            }
+            deposit: ServicePriceType
             kminCluded: null
             addKmRate: {
               value: 0
@@ -121,75 +112,29 @@ export type CarBookingDetailApiResponse = [
             licenseYear: 0
             brand: null
             model: null
-            deliveryType: '\u0000'
+            deliveryType: string
           }
           carIncluded: []
           carInsurances: []
           carExtraOption: []
-          oneWay: {
-            value: 0
-            currency: 'TRY'
-            rateValue: null
-          }
-          orginalTotalPrice: {
-            value: 1592.73
-            currency: 'TRY'
-            rateValue: null
-          }
+          oneWay: ServicePriceType
+          orginalTotalPrice: ServicePriceType
           carMessage: {
             showDetail: boolean
             message: null
             showExtras: boolean
           }
-          servicePrice: {
-            value: 0
-            currency: 'TRY'
-            rateValue: null
-          }
-          totalCommission: {
-            value: 0
-            currency: null
-            rateValue: null
-          }
-          buyServiceFee: 132.73
-          sellServiceFee: 132.73
-          key: '26649'
-          totalPrice: {
-            value: 1592.73
-            currency: 'TRY'
-            rateValue: null
-          }
-          basePrice: {
-            value: 1327.27
-            currency: 'TRY'
-            rateValue: null
-          }
-          taxes: {
-            value: 0
-            currency: 'TRY'
-            rateValue: null
-          }
-          discount: {
-            value: 0
-            currency: 'TRY'
-            rateValue: null
-          }
-          buyFee: {
-            code: 'TRY'
-            price: {
-              value: 132.73
-              currency: 'TRY'
-              rateValue: null
-            }
-          }
-          fee: {
-            code: 'SellFee'
-            price: {
-              value: 0
-              currency: 'TRY'
-              rateValue: null
-            }
-          }
+          servicePrice: ServicePriceType
+          totalCommission: ServicePriceType
+          buyServiceFee: number
+          sellServiceFee: number
+          key: string
+          totalPrice: ServicePriceType
+          basePrice: ServicePriceType
+          taxes: ServicePriceType
+          discount: ServicePriceType
+          buyFee: ServiceFeePriceType
+          fee: ServiceFeePriceType
           passengerPrices: [
             {
               unitPrice: {
@@ -270,7 +215,7 @@ export type CarBookingDetailApiResponse = [
         availableSpecialRequests: object
         sessionToken: 'C5C66CAD7762AE287DBD2BD2407DCA5369670A85D2AA4BBA321FEFE06533E550'
         traceId: 'C5C66CAD7762AE287DBD2BD2407DCA5369670A85D2AA4BBA321FEFE06533E550'
-        isSucceeded: true
+        isSucceeded: boolean
         diagnostics: {
           sessionToken: null
           providerId: 0
@@ -613,7 +558,7 @@ export type CarBookingDetailApiResponse = [
         availableSpecialRequests: object
         sessionToken: 'C5C66CAD7762AE287DBD2BD2407DCA5369670A85D2AA4BBA321FEFE06533E550'
         traceId: 'C5C66CAD7762AE287DBD2BD2407DCA5369670A85D2AA4BBA321FEFE06533E550'
-        isSucceeded: true
+        isSucceeded: boolean
         diagnostics: {
           sessionToken: null
           providerId: 0
@@ -694,195 +639,187 @@ export type CarBookingDetailApiResponse = [
     }
   },
 ]
-export type HotelBookingDetailApiResponse = [
-  {
-    summaryResponse: {
-      searchToken: string
-      sessionToken: string
-      destinationSlug: null
-      hotelSlug: null
-      roomGroup: {
-        hotelId: ID
-        hotelKey: string
-        hotel: {
-          id: ID
-          name: string
-          slug: null
-          zip_code: null
-          address: null | string
-          destination: null | string
-          country_code: null
-          location: null
-          phone: null
-          email: null
-          currency: null
-          meal_type: null
-          nearby: null
-          nearby_info: null
-          checkin_from: null
-          checkout_to: null
-          fax: null
-          nr_rooms: null
-          stars: null
-          availability_score: null
-          max_free_child_age: null
-          min_free_child_age: null
-          images: null | { original: string }[]
-          themes: null
-          facilities: null
-          facility_scopes: null
-          tripAdvisor: null
-          price: ServicePriceType
-          descriptions: null
-          year_built: null
-          nr_restaurants: null
-          nr_bars: null
-          nr_halls: null
-          last_update: string
-          video_list: null
-          web_site: null
-          deleted: boolean
-          destination_slug: null
-          old_destination_slug: null
-          rating: number
-          listing_rate: number
-          sales_rate: number
-          destination_id: number
-          destination_map: null
-          search_rate: number
-          reviews: null
-          nearby_restaurants: null
-          comment_info: null
-          documents: null
-          food_drinks: null
-          can_coupon_used: boolean
-        }
-        roomDetails: {
-          [key: string]: {
-            roomKey: ''
-            description: ''
-            allotment: number
-            bedType: ''
-            roomType: string
-            quantity: 2
-            size: 0.0
-            facilities: {
-              id: 24855
-              name: 'Lcd TV'
-              scope_id: 0
-              type_id: 0
-              isPaid: boolean
-              featured: boolean
-              icon_key: null
-              priority: 0
-            }[]
-            pensionType: string
-            pensionTypeId: number
-            extraInformations: string[]
-            images: null
-          }
-        }
-        rooms: {
-          passengerKeys: null
-          nightlyRates: null
-          addonInfos: null
-          freeChildAges: null
-          freeNights: 0
-          discountInformations: null
-          key: ''
-          totalPrice: ServicePriceType
-          basePrice: ServicePriceType
-          taxes: ServicePriceType
-          discount: ServicePriceType
-          buyFee: ServiceFeePriceType
-          fee: ServiceFeePriceType
-          passengerPrices: null
-          taxInfos: null
-          serviceCharges: null
-        }[]
-        averageRate: ServicePriceType
-        nightlyRateTotal: ServicePriceType
-        discountDescription: null
-        cancelWarrantyPrice: ServicePriceType
-        useCancelWarranty: boolean
-        prepaid: null
-        accommodationTax: null
-        isSingleMaleRestriction: null
-        cancellationPolicy: string
-        cancellationPolicies: {
-          penaltyPrice: ServicePriceType
-          optionDate: string
-          description: string
-        }[]
-        additionalInfos: null
-        nonRefundable: boolean
-        checkInDate: string
-        minNight: number
-        checkOutDate: string
-        earlyBooking: boolean
-        addonInfos: null
-        packageSearchType: number
-        provisionTime: string
-        provider: string
-        priceDifferenceBackGuarantee: boolean
-        canCouponUsed: boolean
-        key: string
-        totalPrice: ServicePriceType
-        basePrice: ServicePriceType
-        taxes: ServicePriceType
-        discount: ServicePriceType
-        buyFee: ServiceFeePriceType
-        fee: ServiceFeePriceType
-        passengerPrices: {
-          unitPrice: ServicePriceType
-          unitBasePrice: ServicePriceType
-          unitFee: ServiceFeePriceType
-          unitTax: ServicePriceType
-          cancelPenalty: null
-          changePenalty: null
-          passengers: {
-            key: null
-            name: null
-            passengerType: number
-            age: number
-            birthday: string
-            gender: number
-          }[]
-          taxInfos: {
-            key: string
-            value: string
-          }[]
-          serviceCharges: [
-            {
-              code: string
-              canApplyAmount: boolean
-              confirmPassenger: boolean
-              price: ServicePriceType
-              desciption: null
-            },
-          ]
-        }[]
-        taxInfos: null
-        serviceCharges: null
-      }
-      status: null
-      productKey: string
-      moduleName: string
-      totalPrice: number
-      priceCurrency: string
-      loyaltyMultiple: number
-      couponDiscountList: null
-      extraCharges: {
-        [key: string]: ServicePriceType
-      }
-      financellDiscount: ServicePriceType
+export type HotelBookingDetailApiResponse = {
+  searchToken: string
+  sessionToken: string
+  destinationSlug: null
+  hotelSlug: null
+  roomGroup: {
+    hotelId: ID
+    hotelKey: string
+    hotel: {
+      id: ID
+      name: string
+      slug: null
+      zip_code: null
+      address: null | string
+      destination: null | string
+      country_code: null
+      location: null
+      phone: null
+      email: null
+      currency: null
+      meal_type: null
+      nearby: null
+      nearby_info: null
+      checkin_from: null
+      checkout_to: null
+      fax: null
+      nr_rooms: null
+      stars: null
+      availability_score: null
+      max_free_child_age: null
+      min_free_child_age: null
+      images: null | { original: string }[]
+      themes: null
+      facilities: null
+      facility_scopes: null
+      tripAdvisor: null
+      price: ServicePriceType
+      descriptions: null
+      year_built: null
+      nr_restaurants: null
+      nr_bars: null
+      nr_halls: null
+      last_update: string
+      video_list: null
+      web_site: null
+      deleted: boolean
+      destination_slug: null
+      old_destination_slug: null
+      rating: number
+      listing_rate: number
+      sales_rate: number
+      destination_id: number
+      destination_map: null
+      search_rate: number
+      reviews: null
+      nearby_restaurants: null
+      comment_info: null
+      documents: null
+      food_drinks: null
+      can_coupon_used: boolean
     }
-  },
-  {
-    operationResultViewData: OperationResultViewData
-  },
-]
-
+    roomDetails: {
+      [key: string]: {
+        roomKey: ''
+        description: ''
+        allotment: number
+        bedType: ''
+        roomType: string
+        quantity: 2
+        size: 0.0
+        facilities: {
+          id: 24855
+          name: 'Lcd TV'
+          scope_id: 0
+          type_id: 0
+          isPaid: boolean
+          featured: boolean
+          icon_key: null
+          priority: 0
+        }[]
+        pensionType: string
+        pensionTypeId: number
+        extraInformations: string[]
+        images: null
+      }
+    }
+    rooms: {
+      passengerKeys: null
+      nightlyRates: null
+      addonInfos: null
+      freeChildAges: null
+      freeNights: 0
+      discountInformations: null
+      key: ''
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: null
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    averageRate: ServicePriceType
+    nightlyRateTotal: ServicePriceType
+    discountDescription: null
+    cancelWarrantyPrice: ServicePriceType
+    useCancelWarranty: boolean
+    prepaid: null
+    accommodationTax: null
+    isSingleMaleRestriction: null
+    cancellationPolicy: string
+    cancellationPolicies: {
+      penaltyPrice: ServicePriceType
+      optionDate: string
+      description: string
+    }[]
+    additionalInfos: null
+    nonRefundable: boolean
+    checkInDate: string
+    minNight: number
+    checkOutDate: string
+    earlyBooking: boolean
+    addonInfos: null
+    packageSearchType: number
+    provisionTime: string
+    provider: string
+    priceDifferenceBackGuarantee: boolean
+    canCouponUsed: boolean
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: ServicePriceType
+      unitBasePrice: ServicePriceType
+      unitFee: ServiceFeePriceType
+      unitTax: ServicePriceType
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: null
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: {
+        key: string
+        value: string
+      }[]
+      serviceCharges: [
+        {
+          code: string
+          canApplyAmount: boolean
+          confirmPassenger: boolean
+          price: ServicePriceType
+          desciption: null
+        },
+      ]
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  status: null
+  productKey: string
+  moduleName: string
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: {
+    [key: string]: ServicePriceType
+  }
+  financellDiscount: ServicePriceType
+}
 export enum ActiveFlightTripKind {
   ONEWAY,
   ROUNDTRIP,
@@ -1134,146 +1071,404 @@ export type FlightRefundApiResponse = [
   },
 ]
 
-export type TourBookingDetailApiResponse = [
-  {
-    summaryResponse: {
-      package: {
-        title: 'Bölge Buluşmalı Kapadokya Turu 1 Gece Otel Konaklamalı - Kendi Aracınız İle | Kapadokya Otelleri  Konaklama Opsiyonu'
-        description: 'Kapadokya Otelleri  Konaklama Opsiyonu'
-        countries: null
-        cities: []
-        group: {
-          code: null
-          title: null
-        }
-        region: null
-        imageUrl: ''
-        startDate: '2025-07-19T00:00:00'
-        endDate: '2025-07-20T00:00:00'
-        tourTime: 1.0
-        hotelInformations: [
-          {
-            name: 'Kapadokya Otelleri'
-            rating: 0.0
-          },
-        ]
-        priceInformations: null
-        quota: 0
-        discountDescription: ''
-        extraServices: null
-        detail: {
-          images: null
-          countryInformation: null
-          extraTours: null
-          tourProgram: null
-          departureInformation: null
-          includedInformation: null
-          notIncludedInformation: null
-          flightInformation: []
-          hotelRooms: null
-          additionalSSRData: null
-        }
-        tlPrice: {
-          value: 0.0
-          currency: 'TRY'
-          rateValue: null
-        }
-        calculatedId: ''
-        slug: ''
-        slugId: ''
-        isDomestic: true
-        commission: 0.0
-        key: ''
-        totalPrice: {
-          value: 6398.0
-          currency: 'TRY'
-          rateValue: null
-        }
-        basePrice: {
-          value: 5661.95
-          currency: 'TRY'
-          rateValue: null
-        }
-        taxes: {
-          value: 0.0
-          currency: 'TRY'
-          rateValue: null
-        }
-        discount: {
-          value: 0.0
-          currency: 'TRY'
-          rateValue: null
-        }
-        buyFee: {
-          code: 'TRY'
-          price: {
-            value: 0.0
-            currency: 'TRY'
-            rateValue: null
-          }
-        }
-        fee: {
-          code: 'SellFee'
-          price: {
-            value: 736.05
-            currency: 'TRY'
-            rateValue: null
-          }
-        }
-        passengerPrices: null
-        taxInfos: null
-        serviceCharges: [
-          {
-            code: 'Fee'
-            canApplyAmount: false
-            confirmPassenger: false
-            price: {
-              value: 736.05
-              currency: 'TRY'
-              rateValue: null
-            }
-            desciption: null
-          },
-        ]
-      }
-      detail: {
-        images: null
-        countryInformation: null
-        extraTours: null
-        tourProgram: null
-        departureInformation: null
-        includedInformation: null
-        notIncludedInformation: null
-        flightInformation: []
-        hotelRooms: null
-        additionalSSRData: null
-      }
-      adultCount: null
-      childs: null
-      sessionToken: '0BE251B4644616C5A5A86CAFC16351C481428760DC9E9F7215142389DF2BC95B'
-      searchToken: '0BE251B4644616C5A5A86CAFC16351C481428760DC9E9F7215142389DF2BC95B'
-      tourExtraServiceToDetailReturnPath: null
-      location: null
-      moduleName: 'Tour'
-      totalPrice: 6398.0
-      priceCurrency: 'TRY'
-      loyaltyMultiple: 0
-      couponDiscountList: null
-      extraCharges: {
-        CIP: {
-          value: 0.0
-          currency: 'TRY'
-          rateValue: null
-        }
-      }
-      financellDiscount: {
+export type TourBookingDetailApiResponse = {
+  package: {
+    title: 'Bölge Buluşmalı Kapadokya Turu 1 Gece Otel Konaklamalı - Kendi Aracınız İle | Kapadokya Otelleri  Konaklama Opsiyonu'
+    description: 'Kapadokya Otelleri  Konaklama Opsiyonu'
+    countries: null
+    cities: []
+    group: {
+      code: null
+      title: null
+    }
+    region: null
+    imageUrl: ''
+    startDate: '2025-07-19T00:00:00'
+    endDate: '2025-07-20T00:00:00'
+    tourTime: 1.0
+    hotelInformations: [
+      {
+        name: 'Kapadokya Otelleri'
+        rating: 0.0
+      },
+    ]
+    priceInformations: null
+    quota: 0
+    discountDescription: ''
+    extraServices: null
+    detail: {
+      images: null
+      countryInformation: null
+      extraTours: null
+      tourProgram: null
+      departureInformation: null
+      includedInformation: null
+      notIncludedInformation: null
+      flightInformation: []
+      hotelRooms: null
+      additionalSSRData: null
+    }
+    tlPrice: {
+      value: 0.0
+      currency: 'TRY'
+      rateValue: null
+    }
+    calculatedId: ''
+    slug: ''
+    slugId: ''
+    isDomestic: boolean
+    commission: 0.0
+    key: ''
+    totalPrice: {
+      value: 6398.0
+      currency: 'TRY'
+      rateValue: null
+    }
+    basePrice: {
+      value: 5661.95
+      currency: 'TRY'
+      rateValue: null
+    }
+    taxes: {
+      value: 0.0
+      currency: 'TRY'
+      rateValue: null
+    }
+    discount: {
+      value: 0.0
+      currency: 'TRY'
+      rateValue: null
+    }
+    buyFee: {
+      code: 'TRY'
+      price: {
         value: 0.0
-        currency: null
+        currency: 'TRY'
         rateValue: null
       }
     }
-  },
-  {
-    operationResultViewData: OperationResultViewData
-  },
-]
+    fee: {
+      code: 'SellFee'
+      price: {
+        value: 736.05
+        currency: 'TRY'
+        rateValue: null
+      }
+    }
+    passengerPrices: null
+    taxInfos: null
+    serviceCharges: [
+      {
+        code: 'Fee'
+        canApplyAmount: boolean
+        confirmPassenger: boolean
+        price: {
+          value: 736.05
+          currency: 'TRY'
+          rateValue: null
+        }
+        desciption: null
+      },
+    ]
+  }
+  detail: {
+    images: null
+    countryInformation: null
+    extraTours: null
+    tourProgram: null
+    departureInformation: null
+    includedInformation: null
+    notIncludedInformation: null
+    flightInformation: []
+    hotelRooms: null
+    additionalSSRData: null
+  }
+  adultCount: null
+  childs: null
+  sessionToken: '0BE251B4644616C5A5A86CAFC16351C481428760DC9E9F7215142389DF2BC95B'
+  searchToken: '0BE251B4644616C5A5A86CAFC16351C481428760DC9E9F7215142389DF2BC95B'
+  tourExtraServiceToDetailReturnPath: null
+  location: null
+  moduleName: 'Tour'
+  totalPrice: 6398.0
+  priceCurrency: 'TRY'
+  loyaltyMultiple: 0
+  couponDiscountList: null
+  extraCharges: {
+    CIP: {
+      value: 0.0
+      currency: 'TRY'
+      rateValue: null
+    }
+  }
+  financellDiscount: {
+    value: 0.0
+    currency: null
+    rateValue: null
+  }
+}
+
+export type FlightBookDetailApiResponse = {
+  flightList: {
+    flightFareInfo: {
+      flightDetailKeys: string[]
+      groupId: 0 | 1 | null
+      key: '719233'
+      totalPrice: {
+        value: 3131
+        currency: 'TRY'
+        rateValue: null
+      }
+      basePrice: {
+        value: 2381.7
+        currency: 'TRY'
+        rateValue: null
+      }
+      taxes: {
+        value: 549.3
+        currency: 'TRY'
+        rateValue: null
+      }
+      discount: {
+        value: 150
+        currency: 'TRY'
+        rateValue: null
+      }
+      buyFee: {
+        code: 'TRY'
+        price: {
+          value: 200
+          currency: 'TRY'
+          rateValue: null
+        }
+      }
+      fee: {
+        code: 'TRY'
+        price: {
+          value: 200
+          currency: 'TRY'
+          rateValue: null
+        }
+      }
+      passengerPrices: [
+        {
+          unitPrice: {
+            value: 3131
+            currency: 'TRY'
+            rateValue: null
+          }
+          unitBasePrice: {
+            value: 2381.7
+            currency: 'TRY'
+            rateValue: null
+          }
+          unitFee: {
+            code: 'TRY'
+            price: {
+              value: 200
+              currency: 'TRY'
+              rateValue: null
+            }
+          }
+          unitTax: {
+            value: 549.3
+            currency: 'TRY'
+            rateValue: null
+          }
+          cancelPenalty: null
+          changePenalty: null
+          passengers: [
+            {
+              key: null
+              name: null
+              passengerType: 0
+              age: 0
+              birthday: '0001-01-01T00:00:00'
+              gender: 0
+            },
+          ]
+          taxInfos: [
+            {
+              key: 'YR'
+              value: '400.00'
+            },
+            {
+              key: 'VQ'
+              value: '149.30'
+            },
+          ]
+          serviceCharges: [
+            {
+              code: 'Fee'
+              canApplyAmount: boolean
+              confirmPassenger: boolean
+              price: {
+                value: 200
+                currency: 'TRY'
+                rateValue: null
+              }
+              desciption: null
+            },
+          ]
+        },
+      ]
+      taxInfos: null
+      serviceCharges: [
+        {
+          code: 'Fee'
+          canApplyAmount: boolean
+          confirmPassenger: boolean
+          price: {
+            value: 200
+            currency: 'TRY'
+            rateValue: null
+          }
+          desciption: null
+        },
+      ]
+    }
+    flightDetail: {
+      key: string
+      groupId: 0 | 1 | null
+      flightSegmentKeys: string[]
+      travelTime: string
+      direction: number
+      isDomestic: boolean
+      isOWCCombinable: boolean
+      isPromotional: boolean
+      reservable: boolean
+      freeVolatileData: object
+    }
+    flightSegments: {
+      key: string
+      groupId: 0 | 1 | null
+      origin: {
+        code: string
+        isDomestic: boolean
+        iata: []
+        type: number
+        id: ID
+      }
+      destination: {
+        code: string
+        isDomestic: boolean
+        iata: []
+        type: number
+        id: ID
+      }
+      departureTime: string
+      arrivalTime: string
+      flightTime: string
+      operatingAirline: {
+        code: string
+        value: string
+        countryCode: string
+      }
+      marketingAirline: {
+        code: string
+        value: string
+        countryCode: string
+      }
+      flightNumber: string
+      cabinClass: number
+      bookingCode: string
+      equipment: ''
+      isMeal: boolean
+      quota: number
+      baggageAllowance: {
+        maxWeight: {
+          value: number
+          unit: number
+        }
+        piece: {
+          pieceCount: number
+        }
+      }
+      freeVolatileData: object
+    }[]
+    flightPackageInfos: []
+  }[]
+  flightFareInfo: {
+    flightDetailKeys: string[]
+    groupId: 0 | 1 | null
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: [
+      {
+        unitPrice: ServicePriceType
+        unitBasePrice: ServicePriceType
+        unitFee: ServiceFeePriceType
+        unitTax: ServicePriceType
+        cancelPenalty: null
+        changePenalty: null
+        passengers: {
+          key: null
+          name: null
+          passengerType: number
+          age: number
+          birthday: string
+          gender: number
+        }[]
+        taxInfos: {
+          key: string
+          value: string
+        }[]
+        serviceCharges: {
+          code: string
+          canApplyAmount: boolean
+          confirmPassenger: boolean
+          price: ServicePriceType
+          desciption: null
+        }[]
+      },
+    ]
+    taxInfos: null
+    serviceCharges: {
+      code: string
+      canApplyAmount: boolean
+      confirmPassenger: boolean
+      price: ServicePriceType
+      desciption: null
+    }[]
+  }
+  flightPackageInfos: []
+  isReservable: boolean
+  hasOwc: boolean
+  activeFlightTripKind: number
+  sessionToken: string
+  airportList: {
+    [key: string]: {
+      id: ID
+      code: string
+      value: {
+        langCode: string
+        value: string
+      }[]
+      countryCode: string
+      country: string
+      city: string
+    }
+  }
+  airlineList: {
+    [key: string]: string
+  }
+  applyCancelationInsurance: boolean
+  buyInsurancePrice: number
+  sellInsurancePrice: number
+  showOnlyInsurancePrice: number
+  productKey: string
+  moduleName: 'Flight'
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: {
+    [key: string]: ServicePriceType
+  }
+  financellDiscount: ServicePriceType
+}
