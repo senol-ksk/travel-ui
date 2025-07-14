@@ -84,7 +84,7 @@ export default async function Home() {
           <div>
             <Container className='px-0 md:px-4 md:pt-[58px]'>
               <Title
-                className='text-center font-medium text-white md:mb-10'
+                className='hidden text-center font-medium text-white md:mb-10 md:block'
                 style={{ fontSize: '32px' }}
               >
                 Parafly ile ParafPara&apos;ların keyfini çıkarın!
