@@ -9,12 +9,13 @@ import {
   Rating,
   Skeleton,
   Title,
+  Tooltip,
   Transition,
   UnstyledButton,
 } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 import { createSerializer, useQueryStates } from 'nuqs'
-import { FaRegCheckCircle } from 'react-icons/fa'
+import { FaRegCheckCircle, FaRegSmile } from 'react-icons/fa'
 import { GiKnifeFork } from 'react-icons/gi'
 import { IoChevronForward, IoStarSharp } from 'react-icons/io5'
 
@@ -30,8 +31,8 @@ import {
   hotelSearchParamParser,
 } from '@/modules/hotel/searchParams'
 import dayjs from 'dayjs'
-import { MdOutlineStarRate } from 'react-icons/md'
 import { Carousel } from '@mantine/carousel'
+import { FaFaceSmile } from 'react-icons/fa6'
 
 type IProps = {
   hotelInfo: HotelSearchResultHotelInfo | undefined
@@ -115,7 +116,6 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                     </div>
                   )}
                 </Transition>
-
                 <Image
                   loading='lazy'
                   fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
@@ -127,7 +127,19 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                   src={hotelImageUrl}
                   alt={hotelInfo?.name}
                   radius={'md'}
+                  className='relative'
                 />
+                {hotelInfo?.comment_info && (
+                  <div className='absolute end-0 top-0 m-2 flex items-center gap-2 rounded bg-green-800 px-1 py-1 text-sm text-white md:hidden'>
+                    <div>
+                      <FaFaceSmile />
+                    </div>
+                    <div>{hotelInfo?.comment_info?.averageScore}</div>
+                    <div className='text-white'>
+                      {hotelInfo?.comment_info?.totalComments} Yorum
+                    </div>
+                  </div>
+                )}
               </Box>
             </div>
             <div className='flex flex-col gap-2 pt-2 md:col-span-5'>
@@ -139,38 +151,40 @@ const HotelSearchResultItem: React.FC<IProps> = ({
               >
                 {hotelInfo?.name}
               </Title>
-              {hotelInfo?.comment_info && (
+              {/* {hotelInfo?.comment_info && (
                 <div className='flex items-center gap-1 text-end text-xs leading-none'>
                   <div className='flex items-center gap-1'>
                     <div className='text-md'>
                       <MdOutlineStarRate />
                     </div>
-                    <div>{hotelInfo?.comment_info?.averageScore} puan</div>
                   </div>
                   <span>({hotelInfo?.comment_info?.totalComments} Yorum)</span>
                 </div>
-              )}
-              {hotelInfo?.stars ? (
-                <Rating
-                  color='dark'
-                  value={hotelInfo?.stars}
-                  count={hotelInfo?.stars}
-                  readOnly
-                  fullSymbol={<IoStarSharp />}
-                />
-              ) : null}
-              <div className='flex items-center gap-3 text-xs'>
-                <span className='text-dark-700'>{hotelInfo?.destination}</span>
+              )} */}
+              <div className='flex items-center gap-2 text-sm'>
+                {hotelInfo?.stars ? (
+                  <Rating
+                    value={hotelInfo?.stars}
+                    count={hotelInfo?.stars}
+                    readOnly
+                    fullSymbol={<IoStarSharp />}
+                  />
+                ) : null}
+                <div className='flex items-center gap-1 text-xs'>
+                  <span className='text-dark-700'>
+                    {hotelInfo?.destination} /
+                  </span>
 
-                {onMapClick && (
-                  <UnstyledButton
-                    fz='inherit'
-                    className='text-blue-800 transition-colors hover:text-blue-900'
-                    onClick={onMapClick}
-                  >
-                    Haritada Gör
-                  </UnstyledButton>
-                )}
+                  {onMapClick && (
+                    <UnstyledButton
+                      fz='inherit'
+                      className='text-blue-800 transition-colors hover:text-blue-900'
+                      onClick={onMapClick}
+                    >
+                      Haritada Göster
+                    </UnstyledButton>
+                  )}
+                </div>
               </div>
               <div>
                 <List size='sm' className='text-teal-800'>
@@ -188,40 +202,31 @@ const HotelSearchResultItem: React.FC<IProps> = ({
               </div>
               {freeChildAges && freeChildAges[0] && (
                 <div>
-                  <Popover
-                    width={200}
-                    position='bottom'
-                    withArrow
-                    arrowOffset={1}
-                    shadow='lg'
-                  >
-                    <Popover.Target>
-                      <Badge
-                        component={UnstyledButton}
-                        variant='outline'
-                        radius={'sm'}
-                        size='lg'
-                        className='cursor-pointer'
-                        classNames={{
-                          root: 'border-gray-300',
-                          label: 'text-dark-700 font-normal',
-                        }}
-                      >
-                        2 Çocuk Ücretsiz
-                      </Badge>
-                    </Popover.Target>
-                    <Popover.Dropdown className='gap-2'>
-                      {freeChildAges.map((child, childIndex) => (
-                        <div key={childIndex}>
-                          <div>{child.whichChild}. Çocuk</div>
-                          <div>
-                            {child.ageFrom} - {Math.round(child.ageTo)} Yaş
-                            ücretsiz
-                          </div>
+                  <Tooltip
+                    label={freeChildAges.map((child, childIndex) => (
+                      <div key={childIndex}>
+                        <div>{child.whichChild}. Çocuk</div>
+                        <div>
+                          {child.ageFrom} - {Math.round(child.ageTo)} Yaş
+                          ücretsiz
                         </div>
-                      ))}
-                    </Popover.Dropdown>
-                  </Popover>
+                      </div>
+                    ))}
+                  >
+                    <Badge
+                      component={UnstyledButton}
+                      variant='outline'
+                      radius={'sm'}
+                      size='lg'
+                      className='cursor-pointer'
+                      classNames={{
+                        root: 'border-gray-300 shadow-xs',
+                        label: 'text-dark-700 font-normal',
+                      }}
+                    >
+                      2 Çocuk Ücretsiz
+                    </Badge>
+                  </Tooltip>
                 </div>
               )}
             </div>
@@ -256,7 +261,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
           ) : null}
         </div>
         <div className='flex md:col-span-3 md:border-s'>
-          <div className='flex flex-1 flex-col gap-3 py-3 md:px-6 md:py-5 md:ps-8'>
+          <div className='flex flex-1 flex-col gap-3 py-2 md:px-6 md:py-5 md:ps-8'>
             {hotelInfo?.comment_info && (
               <div className='hidden items-center gap-3 self-end text-blue-800 md:flex'>
                 <div className='text-lg font-semibold'>Çok İyi</div>
@@ -265,11 +270,11 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 </div>
               </div>
             )}
-            <div className='mt-auto text-end'>
+            <div className='mt-auto flex items-center px-5 text-start md:grid md:px-0 md:text-end'>
               <div>
                 {hasDiscount ? (
                   <div>
-                    <div className='inline-block items-center rounded bg-orange-800 p-2 text-sm leading-none font-semibold text-white'>
+                    <div className='inline-block items-center rounded-full bg-orange-800 p-2 text-sm leading-none font-semibold text-white'>
                       %{discountRate} İndirim
                     </div>
 
@@ -281,20 +286,21 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 ) : (
                   <NightCountText count={nightCount} />
                 )}
-                <div className='pb-3 text-2xl font-bold'>
+                <div className='pb-1 text-2xl font-bold'>
                   {formatCurrency(totalPrice)}
                 </div>
               </div>
 
-              <div>
+              <div className='align-items-self-end ms-auto grid justify-self-end md:w-full'>
                 <Button
                   component={Link}
                   href={detailUrl}
                   fullWidth
                   rightSection={<IoChevronForward size={16} />}
                   size='md'
+                  radius={'md'}
                 >
-                  Seç
+                  Oda Seç
                 </Button>
               </div>
             </div>
