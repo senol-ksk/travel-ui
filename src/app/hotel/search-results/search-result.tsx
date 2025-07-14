@@ -5,6 +5,7 @@ import {
   Alert,
   Button,
   Container,
+  Drawer,
   LoadingOverlay,
   Modal,
   NativeSelect,
@@ -32,7 +33,8 @@ import { SearchByName } from './components/search-by-name'
 import { DestinationIds } from './components/filters/destinationIds'
 import { PensionTypes } from './components/filters/pension-types'
 import { Themes } from './components/filters/themes'
-
+import { useMediaQuery } from '@mantine/hooks'
+import { FaCheck } from 'react-icons/fa'
 type IProps = {
   slug?: string
 }
@@ -59,8 +61,23 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   const handleLoadMoreActions = async () => {
     hotelSearchRequestQuery.fetchNextPage()
   }
-
+  const filterOptions = [
+    {
+      label: 'Fiyat Artan',
+      value: HotelSortOrderEnums.priceAscending,
+    },
+    {
+      label: 'Fiyat Azalan',
+      value: HotelSortOrderEnums.priceDescending,
+    },
+  ]
+  const totalCount =
+    hotelSearchRequestQuery.data?.pages.reduce((acc, page) => {
+      return acc + (page?.searchResults[0]?.items.length || 0)
+    }, 0) || 0
   const { orderBy, ...restFilterParams } = filterParams
+  const [opened, { open, close }] = useDisclosure(false)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <>
@@ -93,219 +110,506 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
       <Container className='px-0'>
         <div className='py-5 lg:py-10'>
           <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
-            <div className='md:col-span-1'>
-              {mounted && (
-                <div className='relative'>
-                  <LoadingOverlay
-                    visible={
-                      hotelSearchRequestQuery.isLoading ||
-                      searchParamsQuery.isLoading ||
-                      searchQueryStatus.current === 'loading'
-                    }
-                    zIndex={1000}
-                    overlayProps={{ radius: 'sm', blur: 2 }}
-                    loaderProps={{ color: 'yellow', type: 'bars' }}
-                  />
-                  <div className='flex justify-between'>
-                    <Title order={2} className='text-xl font-bold'>
-                      Filtreler
-                    </Title>
-                    <UnstyledButton
-                      hidden={!Object.values(restFilterParams).find(Boolean)}
-                      fz='xs'
-                      className='font-semibold text-blue-500'
-                      onClick={() => {
-                        setFilterParams(null)
-                      }}
-                    >
-                      Temizle
-                    </UnstyledButton>
-                  </div>
-                  <div className='pt-3'>
-                    <Accordion
-                      defaultValue={[
-                        'byName',
-                        'priceRange',
-                        'destinationIds',
-                        'pensionTypes',
-                        'themes',
-                      ]}
-                      multiple
-                      classNames={{
-                        control: 'p-2',
-                        label: 'p-0 text-md font-semibold',
-                        content: 'p-0 text-xl',
-                      }}
-                    >
-                      <Accordion.Item value='byName'>
-                        <Accordion.Control>Otel Adına Göre</Accordion.Control>
-                        <Accordion.Panel>
-                          <SearchByName
-                            defaultValue={restFilterParams.hotelName}
-                            onClear={() => {
-                              setFilterParams({
-                                hotelName: null,
-                              })
-                            }}
-                            onSearchClick={(value) => {
-                              setFilterParams({
-                                hotelName: value,
-                              })
-                            }}
-                          />
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='priceRange'>
-                        <Accordion.Control>Fiyat Aralığı</Accordion.Control>
-                        <Accordion.Panel>
-                          <div className='p-2'>
-                            {!hotelSearchRequestQuery.isLoading &&
-                            !hotelSearchRequestQuery.isFetching &&
-                            hotelSearchRequestQuery.data &&
-                            hotelSearchRequestQuery.data.pages.length &&
-                            hotelSearchRequestQuery.data.pages.at(-1) &&
-                            hotelSearchRequestQuery.data.pages.at(-1)
-                              ?.searchResults.length &&
-                            hotelSearchRequestQuery.data.pages.at(-1)
-                              ?.searchResults[0].maxPrice &&
-                            hotelSearchRequestQuery.data?.pages
-                              .at(-1)
-                              ?.searchResults.at(-1)?.minPrice &&
-                            hotelSearchRequestQuery.data?.pages
-                              .at(-1)
-                              ?.searchResults.at(-1)?.maxPrice ? (
-                              <PriceRangeSlider
-                                minPrice={
-                                  restFilterParams?.priceRange
-                                    ? restFilterParams.priceRange[0]
-                                    : (hotelSearchRequestQuery.data?.pages
+            <div className='hidden md:col-span-1 md:block'>
+              {isMobile ? (
+                <Drawer opened={opened} onClose={close}>
+                  {mounted && (
+                    <div className='relative'>
+                      <LoadingOverlay
+                        visible={
+                          hotelSearchRequestQuery.isLoading ||
+                          searchParamsQuery.isLoading ||
+                          searchQueryStatus.current === 'loading'
+                        }
+                        zIndex={1000}
+                        overlayProps={{ radius: 'sm', blur: 2 }}
+                        loaderProps={{ color: 'yellow', type: 'bars' }}
+                      />
+                      <div className='flex justify-between'>
+                        <Title order={2} className='text-xl font-bold'>
+                          Filtreler
+                        </Title>
+                        <UnstyledButton
+                          hidden={
+                            !Object.values(restFilterParams).find(Boolean)
+                          }
+                          fz='xs'
+                          className='font-semibold text-blue-500'
+                          onClick={() => {
+                            setFilterParams(null)
+                          }}
+                        >
+                          Temizle
+                        </UnstyledButton>
+                      </div>
+                      <div className='pt-3'>
+                        <Accordion
+                          defaultValue={[
+                            'byName',
+                            'priceRange',
+                            'destinationIds',
+                            'pensionTypes',
+                            'themes',
+                          ]}
+                          multiple
+                          classNames={{
+                            control: 'p-2',
+                            label: 'p-0 text-md font-semibold',
+                            content: 'p-0 text-xl',
+                          }}
+                        >
+                          <Accordion.Item value='byName'>
+                            <Accordion.Control>
+                              Otel Adına Göre
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                              <SearchByName
+                                defaultValue={restFilterParams.hotelName}
+                                onClear={() => {
+                                  setFilterParams({
+                                    hotelName: null,
+                                  })
+                                }}
+                                onSearchClick={(value) => {
+                                  setFilterParams({
+                                    hotelName: value,
+                                  })
+                                }}
+                              />
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='priceRange'>
+                            <Accordion.Control>Fiyat Aralığı</Accordion.Control>
+                            <Accordion.Panel>
+                              <div className='p-2'>
+                                {!hotelSearchRequestQuery.isLoading &&
+                                !hotelSearchRequestQuery.isFetching &&
+                                hotelSearchRequestQuery.data &&
+                                hotelSearchRequestQuery.data.pages.length &&
+                                hotelSearchRequestQuery.data.pages.at(-1) &&
+                                hotelSearchRequestQuery.data.pages.at(-1)
+                                  ?.searchResults.length &&
+                                hotelSearchRequestQuery.data.pages.at(-1)
+                                  ?.searchResults[0].maxPrice &&
+                                hotelSearchRequestQuery.data?.pages
+                                  .at(-1)
+                                  ?.searchResults.at(-1)?.minPrice &&
+                                hotelSearchRequestQuery.data?.pages
+                                  .at(-1)
+                                  ?.searchResults.at(-1)?.maxPrice ? (
+                                  <PriceRangeSlider
+                                    minPrice={
+                                      restFilterParams?.priceRange
+                                        ? restFilterParams.priceRange[0]
+                                        : (hotelSearchRequestQuery.data?.pages
+                                            .at(-1)
+                                            ?.searchResults.at(-1)?.minPrice
+                                            .value ?? 0)
+                                    }
+                                    maxPrice={
+                                      restFilterParams?.priceRange
+                                        ? restFilterParams.priceRange[1]
+                                        : (hotelSearchRequestQuery.data?.pages
+                                            .at(-1)
+                                            ?.searchResults.at(-1)?.maxPrice
+                                            .value ?? 0)
+                                    }
+                                    defaultRanges={[
+                                      hotelSearchRequestQuery.data?.pages
                                         .at(-1)
                                         ?.searchResults.at(-1)?.minPrice
-                                        .value ?? 0)
-                                }
-                                maxPrice={
-                                  restFilterParams?.priceRange
-                                    ? restFilterParams.priceRange[1]
-                                    : (hotelSearchRequestQuery.data?.pages
+                                        .value ?? 0,
+                                      hotelSearchRequestQuery.data?.pages
                                         .at(-1)
                                         ?.searchResults.at(-1)?.maxPrice
-                                        .value ?? 0)
-                                }
-                                defaultRanges={[
-                                  hotelSearchRequestQuery.data?.pages
-                                    .at(-1)
-                                    ?.searchResults.at(-1)?.minPrice.value ?? 0,
-                                  hotelSearchRequestQuery.data?.pages
-                                    .at(-1)
-                                    ?.searchResults.at(-1)?.maxPrice.value ?? 0,
-                                ]}
+                                        .value ?? 0,
+                                    ]}
+                                  />
+                                ) : null}
+                              </div>
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='destinationIds'>
+                            <Accordion.Control>Yakın Çevre</Accordion.Control>
+                            <Accordion.Panel>
+                              {hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.destinationsInfo && (
+                                <DestinationIds
+                                  destinationsInfo={
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.destinationsInfo
+                                  }
+                                />
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='pensionTypes'>
+                            <Accordion.Control>
+                              Konaklama Tipi
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                              {hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.pensionTypes && (
+                                <PensionTypes
+                                  data={
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.pensionTypes
+                                  }
+                                />
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='themes'>
+                            <Accordion.Control>Temalar</Accordion.Control>
+                            <Accordion.Panel>
+                              {hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.themes && (
+                                <Themes
+                                  data={
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.themes
+                                  }
+                                />
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                        </Accordion>
+                      </div>
+                    </div>
+                  )}
+                </Drawer>
+              ) : (
+                <div>
+                  {mounted && (
+                    <div className='relative'>
+                      <LoadingOverlay
+                        visible={
+                          hotelSearchRequestQuery.isLoading ||
+                          searchParamsQuery.isLoading ||
+                          searchQueryStatus.current === 'loading'
+                        }
+                        zIndex={1000}
+                        overlayProps={{ radius: 'sm', blur: 2 }}
+                        loaderProps={{ color: 'yellow', type: 'bars' }}
+                      />
+                      <div className='flex justify-between'>
+                        <Title order={2} className='text-xl font-bold'>
+                          Filtreler
+                        </Title>
+                        <UnstyledButton
+                          hidden={
+                            !Object.values(restFilterParams).find(Boolean)
+                          }
+                          fz='xs'
+                          className='font-semibold text-blue-500'
+                          onClick={() => {
+                            setFilterParams(null)
+                          }}
+                        >
+                          Temizle
+                        </UnstyledButton>
+                      </div>
+                      <div className='pt-3'>
+                        <Accordion
+                          defaultValue={[
+                            'byName',
+                            'priceRange',
+                            'destinationIds',
+                            'pensionTypes',
+                            'themes',
+                          ]}
+                          multiple
+                          classNames={{
+                            control: 'p-2 ',
+                            label: 'p-0  text-md font-semibold',
+                            content: 'p-0 text-xl',
+                          }}
+                        >
+                          <Accordion.Item value='byName'>
+                            <Accordion.Control>
+                              Otel Adına Göre
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                              <SearchByName
+                                defaultValue={restFilterParams.hotelName}
+                                onClear={() => {
+                                  setFilterParams({
+                                    hotelName: null,
+                                  })
+                                }}
+                                onSearchClick={(value) => {
+                                  setFilterParams({
+                                    hotelName: value,
+                                  })
+                                }}
                               />
-                            ) : null}
-                          </div>
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='destinationIds'>
-                        <Accordion.Control>Yakın Çevre</Accordion.Control>
-                        <Accordion.Panel>
-                          {hotelSearchRequestQuery.data?.pages
-                            .at(-1)
-                            ?.searchResults.at(-1)?.destinationsInfo && (
-                            <DestinationIds
-                              destinationsInfo={
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='priceRange'>
+                            <Accordion.Control>Fiyat Aralığı</Accordion.Control>
+                            <Accordion.Panel>
+                              <div className='p-2'>
+                                {!hotelSearchRequestQuery.isLoading &&
+                                !hotelSearchRequestQuery.isFetching &&
+                                hotelSearchRequestQuery.data &&
+                                hotelSearchRequestQuery.data.pages.length &&
+                                hotelSearchRequestQuery.data.pages.at(-1) &&
+                                hotelSearchRequestQuery.data.pages.at(-1)
+                                  ?.searchResults.length &&
+                                hotelSearchRequestQuery.data.pages.at(-1)
+                                  ?.searchResults[0].maxPrice &&
                                 hotelSearchRequestQuery.data?.pages
                                   .at(-1)
-                                  ?.searchResults.at(-1)?.destinationsInfo
-                              }
-                            />
-                          )}
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='pensionTypes'>
-                        <Accordion.Control>Konaklama Tipi</Accordion.Control>
-                        <Accordion.Panel>
-                          {hotelSearchRequestQuery.data?.pages
-                            .at(-1)
-                            ?.searchResults.at(-1)?.pensionTypes && (
-                            <PensionTypes
-                              data={
+                                  ?.searchResults.at(-1)?.minPrice &&
                                 hotelSearchRequestQuery.data?.pages
                                   .at(-1)
-                                  ?.searchResults.at(-1)?.pensionTypes
-                              }
-                            />
-                          )}
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                      <Accordion.Item value='themes'>
-                        <Accordion.Control>Temalar</Accordion.Control>
-                        <Accordion.Panel>
-                          {hotelSearchRequestQuery.data?.pages
-                            .at(-1)
-                            ?.searchResults.at(-1)?.themes && (
-                            <Themes
-                              data={
-                                hotelSearchRequestQuery.data?.pages
-                                  .at(-1)
-                                  ?.searchResults.at(-1)?.themes
-                              }
-                            />
-                          )}
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    </Accordion>
-                  </div>
+                                  ?.searchResults.at(-1)?.maxPrice ? (
+                                  <PriceRangeSlider
+                                    minPrice={
+                                      restFilterParams?.priceRange
+                                        ? restFilterParams.priceRange[0]
+                                        : (hotelSearchRequestQuery.data?.pages
+                                            .at(-1)
+                                            ?.searchResults.at(-1)?.minPrice
+                                            .value ?? 0)
+                                    }
+                                    maxPrice={
+                                      restFilterParams?.priceRange
+                                        ? restFilterParams.priceRange[1]
+                                        : (hotelSearchRequestQuery.data?.pages
+                                            .at(-1)
+                                            ?.searchResults.at(-1)?.maxPrice
+                                            .value ?? 0)
+                                    }
+                                    defaultRanges={[
+                                      hotelSearchRequestQuery.data?.pages
+                                        .at(-1)
+                                        ?.searchResults.at(-1)?.minPrice
+                                        .value ?? 0,
+                                      hotelSearchRequestQuery.data?.pages
+                                        .at(-1)
+                                        ?.searchResults.at(-1)?.maxPrice
+                                        .value ?? 0,
+                                    ]}
+                                  />
+                                ) : null}
+                              </div>
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='destinationIds'>
+                            <Accordion.Control>Yakın Çevre</Accordion.Control>
+                            <Accordion.Panel>
+                              {hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.destinationsInfo && (
+                                <DestinationIds
+                                  destinationsInfo={
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.destinationsInfo
+                                  }
+                                />
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='pensionTypes'>
+                            <Accordion.Control>
+                              Konaklama Tipi
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                              {hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.pensionTypes && (
+                                <PensionTypes
+                                  data={
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.pensionTypes
+                                  }
+                                />
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='themes'>
+                            <Accordion.Control>Temalar</Accordion.Control>
+                            <Accordion.Panel>
+                              {hotelSearchRequestQuery.data?.pages
+                                .at(-1)
+                                ?.searchResults.at(-1)?.themes && (
+                                <Themes
+                                  data={
+                                    hotelSearchRequestQuery.data?.pages
+                                      .at(-1)
+                                      ?.searchResults.at(-1)?.themes
+                                  }
+                                />
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                        </Accordion>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
             <div className='grid gap-4 pb-20 md:col-span-3'>
-              <div className='flex gap-1'>
-                <div className='ms-auto'>
+              <div className='grid gap-3 md:flex md:gap-1'>
+                <Skeleton
+                  visible={
+                    hotelSearchRequestQuery.isLoading ||
+                    searchParamsQuery.isLoading
+                  }
+                >
+                  {searchParams.destination && (
+                    <div className='hidden items-center gap-2 md:flex'>
+                      <div>
+                        <span className='text-lg font-bold'>
+                          {searchParams.destination}, Otelleri
+                        </span>{' '}
+                        için toplam {totalCount} tesis bulduk!
+                      </div>
+                    </div>
+                  )}
+                </Skeleton>
+
+                <div className='flex items-center justify-between gap-1'>
                   <Skeleton
+                    className='w-auto'
                     visible={
                       hotelSearchRequestQuery.isLoading ||
                       searchParamsQuery.isLoading
                     }
                   >
-                    <NativeSelect
-                      value={filterParams.orderBy}
-                      onChange={({ currentTarget: { value } }) => {
-                        setFilterParams({
-                          orderBy: value as HotelSortOrderEnums,
-                        })
-                      }}
-                      data={[
-                        {
-                          value: HotelSortOrderEnums.priceAscending,
-                          label: 'Fiyat (Artan)',
-                        },
-                        {
-                          value: HotelSortOrderEnums.priceDescending,
-                          label: 'Fiyat (Azalan)',
-                        },
-                        {
-                          value: HotelSortOrderEnums.listingRateDescending,
-                          label: 'Önerilen Oteller',
-                        },
-                        {
-                          value: HotelSortOrderEnums.nameAscending,
-                          label: 'İsme Göre (A-Z)',
-                        },
-                        {
-                          value: HotelSortOrderEnums.nameDescending,
-                          label: 'İsme Göre (Z-A)',
-                        },
-                        {
-                          value: HotelSortOrderEnums.starAscending,
-                          label: 'Yıldız Sayısı (Artan)',
-                        },
-                        {
-                          value: HotelSortOrderEnums.starDescending,
-                          label: 'Yıldız Sayısı (Azalan)',
-                        },
-                      ]}
-                    />
+                    <Button
+                      size='sm'
+                      color='black'
+                      className='mx-1 flex border-gray-400 px-8 font-medium md:hidden'
+                      variant='outline'
+                      onClick={open}
+                    >
+                      Filtreler
+                    </Button>
                   </Skeleton>
+                  <div>
+                    <Skeleton
+                      className='hidden items-center gap-2 md:flex'
+                      visible={
+                        hotelSearchRequestQuery.isLoading ||
+                        searchParamsQuery.isLoading
+                      }
+                    >
+                      {filterOptions.map((option) => (
+                        <Button
+                          size='sm'
+                          className={
+                            filterParams.orderBy === option.value
+                              ? 'border-0 bg-blue-200 font-medium text-blue-700'
+                              : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                          }
+                          key={option.value}
+                          leftSection={
+                            filterParams.orderBy === option.value ? (
+                              <FaCheck />
+                            ) : (
+                              ''
+                            )
+                          }
+                          color='blue'
+                          variant={
+                            filterParams.orderBy === option.value
+                              ? 'filled'
+                              : 'outline'
+                          }
+                          onClick={() =>
+                            setFilterParams({
+                              orderBy: option.value,
+                            })
+                          }
+                        >
+                          {option.label}
+                        </Button>
+                      ))}
+                    </Skeleton>
+                  </div>
+
+                  <div>
+                    <Skeleton
+                      visible={
+                        hotelSearchRequestQuery.isLoading ||
+                        searchParamsQuery.isLoading
+                      }
+                    >
+                      <NativeSelect
+                        className='mx-1 w-auto font-medium'
+                        size='sm'
+                        style={{ width: 'fit-content' }}
+                        value={filterParams.orderBy}
+                        onChange={({ currentTarget: { value } }) => {
+                          setFilterParams({
+                            orderBy: value as HotelSortOrderEnums,
+                          })
+                        }}
+                        data={[
+                          {
+                            label: 'Fiyat Artan',
+                            value: HotelSortOrderEnums.priceAscending,
+                          },
+                          {
+                            label: 'Fiyat Azalan',
+                            value: HotelSortOrderEnums.priceDescending,
+                          },
+
+                          {
+                            value: HotelSortOrderEnums.listingRateDescending,
+                            label: 'Önerilen Oteller',
+                          },
+                          {
+                            value: HotelSortOrderEnums.nameAscending,
+                            label: 'İsme Göre (A-Z)',
+                          },
+                          {
+                            value: HotelSortOrderEnums.nameDescending,
+                            label: 'İsme Göre (Z-A)',
+                          },
+                          {
+                            value: HotelSortOrderEnums.starAscending,
+                            label: 'Yıldız Sayısı (Artan)',
+                          },
+                          {
+                            value: HotelSortOrderEnums.starDescending,
+                            label: 'Yıldız Sayısı (Azalan)',
+                          },
+                        ]}
+                      />
+                    </Skeleton>
+                  </div>
                 </div>
+
+                <Skeleton
+                  className='flex items-center gap-2 px-2 md:hidden'
+                  visible={
+                    hotelSearchRequestQuery.isLoading ||
+                    searchParamsQuery.isLoading
+                  }
+                >
+                  {searchParams.destination && (
+                    <>
+                      <div>
+                        <span className='text-sm font-semibold text-gray-500'>
+                          {searchParams.destination}, Otelleri için toplam{' '}
+                          {totalCount} tesis bulduk!
+                        </span>{' '}
+                      </div>
+                    </>
+                  )}
+                </Skeleton>
               </div>
               {!hotelSearchRequestQuery.isFetching &&
                 hotelSearchRequestQuery.data?.pages.filter(
