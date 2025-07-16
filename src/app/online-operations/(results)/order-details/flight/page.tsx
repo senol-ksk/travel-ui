@@ -10,7 +10,8 @@ export default function FlightBookDetailPage() {
         base: 'md',
         md: 'xl',
       }}
-      className='grid gap-3 md:gap-5'
+      px={0}
+      className='grid gap-2 md:gap-5'
     >
       <Suspense fallback={<Skeleton h={20} />}>
         <FlightOrderDetail />
