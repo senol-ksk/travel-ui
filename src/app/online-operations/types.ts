@@ -1107,3 +1107,90 @@ export type TransferBookDetailApiResponse = {
   }
   financellDiscount: ServicePriceType
 }
+
+export type BusBookDetailApiResponse = {
+  searchPanel: null
+  busJourney: {
+    id: ID
+    companyId: ID
+    company: string
+    busType: null
+    totalSeats: number
+    availableSeats: number
+    bus: {
+      kind: null
+      trackingNo: null
+      lineNo: number
+      origin: null
+      destination: null
+      departureDate: string
+      arrivalDate: string
+      duration: string
+      originalPrice: ServicePriceType
+      internetPrice: ServicePriceType
+      busName: null
+      policy: null
+      features: null
+      description: null
+      available: null
+    }
+    totalCommission: ServicePriceType
+    buyServiceFee: number
+    sellServiceFee: number
+    features: null
+    origin: string
+    originId: ID
+    destination: string
+    destinationId: ID
+    isActive: boolean
+    cancellationOffset: number
+    hasBusShuttle: boolean
+    isHesCodeRequired: boolean
+    disableSingleSeatSelection: boolean
+    changeOffset: number
+    selectedSeats: {
+      no: number
+      status: number
+      sideStatus: number
+      type: number
+      paxId: number
+      paxType: number
+      gender: number
+      age: number
+      discount: ServicePriceType
+      totalPrice: ServicePriceType
+      servicePrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      totalCommission: ServicePriceType
+      buyServiceFee: number
+      sellServiceFee: number
+      isSelectable: boolean
+    }[]
+    routeInfos: null
+    key: null
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: {
+      code: null
+      price: ServicePriceType
+    }
+    fee: {
+      code: null
+      price: ServicePriceType
+    }
+    passengerPrices: null
+    taxInfos: null
+    serviceCharges: null
+  }
+  searchToken: string
+  sessionToken: string
+  moduleName: 'Bus'
+  totalPrice: number
+  priceCurrency: 'TRY'
+  loyaltyMultiple: number
+  couponDiscountList: null
+  financellDiscount: ServicePriceType
+}
