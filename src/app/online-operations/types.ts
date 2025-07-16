@@ -220,9 +220,9 @@ export type CarBookingDetailApiResponse = [
           sessionToken: null
           providerId: 0
           providerName: null
-          generatingRequestTime: '00:00:00'
-          callingServiceTime: '00:00:00'
-          generatingResponseTime: '00:00:00'
+          generatingRequestTime: string
+          callingServiceTime: string
+          generatingResponseTime: string
           subDiagnostics: null
           lastException: null
           serviceRequestData: null
@@ -563,9 +563,9 @@ export type CarBookingDetailApiResponse = [
           sessionToken: null
           providerId: 0
           providerName: null
-          generatingRequestTime: '00:00:00'
-          callingServiceTime: '00:00:00'
-          generatingResponseTime: '00:00:00'
+          generatingRequestTime: string
+          callingServiceTime: string
+          generatingResponseTime: string
           subDiagnostics: null
           lastException: null
           serviceRequestData: null
@@ -1073,8 +1073,8 @@ export type FlightRefundApiResponse = [
 
 export type TourBookingDetailApiResponse = {
   package: {
-    title: 'Bölge Buluşmalı Kapadokya Turu 1 Gece Otel Konaklamalı - Kendi Aracınız İle | Kapadokya Otelleri  Konaklama Opsiyonu'
-    description: 'Kapadokya Otelleri  Konaklama Opsiyonu'
+    title: string
+    description: string
     countries: null
     cities: []
     group: {
@@ -1083,17 +1083,15 @@ export type TourBookingDetailApiResponse = {
     }
     region: null
     imageUrl: ''
-    startDate: '2025-07-19T00:00:00'
-    endDate: '2025-07-20T00:00:00'
-    tourTime: 1.0
-    hotelInformations: [
-      {
-        name: 'Kapadokya Otelleri'
-        rating: 0.0
-      },
-    ]
+    startDate: string
+    endDate: string
+    tourTime: number
+    hotelInformations: {
+      name: string
+      rating: number
+    }[]
     priceInformations: null
-    quota: 0
+    quota: number
     discountDescription: ''
     extraServices: null
     detail: {
@@ -1108,68 +1106,28 @@ export type TourBookingDetailApiResponse = {
       hotelRooms: null
       additionalSSRData: null
     }
-    tlPrice: {
-      value: 0.0
-      currency: 'TRY'
-      rateValue: null
-    }
+    tlPrice: ServicePriceType
     calculatedId: ''
     slug: ''
     slugId: ''
     isDomestic: boolean
-    commission: 0.0
+    commission: number
     key: ''
-    totalPrice: {
-      value: 6398.0
-      currency: 'TRY'
-      rateValue: null
-    }
-    basePrice: {
-      value: 5661.95
-      currency: 'TRY'
-      rateValue: null
-    }
-    taxes: {
-      value: 0.0
-      currency: 'TRY'
-      rateValue: null
-    }
-    discount: {
-      value: 0.0
-      currency: 'TRY'
-      rateValue: null
-    }
-    buyFee: {
-      code: 'TRY'
-      price: {
-        value: 0.0
-        currency: 'TRY'
-        rateValue: null
-      }
-    }
-    fee: {
-      code: 'SellFee'
-      price: {
-        value: 736.05
-        currency: 'TRY'
-        rateValue: null
-      }
-    }
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
     passengerPrices: null
     taxInfos: null
-    serviceCharges: [
-      {
-        code: 'Fee'
-        canApplyAmount: boolean
-        confirmPassenger: boolean
-        price: {
-          value: 736.05
-          currency: 'TRY'
-          rateValue: null
-        }
-        desciption: null
-      },
-    ]
+    serviceCharges: {
+      code: string
+      canApplyAmount: boolean
+      confirmPassenger: boolean
+      price: ServicePriceType
+      desciption: null
+    }[]
   }
   detail: {
     images: null
@@ -1185,27 +1143,19 @@ export type TourBookingDetailApiResponse = {
   }
   adultCount: null
   childs: null
-  sessionToken: '0BE251B4644616C5A5A86CAFC16351C481428760DC9E9F7215142389DF2BC95B'
-  searchToken: '0BE251B4644616C5A5A86CAFC16351C481428760DC9E9F7215142389DF2BC95B'
+  sessionToken: string
+  searchToken: string
   tourExtraServiceToDetailReturnPath: null
   location: null
   moduleName: 'Tour'
-  totalPrice: 6398.0
-  priceCurrency: 'TRY'
-  loyaltyMultiple: 0
+  totalPrice: number
+  priceCurrency: string
+  loyaltyMultiple: number
   couponDiscountList: null
   extraCharges: {
-    CIP: {
-      value: 0.0
-      currency: 'TRY'
-      rateValue: null
-    }
+    [key: string]: ServicePriceType
   }
-  financellDiscount: {
-    value: 0.0
-    currency: null
-    rateValue: null
-  }
+  financellDiscount: ServicePriceType
 }
 
 export type FlightBookDetailApiResponse = {
@@ -1465,6 +1415,91 @@ export type FlightBookDetailApiResponse = {
   moduleName: 'Flight'
   totalPrice: number
   priceCurrency: string
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: {
+    [key: string]: ServicePriceType
+  }
+  financellDiscount: ServicePriceType
+}
+
+export type TransferBookDetailApiResponse = {
+  selectResponse: {
+    requestId: null
+    selectedVehicleCount: number
+    extraServiceIds: null
+    extraServiceInfo: null
+    pickupPointName: string
+    pickupPointType: number
+    pickupLocationName: string
+    pickupDate: string
+    pickupInfo: string
+    pickupDescription: string
+    dropPointName: string
+    dropPointType: number
+    dropLocationName: string
+    dropInfo: string
+    dropDescription: string
+    adultPassengerCount: number
+    childrenPassengerCount: number
+    babyPassengerCount: number
+    transferVehicle: {
+      productKey: null
+      id: ID
+      partnerId: ID
+      vehicleType: number
+      vehicleName: null
+      vehicleTitle: string
+      transferInfo: null | {
+        vehiclePhotoUrl: string
+      }
+      extraServices: null
+      status: null
+      transferData: {
+        bookDetail: {
+          brmFactor: null
+          markupDetail: null
+          priceWithoutMarkup: null
+          priceWithMarkup: null
+          suggestedVehicleCount: number
+          sortPrice: null
+          extraServices: null
+          buyServiceFee: 0
+          sellServiceFee: 0
+          sellBaseFareAddOn: 0
+        }
+        selectedTransferDetail: null
+      }
+    }
+    sessionToken: null
+    traceId: null
+    isSucceeded: boolean
+    diagnostics: {
+      sessionToken: null
+      providerId: 0
+      providerName: null
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: null
+      traceId: null
+    }
+    eventMessages: []
+    appName: null
+    scopeCode: string
+    logSessionToken: null
+    logSearchToken: null
+  }
+  bookingResponse: null
+  searchToken: string
+  sessionToken: string
+  moduleName: 'Transfer'
+  totalPrice: number
+  priceCurrency: 'TRY'
   loyaltyMultiple: number
   couponDiscountList: null
   extraCharges: {
