@@ -72,9 +72,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
     },
   ]
   const totalCount =
-    hotelSearchRequestQuery.data?.pages.reduce((acc, page) => {
-      return acc + (page?.searchResults[0]?.items.length || 0)
-    }, 0) || 0
+    searchParamsQuery.data?.hotelSearchResponse.totalHotelFound ?? 0
   const { orderBy, ...restFilterParams } = filterParams
   const [opened, { open, close }] = useDisclosure(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -467,7 +465,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     searchParamsQuery.isLoading
                   }
                 >
-                  {searchParams.destination && (
+                  {totalCount > 0 && (
                     <div className='hidden items-center gap-2 md:flex'>
                       <div>
                         <span className='text-lg font-bold'>

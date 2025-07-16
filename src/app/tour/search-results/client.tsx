@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  Accordion,
   ActionIcon,
   Affix,
   Alert,
@@ -33,6 +34,10 @@ import { useMemo, useRef, useState } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
 import { CiFilter } from 'react-icons/ci'
+import { FaCheck } from 'react-icons/fa'
+import { TourDetail } from '../detail/detail-view'
+import Module from 'module'
+import { count } from 'console'
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
@@ -43,7 +48,16 @@ const TourSearchResultClient = () => {
 
   const searchRequestIsLoading =
     searchResultsQuery.isLoading || searchResultsQuery.hasNextPage
-
+  const filterOptions = [
+    {
+      label: 'Fiyat Artan',
+      value: SortOrderEnums.priceAsc,
+    },
+    {
+      label: 'Fiyat Azalan',
+      value: SortOrderEnums.priceDesc,
+    },
+  ]
   if (
     searchResultsQuery.hasNextPage &&
     !searchResultsQuery.isFetchingNextPage
@@ -113,6 +127,9 @@ const TourSearchResultClient = () => {
   const filteredData = useFilterActions(searchGroupedData)
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
+  const destinationName: string | undefined =
+    searchParamsQuery.data?.data?.params.tourSearchRequest.location.label
+  const totalCount = Array.isArray(searchData) ? searchData.length : 0
 
   if (
     !searchParamsQuery.data &&
@@ -264,7 +281,7 @@ const TourSearchResultClient = () => {
                             <Stack gap={rem(6)}>
                               {nightCountChecks.map((count) => (
                                 <Checkbox
-                                  label={count}
+                                  label={count + ' Gece'}
                                   value={count.toString()}
                                   key={count}
                                 />
@@ -305,47 +322,104 @@ const TourSearchResultClient = () => {
             </Transition>
           </div>
           <div className='grid gap-3 sm:col-span-8 lg:col-span-9'>
-            <div className='flex justify-between gap-3 px-3 md:px-0'>
-              <div>
-                <Button
-                  size='sm'
-                  leftSection={<CiFilter size={23} />}
-                  color='green'
-                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                  hiddenFrom='md'
-                >
-                  Filtreler
-                </Button>
-              </div>
-              <div>
-                <NativeSelect
-                  data={[
-                    {
-                      label: 'Fiyat (Ucuzdan pahalıya)',
-                      value: SortOrderEnums.priceAsc,
-                    },
-                    {
-                      label: 'Fiyat (Pahalıdan ucuza)',
-                      value: SortOrderEnums.priceDesc,
-                    },
-                    {
-                      label: 'Tarihe Göre (En erken)',
-                      value: SortOrderEnums.dateAsc,
-                    },
-                    {
-                      label: 'Tarihe Göre (En geç)',
-                      value: SortOrderEnums.dateDesc,
-                    },
-                  ]}
-                  onChange={({ target: { value } }) => {
-                    setFilterParams({
-                      order: value as SortOrderEnums,
-                    })
-                  }}
-                  value={order}
-                />
-              </div>
+            <div className='flex justify-between gap-3 md:gap-1'>
+              <Skeleton
+                visible={
+                  searchResultsQuery.isLoading || searchParamsQuery.isLoading
+                }
+              >
+                <div className='hidden items-center gap-2 md:flex'>
+                  <div>
+                    <span className='text-lg font-bold'>
+                      {destinationName},{' '}
+                    </span>{' '}
+                    için toplam {totalCount} tur bulduk!
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    className='mx-1 border-gray-400 bg-white font-normal text-gray-800 hover:bg-gray-100'
+                    size='sm'
+                    variant='outline'
+                    onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                    hiddenFrom='md'
+                  >
+                    Filtreler
+                  </Button>
+                </div>
+              </Skeleton>
+              <Skeleton
+                visible={
+                  searchResultsQuery.isLoading || searchParamsQuery.isLoading
+                }
+              >
+                <div className='mx-1 ms-auto flex items-center gap-1'>
+                  <div className='hidden items-center gap-1 md:flex'>
+                    {filterOptions.map((option) => (
+                      <Button
+                        size='sm'
+                        className={
+                          order === option.value
+                            ? 'border-0 bg-blue-200 font-medium text-blue-700'
+                            : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                        }
+                        key={option.value}
+                        leftSection={order === option.value ? <FaCheck /> : ''}
+                        color='blue'
+                        variant={order === option.value ? 'filled' : 'outline'}
+                        onClick={() =>
+                          setFilterParams({
+                            order: option.value,
+                          })
+                        }
+                      >
+                        {option.label}
+                      </Button>
+                    ))}
+                  </div>
+                  <div>
+                    <NativeSelect
+                      data={[
+                        {
+                          label: 'Fiyat Artan',
+                          value: SortOrderEnums.priceAsc,
+                        },
+                        {
+                          label: 'Fiyat Azalan',
+                          value: SortOrderEnums.priceDesc,
+                        },
+                        {
+                          label: 'Tarihe Göre (En erken)',
+                          value: SortOrderEnums.dateAsc,
+                        },
+                        {
+                          label: 'Tarihe Göre (En geç)',
+                          value: SortOrderEnums.dateDesc,
+                        },
+                      ]}
+                      onChange={({ target: { value } }) => {
+                        setFilterParams({
+                          order: value as SortOrderEnums,
+                        })
+                      }}
+                      value={order}
+                    />
+                  </div>
+                </div>
+              </Skeleton>
             </div>
+            <Skeleton
+              visible={
+                searchResultsQuery.isLoading || searchParamsQuery.isLoading
+              }
+            >
+              <div className='mx-1 flex items-center gap-2 md:hidden'>
+                <span className='text-sm font-semibold text-gray-500'>
+                  <span>{destinationName}, </span> için toplam {totalCount}{' '}
+                  tesis bulduk!
+                </span>
+              </div>
+            </Skeleton>
             <div className='grid gap-5'>
               {!searchRequestIsLoading &&
                 searchResultsQuery.data &&
