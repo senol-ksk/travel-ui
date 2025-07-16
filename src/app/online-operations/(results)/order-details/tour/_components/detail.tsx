@@ -6,7 +6,7 @@ import {
 } from '@/app/online-operations/types'
 import { operationResultParams } from '@/libs/onlineOperations/searchParams'
 import { serviceRequest } from '@/network'
-import { Alert, Container, Grid, Image, Skeleton, Title } from '@mantine/core'
+import { Alert, Grid, Image, Skeleton, Title } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 
 import dayjs from 'dayjs'
@@ -40,11 +40,11 @@ export const TourOrderDetail = () => {
 
   if (!bookDetailsDataQuery.data && bookDetailsDataQuery.isLoading)
     return (
-      <Container py={30} display={'grid'} className='gap-3' maw={700}>
+      <div className='grid gap-3 md:gap-5'>
         <Skeleton h={30} />
         <Skeleton h={24} w={'75%'} />
         <Skeleton h={20} w={'65%'} />
-      </Container>
+      </div>
     )
 
   const productDataViewResponser =
@@ -53,25 +53,16 @@ export const TourOrderDetail = () => {
 
   if (!summaryResponse || !productDataViewResponser) {
     return (
-      <Container mt={'xl'} maw={500}>
-        <Alert variant='light' color='red'>
-          Sonuç bulunamadı.
-        </Alert>
-      </Container>
+      <Alert variant='light' color='red'>
+        Sonuç bulunamadı.
+      </Alert>
     )
   }
 
   const { package: tourPackage } = summaryResponse
 
   return (
-    <Container
-      maw={700}
-      py={{
-        base: 'md',
-        md: 'xl',
-      }}
-      className='grid gap-3 md:gap-5'
-    >
+    <div className='grid gap-3 md:gap-5'>
       <div className='grid gap-6 rounded-md border p-3 md:p-5'>
         <div>
           <Grid gutter={'lg'}>
@@ -112,6 +103,6 @@ export const TourOrderDetail = () => {
           ))}
         </div>
       </div>
-    </Container>
+    </div>
   )
 }

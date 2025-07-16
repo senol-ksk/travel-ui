@@ -65,7 +65,7 @@ export const TransferBookDetail = () => {
   const totalPassengerCount =
     adultPassengerCount + childrenPassengerCount + babyPassengerCount
   return (
-    <>
+    <div className='grid gap-3 md:gap-5'>
       <BookDetailCard>
         <Title fz={'lg'}>Araç Bilgisi</Title>
         <Grid gutter={'md'}>
@@ -116,6 +116,6 @@ export const TransferBookDetail = () => {
           data={bookingDetailData?.operationViewData.operationResultViewData}
         />
       )}
-    </>
+    </div>
   )
 }

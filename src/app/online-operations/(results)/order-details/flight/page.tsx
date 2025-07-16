@@ -4,18 +4,8 @@ import { FlightOrderDetail } from './_components/detail'
 
 export default function FlightBookDetailPage() {
   return (
-    <Container
-      maw={700}
-      py={{
-        base: 'md',
-        md: 'xl',
-      }}
-      px={0}
-      className='grid gap-2 md:gap-5'
-    >
-      <Suspense fallback={<Skeleton h={20} />}>
-        <FlightOrderDetail />
-      </Suspense>
-    </Container>
+    <Suspense fallback={<Skeleton h={20} />}>
+      <FlightOrderDetail />
+    </Suspense>
   )
 }
