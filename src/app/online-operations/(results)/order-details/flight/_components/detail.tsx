@@ -20,6 +20,7 @@ import { CiClock2 } from 'react-icons/ci'
 import { MdOutlineChevronRight } from 'react-icons/md'
 import { PaymentInfo } from '@/app/online-operations/_components/payment-info'
 import { BookDetailCard } from '@/app/online-operations/_components/card'
+import { Fragment } from 'react'
 
 export const FlightOrderDetail = () => {
   const [searchParams] = useQueryStates(operationResultParams)
@@ -72,105 +73,98 @@ export const FlightOrderDetail = () => {
         const relatedSegments = flight.flightSegments.filter((segment) =>
           detail.flightSegmentKeys.includes(segment.key)
         )
+        console.log(relatedSegments)
 
-        return (
-          <div key={flight.flightDetail.key}>
-            {relatedSegments.map((segment) => {
-              const { arrivalTime, departureTime } = segment
-              const arrivalTimeDateObj = dayjs(arrivalTime)
-              const departureTimeDateObj = dayjs(departureTime)
-              const flightDuration = dayjs.duration(
-                arrivalTimeDateObj.diff(departureTimeDateObj)
-              )
+        return relatedSegments.map((segment) => {
+          const { arrivalTime, departureTime } = segment
+          const arrivalTimeDateObj = dayjs(arrivalTime)
+          const departureTimeDateObj = dayjs(departureTime)
+          const flightDuration = dayjs.duration(
+            arrivalTimeDateObj.diff(departureTimeDateObj)
+          )
 
-              return (
-                <div key={segment.key}>
-                  <BookDetailCard>
-                    <div className='grid gap-4'>
-                      <div className='flex justify-between gap-3'>
-                        {segment.groupId === 0 && (
-                          <Title fw={500} fz={'xl'}>
-                            {segment.groupId === 0
-                              ? `Gidiş Uçuşu`
-                              : segment.groupId === 1 && `Dönüş Uçuşu`}
-                          </Title>
-                        )}
-                        <div>
-                          {dayjs(departureTime).format('DD MMMM YYYY, ddd')}
-                        </div>
-                      </div>
-                      <div className='flex gap-3'>
-                        <div>
-                          <AirlineLogo
-                            airlineCode={segment.operatingAirline.code}
-                            alt={segment.operatingAirline.value}
-                          />
-                        </div>
-                        <div>
-                          {segment.operatingAirline.value}{' '}
-                          {segment.operatingAirline.code} {segment.flightNumber}
-                        </div>
-                      </div>
+          return (
+            <Fragment key={segment.key}>
+              <BookDetailCard>
+                <div className='grid gap-4'>
+                  <div className='flex justify-between gap-3'>
+                    {/* {segment.groupId === 0 && (
+                      <Title fw={500} fz={'xl'}>
+                        {segment.groupId === 0
+                          ? `Gidiş Uçuşu`
+                          : segment.groupId === 1 && `Dönüş Uçuşu`}
+                      </Title>
+                    )} */}
+                    <div>
+                      {dayjs(departureTime).format('DD MMMM YYYY, ddd')}
+                    </div>
+                  </div>
+                  <div className='flex gap-3'>
+                    <div>
+                      <AirlineLogo
+                        airlineCode={segment.operatingAirline.code}
+                        alt={segment.operatingAirline.value}
+                      />
+                    </div>
+                    <div>
+                      {segment.operatingAirline.value}{' '}
+                      {segment.operatingAirline.code} {segment.flightNumber}
+                    </div>
+                  </div>
+                  <div>
+                    <div className='flex items-center gap-1 text-sm'>
                       <div>
-                        <div className='flex items-center gap-1 text-sm'>
-                          <div>
-                            {
-                              summaryResponse?.airportList[segment.origin.code]
-                                .city
-                            }
-                            ,{' '}
-                            {
-                              summaryResponse?.airportList[
-                                segment.origin.code
-                              ].value.at(0)?.value
-                            }
-                          </div>
-                          <span className='text-xl'>
-                            <MdOutlineChevronRight />
-                          </span>
-                          <div>
-                            {
-                              summaryResponse?.airportList[
-                                segment.destination.code
-                              ].city
-                            }
-                            ,{' '}
-                            {
-                              summaryResponse?.airportList[
-                                segment.destination.code
-                              ].value.at(0)?.value
-                            }
-                          </div>
-                        </div>
+                        {summaryResponse?.airportList[segment.origin.code].city}
+                        ,{' '}
+                        {
+                          summaryResponse?.airportList[
+                            segment.origin.code
+                          ].value.at(0)?.value
+                        }
                       </div>
-                      <div className='flex'>
-                        <div className='font-medium'>
-                          {dayjs(departureTime).format('HH:mm')}{' '}
-                          {segment.origin.code}
+                      <span className='text-xl'>
+                        <MdOutlineChevronRight />
+                      </span>
+                      <div>
+                        {
+                          summaryResponse?.airportList[segment.destination.code]
+                            .city
+                        }
+                        ,{' '}
+                        {
+                          summaryResponse?.airportList[
+                            segment.destination.code
+                          ].value.at(0)?.value
+                        }
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex'>
+                    <div className='font-medium'>
+                      {dayjs(departureTime).format('HH:mm')}{' '}
+                      {segment.origin.code}
+                    </div>
+                    <div className='flex flex-1 items-center justify-center gap-2'>
+                      <div className='flex items-center gap-2'>
+                        <div>
+                          <CiClock2 />
                         </div>
-                        <div className='flex flex-1 items-center justify-center gap-2'>
-                          <div className='flex items-center gap-2'>
-                            <div>
-                              <CiClock2 />
-                            </div>
-                            <div>
-                              {flightDuration.format('HH')}sa{' '}
-                              {flightDuration.format('mm')}dk
-                            </div>
-                          </div>
-                        </div>
-                        <div className='font-medium'>
-                          {dayjs(arrivalTime).format('HH:mm')}{' '}
-                          {segment.destination.code}
+                        <div>
+                          {flightDuration.format('HH')}sa{' '}
+                          {flightDuration.format('mm')}dk
                         </div>
                       </div>
                     </div>
-                  </BookDetailCard>
+                    <div className='font-medium'>
+                      {dayjs(arrivalTime).format('HH:mm')}{' '}
+                      {segment.destination.code}
+                    </div>
+                  </div>
                 </div>
-              )
-            })}
-          </div>
-        )
+              </BookDetailCard>
+            </Fragment>
+          )
+        })
       })}
       {bookDetailResponseData?.operationViewData.operationResultViewData && (
         <PaymentInfo
