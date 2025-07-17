@@ -35,6 +35,7 @@ import { PensionTypes } from './components/filters/pension-types'
 import { Themes } from './components/filters/themes'
 import { useMediaQuery } from '@mantine/hooks'
 import { FaCheck } from 'react-icons/fa'
+import { hotelSearchRequestModel } from './dummy'
 type IProps = {
   slug?: string
 }
@@ -72,9 +73,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
     },
   ]
   const totalCount =
-    hotelSearchRequestQuery.data?.pages.reduce((acc, page) => {
-      return acc + (page?.searchResults[0]?.items.length || 0)
-    }, 0) || 0
+    searchParamsQuery.data?.hotelSearchResponse.totalHotelFound ?? 0
+
   const { orderBy, ...restFilterParams } = filterParams
   const [opened, { open, close }] = useDisclosure(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -109,8 +109,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
       )}
       <Container className='px-0'>
         <div className='py-5 lg:py-10'>
-          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
-            <div className='hidden md:col-span-1 md:block'>
+          <div className='grid items-start gap-4 md:grid-cols-8 md:gap-5'>
+            <div className='hidden md:col-span-2 md:block'>
               {isMobile ? (
                 <Drawer opened={opened} onClose={close}>
                   {mounted && (
@@ -459,24 +459,23 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                 </div>
               )}
             </div>
-            <div className='grid gap-4 pb-20 md:col-span-3'>
+            <div className='grid gap-4 pb-20 md:col-span-6'>
               <div className='grid gap-3 md:flex md:gap-1'>
                 <Skeleton
                   visible={
                     hotelSearchRequestQuery.isLoading ||
-                    searchParamsQuery.isLoading
+                    searchParamsQuery.isLoading ||
+                    searchQueryStatus.current === 'loading'
                   }
                 >
-                  {searchParams.destination && (
-                    <div className='hidden items-center gap-2 md:flex'>
-                      <div>
-                        <span className='text-lg font-bold'>
-                          {searchParams.destination}, Otelleri
-                        </span>{' '}
-                        için toplam {totalCount} tesis bulduk!
-                      </div>
+                  <div className='hidden items-center gap-2 md:flex'>
+                    <div>
+                      <span className='text-lg font-bold'>
+                        {searchParams.destination}, Otelleri
+                      </span>{' '}
+                      için toplam {totalCount} tesis bulduk!
                     </div>
-                  )}
+                  </div>
                 </Skeleton>
 
                 <div className='flex items-center justify-between gap-1'>
@@ -484,7 +483,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     className='w-auto'
                     visible={
                       hotelSearchRequestQuery.isLoading ||
-                      searchParamsQuery.isLoading
+                      searchParamsQuery.isLoading ||
+                      searchQueryStatus.current === 'loading'
                     }
                   >
                     <Button
@@ -502,7 +502,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                       className='hidden items-center gap-2 md:flex'
                       visible={
                         hotelSearchRequestQuery.isLoading ||
-                        searchParamsQuery.isLoading
+                        searchParamsQuery.isLoading ||
+                        searchQueryStatus.current === 'loading'
                       }
                     >
                       {filterOptions.map((option) => (
@@ -543,7 +544,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     <Skeleton
                       visible={
                         hotelSearchRequestQuery.isLoading ||
-                        searchParamsQuery.isLoading
+                        searchParamsQuery.isLoading ||
+                        searchQueryStatus.current === 'loading'
                       }
                     >
                       <NativeSelect
@@ -596,7 +598,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                   className='flex items-center gap-2 px-2 md:hidden'
                   visible={
                     hotelSearchRequestQuery.isLoading ||
-                    searchParamsQuery.isLoading
+                    searchParamsQuery.isLoading ||
+                    searchQueryStatus.current === 'loading'
                   }
                 >
                   {searchParams.destination && (

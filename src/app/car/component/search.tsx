@@ -9,6 +9,7 @@ import {
   CloseButton,
   Container,
   rem,
+  RemoveScroll,
   ScrollAreaAutosize,
   Skeleton,
   Stack,
@@ -86,6 +87,9 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
   ]
 
   const filteredPageItems = useFilterActions(allPages ?? [])
+  const totalCount = allPages?.length ?? 0
+  const destinationName =
+    searchRequestParams.params.carRentalSearchPanel.destination[0].name
 
   if (carSearchResult.hasNextPage && !carSearchResult.isFetchingNextPage) {
     carSearchResult.fetchNextPage()
@@ -103,7 +107,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
         </div>
 
         <Container className='md:px-md px-0'>
-          <div className='py-10'>
+          <div className='md:py-10'>
             <div className='grid items-start gap-4 md:grid-cols-4 md:gap-5'>
               <div className='md:col-span-1'>
                 <Transition
@@ -111,269 +115,313 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                   mounted={filterSectionIsOpened || !!isBreakPointMatchesMd}
                 >
                   {(styles) => (
-                    <div
-                      className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white md:static'
-                      style={styles}
+                    <RemoveScroll
+                      enabled={filterSectionIsOpened && !isBreakPointMatchesMd}
                     >
-                      <div className='flex justify-end md:hidden'>
-                        <CloseButton
-                          size={'lg'}
-                          onClick={() => setFilterSectionIsOpened(false)}
-                        />
-                      </div>
-                      <div>
-                        {carSearchResult.isFetching ||
-                        carSearchResult.isFetchingNextPage ||
-                        carSearchResult.isLoading ? (
-                          <div className='grid gap-3'>
-                            <Skeleton h={24} />
-                            <Skeleton h={12} width={'60%'} />
-                            <Skeleton h={12} width={'88%'} />
-                            <Skeleton h={12} width={'75%'} />
-                          </div>
-                        ) : (
-                          <>
-                            <div className='flex justify-between gap-2'>
-                              <Title order={2} fz={'h4'} mb={rem(20)}>
-                                Filtreler
-                              </Title>
-
-                              <div
-                                hidden={
-                                  Object.keys(cleanObj(filterParams)).length ===
-                                  0
-                                }
-                              >
-                                <UnstyledButton
-                                  fz='xs'
-                                  className='font-semibold text-blue-500'
-                                  onClick={() => {
-                                    setFilterParams(null)
-                                  }}
-                                >
-                                  Temizle
-                                </UnstyledButton>
-                              </div>
+                      <div
+                        className='fixed start-0 end-0 top-0 bottom-0 z-10 overflow-y-auto bg-white md:static'
+                        style={styles}
+                      >
+                        <div className='flex justify-end md:hidden'>
+                          <CloseButton
+                            size={'lg'}
+                            onClick={() => setFilterSectionIsOpened(false)}
+                          />
+                        </div>
+                        <div>
+                          {carSearchResult.isFetching ||
+                          carSearchResult.isFetchingNextPage ||
+                          carSearchResult.isLoading ? (
+                            <div className='grid gap-3'>
+                              <Skeleton h={24} />
+                              <Skeleton h={12} width={'60%'} />
+                              <Skeleton h={12} width={'88%'} />
+                              <Skeleton h={12} width={'75%'} />
                             </div>
-                            <Accordion
-                              defaultValue={['fuelType', 'provider']}
-                              multiple
-                              classNames={{
-                                control: 'p-2 text-sm',
-                                label: 'p-0',
-                              }}
-                            >
-                              <Accordion.Item value='fuelType'>
-                                <Accordion.Control>
-                                  Yakıt Tipi
-                                </Accordion.Control>
-                                <Accordion.Panel>
-                                  <Checkbox.Group
-                                    onChange={(value) => {
-                                      setFilterParams({
-                                        fuelTypes: value.length
-                                          ? value.map(Number)
-                                          : null,
-                                      })
+                          ) : (
+                            <>
+                              <div className='flex justify-between gap-2'>
+                                <Title order={2} fz={'h4'} mb={rem(20)}>
+                                  Filtreler
+                                </Title>
+
+                                <div
+                                  hidden={
+                                    Object.keys(cleanObj(filterParams))
+                                      .length === 0
+                                  }
+                                >
+                                  <UnstyledButton
+                                    fz='xs'
+                                    className='font-semibold text-blue-500'
+                                    onClick={() => {
+                                      setFilterParams(null)
                                     }}
-                                    value={
-                                      filterParams.fuelTypes?.length
-                                        ? filterParams.fuelTypes?.map(String)
-                                        : []
-                                    }
                                   >
-                                    <Stack gap={rem(6)}>
-                                      {fuelTypeChecks?.map((fuelType) => {
-                                        return (
-                                          <Checkbox
-                                            key={fuelType}
-                                            label={FuelTypes[fuelType]}
-                                            value={'' + fuelType}
-                                          />
-                                        )
-                                      })}
-                                    </Stack>
-                                  </Checkbox.Group>
-                                </Accordion.Panel>
-                              </Accordion.Item>
-                              <Accordion.Item value='provider'>
-                                <Accordion.Control>
-                                  Kiralama Şirketi
-                                </Accordion.Control>
-                                <Accordion.Panel>
-                                  <Checkbox.Group
-                                    onChange={(value) => {
-                                      setFilterParams({
-                                        provider: value.length ? value : null,
-                                      })
-                                    }}
-                                    value={
-                                      filterParams.provider
-                                        ? filterParams.provider
-                                        : []
-                                    }
-                                  >
-                                    <Stack gap={rem(6)}>
-                                      {providerChecks.map(
-                                        (provider, providerIndex) => {
+                                    Temizle
+                                  </UnstyledButton>
+                                </div>
+                              </div>
+                              <Accordion
+                                defaultValue={['fuelType', 'provider']}
+                                multiple
+                                classNames={{
+                                  control: 'p-2 text-sm',
+                                  label: 'p-0',
+                                }}
+                              >
+                                <Accordion.Item value='fuelType'>
+                                  <Accordion.Control>
+                                    Yakıt Tipi
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          fuelTypes: value.length
+                                            ? value.map(Number)
+                                            : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.fuelTypes?.length
+                                          ? filterParams.fuelTypes?.map(String)
+                                          : []
+                                      }
+                                    >
+                                      <Stack gap={rem(6)}>
+                                        {fuelTypeChecks?.map((fuelType) => {
                                           return (
                                             <Checkbox
-                                              key={providerIndex}
-                                              label={provider}
-                                              value={provider}
+                                              key={fuelType}
+                                              label={FuelTypes[fuelType]}
+                                              value={'' + fuelType}
                                             />
                                           )
-                                        }
-                                      )}
-                                    </Stack>
-                                  </Checkbox.Group>
-                                </Accordion.Panel>
-                              </Accordion.Item>
-                              <Accordion.Item value='transmission'>
-                                <Accordion.Control>Şanzıman</Accordion.Control>
-                                <Accordion.Panel>
-                                  <Checkbox.Group
-                                    onChange={(value) => {
-                                      setFilterParams({
-                                        transmission: value.length
-                                          ? value.map(Number)
-                                          : null,
-                                      })
-                                    }}
-                                    value={
-                                      filterParams.transmission
-                                        ? filterParams.transmission.map(String)
-                                        : []
-                                    }
-                                  >
-                                    <Stack gap={rem(6)}>
-                                      <Checkbox
-                                        label='Otomatik Vites'
-                                        value={'1'}
-                                      />
-                                      <Checkbox label='Düz Vites' value={'0'} />
-                                    </Stack>
-                                  </Checkbox.Group>
-                                </Accordion.Panel>
-                              </Accordion.Item>
-                              <Accordion.Item value='seatCount'>
-                                <Accordion.Control>
-                                  Koltuk Sayısı
-                                </Accordion.Control>
-                                <Accordion.Panel>
-                                  <Checkbox.Group
-                                    onChange={(value) => {
-                                      setFilterParams({
-                                        seatCount: value.length ? value : null,
-                                      })
-                                    }}
-                                    value={
-                                      filterParams.seatCount
-                                        ? filterParams.seatCount
-                                        : []
-                                    }
-                                  >
-                                    <Stack gap={rem(6)}>
-                                      {seatCountChecks.map(
-                                        (seat, seatIndex) => (
-                                          <Checkbox
-                                            key={seatIndex}
-                                            label={seat}
-                                            value={seat}
-                                          />
-                                        )
-                                      )}
-                                    </Stack>
-                                  </Checkbox.Group>
-                                </Accordion.Panel>
-                              </Accordion.Item>
-                              <Accordion.Item value='category'>
-                                <Accordion.Control>Kategori</Accordion.Control>
-                                <Accordion.Panel>
-                                  <Checkbox.Group
-                                    onChange={(value) => {
-                                      setFilterParams({
-                                        category: value.length ? value : null,
-                                      })
-                                    }}
-                                    value={
-                                      filterParams.category
-                                        ? filterParams.category
-                                        : []
-                                    }
-                                  >
-                                    <Stack gap={rem(6)}>
-                                      {categoryChecks.map((data, dataIndex) => (
-                                        <Checkbox
-                                          key={dataIndex}
-                                          label={data}
-                                          value={data}
-                                        />
-                                      ))}
-                                    </Stack>
-                                  </Checkbox.Group>
-                                </Accordion.Panel>
-                              </Accordion.Item>
-                              <Accordion.Item value='brand'>
-                                <Accordion.Control>Marka</Accordion.Control>
-                                <Accordion.Panel>
-                                  <Checkbox.Group
-                                    onChange={(value) => {
-                                      setFilterParams({
-                                        brand: value.length ? value : null,
-                                      })
-                                    }}
-                                    value={
-                                      filterParams.brand
-                                        ? filterParams.brand
-                                        : []
-                                    }
-                                  >
-                                    <ScrollAreaAutosize mah={200}>
-                                      <Stack gap={rem(6)}>
-                                        {brandChecks.map((data, dataIndex) => (
-                                          <Checkbox
-                                            key={dataIndex}
-                                            label={data
-                                              .split(' ')
-                                              .map(
-                                                (item) =>
-                                                  upperFirst(
-                                                    item.toLocaleLowerCase()
-                                                  ) + ' '
-                                              )}
-                                            value={data}
-                                          />
-                                        ))}
+                                        })}
                                       </Stack>
-                                    </ScrollAreaAutosize>
-                                  </Checkbox.Group>
-                                </Accordion.Panel>
-                              </Accordion.Item>
-                            </Accordion>
-                          </>
-                        )}
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                                <Accordion.Item value='provider'>
+                                  <Accordion.Control>
+                                    Kiralama Şirketi
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          provider: value.length ? value : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.provider
+                                          ? filterParams.provider
+                                          : []
+                                      }
+                                    >
+                                      <Stack gap={rem(6)}>
+                                        {providerChecks.map(
+                                          (provider, providerIndex) => {
+                                            return (
+                                              <Checkbox
+                                                key={providerIndex}
+                                                label={provider}
+                                                value={provider}
+                                              />
+                                            )
+                                          }
+                                        )}
+                                      </Stack>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                                <Accordion.Item value='transmission'>
+                                  <Accordion.Control>
+                                    Şanzıman
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          transmission: value.length
+                                            ? value.map(Number)
+                                            : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.transmission
+                                          ? filterParams.transmission.map(
+                                              String
+                                            )
+                                          : []
+                                      }
+                                    >
+                                      <Stack gap={rem(6)}>
+                                        <Checkbox
+                                          label='Otomatik Vites'
+                                          value={'1'}
+                                        />
+                                        <Checkbox
+                                          label='Düz Vites'
+                                          value={'0'}
+                                        />
+                                      </Stack>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                                <Accordion.Item value='seatCount'>
+                                  <Accordion.Control>
+                                    Koltuk Sayısı
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          seatCount: value.length
+                                            ? value
+                                            : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.seatCount
+                                          ? filterParams.seatCount
+                                          : []
+                                      }
+                                    >
+                                      <Stack gap={rem(6)}>
+                                        {seatCountChecks.map(
+                                          (seat, seatIndex) => (
+                                            <Checkbox
+                                              key={seatIndex}
+                                              label={seat}
+                                              value={seat}
+                                            />
+                                          )
+                                        )}
+                                      </Stack>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                                <Accordion.Item value='category'>
+                                  <Accordion.Control>
+                                    Kategori
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          category: value.length ? value : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.category
+                                          ? filterParams.category
+                                          : []
+                                      }
+                                    >
+                                      <Stack gap={rem(6)}>
+                                        {categoryChecks.map(
+                                          (data, dataIndex) => (
+                                            <Checkbox
+                                              key={dataIndex}
+                                              label={data}
+                                              value={data}
+                                            />
+                                          )
+                                        )}
+                                      </Stack>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                                <Accordion.Item value='brand'>
+                                  <Accordion.Control>Marka</Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          brand: value.length ? value : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.brand
+                                          ? filterParams.brand
+                                          : []
+                                      }
+                                    >
+                                      <ScrollAreaAutosize mah={200}>
+                                        <Stack gap={rem(6)}>
+                                          {brandChecks.map(
+                                            (data, dataIndex) => (
+                                              <Checkbox
+                                                key={dataIndex}
+                                                label={data
+                                                  .split(' ')
+                                                  .map(
+                                                    (item) =>
+                                                      upperFirst(
+                                                        item.toLocaleLowerCase()
+                                                      ) + ' '
+                                                  )}
+                                                value={data}
+                                              />
+                                            )
+                                          )}
+                                        </Stack>
+                                      </ScrollAreaAutosize>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                              </Accordion>
+                            </>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    </RemoveScroll>
                   )}
                 </Transition>
               </div>
               <div className='grid gap-4 md:col-span-3'>
-                <div className='flex items-center gap-2 pb-3'>
-                  <div>
+                <div className='grid grid-cols-2 items-center gap-2 md:grid-cols-3'>
+                  <Skeleton
+                    className='col-span-2 hidden md:flex'
+                    visible={
+                      carSearchResult.isFetching ||
+                      carSearchResult.isFetchingNextPage ||
+                      carSearchResult.isLoading
+                    }
+                  >
+                    <>
+                      <div className='hidden items-center gap-2 md:flex'>
+                        <div>
+                          <span className='text-lg font-bold'>
+                            {destinationName},
+                          </span>{' '}
+                          için {totalCount} araç bulduk!
+                        </div>
+                      </div>
+                    </>
+                  </Skeleton>
+
+                  <Skeleton
+                    className='px-2 md:hidden'
+                    visible={
+                      carSearchResult.isFetching ||
+                      carSearchResult.isFetchingNextPage ||
+                      carSearchResult.isLoading
+                    }
+                  >
                     <Button
                       size='sm'
-                      leftSection={<CiFilter size={23} />}
-                      // variant='outline'
-                      color='green'
+                      color='black'
+                      className='mx-1 flex border-gray-400 px-8 font-medium md:hidden'
+                      variant='outline'
                       onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                      hiddenFrom='md'
                     >
                       Filtreler
                     </Button>
-                  </div>
-
-                  <div className='relative ms-auto'>
+                  </Skeleton>
+                  <div className='relative col-span-1 ms-auto'>
                     <Skeleton
                       visible={
                         carSearchResult.isFetching ||
@@ -385,6 +433,20 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     </Skeleton>
                   </div>
                 </div>
+                <Skeleton
+                  className='flex items-center gap-2 px-2 md:hidden'
+                  visible={
+                    carSearchResult.isFetching ||
+                    carSearchResult.isFetchingNextPage ||
+                    carSearchResult.isLoading
+                  }
+                >
+                  <>
+                    <span className='text-sm font-semibold text-gray-500'>
+                      {destinationName}, için {totalCount} araç bulduk!
+                    </span>
+                  </>
+                </Skeleton>
                 <div className='grid gap-4 pb-20 md:gap-6'>
                   {carSearchResult.isLoading &&
                     skeltonLoader.map((arr, arrIndex) => (

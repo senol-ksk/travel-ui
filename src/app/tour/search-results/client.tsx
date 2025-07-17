@@ -10,6 +10,7 @@ import {
   Container,
   NativeSelect,
   rem,
+  RemoveScroll,
   Skeleton,
   Stack,
   Title,
@@ -178,129 +179,133 @@ const TourSearchResultClient = () => {
               mounted={filterSectionIsOpened || !!isBreakPointMatchesMd}
             >
               {(styles) => (
-                <div
-                  className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static md:p-0'
-                  style={styles}
+                <RemoveScroll
+                  enabled={filterSectionIsOpened && !isBreakPointMatchesMd}
                 >
-                  <div className='flex justify-end md:hidden'>
-                    <CloseButton
-                      size={'lg'}
-                      onClick={() => setFilterSectionIsOpened(false)}
-                    />
-                  </div>
-                  {searchRequestIsLoading || !searchResultsQuery.data ? (
-                    <div className='grid gap-2'>
-                      <Skeleton h={20} w={150} mb={rem(9)} />
-                      <Skeleton h={12} w={220} />
-                      <Skeleton h={12} w={170} />
-                      <Skeleton h={12} w={190} />
+                  <div
+                    className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static md:p-0'
+                    style={styles}
+                  >
+                    <div className='flex justify-end md:hidden'>
+                      <CloseButton
+                        size={'lg'}
+                        onClick={() => setFilterSectionIsOpened(false)}
+                      />
                     </div>
-                  ) : (
-                    <div>
-                      <div className='flex justify-between pb-6'>
-                        <Title order={2} fz={'h4'}>
-                          Filtreler
-                        </Title>
-                        <div
-                          hidden={
-                            Object.keys(cleanObj(filterParams)).length === 0
-                          }
-                        >
-                          <UnstyledButton
-                            fz='xs'
-                            className='font-semibold text-blue-500'
-                            onClick={() => {
-                              setFilterParams(null)
-                            }}
-                          >
-                            Temizle
-                          </UnstyledButton>
-                        </div>
+                    {searchRequestIsLoading || !searchResultsQuery.data ? (
+                      <div className='grid gap-2'>
+                        <Skeleton h={20} w={150} mb={rem(9)} />
+                        <Skeleton h={12} w={220} />
+                        <Skeleton h={12} w={170} />
+                        <Skeleton h={12} w={190} />
                       </div>
-                      <Stack>
-                        <div className='py-5'>
-                          <div className='flex justify-between gap-2 pb-4 text-sm text-gray-700'>
-                            <div>
-                              {formatCurrency(
-                                filterParams.priceRange
-                                  ? filterParams.priceRange[0]
-                                  : minPrice
-                              )}
-                            </div>
-                            <div>
-                              {formatCurrency(
-                                filterParams.priceRange
-                                  ? filterParams.priceRange[1]
-                                  : maxPrice
-                              )}
-                            </div>
-                          </div>
-                          <div className='px-3'>
-                            <PriceRangeSlider
-                              minPrice={Math.floor(minPrice)}
-                              maxPrice={Math.ceil(maxPrice)}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <Title order={3} fz={'h5'} mb={8}>
-                            Tur Süresi{' '}
-                            <small className='text-gray-600'>(Gece)</small>
+                    ) : (
+                      <div>
+                        <div className='flex justify-between pb-6'>
+                          <Title order={2} fz={'h4'}>
+                            Filtreler
                           </Title>
-                          <Checkbox.Group
-                            onChange={(value) => {
-                              setFilterParams({
-                                nightCount: value.length
-                                  ? value.map(Number)
-                                  : null,
-                              })
-                            }}
-                            value={
-                              filterParams.nightCount
-                                ? filterParams.nightCount.map(String)
-                                : []
+                          <div
+                            hidden={
+                              Object.keys(cleanObj(filterParams)).length === 0
                             }
                           >
-                            <Stack gap={rem(6)}>
-                              {nightCountChecks.map((count) => (
-                                <Checkbox
-                                  label={count}
-                                  value={count.toString()}
-                                  key={count}
-                                />
-                              ))}
-                            </Stack>
-                          </Checkbox.Group>
+                            <UnstyledButton
+                              fz='xs'
+                              className='font-semibold text-blue-500'
+                              onClick={() => {
+                                setFilterParams(null)
+                              }}
+                            >
+                              Temizle
+                            </UnstyledButton>
+                          </div>
                         </div>
-                        <div>
-                          <Title order={3} fz={'h5'} mb={8}>
-                            Bölgeler
-                          </Title>
-                          <Checkbox.Group
-                            onChange={(value) => {
-                              setFilterParams({
-                                regions: value.length ? value : null,
-                              })
-                            }}
-                            value={
-                              filterParams.regions ? filterParams.regions : []
-                            }
-                          >
-                            <Stack gap={rem(6)}>
-                              {regionChecks.map((region, regionIndex) => (
-                                <Checkbox
-                                  key={regionIndex}
-                                  label={region}
-                                  value={slugify(region)}
-                                />
-                              ))}
-                            </Stack>
-                          </Checkbox.Group>
-                        </div>
-                      </Stack>
-                    </div>
-                  )}
-                </div>
+                        <Stack>
+                          <div className='py-5'>
+                            <div className='flex justify-between gap-2 pb-4 text-sm text-gray-700'>
+                              <div>
+                                {formatCurrency(
+                                  filterParams.priceRange
+                                    ? filterParams.priceRange[0]
+                                    : minPrice
+                                )}
+                              </div>
+                              <div>
+                                {formatCurrency(
+                                  filterParams.priceRange
+                                    ? filterParams.priceRange[1]
+                                    : maxPrice
+                                )}
+                              </div>
+                            </div>
+                            <div className='px-3'>
+                              <PriceRangeSlider
+                                minPrice={Math.floor(minPrice)}
+                                maxPrice={Math.ceil(maxPrice)}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Title order={3} fz={'h5'} mb={8}>
+                              Tur Süresi{' '}
+                              <small className='text-gray-600'>(Gece)</small>
+                            </Title>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  nightCount: value.length
+                                    ? value.map(Number)
+                                    : null,
+                                })
+                              }}
+                              value={
+                                filterParams.nightCount
+                                  ? filterParams.nightCount.map(String)
+                                  : []
+                              }
+                            >
+                              <Stack gap={rem(6)}>
+                                {nightCountChecks.map((count) => (
+                                  <Checkbox
+                                    label={count}
+                                    value={count.toString()}
+                                    key={count}
+                                  />
+                                ))}
+                              </Stack>
+                            </Checkbox.Group>
+                          </div>
+                          <div>
+                            <Title order={3} fz={'h5'} mb={8}>
+                              Bölgeler
+                            </Title>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  regions: value.length ? value : null,
+                                })
+                              }}
+                              value={
+                                filterParams.regions ? filterParams.regions : []
+                              }
+                            >
+                              <Stack gap={rem(6)}>
+                                {regionChecks.map((region, regionIndex) => (
+                                  <Checkbox
+                                    key={regionIndex}
+                                    label={region}
+                                    value={slugify(region)}
+                                  />
+                                ))}
+                              </Stack>
+                            </Checkbox.Group>
+                          </div>
+                        </Stack>
+                      </div>
+                    )}
+                  </div>
+                </RemoveScroll>
               )}
             </Transition>
           </div>
