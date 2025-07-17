@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { Container, UnstyledButton } from '@mantine/core'
+import { UnstyledButton } from '@mantine/core'
 import clsx from 'clsx'
 import { Link } from 'next-view-transitions'
 import { ReactNode } from 'react'
@@ -9,10 +9,10 @@ import { ReactNode } from 'react'
 const pageLinks = [
   { title: 'Seyahatinizi Görüntüleyin', pathname: '/online-operations' },
   { title: 'Online Check-in', pathname: '/online-operations/checkin' },
-  {
-    title: 'Uçak Bileti İptal/İade',
-    pathname: '/online-operations/cancel-flight',
-  },
+  // {
+  //   title: 'Uçak Bileti İptal/İade',
+  //   pathname: '/online-operations/cancel-flight',
+  // },
 ]
 
 export const OnlineOperationButtonLinks = () => {
