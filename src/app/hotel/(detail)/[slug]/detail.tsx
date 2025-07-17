@@ -486,24 +486,22 @@ const HotelDetailSection = () => {
 
             return roomGroups?.map((roomGroup) => {
               return (
-                <>
-                  <div key={roomGroup.key}>
-                    <HotelRoom
-                      hotelInfo={page?.data?.hotelDetailResponse?.hotelInfo}
-                      roomGroup={roomGroup}
-                      roomDetails={roomDetails}
-                      onSelect={(selectedRoomGroup) => {
-                        handleRoomSelect({
-                          productKey: roomGroup.key,
-                          cancelWarranty: selectedRoomGroup.useCancelWarranty,
-                        })
-                      }}
-                      onInstallmentClick={(selectedRoomGroup) => {
-                        handleInstallment(selectedRoomGroup)
-                      }}
-                    />
-                  </div>
-                </>
+                <div key={roomGroup.key}>
+                  <HotelRoom
+                    hotelInfo={page?.data?.hotelDetailResponse?.hotelInfo}
+                    roomGroup={roomGroup}
+                    roomDetails={roomDetails}
+                    onSelect={(selectedRoomGroup) => {
+                      handleRoomSelect({
+                        productKey: roomGroup.key,
+                        cancelWarranty: selectedRoomGroup.useCancelWarranty,
+                      })
+                    }}
+                    onInstallmentClick={(selectedRoomGroup) => {
+                      handleInstallment(selectedRoomGroup)
+                    }}
+                  />
+                </div>
               )
             })
           })}
