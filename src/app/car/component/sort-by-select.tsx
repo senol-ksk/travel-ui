@@ -7,6 +7,7 @@ const SortBySelect = () => {
   const [filterParams, setFilterParams] = useQueryStates(filterParsers)
   return (
     <NativeSelect
+      className='font-medium'
       value={filterParams.order}
       onChange={({ currentTarget: { value } }) => {
         setFilterParams({
@@ -15,11 +16,11 @@ const SortBySelect = () => {
       }}
       data={[
         {
-          label: 'Fiyat (Ucuzdan pahalıya)',
+          label: 'Fiyat artan',
           value: SortOrderEnums.priceAsc,
         },
         {
-          label: 'Fiyat (Pahalıdan ucuza)',
+          label: 'Fiyat azalan',
           value: SortOrderEnums.priceDesc,
         },
         // {

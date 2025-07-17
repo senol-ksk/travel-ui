@@ -109,8 +109,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
       )}
       <Container className='px-0'>
         <div className='py-5 lg:py-10'>
-          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
-            <div className='hidden md:col-span-1 md:block'>
+          <div className='grid items-start gap-4 md:grid-cols-8 md:gap-5'>
+            <div className='hidden md:col-span-2 md:block'>
               {isMobile ? (
                 <Drawer opened={opened} onClose={close}>
                   {mounted && (
@@ -459,7 +459,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                 </div>
               )}
             </div>
-            <div className='grid gap-4 pb-20 md:col-span-3'>
+            <div className='grid gap-4 pb-20 md:col-span-6'>
               <div className='grid gap-3 md:flex md:gap-1'>
                 <Skeleton
                   visible={
