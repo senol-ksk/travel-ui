@@ -6,7 +6,7 @@ import {
   OperationResultWithBookingCodeResponse,
 } from '@/app/online-operations/types'
 import { operationResultParams } from '@/libs/onlineOperations/searchParams'
-import { delayCodeExecution, formatCurrency } from '@/libs/util'
+import { formatCurrency } from '@/libs/util'
 import { serviceRequest } from '@/network'
 import {
   Alert,
@@ -20,7 +20,7 @@ import {
 } from '@mantine/core'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
-import { createSerializer, useQueryStates } from 'nuqs'
+import { useQueryStates } from 'nuqs'
 import dayjsLocale from 'dayjs/locale/tr'
 dayjs.locale(dayjsLocale)
 
@@ -36,10 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { InstallmentApiResponse } from '@/types/global'
 import { InstallmentSelect } from '@/app/reservation/(index)/payment/instalment-table'
 import { useEffect, useMemo, useRef } from 'react'
-import {
-  PartialPaymentResponseType,
-  PaymentResponseType,
-} from '@/app/reservation/types'
+import { PartialPaymentResponseType } from '@/app/reservation/types'
 
 export const HotelBookingSummary = () => {
   const form = useForm({
@@ -71,16 +68,12 @@ export const HotelBookingSummary = () => {
     () => bookingDetailsDataQuery.data?.data,
     [bookingDetailsDataQuery.data?.data]
   )
-  const dataViewResponsers =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers
-  const summaryResponse = dataViewResponsers?.[0].summaryResponse
+
+  const summaryResponse = bookingDetailData?.summaryResponse.summaryResponse
   const searchToken = summaryResponse?.searchToken
   const sessionToken = summaryResponse?.sessionToken
 
-  const productKey =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers[0].summaryResponse.productKey
+  const productKey = summaryResponse?.productKey
 
   const threeDFormRef = useRef<HTMLFormElement>(null)
   const partialPaymentMutation = useMutation({
@@ -193,26 +186,22 @@ export const HotelBookingSummary = () => {
 
   if (!bookingDetailsDataQuery.data && bookingDetailsDataQuery.isLoading)
     return (
-      <Container py={30} display={'grid'} className='gap-3' maw={700}>
+      <div className='grid gap-3 md:gap-5'>
         <Skeleton h={30} />
         <Skeleton h={24} w={'75%'} />
         <Skeleton h={20} w={'65%'} />
-      </Container>
+      </div>
     )
 
   if (!bookingDetailsDataQuery.data || !bookingDetailsDataQuery.data.success)
-    return (
-      <Container py={'lg'} maw={600}>
-        <Alert color='red'>Sonuç bulunamadı</Alert>
-      </Container>
-    )
+    return <Alert color='red'>Sonuç bulunamadı</Alert>
 
   const productDataViewResponser =
-    dataViewResponsers?.[1].operationResultViewData
+    bookingDetailData?.operationViewData.operationResultViewData
   const summaryViewDataResponserForHotel = summaryResponse
   const insuranceFee = summaryResponse?.roomGroup.cancelWarrantyPrice.value ?? 0
 
-  const hotelDataSummaryData = dataViewResponsers?.[0].summaryResponse
+  const hotelDataSummaryData = summaryResponse
   const roomGroup = hotelDataSummaryData?.roomGroup
   const isHotelPartialPayment =
     bookingDetailsDataQuery?.data?.data?.hotelCancelWarrantyPriceStatus
@@ -225,14 +214,7 @@ export const HotelBookingSummary = () => {
     return <div>no data</div>
   return (
     <>
-      <Container
-        maw={700}
-        py={{
-          base: 'md',
-          md: 'xl',
-        }}
-        className='grid gap-3 md:gap-5'
-      >
+      <div className='grid gap-3 md:gap-5'>
         {isHotelPartialPayment && (
           <div>
             <Alert
@@ -446,7 +428,7 @@ export const HotelBookingSummary = () => {
             </div>
           )}
         </div>
-      </Container>
+      </div>
       {isHotelPartialPayment && (
         <>
           <Modal
