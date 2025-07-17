@@ -172,7 +172,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 ) : null}
                 <div className='flex items-center gap-1 text-xs'>
                   <span className='text-dark-700'>
-                    {hotelInfo?.destination} /
+                    {hotelInfo?.destination}
                   </span>
 
                   {onMapClick && (

@@ -128,22 +128,22 @@ const MainDrawer: React.FC<IProps> = ({
               <Tabs
                 defaultValue='facilityInfos'
                 classNames={{
-                  tab: 'border-b-5 rounded md:p-3',
+                  tab: 'border-b-5 rounded md:p-1',
                   tabSection: 'hidden sm:flex',
                   tabLabel: 'flex-none',
                 }}
               >
-                <Tabs.List className='d-flex justify-around text-2xl font-bold'>
+                <Tabs.List className='d-flex justify-around text-xl font-bold'>
                   <Tabs.Tab
                     value='facilityInfos'
-                    className='text-2xl font-bold'
+                    className='text-xl font-semibold'
                   >
                     Tesis Bilgileri
                   </Tabs.Tab>
                   {(data?.hotel.comment_info?.comments?.length ?? 0) > 0 && (
                     <Tabs.Tab
                       value='drawerComments'
-                      className='text-2xl font-bold'
+                      className='text-xl font-semibold'
                     >
                       Yorumlar
                     </Tabs.Tab>
@@ -164,7 +164,7 @@ const MainDrawer: React.FC<IProps> = ({
                       </div>
 
                       <div className='rounded bg-white md:p-3'>
-                        <div className='my-5'>
+                        <div>
                           <Title
                             order={3}
                             fz={'h4'}
@@ -175,7 +175,7 @@ const MainDrawer: React.FC<IProps> = ({
                           </Title>
                           <div className='my-4 border-t'></div>
                           <Spoiler
-                            className='ms-auto mb-20 pb-3'
+                            className='ms-auto mb-15 pb-3'
                             showLabel='Daha fazla göster'
                             hideLabel='Daha az göster'
                           >
@@ -192,7 +192,7 @@ const MainDrawer: React.FC<IProps> = ({
                             </ul>
                           </Spoiler>
                         </div>
-                        <ul className='grid-cols-auto my-5 flex gap-2'>
+                        <ul className='grid-cols-auto my-2 flex gap-2'>
                           {data?.hotel.year_built && (
                             <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                               <FaRegBuilding
