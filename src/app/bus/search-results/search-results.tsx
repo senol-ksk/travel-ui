@@ -162,14 +162,17 @@ const BusSearchResults: React.FC = () => {
       label: bus.company,
     })) ?? []
   const totalCount = busSearchResults?.length ?? 0
-  const destinatonName = busSearchResults?.[0]?.destination?.toString() ?? ''
+  const storedData = localStorage.getItem('bus-search-engine')
+  const parsedData = storedData ? JSON.parse(storedData) : null
+  const destinationName = parsedData?.Destination?.Name ?? ''
+  const originName = parsedData?.Origin?.Name ?? ''
   const filterOptions = [
     {
-      label: 'Fiyat Artan',
+      label: 'En Ucuz',
       value: SortOrderEnums.priceAsc,
     },
     {
-      label: 'Fiyat Azalan',
+      label: 'En Pahalı',
       value: SortOrderEnums.priceDesc,
     },
     {
@@ -198,7 +201,7 @@ const BusSearchResults: React.FC = () => {
           ))}
         <div className='@container pt-5 md:pt-10'>
           <Container>
-            <div className='grid items-start gap-4 pb-10 md:grid-cols-4 md:gap-6 md:pb-20'>
+            <div className='grid items-start gap-0 pb-10 md:grid-cols-4 md:gap-6 md:pb-20'>
               <div className='md:col-span-1'>
                 <div>
                   <Transition
@@ -442,7 +445,7 @@ const BusSearchResults: React.FC = () => {
                       <div className='hidden items-center gap-2 md:flex'>
                         <div>
                           <span className='text-lg font-bold'>
-                            {destinatonName}
+                            {originName} - {destinationName}
                             {''}
                           </span>
                           {''} için toplam{' '}
@@ -509,11 +512,11 @@ const BusSearchResults: React.FC = () => {
                             size='sm'
                             data={[
                               {
-                                label: 'Fiyat Artan',
+                                label: 'En Ucuz',
                                 value: SortOrderEnums.priceAsc,
                               },
                               {
-                                label: 'Fiyat Azalan',
+                                label: 'En Pahalı',
                                 value: SortOrderEnums.priceDesc,
                               },
                               {
@@ -544,7 +547,7 @@ const BusSearchResults: React.FC = () => {
                   {totalCount > 0 && (
                     <div className='flex items-center gap-2 md:hidden'>
                       <span className='text-sm font-semibold text-gray-500'>
-                        {destinatonName}
+                        {originName}-{destinationName}
                         {''} için toplam {totalCount} sefer bulduk!
                       </span>{' '}
                     </div>
