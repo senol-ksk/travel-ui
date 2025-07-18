@@ -31,7 +31,8 @@ export const TransferSearchItem: React.FC<Props> = ({
   })
 
   return (
-    <div className='rounded-lg border shadow'>
+    <div className='relative rounded-lg border shadow'>
+      <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400 md:mt-0' />
       <div className='grid gap-3 md:grid-cols-12 md:gap-5'>
         <div className='col-span-12 content-center px-4 md:col-span-3 md:py-3'>
           <Box
@@ -79,16 +80,17 @@ export const TransferSearchItem: React.FC<Props> = ({
         </div>
         <div className='col-span-12 flex content-start items-center justify-between gap-2 border-t p-5 text-end leading-none md:col-span-3 md:grid md:content-center md:justify-center md:border-t-0 md:border-l md:p-0'>
           <div className='leading-none'>
-            <div className='text-end text-sm'>
+            <div className='text-start text-sm'>
               {data.transferData.bookDetail.suggestedVehicleCount} Araç fiyatı
             </div>
-            <div className='text-lg font-semibold'>
+            <div className='text-2xl font-semibold'>
               {formatCurrency(data.transferData.bookDetail.sortPrice)}
             </div>
           </div>
           <div className='md:w-32'>
             <Button
               fullWidth
+              radius={'md'}
               component={Link}
               href={extraPageUrl}
               onClick={() => onSelect(data)}

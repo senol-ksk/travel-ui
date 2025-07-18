@@ -3,8 +3,15 @@ import React from 'react'
 import { Button, Skeleton } from '@mantine/core'
 import dayjs from 'dayjs'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
+import { SearchResult } from '@/app/car/search-results/search-result'
 
 type IProps = {
+  searchResultsQuery: {
+    isLoading: boolean
+    isFetching: boolean
+    isFetchingNextPage?: boolean
+  }
+  searchSessionTokenQuery: { isLoading: boolean }
   onPrevDay: () => void
   onNextDay: () => void
   onPrevReturnDay?: () => void
@@ -16,6 +23,8 @@ type IProps = {
 }
 
 const SearchPrevNextButtons: React.FC<IProps> = ({
+  searchSessionTokenQuery,
+  searchResultsQuery,
   onPrevDay,
   onNextDay,
   onPrevReturnDay,
@@ -28,23 +37,33 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
   return (
     <>
       {isDomestic && (
-        <div className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'>
+        <Skeleton
+          className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'
+          visible={
+            searchResultsQuery.isLoading ||
+            searchResultsQuery.isFetching ||
+            searchResultsQuery.isFetchingNextPage ||
+            searchSessionTokenQuery.isLoading
+          }
+        >
           <Button
             size='md'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-100 hover:border-blue-800'
             onClick={onPrevDay}
           >
             <MdKeyboardArrowLeft color='black' size={18} />
-            <span className='hidden text-black md:block'>Önceki Gün</span>
+            <span className='hidden font-normal text-black md:block'>
+              Önceki Gün
+            </span>
           </Button>
 
-          <div className='md:text-md flex flex-grow justify-center rounded bg-gray-100 py-2 text-sm font-medium'>
+          <div className='flex flex-grow justify-center rounded bg-gray-100 py-2 font-medium'>
             {(() => {
               const calendarDate =
                 isReturnFlightVisible && returnDate ? returnDate : departureDate
               return calendarDate
-                ? dayjs(calendarDate).format('D MMM YYYY')
+                ? dayjs(calendarDate).format('D MMM YYYY, ddd')
                 : ''
             })()}
           </div>
@@ -52,22 +71,31 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
           <Button
             size='md'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-100 hover:border-blue-800'
             onClick={onNextDay}
           >
-            <span className='hidden text-black md:block'>Sonraki Gün</span>
+            <span className='hidden font-normal text-black md:block'>
+              Sonraki Gün
+            </span>
             <MdKeyboardArrowRight size={18} color='black' className='md:mt-1' />
           </Button>
-        </div>
+        </Skeleton>
       )}
-
       {!isDomestic && returnDate && (
-        <div className='sticky top-0 z-10 flex items-center justify-between gap-1 text-center'>
+        <Skeleton
+          className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'
+          visible={
+            searchResultsQuery.isLoading ||
+            searchResultsQuery.isFetching ||
+            searchResultsQuery.isFetchingNextPage ||
+            searchSessionTokenQuery.isLoading
+          }
+        >
           <Button
             color='gray'
             size='sm'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 py-2 text-xs hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-100 py-2 font-normal hover:border-blue-800'
             onClick={onPrevDay}
           >
             <MdKeyboardArrowLeft size={18} />
@@ -78,14 +106,14 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-100 font-normal hover:border-blue-800'
             onClick={onNextDay}
           >
             <span className='hidden md:block'>Sonraki Gün</span>
             <MdKeyboardArrowRight size={18} />
           </Button>
 
-          <div className='border-gray md:text-md flex-grow rounded bg-gray-100 text-center text-xs font-medium'>
+          <div className='border-gray flex-grow rounded bg-gray-100 py-2 text-center text-sm font-medium'>
             {departureDate && returnDate ? (
               <>
                 <div className='hidden justify-center md:flex'>
@@ -97,9 +125,6 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
                   <div>{dayjs(departureDate).format('D MMM')}</div>
                   <div className='mx-1'>-</div>
                   <div>{dayjs(returnDate).format('D MMM')}</div>
-                </div>
-                <div className='justify-center text-xs text-gray-600'>
-                  Gidiş-Dönüş
                 </div>
               </>
             ) : departureDate ? (
@@ -116,7 +141,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-100 font-normal hover:border-blue-800'
             onClick={onPrevReturnDay}
           >
             <MdKeyboardArrowLeft size={18} />
@@ -127,13 +152,13 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-100 font-normal hover:border-blue-800'
             onClick={onNextReturnDay}
           >
             <span className='hidden md:block'>Sonraki Gün</span>
             <MdKeyboardArrowRight size={18} />
           </Button>
-        </div>
+        </Skeleton>
       )}
       {!isDomestic && !returnDate && (
         <div className='sticky top-0 z-10 flex items-center justify-between gap-1 py-2 text-center md:gap-2'>

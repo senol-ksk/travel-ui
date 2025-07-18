@@ -54,3 +54,18 @@ body {
 
   --breakpoint-2xl: 96em;
 }
+@media (min-width: 62em) {
+  .mantine-Accordion-control {
+    padding-left: 0px;
+  }
+  .mantine-Accordion-content {
+    padding-left: 0px;
+  }
+}
+.mantine-Checkbox-input {
+  border: 2px solid gray;
+}
+.mantine-Accordion-label {
+  font-weight: 600;
+  font-size: medium;
+}

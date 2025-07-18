@@ -34,7 +34,7 @@ const BottomSticky: React.FC<IProps> = ({ roomGroup }) => {
     <>
       {/* <input value={JSON.stringify(roomGroup, null, 2)} readOnly /> */}
       <div className='fixed right-0 bottom-0 left-0 z-50 md:hidden'>
-        <div className='grid grid-cols-17 items-end gap-2 rounded-t-lg bg-white px-1 py-5 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
+        <div className='grid grid-cols-17 items-center gap-2 rounded-t-lg bg-white px-1 py-5 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
           {nightCount > 0 && (
             <Title
               order={3}

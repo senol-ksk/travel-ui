@@ -20,6 +20,7 @@ import {
   Modal,
   NativeSelect,
   rem,
+  RemoveScroll,
   Skeleton,
   Stack,
   Title,
@@ -58,7 +59,8 @@ import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
 import { MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
-import { FaLongArrowAltRight } from 'react-icons/fa'
+import { FaCheck, FaLongArrowAltRight } from 'react-icons/fa'
+import { FaArrowRightArrowLeft } from 'react-icons/fa6'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -307,7 +309,30 @@ const FlightSearchView = () => {
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
   const mounted = useMounted()
-
+  const filterOptions = [
+    {
+      label: 'En Ucuz',
+      value: SortOrderEnums.priceAsc,
+    },
+    {
+      label: 'En Pahalı',
+      value: SortOrderEnums.priceDesc,
+    },
+    {
+      label: 'En Erken',
+      value: SortOrderEnums.hourAsc,
+    },
+    {
+      label: 'En Hızlı',
+      value: SortOrderEnums.durationAsc,
+    },
+  ]
+  const totalCount = searchQueryData?.length ?? 0
+  const storedData = localStorage.getItem('flight-search-engine')
+  const parsedData = storedData ? JSON.parse(storedData) : null
+  const destinationName =
+    parsedData?.Destination?.Name.split(' ')[0].split(',') ?? ''
+  const originName = parsedData?.Origin?.Name?.split(' ')[0].split(',') ?? ''
   if (!mounted)
     return (
       <Container className='grid gap-3 py-4'>
@@ -331,491 +356,614 @@ const FlightSearchView = () => {
       ) : null}
 
       <Container ref={targetRef} className='pt-5 pb-20'>
-        <div className='grid md:grid-cols-5 md:gap-3'>
-          <div className='md:col-span-1'>
+        <div className='grid md:grid-cols-8 md:gap-5'>
+          <div className='md:col-span-2'>
             <Transition
               transition={'slide-right'}
               mounted={filterSectionIsOpened || !!isBreakPointMatchesMd}
             >
               {(styles) => (
-                <div
-                  className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white md:static'
-                  style={styles}
+                <RemoveScroll
+                  enabled={filterSectionIsOpened && !isBreakPointMatchesMd}
                 >
-                  <div className='flex justify-end md:hidden'>
-                    <CloseButton
-                      size={'lg'}
-                      onClick={() => setFilterSectionIsOpened(false)}
-                    />
-                  </div>
-                  {searchResultsQuery.isLoading ||
-                  searchResultsQuery.isFetching ||
-                  searchResultsQuery.isFetchingNextPage ||
-                  searchSessionTokenQuery.isLoading ? (
-                    <div className='grid gap-2'>
-                      <Skeleton h={25} className='grow-0' w={'100%'} />
-                      <Skeleton h={18} w={150} />
-                      <div className='flex gap-1'>
-                        <Skeleton className='size-4' />
-                        <Skeleton className='flex-1' />
-                      </div>
-                      <div className='flex gap-1'>
-                        <Skeleton className='size-4' />
-                        <Skeleton className='flex-1' />
-                      </div>
+                  <div
+                    className='fixed start-0 end-0 top-0 bottom-0 z-50 overflow-y-auto bg-white md:static'
+                    style={styles}
+                  >
+                    <div className='flex justify-end md:hidden'>
+                      <CloseButton
+                        size={'lg'}
+                        onClick={() => setFilterSectionIsOpened(false)}
+                      />
                     </div>
-                  ) : (
-                    <>
-                      <div className='flex justify-between gap-2'>
-                        <Title
-                          className='text-xl font-semibold'
-                          order={2}
-                          mb={rem(10)}
-                        >
-                          Filtreler
-                        </Title>
-                        <div>
-                          <UnstyledButton
-                            className='font-semibold text-blue-500'
-                            fz='xs'
-                            hidden={!Object.values(filterParams).find(Boolean)}
-                            onClick={() => {
-                              setFilterParams(null)
-                            }}
-                          >
-                            Temizle
-                          </UnstyledButton>
+                    {searchResultsQuery.isLoading ||
+                    searchResultsQuery.isFetching ||
+                    searchResultsQuery.isFetchingNextPage ||
+                    searchSessionTokenQuery.isLoading ? (
+                      <div className='grid gap-2'>
+                        <Skeleton h={25} className='grow-0' w={'100%'} />
+                        <Skeleton h={18} w={150} />
+                        <div className='flex gap-1'>
+                          <Skeleton className='size-4' />
+                          <Skeleton className='flex-1' />
+                        </div>
+                        <div className='flex gap-1'>
+                          <Skeleton className='size-4' />
+                          <Skeleton className='flex-1' />
                         </div>
                       </div>
-                      <Accordion
-                        defaultValue={[
-                          'numOfStops',
-                          'airlines',
-                          'airports',
-                          'departureHours',
-                        ]}
-                        multiple
-                        classNames={{
-                          control: 'p-2 text-md font-semibold',
-                          label: 'p-0 font-semibold',
-                        }}
-                      >
-                        <Accordion.Item value='numOfStops'>
-                          <Accordion.Control>Aktarma</Accordion.Control>
-                          <Accordion.Panel>
-                            <Checkbox.Group
-                              onChange={(value) => {
-                                setFilterParams({
-                                  numOfStops: value.length
-                                    ? value.map(Number)
-                                    : null,
-                                })
-                              }}
-                              value={
-                                filterParams.numOfStops?.length
-                                  ? filterParams.numOfStops?.map(String)
-                                  : []
+                    ) : (
+                      <>
+                        <div className='flex justify-between gap-2'>
+                          <Title
+                            className='text-xl font-semibold'
+                            order={2}
+                            mb={rem(10)}
+                          >
+                            Filtreler
+                          </Title>
+                          <div>
+                            <UnstyledButton
+                              className='font-semibold text-blue-500'
+                              fz='xs'
+                              hidden={
+                                !Object.values(filterParams).find(Boolean)
                               }
-                            >
-                              <Stack gap={6} className='text-lg'>
-                                {searchQueryData?.find((result) =>
-                                  isDomestic
-                                    ? result.segments.length === 1
-                                    : result.segments.filter(
-                                        (segment) => segment.groupId === 0
-                                      ).length === 1 ||
-                                      result.segments.filter(
-                                        (segment) => segment.groupId === 1
-                                      ).length === 1
-                                ) && (
-                                  <Checkbox
-                                    name='numOfStops'
-                                    label='Aktarmasız'
-                                    value={'0'}
-                                  />
-                                )}
-                                {searchQueryData?.find((result) =>
-                                  isDomestic
-                                    ? result.segments.length === 2
-                                    : result.segments.filter(
-                                        (segment) => segment.groupId === 0
-                                      ).length === 2 ||
-                                      result.segments.filter(
-                                        (segment) => segment.groupId === 1
-                                      ).length === 2
-                                ) && (
-                                  <Checkbox
-                                    name='numOfStops'
-                                    label='1 Aktarma'
-                                    value={'1'}
-                                  />
-                                )}
-                                {searchQueryData?.find((result) =>
-                                  isDomestic
-                                    ? result.segments.length > 2
-                                    : result.segments.filter(
-                                        (segment) => segment.groupId === 0
-                                      ).length > 2 ||
-                                      result.segments.filter(
-                                        (segment) => segment.groupId === 1
-                                      ).length > 2
-                                ) && (
-                                  <Checkbox
-                                    name='numOfStops'
-                                    label='2+ Aktarma'
-                                    value={'2'}
-                                  />
-                                )}
-                              </Stack>
-                            </Checkbox.Group>
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                        <Accordion.Item value='airlines'>
-                          <Accordion.Control>Hava Yolları</Accordion.Control>
-                          <Accordion.Panel>
-                            <Checkbox.Group
-                              onChange={(value) => {
-                                setFilterParams({
-                                  airlines: value.length ? value : null,
-                                })
+                              onClick={() => {
+                                setFilterParams(null)
                               }}
-                              value={
-                                filterParams?.airlines?.length
-                                  ? filterParams.airlines?.map(String)
-                                  : []
-                              }
                             >
-                              <Stack gap={6}>
-                                {airlineDataObj?.map((airline) => {
-                                  return (
-                                    <div key={airline.Code}>
-                                      <Checkbox
-                                        name='airlines'
-                                        label={
-                                          airline.Value.find(
-                                            (airlineValue) =>
-                                              airlineValue.LangCode === 'tr_TR'
-                                          )?.Value
-                                        }
-                                        value={airline.Code}
-                                      />
-                                    </div>
-                                  )
-                                })}
-                              </Stack>
-                            </Checkbox.Group>
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                        <Accordion.Item value='airports'>
-                          <Accordion.Control>Havaalanları</Accordion.Control>
-                          <Accordion.Panel>
-                            <Checkbox.Group
-                              onChange={(value) => {
-                                setFilterParams({
-                                  airports: value.length ? value : null,
-                                })
-                              }}
-                              value={
-                                filterParams?.airports?.length
-                                  ? filterParams.airports?.map(String)
-                                  : []
-                              }
-                            >
-                              <Stack gap={6}>
-                                {getAirportsByCodeList.data?.map((airports) => {
-                                  return (
-                                    <div key={airports.Code}>
-                                      <Checkbox
-                                        name='airports'
-                                        label={
-                                          airports.Value.find(
-                                            (airportValue) =>
-                                              airportValue.LangCode === 'tr_TR'
-                                          )?.Value
-                                        }
-                                        value={airports.Code}
-                                      />
-                                    </div>
-                                  )
-                                })}
-                              </Stack>
-                            </Checkbox.Group>
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                        <Accordion.Item value='departureHours'>
-                          <Accordion.Control>Kalkış saatleri</Accordion.Control>
-                          <Accordion.Panel>
-                            <HourRangeSlider
-                              filterParams={filterParams.departureHours}
-                              onChange={(hourRange) => {
-                                setFilterParams({
-                                  departureHours: [
-                                    hourRange.at(0)?.hourValue ?? 0,
-                                    hourRange.at(-1)?.hourValue ?? 1440,
-                                  ],
-                                })
-                              }}
-                            />
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                      </Accordion>
-                    </>
-                  )}
-                </div>
+                              Temizle
+                            </UnstyledButton>
+                          </div>
+                        </div>
+                        <Accordion
+                          defaultValue={[
+                            'numOfStops',
+                            'airlines',
+                            'airports',
+                            'departureHours',
+                          ]}
+                          multiple
+                          classNames={{
+                            control: 'p-2 text-md font-semibold',
+                            label: 'p-0 font-semibold',
+                          }}
+                        >
+                          <Accordion.Item value='numOfStops'>
+                            <Accordion.Control>Aktarma</Accordion.Control>
+                            <Accordion.Panel>
+                              <Checkbox.Group
+                                onChange={(value) => {
+                                  setFilterParams({
+                                    numOfStops: value.length
+                                      ? value.map(Number)
+                                      : null,
+                                  })
+                                }}
+                                value={
+                                  filterParams.numOfStops?.length
+                                    ? filterParams.numOfStops?.map(String)
+                                    : []
+                                }
+                              >
+                                <Stack gap={6} className='text-lg'>
+                                  {searchQueryData?.find((result) =>
+                                    isDomestic
+                                      ? result.segments.length === 1
+                                      : result.segments.filter(
+                                          (segment) => segment.groupId === 0
+                                        ).length === 1 ||
+                                        result.segments.filter(
+                                          (segment) => segment.groupId === 1
+                                        ).length === 1
+                                  ) && (
+                                    <Checkbox
+                                      name='numOfStops'
+                                      label='Aktarmasız'
+                                      value={'0'}
+                                    />
+                                  )}
+                                  {searchQueryData?.find((result) =>
+                                    isDomestic
+                                      ? result.segments.length === 2
+                                      : result.segments.filter(
+                                          (segment) => segment.groupId === 0
+                                        ).length === 2 ||
+                                        result.segments.filter(
+                                          (segment) => segment.groupId === 1
+                                        ).length === 2
+                                  ) && (
+                                    <Checkbox
+                                      name='numOfStops'
+                                      label='1 Aktarma'
+                                      value={'1'}
+                                    />
+                                  )}
+                                  {searchQueryData?.find((result) =>
+                                    isDomestic
+                                      ? result.segments.length > 2
+                                      : result.segments.filter(
+                                          (segment) => segment.groupId === 0
+                                        ).length > 2 ||
+                                        result.segments.filter(
+                                          (segment) => segment.groupId === 1
+                                        ).length > 2
+                                  ) && (
+                                    <Checkbox
+                                      name='numOfStops'
+                                      label='2+ Aktarma'
+                                      value={'2'}
+                                    />
+                                  )}
+                                </Stack>
+                              </Checkbox.Group>
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='departureHours'>
+                            <Accordion.Control>
+                              Kalkış saatleri
+                            </Accordion.Control>
+                            <Accordion.Panel className='px-3'>
+                              <HourRangeSlider
+                                filterParams={filterParams.departureHours}
+                                onChange={(hourRange) => {
+                                  setFilterParams({
+                                    departureHours: [
+                                      hourRange.at(0)?.hourValue ?? 0,
+                                      hourRange.at(-1)?.hourValue ?? 1440,
+                                    ],
+                                  })
+                                }}
+                              />
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='airlines'>
+                            <Accordion.Control>Hava Yolları</Accordion.Control>
+                            <Accordion.Panel>
+                              <Checkbox.Group
+                                onChange={(value) => {
+                                  setFilterParams({
+                                    airlines: value.length ? value : null,
+                                  })
+                                }}
+                                value={
+                                  filterParams?.airlines?.length
+                                    ? filterParams.airlines?.map(String)
+                                    : []
+                                }
+                              >
+                                <Stack gap={6}>
+                                  {airlineDataObj?.map((airline) => {
+                                    return (
+                                      <div key={airline.Code}>
+                                        <Checkbox
+                                          name='airlines'
+                                          label={
+                                            airline.Value.find(
+                                              (airlineValue) =>
+                                                airlineValue.LangCode ===
+                                                'tr_TR'
+                                            )?.Value
+                                          }
+                                          value={airline.Code}
+                                        />
+                                      </div>
+                                    )
+                                  })}
+                                </Stack>
+                              </Checkbox.Group>
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='airports'>
+                            <Accordion.Control>Havaalanları</Accordion.Control>
+                            <Accordion.Panel>
+                              <Checkbox.Group
+                                onChange={(value) => {
+                                  setFilterParams({
+                                    airports: value.length ? value : null,
+                                  })
+                                }}
+                                value={
+                                  filterParams?.airports?.length
+                                    ? filterParams.airports?.map(String)
+                                    : []
+                                }
+                              >
+                                <Stack gap={6}>
+                                  {getAirportsByCodeList.data?.map(
+                                    (airports) => {
+                                      return (
+                                        <div key={airports.Code}>
+                                          <Checkbox
+                                            name='airports'
+                                            label={
+                                              airports.Value.find(
+                                                (airportValue) =>
+                                                  airportValue.LangCode ===
+                                                  'tr_TR'
+                                              )?.Value
+                                            }
+                                            value={airports.Code}
+                                          />
+                                        </div>
+                                      )
+                                    }
+                                  )}
+                                </Stack>
+                              </Checkbox.Group>
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                        </Accordion>
+                      </>
+                    )}
+                  </div>
+                </RemoveScroll>
               )}
             </Transition>
           </div>
-          <div className='md:col-span-4'>
-            <div className='grid grid-cols-2 pb-3'>
-              <Box className='justify-self-start'>
-                <Button
-                  size='sm'
-                  leftSection={<CiFilter size={23} />}
-                  // variant='outline'
-                  color='green'
-                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                  hiddenFrom='md'
-                >
-                  Filtrele
-                </Button>
-              </Box>
-              <div className='justify-self-end'>
-                <NativeSelect
-                  size='sm'
-                  classNames={{
-                    label: 'hidden',
-                  }}
-                  label='Sırala'
-                  value={order}
-                  onChange={({ currentTarget: { value } }) => {
-                    setFilterParams({
-                      order: value as SortOrderEnums,
-                    })
-                  }}
-                  data={[
-                    {
-                      label: 'Fiyat (Ucuzdan pahalıya)',
-                      value: SortOrderEnums.priceAsc,
-                    },
-                    {
-                      label: 'Fiyat (Pahalıdan ucuza)',
-                      value: SortOrderEnums.priceDesc,
-                    },
-                    {
-                      label: 'Gidiş Saati (En erken)',
-                      value: SortOrderEnums.hourAsc,
-                    },
-                    {
-                      label: 'Gidiş Saati (En geç)',
-                      value: SortOrderEnums.hourDesc,
-                    },
-                    {
-                      label: 'Uçuş Süresi (En kısa süreli)',
-                      value: SortOrderEnums.durationAsc,
-                    },
-                    {
-                      label: 'Uçuş Süresi (En uzun süreli)',
-                      value: SortOrderEnums.durationDesc,
-                    },
-                    // { label: 'Varış Saati (Artan)', value: '' },
-                    // { label: 'Varış Saati (Azalan)', value: '' },
-                  ]}
-                />
-              </div>
-            </div>
-            {filteredData?.length ? (
-              isDomestic ? (
-                isReturnFlightVisible ? (
-                  <div>
-                    <div className='mb-2 flex items-center gap-3'>
-                      <div className='text-lg font-medium'>
-                        Gidiş Uçuşu Seçildi
-                      </div>
-                      <div className='hidden items-center gap-1 text-sm font-semibold text-gray-600 md:flex md:justify-end'>
-                        <div>
-                          {
-                            selectedFlightItemPackages?.flights.at(0)
-                              ?.segments[0].origin.code
-                          }
-                        </div>{' '}
-                        <div>-</div>
-                        <div>
-                          {
-                            selectedFlightItemPackages?.flights
-                              .at(0)
-                              ?.segments.at(-1)?.destination.code
-                          }
-                        </div>
-                        <div>
-                          {dayjs(
-                            selectedFlightItemPackages?.flights
-                              .at(0)
-                              ?.segments.at(0)?.departureTime
-                          ).format(' DD MMM YYYY, ddd')}
-                        </div>
-                      </div>
-                    </div>
-                    <div className='@container mb-5 items-center gap-4 rounded-lg bg-blue-100 shadow md:grid md:grid-cols-5 md:py-6'>
-                      <div className='col-span-4 grid gap-4'>
-                        <div className='relative grid p-3 md:grid-cols-3 md:p-5'>
-                          <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-blue-800 md:mt-0' />
 
-                          <div className='flex items-center gap-3 text-sm'>
-                            <div>
-                              <AirlineLogo
-                                airlineCode={
+          <div className='md:col-span-6'>
+            <div className='grid md:mb-5 md:flex md:justify-between'>
+              <Skeleton
+                className='hidden items-center gap-2 md:flex'
+                visible={
+                  searchResultsQuery.isLoading ||
+                  searchResultsQuery.isFetching ||
+                  searchResultsQuery.isFetchingNextPage ||
+                  searchSessionTokenQuery.isLoading
+                }
+              >
+                {searchParams.destination && (
+                  <div className='hidden items-center gap-2 md:flex'>
+                    <div>
+                      <span className='flex items-center gap-2 text-lg font-medium'>
+                        <span className='max-w-[120px] truncate'>
+                          {originName}{' '}
+                        </span>
+                        <FaArrowRightArrowLeft
+                          size={12}
+                          className='text-blue-700'
+                        />{' '}
+                        <span className='max-w-[100px] truncate'>
+                          {destinationName}
+                        </span>{' '}
+                        Uçuşu
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </Skeleton>
+              <div className='flex items-center justify-between gap-1'>
+                <Skeleton
+                  visible={
+                    searchResultsQuery.isLoading ||
+                    searchResultsQuery.isFetching ||
+                    searchResultsQuery.isFetchingNextPage ||
+                    searchSessionTokenQuery.isLoading
+                  }
+                >
+                  <Box className='justify-self-start'>
+                    <Button
+                      onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                      size='sm'
+                      color='black'
+                      className='flex border-gray-400 px-8 font-medium text-black md:mx-1 md:hidden'
+                      variant='outline'
+                    >
+                      Filtrele
+                    </Button>
+                  </Box>
+                </Skeleton>
+                <Skeleton
+                  className='hidden items-center gap-2 md:flex'
+                  visible={
+                    searchResultsQuery.isLoading ||
+                    searchResultsQuery.isFetching ||
+                    searchResultsQuery.isFetchingNextPage ||
+                    searchSessionTokenQuery.isLoading
+                  }
+                >
+                  {filterOptions.map((option) => (
+                    <Button
+                      size='sm'
+                      className={
+                        order === option.value
+                          ? 'border-0 bg-blue-200 font-medium text-blue-700'
+                          : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                      }
+                      key={option.value}
+                      leftSection={order === option.value ? <FaCheck /> : ''}
+                      color='blue'
+                      variant={order === option.value ? 'filled' : 'outline'}
+                      onClick={() =>
+                        setFilterParams({
+                          order: option.value,
+                        })
+                      }
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </Skeleton>
+                <Skeleton
+                  visible={
+                    searchResultsQuery.isLoading ||
+                    searchResultsQuery.isFetching ||
+                    searchResultsQuery.isFetchingNextPage ||
+                    searchSessionTokenQuery.isLoading
+                  }
+                >
+                  <div className='justify-self-end font-medium'>
+                    <NativeSelect
+                      size='sm'
+                      classNames={{
+                        label: 'hidden',
+                      }}
+                      label='Sırala'
+                      value={order}
+                      onChange={({ currentTarget: { value } }) => {
+                        setFilterParams({
+                          order: value as SortOrderEnums,
+                        })
+                      }}
+                      data={[
+                        {
+                          label: 'En Ucuz',
+                          value: SortOrderEnums.priceAsc,
+                        },
+                        {
+                          label: 'En Pahalı',
+                          value: SortOrderEnums.priceDesc,
+                        },
+                        {
+                          label: 'En Erken',
+                          value: SortOrderEnums.hourAsc,
+                        },
+                        {
+                          label: 'En Geç',
+                          value: SortOrderEnums.hourDesc,
+                        },
+                        {
+                          label: 'En Hızlı',
+                          value: SortOrderEnums.durationAsc,
+                        },
+                        {
+                          label: 'En Uuzn',
+                          value: SortOrderEnums.durationDesc,
+                        },
+                        // { label: 'Varış Saati (Artan)', value: '' },
+                        // { label: 'Varış Saati (Azalan)', value: '' },
+                      ]}
+                    />
+                  </div>
+                </Skeleton>
+              </div>
+              <Skeleton
+                className='my-3 flex items-center gap-2 px-1 md:hidden'
+                visible={
+                  searchResultsQuery.isLoading ||
+                  searchResultsQuery.isFetching ||
+                  searchResultsQuery.isFetchingNextPage ||
+                  searchSessionTokenQuery.isLoading
+                }
+              >
+                {searchParams.destination && (
+                  <span className='text-sm font-semibold text-gray-500'>
+                    <div>
+                      {originName}-{destinationName}, seferi için toplam{' '}
+                      {totalCount} uçuş bulduk!
+                    </div>
+                  </span>
+                )}
+              </Skeleton>
+            </div>
+            <div>
+              {filteredData?.length ? (
+                isDomestic ? (
+                  isReturnFlightVisible ? (
+                    <div>
+                      <div className='mb-2 flex items-center gap-3'>
+                        <div className='text-lg font-medium'>
+                          Gidiş Uçuşu Seçildi
+                        </div>
+                        <div className='hidden items-center gap-1 text-sm font-semibold text-gray-600 md:flex md:justify-end'>
+                          <div>
+                            {
+                              selectedFlightItemPackages?.flights.at(0)
+                                ?.segments[0].origin.code
+                            }
+                          </div>{' '}
+                          <div>-</div>
+                          <div>
+                            {
+                              selectedFlightItemPackages?.flights
+                                .at(0)
+                                ?.segments.at(-1)?.destination.code
+                            }
+                          </div>
+                          <div>
+                            {dayjs(
+                              selectedFlightItemPackages?.flights
+                                .at(0)
+                                ?.segments.at(0)?.departureTime
+                            ).format(' DD MMM YYYY, ddd')}
+                          </div>
+                        </div>
+                      </div>
+                      <div className='@container mb-5 items-center gap-4 rounded-lg bg-blue-100 shadow md:grid md:grid-cols-5 md:py-6'>
+                        <div className='col-span-4 grid gap-4'>
+                          <div className='relative grid p-3 md:grid-cols-3 md:p-5'>
+                            <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-blue-800 md:mt-0' />
+
+                            <div className='flex items-center gap-3 text-sm'>
+                              <div>
+                                <AirlineLogo
+                                  airlineCode={
+                                    selectedFlightItemPackages?.flights
+                                      .at(0)
+                                      ?.segments[0]?.marketingAirline.code?.toLowerCase() ??
+                                    ''
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <div className='font-medium'>
+                                  {
+                                    airlineDataObj
+                                      ?.find(
+                                        (airline) =>
+                                          airline.Code ===
+                                          selectedFlightItemPackages?.flights.at(
+                                            0
+                                          )?.segments[0]?.marketingAirline.code
+                                      )
+                                      ?.Value.find(
+                                        (val) => val.LangCode === 'tr_TR'
+                                      )?.Value
+                                  }
+                                </div>
+                                <div className='md:text-md flex items-center gap-1 text-xs'>
+                                  <PiSuitcaseRolling />
+                                  8kg El Bagajı
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className='relative col-span-2 grid'>
+                              <div className='mt-3 flex items-center justify-between text-sm text-gray-600 md:mt-0'>
+                                <div className='text-center'>
+                                  <div className='text-xl font-semibold'>
+                                    {dayjs(
+                                      selectedFlightItemPackages?.flights.at(0)
+                                        ?.segments[0]?.departureTime
+                                    ).format('HH:mm')}
+                                  </div>
+                                  <div>
+                                    {
+                                      selectedFlightItemPackages?.flights.at(0)
+                                        ?.segments[0].origin.code
+                                    }
+                                  </div>
+                                </div>
+
+                                <div className='relative mx-2 grow'>
+                                  <Box bg='blue' h={2} className='rounded' />
+                                  <div
+                                    className='absolute end-0 -translate-y-1/2 rotate-90 text-blue-800'
+                                    style={{ top: 1, paddingBottom: 1 }}
+                                  >
+                                    <MdOutlineAirplanemodeActive size={18} />
+                                  </div>
+                                </div>
+
+                                <div className='text-center'>
+                                  <div className='text-xl font-semibold'>
+                                    {dayjs(
+                                      selectedFlightItemPackages?.flights
+                                        .at(0)
+                                        ?.segments.at(-1)?.arrivalTime
+                                    ).format('HH:mm')}
+                                  </div>
+                                  <div>
+                                    {
+                                      selectedFlightItemPackages?.flights
+                                        .at(0)
+                                        ?.segments.at(-1)?.destination.code
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className='md:text-md absolute start-0 end-0 mt-3 flex justify-center text-xs text-black md:mt-0'>
+                                {dayjs(
                                   selectedFlightItemPackages?.flights
                                     .at(0)
-                                    ?.segments[0]?.marketingAirline.code?.toLowerCase() ??
-                                  ''
-                                }
-                              />
-                            </div>
-                            <div>
-                              <div className='font-medium'>
-                                {
-                                  airlineDataObj
-                                    ?.find(
-                                      (airline) =>
-                                        airline.Code ===
-                                        selectedFlightItemPackages?.flights.at(
-                                          0
-                                        )?.segments[0]?.marketingAirline.code
+                                    ?.segments.at(0)?.departureTime
+                                ).format(' DD MMM YYYY, ddd')}
+                              </div>
+                              <div className='md:text-md absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-xs text-black'>
+                                <div>
+                                  {hours}s {minutes}d
+                                </div>
+                                <div>
+                                  {(() => {
+                                    const numSegments =
+                                      selectedFlightItemPackages?.flights.at(0)
+                                        ?.segments.length ?? 0
+                                    const hasTransferStop = numSegments > 1
+                                    return hasTransferStop ? (
+                                      <span className='text-red-600'>
+                                        {numSegments - 1} Aktarma
+                                      </span>
+                                    ) : (
+                                      <span className='md-text-md text-sm text-green-800'>
+                                        Aktarmasız
+                                      </span>
                                     )
-                                    ?.Value.find(
-                                      (val) => val.LangCode === 'tr_TR'
-                                    )?.Value
-                                }
-                              </div>
-                              <div className='md:text-md flex items-center gap-1 text-xs'>
-                                <PiSuitcaseRolling />
-                                8kg El Bagajı
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='relative col-span-2 grid'>
-                            <div className='mt-3 flex items-center justify-between text-sm text-gray-600 md:mt-0'>
-                              <div className='text-center'>
-                                <div className='text-xl font-semibold'>
-                                  {dayjs(
-                                    selectedFlightItemPackages?.flights.at(0)
-                                      ?.segments[0]?.departureTime
-                                  ).format('HH:mm')}
+                                  })()}
                                 </div>
-                                <div>
-                                  {
-                                    selectedFlightItemPackages?.flights.at(0)
-                                      ?.segments[0].origin.code
-                                  }
-                                </div>
-                              </div>
-
-                              <div className='relative mx-2 grow'>
-                                <Box bg='blue' h={2} className='rounded' />
-                                <div
-                                  className='absolute end-0 -translate-y-1/2 rotate-90 text-blue-800'
-                                  style={{ top: 1, paddingBottom: 1 }}
-                                >
-                                  <MdOutlineAirplanemodeActive size={18} />
-                                </div>
-                              </div>
-
-                              <div className='text-center'>
-                                <div className='text-xl font-semibold'>
-                                  {dayjs(
-                                    selectedFlightItemPackages?.flights
-                                      .at(0)
-                                      ?.segments.at(-1)?.arrivalTime
-                                  ).format('HH:mm')}
-                                </div>
-                                <div>
-                                  {
-                                    selectedFlightItemPackages?.flights
-                                      .at(0)
-                                      ?.segments.at(-1)?.destination.code
-                                  }
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className='md:text-md absolute start-0 end-0 mt-3 flex justify-center text-xs text-black md:mt-0'>
-                              {dayjs(
-                                selectedFlightItemPackages?.flights
-                                  .at(0)
-                                  ?.segments.at(0)?.departureTime
-                              ).format(' DD MMM YYYY, ddd')}
-                            </div>
-                            <div className='md:text-md absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-xs text-black'>
-                              <div>
-                                {hours}s {minutes}d
-                              </div>
-                              <div>
-                                {(() => {
-                                  const numSegments =
-                                    selectedFlightItemPackages?.flights.at(0)
-                                      ?.segments.length ?? 0
-                                  const hasTransferStop = numSegments > 1
-                                  return hasTransferStop ? (
-                                    <span className='text-red-600'>
-                                      {numSegments - 1} Aktarma
-                                    </span>
-                                  ) : (
-                                    <span className='md-text-md text-sm text-green-800'>
-                                      Aktarmasız
-                                    </span>
-                                  )
-                                })()}
                               </div>
                             </div>
                           </div>
                         </div>
+                        <hr className='mt-2 flex md:hidden' />
+                        <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
+                          <div className='text-xl font-semibold'>
+                            {(() => {
+                              const packagePrice =
+                                selectedFlightItemPackages?.flights?.[0]?.package.find(
+                                  (pckK) =>
+                                    pckK.fareInfo.key ===
+                                    selectedFlightKeys.current?.[0]
+                                )?.fareInfo.totalPrice.value
+                              return packagePrice !== undefined
+                                ? formatCurrency(packagePrice)
+                                : ''
+                            })()}
+                          </div>
+                          <div>
+                            <Button
+                              className='text-blue border-0 bg-white px-4 py-2'
+                              size='md'
+                              radius='md'
+                              variant='default'
+                              type='button'
+                              onClick={resetSelectedFlights}
+                            >
+                              Uçuşu Değiştir
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                      <hr className='mt-2 flex md:hidden' />
-                      <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
-                        <div className='text-xl font-semibold'>
-                          {(() => {
-                            const packagePrice =
-                              selectedFlightItemPackages?.flights?.[0]?.package.find(
-                                (pckK) =>
-                                  pckK.fareInfo.key ===
-                                  selectedFlightKeys.current?.[0]
-                              )?.fareInfo.totalPrice.value
-                            return packagePrice !== undefined
-                              ? formatCurrency(packagePrice)
-                              : ''
-                          })()}
-                        </div>
-                        <div>
-                          <Button
-                            className='text-blue border-0 bg-white px-4 py-2'
-                            size='md'
-                            radius='md'
-                            variant='default'
-                            type='button'
-                            onClick={resetSelectedFlights}
-                          >
-                            Uçuşu Değiştir
-                          </Button>
-                        </div>
+
+                      <div className='text-lg font-medium'>
+                        Dönüş uçuşunuzu seçiniz.
                       </div>
                     </div>
-
-                    <div className='text-lg font-medium'>
-                      Dönüş uçuşunuzu seçiniz.
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <span className='text-lg font-medium'>
-                      Gidiş uçuşunuzu seçiniz.
-                    </span>
-                  </div>
-                )
-              ) : null
-            ) : null}
-
+                  ) : (
+                    <Skeleton
+                      className='w-50'
+                      visible={
+                        searchResultsQuery.isLoading ||
+                        searchResultsQuery.isFetching ||
+                        searchResultsQuery.isFetchingNextPage ||
+                        searchSessionTokenQuery.isLoading
+                      }
+                    >
+                      <div>
+                        <span className='text-lg font-medium'>
+                          Gidiş uçuşunuzu seçiniz.
+                        </span>
+                      </div>
+                    </Skeleton>
+                  )
+                ) : null
+              ) : null}
+            </div>
             <SearchPrevNextButtons
+              searchSessionTokenQuery={searchSessionTokenQuery}
+              searchResultsQuery={searchResultsQuery}
               onPrevDay={handlePrevDay}
               onNextDay={handleNextDay}
               onPrevReturnDay={handlePrevReturnDay}

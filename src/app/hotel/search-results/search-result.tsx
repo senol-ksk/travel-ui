@@ -35,6 +35,7 @@ import { PensionTypes } from './components/filters/pension-types'
 import { Themes } from './components/filters/themes'
 import { useMediaQuery } from '@mantine/hooks'
 import { FaCheck } from 'react-icons/fa'
+import { hotelSearchRequestModel } from './dummy'
 type IProps = {
   slug?: string
 }
@@ -63,12 +64,16 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   }
   const filterOptions = [
     {
-      label: 'Fiyat Artan',
+      label: 'En Ucuz',
       value: HotelSortOrderEnums.priceAscending,
     },
     {
-      label: 'Fiyat Azalan',
+      label: 'En Pahalı',
       value: HotelSortOrderEnums.priceDescending,
+    },
+    {
+      value: HotelSortOrderEnums.listingRateDescending,
+      label: 'Popüler Oteller',
     },
   ]
   const totalCount =
@@ -458,11 +463,12 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
               )}
             </div>
             <div className='grid gap-4 pb-20 md:col-span-3'>
-              <div className='grid gap-3 md:flex md:gap-1'>
+              <div className='grid gap-3 md:flex md:justify-between md:gap-1'>
                 <Skeleton
                   visible={
                     hotelSearchRequestQuery.isLoading ||
-                    searchParamsQuery.isLoading
+                    searchParamsQuery.isLoading ||
+                    searchQueryStatus.current === 'loading'
                   }
                 >
                   {totalCount > 0 && (
@@ -474,7 +480,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         için toplam {totalCount} tesis bulduk!
                       </div>
                     </div>
-                  )}
+                  </div>
                 </Skeleton>
 
                 <div className='flex items-center justify-between gap-1'>
@@ -482,7 +488,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     className='w-auto'
                     visible={
                       hotelSearchRequestQuery.isLoading ||
-                      searchParamsQuery.isLoading
+                      searchParamsQuery.isLoading ||
+                      searchQueryStatus.current === 'loading'
                     }
                   >
                     <Button
@@ -500,7 +507,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                       className='hidden items-center gap-2 md:flex'
                       visible={
                         hotelSearchRequestQuery.isLoading ||
-                        searchParamsQuery.isLoading
+                        searchParamsQuery.isLoading ||
+                        searchQueryStatus.current === 'loading'
                       }
                     >
                       {filterOptions.map((option) => (
@@ -541,11 +549,12 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     <Skeleton
                       visible={
                         hotelSearchRequestQuery.isLoading ||
-                        searchParamsQuery.isLoading
+                        searchParamsQuery.isLoading ||
+                        searchQueryStatus.current === 'loading'
                       }
                     >
                       <NativeSelect
-                        className='mx-1 w-auto font-medium'
+                        className='mx-1 w-50 font-medium'
                         size='sm'
                         style={{ width: 'fit-content' }}
                         value={filterParams.orderBy}
@@ -556,17 +565,17 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         }}
                         data={[
                           {
-                            label: 'Fiyat Artan',
+                            label: 'En Ucuz',
                             value: HotelSortOrderEnums.priceAscending,
                           },
                           {
-                            label: 'Fiyat Azalan',
+                            label: 'En Pahalı',
                             value: HotelSortOrderEnums.priceDescending,
                           },
 
                           {
                             value: HotelSortOrderEnums.listingRateDescending,
-                            label: 'Önerilen Oteller',
+                            label: 'Popüler Oteller',
                           },
                           {
                             value: HotelSortOrderEnums.nameAscending,
@@ -594,7 +603,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                   className='flex items-center gap-2 px-2 md:hidden'
                   visible={
                     hotelSearchRequestQuery.isLoading ||
-                    searchParamsQuery.isLoading
+                    searchParamsQuery.isLoading ||
+                    searchQueryStatus.current === 'loading'
                   }
                 >
                   {searchParams.destination && (

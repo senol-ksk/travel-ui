@@ -358,11 +358,11 @@ const HotelDetailSection = () => {
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
                   </div>
-                  <div className='text-xl font-normal'>Mükemmel</div>
+                  <div className='text-xl font-medium'>Mükemmel</div>
                 </div>
                 <div className='flex items-center'>
                   <Button
-                    className='border-0 bg-transparent p-0 font-normal text-blue-700'
+                    className='border-0 bg-transparent p-0 text-sm font-normal text-blue-700'
                     size='md'
                     onClick={() => scrollIntoRatings()}
                   >
@@ -567,16 +567,16 @@ const HotelDetailSection = () => {
               Değerlendirmeler
             </Title>
             <div className='gap-2 rounded bg-gray-50 p-3'>
-              <div className='flex items-center justify-between rounded bg-white px-3'>
+              <div className='flex items-center justify-between rounded bg-white p-3'>
                 <div className='hidden items-center gap-2 self-end text-blue-800 md:flex'>
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
                   </div>
-                  <div className='grid'>
+                  <div className='flex items-center gap-2'>
                     <div className='text-xl font-normal'>Mükemmel</div>
                     <div className='flex items-center'>
                       <Button
-                        className='border-0 bg-transparent p-0 font-normal text-black'
+                        className='border-0 bg-transparent p-0 text-sm font-normal text-black'
                         size='md'
                         onClick={openGeneralInfoDrawer}
                       >
@@ -591,7 +591,7 @@ const HotelDetailSection = () => {
                   onClick={openGeneralInfoDrawer}
                   className='bg-transparent p-0 font-normal text-blue-700'
                 >
-                  Tüm yorumları Göster <MdKeyboardArrowRight size={20} />
+                  Tüm Yorumları Göster <MdKeyboardArrowRight size={20} />
                 </Button>
               </div>
               <div className='mt-3 rounded bg-white'>

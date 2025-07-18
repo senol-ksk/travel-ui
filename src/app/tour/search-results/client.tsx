@@ -33,7 +33,6 @@ import { GoMoveToTop } from 'react-icons/go'
 import { useMemo, useRef, useState } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
-import { CiFilter } from 'react-icons/ci'
 import { FaCheck } from 'react-icons/fa'
 
 const TourSearchResultClient = () => {

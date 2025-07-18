@@ -1,11 +1,11 @@
-import { ReactNode } from 'react'
-import { OnlineOperationButtonLinks } from './_components/links'
 import { Container, ScrollArea } from '@mantine/core'
+
+import { OnlineOperationButtonLinks } from '@/app/online-operations/_components/links'
 
 export default function OnlineOperationsLayout({
   children,
 }: Readonly<{
-  children: ReactNode
+  children: React.ReactNode
 }>) {
   return (
     <div className='pb-5'>

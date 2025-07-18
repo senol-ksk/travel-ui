@@ -1,5 +1,6 @@
 'use client'
 
+import { notifications } from '@mantine/notifications'
 import {
   HotelBookingDetailApiResponse,
   OperationResultWithBookingCodeResponse,
@@ -34,7 +35,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InstallmentApiResponse } from '@/types/global'
 import { InstallmentSelect } from '@/app/reservation/(index)/payment/instalment-table'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { PartialPaymentResponseType } from '@/app/reservation/types'
 
 export const HotelBookingSummary = () => {
   const form = useForm({
@@ -66,36 +68,94 @@ export const HotelBookingSummary = () => {
     () => bookingDetailsDataQuery.data?.data,
     [bookingDetailsDataQuery.data?.data]
   )
-  const dataViewResponsers =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers
-  const summaryResponse = dataViewResponsers?.[0].summaryResponse
+
+  const summaryResponse = bookingDetailData?.summaryResponse.summaryResponse
   const searchToken = summaryResponse?.searchToken
   const sessionToken = summaryResponse?.sessionToken
 
-  const productKey =
-    bookingDetailData?.operationResultWithBookingCode.productDataViewResponser
-      .dataViewResponsers[0].summaryResponse.productKey
+  const productKey = summaryResponse?.productKey
 
+  const threeDFormRef = useRef<HTMLFormElement>(null)
   const partialPaymentMutation = useMutation({
     mutationKey: ['partial-payment-mutation'],
     mutationFn: async (data: PaymentValidationSchemaTypes) => {
-      const response = await serviceRequest({
+      const threedCallbackURL = `${window.location.origin}/reservation/callback/api`
+      const errorUrl = `${window.location.origin}/reservation/error/api`
+      // const errorUrlSerializer = createSerializer(operationResultParams)
+      // const errorUrl = errorUrlSerializer(
+      //   `${window.location.origin}/online-operations/order-details/hotel`,
+      //   {
+      //     ...searchParams,
+      //     partialPaymentError: 'Ödeme Hatası',
+      //   }
+      // )
+
+      const response = await serviceRequest<PartialPaymentResponseType>({
         axiosOptions: {
           url: 'api/payment/partialPayment',
           method: 'post',
           data: {
             ...data,
-            SessionToken: sessionToken,
-            SearchToken: searchToken,
-            ProductKey: productKey,
+
+            threeDCallbackUrl: threedCallbackURL,
+            threeDSuccessURL: threedCallbackURL,
+            threeDFailureURL: errorUrl,
+            sessionToken,
+            searchToken,
+            productKey,
           },
         },
       })
 
       return response
     },
+    onError: () => {
+      notifications.show({
+        title: 'Bir hata oluştu.',
+        message:
+          'Sistemsel bir hata oluştu. Lütfen daha sonra tekrara deneyin.',
+        color: 'red',
+        position: 'top-center',
+        classNames: {
+          root: 'bg-red-500',
+          description: 'text-white',
+          title: 'text-white',
+          closeButton: 'text-white',
+        },
+      })
+    },
+    onSuccess: async (query) => {
+      if (!query?.success) {
+        notifications.show({
+          title: 'Bir hata oluştu.',
+          message: 'Kart bilgilerinizi gözden geçirin.',
+          color: 'red',
+          position: 'top-center',
+          classNames: {
+            root: 'bg-red-500',
+            description: 'text-white',
+            title: 'text-white',
+            closeButton: 'text-white',
+          },
+        })
+      }
+    },
   })
+
+  useEffect(() => {
+    if (
+      partialPaymentMutation.isSuccess &&
+      partialPaymentMutation.data?.success &&
+      partialPaymentMutation.data.data
+    ) {
+      threeDFormRef.current?.submit()
+    }
+  }, [
+    partialPaymentMutation?.data?.data,
+    partialPaymentMutation.data?.success,
+    partialPaymentMutation.isSuccess,
+  ])
+
   const cardNumber = form.watch('cardNumber')?.trim().replaceAll(' ', '')
 
   const installmentListQuery = useQuery({
@@ -126,29 +186,22 @@ export const HotelBookingSummary = () => {
 
   if (!bookingDetailsDataQuery.data && bookingDetailsDataQuery.isLoading)
     return (
-      <Container py={30} display={'grid'} className='gap-3' maw={700}>
+      <div className='grid gap-3 md:gap-5'>
         <Skeleton h={30} />
         <Skeleton h={24} w={'75%'} />
         <Skeleton h={20} w={'65%'} />
-      </Container>
+      </div>
     )
 
   if (!bookingDetailsDataQuery.data || !bookingDetailsDataQuery.data.success)
-    return (
-      <Container py={'lg'} maw={600}>
-        <Alert color='red'>Sonuç bulunamadı</Alert>
-      </Container>
-    )
-  // const dataViewResponsers =
-  //   bookingDetailData?.operationResultWithBookingCode?.productDataViewResponser
-  //     .dataViewResponsers
+    return <Alert color='red'>Sonuç bulunamadı</Alert>
 
   const productDataViewResponser =
-    dataViewResponsers?.[1].operationResultViewData
+    bookingDetailData?.operationViewData.operationResultViewData
   const summaryViewDataResponserForHotel = summaryResponse
   const insuranceFee = summaryResponse?.roomGroup.cancelWarrantyPrice.value ?? 0
 
-  const hotelDataSummaryData = dataViewResponsers?.[0].summaryResponse
+  const hotelDataSummaryData = summaryResponse
   const roomGroup = hotelDataSummaryData?.roomGroup
   const isHotelPartialPayment =
     bookingDetailsDataQuery?.data?.data?.hotelCancelWarrantyPriceStatus
@@ -161,14 +214,7 @@ export const HotelBookingSummary = () => {
     return <div>no data</div>
   return (
     <>
-      <Container
-        maw={700}
-        py={{
-          base: 'md',
-          md: 'xl',
-        }}
-        className='grid gap-3 md:gap-5'
-      >
+      <div className='grid gap-3 md:gap-5'>
         {isHotelPartialPayment && (
           <div>
             <Alert
@@ -382,67 +428,102 @@ export const HotelBookingSummary = () => {
             </div>
           )}
         </div>
-      </Container>
+      </div>
       {isHotelPartialPayment && (
-        <Modal
-          opened={paymentModalOpened}
-          onClose={closePaymentModal}
-          size={772}
-          title='Ödeme Bilgileri'
-          closeOnEscape={false}
-          classNames={{
-            body: 'p-6 md:p-8',
-          }}
-          closeOnClickOutside={false}
-        >
-          <form
-            onSubmit={form.handleSubmit((data) => {
-              console.log(data)
-              partialPaymentMutation.mutate({
-                ...data,
-              })
-            })}
+        <>
+          <Modal
+            opened={paymentModalOpened}
+            onClose={closePaymentModal}
+            size={772}
+            title='Ödeme Bilgileri'
+            closeOnEscape={false}
+            classNames={{
+              body: 'p-6 md:p-8',
+            }}
+            closeOnClickOutside={false}
           >
-            <div className='grid gap-5'>
-              <CreditCardForm form={form} />
-              <Text fz={'xs'} mb={0} className='text-gray-600'>
-                Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
-              </Text>
-              {installmentList && installmentList.length > 0 && (
-                <InstallmentSelect
-                  onChange={(value) => {
-                    form.setValue('installment', value)
-                  }}
-                  data={installmentList}
-                />
-              )}
-            </div>
-            <div className='flex flex-col items-center justify-center gap-3 sm:pt-8'>
-              <div className='leading-md text-center text-sm sm:px-8'>
-                Ödemeyi tamamla butonuna tıkladığımda{' '}
-                <span className='text-blue-800'>
-                  Mesafeli Satış Sözleşmesini
-                </span>
-                 ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
-                 okuduğumu ve kabul ettiğimi onaylıyorum.
+            <form
+              onSubmit={form.handleSubmit((data) => {
+                partialPaymentMutation.mutate({
+                  ...data,
+                })
+              })}
+            >
+              <div className='grid gap-5'>
+                <CreditCardForm form={form} />
+                <Text fz={'xs'} mb={0} className='text-gray-600'>
+                  Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
+                </Text>
+                {installmentList && installmentList.length > 0 && (
+                  <InstallmentSelect
+                    onChange={(value) => {
+                      form.setValue('installment', value)
+                    }}
+                    data={installmentList}
+                  />
+                )}
               </div>
-              <div className='flex flex-wrap items-center gap-2'>
-                <div className='text-sm'>Ödenecek Tutar:</div>
-                <div className='text-xl font-bold'>
-                  {formatCurrency(
-                    productDataViewResponser.paymentInformation
-                      .basketDiscountTotal
-                  )}
+              <div className='flex flex-col items-center justify-center gap-3 sm:pt-8'>
+                <div className='leading-md text-center text-sm sm:px-8'>
+                  Ödemeyi tamamla butonuna tıkladığımda{' '}
+                  <span className='text-blue-800'>
+                    Mesafeli Satış Sözleşmesini
+                  </span>
+                   ve{' '}
+                  <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
+                   okuduğumu ve kabul ettiğimi onaylıyorum.
+                </div>
+                <div className='flex flex-wrap items-center gap-2'>
+                  <div className='text-sm'>Ödenecek Tutar:</div>
+                  <div className='text-xl font-bold'>
+                    {formatCurrency(
+                      productDataViewResponser.paymentInformation
+                        .basketDiscountTotal
+                    )}
+                  </div>
+                </div>
+                <div className='max-w-full min-w-xs'>
+                  <Button
+                    fullWidth
+                    type='submit'
+                    loading={partialPaymentMutation.isPending}
+                    disabled={!form.formState.isValid}
+                  >
+                    Ödemeyi Tamamla
+                  </Button>
                 </div>
               </div>
-              <div className='max-w-full min-w-xs'>
-                <Button fullWidth type='submit'>
-                  Ödemeyi Tamamla
-                </Button>
-              </div>
-            </div>
-          </form>
-        </Modal>
+            </form>
+          </Modal>
+          {isHotelPartialPayment && (
+            <form
+              ref={threeDFormRef}
+              action={partialPaymentMutation.data?.data?.action}
+              method='POST'
+              hidden
+            >
+              {partialPaymentMutation.data?.data?.action &&
+              partialPaymentMutation.isSuccess
+                ? Object.keys(partialPaymentMutation.data?.data).map(
+                    (input, index) => {
+                      const keyValue = input as keyof PartialPaymentResponseType
+                      const value =
+                        partialPaymentMutation?.data?.data?.[keyValue]
+
+                      return keyValue !== 'action' ? (
+                        <input
+                          key={index}
+                          name={input}
+                          value={value}
+                          readOnly
+                        />
+                      ) : null
+                    }
+                  )
+                : null}
+            </form>
+          )}
+        </>
       )}
     </>
   )
