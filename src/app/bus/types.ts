@@ -104,6 +104,14 @@ export interface Seat {
   totalPrice: ServicePriceType
   type: number
 }
+export interface RouteInfo {
+  arrivalDate: string
+  departureDate: string
+  destination: string
+  locationPoint: string
+  locationPointId: number
+  priority: number
+}
 
 export interface BusSeatApiResponse {
   code: 1
@@ -114,7 +122,7 @@ export interface BusSeatApiResponse {
   sessionToken: string
   userAuthenticationToken: null
   eventMessageList: []
-  data: { seats: Seat[] }
+  data: { seats: Seat[]; routeInfos: RouteInfo[] }
 }
 
 export enum BusGender {

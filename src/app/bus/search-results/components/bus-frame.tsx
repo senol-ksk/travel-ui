@@ -6,7 +6,6 @@ import { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { BusGender, Seat, SeatStatus } from '@/app/bus/types'
 
 import { BusSeatIcons } from './icons'
-import { Button } from '@mantine/core'
 
 let top = 0
 let left = 0
