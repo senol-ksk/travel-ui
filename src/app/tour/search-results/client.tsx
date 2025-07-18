@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Accordion,
   ActionIcon,
   Affix,
   Alert,
@@ -11,6 +10,7 @@ import {
   Container,
   NativeSelect,
   rem,
+  RemoveScroll,
   Skeleton,
   Stack,
   Title,
@@ -35,9 +35,6 @@ import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
 import { CiFilter } from 'react-icons/ci'
 import { FaCheck } from 'react-icons/fa'
-import { TourDetail } from '../detail/detail-view'
-import Module from 'module'
-import { count } from 'console'
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
@@ -48,16 +45,7 @@ const TourSearchResultClient = () => {
 
   const searchRequestIsLoading =
     searchResultsQuery.isLoading || searchResultsQuery.hasNextPage
-  const filterOptions = [
-    {
-      label: 'Fiyat Artan',
-      value: SortOrderEnums.priceAsc,
-    },
-    {
-      label: 'Fiyat Azalan',
-      value: SortOrderEnums.priceDesc,
-    },
-  ]
+
   if (
     searchResultsQuery.hasNextPage &&
     !searchResultsQuery.isFetchingNextPage
@@ -127,9 +115,28 @@ const TourSearchResultClient = () => {
   const filteredData = useFilterActions(searchGroupedData)
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
-  const destinationName: string | undefined =
-    searchParamsQuery.data?.data?.params.tourSearchRequest.location.label
-  const totalCount = Array.isArray(searchData) ? searchData.length : 0
+  const filterOptions = [
+    {
+      label: 'En Ucuz',
+      value: SortOrderEnums.priceAsc,
+    },
+    {
+      label: 'En Pahalı',
+      value: SortOrderEnums.priceDesc,
+    },
+    {
+      label: 'En Erken',
+      value: SortOrderEnums.dateAsc,
+    },
+    {
+      label: 'En Geç',
+      value: SortOrderEnums.dateDesc,
+    },
+  ]
+  const totalCount = searchData?.length ?? 0
+  const storedData = localStorage.getItem('tour-search')
+  const parsedData = storedData ? JSON.parse(storedData) : null
+  const destinationName = parsedData?.destination?.name ?? ''
 
   if (
     !searchParamsQuery.data &&
@@ -195,230 +202,235 @@ const TourSearchResultClient = () => {
               mounted={filterSectionIsOpened || !!isBreakPointMatchesMd}
             >
               {(styles) => (
-                <div
-                  className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static md:p-0'
-                  style={styles}
+                <RemoveScroll
+                  enabled={filterSectionIsOpened && !isBreakPointMatchesMd}
                 >
-                  <div className='flex justify-end md:hidden'>
-                    <CloseButton
-                      size={'lg'}
-                      onClick={() => setFilterSectionIsOpened(false)}
-                    />
-                  </div>
-                  {searchRequestIsLoading || !searchResultsQuery.data ? (
-                    <div className='grid gap-2'>
-                      <Skeleton h={20} w={150} mb={rem(9)} />
-                      <Skeleton h={12} w={220} />
-                      <Skeleton h={12} w={170} />
-                      <Skeleton h={12} w={190} />
+                  <div
+                    className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static md:p-0'
+                    style={styles}
+                  >
+                    <div className='flex justify-end md:hidden'>
+                      <CloseButton
+                        size={'lg'}
+                        onClick={() => setFilterSectionIsOpened(false)}
+                      />
                     </div>
-                  ) : (
-                    <div>
-                      <div className='flex justify-between pb-6'>
-                        <Title order={2} fz={'h4'}>
-                          Filtreler
-                        </Title>
-                        <div
-                          hidden={
-                            Object.keys(cleanObj(filterParams)).length === 0
-                          }
-                        >
-                          <UnstyledButton
-                            fz='xs'
-                            className='font-semibold text-blue-500'
-                            onClick={() => {
-                              setFilterParams(null)
-                            }}
-                          >
-                            Temizle
-                          </UnstyledButton>
-                        </div>
+                    {searchRequestIsLoading || !searchResultsQuery.data ? (
+                      <div className='grid gap-2'>
+                        <Skeleton h={20} w={150} mb={rem(9)} />
+                        <Skeleton h={12} w={220} />
+                        <Skeleton h={12} w={170} />
+                        <Skeleton h={12} w={190} />
                       </div>
-                      <Stack>
-                        <div className='py-5'>
-                          <div className='flex justify-between gap-2 pb-4 text-sm text-gray-700'>
-                            <div>
-                              {formatCurrency(
-                                filterParams.priceRange
-                                  ? filterParams.priceRange[0]
-                                  : minPrice
-                              )}
-                            </div>
-                            <div>
-                              {formatCurrency(
-                                filterParams.priceRange
-                                  ? filterParams.priceRange[1]
-                                  : maxPrice
-                              )}
-                            </div>
-                          </div>
-                          <div className='px-3'>
-                            <PriceRangeSlider
-                              minPrice={Math.floor(minPrice)}
-                              maxPrice={Math.ceil(maxPrice)}
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <Title order={3} fz={'h5'} mb={8}>
-                            Tur Süresi{' '}
-                            <small className='text-gray-600'>(Gece)</small>
+                    ) : (
+                      <div>
+                        <div className='flex justify-between pb-6'>
+                          <Title order={2} fz={'h4'}>
+                            Filtreler
                           </Title>
-                          <Checkbox.Group
-                            onChange={(value) => {
-                              setFilterParams({
-                                nightCount: value.length
-                                  ? value.map(Number)
-                                  : null,
-                              })
-                            }}
-                            value={
-                              filterParams.nightCount
-                                ? filterParams.nightCount.map(String)
-                                : []
+                          <div
+                            hidden={
+                              Object.keys(cleanObj(filterParams)).length === 0
                             }
                           >
-                            <Stack gap={rem(6)}>
-                              {nightCountChecks.map((count) => (
-                                <Checkbox
-                                  label={count + ' Gece'}
-                                  value={count.toString()}
-                                  key={count}
-                                />
-                              ))}
-                            </Stack>
-                          </Checkbox.Group>
+                            <UnstyledButton
+                              fz='xs'
+                              className='font-semibold text-blue-500'
+                              onClick={() => {
+                                setFilterParams(null)
+                              }}
+                            >
+                              Temizle
+                            </UnstyledButton>
+                          </div>
                         </div>
-                        <div>
-                          <Title order={3} fz={'h5'} mb={8}>
-                            Bölgeler
-                          </Title>
-                          <Checkbox.Group
-                            onChange={(value) => {
-                              setFilterParams({
-                                regions: value.length ? value : null,
-                              })
-                            }}
-                            value={
-                              filterParams.regions ? filterParams.regions : []
-                            }
-                          >
-                            <Stack gap={rem(6)}>
-                              {regionChecks.map((region, regionIndex) => (
-                                <Checkbox
-                                  key={regionIndex}
-                                  label={region}
-                                  value={slugify(region)}
-                                />
-                              ))}
-                            </Stack>
-                          </Checkbox.Group>
-                        </div>
-                      </Stack>
-                    </div>
-                  )}
-                </div>
+                        <Stack>
+                          <div className='py-5'>
+                            <div className='flex justify-between gap-2 pb-4 text-sm text-gray-700'>
+                              <div>
+                                {formatCurrency(
+                                  filterParams.priceRange
+                                    ? filterParams.priceRange[0]
+                                    : minPrice
+                                )}
+                              </div>
+                              <div>
+                                {formatCurrency(
+                                  filterParams.priceRange
+                                    ? filterParams.priceRange[1]
+                                    : maxPrice
+                                )}
+                              </div>
+                            </div>
+                            <div className='px-3'>
+                              <PriceRangeSlider
+                                minPrice={Math.floor(minPrice)}
+                                maxPrice={Math.ceil(maxPrice)}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <Title order={3} fz={'h5'} mb={8}>
+                              Tur Süresi{' '}
+                              <small className='text-gray-600'>(Gece)</small>
+                            </Title>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  nightCount: value.length
+                                    ? value.map(Number)
+                                    : null,
+                                })
+                              }}
+                              value={
+                                filterParams.nightCount
+                                  ? filterParams.nightCount.map(String)
+                                  : []
+                              }
+                            >
+                              <Stack gap={rem(6)}>
+                                {nightCountChecks.map((count) => (
+                                  <Checkbox
+                                    label={count}
+                                    value={count.toString()}
+                                    key={count}
+                                  />
+                                ))}
+                              </Stack>
+                            </Checkbox.Group>
+                          </div>
+                          <div>
+                            <Title order={3} fz={'h5'} mb={8}>
+                              Bölgeler
+                            </Title>
+                            <Checkbox.Group
+                              onChange={(value) => {
+                                setFilterParams({
+                                  regions: value.length ? value : null,
+                                })
+                              }}
+                              value={
+                                filterParams.regions ? filterParams.regions : []
+                              }
+                            >
+                              <Stack gap={rem(6)}>
+                                {regionChecks.map((region, regionIndex) => (
+                                  <Checkbox
+                                    key={regionIndex}
+                                    label={region}
+                                    value={slugify(region)}
+                                  />
+                                ))}
+                              </Stack>
+                            </Checkbox.Group>
+                          </div>
+                        </Stack>
+                      </div>
+                    )}
+                  </div>
+                </RemoveScroll>
               )}
             </Transition>
           </div>
           <div className='grid gap-3 sm:col-span-8 lg:col-span-9'>
-            <div className='flex justify-between gap-3 md:gap-1'>
+            <div className='flex justify-between gap-3 md:px-0'>
               <Skeleton
+                className='hidden md:flex'
                 visible={
-                  searchResultsQuery.isLoading || searchParamsQuery.isLoading
+                  !searchParamsQuery.isLoading && searchData?.length === 0
                 }
               >
                 <div className='hidden items-center gap-2 md:flex'>
                   <div>
-                    <span className='text-lg font-bold'>
-                      {destinationName},{' '}
-                    </span>{' '}
-                    için toplam {totalCount} tur bulduk!
+                    <span className='text-lg font-bold'>{destinationName}</span>{' '}
+                    için toplam{' '}
+                    <span className='text-lg font-bold'>{totalCount}</span>{' '}
+                    tesis bulduk!
                   </div>
-                </div>
-                <div>
-                  <Button
-                    className='mx-1 border-gray-400 bg-white font-normal text-gray-800 hover:bg-gray-100'
-                    size='sm'
-                    variant='outline'
-                    onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                    hiddenFrom='md'
-                  >
-                    Filtreler
-                  </Button>
                 </div>
               </Skeleton>
+              <div>
+                <Button
+                  size='sm'
+                  color='black'
+                  className='mx-1 flex border-gray-400 px-8 font-medium md:hidden'
+                  variant='outline'
+                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                >
+                  Filtreler
+                </Button>
+              </div>
+              <div>
+                <NativeSelect
+                  className='font-medium md:hidden'
+                  data={[
+                    {
+                      label: 'En Ucuz',
+                      value: SortOrderEnums.priceAsc,
+                    },
+                    {
+                      label: 'En Pahalı',
+                      value: SortOrderEnums.priceDesc,
+                    },
+                    {
+                      label: 'En Erken',
+                      value: SortOrderEnums.dateAsc,
+                    },
+                    {
+                      label: 'En Geç',
+                      value: SortOrderEnums.dateDesc,
+                    },
+                  ]}
+                  onChange={({ target: { value } }) => {
+                    setFilterParams({
+                      order: value as SortOrderEnums,
+                    })
+                  }}
+                  value={order}
+                />
+              </div>
               <Skeleton
+                className='hidden items-center justify-end gap-1 md:flex'
                 visible={
-                  searchResultsQuery.isLoading || searchParamsQuery.isLoading
+                  !searchParamsQuery.isLoading && searchData?.length === 0
                 }
               >
-                <div className='mx-1 ms-auto flex items-center gap-1'>
-                  <div className='hidden items-center gap-1 md:flex'>
-                    {filterOptions.map((option) => (
-                      <Button
-                        size='sm'
-                        className={
-                          order === option.value
-                            ? 'border-0 bg-blue-200 font-medium text-blue-700'
-                            : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
-                        }
-                        key={option.value}
-                        leftSection={order === option.value ? <FaCheck /> : ''}
-                        color='blue'
-                        variant={order === option.value ? 'filled' : 'outline'}
-                        onClick={() =>
-                          setFilterParams({
-                            order: option.value,
-                          })
-                        }
-                      >
-                        {option.label}
-                      </Button>
-                    ))}
-                  </div>
-                  <div>
-                    <NativeSelect
-                      data={[
-                        {
-                          label: 'Fiyat Artan',
-                          value: SortOrderEnums.priceAsc,
-                        },
-                        {
-                          label: 'Fiyat Azalan',
-                          value: SortOrderEnums.priceDesc,
-                        },
-                        {
-                          label: 'Tarihe Göre (En erken)',
-                          value: SortOrderEnums.dateAsc,
-                        },
-                        {
-                          label: 'Tarihe Göre (En geç)',
-                          value: SortOrderEnums.dateDesc,
-                        },
-                      ]}
-                      onChange={({ target: { value } }) => {
-                        setFilterParams({
-                          order: value as SortOrderEnums,
-                        })
-                      }}
-                      value={order}
-                    />
-                  </div>
-                </div>
+                {filterOptions.map((option) => (
+                  <Button
+                    size='sm'
+                    className={
+                      order === option.value
+                        ? 'border-0 bg-blue-200 font-medium text-blue-700'
+                        : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                    }
+                    key={option.value}
+                    leftSection={order === option.value ? <FaCheck /> : ''}
+                    color='blue'
+                    variant={order === option.value ? 'filled' : 'outline'}
+                    onClick={() =>
+                      setFilterParams({
+                        order: option.value,
+                      })
+                    }
+                  >
+                    {option.label}
+                  </Button>
+                ))}
               </Skeleton>
             </div>
             <Skeleton
+              className='my-3 flex items-center gap-2 px-1 md:hidden'
               visible={
-                searchResultsQuery.isLoading || searchParamsQuery.isLoading
+                searchResultsQuery.isFetching ||
+                searchResultsQuery.isLoading ||
+                !searchResultsQuery.data
               }
             >
-              <div className='mx-1 flex items-center gap-2 md:hidden'>
-                <span className='text-sm font-semibold text-gray-500'>
-                  <span>{destinationName}, </span> için toplam {totalCount}{' '}
-                  tesis bulduk!
-                </span>
-              </div>
+              <span className='text-sm font-semibold text-gray-500'>
+                <div>
+                  {destinationName}, için toplam {totalCount} tesis bulduk!
+                </div>
+              </span>
             </Skeleton>
             <div className='grid gap-5'>
               {!searchRequestIsLoading &&
