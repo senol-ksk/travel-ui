@@ -34,7 +34,7 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
       {data?.map((item) => (
         <CarouselSlide key={item.id}>
           <Box
-            href={`/hotel/${item.params.link?.value.split('/').at(-1)}`}
+            href={`/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}`}
             component={Link}
             className='group block h-full w-full'
           >

@@ -29,7 +29,7 @@ const useHotelDataQuery = () => {
         axiosOptions: {
           signal,
           url: 'api/hotel/detail',
-          method: 'post',
+          method: 'post', // TODO: try to make this `GET` request
           data: {
             ...searchParams,
           },
@@ -38,19 +38,33 @@ const useHotelDataQuery = () => {
 
       return response
     },
+    retry: 1,
   })
 
   const searchPanel = hotelDetailQuery.data?.data?.searchPanel
   const roomRefetchCount = useRef(5)
+  const hotelProductKey = hotelDetailQuery.data?.data?.productKey
+
+  if (
+    !(searchParams.searchToken || searchParams.sessionToken) &&
+    (hotelDetailQuery.data?.data?.searchToken ||
+      hotelDetailQuery.data?.data?.sessionToken)
+  ) {
+    setSearchParams({
+      searchToken: hotelDetailQuery.data?.data?.searchToken,
+      sessionToken: hotelDetailQuery.data?.data?.sessionToken,
+      productKey: hotelProductKey,
+    })
+  }
 
   const roomsQuery = useInfiniteQuery({
-    enabled: !!hotelDetailQuery.data?.data,
+    enabled: !!hotelDetailQuery.data?.data?.productKey,
     queryKey: [
       'hotel-rooms',
-      hotelDetailQuery.data?.data?.productKey,
-      searchPanel?.sessionToken,
-      searchPanel?.searchToken,
+      hotelDetailQuery.data?.data?.sessionToken,
+      hotelDetailQuery.data?.data?.searchToken,
       searchParams.hotelSlug,
+      hotelProductKey,
       searchParams.checkInDate,
       searchParams.checkOutDate,
       roomRefetchCount.current,
@@ -65,14 +79,14 @@ const useHotelDataQuery = () => {
         axiosOptions: {
           signal,
           url: 'api/hotel/rooms',
-          method: 'post',
-          data: {
+          method: 'get',
+          params: {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
             scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-            sessionToken: searchPanel?.sessionToken,
-            searchToken: searchPanel?.searchToken,
+            sessionToken: hotelDetailQuery.data?.data?.sessionToken,
+            searchToken: hotelDetailQuery.data?.data?.searchToken,
             slug: searchParams.hotelSlug,
-            productKey: hotelDetailQuery.data?.data?.productKey,
+            productKey: hotelProductKey,
             checkInDate: searchParams.checkInDate,
             checkOutDate: searchParams.checkOutDate,
             page: pageParam.page,
@@ -80,25 +94,15 @@ const useHotelDataQuery = () => {
           },
         },
       })
-      if (!response?.data && roomRefetchCount.current >= 0) {
-        await delayCodeExecution(1000)
-        return null
-      }
-      return response
-    },
-    refetchInterval: (query) => {
-      if (roomRefetchCount.current === 0) {
-        return 0
-      }
-      if (
-        !query.state.data?.pages.at(0)?.success &&
-        roomRefetchCount.current >= 0
-      ) {
-        return 1000
+
+      if (!response?.success) {
+        throw new Error('no error')
       }
 
-      return 0
+      return response
     },
+    retry: 5,
+    retryDelay: 1000,
     getNextPageParam: (lastPage, allPages, lastPageParams, allPageParams) => {
       if (lastPage?.data?.hotelDetailResponse?.isLoadProducts) {
         return {
@@ -166,6 +170,7 @@ const useHotelDataQuery = () => {
     roomsQuery,
     selectedRoomMutation,
     searchParams,
+    setSearchParams,
     roomInstallmentQuery,
   }
 }

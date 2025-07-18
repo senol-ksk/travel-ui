@@ -17,7 +17,6 @@ import dayjs from 'dayjs'
 export enum HotelSortOrderEnums {
   priceDescending = 'PriceDescending',
   priceAscending = 'PriceAscending',
-  // listingRateAscending = 'ListingRateAscending',
   listingRateDescending = 'ListingRateDescending',
   nameAscending = 'NameAscending',
   nameDescending = 'NameDescending',
@@ -29,10 +28,6 @@ export type HotelRoomOptionTypes = {
   childAges: number[]
   adult: number
   child: number
-  // infant: number
-  // student: number
-  // senior: number
-  // military: number
 }
 const roomSchema = z.object({
   adult: z.number(),
@@ -77,9 +72,11 @@ export const hotelDetailSearchParams = {
   searchToken: parseAsString,
   type: parseAsInteger,
   hotelSlug: parseAsString,
-  checkInDate: parseAsIsoDate,
-  checkOutDate: parseAsIsoDate,
-  rooms: parseAsArrayOf(parseAsJson(roomSchema.parse)),
+  checkInDate: parseAsIsoDate.withDefault(dayjs().add(2, 'day').toDate()),
+  checkOutDate: parseAsIsoDate.withDefault(dayjs().add(7, 'day').toDate()),
+  rooms: parseAsArrayOf(parseAsJson(roomSchema.parse)).withDefault([
+    { adult: 2, child: 0, childAges: [] },
+  ]),
 }
 
 export type HotelDetailSearchParamsType = inferParserType<

@@ -16,7 +16,6 @@ import {
   Text,
 } from '@mantine/core'
 import { IoMapOutline } from 'react-icons/io5'
-import { Link } from 'next-view-transitions'
 import { BiChevronRight } from 'react-icons/bi'
 import {
   useDisclosure,
@@ -24,7 +23,7 @@ import {
   useElementSize,
 } from '@mantine/hooks'
 import { createSerializer } from 'nuqs'
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import { FaExclamationCircle } from 'react-icons/fa'
 import { LuShieldCheck } from 'react-icons/lu'
 import {
@@ -57,7 +56,11 @@ import { RiMapPin2Line } from 'react-icons/ri'
 import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
 
-const HotelDetailSection = () => {
+type IProps = {
+  slug: string
+}
+
+const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
   const router = useRouter()
 
   const {
@@ -65,6 +68,8 @@ const HotelDetailSection = () => {
     roomInstallmentQuery,
     roomsQuery,
     selectedRoomMutation,
+    setSearchParams,
+    searchParams,
   } = useHotelDataQuery()
 
   const [
@@ -94,6 +99,10 @@ const HotelDetailSection = () => {
 
   const hotelInfo = hotelDetailData?.data?.hotelDetailResponse?.hotelInfo
   const hotel = hotelInfo?.hotel
+
+  if (!searchParams.slug) {
+    setSearchParams({ slug })
+  }
 
   const handleRoomSelect = async ({
     productKey,
@@ -176,18 +185,7 @@ const HotelDetailSection = () => {
   }
 
   if (!hotel || !hotelDetailData?.success) {
-    return (
-      <Container className='pt-5 text-center' maw={600}>
-        <Alert color='yellow'>
-          <Text>Otel bilgileri alınırken bir hata oldu.</Text>
-          <div className='flex justify-center pt-3'>
-            <Button component={Link} href={'/'}>
-              Ana Sayfa
-            </Button>
-          </div>
-        </Alert>
-      </Container>
-    )
+    return notFound()
   }
 
   return (
@@ -195,7 +193,6 @@ const HotelDetailSection = () => {
       <Container className='border-b py-4'>
         <HotelSearchEngine />
       </Container>
-      {/* <input value={JSON.stringify(hotelInfo, null, 2)} readOnly /> */}
 
       <Container
         className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-3'

@@ -66,7 +66,7 @@ const HotelRoom: React.FC<IProps> = ({
   const [drawerOpened, setDrawerOpened] = useState(false)
 
   if (details && !details?.length) return null
-  // const themesPriceDiff = roomGroup.provider == 'JollyHotel' && details?.find(item => item.)
+
   const timeDiff = dayjs(roomGroup.checkOutDate).diff(
     dayjs(roomGroup.checkInDate),
     'day'

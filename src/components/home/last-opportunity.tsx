@@ -83,7 +83,7 @@ const LastOpportunity: React.FC<IProps> = ({ data }) => {
             >
               <Link href={item.params.link?.value || '#'}>
                 <Box
-                  href={`/hotel/${item.params.link?.value.split('/').at(-1)}`}
+                  href={`/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}`}
                   component={Link}
                   className='group block h-full w-full'
                 >

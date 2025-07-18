@@ -4,15 +4,13 @@ import dayjs from 'dayjs'
 
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
-import { useHotelDataQuery } from '@/app/hotel/(detail)/detailDataQuery'
+
 import {
   hotelDetailSearchParams,
   HotelRoomOptionTypes,
-  HotelSearchEngineSchemaType,
 } from '@/modules/hotel/searchParams'
 import { parseAsArrayOf, parseAsIsoDate, useQueryStates } from 'nuqs'
 import { type SubmitHandler, useForm } from 'react-hook-form'
-import { useLocalStorage } from '@mantine/hooks'
 
 type RoomParams = {
   rooms: HotelRoomOptionTypes[]
@@ -28,24 +26,15 @@ const roomUpdateParsers = {
 
 const RoomUpdateForm = () => {
   const [showCalendar, setShowCalendar] = useState(false)
-  const { hotelDetailQuery } = useHotelDataQuery()
   const [searchParams, setSearchParams] = useQueryStates(
     hotelDetailSearchParams
   )
 
-  const detailQueryData = hotelDetailQuery?.data?.data
-  const searchPanel = detailQueryData?.searchPanel
-  const rooms = searchPanel?.rooms
-
   const form = useForm<RoomParams>({
     defaultValues: {
-      checkInDate: dayjs(
-        searchParams.checkInDate ?? searchPanel?.checkInDate
-      ).toDate(),
-      checkOutDate: dayjs(
-        searchParams.checkOutDate ?? searchPanel?.checkOutDate
-      ).toDate(),
-      rooms: searchParams.rooms ?? rooms,
+      checkInDate: dayjs(searchParams.checkInDate).toDate(),
+      checkOutDate: dayjs(searchParams.checkOutDate).toDate(),
+      rooms: searchParams.rooms,
     },
   })
 
@@ -77,11 +66,12 @@ const RoomUpdateForm = () => {
                 dayjs().add(7, 'd').toDate(),
             ]}
             onDateSelect={(dates) => {
-              form.setValue('checkInDate', dayjs(dates[0]).toDate(), {
+              console.log(dates)
+              form.setValue('checkInDate', dayjs.utc(dates[0]).toDate(), {
                 shouldValidate: true,
                 shouldDirty: true,
               })
-              form.setValue('checkOutDate', dayjs(dates[1]).toDate(), {
+              form.setValue('checkOutDate', dayjs.utc(dates[1]).toDate(), {
                 shouldValidate: true,
                 shouldDirty: true,
               })

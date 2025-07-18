@@ -1,10 +1,16 @@
 import { Suspense } from 'react'
 import { HotelDetailSection } from './detail'
 
-const HotelDetailPage = () => {
+const HotelDetailPage = async ({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) => {
+  const { slug } = await params
+
   return (
     <Suspense>
-      <HotelDetailSection />
+      <HotelDetailSection slug={slug} />
     </Suspense>
   )
 }
