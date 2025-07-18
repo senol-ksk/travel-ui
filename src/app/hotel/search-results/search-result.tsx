@@ -471,14 +471,14 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     searchQueryStatus.current === 'loading'
                   }
                 >
-                  <div className='hidden items-center gap-2 md:flex'>
-                    <div>
-                      <span className='text-lg font-bold'>
-                        {searchParams.destination}, Otelleri
-                      </span>{' '}
-                      için toplam{' '}
-                      <span className='text-lg font-bold'>{totalCount}</span>{' '}
-                      tesis bulduk!
+                  {totalCount > 0 && (
+                    <div className='hidden items-center gap-2 md:flex'>
+                      <div>
+                        <span className='text-lg font-bold'>
+                          {searchParams.destination}, Otelleri
+                        </span>{' '}
+                        için toplam {totalCount} tesis bulduk!
+                      </div>
                     </div>
                   </div>
                 </Skeleton>

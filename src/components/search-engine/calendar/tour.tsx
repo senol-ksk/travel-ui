@@ -75,7 +75,7 @@ const TourCalendar: React.FC<Props> = ({
           }
           onClick={() => setContainerTransitionState(true)}
           title={
-            <div className='flex w-full items-center gap-[5px] md:px-2'>
+            <div className='flex w-full items-center gap-[12px] md:px-2'>
               <span>{dayjs(rangeValue[0]).format('DD MMM, ddd')}</span>
               <span>-</span>
               <span>{dayjs(rangeValue[1]).format('DD MMM, ddd')}</span>
