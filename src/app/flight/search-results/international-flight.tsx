@@ -227,7 +227,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
           >
             {detailsOpened ? (
               <>
-                Uçuş Detayını Kapat
+                Detayı Kapat
                 <IoIosClose size={25} />
               </>
             ) : (

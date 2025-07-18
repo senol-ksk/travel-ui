@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <Suspense fallback={<Skeleton h={30} />}>
       <div>
-        <div className='border-b px-3 py-3 md:py-6'>
+        <div className='border-b py-3 md:py-6'>
           <Container>
             <TransferSearchEngine />
           </Container>

@@ -22,6 +22,7 @@ import { TransferSearchItem } from '@/app/transfer/search-results/search-item'
 import {
   filterParsers,
   SortOrderEnums,
+  transferSearchParams,
 } from '@/modules/transfer/searchParams.client'
 import { useQueryStates } from 'nuqs'
 import { useFilterActions } from './useFilterActions'
@@ -30,6 +31,7 @@ import { cleanObj, formatCurrency } from '@/libs/util'
 import { useState } from 'react'
 import { useMediaQuery } from '@mantine/hooks'
 import { CiFilter } from 'react-icons/ci'
+import { FaCheck } from 'react-icons/fa'
 
 const skeltonLoader = new Array(3).fill(true)
 
@@ -68,6 +70,18 @@ const TransferSearchResults = () => {
   ].sort((a, b) => +a - +b)
 
   const filteredData = useFilterActions(searchResults)
+  const filterOptions = [
+    {
+      label: 'En Ucuz',
+      value: SortOrderEnums.priceAsc,
+    },
+    {
+      label: 'En Pahalı',
+      value: SortOrderEnums.priceDesc,
+    },
+  ]
+  const totalCount = searchResults.length ?? 0
+  // const destinationName = searchResults[0].transferData.selectedTransferDetail
 
   if (transferSearchResultsQuery.hasNextPage) {
     transferSearchResultsQuery.fetchNextPage()
@@ -76,7 +90,7 @@ const TransferSearchResults = () => {
   return (
     <div className='relative'>
       <Container py={'lg'}>
-        <div className='grid gap-4 md:grid-cols-8 md:gap-7'>
+        <div className='grid gap-0 md:grid-cols-8 md:gap-7'>
           <div className='md:col-span-2'>
             <Transition
               transition={'slide-right'}
@@ -87,7 +101,7 @@ const TransferSearchResults = () => {
                   enabled={filterSectionIsOpened && !isBreakPointMatchesMd}
                 >
                   <div
-                    className='fixed start-0 end-0 top-0 bottom-0 z-10 bg-white p-3 md:static md:p-0'
+                    className='fixed start-0 end-0 top-0 bottom-0 z-10 overflow-y-auto bg-white p-3 md:static md:p-0'
                     style={styles}
                   >
                     <div className='flex justify-end md:hidden'>
@@ -116,7 +130,7 @@ const TransferSearchResults = () => {
                             }
                           >
                             <UnstyledButton
-                              fz='xs'
+                              fz='sm'
                               className='font-semibold text-blue-500'
                               onClick={() => {
                                 setFilterParams(null)
@@ -144,7 +158,7 @@ const TransferSearchResults = () => {
                                 )}
                               </div>
                             </div>
-                            <div className='px-2'>
+                            <div className='px-3'>
                               <PriceRangeSlider
                                 minPrice={minPrice}
                                 maxPrice={maxPrice}
@@ -217,26 +231,77 @@ const TransferSearchResults = () => {
             </Transition>
           </div>
           <div className='md:col-span-6'>
-            <div className='flex justify-between pb-5'>
-              <div>
-                <Button
-                  size='sm'
-                  leftSection={<CiFilter size={23} />}
-                  color='green'
-                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                  hiddenFrom='md'
-                >
-                  Filtreler
-                </Button>
-              </div>
+            <div className='flex justify-between gap-1 pb-3'>
+              <Skeleton
+                className='col-span-2 hidden md:flex'
+                visible={
+                  !transferSearchResultsQuery.data ||
+                  transferSearchResultsQuery.isLoading
+                }
+              >
+                <>
+                  <div className='hidden items-center gap-2 md:flex'>
+                    <div>
+                      <span className='text-lg font-bold'>Transferiniz</span>{' '}
+                      için toplam{' '}
+                      <span className='text-lg font-bold'> {totalCount}</span>{' '}
+                      araç bulduk!
+                    </div>
+                  </div>
+                </>
+              </Skeleton>
+              <Skeleton
+                className='flex items-center justify-between gap-1 md:justify-end'
+                visible={
+                  !transferSearchResultsQuery.data ||
+                  transferSearchResultsQuery.isLoading
+                }
+              >
+                <div>
+                  <Button
+                    size='sm'
+                    color='black'
+                    className='flex border-gray-400 px-6 font-medium md:hidden'
+                    variant='outline'
+                    onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                    hiddenFrom='md'
+                  >
+                    Filtreler
+                  </Button>
+                </div>
+                <div className='flex items-center justify-end gap-1'>
+                  {filterOptions.map((option) => (
+                    <Button
+                      size='sm'
+                      className={
+                        order === option.value
+                          ? 'border-0 bg-blue-200 px-3 font-medium text-blue-700'
+                          : 'border-gray-400 px-3 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                      }
+                      key={option.value}
+                      leftSection={order === option.value ? <FaCheck /> : ''}
+                      color='blue'
+                      variant={order === option.value ? 'filled' : 'outline'}
+                      onClick={() =>
+                        setFilterParams({
+                          order: option.value,
+                        })
+                      }
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </div>
+              </Skeleton>
               <div>
                 <NativeSelect
+                  className='hidden font-medium'
                   size='sm'
                   value={order ? order : ''}
                   data={[
-                    { label: 'Fiyat Artan', value: SortOrderEnums.priceAsc },
+                    { label: 'En Ucuz', value: SortOrderEnums.priceAsc },
                     {
-                      label: 'Fiyat Azalan',
+                      label: 'En Pahalı',
                       value: SortOrderEnums.priceDesc,
                     },
                   ]}
@@ -248,6 +313,21 @@ const TransferSearchResults = () => {
                 />
               </div>
             </div>
+            <Skeleton
+              className='col-span-2 mt-2 mb-4 flex md:hidden'
+              visible={
+                !transferSearchResultsQuery.data ||
+                transferSearchResultsQuery.isLoading
+              }
+            >
+              <>
+                <div className='flex items-center gap-2 md:hidden'>
+                  <div className='text-sm font-semibold text-gray-500'>
+                    Transferiniz için toplam {totalCount} araç bulduk!
+                  </div>
+                </div>
+              </>
+            </Skeleton>
             <div className='grid gap-4 md:gap-6'>
               {filteredData.length === 0 &&
                 (!transferSearchResultsQuery.data ||
