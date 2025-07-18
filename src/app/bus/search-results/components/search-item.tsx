@@ -28,7 +28,8 @@ const BusSearchItem: React.FC<Props> = ({
   const travelDuration = dayjs.duration(arrivalDate.diff(departureDate))
 
   return (
-    <div className='rounded-lg border border-gray-300'>
+    <div className='relative rounded-lg border border-gray-300'>
+      <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400 md:mt-0' />
       <div className='p-3'>
         <div className='flex items-center gap-3'>
           <div className='w-[120px]'>
