@@ -42,26 +42,26 @@ const nextConfig: NextConfig = {
       //   source: '/ucak-bileti/:slug',
       //   destination: '/flight/:slug',
       // },
-      // {
-      //   source: '/otel',
-      //   destination: '/hotel/',
-      // },
-      // {
-      //   source: '/arac',
-      //   destination: '/car/',
-      // },
-      // {
-      //   source: '/otobus',
-      //   destination: '/bus/',
-      // },
-      // {
-      //   source: '/transfer',
-      //   destination: '/transfer/',
-      // },
-      // {
-      //   source: '/tur',
-      //   destination: '/tour/',
-      // },
+      {
+        source: '/otel',
+        destination: '/landings/hotel',
+      },
+      {
+        source: '/arac',
+        destination: '/landings/car',
+      },
+      {
+        source: '/otobus',
+        destination: '/landings/bus',
+      },
+      {
+        source: '/transfer',
+        destination: '/landings/transfer',
+      },
+      {
+        source: '/tur',
+        destination: '/landings/tour/',
+      },
       // {
       //   source: '/iletisim',
       //   destination: '/contact-us/',
