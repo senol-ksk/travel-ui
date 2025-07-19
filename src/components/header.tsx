@@ -77,6 +77,7 @@ export const Header = () => {
                     <Link
                       className='rounded p-2 hover:bg-blue-50'
                       href={item.url}
+                      prefetch={false}
                     >
                       {item.title}
                     </Link>
