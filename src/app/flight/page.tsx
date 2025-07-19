@@ -9,6 +9,7 @@ import {
   FlightLandingWidget,
 } from '@/types/cms-types'
 import { Link } from 'next-view-transitions'
+import { notFound } from 'next/navigation'
 
 export default async function FlightLandingPage() {
   const data = (
@@ -17,7 +18,7 @@ export default async function FlightLandingPage() {
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
 
   const params = data?.params
   const widgets = data?.widgets

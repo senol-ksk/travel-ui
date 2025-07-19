@@ -70,10 +70,10 @@ const nextConfig: NextConfig = {
         source: '/yardim/:slug',
         destination: '/help-center/:slug',
       },
-      {
-        source: '/:slug',
-        destination: '/contents/:slug',
-      },
+      // {
+      //   source: '/:slug',
+      //   destination: '/contents/:slug',
+      // },
     ]
   },
 }
