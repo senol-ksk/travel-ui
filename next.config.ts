@@ -36,40 +36,40 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/ucak-bileti',
-        destination: '/flight/',
+        destination: '/landings/flight',
       },
-      {
-        source: '/ucak-bileti/:slug',
-        destination: '/flight/:slug',
-      },
-      {
-        source: '/otel',
-        destination: '/hotel/',
-      },
-      {
-        source: '/arac',
-        destination: '/car/',
-      },
-      {
-        source: '/otobus',
-        destination: '/bus/',
-      },
-      {
-        source: '/transfer',
-        destination: '/transfer/',
-      },
-      {
-        source: '/tur',
-        destination: '/tour/',
-      },
-      {
-        source: '/iletisim',
-        destination: '/contact-us/',
-      },
-      {
-        source: '/yardim/:slug',
-        destination: '/help-center/:slug',
-      },
+      // {
+      //   source: '/ucak-bileti/:slug',
+      //   destination: '/flight/:slug',
+      // },
+      // {
+      //   source: '/otel',
+      //   destination: '/hotel/',
+      // },
+      // {
+      //   source: '/arac',
+      //   destination: '/car/',
+      // },
+      // {
+      //   source: '/otobus',
+      //   destination: '/bus/',
+      // },
+      // {
+      //   source: '/transfer',
+      //   destination: '/transfer/',
+      // },
+      // {
+      //   source: '/tur',
+      //   destination: '/tour/',
+      // },
+      // {
+      //   source: '/iletisim',
+      //   destination: '/contact-us/',
+      // },
+      // {
+      //   source: '/yardim/:slug',
+      //   destination: '/help-center/:slug',
+      // },
       // {
       //   source: '/:slug',
       //   destination: '/contents/:slug',
