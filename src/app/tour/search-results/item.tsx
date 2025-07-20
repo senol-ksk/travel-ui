@@ -5,6 +5,7 @@ import {
 } from '@/modules/tour/type'
 import {
   AspectRatio,
+  Badge,
   Box,
   Button,
   Divider,
@@ -24,7 +25,7 @@ import { useTourSearchResultsQuery } from '@/app/tour/search-results/useSearchRe
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { TourDropdown } from './_components/dropdown'
-import { IoArrowForward } from 'react-icons/io5'
+import { IoLocationSharp } from 'react-icons/io5'
 import { MdOutlineChevronRight } from 'react-icons/md'
 import { useQueryStates } from 'nuqs'
 import { tourSearchResultParamParser } from '@/modules/tour/searchResultParams'
@@ -52,12 +53,11 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
     sessionToken: searchParamsQuery.data?.data?.sessionToken,
     isCruise: searchParams.isCruise,
   })
-
   return (
     <div className='grid grid-cols-1 rounded-md border border-gray-300 shadow md:grid-cols-5'>
-      <div className='grid gap-3 p-3 md:col-span-4 md:gap-5 lg:p-5'>
+      <div className='grid gap-3 p-3 md:col-span-4 md:gap-5'>
         <div className='grid grid-cols-12 items-start gap-4'>
-          <div className='col-span-12 md:col-span-3'>
+          <div className='col-span-12 md:col-span-5'>
             <Box className='relative'>
               <Transition
                 mounted={isImageLoading}
@@ -76,7 +76,7 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
               </Transition>
               <AspectRatio>
                 <Image
-                  mah={200}
+                  mah={230}
                   loading='lazy'
                   src={data.imageUrl}
                   alt={data.title}
@@ -86,17 +86,27 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
                   }}
                 />
               </AspectRatio>
+              <div className='absolute start-0 end-0 top-0 bottom-0 m-2 rounded-md'>
+                <Badge className='bg-orange-800 p-3 text-white opacity-90 shadow-lg'>
+                  Son {selectedTour.quota} kişi
+                </Badge>
+              </div>
             </Box>
           </div>
-          <div className='col-span-12 flex flex-col gap-3 md:col-span-9'>
+          <div className='col-span-12 flex flex-col gap-3 md:col-span-7'>
             <Title order={3} className='text-md font-semibold lg:text-lg'>
               {data.region.title}
             </Title>
-            <div className='text-sm'>{data.description}</div>
+            <div className='flex gap-2 text-sm'>
+              <span>
+                <LiaInfoCircleSolid size={20} className='text-blue-800' />
+              </span>
+              {data.description}
+            </div>
 
             <div className='flex gap-2 text-sm text-gray-700'>
               <div>
-                <LiaInfoCircleSolid size={22} />
+                <IoLocationSharp size={20} className='text-blue-800' />
               </div>
               <div>{data.title}</div>
             </div>
@@ -119,15 +129,17 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
               selectedTour.totalPrice.currency ?? 'TRY'
             )}
           </small>
-          <div className='text-xl font-semibold'>
+          <div className='text-2xl font-semibold'>
             {formatCurrency(selectedTour.tlPrice.value)}
           </div>
         </div>
         <div className='md:w-full'>
           <Button
+            className='text-lg'
+            radius={'md'}
             component={Link}
             href={detailUrl}
-            rightSection={<MdOutlineChevronRight />}
+            rightSection={<MdOutlineChevronRight size={18} />}
             fullWidth
           >
             Seç

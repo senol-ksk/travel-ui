@@ -64,17 +64,20 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   }
   const filterOptions = [
     {
-      label: 'Fiyat Artan',
+      label: 'En Ucuz',
       value: HotelSortOrderEnums.priceAscending,
     },
     {
-      label: 'Fiyat Azalan',
+      label: 'En Pahalı',
       value: HotelSortOrderEnums.priceDescending,
+    },
+    {
+      value: HotelSortOrderEnums.listingRateDescending,
+      label: 'Popüler Oteller',
     },
   ]
   const totalCount =
     searchParamsQuery.data?.hotelSearchResponse.totalHotelFound ?? 0
-
   const { orderBy, ...restFilterParams } = filterParams
   const [opened, { open, close }] = useDisclosure(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -109,8 +112,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
       )}
       <Container className='px-0'>
         <div className='py-5 lg:py-10'>
-          <div className='grid items-start gap-4 md:grid-cols-8 md:gap-5'>
-            <div className='hidden md:col-span-2 md:block'>
+          <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
+            <div className='hidden md:col-span-1 md:block'>
               {isMobile ? (
                 <Drawer opened={opened} onClose={close}>
                   {mounted && (
@@ -459,8 +462,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                 </div>
               )}
             </div>
-            <div className='grid gap-4 pb-20 md:col-span-6'>
-              <div className='grid gap-3 md:flex md:gap-1'>
+            <div className='grid gap-4 pb-20 md:col-span-3'>
+              <div className='grid gap-3 md:flex md:justify-between md:gap-1'>
                 <Skeleton
                   visible={
                     hotelSearchRequestQuery.isLoading ||
@@ -473,7 +476,9 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                       <span className='text-lg font-bold'>
                         {searchParams.destination}, Otelleri
                       </span>{' '}
-                      için toplam {totalCount} tesis bulduk!
+                      için toplam{' '}
+                      <span className='text-lg font-bold'>{totalCount}</span>{' '}
+                      tesis bulduk!
                     </div>
                   </div>
                 </Skeleton>
@@ -549,7 +554,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                       }
                     >
                       <NativeSelect
-                        className='mx-1 w-auto font-medium'
+                        className='mx-1 w-50 font-medium'
                         size='sm'
                         style={{ width: 'fit-content' }}
                         value={filterParams.orderBy}
@@ -560,17 +565,17 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         }}
                         data={[
                           {
-                            label: 'Fiyat Artan',
+                            label: 'En Ucuz',
                             value: HotelSortOrderEnums.priceAscending,
                           },
                           {
-                            label: 'Fiyat Azalan',
+                            label: 'En Pahalı',
                             value: HotelSortOrderEnums.priceDescending,
                           },
 
                           {
                             value: HotelSortOrderEnums.listingRateDescending,
-                            label: 'Önerilen Oteller',
+                            label: 'Popüler Oteller',
                           },
                           {
                             value: HotelSortOrderEnums.nameAscending,

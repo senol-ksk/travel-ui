@@ -9,6 +9,7 @@ import {
   CloseButton,
   Container,
   Drawer,
+  Modal,
   NativeSelect,
   rem,
   RemoveScroll,
@@ -27,17 +28,22 @@ import { useSearchRequest } from '@/app/bus/useSearchResults'
 import {
   BusGender,
   BusSearchResultItem,
+  RouteInfo,
   Seat,
   SeatColors,
 } from '@/app/bus/types'
 import { BusFrame } from '@/app/bus/search-results/components/bus-frame'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { filterParsers, SortOrderEnums } from '@/modules/bus/searchParams'
+import {
+  busSearchParams,
+  filterParsers,
+  SortOrderEnums,
+} from '@/modules/bus/searchParams'
 import { useFilterActions } from './filter-actions'
 import { cleanObj } from '@/libs/util'
-import { CiFilter } from 'react-icons/ci'
 import { PriceNumberFlow } from '@/components/price-numberflow'
-
+import { FaCheck } from 'react-icons/fa'
+import { TripDetail } from '@/app/bus/search-results/components/trip-detail'
 const skeltonLoader = new Array(3).fill(true)
 
 const BusSearchResults: React.FC = () => {
@@ -60,12 +66,14 @@ const BusSearchResults: React.FC = () => {
   const initBusPaymentProcess = useBusSearchInitPaymentProcess()
 
   const seatData = seatRequestMutation.data
+  const routeInfos = seatRequestMutation.data?.routeInfos
+  // console.log('Allah derim', routeInfos)
   const router = useTransitionRouter()
-
   const [seatSelectIsOpened, { open: openSeatSelect, close: closeSeatSelect }] =
     useDisclosure(false)
   const [selectedBus, setSelectedBus] = useState<BusSearchResultItem | null>()
   const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
+  const [selectedRouteInfos, setSelecetedRouteInfos] = useState<RouteInfo[]>([])
 
   if (
     searchRequestQuery.hasNextPage &&
@@ -113,7 +121,6 @@ const BusSearchResults: React.FC = () => {
       setSelectedSeatsData([])
     }
   }
-
   const searchResultPages = searchRequestQuery.data?.pages
   const hasSearchResult = !(
     !searchRequestQuery.isLoading &&
@@ -154,7 +161,25 @@ const BusSearchResults: React.FC = () => {
       id: bus.companyId,
       label: bus.company,
     })) ?? []
-
+  const totalCount = busSearchResults?.length ?? 0
+  const storedData = localStorage.getItem('bus-search-engine')
+  const parsedData = storedData ? JSON.parse(storedData) : null
+  const destinationName = parsedData?.Destination?.Name ?? ''
+  const originName = parsedData?.Origin?.Name ?? ''
+  const filterOptions = [
+    {
+      label: 'En Ucuz',
+      value: SortOrderEnums.priceAsc,
+    },
+    {
+      label: 'En Pahalı',
+      value: SortOrderEnums.priceDesc,
+    },
+    {
+      label: 'Kalkış Saatine Göre',
+      value: SortOrderEnums.hourAsc,
+    },
+  ]
   if (!hasSearchResult) {
     return (
       <div className='container py-3'>
@@ -176,8 +201,8 @@ const BusSearchResults: React.FC = () => {
           ))}
         <div className='@container pt-5 md:pt-10'>
           <Container>
-            <div className='grid items-start gap-4 pb-10 md:grid-cols-8 md:gap-6 md:pb-20'>
-              <div className='md:col-span-2'>
+            <div className='grid items-start gap-0 pb-10 md:grid-cols-4 md:gap-6 md:pb-20'>
+              <div className='md:col-span-1'>
                 <div>
                   <Transition
                     transition={'slide-right'}
@@ -397,45 +422,137 @@ const BusSearchResults: React.FC = () => {
                   </Transition>
                 </div>
               </div>
-              <div className='md:col-span-6'>
-                <div className='flex items-center gap-2 pb-3'>
-                  <div>
+              <div className='md:col-span-3'>
+                <Skeleton
+                  className=''
+                  visible={
+                    searchRequestQuery.isLoading ||
+                    searchRequestQuery.isFetchingNextPage ||
+                    searchRequestQuery.isFetching
+                  }
+                >
+                  <div className='flex items-center justify-between gap-1'>
                     <Button
                       size='sm'
-                      leftSection={<CiFilter size={23} />}
-                      color='green'
+                      color='black'
+                      className='border-gray-400 px-8 font-medium md:hidden'
+                      variant='outline'
                       onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                      hiddenFrom='md'
                     >
                       Filtreler
                     </Button>
+                    {totalCount > 1 && (
+                      <div className='hidden items-center gap-2 md:flex'>
+                        <div>
+                          <span className='text-lg font-bold'>
+                            {originName} - {destinationName}
+                            {''}
+                          </span>
+                          {''} için toplam{' '}
+                          <span className='text-lg font-bold'>
+                            {' '}
+                            {totalCount}{' '}
+                          </span>
+                          sefer bulduk!
+                        </div>
+                      </div>
+                    )}
+
+                    <div className='flex items-center gap-2'>
+                      <div className='hidden items-center gap-2 md:flex'>
+                        {totalCount > 0 && (
+                          <Skeleton
+                            className='hidden items-center gap-2 md:flex'
+                            visible={
+                              searchRequestQuery.isLoading ||
+                              searchRequestQuery.isFetchingNextPage ||
+                              searchRequestQuery.isFetching
+                            }
+                          >
+                            {filterOptions.map((option) => (
+                              <Button
+                                size='sm'
+                                className={
+                                  order === option.value
+                                    ? 'border-0 bg-blue-200 font-medium text-blue-700'
+                                    : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                                }
+                                key={option.value}
+                                leftSection={
+                                  order === option.value ? <FaCheck /> : ''
+                                }
+                                color='blue'
+                                variant={
+                                  order === option.value ? 'filled' : 'outline'
+                                }
+                                onClick={() =>
+                                  setFilterParams({
+                                    order: option.value,
+                                  })
+                                }
+                              >
+                                {option.label}
+                              </Button>
+                            ))}
+                          </Skeleton>
+                        )}
+                      </div>
+
+                      <Skeleton
+                        className='md:hidden'
+                        visible={
+                          searchRequestQuery.isLoading ||
+                          searchRequestQuery.isFetchingNextPage ||
+                          searchRequestQuery.isFetching
+                        }
+                      >
+                        <div>
+                          <NativeSelect
+                            className='ms-auto w-full font-medium md:w-auto'
+                            size='sm'
+                            data={[
+                              {
+                                label: 'En Ucuz',
+                                value: SortOrderEnums.priceAsc,
+                              },
+                              {
+                                label: 'En Pahalı',
+                                value: SortOrderEnums.priceDesc,
+                              },
+                              {
+                                label: 'Kalkış Saatine Göre',
+                                value: SortOrderEnums.hourAsc,
+                              },
+                            ]}
+                            value={order}
+                            onChange={({ currentTarget: { value } }) => {
+                              setFilterParams({
+                                order: value as SortOrderEnums,
+                              })
+                            }}
+                          />
+                        </div>
+                      </Skeleton>
+                    </div>
                   </div>
-                  <div>
-                    <NativeSelect
-                      size='sm'
-                      data={[
-                        {
-                          label: 'Fiyat Artan',
-                          value: SortOrderEnums.priceAsc,
-                        },
-                        {
-                          label: 'Fiyat Azalan',
-                          value: SortOrderEnums.priceDesc,
-                        },
-                        {
-                          label: 'Kalkış Saatine Göre',
-                          value: SortOrderEnums.hourAsc,
-                        },
-                      ]}
-                      value={order}
-                      onChange={({ currentTarget: { value } }) => {
-                        setFilterParams({
-                          order: value as SortOrderEnums,
-                        })
-                      }}
-                    />
-                  </div>
-                </div>
+                </Skeleton>
+                <Skeleton
+                  className='mt-3 flex items-center gap-2'
+                  visible={
+                    searchRequestQuery.isLoading ||
+                    searchRequestQuery.isFetchingNextPage ||
+                    searchRequestQuery.isFetching
+                  }
+                >
+                  {totalCount > 0 && (
+                    <div className='flex items-center gap-2 md:hidden'>
+                      <span className='text-sm font-semibold text-gray-500'>
+                        {originName}-{destinationName}
+                        {''} için toplam {totalCount} sefer bulduk!
+                      </span>{' '}
+                    </div>
+                  )}
+                </Skeleton>
                 <div className='grid gap-4 pt-4'>
                   {searchToken &&
                     sessionToken &&
@@ -501,16 +618,19 @@ const BusSearchResults: React.FC = () => {
         onClose={() => {
           if (seatControlMutation.isPending || initBusPaymentProcess.isPending)
             return
+          setSelecetedRouteInfos([])
           setSelectedSeatsData([])
           setSelectedBus(null)
 
           closeSeatSelect()
         }}
-        title={selectedBus?.company}
+        title={
+          <div className='text-lg font-semibold'> {selectedBus?.company}</div>
+        }
         radius={'lg'}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
       >
-        <div className='flex justify-evenly gap-4 pb-5 text-xs leading-none'>
+        <div className='flex justify-evenly gap-4 pb-3 text-xs leading-none'>
           <div className='flex items-center gap-2'>
             <div>
               <div
@@ -548,82 +668,94 @@ const BusSearchResults: React.FC = () => {
             <span>Seçilen Koltuk</span>
           </div>
         </div>
+        <div className='font-nromal flex justify-center text-center text-blue-800'>
+          <TripDetail routeInfos={routeInfos} />
+        </div>
+
         {seatRequestMutation.isPending ? (
           <Skeleton h={600} w={'75%'} radius={'xl'} mx='auto' />
         ) : null}
         {seatData?.seats.length ? (
-          <div>
-            <BusFrame
-              seats={seatData.seats}
-              maxSelectCountReached={selectedSeats.length === 4}
-              onSeatSelect={(gender, selectedSeatsData) => {
-                setSelectedSeatsData((prev) => {
-                  const nextState =
-                    gender === BusGender.EMPTY
-                      ? [
-                          ...prev.filter(
-                            (item) => item.no !== selectedSeatsData.no
-                          ),
-                        ]
-                      : [...prev, { ...selectedSeatsData, gender: gender }]
+          <>
+            <div className='relative h-[calc(100vh-180px)] overflow-hidden'>
+              <div className='h-full overflow-auto px-4 pb-[100px]'>
+                <BusFrame
+                  seats={seatData.seats}
+                  maxSelectCountReached={selectedSeats.length === 4}
+                  onSeatSelect={(gender, selectedSeatsData) => {
+                    setSelectedSeatsData((prev) => {
+                      const nextState =
+                        gender === BusGender.EMPTY
+                          ? [
+                              ...prev.filter(
+                                (item) => item.no !== selectedSeatsData.no
+                              ),
+                            ]
+                          : [...prev, { ...selectedSeatsData, gender: gender }]
 
-                  return nextState
-                })
-              }}
-            />
-            <div className='flex items-center gap-3 py-3'>
-              {selectedSeats.length === 0 ? <div>Koltuk Seçiniz.</div> : null}
-              {selectedSeats.map((seat, seatIndex) => {
-                const gender = seat.gender
-                const isMale = gender === BusGender.MALE
-                const isWoman = gender === BusGender.WOMAN
+                      return nextState
+                    })
+                  }}
+                />
+              </div>
+              <div className='fixed right-0 bottom-0 left-0 z-10 bg-white px-4 py-1 shadow-lg md:py-3'>
+                <div className='flex items-center gap-3 overflow-x-auto pb-2'>
+                  {selectedSeats.length === 0 ? (
+                    <div>Koltuk Seçiniz.</div>
+                  ) : null}
+                  {selectedSeats.map((seat, seatIndex) => {
+                    const gender = seat.gender
+                    const isMale = gender === BusGender.MALE
+                    const isWoman = gender === BusGender.WOMAN
 
-                const backgroundColor = isMale
-                  ? `var(${SeatColors.MALE})`
-                  : isWoman
-                    ? `var(${SeatColors.WOMAN})`
-                    : ''
+                    const backgroundColor = isMale
+                      ? `var(${SeatColors.MALE})`
+                      : isWoman
+                        ? `var(${SeatColors.WOMAN})`
+                        : ''
 
-                return (
-                  <div
-                    key={seatIndex}
-                    className='flex size-[36px] items-center justify-center rounded-t-lg border-b-4 border-b-gray-600 pt-1 text-sm text-black'
-                    style={{
-                      backgroundColor,
-                    }}
-                  >
-                    <div className='relative'>{seat.no}</div>
-                  </div>
-                )
-              })}
-            </div>
-            <small className='text-dark-200'>
-              (Tek seferde en fazla 4 koltuk seçebilirsiniz)
-            </small>
-            <div className='flex items-center pt-4'>
-              {selectedSeats.length > 0 && (
-                <div className='text-lg font-semibold'>
-                  <PriceNumberFlow
-                    value={selectedSeats.reduce((a, b) => {
-                      return b.totalPrice.value + a
-                    }, 0)}
-                  />
+                    return (
+                      <div
+                        key={seatIndex}
+                        className='flex size-[36px] items-center justify-center rounded-t-lg border-b-4 border-b-gray-600 pt-1 text-sm text-black'
+                        style={{
+                          backgroundColor,
+                        }}
+                      >
+                        <div className='relative'>{seat.no}</div>
+                      </div>
+                    )
+                  })}
                 </div>
-              )}
-              <div className='ms-auto'>
-                <Button
-                  disabled={!selectedSeats.length}
-                  onClick={handleCheckSeatStatus}
-                  loading={
-                    seatControlMutation.isPending ||
-                    initBusPaymentProcess.isPending
-                  }
-                >
-                  Onayla ve Devam Et
-                </Button>
+                <small className='text-dark-200'>
+                  (Tek seferde en fazla 4 koltuk seçebilirsiniz)
+                </small>
+                <div className='flex items-center pt-4'>
+                  {selectedSeats.length > 0 && (
+                    <div className='text-2xl font-semibold'>
+                      <PriceNumberFlow
+                        value={selectedSeats.reduce((a, b) => {
+                          return b.totalPrice.value + a
+                        }, 0)}
+                      />
+                    </div>
+                  )}
+                  <div className='ms-auto'>
+                    <Button
+                      disabled={!selectedSeats.length}
+                      onClick={handleCheckSeatStatus}
+                      loading={
+                        seatControlMutation.isPending ||
+                        initBusPaymentProcess.isPending
+                      }
+                    >
+                      Onayla ve Devam Et
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </>
         ) : (
           seatData?.seats.length === 0 &&
           seatRequestMutation.isSuccess && <div>No seat data</div>

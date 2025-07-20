@@ -24,12 +24,17 @@ import { useCarSearchResults } from '@/app/car/search-results/useSearchResult'
 import { CarSearchResultItem } from '@/app/car/component/result-item'
 import { CarSearchRequest, CarSearchResultItemType } from '@/app/car/types'
 import { carDetailParams } from '@/app/car/searchParams'
-import { filterParsers, FuelTypes } from '@/modules/carrent/types'
+import {
+  filterParsers,
+  FuelTypes,
+  SortOrderEnums,
+} from '@/modules/carrent/types'
 import { SortBySelect } from '@/app/car/component/sort-by-select'
 import { useFilterActions } from '@/app/car/search-results/filter-actions'
 import { cleanObj } from '@/libs/util'
 import { CiFilter } from 'react-icons/ci'
 import { useState } from 'react'
+import { FaCheck } from 'react-icons/fa'
 
 export const createDetailParams = createSerializer(carDetailParams)
 
@@ -90,7 +95,16 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
   const totalCount = allPages?.length ?? 0
   const destinationName =
     searchRequestParams.params.carRentalSearchPanel.destination[0].name
-
+  const filterOptions = [
+    {
+      label: 'En Ucuz',
+      value: SortOrderEnums.priceAsc,
+    },
+    {
+      label: 'En Pahalı',
+      value: SortOrderEnums.priceDesc,
+    },
+  ]
   if (carSearchResult.hasNextPage && !carSearchResult.isFetchingNextPage) {
     carSearchResult.fetchNextPage()
   }
@@ -382,9 +396,9 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                 </Transition>
               </div>
               <div className='grid gap-4 md:col-span-3'>
-                <div className='grid grid-cols-2 items-center gap-2 md:grid-cols-3'>
+                <div className='grid grid-cols-3 items-center gap-2'>
                   <Skeleton
-                    className='col-span-2 hidden md:flex'
+                    className='col-span-1 hidden md:col-span-2 md:flex'
                     visible={
                       carSearchResult.isFetching ||
                       carSearchResult.isFetchingNextPage ||
@@ -397,14 +411,18 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                           <span className='text-lg font-bold'>
                             {destinationName},
                           </span>{' '}
-                          için {totalCount} araç bulduk!
+                          için{' '}
+                          <span className='text-lg font-bold'>
+                            {totalCount}
+                          </span>{' '}
+                          araç bulduk!
                         </div>
                       </div>
                     </>
                   </Skeleton>
 
                   <Skeleton
-                    className='px-2 md:hidden'
+                    className='flex px-2 md:hidden'
                     visible={
                       carSearchResult.isFetching ||
                       carSearchResult.isFetchingNextPage ||
@@ -414,14 +432,44 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     <Button
                       size='sm'
                       color='black'
-                      className='mx-1 flex border-gray-400 px-8 font-medium md:hidden'
+                      className='mx-1 border-gray-400 font-medium'
                       variant='outline'
                       onClick={() => setFilterSectionIsOpened((prev) => !prev)}
                     >
                       Filtreler
                     </Button>
                   </Skeleton>
-                  <div className='relative col-span-1 ms-auto'>
+                  <Skeleton
+                    className='col-span-2 flex items-center justify-end gap-2 md:col-span-1'
+                    visible={
+                      carSearchResult.isFetching ||
+                      carSearchResult.isFetchingNextPage ||
+                      carSearchResult.isLoading
+                    }
+                  >
+                    {filterOptions.map((option) => (
+                      <Button
+                        size='sm'
+                        className={
+                          order === option.value
+                            ? 'border-0 bg-blue-200 font-medium text-blue-700'
+                            : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                        }
+                        key={option.value}
+                        leftSection={order === option.value ? <FaCheck /> : ''}
+                        color='blue'
+                        variant={order === option.value ? 'filled' : 'outline'}
+                        onClick={() =>
+                          setFilterParams({
+                            order: option.value,
+                          })
+                        }
+                      >
+                        {option.label}
+                      </Button>
+                    ))}
+                  </Skeleton>
+                  {/* <div className='relative col-span-1 ms-auto'>
                     <Skeleton
                       visible={
                         carSearchResult.isFetching ||
@@ -431,7 +479,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     >
                       <SortBySelect />
                     </Skeleton>
-                  </div>
+                  </div> */}
                 </div>
                 <Skeleton
                   className='flex items-center gap-2 px-2 md:hidden'
