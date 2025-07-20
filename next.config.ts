@@ -74,10 +74,10 @@ const nextConfig: NextConfig = {
         source: '/online-islemler-seyahatinizi-goruntuleyin',
         destination: '/online-operations',
       },
-      // {
-      //   source: '/:slug',
-      //   destination: '/contents/:slug',
-      // },
+      {
+        source: '/:slug',
+        destination: '/contents/:slug',
+      },
     ]
   },
 }
