@@ -50,9 +50,25 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
       <Carousel
         emblaOptions={{
           dragFree: true,
-          align: 'center',
           containScroll: false,
-          startIndex: dealsOfWeekData.length / 2,
+          align: (viewSize, snapSize, index) => {
+            console.log(viewSize, snapSize, index)
+            const slideElement = document.querySelector(
+              '.embla__slide'
+            ) as HTMLDivElement
+            const slideCount = document.querySelectorAll('.embla__slide').length
+            const slideWidth = slideElement?.offsetWidth
+            const slideNumber = viewSize / slideWidth
+
+            if (slideCount < slideNumber) {
+              console.log(slideCount, slideNumber, slideWidth)
+              const offsetSlider = ((slideNumber - slideCount) * slideWidth) / 2
+              console.log(offsetSlider)
+              return offsetSlider
+            } else {
+              return 0
+            }
+          },
         }}
         slideSize={'auto'}
         slideGap={{ base: 30, md: 40 }}
@@ -60,6 +76,9 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
         className={clsx('mx-auto', {
           'opacity-0': !isEmblaInitialized,
         })}
+        classNames={{
+          slide: 'embla__slide',
+        }}
       >
         {dealsOfWeekData?.map((item) => (
           <Carousel.Slide key={item.id}>

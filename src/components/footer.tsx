@@ -1,4 +1,4 @@
-import { Container, Image, ThemeIcon } from '@mantine/core'
+import { Container, Image } from '@mantine/core'
 
 import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 import {
@@ -11,6 +11,7 @@ import {
 import NextImage from 'next/image'
 
 import visaLogo from '/public/logos/visa-logo.png'
+import { Link } from 'next-view-transitions'
 
 const Footer = async () => {
   const widgetCollection = await getWidgetsByCollectionSlug()
@@ -84,9 +85,9 @@ const Footer = async () => {
           <Container className='grid gap-4 md:flex md:gap-8'>
             {widget.params.footer_menu.menus.map((menu) => (
               <div key={menu.id}>
-                <a className='hover:text-blue-600' href={menu.url}>
+                <Link className='hover:text-blue-600' href={menu.url}>
                   {menu.title}
-                </a>
+                </Link>
               </div>
             ))}
           </Container>
