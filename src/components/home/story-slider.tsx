@@ -52,7 +52,6 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
           dragFree: true,
           containScroll: false,
           align: (viewSize, snapSize, index) => {
-            console.log(viewSize, snapSize, index)
             const slideElement = document.querySelector(
               '.embla__slide'
             ) as HTMLDivElement
@@ -61,9 +60,8 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
             const slideNumber = viewSize / slideWidth
 
             if (slideCount < slideNumber) {
-              console.log(slideCount, slideNumber, slideWidth)
               const offsetSlider = ((slideNumber - slideCount) * slideWidth) / 2
-              console.log(offsetSlider)
+
               return offsetSlider
             } else {
               return 0

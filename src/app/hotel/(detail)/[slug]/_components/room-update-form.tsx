@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { Button } from '@mantine/core'
 import dayjs from 'dayjs'
+import UTC from 'dayjs/plugin/utc'
+
+dayjs.extend(UTC)
 
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'

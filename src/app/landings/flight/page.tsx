@@ -12,7 +12,6 @@ import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
 
 export default async function FlightLandingPage() {
-  console.log('landing ... flight')
   const data = (
     await getContent<CmsContent<FlightLandingWidget[], FlightLandingParams>>(
       'ucak-bileti/ucak-bileti'
