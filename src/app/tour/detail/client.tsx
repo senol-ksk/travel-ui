@@ -8,6 +8,7 @@ import {
   Group,
   Container,
   Image,
+  Title,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useEffect, useRef, useState } from 'react'
@@ -26,6 +27,13 @@ import { ExtraServicePanel } from './extra-services'
 import { reservationParsers } from '@/app/reservation/searchParams'
 import { tourDetailPageParamParser } from '@/modules/tour/detailSearchParams'
 import { CruiseSearchEngine } from '@/modules/cruise'
+import { IoCalendarClearOutline, IoMapOutline } from 'react-icons/io5'
+import { MdOutlineCameraAlt } from 'react-icons/md'
+import { TourMediaGallery } from '@/app/tour/_components/media-gallery/media-gallery'
+import { TourTableOfContents } from '@/app/tour/_components/table-of-contents'
+import { BiMoon } from 'react-icons/bi'
+import { IoIosAirplane } from 'react-icons/io'
+import dayjs from 'dayjs'
 
 const TourDetailClient = () => {
   const router = useTransitionRouter()
@@ -253,7 +261,17 @@ const TourDetailClient = () => {
   const videos = detailQuery.data?.detail.images.filter((item) =>
     item.includes('youtube')
   )
-
+  const [
+    isMediaGalleryOpened,
+    { open: openMediaGallery, close: closeMediaGallery },
+  ] = useDisclosure(false)
+  const [galleryOpened, setGalleryOpened] = useState(false)
+  const startDate = detailQuery.data?.package.startDate
+  const endDate = detailQuery.data?.package.endDate
+  const dayjsStartDate = dayjs(startDate)
+  const dayjsEndDate = dayjs(endDate)
+  const totalNights = dayjsEndDate.diff(dayjsStartDate, 'day')
+  const totalDays = totalNights + 1
   return (
     <>
       <div className='border-b p-4'>
@@ -276,11 +294,14 @@ const TourDetailClient = () => {
               <Skeleton h={20} radius={'xl'} className='max-w-6xl' />
             </div>
           ) : detailQuery.data ? (
-            <>
-              <div className='grid auto-cols-fr gap-4 px-3 sm:grid-cols-4 md:grid-rows-2'>
+            <div>
+              <div
+                onClick={() => setGalleryOpened(true)}
+                className='relative grid cursor-pointer auto-cols-fr gap-4 px-3 sm:grid-cols-4 md:grid-rows-2 md:px-0'
+              >
                 <figure
                   style={{ contentVisibility: 'auto' }}
-                  className='relative place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
+                  className='place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
                 >
                   <Image
                     className='aspect-16/9 h-full w-full rounded-md object-cover'
@@ -291,7 +312,7 @@ const TourDetailClient = () => {
                 {images?.slice(1, 5).map((image, imageIndex) => (
                   <figure
                     key={imageIndex}
-                    className='relative hidden gap-3 place-self-stretch rounded-md sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
+                    className='hidden gap-3 place-self-stretch rounded-md sm:col-start-[span_1] sm:sm:row-start-[span_1] sm:grid'
                     style={{ contentVisibility: 'auto' }}
                   >
                     <Image
@@ -301,11 +322,73 @@ const TourDetailClient = () => {
                     />
                   </figure>
                 ))}
-              </div>
-              <div className='grid gap-4 py-4 md:grid-cols-12 md:py-6'>
-                <div className='order-1 col-span-12 md:order-0 md:col-span-8'>
-                  <TourDetail data={detailQuery.data} />
+                <div className='absolute end-0 right-0 bottom-1 m-1 hidden h-10 md:flex'>
+                  <Button
+                    color={'black'}
+                    opacity={'.65'}
+                    leftSection={<MdOutlineCameraAlt size={20} />}
+                    onClick={openMediaGallery}
+                    radius={'md'}
+                  >
+                    Galeri ({images?.length})
+                  </Button>
                 </div>
+              </div>
+              <div className='mt-10 mb-6'>
+                <TourTableOfContents tourInfo={detailQuery.data} />
+              </div>
+              <div className='grid grid-cols-12 gap-4'>
+                {/* detail-viewdan taşındı */}
+                <div className='relative col-span-12 gap-5 rounded-lg border p-5 shadow-sm md:col-span-8'>
+                  <Title className='text-md mb-4 md:text-2xl'>
+                    {detailQuery.data.package.title}
+                  </Title>
+
+                  <div className='my-3 grid grid-cols-1 gap-4 md:grid-cols-2'>
+                    <div className='flex items-center gap-4'>
+                      <div className='text-blue-800'>
+                        <IoCalendarClearOutline size={20} />
+                      </div>
+                      <div className='font-semibold'>
+                        {dayjsStartDate.format("DD MMM'YY")} -{' '}
+                        {dayjsEndDate.format("DD MMM'YY")} arası
+                      </div>
+                    </div>
+
+                    <div className='flex items-center gap-4'>
+                      <div className='text-blue-800'>
+                        <BiMoon size={20} />
+                      </div>
+                      <div className='font-semibold'>
+                        {totalNights} gece {totalDays} gün
+                      </div>
+                    </div>
+
+                    {detailQuery.data.detail.flightInformation?.length > 0 && (
+                      <div className='flex items-center gap-4'>
+                        <div className='text-blue-800'>
+                          <IoIosAirplane size={20} />
+                        </div>
+                        <div
+                          className='font-semibold'
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              detailQuery.data.detail.flightInformation[0],
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className='text-dark-200 bottom-5 hidden text-sm md:flex'>
+                    Not : Çocuk kategorisi 7-12 yaşları arasıdır. Tur sirküsü
+                    yayımlandığı 03.02.2025 tarihinde geçerlidir. Aynı tura ait,
+                    daha sonraki bir tarihte yayımlanacak tur sirküsü bir
+                    öncekini geçersiz kılar. Zorunlu ek hizmetler fiyata
+                    dahildir.
+                  </div>
+                </div>
+
                 <div className='order-0 col-span-12 md:order-1 md:col-span-4'>
                   <div className='relative'>
                     <LoadingOverlay
@@ -347,7 +430,12 @@ const TourDetailClient = () => {
                   </div>
                 </div>
               </div>
-            </>
+              <div className='grid gap-4 py-4 md:grid-cols-12 md:py-6'>
+                <div className='order-1 col-span-12 md:order-0 md:col-span-12'>
+                  <TourDetail data={detailQuery.data} />
+                </div>
+              </div>
+            </div>
           ) : (
             <div>no data</div>
           )}
@@ -416,6 +504,14 @@ const TourDetailClient = () => {
           </Group>
         </div>
       </Modal>
+      {images && (
+        <TourMediaGallery
+          images={images}
+          title={detailQuery?.data?.package?.title}
+          opened={galleryOpened}
+          onClose={() => setGalleryOpened(false)}
+        />
+      )}
     </>
   )
 }
