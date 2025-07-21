@@ -1,4 +1,16 @@
-import { Image, Container, rem, Title, Box } from '@mantine/core'
+import {
+  Image,
+  Container,
+  rem,
+  Title,
+  Box,
+  Accordion,
+  AccordionItem,
+  AccordionControl,
+  AccordionPanel,
+  ScrollArea,
+  AspectRatio,
+} from '@mantine/core'
 import NextImage from 'next/image'
 
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
@@ -21,20 +33,20 @@ export default async function FlightLandingPage() {
   if (!data) return notFound()
 
   const { params, widgets } = data
-  const teaser = widgets
-    .filter((item) => item.point === 'teaser')
-    .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
-
   const popularDomesticFlights = widgets.filter(
     (widget) => widget.point === 'popular_domestic_flights'
   )
   const popularInternationalFlights = widgets.filter(
     (widget) => widget.point === 'popular_international_flights'
   )
+  const faqs = widgets.filter((widget) => widget.point === 'sss')
+  const popular_airlines = widgets.filter(
+    (widget) => widget.point === 'popular_airlines'
+  )
 
   return (
     <>
-      <div className='relative border-b py-5 shadow-xs md:py-9'>
+      <div className='relative border-b bg-blue-800 py-5 shadow-xs md:py-9'>
         <Image
           component={NextImage}
           src={cdnImageUrl(params?.image.value)}
@@ -52,75 +64,135 @@ export default async function FlightLandingPage() {
           </div>
         </Container>
       </div>
-      <Container className='py-10'>
-        <div className='grid gap-4'>
-          <div className='grid grid-cols-1 justify-stretch gap-2 md:grid-cols-3 md:gap-4'>
-            {teaser.map((teaserItem) => (
-              <div key={teaserItem.id} className='rounded border p-3'>
-                {teaserItem.title}
-              </div>
-            ))}
-          </div>
-          {widgets
-            .filter((widget) => widget.point === 'top_content')
-            .map((widget) => (
-              <div key={widget.id}>
-                <article>
-                  <Title order={3}>{widget.title}</Title>
-                  <div>
-                    <div>{widget.params.sort_desc?.value}</div>
-                  </div>
-                </article>
-              </div>
-            ))}
-          <div className='grid gap-4'>
-            <Title order={2} className='text-center'>
-              Popüler Uçuşlar
-            </Title>
-
+      <div>
+        <Container className='py-10'>
+          <div className='flex flex-col gap-7 md:gap-12'>
             {popularDomesticFlights.length > 0 && (
               <div>
-                <Title order={4}>Yurt İçi Popüler Uçuşlar</Title>
+                <Title fz={'h3'} mb={'lg'}>
+                  Yurt İçi Popüler Uçuşlar
+                </Title>
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                   {popularDomesticFlights.map((flight) => (
-                    <Box
-                      component={Link}
-                      href={`/ucak-bileti/${flight.params.destinations.destinations
-                        .map((item) => item.slug)
-                        .join('-')}`}
+                    <TicketBox
                       key={flight.id}
-                      className='rounded border p-3'
-                    >
-                      <div>{flight.title}</div>
-                      <div>{flight.params.sort_desc?.value}</div>
-                    </Box>
+                      description={flight.params.sort_desc.value}
+                      image={flight.params.image.value}
+                      title={flight.title}
+                      url={flight.params.destinations.destinations
+                        .map((item) => item.slug)
+                        .join('-')}
+                    />
                   ))}
                 </div>
               </div>
             )}
             {popularInternationalFlights.length > 0 && (
               <div>
-                <Title order={4}>Yurt Dışı Popüler Uçuşlar</Title>
+                <Title order={4} mb={'lg'} fz={'h3'}>
+                  Yurt Dışı Popüler Uçuşlar
+                </Title>
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                   {popularInternationalFlights.map((flight) => (
-                    <Box
-                      component={Link}
-                      href={`/ucak-bileti/${flight.params.destinations.destinations
-                        .map((item) => item.slug)
-                        .join('-')}`}
+                    <TicketBox
                       key={flight.id}
-                      className='rounded border p-3'
-                    >
-                      <div>{flight.title}</div>
-                      <div>{flight.params.sort_desc?.value}</div>
-                    </Box>
+                      description={flight.params.sort_desc.value}
+                      image={flight.params.image.value}
+                      title={flight.title}
+                      url={flight.params.destinations.destinations
+                        .map((item) => item.slug)
+                        .join('-')}
+                    />
                   ))}
                 </div>
               </div>
             )}
+            {popular_airlines.length > 0 && (
+              <div>
+                <Title fz={'h3'} mb={'lg'}>
+                  Popüler Hava Yolları
+                </Title>
+                <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
+                  <div className='flex gap-4 whitespace-nowrap'>
+                    {popular_airlines.map((airline) => (
+                      <div
+                        key={airline.id}
+                        className='flex h-[60px] items-center gap-3 rounded-md border p-5'
+                      >
+                        <div>
+                          <AspectRatio miw={30} maw={30}>
+                            <Image
+                              src={cdnImageUrl(airline.params.image.value)}
+                              alt={airline.title}
+                            />
+                          </AspectRatio>
+                        </div>
+                        <div>{airline.title}</div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+            {faqs.length > 0 && (
+              <div>
+                <Title order={2} mb={'lg'} fz={'h3'}>
+                  Sıkça Sorulan Sorular
+                </Title>
+                <Accordion
+                  chevronPosition='right'
+                  variant='contained'
+                  radius='md'
+                >
+                  {faqs.map((faq) => {
+                    return (
+                      <AccordionItem key={faq.id} value={faq.title}>
+                        <AccordionControl
+                          classNames={{
+                            label: 'font-medium py-2 md:py-6',
+                          }}
+                        >
+                          {faq.title}
+                        </AccordionControl>
+                        <AccordionPanel>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: faq.params.description.value,
+                            }}
+                          />
+                        </AccordionPanel>
+                      </AccordionItem>
+                    )
+                  })}
+                </Accordion>
+              </div>
+            )}
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </>
+  )
+}
+
+type TicketBoxProps = {
+  image: string
+  title: string
+  description: string
+  url: string
+}
+
+function TicketBox({ url, image, title, description }: TicketBoxProps) {
+  return (
+    <Box
+      component={Link}
+      href={url}
+      className='flex h-[200px] flex-col justify-end rounded-lg border bg-white p-3 text-white'
+      style={{ backgroundImage: `url(${cdnImageUrl(image)})` }}
+      bgsz={'cover'}
+      bgp={'center'}
+    >
+      <div className='text-lg font-bold'>{title}</div>
+      <div>{description}</div>
+    </Box>
   )
 }
