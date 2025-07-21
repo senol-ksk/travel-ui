@@ -5,6 +5,7 @@ export const operationResultParams = {
   bookingCode: parseAsString,
   firstName: parseAsString,
   lastName: parseAsString,
+  partialPaymentError: parseAsString,
 }
 
 export const operationResultFormSchema = z.object({
@@ -22,3 +23,10 @@ export type OperationResultFormSchemaType = z.infer<
 export type OperationResultParamTypes = inferParserType<
   typeof operationResultParams
 >
+
+export const flightRefundParams = {
+  bookingCode: parseAsString,
+  surname: parseAsString,
+}
+
+export const loadFlightRefundParams = createLoader(flightRefundParams)

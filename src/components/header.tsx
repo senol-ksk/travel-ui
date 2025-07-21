@@ -123,13 +123,13 @@ export const Header = () => {
                   </UnstyledButton>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item component={Link} href='/parafly'>
+                  <Menu.Item component={Link} href='/parafly/bonus-query'>
                     ParafPara Sorgula
                   </Menu.Item>
-                  <Menu.Item component={Link} href='/parafly/cancel-flight'>
+                  <Menu.Item component={Link} href='/parafly/calculate'>
                     ParafPara Hesapla
                   </Menu.Item>
-                  <Menu.Item component={Link} href='/parafly/checkin'>
+                  <Menu.Item component={Link} href='/parafly/about'>
                     Parafly Travel Nedir?
                   </Menu.Item>
                 </Menu.Dropdown>

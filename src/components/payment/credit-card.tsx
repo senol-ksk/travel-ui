@@ -4,13 +4,9 @@ import { Input, NativeSelect, TextInput } from '@mantine/core'
 import { range } from '@mantine/hooks'
 import { formatCreditCard } from 'cleave-zen'
 import dayjs from 'dayjs'
-import { Controller, useForm, UseFormReturn } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  CreditCardSchemaType,
-  paymentValidationSchema,
-  PaymentValidationSchemaTypes,
-} from '@/libs/credit-card-utils'
+import { Controller, UseFormReturn } from 'react-hook-form'
+
+import { CreditCardSchemaType } from '@/libs/credit-card-utils'
 
 const cardExpiredYearList = () =>
   yearList(dayjs().get('year'), dayjs().get('year') + 20).map((year) => ({
@@ -40,6 +36,7 @@ export const CreditCardForm: React.FC<IProps> = ({ form }) => {
           placeholder='Kart Üzerindeki İsim'
           {...form.register('cardOwner')}
           error={form.formState.errors.cardOwner?.message}
+          size='md'
         />
       </div>
       <div className='sm:col-span-3'>
@@ -58,17 +55,19 @@ export const CreditCardForm: React.FC<IProps> = ({ form }) => {
                 const formattedValue = formatCreditCard(value).trim()
                 field.onChange(formattedValue)
               }}
+              size='md'
             />
           )}
         />
       </div>
       <div className='sm:col-span-2'>
-        <Input.Label htmlFor='cardExpiredMonth'>
+        <Input.Label htmlFor='cardExpiredMonth' size='md'>
           Son kullanma tarihi
         </Input.Label>
         <div className='grid w-full grid-cols-2 gap-2'>
           <div>
             <NativeSelect
+              size='md'
               {...form.register('cardExpiredMonth')}
               id='cardExpiredMonth'
               data={[{ label: 'Ay', value: '' }, ...cardMonths()]}
@@ -77,6 +76,7 @@ export const CreditCardForm: React.FC<IProps> = ({ form }) => {
           </div>
           <div>
             <NativeSelect
+              size='md'
               {...form.register('cardExpiredYear')}
               error={form.formState.errors.cardExpiredYear?.message}
               data={[{ label: 'Yıl', value: '' }, ...cardExpiredYearList()]}
@@ -86,6 +86,7 @@ export const CreditCardForm: React.FC<IProps> = ({ form }) => {
       </div>
       <div className='sm:col-span-1'>
         <TextInput
+          size='md'
           type='tel'
           inputMode='numeric'
           label='CVV'

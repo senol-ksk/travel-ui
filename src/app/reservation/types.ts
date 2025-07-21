@@ -73,6 +73,33 @@ export type PaymentResponseType = {
   cardcvv2: string
   action: string
 }
+export type PartialPaymentResponseType = {
+  pan: string
+  cv2: string
+  Ecom_Payment_Card_ExpDate_Year: string
+  Ecom_Payment_Card_ExpDate_Month: string
+  clientid: string
+  amount: string
+  oid: string
+  okUrl: string
+  callbackUrl: string
+  failUrl: string
+  rnd: string
+  storetype: string
+  refreshtime: string
+  taksit: string
+  islemtipi: string
+  TranType: string
+  Currency: string
+  lang: string
+  hashAlgorithm: string
+  NATIONALIDNO: string
+  TRANID: string
+  CUSTOMERPHONE: string
+  CUSTOMEREMAIL: string
+  action: string
+  hash: string
+}
 
 type FlightGroupID = 1 | 0
 

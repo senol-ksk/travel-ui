@@ -7,7 +7,7 @@ import { FlightSearchView } from '@/app/flight/search-results/client'
 export default function FlightSearchResultsPage() {
   return (
     <>
-      <div className='border-b p-3'>
+      <div className='border-b py-3'>
         <Container>
           <Flight />
         </Container>
