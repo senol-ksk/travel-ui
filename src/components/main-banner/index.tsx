@@ -1,16 +1,10 @@
 'use client'
+
 import { useEffect, useState } from 'react'
-import {
-  ActionIcon,
-  AspectRatio,
-  Box,
-  Container,
-  Image,
-  Skeleton,
-} from '@mantine/core'
+import { ActionIcon, AspectRatio, Box, Image, Skeleton } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 
-import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel'
+import { EmblaCarouselType } from 'embla-carousel'
 
 import { Carousel } from '@mantine/carousel'
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
@@ -55,6 +49,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
         withIndicators={false}
         withControls={false}
         getEmblaApi={setEmblaApi}
+        slideGap={'md'}
         className={clsx('w-full', {
           'opacity-100': !!emblaApi,
           'opacity-0': !emblaApi,
@@ -62,26 +57,17 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
       >
         {slides.map((slide) => {
           return (
-            <Carousel.Slide key={slide.id} className='rounded'>
+            <Carousel.Slide key={slide.id}>
               <Box
                 component={Link}
                 href={slide.params.link?.value || '#'}
-                display={'block'}
-                w={'100%'}
+                className='block'
               >
-                <AspectRatio
-                  ratio={16 / 9}
-                  h={{
-                    base: 190,
-                    md: 487,
-                  }}
-                >
+                <AspectRatio ratio={16 / 9}>
                   <Image
                     src={cdnImageUrl(slide.params.image.value)}
                     alt={slide.Title}
-                    h={'100%'}
-                    pos={'absolute'}
-                    bdrs={'lg'}
+                    bdrs={{ base: 'md', md: 'lg' }}
                   />
                 </AspectRatio>
               </Box>
@@ -89,7 +75,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
           )
         })}
       </Carousel>
-      <div className='flex justify-center gap-4 pt-5'>
+      <div className='flex justify-between gap-4 pt-5 md:justify-center'>
         <div>
           <ActionIcon
             radius={'xl'}
@@ -102,7 +88,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
             <RiArrowLeftLine />
           </ActionIcon>
         </div>
-        <div className='flex items-center gap-2'>
+        <div className='hidden items-center gap-2 md:flex'>
           {emblaApi?.scrollSnapList().map((snap, snapIndex) => {
             const isActiveState = currentSlideIndex === snapIndex
             return (

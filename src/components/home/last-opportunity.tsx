@@ -2,23 +2,13 @@
 
 import { AspectRatio, Button, Container, Title } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
-import { Badge, Box } from '@mantine/core'
+import { Box } from '@mantine/core'
 import Link from 'next/link'
 import { Image } from '@mantine/core'
 import { Widgets } from '@/types/cms-types'
 import React from 'react'
 import { cdnImageUrl } from '@/libs/cms-data'
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
-
-const categories = [
-  'Erken Rezervasyon',
-  'Alanya Otelleri',
-  'Kıbrıs Otelleri',
-  'Bodrum Otelleri',
-  'Belek Otelleri',
-  'Kemer Otelleri',
-  'başar otelleri',
-]
 
 type IProps = {
   data: Widgets
@@ -83,7 +73,7 @@ const LastOpportunity: React.FC<IProps> = ({ data }) => {
             >
               <Link href={item.params.link?.value || '#'}>
                 <Box
-                  href={`/hotel/${item.params.link?.value.split('/').at(-1)}`}
+                  href={`/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}`}
                   component={Link}
                   className='group block h-full w-full'
                 >

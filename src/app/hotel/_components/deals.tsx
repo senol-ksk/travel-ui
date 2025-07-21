@@ -17,13 +17,18 @@ const HotelDeals: React.FC<IProps> = ({ widgets }) => {
         md: '20%',
       }}
     >
-      {widgets.map((deal) => (
-        <Carousel.Slide key={deal.id}>
-          <Box component={Link} href={deal.params.link.value}>
-            {deal.title}
-          </Box>
-        </Carousel.Slide>
-      ))}
+      {widgets.map((deal) => {
+        const slug = deal.params.link?.value.split('/').at(-1)
+        const hotelDetailUrl = `/hotel/${slug}?slug=${slug}`
+
+        return (
+          <Carousel.Slide key={deal.id}>
+            <Box component={Link} href={hotelDetailUrl}>
+              {deal.title}
+            </Box>
+          </Carousel.Slide>
+        )
+      })}
     </Carousel>
   )
 }
