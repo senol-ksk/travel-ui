@@ -1,9 +1,4 @@
-import {
-  Divider,
-  Spoiler,
-  Title,
-  TypographyStylesProvider,
-} from '@mantine/core'
+import { Divider, Spoiler, Title, Typography } from '@mantine/core'
 import dayjs from 'dayjs'
 import { IoCalendarClearOutline } from 'react-icons/io5'
 
@@ -89,13 +84,13 @@ const TourDetail: React.FC<Props> = ({ data }) => {
                 <Title order={4} fz={{ base: 'md' }} c={'blue.8'} pb='md'>
                   {tourProgram.title}
                 </Title>
-                <TypographyStylesProvider fz={'sm'} lh={'sm'}>
+                <Typography fz={'sm'} lh={'sm'}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: tourProgram.description,
                     }}
                   />
-                </TypographyStylesProvider>
+                </Typography>
               </div>
             ))}
           </div>

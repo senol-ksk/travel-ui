@@ -1,6 +1,6 @@
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
-import { Container, Title, TypographyStylesProvider } from '@mantine/core'
+import { Container, Title, Typography } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
 
@@ -85,11 +85,11 @@ export default async function ContentPage({
           )}
         </div>
         <div className='md:col-span-3'>
-          <TypographyStylesProvider>
+          <Typography>
             <div
               dangerouslySetInnerHTML={{ __html: cmsParams.content.value }}
             />
-          </TypographyStylesProvider>
+          </Typography>
         </div>
       </div>
     </Container>

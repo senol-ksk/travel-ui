@@ -69,7 +69,7 @@ const titleIcons: Record<string, JSX.Element> = {
 }
 import {
   Drawer,
-  TypographyStylesProvider,
+  Typography,
   Tabs,
   Accordion,
   Spoiler,
@@ -274,7 +274,7 @@ const MainDrawer: React.FC<IProps> = ({
                           )}
                         </ul>
                       </div>
-                      <TypographyStylesProvider className='mb-3 rounded bg-white p-3'>
+                      <Typography className='mb-3 rounded bg-white p-3'>
                         <Spoiler
                           className='mb-5 pb-3'
                           maxHeight={120}
@@ -287,7 +287,7 @@ const MainDrawer: React.FC<IProps> = ({
                             }}
                           />
                         </Spoiler>
-                      </TypographyStylesProvider>
+                      </Typography>
                     </div>
                     <Accordion className='grid gap-3 rounded bg-gray-50'>
                       {featureValues.map(([key, value], itemIndex) => {
