@@ -17,7 +17,7 @@ const TourSearchResultsPage = async ({ searchParams }: PageProps) => {
   return (
     <div>
       <Suspense>
-        <div className='border-b p-3 md:p-5'>
+        <div className='border-b py-3 md:p-5'>
           <Container>
             {isCruise ? <CruiseSearchEngine /> : <TourSearchEngine />}
           </Container>
