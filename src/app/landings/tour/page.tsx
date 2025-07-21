@@ -11,8 +11,9 @@ import {
 } from '@/types/cms-types'
 import { Link } from 'next-view-transitions'
 import dayjs from 'dayjs'
-import { LandingSliderItem } from './_components/landing-slider-item'
+
 import { serializeTourSearchParams } from '@/modules/tour/searchResultParams'
+import { LandingSliderItem } from '@/app/tour/_components/landing-slider-item'
 
 export default async function TourLandingPage() {
   const headersList = await headers()

@@ -36,44 +36,44 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/ucak-bileti',
-        destination: '/flight/',
+        destination: '/landings/flight',
       },
       {
         source: '/ucak-bileti/:slug',
-        destination: '/flight/:slug',
+        destination: '/landings/flight/:slug',
       },
       {
         source: '/otel',
-        destination: '/hotel/',
+        destination: '/landings/hotel',
       },
       {
         source: '/arac',
-        destination: '/car/',
+        destination: '/landings/car',
       },
       {
         source: '/otobus',
-        destination: '/bus/',
+        destination: '/landings/bus',
       },
       {
         source: '/transfer',
-        destination: '/transfer/',
+        destination: '/landings/transfer',
       },
       {
         source: '/tur',
-        destination: '/tour/',
+        destination: '/landings/tour/',
       },
-      {
-        source: '/iletisim',
-        destination: '/contact-us/',
-      },
-      {
-        source: '/yardim/:slug',
-        destination: '/help-center/:slug',
-      },
-      {
-        source: '/:slug',
-        destination: '/contents/:slug',
-      },
+      // {
+      //   source: '/iletisim',
+      //   destination: '/contact-us/',
+      // },
+      // {
+      //   source: '/yardim/:slug',
+      //   destination: '/help-center/:slug',
+      // },
+      // {
+      //   source: '/:slug',
+      //   destination: '/contents/:slug',
+      // },
     ]
   },
 }

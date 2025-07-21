@@ -9,7 +9,8 @@ import {
   HotelLandingWidgets,
 } from '@/types/cms-types'
 import { Link } from 'next-view-transitions'
-import { HotelDeals } from './_components/deals'
+import { HotelDeals } from '@/app/hotel/_components/deals'
+// import { HotelDeals } from './_components/deals'
 
 export default async function HotelLandingPage() {
   const data = (

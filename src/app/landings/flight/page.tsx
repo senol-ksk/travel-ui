@@ -1,4 +1,4 @@
-import { Image, Container, rem, Title, Button, Box } from '@mantine/core'
+import { Image, Container, rem, Title, Box } from '@mantine/core'
 import NextImage from 'next/image'
 
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
@@ -9,18 +9,19 @@ import {
   FlightLandingWidget,
 } from '@/types/cms-types'
 import { Link } from 'next-view-transitions'
+import { notFound } from 'next/navigation'
 
 export default async function FlightLandingPage() {
+  console.log('landing ... flight')
   const data = (
     await getContent<CmsContent<FlightLandingWidget[], FlightLandingParams>>(
       'ucak-bileti/ucak-bileti'
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
 
-  const params = data?.params
-  const widgets = data?.widgets
+  const { params, widgets } = data
   const teaser = widgets
     .filter((item) => item.point === 'teaser')
     .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
