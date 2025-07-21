@@ -56,7 +56,7 @@ export default function RootLayout({
                 </div>
                 <main className='grow-1'>{children}</main>
                 <Suspense>
-                  <div className='shrink-0 grow-0'>
+                  <div className='shrink-0 grow-0 pt-4 md:pt-10'>
                     <Footer />
                   </div>
                 </Suspense>

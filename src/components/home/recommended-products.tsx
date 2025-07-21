@@ -52,7 +52,7 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
                 </span>
               )}
             </div>
-            <div className='-top-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
+            <div className='-mt-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
               <Title order={3} fz='md' lineClamp={1}>
                 {item.title}
               </Title>

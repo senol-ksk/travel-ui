@@ -8,7 +8,7 @@ type IProps = {
 
 const TrendRegions: React.FC<IProps> = ({ data }) => {
   return (
-    <div className='mb-4 grid grid-cols-2 gap-2 md:auto-rows-[200px] md:grid-cols-12 md:gap-5'>
+    <div className='grid grid-cols-2 gap-2 md:auto-rows-[200px] md:grid-cols-12 md:gap-5'>
       {data?.map((item, index) => {
         let colWidth = 'md:col-span-3'
         let rowLength = ''

@@ -64,7 +64,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/iletisim',
-        destination: '/contact-us/',
+        destination: '/contact-us',
       },
       {
         source: '/yardim/:slug',
