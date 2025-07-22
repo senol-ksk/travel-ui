@@ -1,6 +1,6 @@
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
-import { Container, Title, TypographyStylesProvider } from '@mantine/core'
+import { Container, Title, Typography } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
 
@@ -63,6 +63,8 @@ export default async function ContentPage({
   if (!data) return notFound() // or we can redirect custom not-fount page, see =>> https://nextjs.org/docs/app/api-reference/file-conventions/not-found
   const { params: cmsParams, widgets, title } = data
 
+  if (widgets && !widgets.length) notFound()
+
   return (
     <Container
       py={{
@@ -83,11 +85,11 @@ export default async function ContentPage({
           )}
         </div>
         <div className='md:col-span-3'>
-          <TypographyStylesProvider>
+          <Typography>
             <div
               dangerouslySetInnerHTML={{ __html: cmsParams.content.value }}
             />
-          </TypographyStylesProvider>
+          </Typography>
         </div>
       </div>
     </Container>

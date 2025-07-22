@@ -381,7 +381,7 @@ const TourDetailClient = () => {
                     )}
                   </div>
 
-                  <div className='text-dark-200 bottom-5 hidden text-sm md:flex'>
+                  <div className='text-dark-200 mt-20 hidden text-sm md:flex'>
                     Not : Çocuk kategorisi 7-12 yaşları arasıdır. Tur sirküsü
                     yayımlandığı 03.02.2025 tarihinde geçerlidir. Aynı tura ait,
                     daha sonraki bir tarihte yayımlanacak tur sirküsü bir

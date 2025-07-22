@@ -12,7 +12,7 @@ import {
   ScrollArea,
   Skeleton,
   Title,
-  TypographyStylesProvider,
+  Typography,
   Text,
 } from '@mantine/core'
 import { IoMapOutline } from 'react-icons/io5'
@@ -298,7 +298,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                     position: 'relative',
                   }}
                 >
-                  <TypographyStylesProvider>
+                  <Typography>
                     <div
                       className='text-sm'
                       ref={generalInfoContentRef}
@@ -306,7 +306,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                         __html: hotel.descriptions.hotelInformation.trim(),
                       }}
                     />
-                  </TypographyStylesProvider>
+                  </Typography>
                   {generalInfoContentHeight > GENERAL_INFO_MAX_HEIGHT && (
                     <div className='absolute right-0 bottom-0 left-0 h-10'></div>
                   )}

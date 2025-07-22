@@ -1,11 +1,6 @@
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
-import {
-  Button,
-  Container,
-  Title,
-  TypographyStylesProvider,
-} from '@mantine/core'
+import { Button, Container, Title, Typography } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 
 type CMSHelpCenterParams = {
@@ -125,13 +120,13 @@ export default async function HelpCenterPage({
           <div key={accordion.id}>
             <Title order={4}>{accordion.title}</Title>
             <div className='pt-2'>
-              <TypographyStylesProvider>
+              <Typography>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: accordion.params.description.value,
                   }}
                 />
-              </TypographyStylesProvider>
+              </Typography>
             </div>
           </div>
         ))}

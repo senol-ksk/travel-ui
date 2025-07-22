@@ -1,7 +1,7 @@
 import { HotelDetailResponseHotelInfo } from '@/app/hotel/types'
 import { FaBellConcierge } from 'react-icons/fa6'
 
-import { Button, Title, TypographyStylesProvider } from '@mantine/core'
+import { Button, Title, Typography } from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
 import { useElementSize } from '@mantine/hooks'
 import { MdKeyboardArrowRight, MdOutlineBed } from 'react-icons/md'
@@ -113,14 +113,14 @@ const GeneralDrawer: React.FC<IProps> = ({
               position: 'relative',
             }}
           >
-            <TypographyStylesProvider>
+            <Typography>
               <div
                 ref={generalInfoContentRef}
                 dangerouslySetInnerHTML={{
                   __html: description.hotelInformation.trim(),
                 }}
               />
-            </TypographyStylesProvider>
+            </Typography>
             {generalInfoContentHeight > GENERAL_INFO_MAX_HEIGHT && (
               <div className='absolute right-0 bottom-0 left-0 h-10'></div>
             )}

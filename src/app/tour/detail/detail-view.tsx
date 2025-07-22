@@ -1,10 +1,4 @@
-import {
-  Accordion,
-  Divider,
-  Spoiler,
-  Title,
-  TypographyStylesProvider,
-} from '@mantine/core'
+import { Accordion, Divider, Spoiler, Title } from '@mantine/core'
 import dayjs from 'dayjs'
 import { IoCalendarClearOutline } from 'react-icons/io5'
 
@@ -54,13 +48,13 @@ const TourDetail: React.FC<Props> = ({ data }) => {
                 <Title order={4} fz={{ base: 'md' }} c={'blue.8'} pb='md'>
                   {tourProgram.title}
                 </Title>
-                <TypographyStylesProvider fz={'sm'} lh={'sm'}>
+                <Title fz={'sm'} lh={'sm'}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: tourProgram.description,
                     }}
                   />
-                </TypographyStylesProvider>
+                </Title>
               </div>
             ))}
           </div>
@@ -142,12 +136,11 @@ const TourDetail: React.FC<Props> = ({ data }) => {
           />
         </Spoiler>
         <Accordion
-          defaultValue='included'
           multiple={false}
           variant='default'
-          className='mb-5 rounded-md border'
+          className='my-5 rounded-md border'
         >
-          <Accordion.Item value='included'>
+          <Accordion.Item value='visa'>
             <Accordion.Control>
               <div className='flex items-center gap-3'>
                 <TbWorld size={20} />
@@ -273,8 +266,8 @@ const TourDetail: React.FC<Props> = ({ data }) => {
             </Accordion.Control>
             <Spoiler
               maxHeight={100}
-              hideLabel={'Daha Az Görüntüle'}
-              showLabel={'Devamını Göster'}
+              hideLabel={<div className='px-4'>Daha Az Görüntüle</div>}
+              showLabel={<div className='px-4'>Devamını Göster</div>}
             >
               <Accordion.Panel>
                 <div
