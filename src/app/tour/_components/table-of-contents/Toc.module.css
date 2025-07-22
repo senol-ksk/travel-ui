@@ -1,13 +1,13 @@
 .root {
   display: flex;
   flex-direction: row;
-  padding: 0 15px;
+  padding: 0 5px;
   gap: 35px;
 }
 
 .control {
   font-size: 17px;
-  padding: 17px;
+  padding: 12px;
   position: relative;
   font-weight: 500;
 

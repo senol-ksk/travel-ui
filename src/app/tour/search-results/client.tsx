@@ -343,8 +343,8 @@ const TourSearchResultClient = () => {
                   <div>
                     <span className='text-lg font-bold'>{destinationName}</span>{' '}
                     için toplam{' '}
-                    <span className='text-lg font-bold'>{totalCount}</span>{' '}
-                    tesis bulduk!
+                    <span className='text-lg font-bold'>{totalCount}</span> tur
+                    bulduk!
                   </div>
                 </div>
               </Skeleton>
@@ -427,7 +427,7 @@ const TourSearchResultClient = () => {
             >
               <span className='text-sm font-semibold text-gray-500'>
                 <div>
-                  {destinationName}, için toplam {totalCount} tesis bulduk!
+                  {destinationName}, için toplam {totalCount} tur bulduk!
                 </div>
               </span>
             </Skeleton>

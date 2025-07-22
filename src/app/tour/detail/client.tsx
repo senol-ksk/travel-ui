@@ -34,6 +34,7 @@ import { TourTableOfContents } from '@/app/tour/_components/table-of-contents'
 import { BiMoon } from 'react-icons/bi'
 import { IoIosAirplane } from 'react-icons/io'
 import dayjs from 'dayjs'
+import { CiLocationOn } from 'react-icons/ci'
 
 const TourDetailClient = () => {
   const router = useTransitionRouter()
@@ -367,7 +368,7 @@ const TourDetailClient = () => {
                     {detailQuery.data.detail.flightInformation?.length > 0 && (
                       <div className='flex items-center gap-4'>
                         <div className='text-blue-800'>
-                          <IoIosAirplane size={20} />
+                          <CiLocationOn size={22} />
                         </div>
                         <div
                           className='font-semibold'

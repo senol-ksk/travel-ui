@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button, TableOfContents } from '@mantine/core'
+import { TableOfContents } from '@mantine/core'
 import classes from './Toc.module.css'
-import { HotelDetailResponseHotelInfo } from '@/app/hotel/types'
-import { RiMapPin2Line } from 'react-icons/ri'
 import { TourDetailApiResponse } from '@/modules/tour/type'
 
 type IProps = {
@@ -41,12 +39,12 @@ const TourTableOfContents: React.FC<IProps> = ({ tourInfo, detailQuery }) => {
       <div
         className={`${
           isSticky ? 'fixed top-0 left-0 w-full shadow-xl' : 'sticky top-0'
-        } z-[99] rounded bg-gray-50`}
+        } z-[99] rounded-md bg-gray-50`}
       >
         <div className='mx-auto max-w-6xl'>
           {isSticky && (
             <>
-              <div className='hidden items-center px-3 pt-2 font-medium md:flex md:gap-10 md:text-xl'>
+              <div className='hidden items-center px-3 font-medium md:flex md:gap-10 md:text-xl'>
                 <div className='font-semibold text-gray-700'>
                   {tourInfo?.package.region.title}
                 </div>
@@ -57,15 +55,15 @@ const TourTableOfContents: React.FC<IProps> = ({ tourInfo, detailQuery }) => {
               </div>
             </>
           )}
-          <div className='mt-3 flex items-center justify-between gap-4 md:mt-0 md:flex-row'>
+          <div className='flex items-center justify-center gap-4 md:mt-0 md:flex-row md:justify-between'>
             <TableOfContents
               classNames={classes}
               variant='filled'
               color='blue'
-              size='sm'
-              radius='sm'
+              size='xs'
+              radius='xs'
               scrollSpyOptions={{
-                selector: ' #tour-program, #transport, #inclued, #not-inclued',
+                selector: ' #general, #tour-program, #transport',
               }}
               getControlProps={({ data }) => ({
                 onClick: () =>
