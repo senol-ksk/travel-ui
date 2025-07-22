@@ -62,18 +62,22 @@ const nextConfig: NextConfig = {
         source: '/tur',
         destination: '/landings/tour/',
       },
-      // {
-      //   source: '/iletisim',
-      //   destination: '/contact-us/',
-      // },
-      // {
-      //   source: '/yardim/:slug',
-      //   destination: '/help-center/:slug',
-      // },
-      // {
-      //   source: '/:slug',
-      //   destination: '/contents/:slug',
-      // },
+      {
+        source: '/iletisim',
+        destination: '/contact-us',
+      },
+      {
+        source: '/yardim/:slug',
+        destination: '/help-center/:slug',
+      },
+      {
+        source: '/online-islemler-seyahatinizi-goruntuleyin',
+        destination: '/online-operations',
+      },
+      {
+        source: '/:slug',
+        destination: '/contents/:slug',
+      },
     ]
   },
 }
