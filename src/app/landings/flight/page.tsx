@@ -23,6 +23,7 @@ import {
 } from '@/types/cms-types'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
+import ProductBox from '../_components/box-link'
 
 export default async function FlightLandingPage() {
   const data = (
@@ -79,7 +80,7 @@ export default async function FlightLandingPage() {
                 </Title>
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                   {popularDomesticFlights.map((flight) => (
-                    <TicketBox
+                    <ProductBox
                       key={flight.id}
                       description={flight.params.sort_desc.value}
                       image={flight.params.image.value}
@@ -102,7 +103,7 @@ export default async function FlightLandingPage() {
                 </Title>
                 <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                   {popularInternationalFlights.map((flight) => (
-                    <TicketBox
+                    <ProductBox
                       key={flight.id}
                       description={flight.params.sort_desc.value}
                       image={flight.params.image.value}
@@ -200,34 +201,5 @@ export default async function FlightLandingPage() {
         </Container>
       </div>
     </>
-  )
-}
-
-type TicketBoxProps = {
-  image: string
-  title: string
-  description: string
-  url: string
-}
-
-function TicketBox({ url, image, title, description }: TicketBoxProps) {
-  return (
-    <Box
-      component={Link}
-      href={url}
-      className='group relative flex h-[200px] flex-col justify-end overflow-hidden rounded-lg border bg-white p-3 text-white'
-      style={{ backgroundImage: `url(${cdnImageUrl(image)})` }}
-      bgsz={'cover'}
-      bgp={'center'}
-    >
-      <div
-        className='absolute top-0 right-0 bottom-0 left-0 -z-0 block bg-black/20 transition-all group-hover:bg-black/35'
-        aria-hidden
-      />
-      <div className='relative z-10'>
-        <div className='text-lg font-bold'>{title}</div>
-        <div>{description}</div>
-      </div>
-    </Box>
   )
 }

@@ -1,4 +1,13 @@
-import { Container, Title, Image, Box, ScrollArea, Button } from '@mantine/core'
+import {
+  Container,
+  Title,
+  Image,
+  Accordion,
+  AccordionItem,
+  AccordionControl,
+  AccordionPanel,
+  Typography,
+} from '@mantine/core'
 import NextImage from 'next/image'
 
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
@@ -8,9 +17,9 @@ import {
   HotelLandingParams,
   HotelLandingWidgets,
 } from '@/types/cms-types'
-import { Link } from 'next-view-transitions'
-import { HotelDeals } from '@/app/hotel/_components/deals'
-// import { HotelDeals } from './_components/deals'
+
+import { notFound } from 'next/navigation'
+import ProductBox from '../_components/box-link'
 
 export default async function HotelLandingPage() {
   const data = (
@@ -19,23 +28,20 @@ export default async function HotelLandingPage() {
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
+
   const { params, widgets } = data
 
-  const teaser = widgets
-    .filter((item) => item.point === 'teaser')
-    .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
-
-  const themes = widgets
-    .filter((item) => item.point === 'theme')
-    .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
-
-  const deals = widgets
-    .filter((item) => item.point === 'hotel_deals')
-    .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
-  const popularPlaces = widgets
-    .filter((item) => item.point === 'popular_places')
-    .sort((a, b) => (a.ordering ?? 0) - (b.ordering ?? 0))
+  const popular_domestic_cities = widgets.filter(
+    (x) => x.point === 'popular_domestic_cities'
+  )
+  const popular_abroad_cities = widgets.filter(
+    (x) => x.point === 'popular_abroad_cities'
+  )
+  const faqs = widgets.filter((x) => x.point === 'sss')
+  const teaser_bottom = widgets.filter(
+    (widget) => widget.point === 'teaser_bottom'
+  )
 
   return (
     <div>
@@ -57,66 +63,96 @@ export default async function HotelLandingPage() {
           </div>
         </Container>
       </div>
-      <Container className='flex flex-col gap-3 py-5 md:gap-7 md:py-10'>
-        <div className='py-4 md:py-7'>
-          <div className='grid grid-cols-1 justify-stretch gap-2 sm:grid-cols-3 md:gap-4'>
-            {teaser.map((teaserItem) => (
-              <Box
-                key={teaserItem.id}
-                component={Link}
-                href={teaserItem.params.link.value}
-              >
-                <div className='rounded border p-3'>{teaserItem.title}</div>
-              </Box>
-            ))}
-          </div>
-        </div>
-        <div>
-          <Title order={2} className='text-center'>
-            Her İhtiyaca Uygun Tatil Seçenekleri
-          </Title>
-          {themes.length > 0 && (
-            <div className='py-3'>
-              <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
-                <div className='flex gap-3'>
-                  {themes.map((theme) => {
-                    return (
-                      <div key={theme.id}>
-                        <Button
-                          component={Link}
-                          href={theme.params.link.value}
-                          size='compact-sm'
-                        >
-                          {theme.title}
-                        </Button>
-                      </div>
-                    )
-                  })}
-                </div>
-              </ScrollArea>
-            </div>
-          )}
-        </div>
-        {deals.length > 0 && (
+      <Container className='grid gap-3 py-5 md:gap-7 md:py-10'>
+        {popular_domestic_cities.length > 0 && (
           <div>
-            <Title order={3} pb={'lg'} className='text-center'>
-              Erken Rezervasyon Fırsatları
+            <Title fz={'h3'} mb={'lg'}>
+              Yurt İçi Popüler Şehirler
             </Title>
-            <HotelDeals widgets={deals} />
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {popular_domestic_cities.map((item) => (
+                <ProductBox
+                  key={item.id}
+                  description={item.params.sort_desc.value}
+                  image={item.params.image.value}
+                  title={item.title}
+                  url={
+                    item.params.link.value.length > 0
+                      ? `/hotel/search-results?${item.params.link.value}`
+                      : ''
+                  }
+                />
+              ))}
+            </div>
           </div>
         )}
-        {popularPlaces.length > 0 && (
-          <div className='grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 md:gap-4'>
-            {popularPlaces.map((item) => (
-              <Box
-                component={Link}
-                href={item.params.link.value}
-                key={item.id}
-                className='rounded border p-3'
-              >
-                {item.title}
-              </Box>
+        {popular_abroad_cities.length > 0 && (
+          <div>
+            <Title fz={'h3'} mb={'lg'}>
+              Yurt Dışı Popüler Şehirler
+            </Title>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {popular_abroad_cities.map((item) => (
+                <ProductBox
+                  key={item.id}
+                  description={item.params.sort_desc.value}
+                  image={item.params.image.value}
+                  title={item.title}
+                  url={
+                    item.params.link.value.length > 0
+                      ? `/hotel/search-results?${item.params.link.value}`
+                      : ''
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        {teaser_bottom.length > 0 && (
+          <div className='grid gap-6 rounded-md border bg-white p-3 md:p-6'>
+            {teaser_bottom.map((teaser) => (
+              <article key={teaser.id}>
+                <Title fz={'h3'} mb={'md'}>
+                  {teaser.title}
+                </Title>
+                <Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: teaser.params.description.value,
+                    }}
+                  />
+                </Typography>
+              </article>
             ))}
+          </div>
+        )}
+        {faqs.length > 0 && (
+          <div>
+            <Title order={2} mb={'lg'} fz={'h3'}>
+              Sıkça Sorulan Sorular
+            </Title>
+            <Accordion chevronPosition='right' variant='contained' radius='md'>
+              {faqs.map((faq) => {
+                return (
+                  <AccordionItem key={faq.id} value={faq.title}>
+                    <AccordionControl
+                      classNames={{
+                        label: 'font-medium py-2 md:py-6',
+                      }}
+                    >
+                      {faq.title}
+                    </AccordionControl>
+                    <AccordionPanel>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: faq.params.description.value,
+                        }}
+                      />
+                    </AccordionPanel>
+                  </AccordionItem>
+                )
+              })}
+            </Accordion>
           </div>
         )}
       </Container>
