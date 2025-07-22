@@ -84,7 +84,12 @@ export default async function FlightLandingPage() {
                       description={flight.params.sort_desc.value}
                       image={flight.params.image.value}
                       title={flight.title}
-                      url={`/flight/search-results?${flight.params.link.value}`}
+                      url={
+                        flight.params.link.value &&
+                        flight.params.link.value.length > 0
+                          ? `/flight/search-results?${flight.params.link.value}`
+                          : ''
+                      }
                     />
                   ))}
                 </div>
@@ -102,7 +107,12 @@ export default async function FlightLandingPage() {
                       description={flight.params.sort_desc.value}
                       image={flight.params.image.value}
                       title={flight.title}
-                      url={`/flight/search-results?${flight.params.link.value}`}
+                      url={
+                        flight.params.link.value &&
+                        flight.params.link.value.length > 0
+                          ? `/flight/search-results?${flight.params.link.value}`
+                          : ''
+                      }
                     />
                   ))}
                 </div>
