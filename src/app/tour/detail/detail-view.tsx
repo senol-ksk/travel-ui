@@ -124,7 +124,7 @@ const TourDetail: React.FC<Props> = ({ data }) => {
       <div className='flex flex-col gap-3 rounded-lg border px-3 pt-3 shadow-sm'>
         <div className='flex items-center gap-3 p-3'>
           <FaRegCheckCircle size={20} />
-          <span className='text-xs font-semibold md:text-lg'>
+          <span className='text-md font-semibold md:text-lg'>
             Ücrete Dahil Olan Hizmetler
           </span>
         </div>
@@ -151,7 +151,7 @@ const TourDetail: React.FC<Props> = ({ data }) => {
             <Accordion.Control>
               <div className='flex items-center gap-3'>
                 <TbWorld size={20} />
-                <span className='text-xs font-semibold md:text-lg'>
+                <span className='text-md font-semibold md:text-lg'>
                   Vize Bilgileri
                 </span>
               </div>
@@ -266,7 +266,7 @@ const TourDetail: React.FC<Props> = ({ data }) => {
             <Accordion.Control>
               <div className='flex items-center gap-3'>
                 <GoNoEntry size={20} />
-                <span className='text-xs font-semibold md:text-lg'>
+                <span className='text-md font-semibold md:text-lg'>
                   Ücrete Dahil Olmayan Hizmetler & Önemli Notlar
                 </span>
               </div>

@@ -49,8 +49,10 @@ const TourMediaGallery = ({ images, title, opened, onClose }: Props) => {
                 src={img}
                 alt={`${title} - ${idx + 1}`}
                 style={{
-                  maxHeight: '60vh',
+                  height: 'auto',
                   width: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'center',
                 }}
               />
             </Carousel.Slide>
