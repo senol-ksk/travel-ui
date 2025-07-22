@@ -13,7 +13,7 @@ import { RecommendedProducts } from '@/components/home/recommended-products'
 import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
 
-import { EbultenForm } from '@/components/home/ebulten-form'
+// import { EbultenForm } from '@/components/home/ebulten-form'
 import { MainBannerCarousel } from '@/components/main-banner'
 
 export default async function Home() {
@@ -173,9 +173,9 @@ export default async function Home() {
           <div>
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
-          <div>
+          {/* <div>
             <EbultenForm />
-          </div>
+          </div> */}
         </Container>
       </div>
     </div>

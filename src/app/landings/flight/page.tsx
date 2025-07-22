@@ -10,6 +10,7 @@ import {
   AccordionPanel,
   ScrollArea,
   AspectRatio,
+  Typography,
 } from '@mantine/core'
 import NextImage from 'next/image'
 
@@ -42,6 +43,10 @@ export default async function FlightLandingPage() {
   const faqs = widgets.filter((widget) => widget.point === 'sss')
   const popular_airlines = widgets.filter(
     (widget) => widget.point === 'popular_airlines'
+  )
+
+  const teaser_bottom = widgets.filter(
+    (widget) => widget.point === 'teaser_bottom'
   )
 
   return (
@@ -79,9 +84,7 @@ export default async function FlightLandingPage() {
                       description={flight.params.sort_desc.value}
                       image={flight.params.image.value}
                       title={flight.title}
-                      url={flight.params.destinations.destinations
-                        .map((item) => item.slug)
-                        .join('-')}
+                      url={`/flight/search-results?${flight.params.link.value}`}
                     />
                   ))}
                 </div>
@@ -99,9 +102,7 @@ export default async function FlightLandingPage() {
                       description={flight.params.sort_desc.value}
                       image={flight.params.image.value}
                       title={flight.title}
-                      url={flight.params.destinations.destinations
-                        .map((item) => item.slug)
-                        .join('-')}
+                      url={`/flight/search-results?${flight.params.link.value}`}
                     />
                   ))}
                 </div>
@@ -132,6 +133,24 @@ export default async function FlightLandingPage() {
                     ))}
                   </div>
                 </ScrollArea>
+              </div>
+            )}
+            {teaser_bottom.length > 0 && (
+              <div className='grid gap-6 rounded-md border bg-white p-3 md:p-6'>
+                {teaser_bottom.map((teaser) => (
+                  <article key={teaser.id}>
+                    <Title fz={'h3'} mb={'md'}>
+                      {teaser.title}
+                    </Title>
+                    <Typography>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: teaser.params.description.value,
+                        }}
+                      />
+                    </Typography>
+                  </article>
+                ))}
               </div>
             )}
             {faqs.length > 0 && (
@@ -186,13 +205,19 @@ function TicketBox({ url, image, title, description }: TicketBoxProps) {
     <Box
       component={Link}
       href={url}
-      className='flex h-[200px] flex-col justify-end rounded-lg border bg-white p-3 text-white'
+      className='group relative flex h-[200px] flex-col justify-end overflow-hidden rounded-lg border bg-white p-3 text-white'
       style={{ backgroundImage: `url(${cdnImageUrl(image)})` }}
       bgsz={'cover'}
       bgp={'center'}
     >
-      <div className='text-lg font-bold'>{title}</div>
-      <div>{description}</div>
+      <div
+        className='absolute top-0 right-0 bottom-0 left-0 -z-0 block bg-black/20 transition-all group-hover:bg-black/35'
+        aria-hidden
+      />
+      <div className='relative z-10'>
+        <div className='text-lg font-bold'>{title}</div>
+        <div>{description}</div>
+      </div>
     </Box>
   )
 }
