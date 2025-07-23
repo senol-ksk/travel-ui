@@ -27,6 +27,10 @@ const nextConfig: NextConfig = {
         destination: '/hotel/search-results',
       },
       {
+        source: '/otel-arama/:path',
+        destination: '/hotel/search-results',
+      },
+      {
         source: '/kampanyalar',
         destination: '/campaigns',
       },
@@ -60,7 +64,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/tur',
-        destination: '/landings/tour/',
+        destination: '/landings/tour',
       },
       {
         source: '/iletisim',
