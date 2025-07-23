@@ -176,7 +176,8 @@ export const Flight = () => {
         type: data.Origin.Type,
       },
       passengerCounts: data.PassengerCounts,
-      returnDate: data.ActiveTripKind === '2' ? returnDate : null,
+      // returnDate: data.ActiveTripKind === '2' ? returnDate : null,
+      ...(data.ActiveTripKind === '2' && { returnDate: returnDate }),
     })
 
     setFlightLocalObj(() => ({
