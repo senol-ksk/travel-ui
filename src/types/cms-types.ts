@@ -120,6 +120,20 @@ export type HotelLandingWidgets = {
   collectionId: ID
   point: string
   params: {
+    destinations: {
+      destinations: {
+        id: ID
+        name: string
+        slug: string
+        code: null
+        iata: null
+        typeId: number
+        domestic: boolean
+      }[]
+    }
+    sort_desc: {
+      value: string
+    }
     sort_description: {
       value: string
     }
