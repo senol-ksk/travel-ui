@@ -23,7 +23,6 @@ export default function ReservationLayout({
             <div className='grid gap-5'>
               <div
                 className='mb-3 flex items-center gap-5 rounded-md border bg-white p-5 text-lg font-semibold shadow-xs md:hidden md:p-4'
-                typeof='button'
                 role='button'
                 onClick={openDrawer}
               >

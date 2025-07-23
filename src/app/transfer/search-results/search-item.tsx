@@ -79,7 +79,7 @@ export const TransferSearchItem: React.FC<Props> = ({
           </div>
         </div>
         <div className='col-span-12 flex content-start items-center justify-between gap-2 border-t p-5 text-end leading-none md:col-span-3 md:grid md:content-center md:justify-center md:border-t-0 md:border-l md:p-0'>
-          <div className='leading-none'>
+          <div className='grid items-center justify-center'>
             <div className='text-start text-sm'>
               {data.transferData.bookDetail.suggestedVehicleCount} Araç fiyatı
             </div>

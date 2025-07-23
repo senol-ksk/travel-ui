@@ -1,6 +1,6 @@
-import { Suspense } from 'react'
-import { Skeleton, Container, Title, Image, ScrollArea } from '@mantine/core'
+import { Container, Title, Image, ScrollArea } from '@mantine/core'
 import NextImage from 'next/image'
+import { Link } from 'next-view-transitions'
 
 import { SearchEngine } from '@/components/search-engine/'
 import { StorySlider } from '@/components/home/story-slider'
@@ -13,14 +13,13 @@ import { RecommendedProducts } from '@/components/home/recommended-products'
 import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
 
-import { EbultenForm } from '@/components/home/ebulten-form'
+// import { EbultenForm } from '@/components/home/ebulten-form'
 import { MainBannerCarousel } from '@/components/main-banner'
-import { Link } from 'next-view-transitions'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
     ?.data
-  console.log(cmsData)
+
   const dealsOfWeekData = cmsData?.widgets.filter(
     (x) => x.point === 'deals_of_week'
   )
@@ -54,9 +53,6 @@ export default async function Home() {
   return (
     <div className='flex flex-col gap-4 md:gap-10'>
       <div className='relative'>
-        <Title className='text-dark hidden pt-5 text-center text-lg text-shadow-md md:pt-13 md:text-4xl md:text-white'>
-          FullTrip ile seyahat planlamak çok kolay
-        </Title>
         <Image
           component={NextImage}
           src='https://ykmturizm.mncdn.com/11/Files/638737370698225204.jpg'
@@ -177,9 +173,9 @@ export default async function Home() {
           <div>
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
-          <div>
+          {/* <div>
             <EbultenForm />
-          </div>
+          </div> */}
         </Container>
       </div>
     </div>

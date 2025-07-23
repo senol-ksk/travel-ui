@@ -40,10 +40,10 @@ export type FlightLandingWidget = {
       value: string
     }
     btn_text: {
-      value: ''
+      value: string
     }
     link: {
-      value: ''
+      value: string
     }
 
     view_country: {
@@ -59,7 +59,7 @@ export type FlightLandingWidget = {
         typeId: ID
         domestic: boolean
       }[]
-      value: ''
+      value: string
     }
     image: {
       value: string
@@ -68,10 +68,10 @@ export type FlightLandingWidget = {
       value: string
     }
     icon: {
-      value: ''
+      value: string
     }
     search_date: {
-      value: ''
+      value: string
     }
     svg: {
       value: string
@@ -120,6 +120,20 @@ export type HotelLandingWidgets = {
   collectionId: ID
   point: string
   params: {
+    destinations: {
+      destinations: {
+        id: ID
+        name: string
+        slug: string
+        code: null
+        iata: null
+        typeId: number
+        domestic: boolean
+      }[]
+    }
+    sort_desc: {
+      value: string
+    }
     sort_description: {
       value: string
     }
@@ -410,7 +424,7 @@ export type Widgets = {
         typeId: ID
         domestic: boolean
       }[]
-      value: ''
+      value: string
     } | null
   }
   ordering: number

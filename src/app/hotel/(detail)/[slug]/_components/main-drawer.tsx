@@ -67,14 +67,7 @@ const titleIcons: Record<string, JSX.Element> = {
   activities: <FaRunning />,
   importentInfo: <MdNotificationImportant />,
 }
-import {
-  Drawer,
-  TypographyStylesProvider,
-  Tabs,
-  Accordion,
-  Spoiler,
-  Title,
-} from '@mantine/core'
+import { Drawer, Tabs, Accordion, Spoiler, Title } from '@mantine/core'
 import { HotelDetailDescription } from '@/app/hotel/types'
 import { CommentsDrawer } from './comments-drawer'
 import { IoClose } from 'react-icons/io5'
@@ -133,7 +126,7 @@ const MainDrawer: React.FC<IProps> = ({
                   tabLabel: 'flex-none',
                 }}
               >
-                <Tabs.List className='d-flex justify-around text-xl font-bold'>
+                <Tabs.List className='flex justify-around text-xl font-bold'>
                   <Tabs.Tab
                     value='facilityInfos'
                     className='text-xl font-semibold'
@@ -274,7 +267,7 @@ const MainDrawer: React.FC<IProps> = ({
                           )}
                         </ul>
                       </div>
-                      <TypographyStylesProvider className='mb-3 rounded bg-white p-3'>
+                      <div className='mb-3 rounded bg-white p-3'>
                         <Spoiler
                           className='mb-5 pb-3'
                           maxHeight={120}
@@ -287,7 +280,7 @@ const MainDrawer: React.FC<IProps> = ({
                             }}
                           />
                         </Spoiler>
-                      </TypographyStylesProvider>
+                      </div>
                     </div>
                     <Accordion className='grid gap-3 rounded bg-gray-50'>
                       {featureValues.map(([key, value], itemIndex) => {

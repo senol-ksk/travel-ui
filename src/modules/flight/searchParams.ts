@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import {
   createSerializer,
   inferParserType,
@@ -41,8 +42,10 @@ const destinationSchema = z.object({
 export const flightSearchParams = {
   origin: parseAsJson(destinationSchema.parse),
   destination: parseAsJson(destinationSchema.parse),
-  departureDate: parseAsIsoDate,
-  returnDate: parseAsIsoDate,
+  departureDate: parseAsIsoDate.withDefault(dayjs().add(1, 'month').toDate()),
+  returnDate: parseAsIsoDate.withDefault(
+    dayjs().add(1, 'month').add(5, 'days').toDate()
+  ),
   activeTripKind: parseAsString,
   cabinClass: parseAsJson(cabinClassSchema.parse),
   passengerCounts: parseAsJson(passengerCounts.parse),

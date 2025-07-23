@@ -34,6 +34,11 @@ import { formatCurrency } from '@/libs/util'
 import { TransferSearchEngineSchemaInfer } from '@/modules/transfer/searchParams.client'
 import { transferExtraPageParams } from '@/modules/transfer/searchParams.extras'
 import { reservationParsers } from '@/app/reservation/searchParams'
+import { TransferExtraOptionsDetail } from '@/app/transfer/components/transfer-extraOptions-detail'
+import { TransferVehicle } from '../types'
+import { HiLocationMarker } from 'react-icons/hi'
+import { PriceNumberFlow } from '@/components/price-numberflow'
+import { IoChevronForwardSharp } from 'react-icons/io5'
 
 const transferExtraRequeireFields = z.object({
   PickupInfo: z.string().nonempty(),
@@ -195,7 +200,7 @@ export default function Page() {
   const handleSubmit = (data: TransferExtrasSchmeType) => {
     reservationPageMutation.mutateAsync(data)
   }
-
+  const extraOptionsDatas = transferData?.selectResponse.transferVehicle
   useEffect(() => {
     if (
       extraDataQuery.data?.data?.selectResponse.transferVehicle.transferData
@@ -225,7 +230,7 @@ export default function Page() {
     !(extraDataQuery?.data.data || extraDataQuery.data.success)
   )
     return (
-      <div className='container max-w-2xl p-5'>
+      <div className='container max-w-2xl md:py-5'>
         <Alert variant='light' color='red' title='Data Alınmadı'>
           Ekstra verisi alınırkan bir hata oluştu.
         </Alert>
@@ -235,118 +240,156 @@ export default function Page() {
   return (
     <Suspense>
       <form onSubmit={formActions.handleSubmit(handleSubmit)}>
-        <div className='@container'>
-          <Container>
-            <div className='grid grid-cols-12 items-baseline gap-4 p-5'>
-              <div className='col-span-12 rounded-md border p-3 md:col-span-8'>
-                <div>
-                  <Title className='text-md @lg:text-xl' order={3}>
-                    Alınış Yeri - {transferData?.selectResponse.pickupPointName}
-                  </Title>
-                  <div className='grid gap-4 py-4'>
-                    <div>
-                      <Controller
-                        control={formActions.control}
-                        name='PickupInfo'
-                        defaultValue=''
-                        render={({ field, fieldState }) => {
-                          return (
+        <div className='@container p-0'>
+          <Container className='p-0'>
+            <div className='grid grid-cols-12 items-start gap-3 py-5'>
+              <div className='col-span-12 grid gap-3 md:col-span-8'>
+                <div className='rounded-md border p-3'>
+                  {extraOptionsDatas && (
+                    <TransferExtraOptionsDetail
+                      data={extraOptionsDatas as TransferVehicle}
+                    />
+                  )}
+                </div>
+                <div className='rounded-md border p-3'>
+                  <div>
+                    <Title
+                      className='text-md flex items-center gap-2 @lg:text-xl'
+                      order={3}
+                    >
+                      <HiLocationMarker className='text-blue-700' size={20} />
+
+                      <span>
+                        Alınış Yeri -{' '}
+                        {transferData?.selectResponse.pickupPointName}
+                      </span>
+                    </Title>
+                    <div className='grid gap-4 py-4'>
+                      <div>
+                        <Controller
+                          control={formActions.control}
+                          name='PickupInfo'
+                          defaultValue=''
+                          render={({ field, fieldState }) => {
+                            return (
+                              <TextInput
+                                {...field}
+                                size='xl'
+                                label={
+                                  <div className='text-md'>Uçuş Numarası *</div>
+                                }
+                                error={fieldState.error?.message}
+                                description={
+                                  <div className='text-xs'>
+                                    *Sürücünüz uçuşunuzun durumunu
+                                    inceleyecektir
+                                  </div>
+                                }
+                                inputWrapperOrder={[
+                                  'label',
+                                  'input',
+                                  'error',
+                                  'description',
+                                ]}
+                              />
+                            )
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <Controller
+                          control={formActions.control}
+                          name='PickupDescription'
+                          defaultValue=''
+                          render={({ field, fieldState }) => {
+                            return (
+                              <Textarea
+                                {...field}
+                                error={fieldState.error?.message}
+                                label='Açıklama'
+                                description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
+                                inputWrapperOrder={[
+                                  'label',
+                                  'input',
+                                  'error',
+                                  'description',
+                                ]}
+                              />
+                            )
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <Title
+                      className='text-md flex items-center gap-2 @lg:text-xl'
+                      order={3}
+                    >
+                      <HiLocationMarker className='text-blue-700' size={20} />
+                      <span>
+                        Bırakılış Yeri -{' '}
+                        {transferData?.selectResponse.dropPointName}
+                      </span>
+                    </Title>
+                    <div className='grid gap-4 py-4'>
+                      <div>
+                        <Controller
+                          control={formActions.control}
+                          name='DropInfo'
+                          defaultValue=''
+                          render={({ field, fieldState }) => (
                             <TextInput
                               {...field}
-                              label='Uçuş Numarası'
+                              size='xl'
+                              label={
+                                <div className='text-md'>
+                                  Alınış Yeri Bilgisi *
+                                </div>
+                              }
                               error={fieldState.error?.message}
-                              description='Sürücünüz uçuşunuzun durumunu inceleyecektir'
+                              description={
+                                <div className='text-xs'>Adres Bilgisi</div>
+                              }
                               inputWrapperOrder={[
                                 'label',
-                                'input',
                                 'error',
+                                'input',
                                 'description',
                               ]}
                             />
-                          )
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <Controller
-                        control={formActions.control}
-                        name='PickupDescription'
-                        defaultValue=''
-                        render={({ field, fieldState }) => {
-                          return (
+                          )}
+                        />
+                      </div>
+                      <div>
+                        <Controller
+                          control={formActions.control}
+                          name='DropDescription'
+                          defaultValue=''
+                          render={({ field }) => (
                             <Textarea
                               {...field}
-                              error={fieldState.error?.message}
-                              label='Not'
+                              label='Açıklama'
                               description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
                               inputWrapperOrder={[
                                 'label',
-                                'input',
                                 'error',
+                                'input',
                                 'description',
                               ]}
                             />
-                          )
-                        }}
-                      />
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div>
-                  <Title className='text-md @lg:text-xl' order={3}>
-                    Bırakılış Yeri -{' '}
-                    {transferData?.selectResponse.dropPointName}
-                  </Title>
-                  <div className='grid gap-4 py-4'>
-                    <div>
-                      <Controller
-                        control={formActions.control}
-                        name='DropInfo'
-                        defaultValue=''
-                        render={({ field, fieldState }) => (
-                          <TextInput
-                            {...field}
-                            label='Alınış Yeri Bilgisi'
-                            error={fieldState.error?.message}
-                            description='Adres Bilgisi'
-                            inputWrapperOrder={[
-                              'label',
-                              'error',
-                              'input',
-                              'description',
-                            ]}
-                          />
-                        )}
-                      />
-                    </div>
-                    <div>
-                      <Controller
-                        control={formActions.control}
-                        name='DropDescription'
-                        defaultValue=''
-                        render={({ field }) => (
-                          <Textarea
-                            {...field}
-                            label='Not'
-                            description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
-                            inputWrapperOrder={[
-                              'label',
-                              'error',
-                              'input',
-                              'description',
-                            ]}
-                          />
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
+                <div className='rounded-md border p-3'>
                   <Title order={5}>
                     Aşağıda istediğiniz ek hizmeti seçebilirsiniz.
                   </Title>
 
-                  <div className='py-5'>
+                  <div className='my-2 rounded border p-3'>
                     {transferData?.selectResponse.transferVehicle.transferData.bookDetail.extraServices.map(
                       (extra, extraIndex, extraData) => {
                         const lastItem = extraData.length - 1 === extraIndex
@@ -418,8 +461,8 @@ export default function Page() {
                   </div>
                 </div>
               </div>
-              <div className='col-span-12 rounded-md border p-3 md:col-span-4'>
-                <div className='flex justify-between'>
+              <div className='sticky col-span-12 hidden w-full rounded-md border p-3 md:top-1 md:col-span-4 md:grid'>
+                <div className='my-3 flex justify-between font-semibold'>
                   <div>Toplam Tutar</div>
                   <div className='text-end text-lg font-semibold'>
                     {formatCurrency(totalPriceState)}
@@ -437,6 +480,25 @@ export default function Page() {
               </div>
             </div>
           </Container>
+        </div>
+        <div className='fixed right-0 bottom-0 left-0 z-50 md:hidden'>
+          <div className='grid grid-cols-17 items-center gap-2 rounded-t-lg bg-white px-1 py-5 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
+            <Title
+              order={3}
+              className='col-span-10 items-center justify-center text-center'
+            >
+              {formatCurrency(totalPriceState)}
+            </Title>
+            <Button
+              type='submit'
+              className='bg-primary col-span-7 border-none text-end text-white'
+              radius={'md'}
+              loading={reservationPageMutation.isPending}
+              rightSection={<IoChevronForwardSharp size={20} />}
+            >
+              Devam et{' '}
+            </Button>{' '}
+          </div>
         </div>
       </form>
     </Suspense>

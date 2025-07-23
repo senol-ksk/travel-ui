@@ -327,12 +327,7 @@ const FlightSearchView = () => {
       value: SortOrderEnums.durationAsc,
     },
   ]
-  const totalCount = searchQueryData?.length ?? 0
-  const storedData = localStorage.getItem('flight-search-engine')
-  const parsedData = storedData ? JSON.parse(storedData) : null
-  const destinationName =
-    parsedData?.Destination?.Name.split(' ')[0].split(',') ?? ''
-  const originName = parsedData?.Origin?.Name?.split(' ')[0].split(',') ?? ''
+
   if (!mounted)
     return (
       <Container className='grid gap-3 py-4'>
@@ -341,6 +336,13 @@ const FlightSearchView = () => {
         <Skeleton h={16} radius='sm' w={'95%'} />
       </Container>
     )
+
+  const totalCount = searchQueryData?.length ?? 0
+  const storedData = localStorage.getItem('flight-search-engine')
+  const parsedData = storedData ? JSON.parse(storedData) : null
+  const destinationName =
+    parsedData?.Destination?.Name.split(' ')[0].split(',') ?? ''
+  const originName = parsedData?.Origin?.Name?.split(' ')[0].split(',') ?? ''
 
   return (
     <>
@@ -669,8 +671,8 @@ const FlightSearchView = () => {
                       size='sm'
                       className={
                         order === option.value
-                          ? 'border-0 bg-blue-200 font-medium text-blue-700'
-                          : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                          ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                          : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
                       }
                       key={option.value}
                       leftSection={order === option.value ? <FaCheck /> : ''}

@@ -343,8 +343,8 @@ const TourSearchResultClient = () => {
                   <div>
                     <span className='text-lg font-bold'>{destinationName}</span>{' '}
                     için toplam{' '}
-                    <span className='text-lg font-bold'>{totalCount}</span>{' '}
-                    tesis bulduk!
+                    <span className='text-lg font-bold'>{totalCount}</span> tur
+                    bulduk!
                   </div>
                 </div>
               </Skeleton>
@@ -399,8 +399,8 @@ const TourSearchResultClient = () => {
                     size='sm'
                     className={
                       order === option.value
-                        ? 'border-0 bg-blue-200 font-medium text-blue-700'
-                        : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                        ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                        : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
                     }
                     key={option.value}
                     leftSection={order === option.value ? <FaCheck /> : ''}
@@ -427,7 +427,7 @@ const TourSearchResultClient = () => {
             >
               <span className='text-sm font-semibold text-gray-500'>
                 <div>
-                  {destinationName}, için toplam {totalCount} tesis bulduk!
+                  {destinationName}, için toplam {totalCount} tur bulduk!
                 </div>
               </span>
             </Skeleton>

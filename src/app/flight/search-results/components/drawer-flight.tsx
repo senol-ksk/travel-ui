@@ -51,7 +51,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
           <div
             key={selectedPackage.flightFareInfo.key}
             className={`flex cursor-pointer flex-col items-start gap-2 rounded-md border border-l-6 p-2 md:p-3 ${dynamicBorderColor}`}
-            typeof='button'
+            role='button'
             onClick={() => {
               onSelect(selectedPackage)
             }}
