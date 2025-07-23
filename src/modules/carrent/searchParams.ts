@@ -1,5 +1,4 @@
-// ?pickup=istanbul-beylikduzu&dropoff=izmir-adnan-menderes-havalimani305223&pickup_date=2024-12-28&drop_date=2024-12-31&pickup_time=11%3A00&drop_time=12%3A00&driverAge=26
-
+import dayjs from 'dayjs'
 import {
   createSearchParamsCache,
   createSerializer,
@@ -21,10 +20,10 @@ export type CarSearchQueryParams = {
 
 export const carSearchParamParser: CarSearchQueryParams = {
   driverAge: parseAsInteger,
-  drop_date: parseAsIsoDate,
+  drop_date: parseAsIsoDate.withDefault(dayjs().add(10, 'days').toDate()),
   drop_time: parseAsString,
   dropoff: parseAsString,
-  pickup_date: parseAsIsoDate,
+  pickup_date: parseAsIsoDate.withDefault(dayjs().add(5, 'days').toDate()),
   pickup_time: parseAsString,
   pickup: parseAsString,
 }

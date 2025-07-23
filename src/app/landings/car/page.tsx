@@ -19,6 +19,7 @@ import {
   CmsContent,
 } from '@/types/cms-types'
 import { notFound } from 'next/navigation'
+import ProductBox from '../_components/box-link'
 
 export default async function CarLandingPage() {
   const data = (
@@ -32,14 +33,14 @@ export default async function CarLandingPage() {
   const { params, widgets } = data
   const providers = widgets.find((item) => item.point === 'providers')
   const popularDomesticLocations = widgets.filter(
-    (item) => item.point === 'popular_domestic_locations'
+    (item) => item.point === 'domestic_react_locations'
   )
   const popularLocationsAbroad = widgets.filter(
-    (item) => item.point === 'popular_locations_abroad'
+    (item) => item.point === 'int_react_locations'
   )
   const faqs = widgets.filter((item) => item.point === 'sss')
-  const teaser = widgets.filter((item) => item.point === 'teaser')
   const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
+  console.log(popularDomesticLocations)
 
   return (
     <div className='py-6 md:py-10'>
@@ -100,42 +101,36 @@ export default async function CarLandingPage() {
           </div>
 
           <div>
-            <Title fz={'h3'} mb={'lg'}>
+            <Title order={4} fz={'h3'} mb={'lg'}>
               Yurt İçi Araç Kiralama Noktaları
             </Title>
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
               {popularDomesticLocations.map((item) => (
-                <div key={item.id} className='relative h-36'>
-                  <Image
-                    radius={'md'}
-                    component={NextImage}
-                    src={cdnImageUrl(item.params.image.value)}
-                    fill
-                    alt={item.title}
-                  />
-                  <div className='absolute bottom-0 z-10 p-4 text-lg font-semibold text-white'>
-                    {item.title}
-                  </div>
-                </div>
+                <ProductBox
+                  key={item.id}
+                  description=''
+                  image={item.params.image.value}
+                  title={item.title}
+                  url={`/car/search-results?${item.params.link.value}`}
+                  // url={item.l}
+                />
               ))}
             </div>
           </div>
           <div>
-            <Title order={4}>Yurt Dışı Araç Kiralama Noktaları</Title>
+            <Title order={4} fz={'h3'} mb={'lg'}>
+              Yurt Dışı Araç Kiralama Noktaları
+            </Title>
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
               {popularLocationsAbroad.map((item) => (
-                <div key={item.id} className='relative h-36'>
-                  <Image
-                    radius={'md'}
-                    component={NextImage}
-                    src={cdnImageUrl(item.params.image.value)}
-                    fill
-                    alt={item.title}
-                  />
-                  <div className='absolute bottom-0 z-10 p-4 text-lg font-semibold text-white'>
-                    {item.title}
-                  </div>
-                </div>
+                <ProductBox
+                  key={item.id}
+                  description=''
+                  image={item.params.image.value}
+                  title={item.title}
+                  url={`/car/search-results?${item.params.link.value}`}
+                  // url={item.l}
+                />
               ))}
             </div>
           </div>
