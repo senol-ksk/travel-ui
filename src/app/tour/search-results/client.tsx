@@ -399,8 +399,8 @@ const TourSearchResultClient = () => {
                     size='sm'
                     className={
                       order === option.value
-                        ? 'border-0 bg-blue-200 font-medium text-blue-700'
-                        : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                        ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                        : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
                     }
                     key={option.value}
                     leftSection={order === option.value ? <FaCheck /> : ''}
