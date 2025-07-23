@@ -395,7 +395,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                   )}
                 </Transition>
               </div>
-              <div className='grid gap-4 md:col-span-3'>
+              <div className='grid gap-3 md:col-span-3'>
                 <div className='grid grid-cols-3 items-center gap-2'>
                   <Skeleton
                     className='col-span-1 hidden md:col-span-2 md:flex'
@@ -432,7 +432,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     <Button
                       size='sm'
                       color='black'
-                      className='mx-1 border-gray-400 font-medium'
+                      className='mx-1 rounded-md border-gray-400 font-medium'
                       variant='outline'
                       onClick={() => setFilterSectionIsOpened((prev) => !prev)}
                     >
@@ -452,8 +452,8 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                         size='sm'
                         className={
                           order === option.value
-                            ? 'border-0 bg-blue-200 font-medium text-blue-700'
-                            : 'border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                            ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                            : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
                         }
                         key={option.value}
                         leftSection={order === option.value ? <FaCheck /> : ''}
@@ -482,7 +482,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                   </div> */}
                 </div>
                 <Skeleton
-                  className='flex items-center gap-2 px-2 md:hidden'
+                  className='flex items-center gap-2 px-3 md:hidden'
                   visible={
                     carSearchResult.isFetching ||
                     carSearchResult.isFetchingNextPage ||
@@ -491,7 +491,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                 >
                   <>
                     <span className='text-sm font-semibold text-gray-500'>
-                      {destinationName}, için {totalCount} araç bulduk!
+                      Arama sonucu {totalCount} araç bulundu
                     </span>
                   </>
                 </Skeleton>
