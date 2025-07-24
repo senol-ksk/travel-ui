@@ -116,11 +116,11 @@ const TourSearchResultClient = () => {
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
   const filterOptions = [
     {
-      label: 'En Ucuz',
+      label: 'Fiyata Göre Artan ',
       value: SortOrderEnums.priceAsc,
     },
     {
-      label: 'En Pahalı',
+      label: 'Fiyata Göre Azalan',
       value: SortOrderEnums.priceDesc,
     },
     {
@@ -364,11 +364,11 @@ const TourSearchResultClient = () => {
                   className='font-medium md:hidden'
                   data={[
                     {
-                      label: 'En Ucuz',
+                      label: 'Fiyata Göre Artan ',
                       value: SortOrderEnums.priceAsc,
                     },
                     {
-                      label: 'En Pahalı',
+                      label: 'Fiyata Göre Azalan',
                       value: SortOrderEnums.priceDesc,
                     },
                     {
