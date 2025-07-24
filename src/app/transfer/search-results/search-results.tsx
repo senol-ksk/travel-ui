@@ -72,11 +72,11 @@ const TransferSearchResults = () => {
   const filteredData = useFilterActions(searchResults)
   const filterOptions = [
     {
-      label: 'En Ucuz',
+      label: 'Fiyata Göre Artan ',
       value: SortOrderEnums.priceAsc,
     },
     {
-      label: 'En Pahalı',
+      label: 'Fiyata Göre Azalan',
       value: SortOrderEnums.priceDesc,
     },
   ]
@@ -299,9 +299,12 @@ const TransferSearchResults = () => {
                   size='sm'
                   value={order ? order : ''}
                   data={[
-                    { label: 'En Ucuz', value: SortOrderEnums.priceAsc },
                     {
-                      label: 'En Pahalı',
+                      label: 'Fiyata Göre Artan ',
+                      value: SortOrderEnums.priceAsc,
+                    },
+                    {
+                      label: 'Fiyata Göre Azalan',
                       value: SortOrderEnums.priceDesc,
                     },
                   ]}

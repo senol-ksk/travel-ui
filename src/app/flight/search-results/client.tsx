@@ -59,9 +59,13 @@ import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
 import { MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
-import { FaCheck, FaLongArrowAltRight } from 'react-icons/fa'
-import { FaArrowRightArrowLeft } from 'react-icons/fa6'
-
+import { LuCircleCheckBig } from 'react-icons/lu'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import { Select } from '@mantine/core'
+import { FaCheck } from 'react-icons/fa'
+import { IoIosClose } from 'react-icons/io'
+import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
+import { AirportCode } from '@/app/flight/type'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
   flightFareInfo: FlightFareInfo
@@ -73,6 +77,8 @@ dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
 
 const FlightSearchView = () => {
+  const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
+
   const {
     searchResultsQuery,
     searchSessionTokenQuery,
@@ -242,6 +248,7 @@ const FlightSearchView = () => {
 
   // this is for flight select. first this should be called, then `handlePackageSelect`
   const handleFlightSelect = (flight: ClientDataType) => {
+    console.log(flight)
     const packages = flight.package.map((pack) => ({
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
@@ -311,11 +318,11 @@ const FlightSearchView = () => {
   const mounted = useMounted()
   const filterOptions = [
     {
-      label: 'En Ucuz',
+      label: 'Fiyata Göre Artan ',
       value: SortOrderEnums.priceAsc,
     },
     {
-      label: 'En Pahalı',
+      label: 'Fiyata Göre Azalan',
       value: SortOrderEnums.priceDesc,
     },
     {
@@ -397,11 +404,7 @@ const FlightSearchView = () => {
                     ) : (
                       <>
                         <div className='flex justify-between gap-2'>
-                          <Title
-                            className='text-xl font-semibold'
-                            order={2}
-                            mb={rem(10)}
-                          >
+                          <Title className='text-xl' order={2} mb={rem(10)}>
                             Filtreler
                           </Title>
                           <div>
@@ -432,6 +435,57 @@ const FlightSearchView = () => {
                             label: 'p-0 font-semibold',
                           }}
                         >
+                          <Skeleton
+                            className='flex md:hidden'
+                            visible={
+                              searchResultsQuery.isLoading ||
+                              searchResultsQuery.isFetching ||
+                              searchResultsQuery.isFetchingNextPage ||
+                              searchSessionTokenQuery.isLoading
+                            }
+                          >
+                            <div className='justify-self-end font-medium'>
+                              <Select
+                                checkIconPosition='right'
+                                leftSection={<FaCheck />}
+                                size='sm'
+                                value={order}
+                                onChange={(value) =>
+                                  setFilterParams({
+                                    order: value as SortOrderEnums,
+                                  })
+                                }
+                                data={[
+                                  {
+                                    label: 'Fiyata Göre Artan ',
+                                    value: SortOrderEnums.priceAsc,
+                                  },
+                                  {
+                                    label: 'Fiyata Göre Azalan',
+                                    value: SortOrderEnums.priceDesc,
+                                  },
+                                  {
+                                    label: 'En Erken',
+                                    value: SortOrderEnums.hourAsc,
+                                  },
+                                  {
+                                    label: 'En Geç',
+                                    value: SortOrderEnums.hourDesc,
+                                  },
+                                  {
+                                    label: 'En Hızlı',
+                                    value: SortOrderEnums.durationAsc,
+                                  },
+                                  {
+                                    label: 'En Uuzn',
+                                    value: SortOrderEnums.durationDesc,
+                                  },
+                                  // { label: 'Varış Saati (Artan)', value: '' },
+                                  // { label: 'Varış Saati (Azalan)', value: '' },
+                                ]}
+                              />
+                            </div>
+                          </Skeleton>
                           <Accordion.Item value='numOfStops'>
                             <Accordion.Control>Aktarma</Accordion.Control>
                             <Accordion.Panel>
@@ -606,346 +660,366 @@ const FlightSearchView = () => {
           </div>
 
           <div className='md:col-span-6'>
-            <div className='grid md:mb-5 md:flex md:justify-between'>
-              <Skeleton
-                className='hidden items-center gap-2 md:flex'
-                visible={
-                  searchResultsQuery.isLoading ||
-                  searchResultsQuery.isFetching ||
-                  searchResultsQuery.isFetchingNextPage ||
-                  searchSessionTokenQuery.isLoading
-                }
-              >
-                {searchParams.destination && (
-                  <div className='hidden items-center gap-2 md:flex'>
-                    <div>
-                      <span className='flex items-center gap-2 text-lg font-medium'>
-                        <span className='max-w-[120px] truncate'>
-                          {originName}{' '}
-                        </span>
-                        <FaArrowRightArrowLeft
-                          size={12}
-                          className='text-blue-700'
-                        />{' '}
-                        <span className='max-w-[100px] truncate'>
-                          {destinationName}
-                        </span>{' '}
-                        Uçuşu
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </Skeleton>
-              <div className='flex items-center justify-between gap-1'>
-                <Skeleton
-                  visible={
-                    searchResultsQuery.isLoading ||
-                    searchResultsQuery.isFetching ||
-                    searchResultsQuery.isFetchingNextPage ||
-                    searchSessionTokenQuery.isLoading
-                  }
-                >
-                  <Box className='justify-self-start'>
-                    <Button
-                      onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                      size='sm'
-                      color='black'
-                      className='flex border-gray-400 px-8 font-medium text-black md:mx-1 md:hidden'
-                      variant='outline'
-                    >
-                      Filtrele
-                    </Button>
-                  </Box>
-                </Skeleton>
-                <Skeleton
-                  className='hidden items-center gap-2 md:flex'
-                  visible={
-                    searchResultsQuery.isLoading ||
-                    searchResultsQuery.isFetching ||
-                    searchResultsQuery.isFetchingNextPage ||
-                    searchSessionTokenQuery.isLoading
-                  }
-                >
-                  {filterOptions.map((option) => (
-                    <Button
-                      size='sm'
-                      className={
-                        order === option.value
-                          ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
-                          : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
-                      }
-                      key={option.value}
-                      leftSection={order === option.value ? <FaCheck /> : ''}
-                      color='blue'
-                      variant={order === option.value ? 'filled' : 'outline'}
-                      onClick={() =>
-                        setFilterParams({
-                          order: option.value,
-                        })
-                      }
-                    >
-                      {option.label}
-                    </Button>
-                  ))}
-                </Skeleton>
-                <Skeleton
-                  visible={
-                    searchResultsQuery.isLoading ||
-                    searchResultsQuery.isFetching ||
-                    searchResultsQuery.isFetchingNextPage ||
-                    searchSessionTokenQuery.isLoading
-                  }
-                >
-                  <div className='justify-self-end font-medium'>
-                    <NativeSelect
-                      size='sm'
-                      classNames={{
-                        label: 'hidden',
-                      }}
-                      label='Sırala'
-                      value={order}
-                      onChange={({ currentTarget: { value } }) => {
-                        setFilterParams({
-                          order: value as SortOrderEnums,
-                        })
-                      }}
-                      data={[
-                        {
-                          label: 'En Ucuz',
-                          value: SortOrderEnums.priceAsc,
-                        },
-                        {
-                          label: 'En Pahalı',
-                          value: SortOrderEnums.priceDesc,
-                        },
-                        {
-                          label: 'En Erken',
-                          value: SortOrderEnums.hourAsc,
-                        },
-                        {
-                          label: 'En Geç',
-                          value: SortOrderEnums.hourDesc,
-                        },
-                        {
-                          label: 'En Hızlı',
-                          value: SortOrderEnums.durationAsc,
-                        },
-                        {
-                          label: 'En Uuzn',
-                          value: SortOrderEnums.durationDesc,
-                        },
-                        // { label: 'Varış Saati (Artan)', value: '' },
-                        // { label: 'Varış Saati (Azalan)', value: '' },
-                      ]}
-                    />
-                  </div>
-                </Skeleton>
-              </div>
-              <Skeleton
-                className='my-3 flex items-center gap-2 px-1 md:hidden'
-                visible={
-                  searchResultsQuery.isLoading ||
-                  searchResultsQuery.isFetching ||
-                  searchResultsQuery.isFetchingNextPage ||
-                  searchSessionTokenQuery.isLoading
-                }
-              >
-                {searchParams.destination && (
-                  <span className='text-sm font-semibold text-gray-500'>
-                    <div>
-                      {originName}-{destinationName}, seferi için toplam{' '}
-                      {totalCount} uçuş bulduk!
-                    </div>
-                  </span>
-                )}
-              </Skeleton>
-            </div>
             <div>
               {filteredData?.length ? (
                 isDomestic ? (
                   isReturnFlightVisible ? (
                     <div>
-                      <div className='mb-2 flex items-center gap-3'>
-                        <div className='text-lg font-medium'>
-                          Gidiş Uçuşu Seçildi
-                        </div>
-                        <div className='hidden items-center gap-1 text-sm font-semibold text-gray-600 md:flex md:justify-end'>
-                          <div>
-                            {
-                              selectedFlightItemPackages?.flights.at(0)
-                                ?.segments[0].origin.code
-                            }
-                          </div>{' '}
-                          <div>-</div>
-                          <div>
-                            {
-                              selectedFlightItemPackages?.flights
-                                .at(0)
-                                ?.segments.at(-1)?.destination.code
-                            }
-                          </div>
-                          <div>
-                            {dayjs(
-                              selectedFlightItemPackages?.flights
-                                .at(0)
-                                ?.segments.at(0)?.departureTime
-                            ).format(' DD MMM YYYY, ddd')}
-                          </div>
-                        </div>
-                      </div>
-                      <div className='@container mb-5 items-center gap-4 rounded-lg bg-blue-100 shadow md:grid md:grid-cols-5 md:py-6'>
-                        <div className='col-span-4 grid gap-4'>
-                          <div className='relative grid p-3 md:grid-cols-3 md:p-5'>
-                            <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-blue-800 md:mt-0' />
-
-                            <div className='flex items-center gap-3 text-sm'>
-                              <div>
-                                <AirlineLogo
-                                  airlineCode={
-                                    selectedFlightItemPackages?.flights
-                                      .at(0)
-                                      ?.segments[0]?.marketingAirline.code?.toLowerCase() ??
-                                    ''
-                                  }
-                                />
-                              </div>
-                              <div>
-                                <div className='font-medium'>
-                                  {
-                                    airlineDataObj
-                                      ?.find(
-                                        (airline) =>
-                                          airline.Code ===
-                                          selectedFlightItemPackages?.flights.at(
-                                            0
-                                          )?.segments[0]?.marketingAirline.code
-                                      )
-                                      ?.Value.find(
-                                        (val) => val.LangCode === 'tr_TR'
-                                      )?.Value
-                                  }
-                                </div>
-                                <div className='md:text-md flex items-center gap-1 text-xs'>
-                                  <PiSuitcaseRolling />
-                                  8kg El Bagajı
-                                </div>
-                              </div>
+                      <div className='not-only: @container mb-4 grid items-center rounded-lg border-2 border-blue-500 shadow'>
+                        <div className='flex items-center justify-between rounded-t-lg bg-blue-100 py-3 md:p-2'>
+                          <div className='flex items-center justify-between'>
+                            <div className='text-md flex items-center font-bold'>
+                              <LuCircleCheckBig
+                                size={24}
+                                className='text-blue-800'
+                              />
+                              <span className='md:text-md ps-2 text-sm'>
+                                Gidiş Uçuşunuz
+                              </span>
+                              <FaArrowRightLong className='ml-2' /> {''}
                             </div>
 
-                            <div className='relative col-span-2 grid'>
-                              <div className='mt-3 flex items-center justify-between text-sm text-gray-600 md:mt-0'>
-                                <div className='text-center'>
-                                  <div className='text-xl font-semibold'>
-                                    {dayjs(
-                                      selectedFlightItemPackages?.flights.at(0)
-                                        ?.segments[0]?.departureTime
-                                    ).format('HH:mm')}
-                                  </div>
-                                  <div>
-                                    {
-                                      selectedFlightItemPackages?.flights.at(0)
-                                        ?.segments[0].origin.code
-                                    }
-                                  </div>
-                                </div>
-
-                                <div className='relative mx-2 grow'>
-                                  <Box bg='blue' h={2} className='rounded' />
-                                  <div
-                                    className='absolute end-0 -translate-y-1/2 rotate-90 text-blue-800'
-                                    style={{ top: 1, paddingBottom: 1 }}
-                                  >
-                                    <MdOutlineAirplanemodeActive size={18} />
-                                  </div>
-                                </div>
-
-                                <div className='text-center'>
-                                  <div className='text-xl font-semibold'>
-                                    {dayjs(
-                                      selectedFlightItemPackages?.flights
-                                        .at(0)
-                                        ?.segments.at(-1)?.arrivalTime
-                                    ).format('HH:mm')}
-                                  </div>
-                                  <div>
-                                    {
-                                      selectedFlightItemPackages?.flights
-                                        .at(0)
-                                        ?.segments.at(-1)?.destination.code
-                                    }
-                                  </div>
-                                </div>
+                            <div className='flex items-center gap-1 ps-2 text-xs font-bold md:justify-end md:text-sm'>
+                              <div>
+                                {
+                                  selectedFlightItemPackages?.flights.at(0)
+                                    ?.segments[0].origin.code
+                                }
+                              </div>{' '}
+                              <div>-</div>
+                              <div>
+                                {
+                                  selectedFlightItemPackages?.flights
+                                    .at(0)
+                                    ?.segments.at(-1)?.destination.code
+                                }
+                                ,
                               </div>
-
-                              <div className='md:text-md absolute start-0 end-0 mt-3 flex justify-center text-xs text-black md:mt-0'>
+                              <div>
                                 {dayjs(
                                   selectedFlightItemPackages?.flights
                                     .at(0)
                                     ?.segments.at(0)?.departureTime
                                 ).format(' DD MMM YYYY, ddd')}
                               </div>
-                              <div className='md:text-md absolute start-0 end-0 top-10 flex items-center justify-center gap-2 text-xs text-black'>
-                                <div>
-                                  {hours}s {minutes}d
-                                </div>
-                                <div>
-                                  {(() => {
-                                    const numSegments =
-                                      selectedFlightItemPackages?.flights.at(0)
-                                        ?.segments.length ?? 0
-                                    const hasTransferStop = numSegments > 1
-                                    return hasTransferStop ? (
-                                      <span className='text-red-600'>
-                                        {numSegments - 1} Aktarma
-                                      </span>
-                                    ) : (
-                                      <span className='md-text-md text-sm text-green-800'>
-                                        Aktarmasız
-                                      </span>
-                                    )
-                                  })()}
-                                </div>
-                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <hr className='mt-2 flex md:hidden' />
-                        <div className='flex justify-between gap-3 border-l px-3 py-5 text-center md:grid'>
-                          <div className='text-xl font-semibold'>
-                            {(() => {
-                              const packagePrice =
-                                selectedFlightItemPackages?.flights?.[0]?.package.find(
-                                  (pckK) =>
-                                    pckK.fareInfo.key ===
-                                    selectedFlightKeys.current?.[0]
-                                )?.fareInfo.totalPrice.value
-                              return packagePrice !== undefined
-                                ? formatCurrency(packagePrice)
-                                : ''
-                            })()}
                           </div>
                           <div>
                             <Button
-                              className='text-blue border-0 bg-white px-4 py-2'
+                              className='text-blue hidden border border-gray-300 bg-white px-7 py-2 text-sm font-normal md:flex'
                               size='md'
                               radius='md'
                               variant='default'
                               type='button'
                               onClick={resetSelectedFlights}
                             >
-                              Uçuşu Değiştir
+                              Değiştir
                             </Button>
                           </div>
                         </div>
-                      </div>
+                        <div>
+                          <div className='grid items-center gap-6 md:grid-cols-6'>
+                            <div className='relative col-span-5 grid'>
+                              <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-blue-800 md:mt-0' />
+                              <div className='grid md:grid-cols-3'>
+                                <div className='col-span-1 mt-2 flex items-center gap-1 px-3 text-sm md:mt-0'>
+                                  <div>
+                                    <AirlineLogo
+                                      airlineCode={
+                                        selectedFlightItemPackages?.flights
+                                          .at(0)
+                                          ?.segments[0]?.marketingAirline.code?.toLowerCase() ??
+                                        ''
+                                      }
+                                    />
+                                  </div>
+                                  <div className='flex items-center justify-between md:grid'>
+                                    <div className='text-sm'>
+                                      {
+                                        airlineDataObj
+                                          ?.find(
+                                            (airline) =>
+                                              airline.Code ===
+                                              selectedFlightItemPackages?.flights.at(
+                                                0
+                                              )?.segments[0]?.marketingAirline
+                                                .code
+                                          )
+                                          ?.Value.find(
+                                            (val) => val.LangCode === 'tr_TR'
+                                          )?.Value
+                                      }
+                                    </div>
+                                    <div className='flex items-center gap-1 px-5 text-sm md:px-0'>
+                                      <PiSuitcaseRolling />
+                                      8kg El Bagajı
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className='relative col-span-2 mt-5 grid'>
+                                  <div className='flex items-center justify-between px-3 text-sm'>
+                                    <div className='text-center'>
+                                      <div className='text-lg font-medium'>
+                                        {dayjs(
+                                          selectedFlightItemPackages?.flights.at(
+                                            0
+                                          )?.segments[0]?.departureTime
+                                        ).format('HH:mm')}
+                                      </div>
+                                      <div className='text-sm'>
+                                        {
+                                          selectedFlightItemPackages?.flights.at(
+                                            0
+                                          )?.segments[0].origin.code
+                                        }
+                                      </div>
+                                    </div>
 
-                      <div className='text-lg font-medium'>
-                        Dönüş uçuşunuzu seçiniz.
+                                    <div className='relative mx-4 grow'>
+                                      <Box
+                                        bg='blue'
+                                        h={2}
+                                        className='rounded'
+                                      />
+                                      <div
+                                        className='absolute end-0 -translate-y-1/2 rotate-90 text-blue-800'
+                                        style={{ top: 1, paddingBottom: 1 }}
+                                      >
+                                        <MdOutlineAirplanemodeActive
+                                          size={18}
+                                        />
+                                      </div>
+                                    </div>
+
+                                    <div className='text-center'>
+                                      <div className='text-lg font-medium'>
+                                        {dayjs(
+                                          selectedFlightItemPackages?.flights
+                                            .at(0)
+                                            ?.segments.at(-1)?.arrivalTime
+                                        ).format('HH:mm')}
+                                      </div>
+                                      <div className='text-sm'>
+                                        {
+                                          selectedFlightItemPackages?.flights
+                                            .at(0)
+                                            ?.segments.at(-1)?.destination.code
+                                        }
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className='md:text-md absolute start-0 end-0 top-0 flex items-center justify-center gap-1 text-xs text-black'>
+                                    <div>
+                                      {hours}s {minutes}d
+                                    </div>
+                                    <div>
+                                      {(() => {
+                                        const numSegments =
+                                          selectedFlightItemPackages?.flights.at(
+                                            0
+                                          )?.segments.length ?? 0
+                                        const hasTransferStop = numSegments > 1
+                                        return hasTransferStop ? (
+                                          <span className='text-red-600'>
+                                            {numSegments - 1} Aktarma
+                                          </span>
+                                        ) : (
+                                          <span className='md-text-md text-sm text-green-800'>
+                                            Aktarmasız
+                                          </span>
+                                        )
+                                      })()}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className='col-span-1 hidden items-center justify-center text-center md:grid md:pt-6'>
+                              <div className='text-xl font-semibold'>
+                                {(() => {
+                                  const packagePrice =
+                                    selectedFlightItemPackages?.flights?.[0]?.package.find(
+                                      (pckK) =>
+                                        pckK.fareInfo.key ===
+                                        selectedFlightKeys.current?.[0]
+                                    )?.fareInfo.totalPrice.value
+                                  return packagePrice !== undefined
+                                    ? formatCurrency(packagePrice)
+                                    : ''
+                                })()}
+                              </div>
+                              <div className=''>
+                                <Button
+                                  className='border-0 bg-white px-0 text-sm font-normal text-blue-500'
+                                  onClick={toggleDetails}
+                                >
+                                  {detailsOpened ? (
+                                    <>
+                                      Detayı Kapat <IoIosClose size={25} />
+                                    </>
+                                  ) : (
+                                    'Uçuş Detayları'
+                                  )}
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          <hr className='mt-2 flex md:hidden' />
+                          <div>
+                            <div className='col-span-1 my-2 flex items-center justify-between gap-3 px-3 text-center md:hidden'>
+                              <div className='text-lg font-semibold'>
+                                {(() => {
+                                  const packagePrice =
+                                    selectedFlightItemPackages?.flights?.[0]?.package.find(
+                                      (pckK) =>
+                                        pckK.fareInfo.key ===
+                                        selectedFlightKeys.current?.[0]
+                                    )?.fareInfo.totalPrice.value
+                                  return packagePrice !== undefined
+                                    ? formatCurrency(packagePrice)
+                                    : ''
+                                })()}
+                              </div>
+                              <div>
+                                <Button
+                                  className='border-0 bg-white px-0 text-xs font-normal text-blue-500'
+                                  onClick={toggleDetails}
+                                >
+                                  {detailsOpened ? (
+                                    <>
+                                      Detayı Kapat <IoIosClose size={25} />
+                                    </>
+                                  ) : (
+                                    'Uçuş Detayları'
+                                  )}
+                                </Button>
+                              </div>
+                              <div>
+                                <Button
+                                  className='text-blue border border-gray-300 bg-white px-7 py-2 text-sm font-normal'
+                                  size='sm'
+                                  radius='md'
+                                  variant='default'
+                                  type='button'
+                                  onClick={resetSelectedFlights}
+                                >
+                                  Değiştir
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className='rounded-lg bg-gray-100 text-start md:mr-5 md:mb-5 md:ml-5'>
+                          {selectedFlightItemPackages?.flights[0].details &&
+                            selectedFlightItemPackages?.flights[0].segments && (
+                              <FlightDetailsSearch
+                                details={
+                                  selectedFlightItemPackages?.flights[0].details
+                                }
+                                detailSegments={
+                                  selectedFlightItemPackages?.flights[0]
+                                    .segments
+                                }
+                                airlineValues={airlineDataObj}
+                                airportValues={getAirportsByCodeList.data}
+                                opened={detailsOpened}
+                                isDomestic={true}
+                              />
+                            )}
+                        </div>
+                      </div>
+                      <div className='flex items-center justify-between py-3'>
+                        <div className='text-xl font-medium md:text-2xl'>
+                          Dönüş Uçuşunuzu Seçiniz
+                        </div>
+                        <div>
+                          <div className='flex md:mb-5 md:hidden md:justify-between'>
+                            <div className='ms-auto flex items-center gap-1'>
+                              <Skeleton
+                                visible={
+                                  searchResultsQuery.isLoading ||
+                                  searchResultsQuery.isFetching ||
+                                  searchResultsQuery.isFetchingNextPage ||
+                                  searchSessionTokenQuery.isLoading
+                                }
+                              >
+                                <Box className='justify-self-start'>
+                                  <Button
+                                    onClick={() =>
+                                      setFilterSectionIsOpened((prev) => !prev)
+                                    }
+                                    size='sm'
+                                    color='black'
+                                    className='flex border-gray-400 px-5 font-medium text-black md:mx-1 md:hidden'
+                                    variant='outline'
+                                  >
+                                    Filtrele
+                                  </Button>
+                                </Box>
+                              </Skeleton>
+                            </div>
+                          </div>
+
+                          <Skeleton
+                            className='hidden md:flex'
+                            visible={
+                              searchResultsQuery.isLoading ||
+                              searchResultsQuery.isFetching ||
+                              searchResultsQuery.isFetchingNextPage ||
+                              searchSessionTokenQuery.isLoading
+                            }
+                          >
+                            <div className='justify-self-end'>
+                              <Select
+                                checkIconPosition='right'
+                                leftSection={<FaCheck />}
+                                size='sm'
+                                classNames={{
+                                  label: 'hidden',
+                                }}
+                                label='Sırala'
+                                value={order}
+                                onChange={(value) => {
+                                  setFilterParams({
+                                    order: value as SortOrderEnums,
+                                  })
+                                }}
+                                data={[
+                                  {
+                                    label: 'Fiyata Göre Artan ',
+                                    value: SortOrderEnums.priceAsc,
+                                  },
+                                  {
+                                    label: 'Fiyata Göre Azalan',
+                                    value: SortOrderEnums.priceDesc,
+                                  },
+                                  {
+                                    label: 'En Erken',
+                                    value: SortOrderEnums.hourAsc,
+                                  },
+                                  {
+                                    label: 'En Geç',
+                                    value: SortOrderEnums.hourDesc,
+                                  },
+                                  {
+                                    label: 'En Hızlı',
+                                    value: SortOrderEnums.durationAsc,
+                                  },
+                                  {
+                                    label: 'En Uuzn',
+                                    value: SortOrderEnums.durationDesc,
+                                  },
+                                ]}
+                              />
+                            </div>
+                          </Skeleton>
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <Skeleton
-                      className='w-50'
+                      className='flex items-center justify-between py-3'
                       visible={
                         searchResultsQuery.isLoading ||
                         searchResultsQuery.isFetching ||
@@ -953,10 +1027,86 @@ const FlightSearchView = () => {
                         searchSessionTokenQuery.isLoading
                       }
                     >
+                      <span className='text-xl font-medium md:text-2xl'>
+                        {!isReturnFlightVisible && filteredData?.length
+                          ? 'Gidiş uçuşunuzu seçiniz'
+                          : isReturnFlightVisible && filteredData?.length
+                            ? 'Dönüş uçuşunuzu seçiniz.'
+                            : ''}
+                      </span>
                       <div>
-                        <span className='text-lg font-medium'>
-                          Gidiş uçuşunuzu seçiniz.
-                        </span>
+                        <Skeleton
+                          className='flex md:hidden'
+                          visible={
+                            searchResultsQuery.isLoading ||
+                            searchResultsQuery.isFetching ||
+                            searchResultsQuery.isFetchingNextPage ||
+                            searchSessionTokenQuery.isLoading
+                          }
+                        >
+                          <Box className='justify-self-start'>
+                            <Button
+                              onClick={() =>
+                                setFilterSectionIsOpened((prev) => !prev)
+                              }
+                              size='sm'
+                              color='black'
+                              className='flex border-gray-400 px-5 font-medium text-black md:mx-1 md:hidden'
+                              variant='outline'
+                            >
+                              Filtrele
+                            </Button>
+                          </Box>
+                        </Skeleton>
+                        <Skeleton
+                          className='hidden md:flex'
+                          visible={
+                            searchResultsQuery.isLoading ||
+                            searchResultsQuery.isFetching ||
+                            searchResultsQuery.isFetchingNextPage ||
+                            searchSessionTokenQuery.isLoading
+                          }
+                        >
+                          <div className=''>
+                            <Select
+                              leftSection={<FaCheck />}
+                              size='md'
+                              checkIconPosition='right'
+                              value={order}
+                              onChange={(value) =>
+                                setFilterParams({
+                                  order: value as SortOrderEnums,
+                                })
+                              }
+                              data={[
+                                {
+                                  label: 'Fiyata Göre Artan ',
+                                  value: SortOrderEnums.priceAsc,
+                                },
+                                {
+                                  label: 'Fiyata Göre Azalan',
+                                  value: SortOrderEnums.priceDesc,
+                                },
+                                {
+                                  label: 'En Erken',
+                                  value: SortOrderEnums.hourAsc,
+                                },
+                                {
+                                  label: 'En Geç',
+                                  value: SortOrderEnums.hourDesc,
+                                },
+                                {
+                                  label: 'En Hızlı',
+                                  value: SortOrderEnums.durationAsc,
+                                },
+                                {
+                                  label: 'En Uzun',
+                                  value: SortOrderEnums.durationDesc,
+                                },
+                              ]}
+                            />
+                          </div>
+                        </Skeleton>
                       </div>
                     </Skeleton>
                   )
@@ -1163,7 +1313,7 @@ const FlightSearchView = () => {
         }}
         title={
           <div className='flex justify-center gap-1'>
-            <span className='font-semibold'>
+            <span className='md:text-md text-sm font-semibold'>
               {
                 airlineDataObj
                   ?.find(
@@ -1174,15 +1324,17 @@ const FlightSearchView = () => {
                   )
                   ?.Value.at(0)?.Value
               }
+              {''}-{''}
             </span>
-            <span className='font-semibold'>
+            <span className='md:text-md text-sm font-semibold'>
               {
                 selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
                   ?.origin.code
               }
+              {''}-{''}
             </span>
 
-            <span>Fiyatlarını İnceleyin</span>
+            <span className='md:text-md text-sm'>Fiyatlarını İnceleyin</span>
           </div>
         }
       >

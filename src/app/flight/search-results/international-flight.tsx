@@ -237,7 +237,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         </div>
       </div>
 
-      <div className='col-span-5 rounded bg-gray-100 text-start md:mr-5 md:mb-5 md:ml-5'>
+      <div className='col-span-5 rounded-lg bg-gray-100 text-start md:mr-5 md:mb-5 md:ml-5'>
         <FlightDetailsSearch
           details={details}
           detailSegments={detailSegments}

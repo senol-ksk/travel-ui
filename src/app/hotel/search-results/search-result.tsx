@@ -64,11 +64,11 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   }
   const filterOptions = [
     {
-      label: 'En Ucuz',
+      label: 'Fiyata Göre Artan ',
       value: HotelSortOrderEnums.priceAscending,
     },
     {
-      label: 'En Pahalı',
+      label: 'Fiyata Göre Azalan',
       value: HotelSortOrderEnums.priceDescending,
     },
     {
@@ -565,11 +565,11 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         }}
                         data={[
                           {
-                            label: 'En Ucuz',
+                            label: 'Fiyata Göre Artan ',
                             value: HotelSortOrderEnums.priceAscending,
                           },
                           {
-                            label: 'En Pahalı',
+                            label: 'Fiyata Göre Azalan',
                             value: HotelSortOrderEnums.priceDescending,
                           },
 

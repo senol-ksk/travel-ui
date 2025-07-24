@@ -176,7 +176,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
           )
         })}
       </div>
-      <div className='grid gap-3 px-3 text-center md:pt-6'>
+      <div className='grid gap-1 px-3 text-center md:pt-6'>
         <div className='text-xl font-semibold'>
           {formatCurrency(fareInfo.totalPrice.value)}
         </div>
@@ -197,7 +197,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         >
           {detailsOpened ? (
             <>
-              Uçuş Detayını Kapat <IoIosClose size={25} />
+              Uçuş Detayı Kapat <IoIosClose size={25} />
             </>
           ) : (
             'Uçuş Detayları'
@@ -205,7 +205,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         </Button>
       </div>
 
-      <div className='col-span-5 rounded bg-gray-100 text-start md:mr-5 md:mb-5 md:ml-5'>
+      <div className='col-span-5 rounded-lg bg-gray-100 text-start md:mr-5 md:mb-5 md:ml-5'>
         <FlightDetailsSearch
           details={details}
           detailSegments={detailSegments}

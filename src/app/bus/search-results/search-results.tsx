@@ -168,11 +168,11 @@ const BusSearchResults: React.FC = () => {
   const originName = parsedData?.Origin?.Name ?? ''
   const filterOptions = [
     {
-      label: 'En Ucuz',
+      label: 'Fiyata Göre Artan ',
       value: SortOrderEnums.priceAsc,
     },
     {
-      label: 'En Pahalı',
+      label: 'Fiyata Göre Azalan',
       value: SortOrderEnums.priceDesc,
     },
     {
@@ -512,11 +512,11 @@ const BusSearchResults: React.FC = () => {
                             size='sm'
                             data={[
                               {
-                                label: 'En Ucuz',
+                                label: 'Fiyata Göre Artan ',
                                 value: SortOrderEnums.priceAsc,
                               },
                               {
-                                label: 'En Pahalı',
+                                label: 'Fiyata Göre Azalan',
                                 value: SortOrderEnums.priceDesc,
                               },
                               {
