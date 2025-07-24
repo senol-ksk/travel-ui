@@ -16,11 +16,11 @@ const SortBySelect = () => {
       }}
       data={[
         {
-          label: 'En Ucuz',
+          label: 'Fiyata Göre Artan ',
           value: SortOrderEnums.priceAsc,
         },
         {
-          label: 'En Pahalı',
+          label: 'Fiyata Göre Azalan',
           value: SortOrderEnums.priceDesc,
         },
         // {

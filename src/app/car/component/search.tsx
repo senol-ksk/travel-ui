@@ -97,11 +97,11 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
     searchRequestParams.params.carRentalSearchPanel.destination[0].name
   const filterOptions = [
     {
-      label: 'En Ucuz',
+      label: 'Fiyata Göre Artan ',
       value: SortOrderEnums.priceAsc,
     },
     {
-      label: 'En Pahalı',
+      label: 'Fiyata Göre Azalan',
       value: SortOrderEnums.priceDesc,
     },
   ]
