@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mantine/core'
 import { Link } from 'next-view-transitions'
+import { notFound } from 'next/navigation'
 
 type CMSHelpCenterParams = {
   sub_title: {
@@ -102,7 +103,7 @@ export default async function HelpCenterPage({
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
   const { widgets, title } = data
   const accordionData = widgets.filter((x) => x.point === 'list')
   const topMenu = widgets.filter((x) => x.point === 'help_menu')

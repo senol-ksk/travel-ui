@@ -1,4 +1,13 @@
-import { Container, Title, Image } from '@mantine/core'
+import {
+  Container,
+  Title,
+  Image,
+  Typography,
+  Accordion,
+  AccordionItem,
+  AccordionControl,
+  AccordionPanel,
+} from '@mantine/core'
 import NextImage from 'next/image'
 
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
@@ -8,6 +17,7 @@ import {
   TransferLandingParams,
   TransferLandingWidget,
 } from '@/types/cms-types'
+import { notFound } from 'next/navigation'
 
 export default async function TransferLandingPage() {
   const data = (
@@ -16,11 +26,12 @@ export default async function TransferLandingPage() {
     >('transfer/transfer')
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
   const { widgets, params } = data
   const teaser = widgets.filter((item) => item.point === 'teaser')
   const content = widgets?.find((x) => x.point == 'content')
   const bottomContents = widgets?.filter((x) => x.point == 'bottom_contents')
+  const faqs = widgets?.filter((x) => x.point == 'sss')
   const populerTransferPoints = widgets?.filter(
     (x) => x.point == 'populer_transfer_points'
   )
@@ -45,7 +56,7 @@ export default async function TransferLandingPage() {
           </div>
         </Container>
       </div>
-      <Container className='flex flex-col gap-3 py-5 md:gap-7 md:py-10'>
+      <Container className='grid grid-cols-1 gap-8 py-5 md:gap-12 md:py-10'>
         <div className='py-4 md:py-7'>
           <div className='grid grid-cols-1 gap-2 sm:grid-cols-3 md:gap-4'>
             {teaser.map((teaserItem) => (
@@ -58,17 +69,20 @@ export default async function TransferLandingPage() {
             ))}
           </div>
         </div>
+
         {bottomContents.length > 0 &&
           bottomContents.map((content) => {
             return (
               <div key={content.id}>
-                <Title order={3}>{content.title}</Title>
+                <Title order={3}>{content.title} </Title>
                 <div>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: content.params.description.value,
-                    }}
-                  />
+                  <Typography>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: content.params.description.value,
+                      }}
+                    />
+                  </Typography>
                 </div>
                 <div>
                   <Image
@@ -84,9 +98,11 @@ export default async function TransferLandingPage() {
 
         {content && (
           <div>
-            <Title order={2}>{content.title}</Title>
+            <Title order={2} mb={'md'}>
+              {content.title}
+            </Title>
             <div className='grid grid-cols-1 gap-3 pt-4 sm:grid-cols-3'>
-              <div className='col-span-1 flex justify-center md:order-2'>
+              <div className='flex justify-center md:order-2 md:col-span-1'>
                 <Image
                   component={NextImage}
                   src={cdnImageUrl(content.params.image.value)}
@@ -96,19 +112,22 @@ export default async function TransferLandingPage() {
                   radius={'md'}
                 />
               </div>
-              <div className='col-span-2'>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: content.params.description.value,
-                  }}
-                />
+              <div className='md:col-span-2'>
+                <Typography>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: content.params.description.value,
+                    }}
+                  />
+                </Typography>
               </div>
             </div>
           </div>
         )}
+
         {populerTransferPoints.length > 0 && (
           <div>
-            <Title order={2} fz={'h3'}>
+            <Title order={2} fz={'h3'} mb={'lg'}>
               Popüler Transfer Noktaları
             </Title>
             <div className='grid grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-4'>
@@ -129,6 +148,37 @@ export default async function TransferLandingPage() {
                 )
               })}
             </div>
+          </div>
+        )}
+
+        {faqs.length > 0 && (
+          <div>
+            <Title order={2} mb={'lg'} fz={'h3'}>
+              Sıkça Sorulan Sorular
+            </Title>
+            <Accordion chevronPosition='right' variant='contained' radius='md'>
+              {faqs.map((faq) => {
+                return faq.params.description &&
+                  faq.params.description?.value ? (
+                  <AccordionItem key={faq.id} value={faq.title}>
+                    <AccordionControl
+                      classNames={{
+                        label: 'font-medium py-2 md:py-6',
+                      }}
+                    >
+                      {faq.title}
+                    </AccordionControl>
+                    <AccordionPanel>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: faq.params.description.value,
+                        }}
+                      />
+                    </AccordionPanel>
+                  </AccordionItem>
+                ) : null
+              })}
+            </Accordion>
           </div>
         )}
       </Container>
