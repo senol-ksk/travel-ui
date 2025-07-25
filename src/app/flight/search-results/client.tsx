@@ -693,14 +693,14 @@ const FlightSearchView = () => {
                                     .at(0)
                                     ?.segments.at(-1)?.destination.code
                                 }
-                                ,
+                                -
                               </div>
                               <div>
                                 {dayjs(
                                   selectedFlightItemPackages?.flights
                                     .at(0)
                                     ?.segments.at(0)?.departureTime
-                                ).format(' DD MMM YYYY, ddd')}
+                                ).format(' DD MMM, ddd')}
                               </div>
                             </div>
                           </div>
@@ -868,7 +868,7 @@ const FlightSearchView = () => {
                           <hr className='mt-2 flex md:hidden' />
                           <div>
                             <div className='col-span-1 my-2 flex items-center justify-between gap-3 px-3 text-center md:hidden'>
-                              <div className='text-lg font-semibold'>
+                              <div className='text-md font-semibold'>
                                 {(() => {
                                   const packagePrice =
                                     selectedFlightItemPackages?.flights?.[0]?.package.find(
@@ -897,8 +897,8 @@ const FlightSearchView = () => {
                               </div>
                               <div>
                                 <Button
-                                  className='text-blue border border-gray-300 bg-white px-7 py-2 text-sm font-normal'
-                                  size='sm'
+                                  className='text-blue border border-gray-300 bg-white px-5 py-2 text-sm font-normal'
+                                  size='xs'
                                   radius='md'
                                   variant='default'
                                   type='button'
