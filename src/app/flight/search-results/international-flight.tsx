@@ -222,7 +222,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
         </div>
         <div>
           <Button
-            className='border-0 bg-white px-0 text-sm text-blue-500'
+            className='border-0 bg-white px-0 text-sm font-normal text-blue-500'
             onClick={toggleDetails}
           >
             {detailsOpened ? (

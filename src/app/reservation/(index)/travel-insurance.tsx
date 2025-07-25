@@ -2,6 +2,7 @@ import { Group, Modal, Radio, Title, UnstyledButton, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 
 import { CheckoutCard } from '@/components/card'
+import { MdHealthAndSafety } from 'react-icons/md'
 
 const TravelInsurancePackages = () => {
   const [opened, { open, close }] = useDisclosure(false)
@@ -10,10 +11,14 @@ const TravelInsurancePackages = () => {
     <>
       <CheckoutCard>
         {/* <TravelInsurancePackages /> */}
-        <Title order={5} className='text-lg font-semibold'>
-          Seyahat Sağlık Güvencesi
-        </Title>
-        <div className='pt-4 pb-3'>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <MdHealthAndSafety size={22} className='text-blue-800' />
+          <UnstyledButton type='button'>
+            <span className='text-xl font-bold'> Seyahat Sağlık Güvencesi</span>
+          </UnstyledButton>
+        </div>
+
+        <div>
           Seyahat Destek Hizmet Paketi ile Seyahatinizi Güvenceye Almak İster
           misiniz?
         </div>

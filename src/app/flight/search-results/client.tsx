@@ -248,7 +248,6 @@ const FlightSearchView = () => {
 
   // this is for flight select. first this should be called, then `handlePackageSelect`
   const handleFlightSelect = (flight: ClientDataType) => {
-    console.log(flight)
     const packages = flight.package.map((pack) => ({
       flightDetailSegment: pack.segments.at(0),
       flightFareInfo: pack.fareInfo,
@@ -446,7 +445,7 @@ const FlightSearchView = () => {
                           >
                             <div className='justify-self-end font-medium'>
                               <Select
-                                checkIconPosition='right'
+                                checkIconPosition='left'
                                 leftSection={<FaCheck />}
                                 size='sm'
                                 value={order}
@@ -661,8 +660,8 @@ const FlightSearchView = () => {
 
           <div className='md:col-span-6'>
             <div>
-              {filteredData?.length ? (
-                isDomestic ? (
+              <>
+                {filteredData?.length ? (
                   isReturnFlightVisible ? (
                     <div>
                       <div className='not-only: @container mb-4 grid items-center rounded-lg border-2 border-blue-500 shadow'>
@@ -733,7 +732,7 @@ const FlightSearchView = () => {
                                       }
                                     />
                                   </div>
-                                  <div className='flex items-center justify-between md:grid'>
+                                  <div className='flex items-center justify-between gap-2 md:grid'>
                                     <div className='text-sm'>
                                       {
                                         airlineDataObj
@@ -750,7 +749,7 @@ const FlightSearchView = () => {
                                           )?.Value
                                       }
                                     </div>
-                                    <div className='flex items-center gap-1 px-5 text-sm md:px-0'>
+                                    <div className='flex items-center gap-1 text-sm md:px-0'>
                                       <PiSuitcaseRolling />
                                       8kg El Bagajı
                                     </div>
@@ -951,7 +950,7 @@ const FlightSearchView = () => {
                                     }
                                     size='sm'
                                     color='black'
-                                    className='flex border-gray-400 px-5 font-medium text-black md:mx-1 md:hidden'
+                                    className='flex border-gray-400 px-3 font-medium text-black md:mx-1 md:hidden'
                                     variant='outline'
                                   >
                                     Filtrele
@@ -972,7 +971,7 @@ const FlightSearchView = () => {
                           >
                             <div className='justify-self-end'>
                               <Select
-                                checkIconPosition='right'
+                                checkIconPosition='left'
                                 leftSection={<FaCheck />}
                                 size='sm'
                                 classNames={{
@@ -1051,7 +1050,7 @@ const FlightSearchView = () => {
                               }
                               size='sm'
                               color='black'
-                              className='flex border-gray-400 px-5 font-medium text-black md:mx-1 md:hidden'
+                              className='flex border-gray-400 px-3 font-medium text-black md:mx-1 md:hidden'
                               variant='outline'
                             >
                               Filtrele
@@ -1071,7 +1070,7 @@ const FlightSearchView = () => {
                             <Select
                               leftSection={<FaCheck />}
                               size='md'
-                              checkIconPosition='right'
+                              checkIconPosition='left'
                               value={order}
                               onChange={(value) =>
                                 setFilterParams({
@@ -1110,8 +1109,8 @@ const FlightSearchView = () => {
                       </div>
                     </Skeleton>
                   )
-                ) : null
-              ) : null}
+                ) : null}
+              </>
             </div>
             <SearchPrevNextButtons
               searchSessionTokenQuery={searchSessionTokenQuery}
@@ -1282,7 +1281,6 @@ const FlightSearchView = () => {
                           (segment) => segment === airlineObj.Code
                         )
                       )
-
                     return (
                       <div className='pb-3 md:pb-5'>
                         <MemoizedFlightSearchResultsInternational

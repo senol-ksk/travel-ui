@@ -17,7 +17,7 @@ const convertBaggageLabel = (data: string) => {
   const price = +dataArr[0]
   const priceFormated = formatCurrency(+dataArr[0]) // first item is price
 
-  if (!price || price === 0) return 'Bagaj Ekle'
+  if (!price || price === 0) return 'Ek Bagaj Ekle'
 
   const baggage =
     dataArr[4] && dataArr[5]

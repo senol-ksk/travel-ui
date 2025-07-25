@@ -251,25 +251,24 @@ const TransferSearchResults = () => {
                 </>
               </Skeleton>
               <Skeleton
-                className='flex items-center justify-between gap-1 md:justify-end'
+                className='w-40 md:w-full'
                 visible={
                   !transferSearchResultsQuery.data ||
                   transferSearchResultsQuery.isLoading
                 }
               >
-                <div>
-                  <Button
-                    size='sm'
-                    color='black'
-                    className='flex border-gray-400 px-6 font-medium md:hidden'
-                    variant='outline'
-                    onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                    hiddenFrom='md'
-                  >
-                    Filtreler
-                  </Button>
-                </div>
-                <div className='flex items-center justify-end gap-1'>
+                <Button
+                  size='sm'
+                  color='black'
+                  className='flex border-gray-400 px-6 font-medium md:hidden'
+                  variant='outline'
+                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
+                  hiddenFrom='md'
+                >
+                  Filtreler
+                </Button>
+
+                <div className='hidden items-center justify-end gap-1 md:flex'>
                   {filterOptions.map((option) => (
                     <Button
                       size='sm'
@@ -295,7 +294,7 @@ const TransferSearchResults = () => {
               </Skeleton>
               <div>
                 <NativeSelect
-                  className='hidden font-medium'
+                  className='font-medium md:hidden'
                   size='sm'
                   value={order ? order : ''}
                   data={[
@@ -326,7 +325,9 @@ const TransferSearchResults = () => {
               <>
                 <div className='flex items-center gap-2 md:hidden'>
                   <div className='text-sm font-semibold text-gray-500'>
-                    Transferiniz için toplam {totalCount} araç bulduk!
+                    Transferiniz için toplam{' '}
+                    <span className='text-xl font-bold'>{totalCount}</span> araç
+                    bulduk!
                   </div>
                 </div>
               </>
