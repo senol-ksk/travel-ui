@@ -396,9 +396,9 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                 </Transition>
               </div>
               <div className='grid gap-3 md:col-span-3'>
-                <div className='grid grid-cols-3 items-center gap-2'>
+                <div className='grid grid-cols-3 items-center gap-2 md:grid-cols-5'>
                   <Skeleton
-                    className='col-span-1 hidden md:col-span-2 md:flex'
+                    className='col-span-1 hidden md:col-span-3 md:flex'
                     visible={
                       carSearchResult.isFetching ||
                       carSearchResult.isFetchingNextPage ||
@@ -408,11 +408,11 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     <>
                       <div className='hidden items-center gap-2 md:flex'>
                         <div>
-                          <span className='text-lg font-bold'>
+                          <span className='text-md font-bold'>
                             {destinationName},
                           </span>{' '}
                           için{' '}
-                          <span className='text-lg font-bold'>
+                          <span className='text-md font-bold'>
                             {totalCount}
                           </span>{' '}
                           araç bulduk!
@@ -430,9 +430,8 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     }
                   >
                     <Button
-                      size='sm'
                       color='black'
-                      className='mx-1 rounded-md border-gray-400 font-medium'
+                      className='rounded-md border-gray-400 font-medium'
                       variant='outline'
                       onClick={() => setFilterSectionIsOpened((prev) => !prev)}
                     >
@@ -440,7 +439,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     </Button>
                   </Skeleton>
                   <Skeleton
-                    className='col-span-2 flex items-center justify-end gap-2 md:col-span-1'
+                    className='col-span-2 hidden items-center justify-end gap-2 md:col-span-2 md:flex'
                     visible={
                       carSearchResult.isFetching ||
                       carSearchResult.isFetchingNextPage ||
@@ -453,7 +452,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                         className={
                           order === option.value
                             ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
-                            : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                            : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                         }
                         key={option.value}
                         leftSection={order === option.value ? <FaCheck /> : ''}
@@ -469,7 +468,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                       </Button>
                     ))}
                   </Skeleton>
-                  {/* <div className='relative col-span-1 ms-auto'>
+                  <div className='relative col-span-2 ms-auto flex md:hidden'>
                     <Skeleton
                       visible={
                         carSearchResult.isFetching ||
@@ -479,7 +478,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     >
                       <SortBySelect />
                     </Skeleton>
-                  </div> */}
+                  </div>
                 </div>
                 <Skeleton
                   className='flex items-center gap-2 px-3 md:hidden'
@@ -491,7 +490,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                 >
                   <>
                     <span className='text-sm font-semibold text-gray-500'>
-                      Arama sonucu {totalCount} araç bulundu
+                      Toplam {totalCount} araç bulundu
                     </span>
                   </>
                 </Skeleton>

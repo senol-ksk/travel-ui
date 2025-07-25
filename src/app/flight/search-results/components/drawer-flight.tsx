@@ -46,7 +46,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         packagePrice =
           selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
         packagePrice = Math.max(0, packagePrice)
-
+        console.log(selectedPackage)
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
@@ -312,19 +312,6 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   'AAAT-FFIRFL' ||
                   selectedPackage.flightDetailSegment.bookingCode ===
                     'AAAT-FBUSFL') && <div>Esnek İptal (Uçuşa kadar)</div>}
-
-              {/* {selectedPackage.flightDetailSegment.baggageAllowance
-                 .maxWeight.value > 0 &&
-                 selectedPackage.flightDetailSegment.operatingAirline
-                   .code !== 'AA' && (
-                   <div>
-                     {
-                       selectedPackage.flightDetailSegment.baggageAllowance
-                         .maxWeight.value
-                     }{' '}
-                     Kg Bagaj Hakkı
-                   </div>
-                 )} */}
             </Stack>
             <div className='mt-auto w-full'>
               <Button

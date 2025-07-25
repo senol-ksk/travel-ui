@@ -2,6 +2,7 @@ import { upperFirst, useDisclosure } from '@mantine/hooks'
 import { Button, Collapse, Drawer, Title, UnstyledButton } from '@mantine/core'
 
 import {
+  MdDescription,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
   MdTransferWithinAStation,
@@ -30,8 +31,7 @@ import { formatCurrency } from '@/libs/util'
 import NumberFlow from '@number-flow/react'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { FlightTransferSummary } from './transfer'
-import { BsSuitcaseLg } from 'react-icons/bs'
-
+import { FlightRules } from './flight-rules'
 const FlightSummary: React.FC<IProps> = ({ data }) => {
   const [openedPriceDetails, { toggle: togglePriceDetails }] =
     useDisclosure(false)
@@ -75,9 +75,31 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
 
                 return (
                   <div key={flightDetail.key} className='grid gap-1'>
-                    <Title order={5}>
-                      {flightDetail.groupId === 0 ? 'Gidiş' : 'Dönüş'}
+                    <Title
+                      order={4}
+                      className='flex items-center gap-2 border-b pb-1'
+                    >
+                      <MdDescription size={22} className='text-blue-800' />
+                      <span className='font-semibold'>Seyahat Özeti</span>
                     </Title>
+                    <div className='mt-2 flex items-center justify-between'>
+                      <Title order={5} className='font-medium'>
+                        {flightDetail.groupId === 0
+                          ? 'Gidiş Uçuşu'
+                          : 'Dönüş Uçuşu'}
+                      </Title>
+                      {flightDetail.groupId === 0 &&
+                        data.SummaryViewDataResponser.summaryResponse && (
+                          <>
+                            <FlightRules
+                              data={
+                                data.SummaryViewDataResponser
+                                  .summaryResponse as FlightReservationSummary
+                              }
+                            />
+                          </>
+                        )}
+                    </div>
                     <div className='flex gap-2'>
                       <div className='leading-none'>
                         <AirlineLogo
@@ -109,7 +131,7 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                       </div>
                     </div>
                     <div>
-                      <strong>
+                      <strong className='text-sm font-medium'>
                         {firstDepartureTime.format('HH:mm')}
                         {' - '}
                         {lastArrivalTime.format('HH:mm')}
@@ -148,8 +170,8 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
             onClick={togglePriceDetails}
           >
             <div className='flex items-center gap-1'>
-              <span>Toplam Tutar</span>
-              <span className='text-3xl'>
+              <span className='text-sm'>Toplam Tutar</span>
+              <span className='text-2xl'>
                 {openedPriceDetails ? (
                   <MdKeyboardArrowUp />
                 ) : (
@@ -157,9 +179,9 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                 )}
               </span>
             </div>
-            <div className='text-lg font-semibold'>
+            <div className='text-xl font-semibold'>
               <NumberFlow
-                className='pt-1 text-lg font-semibold'
+                className='pt-1 text-xl font-bold'
                 format={{
                   style: 'currency',
                   currency: 'TRY',

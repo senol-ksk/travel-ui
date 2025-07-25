@@ -32,7 +32,7 @@ const BillingForm = () => {
     <div>
       <Checkbox
         {...formContext.register('fillBillingInfosCheck')}
-        label={'Fatura Bilgileri'}
+        label={<div className='text-xl'>Fatura Bilgileri</div>}
         defaultChecked={opened}
         onChange={() => toggle()}
         classNames={{

@@ -13,6 +13,7 @@ import {
   type BaggageRequestDataModel,
 } from '../checkout-query'
 import { useRef } from 'react'
+import { MdOutlineLuggage } from 'react-icons/md'
 
 type IProps = {
   flightInfos: FlightReservationSummary
@@ -91,64 +92,61 @@ const FlightOptionalServices: React.FC<IProps> = ({
 
   return (
     <CheckoutCard>
-      <div className='grid py-2 md:p-0'>
-        <UnstyledButton
-          className='text-lg font-semibold'
-          onClick={toggle}
-          type='button'
-        >
-          Bagaj hakkını yükseltin
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <MdOutlineLuggage size={22} className='text-blue-800' />
+        <UnstyledButton onClick={toggle} type='button'>
+          <span className='text-xl font-bold'> Bagaj hakkını yükseltin</span>
         </UnstyledButton>
-        <Collapse in={opened} className='relative'>
-          <LoadingOverlay visible={isLoading || baggageMutation.isPending} />
-          <div className='grid gap-5'>
-            {passengers
-              ?.filter((passenger) => passenger.key !== 'Infant') // Infant passengers can not select baggage
-              .map((passenger, passengerIndex) => (
-                <div key={passenger.orderId} className='grid gap-1'>
-                  <Title order={6} fz='h5' className='mt-3'>
-                    {passenger.orderId}.Yolcu
-                  </Title>
-
-                  <div className='grid grid-cols-2 gap-3 md:gap-5'>
-                    {baggageServiceArray.map((item, flightIndex) => {
-                      const relatedFlightData =
-                        flightInfos.flightList[flightIndex]
-                      return (
-                        item.length > 0 && (
-                          <div key={flightIndex}>
-                            <BaggageSelect
-                              label={
-                                relatedFlightData.flightDetail.groupId === 0 ? (
-                                  <span className='font-normal'>
-                                    Gidiş Uçuşu
-                                  </span>
-                                ) : (
-                                  <span className='font-normal'>
-                                    Dönüş Uçuşu
-                                  </span>
-                                )
-                              }
-                              data={item}
-                              onChange={(item) => {
-                                handleBaggageSelect({
-                                  baggageData: item,
-                                  passengerIndex,
-                                  flightLeg: flightIndex,
-                                  // passengerIndex
-                                })
-                              }}
-                            />
-                          </div>
-                        )
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-          </div>
-        </Collapse>
       </div>
+      <Collapse in={opened} className='relative'>
+        <LoadingOverlay visible={isLoading || baggageMutation.isPending} />
+        <div className='grid gap-5'>
+          {passengers
+            ?.filter((passenger) => passenger.key !== 'Infant') // Infant passengers can not select baggage
+            .map((passenger, passengerIndex) => (
+              <div key={passenger.orderId} className='grid gap-1'>
+                <Title className='text-sm font-medium'>
+                  {passenger.orderId}.Yolcu
+                </Title>
+
+                <div className='grid grid-cols-2 gap-3 md:gap-5'>
+                  {baggageServiceArray.map((item, flightIndex) => {
+                    const relatedFlightData =
+                      flightInfos.flightList[flightIndex]
+                    return (
+                      item.length > 0 && (
+                        <div key={flightIndex}>
+                          <BaggageSelect
+                            label={
+                              relatedFlightData.flightDetail.groupId === 0 ? (
+                                <span className='text-sm font-normal'>
+                                  Gidiş Uçuşu
+                                </span>
+                              ) : (
+                                <span className='text-sm font-normal'>
+                                  Dönüş Uçuşu
+                                </span>
+                              )
+                            }
+                            data={item}
+                            onChange={(item) => {
+                              handleBaggageSelect({
+                                baggageData: item,
+                                passengerIndex,
+                                flightLeg: flightIndex,
+                                // passengerIndex
+                              })
+                            }}
+                          />
+                        </div>
+                      )
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+        </div>
+      </Collapse>
     </CheckoutCard>
   )
 }

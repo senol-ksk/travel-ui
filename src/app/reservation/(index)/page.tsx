@@ -56,6 +56,8 @@ import { FlightOptionalServices } from '@/app/reservation/(index)/flight-optiona
 import { TravelInsurancePackages } from './travel-insurance'
 import { EarlyReservationInsurance } from './hotel/insurance-options'
 import { TourExtraServices } from './tour/extras'
+import { MdContactPhone } from 'react-icons/md'
+import { RiAccountCircleFill } from 'react-icons/ri'
 
 // function useZodForm<TSchema extends z.ZodType>(
 //   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
@@ -164,7 +166,13 @@ export default function CheckoutPage() {
           })}
           className='relative grid gap-3 md:gap-5'
         >
-          <CheckoutCard title={'İletişim Bilgileri'}>
+          <CheckoutCard>
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}
+            >
+              <MdContactPhone size={20} className='text-blue-800' />
+              <span className='text-xl font-bold'>İletişim Bilgileri</span>
+            </div>
             <div className='grid grid-cols-2 gap-1 md:gap-3'>
               <div>
                 <TextInput
@@ -182,7 +190,7 @@ export default function CheckoutPage() {
               <div>
                 <Input.Wrapper>
                   <Input.Label htmlFor='contactGSM' className='font-normal'>
-                    GSM No
+                    Telefon Numarası{' '}
                   </Input.Label>
                   <div
                     className='m_6c018570 mantine-Input-wrapper'
@@ -247,7 +255,13 @@ export default function CheckoutPage() {
             </div>
           </CheckoutCard>
 
-          <CheckoutCard title={'Yolcu Bilgileri'}>
+          <CheckoutCard>
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}
+            >
+              <RiAccountCircleFill size={22} className='text-blue-800' />
+              <span className='text-xl font-bold'>Yolcu Bilgileri</span>
+            </div>
             <div className='grid gap-3'>
               {(() => {
                 switch (moduleName.toLowerCase()) {
@@ -460,7 +474,7 @@ export default function CheckoutPage() {
                           return (
                             <div key={index}>
                               <div className='mb-3 flex items-center gap-1 font-semibold'>
-                                <div>{index + 1}.</div>
+                                <div className='font-bold'>{index + 1}.</div>
                                 <div>
                                   {moduleName.toLowerCase() === 'bus'
                                     ? field?.gender.toString() === '1'
@@ -624,11 +638,11 @@ export default function CheckoutPage() {
                         checkoutDataQuery.isRefetching
                       }
                     />
-                    <div className='mt-5 mb-1 flex items-center justify-center gap-3'>
+                    <div className='flex items-center justify-center gap-3'>
                       <div className='text-center text-sm'>Ödenecek Tutar:</div>
                       <div className='text-center'>
                         <NumberFlow
-                          className='pt-1 text-center text-lg font-semibold'
+                          className='pt-1 text-center text-xl font-bold'
                           format={{
                             style: 'currency',
                             currency: 'TRY',
