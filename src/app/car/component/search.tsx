@@ -29,12 +29,12 @@ import {
   FuelTypes,
   SortOrderEnums,
 } from '@/modules/carrent/types'
-import { SortBySelect } from '@/app/car/component/sort-by-select'
+
 import { useFilterActions } from '@/app/car/search-results/filter-actions'
 import { cleanObj } from '@/libs/util'
-import { CiFilter } from 'react-icons/ci'
 import { useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
+import { SortBySelect } from './sort-by-select'
 
 export const createDetailParams = createSerializer(carDetailParams)
 

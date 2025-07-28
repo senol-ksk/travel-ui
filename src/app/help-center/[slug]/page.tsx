@@ -1,7 +1,20 @@
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
-import { Button, Container, Title, Typography } from '@mantine/core'
+import {
+  Accordion,
+  AccordionControl,
+  AccordionItem,
+  AccordionPanel,
+  Button,
+  Container,
+  Grid,
+  GridCol,
+  NavLink,
+  Title,
+  Typography,
+} from '@mantine/core'
 import { Link } from 'next-view-transitions'
+import { notFound } from 'next/navigation'
 
 type CMSHelpCenterParams = {
   sub_title: {
@@ -90,47 +103,60 @@ export default async function HelpCenterPage({
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
   const { widgets, title } = data
   const accordionData = widgets.filter((x) => x.point === 'list')
   const topMenu = widgets.filter((x) => x.point === 'help_menu')
 
   return (
     <Container className='flex flex-col gap-4 py-4 md:py-8'>
-      <Title>{title}</Title>
-      <div className='flex justify-center gap-3'>
-        {topMenu.map((item) =>
-          item.params.menu.menus.map((menu) => (
-            <div key={menu.id}>
-              <Button
-                href={menu.url}
-                component={Link}
-                size='compact-sm'
-                variant={'/' + menuUrl === menu.url ? 'filled' : 'outline'}
-                radius={'lg'}
-              >
-                {menu.title}
-              </Button>
-            </div>
-          ))
-        )}
-      </div>
-      <div className='flex flex-col gap-4 pt-4'>
-        {accordionData.map((accordion) => (
-          <div key={accordion.id}>
-            <Title order={4}>{accordion.title}</Title>
-            <div className='pt-2'>
-              <Typography>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: accordion.params.description.value,
-                  }}
-                />
-              </Typography>
-            </div>
+      <Title fz={'h3'}>{title}</Title>
+      <Grid gutter={{ base: 'md', md: 'xl' }}>
+        <GridCol span={{ sm: 3 }}>
+          <div className='rounded-md border p-3'>
+            {topMenu.map((item) =>
+              item.params.menu.menus.map((menu) => {
+                console.log(menu)
+                return (
+                  <div key={menu.id}>
+                    <NavLink
+                      label={menu.title}
+                      href={menu.url}
+                      component={Link}
+                      variant={'/' + menuUrl === menu.url ? 'light' : 'subtle'}
+                      active={'/' + menuUrl === menu.url}
+                    />
+                  </div>
+                )
+              })
+            )}
           </div>
-        ))}
-      </div>
+        </GridCol>
+        <GridCol span={{ sm: 9 }}>
+          <Accordion chevronPosition='right' variant='contained' radius='md'>
+            {accordionData.map((accordion) => (
+              <AccordionItem key={accordion.id} value={accordion.title}>
+                <AccordionControl
+                  classNames={{
+                    label: 'font-medium py-2 md:py-6',
+                  }}
+                >
+                  {accordion.title}
+                </AccordionControl>
+                <AccordionPanel>
+                  <Typography>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: accordion.params.description.value,
+                      }}
+                    />
+                  </Typography>
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </GridCol>
+      </Grid>
     </Container>
   )
 }

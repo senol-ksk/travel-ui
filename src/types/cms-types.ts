@@ -253,6 +253,7 @@ export type BusLandingWidgets = {
     image: {
       value: string
     }
+    description: { value: string | null } | null
     sort_desc: {
       value: string
     }

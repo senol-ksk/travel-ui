@@ -2,6 +2,7 @@ import { Container, Text, Title } from '@mantine/core'
 
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
+import { notFound } from 'next/navigation'
 
 type CMSContactParams = {
   title: {
@@ -47,7 +48,7 @@ export default async function ContactPage() {
     await getContent<CmsContent<null, CMSContactParams>>('iletisim')
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
 
   const { params } = data
 

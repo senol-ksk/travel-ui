@@ -7,6 +7,7 @@ import {
   FlightLandingParams,
   FlightLandingWidget,
 } from '@/types/cms-types'
+import { notFound } from 'next/navigation'
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -21,7 +22,7 @@ export default async function FlightLandingDetail({ params }: PageProps) {
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
 
   const { params: cmsParams, widgets } = data
   const teaser = widgets

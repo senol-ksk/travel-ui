@@ -1,4 +1,14 @@
-import { Box, Container, Title, Image } from '@mantine/core'
+import {
+  Box,
+  Container,
+  Title,
+  Image,
+  Typography,
+  Accordion,
+  AccordionItem,
+  AccordionControl,
+  AccordionPanel,
+} from '@mantine/core'
 import NextImage from 'next/image'
 
 import { cdnImageUrl, getContent } from '@/libs/cms-data'
@@ -8,6 +18,7 @@ import {
   BusLandingWidgets,
   CmsContent,
 } from '@/types/cms-types'
+import { notFound } from 'next/navigation'
 
 export default async function BusLandingPage() {
   const data = (
@@ -16,13 +27,17 @@ export default async function BusLandingPage() {
     )
   )?.data
 
-  if (!data) return null
+  if (!data) return notFound()
 
   const { params, widgets } = data
-  const teaser = widgets.filter((item) => item.point === 'teaser')
+
   const popularBusServices = widgets.filter(
     (item) => item.point === 'popular_bus_services'
   )
+  const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
+  const faqs = widgets.filter((item) => item.point === 'sss')
+
+  console.log(faqs)
 
   return (
     <div>
@@ -35,14 +50,7 @@ export default async function BusLandingPage() {
         </Container>
       </div>
       <div className='py-5 md:py-9'>
-        <Container className='flex flex-col gap-3 md:gap-6'>
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
-            {teaser.map((tease) => (
-              <div key={tease.id} className='rounded border p-3'>
-                {tease.title}
-              </div>
-            ))}
-          </div>
+        <Container className='grid grid-cols-1 gap-8 md:gap-12'>
           {popularBusServices.length > 0 && (
             <div>
               <Title order={2} fz={'h3'}>
@@ -65,6 +73,62 @@ export default async function BusLandingPage() {
                   </Box>
                 ))}
               </div>
+            </div>
+          )}
+
+          {teaser_bottom.length > 0 && (
+            <div className='grid gap-6 rounded-md border bg-white p-3 md:p-6'>
+              {teaser_bottom.map((teaser) =>
+                teaser.params.description?.value ? (
+                  <article key={teaser.id}>
+                    <Title fz={'h3'} mb={'md'}>
+                      {teaser.title}
+                    </Title>
+                    <Typography>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: teaser.params.description?.value,
+                        }}
+                      />
+                    </Typography>
+                  </article>
+                ) : null
+              )}
+            </div>
+          )}
+
+          {faqs.length > 0 && (
+            <div>
+              <Title order={2} mb={'lg'} fz={'h3'}>
+                Sıkça Sorulan Sorular
+              </Title>
+              <Accordion
+                chevronPosition='right'
+                variant='contained'
+                radius='md'
+              >
+                {faqs.map((faq) => {
+                  return faq.params.description &&
+                    faq.params.description?.value ? (
+                    <AccordionItem key={faq.id} value={faq.title}>
+                      <AccordionControl
+                        classNames={{
+                          label: 'font-medium py-2 md:py-6',
+                        }}
+                      >
+                        {faq.title}
+                      </AccordionControl>
+                      <AccordionPanel>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: faq.params.description.value,
+                          }}
+                        />
+                      </AccordionPanel>
+                    </AccordionItem>
+                  ) : null
+                })}
+              </Accordion>
             </div>
           )}
         </Container>
