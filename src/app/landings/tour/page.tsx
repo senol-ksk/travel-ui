@@ -1,4 +1,13 @@
-import { Container, Title, Image, Button, ScrollArea } from '@mantine/core'
+import {
+  Container,
+  Title,
+  Image,
+  Button,
+  Accordion,
+  AccordionItem,
+  AccordionControl,
+  AccordionPanel,
+} from '@mantine/core'
 import NextImage from 'next/image'
 import { headers } from 'next/headers'
 
@@ -14,6 +23,8 @@ import dayjs from 'dayjs'
 
 import { serializeTourSearchParams } from '@/modules/tour/searchResultParams'
 import { LandingSliderItem } from '@/app/tour/_components/landing-slider-item'
+import { notFound } from 'next/navigation'
+import { Carousel, CarouselSlide } from '@mantine/carousel'
 
 export default async function TourLandingPage() {
   const headersList = await headers()
@@ -30,12 +41,8 @@ export default async function TourLandingPage() {
   const generateSearchURL = (link: string) => {
     const url = new URL(link, baseUrl)
     const destinationSlug = url.pathname.split('/').filter(Boolean).at(-1)
-    const checkinDate = url.searchParams.get('checkinDate')
-      ? dayjs(url.searchParams.get('checkinDate')).toDate()
-      : dayjs().add(10, 'D').toDate()
-    const checkoutDate = url.searchParams.get('checkoutDate')
-      ? dayjs(url.searchParams.get('checkoutDate')).toDate()
-      : dayjs(checkinDate).add(200, 'd').toDate()
+    const checkinDate = dayjs().add(1, 'day').toDate()
+    const checkoutDate = dayjs(checkinDate).add(1, 'years').toDate()
 
     const serializedUrl = serializeTourSearchParams('/tour/search-results', {
       checkinDate,
@@ -46,7 +53,8 @@ export default async function TourLandingPage() {
     return serializedUrl
   }
 
-  if (!data) return null
+  if (!data) return notFound()
+
   const { params, widgets } = data
   const abroadTours = widgets?.filter((x) => x.point == 'abroad_tours')
   const abroadSeeAll = widgets?.find((x) => x.point == 'abroad_see_all')
@@ -55,6 +63,15 @@ export default async function TourLandingPage() {
   const aidSeeAll = widgets?.find((x) => x.point == 'aid_see_all')
   const shipTours = widgets?.filter((x) => x.point == 'ship_tours')
   const shipSeeAll = widgets?.find((x) => x.point == 'ship_see_all')
+  const faqs = widgets?.filter((x) => x.point == 'sss')
+  const europe_tours = widgets?.filter((x) => x.point == 'europe_tours')
+  const teasers = widgets?.filter(
+    (x) =>
+      x.point !== 'europe_tours' &&
+      x.point !== 'abroad_tours' &&
+      x.point !== 'sss'
+  )
+  console.log(teasers)
 
   return (
     <div>
@@ -76,7 +93,7 @@ export default async function TourLandingPage() {
           </div>
         </Container>
       </div>
-      <Container className='flex flex-col gap-3 py-5 md:gap-7 md:py-10'>
+      <Container className='grid grid-cols-1 gap-8 py-5 md:gap-12 md:py-10'>
         {abroadTours.length > 0 && (
           <div>
             <div className='flex items-center justify-between gap-2 pb-3'>
@@ -95,20 +112,19 @@ export default async function TourLandingPage() {
                 </div>
               )}
             </div>
-            <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
-              <div className='flex gap-3'>
-                {abroadTours.map((tour) => {
-                  return (
+            <Carousel slideSize={'auto'} slideGap={'lg'}>
+              {abroadTours.map((tour) => {
+                return (
+                  <CarouselSlide key={tour.id}>
                     <LandingSliderItem
                       href={generateSearchURL(tour.params.link.value)}
                       imageSrc={cdnImageUrl(tour.params.image.value)}
                       title={tour.title}
-                      key={tour.id}
                     />
-                  )
-                })}
-              </div>
-            </ScrollArea>
+                  </CarouselSlide>
+                )
+              })}
+            </Carousel>
           </div>
         )}
         {aidTours.length > 0 && (
@@ -129,20 +145,20 @@ export default async function TourLandingPage() {
                 </div>
               )}
             </div>
-            <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
-              <div className='flex gap-3'>
-                {aidTours.map((tour) => {
-                  return (
+
+            <Carousel slideSize={'auto'} slideGap={'lg'}>
+              {aidTours.map((tour) => {
+                return (
+                  <CarouselSlide key={tour.id}>
                     <LandingSliderItem
                       href={generateSearchURL(tour.params.link.value)}
                       imageSrc={cdnImageUrl(tour.params.image.value)}
                       title={tour.title}
-                      key={tour.id}
                     />
-                  )
-                })}
-              </div>
-            </ScrollArea>
+                  </CarouselSlide>
+                )
+              })}
+            </Carousel>
           </div>
         )}
         {shipTours.length > 0 && (
@@ -163,20 +179,81 @@ export default async function TourLandingPage() {
                 </div>
               )}
             </div>
-            <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
-              <div className='flex gap-3'>
-                {shipTours.map((tour) => {
-                  return (
+            <Carousel slideSize={'auto'} slideGap={'lg'}>
+              {shipTours.map((tour) => {
+                return (
+                  <CarouselSlide key={tour.id}>
                     <LandingSliderItem
                       href={generateSearchURL(tour.params.link.value)}
                       imageSrc={cdnImageUrl(tour.params.image.value)}
                       title={tour.title}
-                      key={tour.id}
                     />
-                  )
-                })}
-              </div>
-            </ScrollArea>
+                  </CarouselSlide>
+                )
+              })}
+            </Carousel>
+          </div>
+        )}
+        {europe_tours.length > 0 && (
+          <div>
+            <div className='flex items-center justify-between gap-2 pb-3'>
+              <Title order={3} fz={'h3'}>
+                Avrupa Turları
+              </Title>
+              {shipSeeAll && (
+                <div>
+                  <Button
+                    component={Link}
+                    href={generateSearchURL(shipSeeAll?.params.link.value)}
+                    size='compact-sm'
+                  >
+                    {shipSeeAll?.title}
+                  </Button>
+                </div>
+              )}
+            </div>
+            <Carousel slideSize={'auto'} slideGap={'lg'}>
+              {europe_tours.map((tour) => {
+                return (
+                  <CarouselSlide key={tour.id}>
+                    <LandingSliderItem
+                      href={generateSearchURL(tour.params.link.value)}
+                      imageSrc={cdnImageUrl(tour.params.image.value)}
+                      title={tour.title}
+                    />
+                  </CarouselSlide>
+                )
+              })}
+            </Carousel>
+          </div>
+        )}
+        {faqs?.length > 0 && (
+          <div>
+            <Title order={2} mb={'lg'} fz={'h3'}>
+              Sıkça Sorulan Sorular
+            </Title>
+            <Accordion chevronPosition='right' variant='contained' radius='md'>
+              {faqs.map((faq) => {
+                return (
+                  <AccordionItem key={faq.id} value={faq.title}>
+                    <AccordionControl
+                      classNames={{
+                        label: 'font-medium py-2 md:py-6',
+                      }}
+                    >
+                      {faq.title}
+                    </AccordionControl>
+                    <AccordionPanel>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: faq.params.description.value,
+                        }}
+                      />
+                    </AccordionPanel>
+                  </AccordionItem>
+                )
+              })}
+            </Accordion>
           </div>
         )}
       </Container>
