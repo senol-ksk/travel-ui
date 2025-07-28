@@ -34,6 +34,7 @@ import { useFilterActions } from '@/app/car/search-results/filter-actions'
 import { cleanObj } from '@/libs/util'
 import { useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
+import { SortBySelect } from './sort-by-select'
 
 export const createDetailParams = createSerializer(carDetailParams)
 
