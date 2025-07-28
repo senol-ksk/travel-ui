@@ -7,6 +7,7 @@ const SortBySelect = () => {
   const [filterParams, setFilterParams] = useQueryStates(filterParsers)
   return (
     <NativeSelect
+      radius={'md'}
       className='font-medium'
       value={filterParams.order}
       onChange={({ currentTarget: { value } }) => {

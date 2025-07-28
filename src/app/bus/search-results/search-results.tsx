@@ -434,6 +434,7 @@ const BusSearchResults: React.FC = () => {
                   <div className='flex items-center justify-between gap-1'>
                     <Button
                       size='sm'
+                      radius={'md'}
                       color='black'
                       className='border-gray-400 px-8 font-medium md:hidden'
                       variant='outline'
@@ -443,17 +444,13 @@ const BusSearchResults: React.FC = () => {
                     </Button>
                     {totalCount > 1 && (
                       <div className='hidden items-center gap-2 md:flex'>
-                        <div>
-                          <span className='text-lg font-bold'>
-                            {originName} - {destinationName}
-                            {''}
-                          </span>
-                          {''} için toplam{' '}
-                          <span className='text-lg font-bold'>
+                        <div className='text-lg font-normal'>
+                          Toplam{' '}
+                          <span className='text-xl font-bold'>
                             {' '}
                             {totalCount}{' '}
                           </span>
-                          sefer bulduk!
+                          otobüs seferi bulundu
                         </div>
                       </div>
                     )}
@@ -474,8 +471,8 @@ const BusSearchResults: React.FC = () => {
                                 size='sm'
                                 className={
                                   order === option.value
-                                    ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
-                                    : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                                    ? 'rounded-md border-0 bg-blue-200 font-normal text-blue-700'
+                                    : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                                 }
                                 key={option.value}
                                 leftSection={
@@ -508,6 +505,7 @@ const BusSearchResults: React.FC = () => {
                       >
                         <div>
                           <NativeSelect
+                            radius={'md'}
                             className='ms-auto w-full font-medium md:w-auto'
                             size='sm'
                             data={[
@@ -547,8 +545,9 @@ const BusSearchResults: React.FC = () => {
                   {totalCount > 0 && (
                     <div className='flex items-center gap-2 md:hidden'>
                       <span className='text-sm font-semibold text-gray-500'>
-                        {originName}-{destinationName}
-                        {''} için toplam {totalCount} sefer bulduk!
+                        Toplam{' '}
+                        <span className='text-xl font-bold'>{totalCount}</span>{' '}
+                        otobüs seferi bulundu
                       </span>{' '}
                     </div>
                   )}

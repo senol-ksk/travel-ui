@@ -331,7 +331,7 @@ const TourSearchResultClient = () => {
               )}
             </Transition>
           </div>
-          <div className='grid gap-3 sm:col-span-8 lg:col-span-9'>
+          <div className='grid gap-2 sm:col-span-8 lg:col-span-9'>
             <div className='flex justify-between gap-3 md:px-0'>
               <Skeleton
                 className='hidden md:flex'
@@ -341,10 +341,9 @@ const TourSearchResultClient = () => {
               >
                 <div className='hidden items-center gap-2 md:flex'>
                   <div>
-                    <span className='text-lg font-bold'>{destinationName}</span>{' '}
-                    için toplam{' '}
-                    <span className='text-lg font-bold'>{totalCount}</span> tur
-                    bulduk!
+                    <span className='text-lg'>Toplam</span>{' '}
+                    <span className='text-xl font-bold'>{totalCount}</span> tur
+                    bulundu
                   </div>
                 </div>
               </Skeleton>
@@ -400,7 +399,7 @@ const TourSearchResultClient = () => {
                     className={
                       order === option.value
                         ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
-                        : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                        : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                     }
                     key={option.value}
                     leftSection={order === option.value ? <FaCheck /> : ''}
@@ -418,7 +417,7 @@ const TourSearchResultClient = () => {
               </Skeleton>
             </div>
             <Skeleton
-              className='my-3 flex items-center gap-2 px-1 md:hidden'
+              className='flex items-center gap-2 px-1 md:hidden'
               visible={
                 searchResultsQuery.isFetching ||
                 searchResultsQuery.isLoading ||
@@ -426,9 +425,8 @@ const TourSearchResultClient = () => {
               }
             >
               <span className='text-sm font-semibold text-gray-500'>
-                <div>
-                  {destinationName}, için toplam {totalCount} tur bulduk!
-                </div>
+                Toplam <span className='text-xl font-bold'>{totalCount}</span>{' '}
+                tur bulundu
               </span>
             </Skeleton>
             <div className='grid gap-5'>

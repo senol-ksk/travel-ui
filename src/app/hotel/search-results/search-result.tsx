@@ -477,7 +477,12 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         <span className='text-lg font-bold'>
                           {searchParams.destination}, Otelleri
                         </span>{' '}
-                        için toplam {totalCount} tesis bulduk!
+                        için{' '}
+                        <span className='text-xl font-bold'>
+                          {' '}
+                          {totalCount}{' '}
+                        </span>
+                        tesis bulduk!
                       </div>
                     </div>
                   )}
@@ -517,7 +522,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                           className={
                             filterParams.orderBy === option.value
                               ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
-                              : 'rounded-md border-gray-400 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
+                              : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                           }
                           key={option.value}
                           leftSection={
