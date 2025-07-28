@@ -143,7 +143,7 @@ const HotelRoom: React.FC<IProps> = ({
                   <div>
                     <Image
                       loading='lazy'
-                      fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
+                      fallbackSrc='/default-room.jpg'
                       src={images?.at(0)}
                       alt={detail.roomType}
                       className='mb-6 h-full max-h-52 rounded'
