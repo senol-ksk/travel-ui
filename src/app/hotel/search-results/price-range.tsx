@@ -50,7 +50,6 @@ const PriceRangeSlider: React.FC<IProps> = ({
           <div>
             <TextInput
               readOnly
-              size='xs'
               label='En Düşük'
               value={formatCurrency(values[0])}
             />
@@ -58,7 +57,6 @@ const PriceRangeSlider: React.FC<IProps> = ({
           <div>
             <TextInput
               readOnly
-              size='xs'
               label='En Yüksek'
               value={formatCurrency(values[1])}
             />

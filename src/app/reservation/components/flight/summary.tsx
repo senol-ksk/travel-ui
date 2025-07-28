@@ -75,11 +75,11 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
 
                 return (
                   <div key={flightDetail.key} className='grid gap-1'>
-                    <div className='hidden md:flex'>
+                    <div className='hidden border-b md:flex'>
                       {flightDetail.groupId === 0 && (
                         <Title
                           order={4}
-                          className='flex items-center gap-2 border-b pb-2'
+                          className='flex items-center gap-2 pb-2'
                         >
                           <MdDescription size={22} className='text-blue-800' />
                           <span className='font-semibold'>Seyahat Özeti</span>

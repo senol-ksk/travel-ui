@@ -446,12 +446,7 @@ const PaymentPage = () => {
                           {...field}
                           autoComplete='cc-name'
                           size='md'
-                          label={
-                            <span className='text-sm font-normal'>
-                              Kart üzerindeki isim {''}
-                              <span style={{ color: 'red' }}>*</span>
-                            </span>
-                          }
+                          label='Kart üzerindeki isim'
                           placeholder='Kart Üzerindeki İsim'
                           error={
                             !!formMethods.formState.errors.cardOwner
@@ -471,11 +466,7 @@ const PaymentPage = () => {
                         className='grid gap-1'
                         {...field}
                         autoComplete='cc-number'
-                        label={
-                          <span className='text-sm font-normal'>
-                            Kart Numarası {''}
-                          </span>
-                        }
+                        label='Kart Numarası'
                         type='tel'
                         size='md'
                         error={
@@ -492,7 +483,7 @@ const PaymentPage = () => {
                       />
                     )}
                   />
-                  <div className='grid grid-cols-3 gap-3'>
+                  <div className='grid grid-cols-3 items-center gap-3'>
                     <div className='col-span-2'>
                       <div className='grid gap-1'>
                         <div className='text-sm'>Son kullanma tarihi</div>
@@ -550,25 +541,21 @@ const PaymentPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div className='col-span-1'>
                       <Controller
                         control={formMethods.control}
                         name='cardCvv'
                         defaultValue=''
                         render={({ field }) => (
                           <TextInput
-                            className='grid w-full'
+                            className='w-full'
                             {...field}
                             maxLength={
                               cardValidation.number(
                                 formMethods.watch('cardNumber')
                               ).card?.code.size || 3
                             }
-                            label={
-                              <span className='p-0 text-sm font-normal'>
-                                CVV
-                              </span>
-                            }
+                            label='CVV'
                             placeholder='CVV'
                             size='md'
                             error={

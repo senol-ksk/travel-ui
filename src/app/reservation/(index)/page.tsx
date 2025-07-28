@@ -176,8 +176,8 @@ export default function CheckoutPage() {
             <div className='gap-1 md:grid md:grid-cols-2 md:gap-3'>
               <div>
                 <TextInput
-                  label={<span className='text-sm font-normal'>E-posta</span>}
                   size='md'
+                  label='E-posta'
                   type='email'
                   {...formMethods.register('contactEmail')}
                   error={

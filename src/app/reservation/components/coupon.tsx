@@ -21,7 +21,6 @@ const Coupon: React.FC<IProps> = ({
 }) => {
   const [couponValue, setCouponValue] = useInputState(defaultCouponValue ?? '')
   const inputRef = useRef<HTMLInputElement>(null)
-  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <div>
@@ -31,7 +30,7 @@ const Coupon: React.FC<IProps> = ({
       </div>
       <div className='flex gap-2 pt-3'>
         <TextInput
-          style={isMobile ? { width: '70%' } : { width: '50%' }}
+          className='w-[70%] md:w-[49%]'
           ref={inputRef}
           size='md'
           placeholder='Kodu giriniz'

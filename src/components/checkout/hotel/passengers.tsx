@@ -198,7 +198,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label={<div className='text-sm font-normal'>Ad</div>}
+                  label='Ad'
                   error={error?.firstName ? error?.firstName?.message : null}
                   autoComplete='given-name'
                 />
@@ -215,7 +215,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               <TextInput
                 {...field}
                 size='md'
-                label={<div className='text-sm font-normal'>Soyad</div>}
+                label='Soyad'
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
               />
@@ -298,7 +298,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               <TextInput
                 {...field}
                 size='md'
-                label={<div className='text-sm font-normal'>TC Kimlik No</div>}
+                label='TC Kimlik No'
                 inputMode='numeric'
                 type='tel'
                 error={

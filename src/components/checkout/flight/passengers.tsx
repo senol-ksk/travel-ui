@@ -261,11 +261,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label={
-                    <span className='text-sm font-normal'>
-                      Ad <span style={{ color: 'red' }}>*</span>
-                    </span>
-                  }
+                  label='Ad'
                   error={error?.firstName ? error?.firstName?.message : null}
                   autoComplete='given-name'
                 />
@@ -282,7 +278,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               <TextInput
                 {...field}
                 size='md'
-                label={<span className='text-sm font-normal'>Soyad</span>}
+                label='Soyad'
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
               />
@@ -367,9 +363,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label={
-                    <span className='text-sm font-normal'>TC Kimlik No</span>
-                  }
+                  label='TC Kimlik No'
                   inputMode='numeric'
                   type='tel'
                   error={
@@ -449,7 +443,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label={<div className='text-sm font-normal'>Pasaport No</div>}
+                  label='Pasaport No'
                   error={!!error?.passportNo ? error?.passportNo.message : null}
                 />
               )}
