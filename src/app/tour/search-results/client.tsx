@@ -342,8 +342,8 @@ const TourSearchResultClient = () => {
                 <div className='hidden items-center gap-2 md:flex'>
                   <div>
                     <span className='text-lg'>Toplam</span>{' '}
-                    <span className='text-xl font-bold'>{totalCount}</span> tur
-                    bulundu
+                    <span className='text-xl font-bold'>{totalCount}</span> Tur
+                    Bulundu
                   </div>
                 </div>
               </Skeleton>
@@ -360,6 +360,7 @@ const TourSearchResultClient = () => {
               </div>
               <div>
                 <NativeSelect
+                  leftSection={<FaCheck />}
                   className='font-medium md:hidden'
                   data={[
                     {
@@ -426,7 +427,7 @@ const TourSearchResultClient = () => {
             >
               <span className='text-sm font-semibold text-gray-500'>
                 Toplam <span className='text-xl font-bold'>{totalCount}</span>{' '}
-                tur bulundu
+                Tur Bulundu
               </span>
             </Skeleton>
             <div className='grid gap-5'>

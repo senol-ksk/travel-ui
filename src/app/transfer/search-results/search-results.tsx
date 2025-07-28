@@ -243,9 +243,9 @@ const TransferSearchResults = () => {
                   <div className='hidden items-center gap-2 md:flex'>
                     <div>
                       <span className='text-lg font-bold'>Transferiniz</span>{' '}
-                      için toplam{' '}
+                      İçin Toplam{' '}
                       <span className='text-lg font-bold'> {totalCount}</span>{' '}
-                      araç bulduk!
+                      Araç Bulundu
                     </div>
                   </div>
                 </>
@@ -292,28 +292,37 @@ const TransferSearchResults = () => {
                   ))}
                 </div>
               </Skeleton>
-              <div>
-                <NativeSelect
-                  className='font-medium md:hidden'
-                  size='sm'
-                  value={order ? order : ''}
-                  data={[
-                    {
-                      label: 'Fiyata Göre Artan ',
-                      value: SortOrderEnums.priceAsc,
-                    },
-                    {
-                      label: 'Fiyata Göre Azalan',
-                      value: SortOrderEnums.priceDesc,
-                    },
-                  ]}
-                  onChange={({ target: { value } }) => {
-                    setFilterParams({
-                      order: value as SortOrderEnums,
-                    })
-                  }}
-                />
-              </div>
+              <Skeleton
+                className='md:hidden'
+                visible={
+                  !transferSearchResultsQuery.data ||
+                  transferSearchResultsQuery.isLoading
+                }
+              >
+                <div>
+                  <NativeSelect
+                    leftSection={<FaCheck />}
+                    className='font-medium md:hidden'
+                    size='sm'
+                    value={order ? order : ''}
+                    data={[
+                      {
+                        label: 'Fiyata Göre Artan ',
+                        value: SortOrderEnums.priceAsc,
+                      },
+                      {
+                        label: 'Fiyata Göre Azalan',
+                        value: SortOrderEnums.priceDesc,
+                      },
+                    ]}
+                    onChange={({ target: { value } }) => {
+                      setFilterParams({
+                        order: value as SortOrderEnums,
+                      })
+                    }}
+                  />
+                </div>
+              </Skeleton>
             </div>
             <Skeleton
               className='col-span-2 mt-2 mb-4 flex md:hidden'
@@ -325,9 +334,9 @@ const TransferSearchResults = () => {
               <>
                 <div className='flex items-center gap-2 md:hidden'>
                   <div className='text-sm font-semibold text-gray-500'>
-                    Transferiniz için toplam{' '}
-                    <span className='text-xl font-bold'>{totalCount}</span> araç
-                    bulduk!
+                    Transferiniz İçin Toplam{' '}
+                    <span className='text-xl font-bold'>{totalCount}</span> Araç
+                    Bulundu
                   </div>
                 </div>
               </>

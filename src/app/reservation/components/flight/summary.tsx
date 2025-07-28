@@ -75,15 +75,19 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
 
                 return (
                   <div key={flightDetail.key} className='grid gap-1'>
-                    <Title
-                      order={4}
-                      className='flex items-center gap-2 border-b pb-1'
-                    >
-                      <MdDescription size={22} className='text-blue-800' />
-                      <span className='font-semibold'>Seyahat Özeti</span>
-                    </Title>
+                    <div className='hidden md:flex'>
+                      {flightDetail.groupId === 0 && (
+                        <Title
+                          order={4}
+                          className='flex items-center gap-2 border-b pb-2'
+                        >
+                          <MdDescription size={22} className='text-blue-800' />
+                          <span className='font-semibold'>Seyahat Özeti</span>
+                        </Title>
+                      )}
+                    </div>
                     <div className='mt-2 flex items-center justify-between'>
-                      <Title order={5} className='font-medium'>
+                      <Title order={5} className='font-semibold'>
                         {flightDetail.groupId === 0
                           ? 'Gidiş Uçuşu'
                           : 'Dönüş Uçuşu'}

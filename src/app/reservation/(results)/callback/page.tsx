@@ -22,6 +22,7 @@ import {
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
 import { FlightSummary } from '@/components/book-results/flight'
+import { BsFillCreditCardFill } from 'react-icons/bs'
 
 type IProps = {
   searchParams: Promise<{

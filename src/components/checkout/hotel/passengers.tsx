@@ -167,7 +167,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
         type='hidden'
       />
 
-      <div className='grid grid-cols-2 gap-3'>
+      <div className='flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-3'>
         <div className='col-span-2'>
           <Input.Wrapper error={!!error?.gender}>
             <Controller
@@ -198,7 +198,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label='Ad'
+                  label={<div className='text-sm font-normal'>Ad</div>}
                   error={error?.firstName ? error?.firstName?.message : null}
                   autoComplete='given-name'
                 />
@@ -215,7 +215,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               <TextInput
                 {...field}
                 size='md'
-                label='Soyad'
+                label={<div className='text-sm font-normal'>Soyad</div>}
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
               />
@@ -225,7 +225,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
         <div>
           <Input.Wrapper>
             <Input.Label htmlFor={name_birthDate_day} fz={'md'}>
-              Doğum Tarihi
+              <div className='text-sm font-normal'> Doğum Tarihi</div>
             </Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
@@ -298,7 +298,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
               <TextInput
                 {...field}
                 size='md'
-                label='TC Kimlik No'
+                label={<div className='text-sm font-normal'>TC Kimlik No</div>}
                 inputMode='numeric'
                 type='tel'
                 error={

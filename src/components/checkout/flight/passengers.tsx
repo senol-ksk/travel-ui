@@ -209,7 +209,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
         type='hidden'
       />
 
-      <div className='grid grid-cols-2 gap-3 md:gap-5'>
+      <div className='flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-5'>
         <div
           className={clsx(`col-span-2`, {
             hidden: moduleName.toLowerCase() === 'bus',
@@ -262,7 +262,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                   {...field}
                   size='md'
                   label={
-                    <span className='font-normal'>
+                    <span className='text-sm font-normal'>
                       Ad <span style={{ color: 'red' }}>*</span>
                     </span>
                   }
@@ -282,7 +282,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               <TextInput
                 {...field}
                 size='md'
-                label={<span className='font-normal'>Soyad</span>}
+                label={<span className='text-sm font-normal'>Soyad</span>}
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
               />
@@ -292,7 +292,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
         <div>
           <Input.Wrapper>
             <Input.Label fz='md' htmlFor={name_birthDate_day}>
-              Doğum Tarihi
+              <span className='text-sm font-normal'>Doğum Tarihi</span>
             </Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
@@ -367,7 +367,9 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label={<span className='font-normal'>TC Kimlik No</span>}
+                  label={
+                    <span className='text-sm font-normal'>TC Kimlik No</span>
+                  }
                   inputMode='numeric'
                   type='tel'
                   error={
@@ -420,7 +422,11 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 <NativeSelect
                   {...field}
                   size='md'
-                  label='Pasaportu Veren Ülke'
+                  label={
+                    <div className='text-sm font-normal'>
+                      Pasaportu Veren Ülke
+                    </div>
+                  }
                   error={
                     !!error?.passportCountry
                       ? error?.passportCountry.message
@@ -443,7 +449,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
                 <TextInput
                   {...field}
                   size='md'
-                  label='Pasaport No'
+                  label={<div className='text-sm font-normal'>Pasaport No</div>}
                   error={!!error?.passportNo ? error?.passportNo.message : null}
                 />
               )}
@@ -451,7 +457,10 @@ export const PassengerInformationForm: React.FC<IProps> = ({
           </div>
           <div>
             <Input.Label htmlFor={`${namePrefix}_${name_passportValid_day}`}>
-              Pasaport Geçerlilik Tarihi
+              <div className='text-sm font-normal'>
+                {' '}
+                Pasaport Geçerlilik Tarihi
+              </div>
             </Input.Label>
             <Input.Wrapper className='grid grid-cols-3 gap-3'>
               <Controller

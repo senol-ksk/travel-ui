@@ -1,7 +1,8 @@
 import { Button, TextInput } from '@mantine/core'
-import { useInputState } from '@mantine/hooks'
+import { useInputState, useMediaQuery } from '@mantine/hooks'
 import { useRef } from 'react'
-import { MdOutlineConfirmationNumber } from 'react-icons/md'
+import { CiShoppingTag } from 'react-icons/ci'
+import { MdOutlineConfirmationNumber, MdSell } from 'react-icons/md'
 
 type IProps = {
   onRevoke: () => void
@@ -20,18 +21,17 @@ const Coupon: React.FC<IProps> = ({
 }) => {
   const [couponValue, setCouponValue] = useInputState(defaultCouponValue ?? '')
   const inputRef = useRef<HTMLInputElement>(null)
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <div>
-      <div className='flex items-center gap-2 font-semibold text-blue-800'>
-        <span>
-          <MdOutlineConfirmationNumber size={26} />
-        </span>
-        <span className='text-lg font-semibold'>İndirim Kodu Kullan</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+        <MdSell size={22} className='text-blue-800' />
+        <span className='text-xl font-bold'>İndirim Kodu Kullan</span>
       </div>
       <div className='flex gap-2 pt-3'>
         <TextInput
-          style={{ width: '49%' }}
+          style={isMobile ? { width: '70%' } : { width: '50%' }}
           ref={inputRef}
           size='md'
           placeholder='Kodu giriniz'
