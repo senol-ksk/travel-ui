@@ -24,14 +24,14 @@ const TravelInsurancePackages = () => {
         </div>
 
         <Radio.Group name='callCenterSupport_radio' defaultValue={'2'}>
-          <div className='flex gap-5'>
-            <Radio.Card value='2' className='col-8 p-2 md:p-4'>
+          <div className='grid gap-3 md:flex md:gap-5'>
+            <Radio.Card value='2' className='p-4 md:col-8'>
               <Group wrap='nowrap'>
                 <Radio.Indicator />
                 <div>Hayır, İstemiyorum</div>
               </Group>
             </Radio.Card>
-            <Radio.Card value='1' className='p-2 md:p-4'>
+            <Radio.Card value='1' className='p-4'>
               <Group wrap='nowrap'>
                 <Radio.Indicator />
                 <div>Evet, İstiyorum</div>

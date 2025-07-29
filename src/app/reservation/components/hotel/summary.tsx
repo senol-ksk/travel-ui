@@ -46,6 +46,129 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
   return (
     <div className='grid gap-3'>
       <CheckoutCard>
+        <div className='grid gap-3'>
+          <div className='relative h-[200px]'>
+            <Skeleton
+              pos={'absolute'}
+              top={0}
+              bottom={0}
+              width={'100%'}
+              visible={isImageLoading}
+            />
+            <Image
+              src={hotel.images.at(0)?.original}
+              alt={hotel.name}
+              h={'100%'}
+              radius={'md'}
+              onLoad={() => {
+                setIsImageLoading(false)
+              }}
+            />
+          </div>
+          <div>
+            <Title order={3} fz='h4'>
+              {hotel.name}
+            </Title>
+            <address className='text-sm text-gray-600 not-italic'>
+              {hotel.address}
+            </address>
+          </div>
+
+          <div className='grid grid-cols-2 items-center rounded-md border p-3 text-sm text-gray-700'>
+            <div className='flex flex-col items-center text-center'>
+              <div>Giriş Tarihi</div>
+              <div className='font-bold'>
+                {dayjs(roomGroup.checkInDate).format('DD MMM YYYY')}
+              </div>
+            </div>
+
+            <div className='relative flex flex-col items-center text-center'>
+              <div className='absolute top-1/2 left-0 h-16 -translate-y-1/2 border-l border-gray-300'></div>
+
+              <div>Çıkış Tarihi</div>
+              <div className='font-bold'>
+                {dayjs(roomGroup.checkOutDate).format('DD MMM YYYY')}
+              </div>
+            </div>
+          </div>
+
+          <div className='flex items-center gap-3 border-b pb-3 text-lg font-semibold'>
+            <List type='ordered' className='list-decimal'>
+              {roomGroup.rooms.map((room, roomIndex) => {
+                const roomDetail = roomGroup.roomDetails[room.key]
+
+                return <List.Item key={room.key}>Oda</List.Item>
+              })}
+            </List>
+            {nightStay} Gece
+          </div>
+          <div className='grid items-center gap-3'>
+            {/* <div className='flex items-center justify-between'>
+              <div>Misafirler</div>
+              <div className='text-sm font-semibold'>2 Yetişkin, 1 Çocuk</div>
+            </div> */}
+            <div className='flex items-center justify-between'>
+              <div>Oda Bilgisi</div>
+              <div className='text-sm font-semibold'>
+                {roomGroup.rooms.map((room, roomIndex) => {
+                  const roomInfo = roomGroup.roomDetails[room.key]
+
+                  return <div key={room.key}> {roomInfo.roomType}</div>
+                })}
+              </div>
+            </div>
+            <div className='flex items-center justify-between'>
+              <div>Konsept </div>
+              <div className='text-sm font-semibold'>
+                {roomGroup.rooms.map((room, roomIndex) => {
+                  const roomDetail = roomGroup.roomDetails[room.key]
+
+                  return <div key={room.key}> {roomDetail.pensionType}</div>
+                })}
+              </div>
+            </div>
+            <div className='flex items-center justify-between'>
+              <div>İptal Politikası</div>
+              <div className='text-sm font-semibold'>
+                {' '}
+                {!data.HotelCancelWarrantyPriceStatusModel.hasHotelWarranty && (
+                  <div>
+                    {roomGroup.nonRefundable ? (
+                      <div className='text-red'>Bu oda iptal edilemez.</div>
+                    ) : (
+                      <div className='text-green'>Ücretsiz iptal </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* {!data.HotelCancelWarrantyPriceStatusModel.hasHotelWarranty && (
+            <div>
+              {roomGroup.nonRefundable ? (
+                <div className='text-red'>Bu oda iptal edilemez.</div>
+              ) : (
+                <div className='text-green'>Ücretsiz iptal </div>
+              )}
+            </div>
+          )} */}
+          {roomGroup.cancellationPolicies &&
+            roomGroup.cancellationPolicies.length > 0 &&
+            roomGroup.cancellationPolicies
+              .filter((item) => item.description)
+              .map((cancelPolicy, cancelPolicyIndex) => (
+                <Alert
+                  color='yellow'
+                  key={cancelPolicyIndex}
+                  className='text-sm'
+                >
+                  {cancelPolicy.description}
+                </Alert>
+              ))}
+        </div>
+      </CheckoutCard>
+      <CheckoutCard>
         <UnstyledButton
           className='flex w-full items-center justify-between'
           onClick={togglePriceDetails}
@@ -118,83 +241,6 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
             })}
           </div>
         </Collapse>
-      </CheckoutCard>
-      <CheckoutCard>
-        <div className='grid gap-3'>
-          <div className='relative h-[200px]'>
-            <Skeleton
-              pos={'absolute'}
-              top={0}
-              bottom={0}
-              width={'100%'}
-              visible={isImageLoading}
-            />
-            <Image
-              src={hotel.images.at(0)?.original}
-              alt={hotel.name}
-              h={'100%'}
-              radius={'md'}
-              onLoad={() => {
-                setIsImageLoading(false)
-              }}
-            />
-          </div>
-          <div>
-            <Title order={3} fz='h4'>
-              {hotel.name}
-            </Title>
-            <address className='text-sm text-gray-600 not-italic'>
-              {hotel.address}
-            </address>
-          </div>
-
-          <div className='text-sm text-gray-700'>
-            <div className='flex gap-2'>
-              <div className='font-semibold'>Giriş Tarihi:</div>
-              <div>{dayjs(roomGroup.checkInDate).format('DD.MM.YYYY')}</div>
-            </div>
-            <div className='flex gap-2'>
-              <div className='font-semibold'>Çıkış Tarihi:</div>
-              <div>{dayjs(roomGroup.checkOutDate).format('DD.MM.YYYY')}</div>
-            </div>
-            <div className='pt-2'>{nightStay} Gece</div>
-          </div>
-          <div className='text-sm'>
-            <List type='ordered' className='list-decimal text-sm'>
-              {roomGroup.rooms.map((room, roomIndex) => {
-                const roomDetail = roomGroup.roomDetails[room.key]
-
-                return (
-                  <List.Item key={room.key}>
-                    Oda: {roomDetail.pensionType}
-                  </List.Item>
-                )
-              })}
-            </List>
-          </div>
-          {!data.HotelCancelWarrantyPriceStatusModel.hasHotelWarranty && (
-            <div>
-              {roomGroup.nonRefundable ? (
-                <div className='text-red'>Bu oda iptal edilemez.</div>
-              ) : (
-                <div className='text-green'>Ücretsiz iptal </div>
-              )}
-            </div>
-          )}
-          {roomGroup.cancellationPolicies &&
-            roomGroup.cancellationPolicies.length > 0 &&
-            roomGroup.cancellationPolicies
-              .filter((item) => item.description)
-              .map((cancelPolicy, cancelPolicyIndex) => (
-                <Alert
-                  color='yellow'
-                  key={cancelPolicyIndex}
-                  className='text-sm'
-                >
-                  {cancelPolicy.description}
-                </Alert>
-              ))}
-        </div>
       </CheckoutCard>
     </div>
   )

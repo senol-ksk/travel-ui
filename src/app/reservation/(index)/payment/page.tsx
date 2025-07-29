@@ -22,6 +22,7 @@ import {
   Stack,
   Text,
   TextInput,
+  Title,
   UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
@@ -56,6 +57,8 @@ import {
   PaymentValidationSchemaTypes,
   paymentValidationSchema,
 } from '@/libs/credit-card-utils'
+import { BsFillCreditCardFill } from 'react-icons/bs'
+import { MdCreditCard } from 'react-icons/md'
 // import { CreditCardForm } from '@/components/payment/credit-card'
 
 enum PaymentMethodEnums {
@@ -344,7 +347,11 @@ const PaymentPage = () => {
           </CheckoutCard>
         )}
 
-        <CheckoutCard title={'Ödeme Bilgileri'}>
+        <CheckoutCard>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <MdCreditCard size={22} className='text-blue-800' />
+            <span className='text-xl font-bold'>Ödeme Bilgileri</span>
+          </div>
           <div className='flex flex-col gap-3 md:gap-5'>
             <div>
               {/* <Switch
@@ -391,7 +398,9 @@ const PaymentPage = () => {
                         >
                           <RiCheckboxCircleFill size={22} />
                         </span>
-                        <span>Kredi Kartı İle Ödeme</span>
+                        <span className='md:text-md font-bold'>
+                          Kredi Kartı İle Ödeme
+                        </span>
                       </Center>
                     ),
                     value: '' + PaymentMethodEnums.CreditCard,
@@ -407,7 +416,9 @@ const PaymentPage = () => {
                         >
                           <RiCheckboxCircleFill size={22} />
                         </span>
-                        <span>ParafPara İle Ödeme</span>
+                        <span className='md:text-md font-bold'>
+                          ParafPara İle Ödeme
+                        </span>
                       </Center>
                     ),
                     value: '' + PaymentMethodEnums.Bonus,
@@ -435,12 +446,7 @@ const PaymentPage = () => {
                           {...field}
                           autoComplete='cc-name'
                           size='md'
-                          label={
-                            <span className='font-normal'>
-                              Kart üzerindeki isim {''}
-                              <span style={{ color: 'red' }}>*</span>
-                            </span>
-                          }
+                          label='Kart üzerindeki isim'
                           placeholder='Kart Üzerindeki İsim'
                           error={
                             !!formMethods.formState.errors.cardOwner
@@ -460,11 +466,7 @@ const PaymentPage = () => {
                         className='grid gap-1'
                         {...field}
                         autoComplete='cc-number'
-                        label={
-                          <span className='font-normal'>
-                            Kart Numarası {''}
-                          </span>
-                        }
+                        label='Kart Numarası'
                         type='tel'
                         size='md'
                         error={
@@ -481,10 +483,10 @@ const PaymentPage = () => {
                       />
                     )}
                   />
-                  <div className='grid grid-cols-3 gap-3'>
+                  <div className='grid grid-cols-3 items-center gap-3'>
                     <div className='col-span-2'>
                       <div className='grid gap-1'>
-                        <div>Son kullanma tarihi</div>
+                        <div className='text-sm'>Son kullanma tarihi</div>
                         <div className='flex gap-3'>
                           <div className='w-full'>
                             <Controller
@@ -539,21 +541,21 @@ const PaymentPage = () => {
                         </div>
                       </div>
                     </div>
-                    <div>
+                    <div className='col-span-1'>
                       <Controller
                         control={formMethods.control}
                         name='cardCvv'
                         defaultValue=''
                         render={({ field }) => (
                           <TextInput
-                            className='grid w-full gap-1'
+                            className='w-full'
                             {...field}
                             maxLength={
                               cardValidation.number(
                                 formMethods.watch('cardNumber')
                               ).card?.code.size || 3
                             }
-                            label={<span className='font-normal'>CVV</span>}
+                            label='CVV'
                             placeholder='CVV'
                             size='md'
                             error={

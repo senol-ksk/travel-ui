@@ -21,7 +21,6 @@ const BedType: React.FC<IProps> = ({ data }) => {
   return (
     <NativeSelect
       name={extraItem.code}
-      label={extraItem.description}
       data={options}
       defaultValue={options[0].value}
     />

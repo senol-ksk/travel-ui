@@ -173,11 +173,11 @@ export default function CheckoutPage() {
               <MdContactPhone size={20} className='text-blue-800' />
               <span className='text-xl font-bold'>İletişim Bilgileri</span>
             </div>
-            <div className='grid grid-cols-2 gap-1 md:gap-3'>
+            <div className='gap-1 md:grid md:grid-cols-2 md:gap-3'>
               <div>
                 <TextInput
-                  label={<span className='font-normal'>E-posta</span>}
                   size='md'
+                  label='E-posta'
                   type='email'
                   {...formMethods.register('contactEmail')}
                   error={
@@ -189,7 +189,7 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <Input.Wrapper>
-                  <Input.Label htmlFor='contactGSM' className='font-normal'>
+                  <Input.Label htmlFor='contactGSM'>
                     Telefon Numarası{' '}
                   </Input.Label>
                   <div
@@ -273,7 +273,7 @@ export default function CheckoutPage() {
 
                           return (
                             <div key={childNode.orderId}>
-                              <Title order={3} size={'sm'} pb={10}>
+                              <Title order={3} size={'md'} pb={10}>
                                 {childNodeIndex + 1}. Oda
                               </Title>
                               {childNode.childNodes.map(
@@ -299,7 +299,7 @@ export default function CheckoutPage() {
 
                                   return (
                                     <div key={innerChildNode.orderId}>
-                                      <div className='ps-4'>
+                                      <div>
                                         <Title
                                           order={5}
                                           pb={10}
@@ -318,7 +318,6 @@ export default function CheckoutPage() {
                                                 return innerChildNode.key
                                             }
                                           })()}{' '}
-                                          Bilgileri
                                         </Title>
                                         <HotelPassengerInformationForm
                                           moduleName={moduleName}

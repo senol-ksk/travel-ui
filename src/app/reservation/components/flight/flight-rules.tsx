@@ -42,7 +42,7 @@ const FlightRules: React.FC<Iprops> = ({ data }) => {
         title={<div className='text-xl'>Uçuş Kuralları</div>}
         transitionProps={{ transition: 'fade', duration: 200 }}
       >
-        <div className='mb-3 flex items-center justify-around gap-2 border p-2'>
+        <div className='mb-3 grid items-center gap-2 border p-2 text-sm md:flex md:justify-around'>
           {flightData.flightList
             .sort((a, b) => a.flightDetail.groupId - b.flightDetail.groupId)
             .map((flightItem) => {
