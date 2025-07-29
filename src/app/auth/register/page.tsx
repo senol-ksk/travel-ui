@@ -94,6 +94,7 @@ export default function RegisterPage() {
           </div>
           <div className='col-span-2'>
             <TextInput
+              size='md'
               label='E-posta'
               type='email'
               {...form.register('email')}

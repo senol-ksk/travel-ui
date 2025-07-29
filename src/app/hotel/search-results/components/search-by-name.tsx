@@ -26,7 +26,6 @@ const SearchByName: React.FC<IProps> = ({
 
   return (
     <TextInput
-      label=''
       type='search'
       maxLength={20}
       placeholder='Otel adı yazın'

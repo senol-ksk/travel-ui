@@ -239,7 +239,6 @@ const HotelRoom: React.FC<IProps> = ({
               {hasCancelWarranty && (
                 <div className='my-2 flex w-80 items-center rounded-md border p-2'>
                   <Checkbox
-                    label={<span></span>}
                     defaultChecked={isCancelWarrantyChecked}
                     size='sm'
                     radius={'xl'}

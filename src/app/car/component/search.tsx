@@ -411,11 +411,11 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                           <span className='text-md font-bold'>
                             {destinationName},
                           </span>{' '}
-                          için{' '}
+                          İçin{' '}
                           <span className='text-md font-bold'>
                             {totalCount}
                           </span>{' '}
-                          araç bulduk!
+                          Araç Bulundu
                         </div>
                       </div>
                     </>
@@ -490,7 +490,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                 >
                   <>
                     <span className='text-sm font-semibold text-gray-500'>
-                      Toplam {totalCount} araç bulundu
+                      Toplam {totalCount} Araç Bulundu
                     </span>
                   </>
                 </Skeleton>

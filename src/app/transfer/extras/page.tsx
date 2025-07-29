@@ -24,6 +24,7 @@ import {
 } from 'react-hook-form'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
+import { Image } from '@mantine/core'
 
 import { serviceRequest } from '@/network'
 import {
@@ -39,6 +40,8 @@ import { TransferVehicle } from '../types'
 import { HiLocationMarker } from 'react-icons/hi'
 import { PriceNumberFlow } from '@/components/price-numberflow'
 import { IoChevronForwardSharp } from 'react-icons/io5'
+import dayjs from 'dayjs'
+import { MdDescription } from 'react-icons/md'
 
 const transferExtraRequeireFields = z.object({
   PickupInfo: z.string().nonempty(),
@@ -462,14 +465,72 @@ export default function Page() {
                 </div>
               </div>
               <div className='sticky col-span-12 hidden w-full rounded-md border p-3 md:top-1 md:col-span-4 md:grid'>
-                <div className='my-3 flex justify-between font-semibold'>
-                  <div>Toplam Tutar</div>
-                  <div className='text-end text-lg font-semibold'>
+                <div className='grid gap-3'>
+                  <div className='hidden items-center gap-3 border-b pb-2 text-lg font-semibold md:flex'>
+                    <MdDescription size={22} className='text-blue-800' />
+                    <div>Seyahat Özeti</div>
+                  </div>
+
+                  <div className='grid items-center justify-center'>
+                    <div className='w-[250px]'>
+                      <Image
+                        alt={extraOptionsDatas?.vehicleTitle}
+                        src={extraOptionsDatas?.transferInfo.vehiclePhotoUrl}
+                        className='h-auto w-full rounded-md object-contain'
+                      />
+                    </div>
+                  </div>
+                  <Title order={3}>
+                    {transferData?.selectResponse.transferVehicle.vehicleName}
+                  </Title>
+                  <div>
+                    Maks.{' '}
+                    {
+                      transferData?.selectResponse.transferVehicle.transferInfo
+                        .transferMax.pax
+                    }
+                    , Maks.{' '}
+                    {
+                      transferData?.selectResponse.transferVehicle.transferInfo
+                        .transferMax.suitcase
+                    }
+                  </div>
+                  <div className='grid grid-cols-2 items-baseline rounded-md border p-2 py-4 text-sm text-gray-700'>
+                    <div className='flex flex-col items-center text-center'>
+                      <div className='font-bold'>Alış Bilgileri</div>
+                      <div className='grid text-sm'>
+                        <div className='font-medium'>
+                          {dayjs(
+                            transferData?.selectResponse.pickupDate
+                          ).format('DD MMMM YYYY HH:mm')}
+                        </div>
+                        <div>
+                          {' '}
+                          {transferData?.selectResponse.pickupPointName}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className='relative flex flex-col items-center text-center'>
+                      <div className='absolute top-1/2 left-0 h-16 -translate-y-1/2 border-l border-gray-300'></div>
+
+                      <div className='font-bold'>Bırakış Bilgileri</div>
+                      <div className='grid text-sm'>
+                        <div>{transferData?.selectResponse.dropPointName}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className='my-3 flex items-center justify-between font-semibold'>
+                  <div className='text-lg'>Toplam Tutar</div>
+                  <div className='text-end text-xl'>
                     {formatCurrency(totalPriceState)}
                   </div>
                 </div>
                 <div className='pt-2'>
                   <Button
+                    size='md'
+                    radius={'md'}
                     type='submit'
                     fullWidth
                     loading={reservationPageMutation.isPending}
@@ -491,7 +552,7 @@ export default function Page() {
             </Title>
             <Button
               type='submit'
-              className='bg-primary col-span-7 border-none text-end text-white'
+              className='col-span-7 text-white'
               radius={'md'}
               loading={reservationPageMutation.isPending}
               rightSection={<IoChevronForwardSharp size={20} />}

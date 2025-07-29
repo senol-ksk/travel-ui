@@ -5,6 +5,7 @@ import { Button, Card, Container, Drawer, ScrollArea } from '@mantine/core'
 import { ReservationSummarySection } from './summary-section'
 import { BsSuitcaseLg } from 'react-icons/bs'
 import { useDisclosure } from '@mantine/hooks'
+import { MdDescription, MdTimer } from 'react-icons/md'
 
 // import '@/styles/reservation.css'
 export default function ReservationLayout({
@@ -26,7 +27,7 @@ export default function ReservationLayout({
                 role='button'
                 onClick={openDrawer}
               >
-                <BsSuitcaseLg />
+                <MdDescription size={22} className='text-blue-800' />
                 <div>Seyahat Özeti</div>
               </div>
               <Drawer
@@ -34,17 +35,27 @@ export default function ReservationLayout({
                 radius='md'
                 opened={drawerOpened}
                 onClose={closeDrawer}
-                title='Seyahat Özeti'
+                title={
+                  <div className='flex items-center gap-2'>
+                    <MdDescription size={22} className='text-blue-800' />
+                    <span className='text-xl font-semibold'>Seyahat Özeti</span>
+                  </div>
+                }
                 scrollAreaComponent={ScrollArea.Autosize}
               >
                 <ReservationSummarySection />
               </Drawer>
               <div className='hidden rounded-md border border-amber-400 bg-orange-50 p-2 shadow-xs md:block md:p-4'>
-                Oturumun aktif kalması için ödemenizi <br />
-                <span className='px-1 font-bold text-orange-500'>
-                  20 dakika
+                <span className='flex items-start gap-2'>
+                  <MdTimer size={22} className='text-orange-800' />
+                  <span>
+                    Oturumun aktif kalması için ödemenizi <br />
+                    <span className='px-1 font-bold text-orange-500'>
+                      20 dakika
+                    </span>
+                    içinde tamamlayın!
+                  </span>
                 </span>
-                içinde tamamlayın!
               </div>
               <div className='hidden md:block'>
                 <ReservationSummarySection />

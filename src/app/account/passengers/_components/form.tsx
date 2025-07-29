@@ -244,7 +244,7 @@ const PassengerForm: React.FC<IProps> = ({
               <TextInput
                 size='md'
                 type='email'
-                label={<span className='font-normal'>E-posta</span>}
+                label='E-posta'
                 {...field}
                 error={fieldState.error?.message}
               />

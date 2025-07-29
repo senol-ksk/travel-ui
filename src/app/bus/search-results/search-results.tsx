@@ -450,7 +450,7 @@ const BusSearchResults: React.FC = () => {
                             {' '}
                             {totalCount}{' '}
                           </span>
-                          otobüs seferi bulundu
+                          Otobüs Seferi Bulundu
                         </div>
                       </div>
                     )}
@@ -505,6 +505,7 @@ const BusSearchResults: React.FC = () => {
                       >
                         <div>
                           <NativeSelect
+                            leftSection={<FaCheck />}
                             radius={'md'}
                             className='ms-auto w-full font-medium md:w-auto'
                             size='sm'
@@ -547,7 +548,7 @@ const BusSearchResults: React.FC = () => {
                       <span className='text-sm font-semibold text-gray-500'>
                         Toplam{' '}
                         <span className='text-xl font-bold'>{totalCount}</span>{' '}
-                        otobüs seferi bulundu
+                        Otobüs Seferi Bulundu
                       </span>{' '}
                     </div>
                   )}

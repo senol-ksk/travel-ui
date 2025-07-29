@@ -1,6 +1,14 @@
 'use client'
 
-import { DEFAULT_THEME, mergeMantineTheme, Modal, rem } from '@mantine/core'
+import {
+  DEFAULT_THEME,
+  mergeMantineTheme,
+  Modal,
+  rem,
+  TextInput,
+  Input,
+  InputLabel,
+} from '@mantine/core'
 
 import { fonts } from './fonts'
 import { colors } from './colors'
@@ -35,6 +43,21 @@ const mantineTheme = mergeMantineTheme(
           withThumbIndicator: false,
         },
       },
+      TextInput: TextInput.extend({
+        defaultProps: {
+          size: 'md',
+          labelProps: {
+            fw: 400,
+          },
+        },
+      }),
+
+      InputLabel: Input.Label.extend({
+        defaultProps: {
+          size: 'md',
+          fw: 400,
+        },
+      }),
     },
   }
 )

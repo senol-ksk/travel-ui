@@ -477,12 +477,12 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         <span className='text-lg font-bold'>
                           {searchParams.destination}, Otelleri
                         </span>{' '}
-                        için{' '}
+                        İçin{' '}
                         <span className='text-xl font-bold'>
                           {' '}
                           {totalCount}{' '}
                         </span>
-                        tesis bulduk!
+                        Tesis Bulundu
                       </div>
                     </div>
                   )}
@@ -616,8 +616,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     <>
                       <div>
                         <span className='text-sm font-semibold text-gray-500'>
-                          {searchParams.destination}, Otelleri için toplam{' '}
-                          {totalCount} tesis bulduk!
+                          {searchParams.destination}, Otelleri İçin Toplam{' '}
+                          {totalCount} Tesis Bulundu
                         </span>{' '}
                       </div>
                     </>
