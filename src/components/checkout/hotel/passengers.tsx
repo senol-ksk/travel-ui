@@ -214,7 +214,6 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
             render={({ field }) => (
               <TextInput
                 {...field}
-                size='md'
                 label='Soyad'
                 error={error?.lastName ? error?.lastName.message : null}
                 autoComplete='family-name'
@@ -224,9 +223,7 @@ export const HotelPassengerInformationForm: React.FC<IProps> = ({
         </div>
         <div>
           <Input.Wrapper>
-            <Input.Label htmlFor={name_birthDate_day} fz={'md'}>
-              <div className='text-sm font-normal'> Doğum Tarihi</div>
-            </Input.Label>
+            <Input.Label htmlFor={name_birthDate_day}>Doğum Tarihi</Input.Label>
             <div className='grid grid-cols-3 gap-2'>
               <Controller
                 control={methods.control}

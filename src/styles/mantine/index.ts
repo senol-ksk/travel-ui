@@ -6,6 +6,8 @@ import {
   Modal,
   rem,
   TextInput,
+  Input,
+  InputLabel,
 } from '@mantine/core'
 
 import { fonts } from './fonts'
@@ -44,15 +46,16 @@ const mantineTheme = mergeMantineTheme(
       TextInput: TextInput.extend({
         defaultProps: {
           size: 'md',
+          labelProps: {
+            fw: 400,
+          },
         },
-        styles: {
-          input: {
-            fontSize: '14px',
-          },
-          label: {
-            fontSize: '14px',
-            fontWeight: 400,
-          },
+      }),
+
+      InputLabel: Input.Label.extend({
+        defaultProps: {
+          size: 'md',
+          fw: 400,
         },
       }),
     },

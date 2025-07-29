@@ -189,10 +189,7 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <Input.Wrapper>
-                  <Input.Label
-                    htmlFor='contactGSM'
-                    className='text-sm font-normal'
-                  >
+                  <Input.Label htmlFor='contactGSM'>
                     Telefon Numarası{' '}
                   </Input.Label>
                   <div
