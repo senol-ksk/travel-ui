@@ -9,13 +9,15 @@ type IProps = {
 }
 
 const PickUpPointSelect: React.FC<IProps> = ({ data }) => {
+  if (!data) return null
   const extraItem = data
+
   const values = extraItem.filters
-    .find((item) => item.key === 'PickUpPointCode')
+    ?.find((item) => item.key === 'PickUpPointCode')
     ?.value.split('@') as string[]
 
   const labels = extraItem.filters
-    .find((item) => item.key === 'PickUpPointExplain')
+    ?.find((item) => item.key === 'PickUpPointExplain')
     ?.value.split('@') as string[]
   const options: { label: string; value: string }[] = []
 
@@ -27,7 +29,7 @@ const PickUpPointSelect: React.FC<IProps> = ({ data }) => {
       })
     })
   } else {
-    extraItem.filters.forEach((extraItemValue) => {
+    extraItem.filters?.forEach((extraItemValue) => {
       options.push({
         value: extraItemValue.key,
         label: extraItemValue.value,
