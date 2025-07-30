@@ -88,7 +88,7 @@ export default async function Home() {
       <div>
         <Container className='flex flex-col gap-3 md:gap-10'>
           {opportunities && (
-            <div>
+            <div className='mx-auto'>
               <MainBannerCarousel
                 slides={opportunities.map((slide) => ({
                   ...slide,
@@ -113,11 +113,11 @@ export default async function Home() {
 
           {recommendedProductsData && recommendedProductsData.length > 0 && (
             <div>
-              <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:mb-10 md:text-3xl'>
+              <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:mb-0 md:text-3xl'>
                 Tavsiye Ettiğimiz Oteller
               </h2>
               {hotelDestinations && hotelDestinations?.length > 0 && (
-                <div className='hidden gap-3 overflow-hidden pb-8 whitespace-nowrap md:flex'>
+                <div className='hidden gap-3 overflow-hidden py-8 whitespace-nowrap md:flex'>
                   <ScrollArea w={'100%'}>
                     <div className='flex gap-3'>
                       {hotelDestinations
@@ -142,13 +142,17 @@ export default async function Home() {
 
           {trendRegionsData && trendRegionsData.length > 0 && (
             <div className='hidden sm:block'>
-              <Title order={4} c={'blue.9'} fz={'h2'} className='text-center'>
+              <Title
+                order={4}
+                c={'blue.9'}
+                className='my-8 text-center text-3xl'
+              >
                 Trend Tatil Bölgeleri
               </Title>
               {hotelPopularRegionsBtns?.map((hotelPopularRegionsBtn) => {
                 return (
                   <div
-                    className='hidden gap-3 overflow-hidden py-8 md:block'
+                    className='hidden gap-3 overflow-hidden pb-8 md:block'
                     key={hotelPopularRegionsBtn.id}
                   >
                     <ScrollArea w={'100%'}>
@@ -183,7 +187,10 @@ export default async function Home() {
 }
 
 const CategoryLink = ({ link, title }: { link: string; title: string }) => (
-  <Link href={link} className='block rounded-md border bg-white px-4 py-3'>
+  <Link
+    href={link}
+    className='block rounded-md border bg-white px-4 py-3 hover:bg-blue-100'
+  >
     {title}
   </Link>
 )
