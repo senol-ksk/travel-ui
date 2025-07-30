@@ -21,8 +21,9 @@ import {
 } from '../../types'
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
-import { FlightSummary } from '@/components/book-results/flight'
+import { FlightSummary } from '@/app/reservation/(results)/callback/products/flight'
 import { BsFillCreditCardFill } from 'react-icons/bs'
+import { notFound } from 'next/navigation'
 
 type IProps = {
   searchParams: Promise<{
@@ -38,9 +39,15 @@ type IProps = {
 const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
   const { searchToken, sessionToken, shoppingFileId, productKey } =
     await searchParams
+
+  console.log(searchToken, sessionToken, shoppingFileId, productKey)
+
+  if (!(searchToken || sessionToken || shoppingFileId || productKey))
+    return notFound()
+
   const getSummaryData = await serviceRequest<OperationResultType>({
     axiosOptions: {
-      // url: `api/product/summary/withshoppingfileId`,
+      // url: `api/product/summary/withshoppingfileId` as number,
       url: `api/product/summary`,
       params: {
         searchToken,
@@ -51,7 +58,10 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     },
   })
 
+  if (!getSummaryData?.data && !getSummaryData?.success) return notFound()
+
   const getSummary = getSummaryData?.data
+  console.log(getSummary)
   const passengerData = getSummary?.passenger
 
   const productData = getSummary?.product.summaryResponse
