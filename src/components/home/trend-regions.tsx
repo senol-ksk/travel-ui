@@ -36,17 +36,17 @@ const TrendRegions: React.FC<IProps> = ({ data }) => {
         return (
           <div
             key={item.id}
-            className={`group col-span-6 ${colWidth} ${rowLength}`}
+            className={`group col-span-6 ${colWidth} ${rowLength} rounded-3xl`}
           >
             <Link
               href={item.params.link?.value || '#'}
-              className='relative block h-full overflow-hidden rounded-3xl'
+              className='relative block h-full overflow-hidden rounded-3xl shadow-xl'
             >
               <div className='h-full w-full overflow-hidden'>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
                   alt={item.title}
-                  className='h-full w-full object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
+                  className='h-full w-full object-cover transition-all duration-300'
                 />
               </div>
               <div className='absolute right-0 bottom-0 left-0 truncate bg-gradient-to-t from-black/70 to-transparent p-3 text-lg font-medium text-white'>

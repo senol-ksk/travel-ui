@@ -63,7 +63,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
                 href={slide.params.link?.value || '#'}
                 className='block'
               >
-                <AspectRatio ratio={16 / 9}>
+                <AspectRatio ratio={2.6 / 1}>
                   <Image
                     src={cdnImageUrl(slide.params.image.value)}
                     alt={slide.Title}
