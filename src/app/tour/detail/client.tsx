@@ -32,7 +32,7 @@ import { MdOutlineCameraAlt } from 'react-icons/md'
 import { TourMediaGallery } from '@/app/tour/_components/media-gallery/media-gallery'
 import { TourTableOfContents } from '@/app/tour/_components/table-of-contents'
 import { BiMoon } from 'react-icons/bi'
-import { IoIosAirplane } from 'react-icons/io'
+
 import dayjs from 'dayjs'
 import { CiLocationOn } from 'react-icons/ci'
 
@@ -42,7 +42,11 @@ const TourDetailClient = () => {
     isOpenExtraServicesModal,
     { open: openExtraServicesModal, close: closeExtraServicesModal },
   ] = useDisclosure(false)
-  const [searchParams] = useQueryStates(tourDetailPageParamParser)
+  const [searchParams, setSearchParams] = useQueryStates(
+    tourDetailPageParamParser
+  )
+
+  console.log(searchParams)
 
   const lastKeys = useRef({
     packageKey: '',
@@ -60,6 +64,17 @@ const TourDetailClient = () => {
 
   const detailQuery = useTourDetailQuery()
 
+  if (
+    (!searchParams.searchToken || !searchParams.sessionToken) &&
+    detailQuery.data
+  ) {
+    setSearchParams({
+      productKey: detailQuery.data?.package.key,
+      searchToken: detailQuery.data?.searchToken,
+      sessionToken: detailQuery.data?.sessionToken,
+    })
+  }
+
   const [passengers, setPassengers] = useState<{
     adultCount: string
     childAge?: (string | undefined)[] | undefined
@@ -69,8 +84,16 @@ const TourDetailClient = () => {
 
   const calculateTotalPriceQuery = useQuery({
     enabled: !!detailQuery.data && detailQuery.isSuccess,
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: ['tour-detail-totalPrice', detailQuery.data, passengers],
+
+    queryKey: [
+      searchParams?.searchToken,
+      searchParams?.sessionToken,
+      lastKeys.current.packageKey.length,
+      lastKeys.current.packageKey,
+      searchParams?.productKey,
+      passengers.adultCount,
+      passengers.childAge,
+    ],
     queryFn: async () => {
       const response = await serviceRequest<{
         value: ServicePriceType

@@ -5,7 +5,7 @@ import { Link } from 'next-view-transitions'
 import { SearchEngine } from '@/components/search-engine/'
 import { StorySlider } from '@/components/home/story-slider'
 import { getContent } from '@/libs/cms-data'
-import { CmsContent, Params, Widgets } from '@/types/cms-types'
+import { CmsContent, Params, TourDealType, Widgets } from '@/types/cms-types'
 import { UpComingHolidays } from '@/components/home/upcoming-holidays'
 import { LastOpportunity } from '@/components/home/last-opportunity'
 import { RecommendedProducts } from '@/components/home/recommended-products'
@@ -13,8 +13,9 @@ import { RecommendedProducts } from '@/components/home/recommended-products'
 import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
 
-// import { EbultenForm } from '@/components/home/ebulten-form'
 import { MainBannerCarousel } from '@/components/main-banner'
+import { serviceRequest } from '@/network'
+import { slugify } from '@/libs/util'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -49,6 +50,21 @@ export default async function Home() {
   const lastOpportunityData = cmsData?.widgets.filter(
     (x) => x.point === 'last_opportunity'
   )
+
+  const tourDeals = await serviceRequest<TourDealType[]>({
+    axiosOptions: {
+      url: 'api/cms/getDealList',
+      params: {
+        channel: 7,
+        pageNumber: 1,
+        placement: 'homepage',
+        takeCount: 100,
+        languageCode: 'tr_TR',
+        // SessionToken: ViewBag.SessionToken,
+        // SearchToken: ViewBag.TourSearchToken,
+      },
+    },
+  })
 
   return (
     <div className='flex flex-col gap-4 md:gap-10'>
@@ -173,9 +189,21 @@ export default async function Home() {
           <div>
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
-          {/* <div>
-            <EbultenForm />
-          </div> */}
+
+          {tourDeals?.data && tourDeals.data?.length > 0 && (
+            <div>
+              <Title order={3}>Tur Fırsatları</Title>
+              {tourDeals.data.map((tourDeal) => (
+                <div key={tourDeal.id}>
+                  <Link
+                    href={`/tour/detail?slug=${slugify(tourDeal.title.toLocaleLowerCase())}-${tourDeal.subDealId}&productKey=${tourDeal.productKey}`}
+                  >
+                    {tourDeal.title}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </Container>
       </div>
     </div>
