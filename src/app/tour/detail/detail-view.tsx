@@ -21,7 +21,6 @@ const TourDetail: React.FC<Props> = ({ data }) => {
   const dayjsEndDate = dayjs(endDate)
   const totalNights = dayjsEndDate.diff(dayjsStartDate, 'day')
   const totalDays = totalNights + 1
-  console.log(data.detail)
 
   return (
     <div className='flex flex-col gap-6'>

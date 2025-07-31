@@ -1,125 +1,92 @@
 'use client'
 
-import { Button, Container } from '@mantine/core'
+import { AspectRatio, Button } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
-import { Badge, Box } from '@mantine/core'
+import { Box } from '@mantine/core'
 import Link from 'next/link'
 import { Image } from '@mantine/core'
+import { TourDealType } from '@/types/cms-types'
+import { formatCurrency, slugify, validateUrl } from '@/libs/util'
+import { cdnSiteImageUrl } from '@/libs/cms-data'
+import dayjs from 'dayjs'
+import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri'
+type IProps = {
+  data: TourDealType[]
+}
 
-const categories = [
-  'Erken Rezervasyon',
-  'Alanya Otelleri',
-  'Kıbrıs Otelleri',
-  'Bodrum Otelleri',
-  'Belek Otelleri',
-  'Kemer Otelleri',
-  'başar otelleri',
-]
-
-const tours = [
-  {
-    name: 'Crystal Family Resort & Spa',
-    location: 'Muğla/Bodrum, Turkey',
-    date: '02 Haziran - 06 Haziran 2025',
-    price: '2.330₺',
-    discount: '%50',
-    img: 'https://static.daktilo.com/sites/1222/uploads/2024/08/19/tatil4784515.jpg',
-  },
-  {
-    name: 'Süper Promo İtalya Turu',
-    location: 'Milano - Venedik - Floransa',
-    date: '02 Haziran - 06 Haziran 2025',
-    price: '3.200₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-  {
-    name: 'Sueno Hotels Deluxe Belek',
-    location: 'Muğla/Bodrum, Turkey',
-    date: '02 Haziran - 06 Haziran 2025',
-    price: '2.500₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-  {
-    name: 'Leodikia Kirman Premium',
-    location: 'Muğla/Bodrum, Turkey',
-    date: '02 Haziran - 06 Haziran 2025',
-
-    price: '1.500₺',
-    img: 'https://static.daktilo.com/sites/1222/uploads/2024/08/19/tatil4784515.jpg',
-  },
-  {
-    name: 'basar otellerı',
-    location: 'Muğla/Bodrum, Turkey',
-    date: '02 Haziran - 06 Haziran 2025',
-
-    price: '4.000₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-  {
-    name: 'bılmem ne otellerı',
-    location: 'Muğla/Bodrum, Turkey',
-    date: '02 Haziran - 06 Haziran 2025',
-
-    price: '4.20₺',
-    img: 'https://c.ekstatic.net/ecl/explore-destination/beach/beach-view-with-clear-blue-water-lp-w1920x480.jpg',
-  },
-]
-
-const TourOpportunity = () => {
+const TourOpportunity: React.FC<IProps> = ({ data }) => {
   return (
-    <div className='relative'>
-      <h2 className='mb-6 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
-        Tur Fırsatları
-      </h2>
-
-      <Container className='mb-8 gap-2 overflow-x-auto md:overflow-x-visible'>
-        <div className='flex w-max gap-2 md:w-auto md:flex-wrap md:justify-center'>
-          {categories.map((title, i) => (
-            <Link href='#' key={i}>
-              <Button
-                className='cursor-pointer whitespace-nowrap'
-                variant='default'
-                color='white'
-                size='md'
-                radius='md'
-              >
-                {title}
-              </Button>
-            </Link>
-          ))}
+    <Carousel
+      slideGap='lg'
+      slideSize={{ base: '100%', sm: `${100 / 4}%` }}
+      controlSize={48}
+      emblaOptions={{
+        dragFree: true,
+      }}
+      controlsOffset={0}
+      nextControlIcon={
+        <div className='text-blue-800'>
+          <RiArrowRightLine size={24} />
         </div>
-      </Container>
-      <Container>
-        <Carousel slideGap='lg' className='relative' slideSize='100%'>
-          {tours.map((tour, i) => (
-            <Carousel.Slide
-              key={i}
-              className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
+      }
+      previousControlIcon={
+        <div className='text-blue-800'>
+          <RiArrowLeftLine size={24} />
+        </div>
+      }
+    >
+      {data.map((tour) => {
+        const {
+          imagePath,
+          id,
+          title,
+          subDealId,
+          subTitle,
+          productKey,
+          startDate,
+          price,
+          promotionText,
+        } = tour
+        const href = `/tour/detail?slug=${slugify(title.toLocaleLowerCase())}-${subDealId}&productKey=${productKey}`
+        return (
+          <Carousel.Slide key={id}>
+            <Box
+              href={href}
+              component={Link}
+              className='group block h-full w-full gap-3'
             >
-              <Link href='#'>
-                <Box className='group mb-10 w-full rounded-lg border bg-white shadow-xl'>
-                  <div className='relative'>
+              <Box className='group mb-10 w-full rounded-xl border bg-white shadow-xl'>
+                <div className='relative'>
+                  <AspectRatio>
                     <Image
-                      src={tour.img}
-                      alt={tour.name}
-                      className='h-50 w-full rounded-lg object-cover brightness-75 transition-all duration-300 group-hover:brightness-100'
+                      src={
+                        validateUrl(imagePath)
+                          ? imagePath
+                          : cdnSiteImageUrl(imagePath)
+                      }
+                      alt={title}
+                      className='rounded-t-xl'
                     />
-                    {tour.discount && (
-                      <span className='absolute top-2 right-2 rounded bg-orange-500 px-2 py-1 text-xs text-white'>
-                        {tour.discount}
-                      </span>
-                    )}
-                  </div>
-                  <div className='grid gap-3 p-5'>
-                    <h3 className='text-md font-semibold'>{tour.name}</h3>
-                    <p className='text-xs'>{tour.date}</p>
-                    <p className='text-xs text-gray-900'>{tour.location}</p>
+                  </AspectRatio>
+                  {promotionText && (
+                    <span className='absolute top-3 left-3 rounded-lg bg-blue-800 px-2 py-1 text-xs text-white'>
+                      {promotionText}
+                    </span>
+                  )}
+                </div>
+                <div className='-mt-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
+                  <div className='grid gap-3'>
+                    <h3 className='text-md truncate font-semibold'>{title}</h3>
+                    <p className='text-xs'>
+                      {dayjs(startDate).format('YYYY DD MMM ddd ')}
+                    </p>
+                    <p className='truncate text-xs text-gray-900'>{subTitle}</p>
                     <div className='flex items-center justify-between pt-5'>
-                      <p className='text-md font-bold'>
-                        {tour.price}
-                        <span className='text-sm font-normal'>/ Kişi</span>
+                      <p className='text-red text-xl font-bold'>
+                        {formatCurrency(price)}
                       </p>
                       <Button
+                        className='transition-all ease-linear group-hover:bg-blue-800 group-hover:text-white'
                         variant='light'
                         color='blue'
                         size='sm'
@@ -129,13 +96,13 @@ const TourOpportunity = () => {
                       </Button>
                     </div>
                   </div>
-                </Box>
-              </Link>
-            </Carousel.Slide>
-          ))}
-        </Carousel>
-      </Container>
-    </div>
+                </div>
+              </Box>
+            </Box>
+          </Carousel.Slide>
+        )
+      })}
+    </Carousel>
   )
 }
 

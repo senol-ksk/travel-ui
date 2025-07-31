@@ -1,6 +1,6 @@
 import { CheckoutCard } from '@/components/card'
-import { cdnImageUrl } from '@/libs/cms-data'
-import { formatCurrency } from '@/libs/util'
+import { cdnImageUrl, cdnSiteImageUrl } from '@/libs/cms-data'
+import { formatCurrency, validateUrl } from '@/libs/util'
 import {
   ProductPassengerApiResponseModel,
   TourSummaryViewData,
@@ -27,7 +27,11 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
       <div className='grid gap-3'>
         <div>
           <Image
-            src={cdnImageUrl(tourData.package.imageUrl)}
+            src={
+              validateUrl(tourData.package.imageUrl)
+                ? tourData.package.imageUrl
+                : cdnSiteImageUrl(tourData.package.imageUrl)
+            }
             alt={tourData.package.title}
             radius={'md'}
           />

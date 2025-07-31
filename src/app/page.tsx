@@ -15,7 +15,7 @@ import { HolidayThemes } from '@/components/home/holiday-themes'
 
 import { MainBannerCarousel } from '@/components/main-banner'
 import { serviceRequest } from '@/network'
-import { slugify } from '@/libs/util'
+import { TourOpportunity } from '@/components/home/tour-opportunity'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -155,7 +155,14 @@ export default async function Home() {
               </div>
             </div>
           )}
-
+          {tourDeals?.data && tourDeals.data?.length > 0 && (
+            <>
+              <h2 className='mt-8 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
+                Tur Fırsatları
+              </h2>
+              <TourOpportunity data={tourDeals.data} />
+            </>
+          )}
           {trendRegionsData && trendRegionsData.length > 0 && (
             <div className='hidden sm:block'>
               <Title
@@ -187,27 +194,13 @@ export default async function Home() {
                   </div>
                 )
               })}
+
               <TrendRegions data={trendRegionsData} />
             </div>
           )}
           <div>
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
-
-          {tourDeals?.data && tourDeals.data?.length > 0 && (
-            <div>
-              <Title order={3}>Tur Fırsatları</Title>
-              {tourDeals.data.map((tourDeal) => (
-                <div key={tourDeal.id}>
-                  <Link
-                    href={`/tour/detail?slug=${slugify(tourDeal.title.toLocaleLowerCase())}-${tourDeal.subDealId}&productKey=${tourDeal.productKey}`}
-                  >
-                    {tourDeal.title}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          )}
         </Container>
       </div>
     </div>
