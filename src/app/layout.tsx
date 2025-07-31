@@ -22,6 +22,7 @@ import Header from '@/components/header'
 import { Footer } from '@/components/footer'
 import { Suspense } from 'react'
 import { Notifications } from '@mantine/notifications'
+import { CallFormDrawer } from '@/components/call-form/CallFormDrawer'
 
 export const metadata: Metadata = {
   title: process.env.APP_TITLE,
@@ -60,6 +61,7 @@ export default function RootLayout({
                     <Footer />
                   </div>
                 </Suspense>
+                <CallFormDrawer />
               </Providers>
             </MantineProvider>
           </body>
