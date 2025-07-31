@@ -1,10 +1,11 @@
 import { CheckoutCard } from '@/components/card'
-import { formatCurrency } from '@/libs/util'
+import { cdnImageUrl, cdnSiteImageUrl } from '@/libs/cms-data'
+import { formatCurrency, validateUrl } from '@/libs/util'
 import {
   ProductPassengerApiResponseModel,
   TourSummaryViewData,
 } from '@/types/passengerViewModel'
-import { Image, Title, Tooltip } from '@mantine/core'
+import { Image, Tooltip } from '@mantine/core'
 import dayjs from 'dayjs'
 import { MdDescription } from 'react-icons/md'
 
@@ -16,7 +17,7 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
   const tourData = data.SummaryViewDataResponser
     .summaryResponse as TourSummaryViewData
   const tourDay = tourData.package.tourTime + 1
-  console.log(tourData)
+
   return (
     <CheckoutCard>
       <div className='hidden items-center gap-3 border-b pb-2 text-lg font-semibold md:flex'>
@@ -26,7 +27,11 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
       <div className='grid gap-3'>
         <div>
           <Image
-            src={tourData.package.imageUrl}
+            src={
+              validateUrl(tourData.package.imageUrl)
+                ? tourData.package.imageUrl
+                : cdnSiteImageUrl(tourData.package.imageUrl)
+            }
             alt={tourData.package.title}
             radius={'md'}
           />
@@ -40,7 +45,6 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
           </div>
           {'-'}
           <div>
-            {' '}
             {tourData.package.tourTime} Gece {tourDay} Gün
           </div>
         </div>
@@ -62,25 +66,8 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
         <div className='flex items-center justify-between'>
           <div>Misafirler</div>
           <div className='font-bold'>
-            {' '}
-            {tourData.package.passengerPrices.map(
-              (passengerPrice, passengerPriceIndex) => {
-                const adultCount = passengerPrice.passengers.filter(
-                  (item) => item.gender === 0
-                )
-                const childCount = passengerPrice.passengers.filter(
-                  (item) => item.gender !== 0
-                )
-                return (
-                  <div key={passengerPriceIndex}>
-                    <div>{adultCount.length} Yetişkin</div>
-                    {childCount.length > 0 && (
-                      <div>{childCount.length} Çocuk</div>
-                    )}
-                  </div>
-                )
-              }
-            )}
+            {tourData.adultCount.split(':')[0]} Yetişkin
+            {tourData.childs && <div>{tourData.childs.length} Çocuk</div>}
           </div>
         </div>
         <div className='flex items-center justify-between'>

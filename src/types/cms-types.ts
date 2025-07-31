@@ -480,3 +480,21 @@ export type Params = {
     value: string
   }
 }
+
+export interface TourDealType {
+  id: ID
+  imagePath: string
+  title: string
+  subTitle: string
+  priceWithCurrency: ServicePriceType
+  discountedPriceWithCurrency: ServicePriceType
+  price: number
+  productKey: string
+  sessionToken: null
+  searchToken: null
+  promotionText: string
+  startDate: string
+  endDate: string
+  providerName: string
+  subDealId: ID
+}

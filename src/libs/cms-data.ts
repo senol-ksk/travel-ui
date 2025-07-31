@@ -232,5 +232,17 @@ export function getContentBySlugAsync(slug: string) {
 export function cdnImageUrl(src: string) {
   if (typeof window === null) return `${process.env.CMS_CDN}/${src}`
 
-  return `${process.env.NEXT_PUBLIC_CMS_CDN}/${src}`
+  return `${process.env.NEXT_PUBLIC_CMS_CDN}/${src}`.replace(
+    /([^:]\/)\/+/g,
+    '$1'
+  )
+}
+export function cdnSiteImageUrl(src: string) {
+  if (typeof window === null)
+    return `${process.env.CMS_SITE_CDN}/${src}`.replace(/([^:]\/)\/+/g, '$1')
+
+  return `${process.env.NEXT_PUBLIC_CMS_SITE_CDN}/${src}`.replace(
+    /([^:]\/)\/+/g,
+    '$1'
+  )
 }

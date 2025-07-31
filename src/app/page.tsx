@@ -5,7 +5,7 @@ import { Link } from 'next-view-transitions'
 import { SearchEngine } from '@/components/search-engine/'
 import { StorySlider } from '@/components/home/story-slider'
 import { getContent } from '@/libs/cms-data'
-import { CmsContent, Params, Widgets } from '@/types/cms-types'
+import { CmsContent, Params, TourDealType, Widgets } from '@/types/cms-types'
 import { UpComingHolidays } from '@/components/home/upcoming-holidays'
 import { LastOpportunity } from '@/components/home/last-opportunity'
 import { RecommendedProducts } from '@/components/home/recommended-products'
@@ -13,8 +13,9 @@ import { RecommendedProducts } from '@/components/home/recommended-products'
 import { TrendRegions } from '@/components/home/trend-regions'
 import { HolidayThemes } from '@/components/home/holiday-themes'
 
-// import { EbultenForm } from '@/components/home/ebulten-form'
 import { MainBannerCarousel } from '@/components/main-banner'
+import { serviceRequest } from '@/network'
+import { TourOpportunity } from '@/components/home/tour-opportunity'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -49,6 +50,21 @@ export default async function Home() {
   const lastOpportunityData = cmsData?.widgets.filter(
     (x) => x.point === 'last_opportunity'
   )
+
+  const tourDeals = await serviceRequest<TourDealType[]>({
+    axiosOptions: {
+      url: 'api/cms/getDealList',
+      params: {
+        channel: 7,
+        pageNumber: 1,
+        placement: 'homepage',
+        takeCount: 100,
+        languageCode: 'tr_TR',
+        // SessionToken: ViewBag.SessionToken,
+        // SearchToken: ViewBag.TourSearchToken,
+      },
+    },
+  })
 
   return (
     <div className='flex flex-col gap-4 md:gap-10'>
@@ -139,7 +155,14 @@ export default async function Home() {
               </div>
             </div>
           )}
-
+          {tourDeals?.data && tourDeals.data?.length > 0 && (
+            <>
+              <h2 className='mt-8 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
+                Tur Fırsatları
+              </h2>
+              <TourOpportunity data={tourDeals.data} />
+            </>
+          )}
           {trendRegionsData && trendRegionsData.length > 0 && (
             <div className='hidden sm:block'>
               <Title
@@ -171,15 +194,13 @@ export default async function Home() {
                   </div>
                 )
               })}
+
               <TrendRegions data={trendRegionsData} />
             </div>
           )}
           <div>
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
-          {/* <div>
-            <EbultenForm />
-          </div> */}
         </Container>
       </div>
     </div>

@@ -60,9 +60,9 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
                 {item.params.location?.value}
               </p>
               <div className='flex items-center justify-between pt-5'>
-                <p className='text-md font-bold'>
+                <p className='text-xl font-bold'>
                   {item.params.discount_price?.value}
-                  <span className='text-sm font-normal'>/ Kişi</span>
+                  <span className='text-sm font-normal'> / Kişi</span>
                 </p>
                 <Button
                   component='div'

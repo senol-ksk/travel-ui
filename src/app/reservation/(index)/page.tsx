@@ -189,7 +189,11 @@ export default function CheckoutPage() {
               </div>
               <div>
                 <Input.Wrapper>
-                  <Input.Label htmlFor='contactGSM'>
+                  <Input.Label
+                    htmlFor='contactGSM'
+                    size='md'
+                    className='text-md'
+                  >
                     Telefon Numarası{' '}
                   </Input.Label>
                   <div
@@ -400,12 +404,13 @@ export default function CheckoutPage() {
 
                           return (
                             <div key={index}>
-                              <Title order={3} size={'sm'} pb={10}>
+                              {index > 0 && <hr className='m-5' />}
+                              <Title order={2} size={'xl'} pb={15}>
                                 {/* {PassengerTypesIndexEnum[passengerType]} */}
                                 {(() => {
                                   switch (passengerType) {
                                     case 0:
-                                      return 'Yetiskin'
+                                      return 'Yetişkin'
 
                                     default:
                                       return PassengerTypesIndexEnum[

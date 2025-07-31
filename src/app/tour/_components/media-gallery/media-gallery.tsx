@@ -1,6 +1,8 @@
 import { Modal, Image } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { useMediaQuery } from '@mantine/hooks'
+import { validateUrl } from '@/libs/util'
+import { cdnSiteImageUrl } from '@/libs/cms-data'
 
 type Props = {
   images: string[]
@@ -46,7 +48,7 @@ const TourMediaGallery = ({ images, title, opened, onClose }: Props) => {
             <Carousel.Slide key={idx}>
               <Image
                 className='rounded-3xl'
-                src={img}
+                src={validateUrl(img) ? img : cdnSiteImageUrl(img)}
                 alt={`${title} - ${idx + 1}`}
                 style={{
                   height: 'auto',
