@@ -11,7 +11,12 @@ const CampaignTopMenus = async () => {
     <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
       <div className='flex gap-3'>
         <div>
-          <Button component={Link} href={linkPrefix} size='compact-md'>
+          <Button
+            variant='default'
+            component={Link}
+            href={linkPrefix}
+            size='compact-md'
+          >
             Tümü
           </Button>
         </div>
@@ -19,6 +24,7 @@ const CampaignTopMenus = async () => {
           return (
             <div key={item.id}>
               <Button
+                variant='default'
                 component={Link}
                 href={`${linkPrefix}?categoryId=${item.id}`}
                 size='compact-md'
