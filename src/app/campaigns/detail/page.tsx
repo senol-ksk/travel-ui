@@ -20,13 +20,13 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
     <Container>
       <div className='my-5 border p-3'>
         <div className='relative mb-5 w-full'>
-          <AspectRatio ratio={16 / 9} className='mb-5 pb-5'>
+          <AspectRatio ratio={25 / 12} className='mb-5 pb-5'>
             <Image
               component={NextImage}
               src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${content.params.image.value}`}
               alt={content.title}
-              width={1000}
-              height={1000}
+              width={5000}
+              height={5000}
               priority
               radius={'md'}
               placeholder='empty'
