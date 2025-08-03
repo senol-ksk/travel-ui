@@ -293,7 +293,17 @@ export interface FlightSummaryResponse {
             pieceCount: number
           }
         }
-        freeVolatileData: object
+        freeVolatileData: {
+          ResBookDesigID: {
+            SeatsLeft: number
+            SeatsLeftSpecified: boolean
+            Value: string
+          }
+          ResBookDesigCode: string
+          Baggage: string
+          BrandName: string
+          Seq: string
+        }
       },
     ]
     flightPackageInfos: []

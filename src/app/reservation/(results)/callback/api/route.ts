@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { NextRequest } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { serviceRequest } from '@/network'
 
 export async function POST(request: NextRequest) {
@@ -23,8 +23,6 @@ export async function POST(request: NextRequest) {
     },
   })
 
-  console.log(bookResult)
-
   if (bookResult && bookResult?.success && bookResult.data) {
     const bookResultParams = new URLSearchParams(bookResult.data)
 
@@ -35,8 +33,6 @@ export async function POST(request: NextRequest) {
         data: bookResult.data,
       },
     })
-
-    console.log(completeResponse)
 
     return redirect(`/reservation/callback?${bookResultParams}`)
   }
