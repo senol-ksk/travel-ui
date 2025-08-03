@@ -15,6 +15,7 @@ namespace NodeJS {
     NEXT_PUBLIC_HOTEL_SOCKET_URL: string
     NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string
     NEXT_PUBLIC_CMS_CDN: string
+    NEXT_PUBLIC_CMS_SITE_CDN: string
     // server envs
     CMS_CDN: string
     API_GW_ROUTE: string
@@ -31,5 +32,6 @@ namespace NodeJS {
     API_GW_KEY: string
     APP_TITLE: string
     RESEND_API_KEY: string
+    CMS_SITE_CDN: string
   }
 }

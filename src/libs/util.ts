@@ -59,3 +59,9 @@ export const phoneSchema = z
   .string()
   .optional()
   .refine((value) => isMobilePhone(value ?? ''))
+
+export const validateUrl = (value: string | undefined) => {
+  const url = z.string().url()
+  console.log(url.safeParse(value))
+  return url.safeParse(value).success
+}

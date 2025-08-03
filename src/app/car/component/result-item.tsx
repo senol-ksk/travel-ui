@@ -32,7 +32,10 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
   )
 
   return (
-    <div className='rounded-lg border border-gray-300 shadow'>
+    <div
+      className='cursor-pointer rounded-lg border border-gray-300 shadow'
+      onClick={() => onSelect(item)}
+    >
       {/* WEB GÖRÜNÜMÜ*/}
       <div>
         <div className='hidden gap-4 p-4 md:grid md:grid-cols-10'>
@@ -153,7 +156,6 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
           <Button
             size='md'
             radius='md'
-            onClick={() => onSelect(item)}
             rightSection={<MdOutlineChevronRight />}
           >
             Hemen Kirala

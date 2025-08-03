@@ -16,7 +16,6 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import NumberFlow from '@number-flow/react'
 import { useTransitionRouter } from 'next-view-transitions'
 import { createSerializer, useQueryStates } from 'nuqs'
-
 import { useTourDetailQuery } from './useTourDetailQuery'
 import { TourDetail } from './detail-view'
 import { TourDetailPriceSection } from './price-section'
@@ -27,22 +26,24 @@ import { ExtraServicePanel } from './extra-services'
 import { reservationParsers } from '@/app/reservation/searchParams'
 import { tourDetailPageParamParser } from '@/modules/tour/detailSearchParams'
 import { CruiseSearchEngine } from '@/modules/cruise'
-import { IoCalendarClearOutline, IoMapOutline } from 'react-icons/io5'
+import { IoCalendarClearOutline } from 'react-icons/io5'
 import { MdOutlineCameraAlt } from 'react-icons/md'
 import { TourMediaGallery } from '@/app/tour/_components/media-gallery/media-gallery'
 import { TourTableOfContents } from '@/app/tour/_components/table-of-contents'
 import { BiMoon } from 'react-icons/bi'
-import { IoIosAirplane } from 'react-icons/io'
 import dayjs from 'dayjs'
 import { CiLocationOn } from 'react-icons/ci'
-
+import { validateUrl } from '@/libs/util'
+import { cdnSiteImageUrl } from '@/libs/cms-data'
 const TourDetailClient = () => {
   const router = useTransitionRouter()
   const [
     isOpenExtraServicesModal,
     { open: openExtraServicesModal, close: closeExtraServicesModal },
   ] = useDisclosure(false)
-  const [searchParams] = useQueryStates(tourDetailPageParamParser)
+  const [searchParams, setSearchParams] = useQueryStates(
+    tourDetailPageParamParser
+  )
 
   const lastKeys = useRef({
     packageKey: '',
@@ -60,6 +61,17 @@ const TourDetailClient = () => {
 
   const detailQuery = useTourDetailQuery()
 
+  if (
+    (!searchParams.searchToken || !searchParams.sessionToken) &&
+    detailQuery.data
+  ) {
+    setSearchParams({
+      productKey: detailQuery.data?.package.key,
+      searchToken: detailQuery.data?.searchToken,
+      sessionToken: detailQuery.data?.sessionToken,
+    })
+  }
+
   const [passengers, setPassengers] = useState<{
     adultCount: string
     childAge?: (string | undefined)[] | undefined
@@ -69,8 +81,16 @@ const TourDetailClient = () => {
 
   const calculateTotalPriceQuery = useQuery({
     enabled: !!detailQuery.data && detailQuery.isSuccess,
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: ['tour-detail-totalPrice', detailQuery.data, passengers],
+
+    queryKey: [
+      searchParams?.searchToken,
+      searchParams?.sessionToken,
+      lastKeys.current.packageKey.length,
+      lastKeys.current.packageKey,
+      searchParams?.productKey,
+      passengers.adultCount,
+      passengers.childAge,
+    ],
     queryFn: async () => {
       const response = await serviceRequest<{
         value: ServicePriceType
@@ -300,16 +320,23 @@ const TourDetailClient = () => {
                 onClick={() => setGalleryOpened(true)}
                 className='relative grid cursor-pointer auto-cols-fr gap-4 px-3 sm:grid-cols-4 md:grid-rows-2 md:px-0'
               >
-                <figure
-                  style={{ contentVisibility: 'auto' }}
-                  className='place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
-                >
-                  <Image
-                    className='aspect-16/9 h-full w-full rounded-md object-cover'
-                    src={images?.at(0)}
-                    alt={detailQuery.data.package.title}
-                  />
-                </figure>
+                {Array.isArray(images) && images?.at(0) && (
+                  <figure
+                    style={{ contentVisibility: 'auto' }}
+                    className='place-self-stretch sm:col-start-[span_2] sm:row-start-[span_2]'
+                  >
+                    <Image
+                      fallbackSrc=''
+                      className='aspect-16/9 h-full w-full rounded-md object-cover'
+                      src={
+                        validateUrl(images?.at(0))
+                          ? images?.at(0)
+                          : cdnSiteImageUrl(images[0])
+                      }
+                      alt={detailQuery.data.package.title}
+                    />
+                  </figure>
+                )}
                 {images?.slice(1, 5).map((image, imageIndex) => (
                   <figure
                     key={imageIndex}
@@ -317,7 +344,7 @@ const TourDetailClient = () => {
                     style={{ contentVisibility: 'auto' }}
                   >
                     <Image
-                      src={image}
+                      src={validateUrl(image) ? image : cdnSiteImageUrl(image)}
                       alt={detailQuery.data?.package.title}
                       className='absolute aspect-16/9 h-full w-full object-cover'
                     />
@@ -371,7 +398,7 @@ const TourDetailClient = () => {
                           <CiLocationOn size={22} />
                         </div>
                         <div
-                          className='font-semibold'
+                          className='flex items-center font-semibold'
                           dangerouslySetInnerHTML={{
                             __html:
                               detailQuery.data.detail.flightInformation[0],
@@ -381,7 +408,7 @@ const TourDetailClient = () => {
                     )}
                   </div>
 
-                  <div className='text-dark-200 mt-20 hidden text-sm md:flex'>
+                  <div className='text-dark-200 mt-13 hidden text-sm md:flex'>
                     Not : Çocuk kategorisi 7-12 yaşları arasıdır. Tur sirküsü
                     yayımlandığı 03.02.2025 tarihinde geçerlidir. Aynı tura ait,
                     daha sonraki bir tarihte yayımlanacak tur sirküsü bir

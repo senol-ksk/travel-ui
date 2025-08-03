@@ -723,11 +723,13 @@ export interface TourExtraOptionsItemType {
   required: true
   indexNo: 0
   data: null
-  filters: {
-    key: 'PickUpPointCode' | 'PickUpPointExplain' | string
-    value: string
-    indexNo: number
-  }[]
+  filters:
+    | {
+        key: 'PickUpPointCode' | 'PickUpPointExplain' | string
+        value: string
+        indexNo: number
+      }[]
+    | null
 }
 export interface TourExtraOptionsTypes {
   items: []
@@ -1260,7 +1262,7 @@ export interface TourSummaryViewData {
     }
   }
   adultCount: string
-  childs: null
+  childs: null | number[]
   sessionToken: null
   searchToken: null
   tourExtraServiceToDetailReturnPath: null
