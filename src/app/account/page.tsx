@@ -43,7 +43,7 @@ export default async function AccountPage() {
 
   return (
     <div>
-      <Title fz={'h3'}>Üyelik Bilgileri</Title>
+      <Title fz={'h3'}>Hesap Bilgilerim</Title>
       <div className='pt-5'>
         <div>{`${userData?.name} ${userData?.surname}`}</div>
         {userData?.birthdate && dayjs(userData?.birthdate).isValid() && (
