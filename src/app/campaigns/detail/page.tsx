@@ -1,9 +1,10 @@
-import { Button, Container, Image, Title } from '@mantine/core'
+import { AspectRatio, Button, Container, Image, Title } from '@mantine/core'
 import { type SearchParams } from 'nuqs/server'
 import NextImage from 'next/image'
 
 import { getContentBySlugAsync } from '@/libs/cms-data'
 import { Link } from 'next-view-transitions'
+import { CampaignCopySection } from '@/app/campaigns/_components/campaign-copy-value'
 
 type PageProps = {
   searchParams: Promise<SearchParams>
@@ -13,33 +14,37 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
   const { slug, target } = await searchParams
   const path = `kampanyalar/${slug}/${target}`
   const content = (await getContentBySlugAsync(path))?.data
-
   if (!content) return <div>no data</div>
 
   return (
     <Container>
-      <Title fz={'h3'}>{content?.title}</Title>
-      <div>
-        <div className='relative h-[200px] w-full'>
-          <Image
-            component={NextImage}
-            src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${content.params.image.value}`}
-            fill
-            alt={content.title}
-            radius={'md'}
-          />
+      <div className='my-5 border p-3'>
+        <div className='relative mb-5 w-full'>
+          <AspectRatio ratio={25 / 12} className='mb-5 pb-5'>
+            <Image
+              component={NextImage}
+              src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${content.params.image.value}`}
+              alt={content.title}
+              width={5000}
+              height={5000}
+              priority
+              radius={'md'}
+              placeholder='empty'
+            />
+          </AspectRatio>
         </div>
+        <Title className='mt-5' fz={'h2'}>
+          {content?.title}
+        </Title>
         <div
           dangerouslySetInnerHTML={{
             __html: content?.params.sort_description.value,
           }}
         />
         {content.params.promation_code && (
-          <div>
-            {content.params.promation.value}
-            <div>{content.params.promation_code.value}</div>
-          </div>
+          <CampaignCopySection code={content.params.promation_code.value} />
         )}
+
         {content.params.description && (
           <div>
             <Title order={2} fz={'h4'}>
@@ -69,7 +74,11 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
           </div>
         )}
 
-        <Button component={Link} href={content.params.link.value}>
+        <Button
+          className='my-5'
+          component={Link}
+          href={content.params.link.value}
+        >
           {content.params.btn_name.value}
         </Button>
       </div>
