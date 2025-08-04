@@ -8,6 +8,10 @@ import {
   Container,
   Link,
   Head,
+  Section,
+  Text,
+  Row,
+  Column,
 } from '@react-email/components'
 import dayjs from 'dayjs'
 import 'dayjs/locale/tr'
@@ -42,35 +46,6 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
         }}
       >
         <Body className='m-0 bg-white font-sans leading-normal text-black'>
-          {/*
-          https://developers.google.com/workspace/gmail/markup/reference/flight-reservation#use_cases
-          <script
-            type='application/ld+json'
-            dangerouslySetInnerHTML={{
-              __html: `{
-  "@context": "http://schema.org",
-  "@type": "FlightReservation",
-  "reservationFor": {
-    "@type": "Flight",
-    "airline": {
-      "@type": "Airline",
-      "name": "Pegasus Havayolları"
-    },
-    "departureAirport": {
-      "@type": "Airport",
-      "iataCode": "SAW"
-    },
-    "departureTime": "2025-10-13T17:20",
-    "arrivalAirport": {
-      "@type": "Airport",
-      "name": "Schiphol Havalimanı",
-      "iataCode": "AMS"
-    },
-    "arrivalTime": "2025-10-14T08:55"
-  }
-}`,
-            }}
-          /> */}
           <div className='bg-white'>
             <div className='p-3'>
               <Link href='https://www.paraflytravel.com/'>
@@ -87,11 +62,31 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
 
             <Container
               style={{
-                maxWidth: em(800),
+                minWidth: em(800),
               }}
               className='p-4'
             >
-              {children}
+              <Section>
+                <Row>
+                  <Column>{children}</Column>
+                </Row>
+              </Section>
+              <Section className='text-center text-xs'>
+                <Text className='mx-auto w-3/4'>
+                  Paraflytravel.com sitesinin tüm seyahat hizmetleri Yeni
+                  Karamürsel Turizm ve Seyahat Acentası tarafından haftanın her
+                  günü 09:00 - 18:00 saatleri arasında verilmektedir.
+                </Text>
+                <Section width={'55%'}>
+                  <div>
+                    <strong>Karya Tur Seyahat Acenteliği A.Ş</strong>
+                  </div>
+                  <div>
+                    İcadiye, Cumhuriyet Cad. No:167/5, 34674 Üsküdar / İstanbul 
+                  </div>
+                  <div>Mersis No: 0948006409700018 </div>
+                </Section>
+              </Section>
             </Container>
           </div>
         </Body>

@@ -90,7 +90,10 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
         }
       )
       .then((responseData) => {
-        console.log(responseData)
+        console.log('email send response => ', responseData)
+      })
+      .catch((reason) => {
+        console.log('email send error => ', reason)
       })
   }
 
