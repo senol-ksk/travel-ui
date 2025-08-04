@@ -62,6 +62,6 @@ export const phoneSchema = z
 
 export const validateUrl = (value: string | undefined) => {
   const url = z.string().url()
-  console.log(url.safeParse(value))
+
   return url.safeParse(value).success
 }
