@@ -403,7 +403,7 @@ const FlightSearchView = () => {
                     ) : (
                       <>
                         <div className='flex justify-between gap-2'>
-                          <Title className='text-xl' order={2} mb={rem(10)}>
+                          <Title className='text-xl font-medium' mb={rem(10)}>
                             Filtreler
                           </Title>
                           <div>
@@ -430,8 +430,8 @@ const FlightSearchView = () => {
                           ]}
                           multiple
                           classNames={{
-                            control: 'p-2 text-md font-semibold',
-                            label: 'p-0 font-semibold',
+                            root: 'filter-accordion',
+                            control: 'text-md font-medium',
                           }}
                         >
                           <Skeleton

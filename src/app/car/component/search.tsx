@@ -155,7 +155,10 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                           ) : (
                             <>
                               <div className='flex justify-between gap-2'>
-                                <Title order={2} fz={'h4'} mb={rem(20)}>
+                                <Title
+                                  className='text-xl font-medium'
+                                  mb={rem(20)}
+                                >
                                   Filtreler
                                 </Title>
 
@@ -180,8 +183,8 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                 defaultValue={['fuelType', 'provider']}
                                 multiple
                                 classNames={{
-                                  control: 'p-2 text-sm',
-                                  label: 'p-0',
+                                  root: 'filter-accordion',
+                                  control: 'text-md font-medium',
                                 }}
                               >
                                 <Accordion.Item value='fuelType'>
