@@ -12,7 +12,7 @@
 
 @import '@mantine/carousel/styles.layer.css';
 @import './Fonts.css';
-
+@import './general-site.css';
 @layer base {
   *,
   ::after,

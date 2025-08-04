@@ -11,7 +11,7 @@ const CallFormDrawer = () => {
   return (
     <div>
       <Container>
-        <div className='fixed right-6 bottom-6 z-50 flex items-center gap-5'>
+        <div className='fixed right-6 bottom-6 z-50 hidden items-center gap-5 md:flex'>
           <Button variant='filled' onClick={open} className='' size='md'>
             <MdPhone size={20} />
             <span> Biz Sizi Arayalım</span>
