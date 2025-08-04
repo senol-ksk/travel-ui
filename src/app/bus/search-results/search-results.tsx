@@ -232,7 +232,10 @@ const BusSearchResults: React.FC = () => {
                           ) : (
                             <>
                               <div className='flex justify-between'>
-                                <Title order={2} fz={'h4'} mb={rem(20)}>
+                                <Title
+                                  className='text-xl font-medium'
+                                  mb={rem(20)}
+                                >
                                   Filtreler
                                 </Title>
 
@@ -255,11 +258,15 @@ const BusSearchResults: React.FC = () => {
                               </div>
                               <Accordion
                                 multiple
-                                defaultValue={['busType', 'origin']}
+                                defaultValue={[
+                                  'busType',
+                                  'origin',
+                                  'destination',
+                                  'companies',
+                                ]}
                                 classNames={{
-                                  control: 'p-2 text-sm',
-                                  label: 'p-0',
-                                  content: 'p-2',
+                                  root: 'filter-accordion',
+                                  control: 'text-md font-medium',
                                 }}
                               >
                                 <Accordion.Item value='busType'>

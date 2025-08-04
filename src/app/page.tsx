@@ -25,7 +25,7 @@ export default async function Home() {
     (x) => x.point === 'deals_of_week'
   )
   const opportunities = cmsData?.widgets?.filter(
-    (x) => x.point == 'home-carousel-banner'
+    (x) => x.point == 'home_carousel_banner'
   )
 
   const recommendedProductsData = cmsData?.widgets.filter(

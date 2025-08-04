@@ -121,7 +121,7 @@ const TransferSearchResults = () => {
                     ) : (
                       <>
                         <div className='flex justify-between pb-6'>
-                          <Title order={2} fz={'h4'}>
+                          <Title className='text-xl font-medium'>
                             Filtreler
                           </Title>
                           <div
@@ -180,6 +180,9 @@ const TransferSearchResults = () => {
                               value={
                                 filterParams.vehicle ? filterParams.vehicle : []
                               }
+                              classNames={{
+                                root: 'filter-accordion',
+                              }}
                             >
                               <Stack gap={rem(6)}>
                                 {vehicleTypeChecks
@@ -209,6 +212,9 @@ const TransferSearchResults = () => {
                                 setFilterParams({
                                   pax: values.length ? values : null,
                                 })
+                              }}
+                              classNames={{
+                                root: 'filter-accordion',
                               }}
                             >
                               <Stack gap={rem(6)}>

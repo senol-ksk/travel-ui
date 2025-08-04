@@ -1,0 +1,14 @@
+.filter-accordion .mantine-Checkbox-input {
+  border: 2px solid gray;
+}
+.filter-accordion .mantine-Accordion-label {
+  font-weight: 500;
+}
+@media (min-width: 768px) {
+  .filter-accordion .mantine-Accordion-content {
+    padding-left: 0;
+  }
+  .filter-accordion .mantine-Accordion-control {
+    padding-left: 0;
+  }
+}
