@@ -39,8 +39,6 @@ const schema = z.object({
   passportValidityDate: z.coerce.date(),
   email: z.string().email(),
   mobilePhoneNumber: phoneSchema,
-  // listFlightFrequencyAirline: z.array(z.string()).optional(),
-  // listFlightFrequencyNo: z.array(z.string()).optional(),
 })
 
 export type FormSchemaType = z.infer<typeof schema>
@@ -74,15 +72,6 @@ const PassengerForm: React.FC<IProps> = ({
       type: defaultValues?.type.toString() ?? '0',
     },
   })
-
-  // const airlineList = useAirlineListQuery()
-
-  // const airlineDropdownOptions = airlineList.data?.data
-  //   ? airlineList?.data?.data?.map((airline) => ({
-  //       label: airline.value.at(0)?.value ?? '',
-  //       value: airline.code,
-  //     }))
-  //   : []
 
   return (
     <form
@@ -308,57 +297,6 @@ const PassengerForm: React.FC<IProps> = ({
             </div>
           </Input.Wrapper>
         </div>
-        {/* <div className='col-span-2'>
-          <Title order={4}>Havayolu Bilgileri</Title>
-        </div>
-        <div>
-          {form?.formState?.defaultValues?.listFlightFrequencyAirline &&
-          form?.formState?.defaultValues?.listFlightFrequencyAirline?.length >
-            0 ? (
-            form.formState?.defaultValues?.listFlightFrequencyAirline.map(
-              (listFlightFrequencyAirline) => {
-                return (
-                  <Controller
-                    key={listFlightFrequencyAirline}
-                    control={form.control}
-                    name='listFlightFrequencyAirline'
-                    // defaultValue={listFlightFrequencyAirline}
-                    render={({ field, fieldState }) => (
-                      <NativeSelect
-                        label='Havayolu'
-                        disabled={airlineList.isLoading}
-                        data={[
-                          { label: 'Lütfen bir havayolu seçin', value: '' },
-                          ...airlineDropdownOptions,
-                        ]}
-                        {...field}
-                      />
-                    )}
-                  />
-                )
-              }
-            )
-          ) : (
-            <Controller
-              control={form.control}
-              name='listFlightFrequencyAirline'
-              render={({ field, fieldState }) => (
-                <NativeSelect
-                  label='Havayolu'
-                  disabled={airlineList.isLoading}
-                  data={[
-                    { label: 'Lütfen bir havayolu seçin', value: '' },
-                    ...airlineDropdownOptions,
-                  ]}
-                  {...field}
-                />
-              )}
-            />
-          )}
-        </div>
-        <div>
-          <TextInput label='Üyelik No' />
-        </div> */}
       </div>
       <div className='flex justify-center pt-5'>
         <Button type='submit' loading={isSubmitting}>

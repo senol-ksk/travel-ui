@@ -8,15 +8,20 @@ import {
   TextInput,
   PasswordInput,
   Checkbox,
+  Title,
+  Grid,
 } from '@mantine/core'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
+import { Image } from '@mantine/core'
 
 import { phoneSchema } from '@/libs/util'
 import { serviceRequest } from '@/network'
 import { z } from '@/libs/zod'
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
+import Link from 'next/link'
 
 const registerSchema = z.object({
   name: z.string().nonempty().min(3),
@@ -62,19 +67,100 @@ export default function RegisterPage() {
   }
 
   return (
-    <Container
-      size={600}
-      py={{
-        base: 'md',
-        md: 'xl',
-      }}
-    >
+    <Container className='mt-5 grid grid-cols-4 gap-5 rounded-lg border p-0 shadow'>
+      <div className='col-span-2 rounded-l-lg border-r bg-blue-50 p-3 shadow'>
+        <Container className='grid gap-5 py-7'>
+          <Link href='/'>
+            <Image src='/logo.png' className='w-[25%]' alt='Paraflytravel' />
+          </Link>
+          <Grid gutter='xl'>
+            <Grid.Col>
+              <div className='flex items-center gap-2 font-bold'>
+                Hemen Üye Ol,  Seyahatini Planlamaya Başla!{' '}
+              </div>
+            </Grid.Col>
+            <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='grid'>
+                  <span className='font-bold'>
+                    Yolcu bilgilerinizi kaydedin
+                  </span>
+                  <span>
+                    Kendinize ve sevdiklerinize ait bilgileri kaydedin, bilet ve
+                    rezervasyon işlemlerinizi çok daha hızlı halledin.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col>
+
+            <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='flex flex-col'>
+                  <span className='font-bold'>
+                    Rezervasyonlarını kolayca yönet{' '}
+                  </span>
+                  <span>
+                    Rezervasyonlarınıza ve bilet bilgilerinize dilediğiniz zaman
+                    ulaşın.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col>
+
+            {/* <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='flex flex-col'>
+                  <span className='font-bold'>
+                    Hoşgeldin Kuponu ile Hemen Kazanmaya Başla!{' '}
+                  </span>
+                  <span>
+                    Rezervasyonlarınıza ve bilet bilgilerinize dilediğiniz zaman
+                    ulaşın.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col> */}
+
+            <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='flex flex-col'>
+                  <span className='font-bold'>ParafPara sorgulama yapın </span>
+                  <span>
+                    Kredi kartı puanlarınızı hesabınıza aktarın, biriken
+                    puanlarla uçak ya da otobüs biletinizi alın, otel
+                    rezervasyonunuzu yapın.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </div>
       <form
+        className='col-span-2 p-3 py-7'
         onSubmit={form.handleSubmit((data) => {
           console.log(data)
           submitHandler(data)
         })}
       >
+        <Title className='text-start text-xl'>Parafly Travel’a Üye Ol</Title>
+
         <div className='grid grid-cols-2 gap-3 md:gap-5'>
           <div>
             <TextInput
@@ -194,6 +280,8 @@ export default function RegisterPage() {
           <div className='col-span-2'>
             <Button
               fullWidth
+              size='md'
+              radius={'md'}
               type='submit'
               //  disabled={!form.formState.isValid}
             >

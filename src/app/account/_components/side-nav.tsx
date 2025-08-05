@@ -5,9 +5,11 @@ import { Link } from 'next-view-transitions'
 
 import { IoIosLogOut } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
-import { RiFileUserLine } from 'react-icons/ri'
-import { LiaFileInvoiceSolid } from 'react-icons/lia'
-import { MdModeOfTravel } from 'react-icons/md'
+import {
+  MdOutlineContacts,
+  MdOutlineLuggage,
+  MdOutlineReceiptLong,
+} from 'react-icons/md'
 
 import { signOut } from 'next-auth/react'
 
@@ -21,23 +23,24 @@ export default function AccountSideNav() {
         leftSection={<FaRegUserCircle />}
       />
       <NavLink
+        label='Rezervasyonlarım'
+        component={Link}
+        href={'/account/reservations'}
+        leftSection={<MdOutlineLuggage />}
+      />
+      <NavLink
         label='Kayıtlı Yolcularım'
         component={Link}
         href={'/account/passengers'}
-        leftSection={<RiFileUserLine />}
+        leftSection={<MdOutlineContacts />}
       />
       <NavLink
         label='Fatura Bilgilerim'
         component={Link}
         href={'/account/invoices'}
-        leftSection={<LiaFileInvoiceSolid />}
+        leftSection={<MdOutlineReceiptLong />}
       />
-      <NavLink
-        label='Seyahatlerim'
-        component={Link}
-        href={'/account/reservations'}
-        leftSection={<MdModeOfTravel />}
-      />
+
       <NavLink
         label='Oturumu Kapat'
         leftSection={<IoIosLogOut />}
