@@ -33,5 +33,6 @@ namespace NodeJS {
     APP_TITLE: string
     RESEND_API_KEY: string
     CMS_SITE_CDN: string
+    EMAIL_FROM: string
   }
 }

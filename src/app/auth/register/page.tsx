@@ -8,73 +8,112 @@ import {
   TextInput,
   PasswordInput,
   Checkbox,
+  LoadingOverlay,
 } from '@mantine/core'
+import { Link } from 'next-view-transitions'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
+import { useMutation } from '@tanstack/react-query'
+import { modals } from '@mantine/modals'
 
-import { phoneSchema } from '@/libs/util'
-import { serviceRequest } from '@/network'
-import { z } from '@/libs/zod'
-
-const registerSchema = z.object({
-  name: z.string().nonempty().min(3),
-  surname: z.string().nonempty(),
-  email: z.string().email(),
-  phone: phoneSchema,
-  password: z.string().max(15).min(6),
-  passwordRepeat: z.string().max(15).min(6),
-  confirmAgreement: z.literal(true),
-  confirmKVKK: z.literal(true),
-})
-
-type RegisterSchemaTypes = z.infer<typeof registerSchema>
+import { registerSchema, RegisterSchemaTypes } from './schema'
+import { registerActions } from './actions'
 
 export default function RegisterPage() {
   const form = useForm({
     resolver: zodResolver(registerSchema),
   })
 
-  const submitHandler = async (data: RegisterSchemaTypes) => {
-    const response = await serviceRequest<{
-      name: string
-      returnUrl: null
-      searchToken: null
-      sessionToken: null
-      userAuthenticationToken: string
-    }>({
-      axiosOptions: {
-        url: 'api/account/register',
-        method: 'post',
-        data: {
-          ...data,
-          siteURL: window.location.origin,
-        },
-      },
-    })
+  const handleMutate = useMutation({
+    mutationFn: async (data: RegisterSchemaTypes) => {
+      const actionResponse = await registerActions(
+        data,
+        window.location.origin + '/'
+      )
 
-    if (response?.success) {
-      console.log('basarili islem')
-    } else {
-      console.error('hatali islem')
-    }
+      console.log(actionResponse)
+
+      return actionResponse
+    },
+    onSuccess(query, variables) {
+      if (!query?.data) {
+        modals.open({
+          title: 'Bir Sorun Var',
+          children: (
+            <div>
+              <div>
+                Girdiğiniz bilgilerle daha önce bir üyelik açılmış olabilir.
+                Bilgilerinizi kontrol edin.
+              </div>
+              <div className='pt-4 text-center'>
+                <Button
+                  component={Link}
+                  href={'/auth/login'}
+                  onClick={() => {
+                    modals.closeAll()
+                  }}
+                >
+                  Veya Giriş Yapın
+                </Button>
+              </div>
+            </div>
+          ),
+        })
+      }
+
+      if (query?.success) {
+        modals.open({
+          title: 'İşlem Başarılı',
+          closeOnClickOutside: false,
+          withCloseButton: false,
+          children: (
+            <div>
+              <div>
+                Kayıt işleminiz başarılı. Epostanıza gelen aktivasyon
+                bağlantısını tıklayarak üyeliğinizi aktif edebilirsiniz.
+              </div>
+              <div className='pt-4 text-center'>
+                <Button
+                  component={Link}
+                  href={'/auth/login'}
+                  onClick={() => {
+                    modals.closeAll()
+                  }}
+                >
+                  Giriş Yap
+                </Button>
+              </div>
+            </div>
+          ),
+          closeOnEscape: false,
+        })
+      }
+    },
+  })
+
+  const handleSubmit = (data: RegisterSchemaTypes) => {
+    handleMutate.mutate(data)
   }
 
   return (
     <Container
+      pos={'relative'}
       size={600}
       py={{
         base: 'md',
         md: 'xl',
       }}
     >
-      <form
-        onSubmit={form.handleSubmit((data) => {
-          console.log(data)
-          submitHandler(data)
-        })}
-      >
+      <LoadingOverlay
+        visible={handleMutate.isPending}
+        overlayProps={{
+          radius: 'md',
+          blur: 2,
+        }}
+      />
+      <form onSubmit={form.handleSubmit(handleSubmit)} className='relative'>
         <div className='grid grid-cols-2 gap-3 md:gap-5'>
           <div>
             <TextInput
@@ -99,7 +138,6 @@ export default function RegisterPage() {
               type='email'
               {...form.register('email')}
               error={form.formState.errors.email?.message}
-              autoComplete='off'
             />
           </div>
           <div className='col-span-2'>
@@ -174,7 +212,7 @@ export default function RegisterPage() {
             <PasswordInput
               {...form.register('passwordRepeat')}
               label='Şifre Tekrar'
-              error={form.formState.errors.password?.message}
+              error={form.formState.errors.passwordRepeat?.message}
             />
           </div>
           <div className='col-span-2'>
@@ -195,7 +233,8 @@ export default function RegisterPage() {
             <Button
               fullWidth
               type='submit'
-              //  disabled={!form.formState.isValid}
+              // disabled={!form.formState.isValid}
+              loading={handleMutate.isPending}
             >
               Üye Ol
             </Button>
