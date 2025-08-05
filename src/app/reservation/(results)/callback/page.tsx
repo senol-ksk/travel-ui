@@ -74,7 +74,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     resend.emails
       .send(
         {
-          from: 'ParaflyTravel <reservation@retroguzellik.com>',
+          from: process.env.EMAIL_FROM,
           to:
             process.env.NODE_ENV === 'development'
               ? 'senolk@lidyateknoloji.com'
