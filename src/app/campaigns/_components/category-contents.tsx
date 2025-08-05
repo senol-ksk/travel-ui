@@ -21,12 +21,11 @@ const CategoryContents: React.FC<PageProps> = async ({ categoryId }) => {
     .filter((item) => (categoryId ? '' + item.categoryId === categoryId : true))
 
   return (
-    <div className='@container grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-7'>
+    <div className='@container grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-7'>
       {categories?.map((category) => (
         <div key={category.id}>
           <Card
-            withBorder
-            shadow='sm'
+            radius={'md'}
             component={Link}
             href={`${category.redirect}/${category.slug}`}
             h={'100%'}
@@ -37,17 +36,17 @@ const CategoryContents: React.FC<PageProps> = async ({ categoryId }) => {
                   component={NextImage}
                   src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${category.params.image.value}`}
                   alt={category.title}
-                  width={200}
-                  height={200}
+                  width={550}
+                  height={550}
                   priority
+                  radius={'md'}
                   placeholder='empty'
                 />
               </AspectRatio>
             </CardSection>
             <Title
-              order={3}
               pt={rem(10)}
-              className='@xs:text-md text-sm @sm:text-lg'
+              className='@xs:text-md px-0 text-start text-lg @sm:text-lg'
             >
               {category.title}
             </Title>

@@ -129,9 +129,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         loaderProps={{ color: 'yellow', type: 'bars' }}
                       />
                       <div className='flex justify-between'>
-                        <Title order={2} className='text-xl font-bold'>
-                          Filtreler
-                        </Title>
+                        <Title className='text-xl font-medium'>Filtreler</Title>
                         <UnstyledButton
                           hidden={
                             !Object.values(restFilterParams).find(Boolean)
@@ -156,9 +154,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                           ]}
                           multiple
                           classNames={{
-                            control: 'p-2',
-                            label: 'p-0 text-md font-semibold',
-                            content: 'p-0 text-xl',
+                            root: 'filter-accordion',
+                            control: 'text-md font-medium',
                           }}
                         >
                           <Accordion.Item value='byName'>
@@ -302,9 +299,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                         loaderProps={{ color: 'yellow', type: 'bars' }}
                       />
                       <div className='flex justify-between'>
-                        <Title order={2} className='text-xl font-bold'>
-                          Filtreler
-                        </Title>
+                        <Title className='text-xl font-medium'>Filtreler</Title>
                         <UnstyledButton
                           hidden={
                             !Object.values(restFilterParams).find(Boolean)
@@ -329,9 +324,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                           ]}
                           multiple
                           classNames={{
-                            control: 'p-2 ',
-                            label: 'p-0  text-md font-semibold',
-                            content: 'p-0 text-xl',
+                            root: 'filter-accordion',
+                            control: 'text-md font-medium',
                           }}
                         >
                           <Accordion.Item value='byName'>

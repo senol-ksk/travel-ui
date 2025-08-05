@@ -224,7 +224,7 @@ const TourSearchResultClient = () => {
                     ) : (
                       <div>
                         <div className='flex justify-between pb-6'>
-                          <Title order={2} fz={'h4'}>
+                          <Title className='text-xl font-medium'>
                             Filtreler
                           </Title>
                           <div
@@ -243,7 +243,11 @@ const TourSearchResultClient = () => {
                             </UnstyledButton>
                           </div>
                         </div>
-                        <Stack>
+                        <Stack
+                          classNames={{
+                            root: 'filter-accordion',
+                          }}
+                        >
                           <div className='py-5'>
                             <div className='flex justify-between gap-2 pb-4 text-sm text-gray-700'>
                               <div>
