@@ -1,6 +1,6 @@
 'use server'
 
-import { resend } from '@/libs/resend'
+// import { resend } from '@/libs/resend'
 import { RegisterSchemaTypes } from './schema'
 import { serviceRequest } from '@/network'
 

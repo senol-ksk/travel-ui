@@ -21,8 +21,6 @@ export default async function ConfirmEmailPage({
     },
   })
 
-  console.log(confirmResponse)
-
   if (!confirmResponse?.success) redirect('/')
 
   return (

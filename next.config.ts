@@ -83,6 +83,10 @@ const nextConfig: NextConfig = {
         destination: '/auth/confirm-email',
       },
       {
+        source: '/sifre-yenileme',
+        destination: '/auth/password-renew',
+      },
+      {
         source: '/:slug',
         destination: '/contents/:slug',
       },

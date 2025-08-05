@@ -3,10 +3,10 @@
 import { Controller, useForm } from 'react-hook-form'
 import { z } from '@/libs/zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Alert, Button, PasswordInput, TextInput } from '@mantine/core'
+import { Alert, Anchor, Button, PasswordInput, TextInput } from '@mantine/core'
 import { signIn, useSession } from 'next-auth/react'
 import { useState } from 'react'
-import { useTransitionRouter } from 'next-view-transitions'
+import { Link, useTransitionRouter } from 'next-view-transitions'
 import { serviceRequest } from '@/network'
 
 const loginSchema = z.object({
@@ -105,6 +105,11 @@ export const LoginForm = () => {
           >
             Gönder
           </Button>
+        </div>
+        <div className='text-center'>
+          <Anchor component={Link} href={'/auth/forgot-password'}>
+            Şifremi unuttum
+          </Anchor>
         </div>
       </form>
     </div>
