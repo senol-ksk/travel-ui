@@ -121,7 +121,11 @@ export const LoginForm = () => {
         </Button>
       </div>
       <div className='text-center'>
-        <Anchor component={Link} href={'/auth/forgot-password'}>
+        <Anchor
+          component={Link}
+          href={'/auth/forgot-password'}
+          onClick={modals.closeAll}
+        >
           Şifremi unuttum
         </Anchor>
       </div>
