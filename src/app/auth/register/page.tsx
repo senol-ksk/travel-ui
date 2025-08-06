@@ -67,11 +67,15 @@ export default function RegisterPage() {
   }
 
   return (
-    <Container className='mt-5 grid grid-cols-4 gap-5 rounded-lg border p-0 shadow'>
-      <div className='col-span-2 rounded-l-lg border-r bg-blue-50 p-3 shadow'>
-        <Container className='grid gap-5 py-7'>
+    <Container className='mt-5 grid gap-5 rounded-lg border p-0 shadow md:grid-cols-4'>
+      <div className='col-span-2 hidden rounded-l-lg border-r bg-blue-50 p-3 shadow md:grid'>
+        <Container className='flex flex-col gap-5 py-7'>
           <Link href='/'>
-            <Image src='/logo.png' className='w-[25%]' alt='Paraflytravel' />
+            <Image
+              src='/logo.png'
+              className='w-[40%] md:w-[25%]'
+              alt='Paraflytravel'
+            />
           </Link>
           <Grid gutter='xl'>
             <Grid.Col>

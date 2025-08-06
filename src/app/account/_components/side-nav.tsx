@@ -12,33 +12,39 @@ import {
 } from 'react-icons/md'
 
 import { signOut } from 'next-auth/react'
-
-export default function AccountSideNav() {
+type Props = {
+  insideClose?: () => void
+}
+export default function AccountSideNav({ insideClose }: Props) {
   return (
     <div>
       <NavLink
-        label='Üyelik Bilgileri'
+        label='Hesap Bilgilerim'
         component={Link}
         href={'/account/'}
         leftSection={<FaRegUserCircle />}
+        onClick={insideClose}
       />
       <NavLink
         label='Rezervasyonlarım'
         component={Link}
         href={'/account/reservations'}
         leftSection={<MdOutlineLuggage />}
+        onClick={insideClose}
       />
       <NavLink
         label='Kayıtlı Yolcularım'
         component={Link}
         href={'/account/passengers'}
         leftSection={<MdOutlineContacts />}
+        onClick={insideClose}
       />
       <NavLink
         label='Fatura Bilgilerim'
         component={Link}
         href={'/account/invoices'}
         leftSection={<MdOutlineReceiptLong />}
+        onClick={insideClose}
       />
 
       <NavLink
