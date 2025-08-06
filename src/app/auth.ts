@@ -29,6 +29,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/auth/login',
   },
+  trustHost: true,
   session: {
     maxAge: 1200,
   },
