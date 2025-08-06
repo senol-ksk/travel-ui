@@ -15,7 +15,7 @@ import {
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { Controller, useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from '@/libs/zod'
 import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
 
@@ -27,37 +27,41 @@ import { useMutation } from '@tanstack/react-query'
 import { Account } from '../type'
 import { useState } from 'react'
 
-const schema = z.object({
-  birthdate: z.string(),
-  confirmAgreement: z.boolean(),
-  confirmKVKK: z.boolean(),
-  currentKVKKFileName: z.string().nullable().default(''),
-  totalRewardAmount: z.number().nullable().default(0),
-  email: z.string().email(),
-  gender: z.number().refine((val) => val === 0 || val === 1, {
-    message: 'Lütfen cinsiyet seçiniz',
-  }),
-  id: z.union([z.string(), z.number()]),
-  identityNumber: z
-    .union([z.string(), z.number(), z.null()])
-    .refine((value) => value === null || validTCKN(String(value)), {
-      message: 'Geçerli bir TCKN girin.',
-    }),
-  isFacebookConnected: z.boolean(),
-  isForeign: z.boolean(),
-  isGoogleConnected: z.boolean(),
-  isInEmailPromoList: z.boolean(),
-  isInSmsPromoList: z.boolean(),
-  isMobileConnectActivated: z.boolean(),
-  isPhoneNumberConfirmed: z.boolean(),
-  loginProvider: z.literal('site'),
-  mobilePhone: z.string(),
-  mobilePhoneNumberFull: z.string(),
-  name: z.string().min(3).max(20),
-  passportNumber: z.string().nullable().default(''),
-  passportValidity: z.string().nullable().default(''),
-  surname: z.string().min(3).max(30),
-})
+const schema = z
+  .object({
+    birthdate: z.string(),
+    confirmAgreement: z.boolean(),
+    confirmKVKK: z.boolean(),
+    currentKVKKFileName: z.string().nullable(),
+    email: z.string().email(),
+    gender: z.number().refine((val) => val === 0 || val === 1),
+    // id: z.number(),
+    identityNumber: z.string().optional(),
+    isFacebookConnected: z.boolean(),
+    isForeign: z.boolean(),
+    isGoogleConnected: z.boolean(),
+    isInEmailPromoList: z.boolean(),
+    isInSmsPromoList: z.boolean(),
+    isMobileConnectActivated: z.boolean(),
+    isPhoneNumberConfirmed: z.boolean(),
+    loginProvider: z.literal('site'),
+    mobilePhone: z.string(),
+    mobilePhoneNumberFull: z.string(),
+    name: z.string().min(3).max(20),
+    passportNumber: z.string().nullable().default(''),
+    passportValidity: z.string().nullable().default(''),
+    surname: z.string().min(3).max(30),
+    totalRewardAmount: z.number().nullable(),
+  })
+  .superRefine((value, ctx) => {
+    if (!value.isForeign && !validTCKN(value.identityNumber!)) {
+      return ctx.addIssue({
+        code: 'custom',
+        path: ['identityNumber'],
+        message: 'Gecerli tc giriniz',
+      })
+    }
+  })
 
 export type FormSchemaType = z.infer<typeof schema>
 
@@ -151,6 +155,7 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
           <Controller
             control={form.control}
             name='birthdate'
+            defaultValue={form.formState.defaultValues?.birthdate}
             render={({ field, fieldState }) => (
               <DatePickerInput
                 label='Doğum Tarihi'
@@ -171,20 +176,37 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
               <NumberInput
                 withAsterisk
                 hideControls
+                inputMode='numeric'
+                type='tel'
                 label='TC Kimlik'
                 error={fieldState.error?.message}
+                disabled={form.watch('isForeign')}
                 {...field}
-                value={field.value ?? undefined}
-                disabled={INotTc}
               />
             )}
           />
 
-          <Switch
-            className='mt-3'
-            onChange={notTcSwitch}
-            checked={INotTc}
-            label='TC Vatandaşı Değilim'
+          <Controller
+            control={form.control}
+            name='isForeign'
+            render={({ field }) => {
+              return (
+                <Switch
+                  defaultChecked={field.value}
+                  className='mt-3'
+                  label='TC Vatandaşı Değilim'
+                  name={field.name}
+                  onChange={({ currentTarget: { checked } }) => {
+                    if (checked) {
+                      form.setValue('identityNumber', '', {
+                        shouldValidate: false,
+                      })
+                    }
+                    field.onChange(checked)
+                  }}
+                />
+              )
+            }}
           />
         </div>
 

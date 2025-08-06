@@ -12,7 +12,6 @@ import {
   TextInput,
 } from '@mantine/core'
 import { signIn, useSession } from 'next-auth/react'
-import { useState } from 'react'
 import { Link, useTransitionRouter } from 'next-view-transitions'
 import { serviceRequest } from '@/network'
 import { modals } from '@mantine/modals'

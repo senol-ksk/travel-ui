@@ -6,7 +6,7 @@ export interface Account {
   email: string
   gender: number
   id: ID
-  identityNumber: number
+  identityNumber: string
   isFacebookConnected: boolean
   isForeign: boolean
   isGoogleConnected: boolean

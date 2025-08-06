@@ -1,6 +1,6 @@
 import { Title } from '@mantine/core'
 import { cookies } from 'next/headers'
-import { Account } from './type'
+import { Account } from '@/app/account/type'
 import { serviceRequest } from '@/network'
 import { MyAccount } from './_components/my-account'
 
