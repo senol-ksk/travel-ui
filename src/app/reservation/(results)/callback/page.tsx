@@ -71,8 +71,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
   const productData = getSummary?.product.summaryResponse
 
   if (getSummary && getSummaryData.success) {
-    resend.emails
-      .send(
+    resend()
+      .emails.send(
         {
           from: process.env.EMAIL_FROM,
           to:
