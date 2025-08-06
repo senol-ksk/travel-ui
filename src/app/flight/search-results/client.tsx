@@ -1303,6 +1303,7 @@ const FlightSearchView = () => {
         </div>
       </Container>
       <Drawer
+        size={'lg'}
         opened={packageDrawerOpened}
         onClose={closePackageDrawer}
         position='bottom'
@@ -1310,29 +1311,39 @@ const FlightSearchView = () => {
           title: 'flex-1 text-center font-normal',
         }}
         title={
-          <div className='flex justify-center gap-1'>
-            <span className='md:text-md text-sm font-semibold'>
-              {
-                airlineDataObj
-                  ?.find(
-                    (airline) =>
-                      airline.Code ==
-                      selectedFlightItemPackages?.flights.at(-1)?.segments.at(0)
-                        ?.marketingAirline.code
-                  )
-                  ?.Value.at(0)?.Value
-              }
+          <div className='flex flex-col items-center justify-center gap-2'>
+            <div className='text-2xl font-medium'>Uçuş Paketini Seçiniz</div>
+            <div className='flex items-center justify-center gap-1'>
+              <AirlineLogo
+                airlineCode={
+                  selectedFlightItemPackages?.flights
+                    ?.at(-1)
+                    ?.segments?.at(0)
+                    ?.marketingAirline.code.toLowerCase() ?? ''
+                }
+              />
+              <span className='md:text-md text-sm font-semibold'>
+                {
+                  airlineDataObj
+                    ?.find(
+                      (airline) =>
+                        airline.Code ==
+                        selectedFlightItemPackages?.flights
+                          .at(-1)
+                          ?.segments.at(0)?.marketingAirline.code
+                    )
+                    ?.Value.at(0)?.Value
+                }
+              </span>
               {''}-{''}
-            </span>
-            <span className='md:text-md text-sm font-semibold'>
-              {
-                selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
-                  ?.origin.code
-              }
-              {''}-{''}
-            </span>
-
-            <span className='md:text-md text-sm'>Fiyatlarını İnceleyin</span>
+              <span className='md:text-md text-sm font-semibold'>
+                {/* {selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0).ai} */}
+                {
+                  selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
+                    ?.origin.code
+                }
+              </span>
+            </div>
           </div>
         }
       >
