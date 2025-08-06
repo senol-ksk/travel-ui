@@ -4,7 +4,7 @@ import { SavePassenger } from './_components/save-passenger'
 
 export default function SavedPassengersPage() {
   return (
-    <div className='grid gap-3 md:gap-5'>
+    <div className='grid gap-3'>
       <div>
         <SavePassenger />
       </div>

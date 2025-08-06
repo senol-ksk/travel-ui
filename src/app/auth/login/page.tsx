@@ -9,10 +9,12 @@ export default async function LoginPage() {
   if (session) redirect('/')
 
   return (
-    <Container size={'xs'} className='flex flex-col gap-4 py-4'>
-      <Title className='text-center'>Oturum Açın</Title>
-      <div>
-        <LoginForm />
+    <Container size={'xs'} className='flex flex-col gap-4 py-10'>
+      <div className='rounded-lg border p-3 py-10 shadow'>
+        <Title className='text-center'>Giriş Yap</Title>
+        <div>
+          <LoginForm />
+        </div>
       </div>
     </Container>
   )
