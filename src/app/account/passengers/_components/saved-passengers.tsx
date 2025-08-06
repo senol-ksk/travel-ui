@@ -88,7 +88,7 @@ const SavedPassengerList = () => {
   })
 
   return (
-    <>
+    <div>
       <div>
         <Title fz={'h5'} pb={'md'}>
           Kayıtlı Yolcular
@@ -139,7 +139,7 @@ const SavedPassengerList = () => {
           />
         )}
       </Modal>
-    </>
+    </div>
   )
 }
 

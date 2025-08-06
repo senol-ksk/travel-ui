@@ -97,7 +97,7 @@ const SavedInvoices = () => {
     <>
       <div>
         {!!invoiceQuery?.data && invoiceQuery?.data?.length > 0 ? (
-          <div className='grid grid-cols-4 gap-3'>
+          <div className='grid grid-cols-2 gap-3 md:grid-cols-4'>
             {invoiceQuery?.data.map((invoice) => (
               <SaveInvoiceCard
                 key={invoice.id}

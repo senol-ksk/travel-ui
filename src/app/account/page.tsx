@@ -21,7 +21,7 @@ export default async function AccountPage() {
 
   return (
     <div>
-      <Title fz='h3'>Hesap Bilgileri</Title>
+      <Title fz='h3'>Hesap Bilgilerim</Title>
       {userData && <MyAccount defaultValues={userData} />}
     </div>
   )

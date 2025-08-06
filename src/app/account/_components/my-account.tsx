@@ -375,8 +375,8 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
           />
         </div>
       </div>*/}
-      <div className='my-15 flex justify-between border-t py-5'>
-        <div className='text-sm text-gray-600'>
+      <div className='my-10 grid justify-end gap-5 border-t py-5 md:flex md:justify-between'>
+        <div className='hidden text-sm text-gray-600 md:flex'>
           Lütfen bilgilerinizi doğru girdiğinizden emin olunuz. <br />
           Aksi Durumda yurt dışına çıkışınız mümkün olmayacaktır{' '}
         </div>

@@ -27,10 +27,10 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
   const selectedFlightItemPackages = data
   // border colors dyanmic changing for per package
   const dynmicborderColors = [
-    'border-l-gray-500',
-    'border-l-green-700',
-    'border-l-indigo-900',
-    'border-l-purple-600',
+    'border-t-gray-500',
+    'border-t-green-700',
+    'border-t-indigo-900',
+    'border-t-purple-600',
   ]
   // base price defined
   const mainPricePackage = data.flights.at(-1)?.fareInfo.totalPrice.value ?? 0
@@ -50,7 +50,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className={`flex cursor-pointer flex-col items-start gap-2 rounded-md border border-l-6 p-2 md:p-3 ${dynamicBorderColor}`}
+            className={`flex cursor-pointer flex-col items-start gap-2 rounded-md border border-t-6 p-2 md:p-3 ${dynamicBorderColor}`}
             role='button'
             onClick={() => {
               onSelect(selectedPackage)
