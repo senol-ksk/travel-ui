@@ -174,8 +174,7 @@ export const RegisterForm = () => {
       <form
         className='col-span-1 p-3 py-7 md:col-span-2'
         onSubmit={form.handleSubmit((data) => {
-          console.log(data)
-          // handleMutate.mutate(data)
+          handleMutate.mutate(data)
         })}
       >
         <Title className='text-start text-xl'>Parafly Travel’a Üye Ol</Title>
