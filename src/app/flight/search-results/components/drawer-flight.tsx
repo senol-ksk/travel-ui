@@ -8,6 +8,8 @@ import {
   FlightDetailSegment,
   FlightFareInfo,
 } from '../../type'
+import { MdCheck } from 'react-icons/md'
+import { IoClose } from 'react-icons/io5'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -50,14 +52,14 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className={`flex cursor-pointer flex-col items-start gap-2 rounded-md border border-t-6 p-2 md:p-3 ${dynamicBorderColor}`}
+            className={`flex cursor-pointer flex-col items-start gap-2 rounded-lg border border-t-10 p-2 md:p-4 ${dynamicBorderColor}`}
             role='button'
             onClick={() => {
               onSelect(selectedPackage)
             }}
           >
             <div className='flex w-full cursor-pointer justify-between gap-2'>
-              <div className='font-semibold capitalize'>
+              <div className='text-lg font-bold capitalize'>
                 {(() => {
                   switch (
                     selectedPackage.flightDetailSegment.freeVolatileData
@@ -77,58 +79,197 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   }
                 })()}
               </div>
+              <div className='text-xl font-bold'>
+                +{formatCurrency(packagePrice)}
+              </div>
             </div>
-            <Stack gap={rem(4)} className='mb-8 text-sm'>
+            <Stack gap={rem(4)} className='mb-4 text-sm'>
               {selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
                 .value > 0 && (
-                <div>
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
                   {
                     selectedPackage.flightDetailSegment.baggageAllowance
                       .maxWeight.value
                   }{' '}
-                  kg bagaj
+                  Kg Uçak Altı Bagajı
                 </div>
+              )}{' '}
+              {selectedPackage?.flightDetailSegment && (
+                <>
+                  {(selectedPackage.flightDetailSegment.bookingCode === 'EF' ||
+                    selectedPackage.flightDetailSegment.bookingCode === 'XF' ||
+                    selectedPackage.flightDetailSegment.bookingCode ===
+                      'PF') && (
+                    <>
+                      <div className='flex items-center gap-1'>
+                        <MdCheck size={18} className='text-green-800' />1 parça
+                        x 8 kg kabin bagajı
+                      </div>
+                      <div className='flex items-center gap-1'>
+                        <MdCheck size={18} className='text-green-800' />
+                        İkram Hizmeti
+                      </div>
+                      <div className='flex items-center gap-1'>
+                        <MdCheck size={18} className='text-green-800' />
+                        24 saat içinde kesintisiz iade
+                      </div>
+                    </>
+                  )}
+                </>
               )}
-              {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'PC' && (
-                <div>1 Adet Koltuk Altına Sığacak Çanta (40x30x15)</div>
+              {(selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'PREMIUM' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandName === 'BASIC' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandName === 'FLEX') && (
+                <>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça x 8
+                    kg kabin bagajı
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' /> 1 parça x 4
+                    kg kişisel eşya hakkı
+                  </div>
+                </>
+              )}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'PREMIUM' && (
+                <>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Sandviç İkramı
+                  </div>
+                </>
+              )}
+              {selectedPackage?.flightDetailSegment && (
+                <>
+                  {selectedPackage.flightDetailSegment.bookingCode === 'PF' && (
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Kesintisiz iade (son 12 saate kadar)
+                    </div>
+                  )}
+                </>
               )}
               {selectedPackage.flightDetailSegment.freeVolatileData
                 .BrandName !== 'SUPER_ECO' &&
                 selectedPackage.flightDetailSegment.operatingAirline.code ===
-                  'PC' && <div>1 Parça Kabin bagajı (55x40x20)</div>}
-              {selectedPackage.flightDetails.freeVolatileData
-                .StandartSeatSelection && <div>Standart koltuk seçimi</div>}
-              {selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'EXTRA' &&
-                selectedPackage.flightDetailSegment.operatingAirline.code ===
-                  'PC' && <div>Sandviç İkramı</div>}
-              {selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'EXTRA' &&
-                selectedPackage.flightDetailSegment.operatingAirline.code ===
-                  'PC' && <div>Film, Dizi, Müzik, Oyun</div>}
-              {selectedPackage.flightDetails.freeVolatileData
-                .FlexibleReturnChangeRight && (
-                <div>Esnek İade/Değişiklik Hakkı</div>
-              )}
-              {selectedPackage.flightDetails.freeVolatileData
-                .AllSeatSelection && <div>Dilediğiniz Koltuk Seçimi</div>}
-              {selectedPackage.flightDetailSegment.bookingCode !== 'EF' &&
-                selectedPackage.flightDetailSegment.operatingAirline.code !==
                   'PC' && (
-                  <div
-                    className={clsx({
-                      'text-red-800':
-                        selectedPackage.flightDetailSegment.bookingCode !==
-                        'XF',
-                    })}
-                  >
-                    {selectedPackage.flightDetailSegment.bookingCode === 'PF'
-                      ? 'Cezasız Değişiklik'
-                      : 'Ücretli Değişiklik'}
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 Adet Kabin
+                    Bagajı (55x40x20)
                   </div>
                 )}
-
+              {selectedPackage.flightDetailSegment.bookingCode === 'PF' ||
+                (selectedPackage.flightDetailSegment.bookingCode === 'XF' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Standart koltuk seçimi
+                  </div>
+                ))}
+              {(selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'ADVANTAGE' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandName === 'EXTRA') && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Sandviç İkramı
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'EXTRA' &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'PC' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Film, Dizi, Müzik, Oyun
+                  </div>
+                )}
+              {selectedPackage.flightDetails.freeVolatileData
+                .AllSeatSelection && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Dilediğiniz Koltuk Seçimi
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.bookingCode === 'XF' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  150 Ekstra Bonus Mil
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.bookingCode === 'PF' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  250 Ekstra Bonus Mil
+                </div>
+              )}
+              {selectedPackage.flightDetails.freeVolatileData
+                .StandartSeatSelection && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Standart Koltuk Seçimi
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.bookingCode === 'EF' ||
+                (selectedPackage.flightDetailSegment.bookingCode === 'XF' && (
+                  <div className={'flex items-center gap-1 text-red-800'}>
+                    <IoClose size={20} className='text-red-800' />
+                    Cezalı Değişiklik
+                  </div>
+                ))}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'FLEX' && (
+                <>
+                  <div className={'flex items-center gap-1 text-red-800'}>
+                    <IoClose size={20} className='text-red-800' />
+                    Ücretli Değişiklik
+                  </div>
+                  <div className={'flex items-center gap-1 text-red-800'}>
+                    <IoClose size={20} className='text-red-800' />
+                    Kesintili İade Hakkı
+                  </div>
+                </>
+              )}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'PREMIUM' && (
+                <>
+                  <div className={'flex items-center gap-1 text-green-800'}>
+                    <MdCheck size={18} className='text-green-800' /> Ücretsiz
+                    Değişiklik{' '}
+                    <span className='text-xs text-gray-600'>
+                      (Uçuşa 1 saat kalana kadar)
+                    </span>
+                  </div>
+                </>
+              )}
+              {selectedPackage.flightDetails.freeVolatileData
+                .FlexibleReturnChangeRight && (
+                <div className='flex items-center gap-1 text-green-800'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Esnek İade/Değişiklik Hakkı
+                  <span className='text-xs text-gray-600'>
+                    (Uçuşa 1 saat kalana kadar)
+                  </span>
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.bookingCode === 'PF' && (
+                <div className='flex items-center gap-1 text-green-800'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Cezasız Değişiklik
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.bookingCode === 'PF' && (
+                <>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz ön sıra koltuk seçimi
+                  </div>
+                </>
+              )}
               {!(
                 selectedPackage.flightDetailSegment.bookingCode !== 'EF' &&
                 selectedPackage.flightDetailSegment.operatingAirline.code !==
@@ -136,24 +277,47 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
               ) &&
                 selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
                   .value <= 15 && (
-                  <div className='text-red-600'>
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
                     Değişiklik yapılamaz &amp; İade edilemez
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'BASIC' && (
+                <div className='flex items-center gap-1 text-red-600'>
+                  <IoClose size={20} className='text-red-800' />
+                  Değişiklik yapılamaz &amp; İade edilemez
+                </div>
+              )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AA' &&
+                selectedPackage.flightDetailSegment.bookingCode !==
+                  'AAAT-FBUSFL' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    2x32 Kg Bagaj Hakkı
                   </div>
                 )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
-                selectedPackage.flightDetailSegment.bookingCode !==
-                  'AAAT-FBUSFL' && <div>2x32 Kg Bagaj Hakkı</div>}
-              {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'AA' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'AAAT-FFIRFL' && <div>3x32 Kg Bagaj Hakkı</div>}
+                  'AAAT-FFIRFL' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    3x32 Kg Bagaj Hakkı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 (selectedPackage.flightDetailSegment.bookingCode ===
                   'AAAT-PEC' ||
                   selectedPackage.flightDetailSegment.bookingCode ===
-                    'AAAT-PECFL') && <div>2x23 Kg Bagaj Hakkı</div>}
+                    'AAAT-PECFL') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    2x23 Kg Bagaj Hakkı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 (selectedPackage.flightDetailSegment.bookingCode ===
@@ -161,27 +325,57 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   selectedPackage.flightDetailSegment.bookingCode ===
                     'AAAT-MAINSFL' ||
                   selectedPackage.flightDetailSegment.bookingCode ===
-                    'AAAT-MAIN') && <div>1x23 Kg Bagaj Hakkı</div>}
+                    'AAAT-MAIN') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    1x23 Kg Bagaj Hakkı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'UA' ||
                 (selectedPackage.flightDetailSegment.operatingAirline.code ===
                   'LO' &&
                   selectedPackage.flightDetailSegment.bookingCode !==
-                    'SAVER-PCID' && <div>1x23 Kg Bagaj Hakkı</div>)}
+                    'SAVER-PCID' && (
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      1x23 Kg Bagaj Hakkı
+                    </div>
+                  ))}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'VF' ||
                 (selectedPackage.flightDetailSegment.operatingAirline.code ===
-                  'UA' && <div>1 parça X 8 kg El Bagajı</div>)}
+                  'UA' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 8
+                    kg El Bagajı
+                  </div>
+                ))}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'QR' ||
                 (selectedPackage.flightDetailSegment.operatingAirline.code ===
-                  'SQ' && <div>1 parça X 7 kg El Bagajı</div>)}
+                  'SQ' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 7
+                    kg El Bagajı
+                  </div>
+                ))}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'LO' ||
                 (selectedPackage.flightDetailSegment.operatingAirline.code ===
-                  'AA' && <div>Kabin Bagajı</div>)}
+                  'AA' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Kabin Bagajı
+                  </div>
+                ))}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'LO' && <div>Ücretli Koltuk Seçimi</div>}
+                'LO' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Ücretli Koltuk Seçimi
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'UA' ||
                 selectedPackage.flightDetailSegment.operatingAirline.code ===
@@ -191,61 +385,108 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   (selectedPackage.flightDetailSegment.bookingCode ===
                     'SAVER-PCID' ||
                     selectedPackage.flightDetailSegment.bookingCode ===
-                      'STANDARD-PCID') && <div>Ekstra Mil Kazancı</div>)}
+                      'STANDARD-PCID') && (
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Ekstra Mil Kazancı
+                    </div>
+                  ))}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'SQ' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FF41-PCID' && <div>50 Ekstra Mil</div>}
-
+                  'FF41-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    50 Ekstra Mil
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'SQ' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FF21-PCID' && <div>Esnek Değişim (Uçuşa kadar)</div>}
+                  'FF21-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Esnek Değişim (Uçuşa kadar)
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'SQ' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FF21-PCID' && <div>%100 Ekstra Mil Kazancı</div>}
+                  'FF21-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    %100 Ekstra Mil Kazancı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'SQ' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FF01-PCID' && <div>%125 Ekstra Mil Kazancı</div>}
-
+                  'FF01-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    %125 Ekstra Mil Kazancı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'LO' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FLEX-PCID' && <div>%150 Ekstra Mil Kazancı</div>}
-
+                  'FLEX-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    %150 Ekstra Mil Kazancı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'LO' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FLEX-PCID' && <div>Esnek Değişim (Uçuşa kadar)</div>}
-
+                  'FLEX-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Esnek Değişim (Uçuşa kadar)
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'SQ' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FF21-PCID' && <div>Ücretsiz Koltuk Seçimi</div>}
+                  'FF21-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz Koltuk Seçimi
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'SQ' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'FF31-PCID' && <div>75 Ekstra Mil</div>}
-
+                  'FF31-PCID' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    75 Ekstra Mil
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'QR' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
                   'CLASSIC-PCID' && (
-                  <div className='text-red-600'>Cezalı İade</div>
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='' />
+                    Cezalı İade
+                  </div>
                 )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'QR' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
                   'CONVENIENC-PCID' && (
-                  <div className='text-red-600'>Cezalı İade</div>
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='' />
+                    Cezalı İade
+                  </div>
                 )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'QR' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
                   'COMFORT-PCID' && (
-                  <div className='text-red-600'>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
                     Cezasız İade (Son 12 Saate Kadar)
                   </div>
                 )}
@@ -264,27 +505,65 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   <div>Uçuştan Önce Koltuk Seçimi (Ücretli)</div>
                 )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'UA' && <div>Özel Koltuk Seçimi (Ücretli)</div>}
+                'UA' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Özel Koltuk Seçimi (Ücretli)
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'UA' && <div>Mil veya ek ödeme ile kabin yükseltme</div>}
+                'UA' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Mil veya ek ödeme ile kabin yükseltme
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'UA' && <div>Öncelikli Boarding (Ücretli)</div>}
+                'UA' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Öncelikli Boarding (Ücretli)
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'UA' && <div>İkinci ek bagaj (Ücretli)</div>}
+                'UA' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  İkinci ek bagaj (Ücretli)
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'AA' && <div>Sandviç İkramı</div>}
+                'AA' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Sandviç İkramı
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'AA' && <div>Film, Dizi, Müzik, Oyun</div>}
+                'AA' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Film, Dizi, Müzik, Oyun
+                </div>
+              )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 selectedPackage.flightDetailSegment.bookingCode !==
-                  'AAAT-BASIC' && <div> Ücretsiz Koltuk Seçimi</div>}
-
+                  'AAAT-BASIC' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' /> Ücretsiz
+                    Koltuk Seçimi
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 selectedPackage.flightDetailSegment.bookingCode ===
-                  'AAAT-BASIC' && <div> Ücretsiz Koltuk Seçimi</div>}
-
+                  'AAAT-BASIC' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' /> Ücretsiz
+                    Koltuk Seçimi
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 (selectedPackage.flightDetailSegment.bookingCode ===
@@ -294,8 +573,12 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   selectedPackage.flightDetailSegment.bookingCode ===
                     'AAAT-FFIRFL' ||
                   selectedPackage.flightDetailSegment.bookingCode ===
-                    'AAAT-FBUSFL') && <div>Öncelikli Check-In Hakkı</div>}
-
+                    'AAAT-FBUSFL') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Öncelikli Check-In Hakkı
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 (selectedPackage.flightDetailSegment.bookingCode ===
@@ -305,13 +588,23 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   selectedPackage.flightDetailSegment.bookingCode ===
                     'AAAT-FFIRFL' ||
                   selectedPackage.flightDetailSegment.bookingCode ===
-                    'AAAT-FBUSFL') && <div>Esnek Değişim (Uçuşa kadar)</div>}
+                    'AAAT-FBUSFL') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Esnek Değişim (Uçuşa kadar)
+                  </div>
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 (selectedPackage.flightDetailSegment.bookingCode ===
                   'AAAT-FFIRFL' ||
                   selectedPackage.flightDetailSegment.bookingCode ===
-                    'AAAT-FBUSFL') && <div>Esnek İptal (Uçuşa kadar)</div>}
+                    'AAAT-FBUSFL') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Esnek İptal (Uçuşa kadar)
+                  </div>
+                )}
             </Stack>
             <div className='mt-auto w-full'>
               <Button
@@ -320,9 +613,9 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 radius={'xl'}
                 size='lg'
                 variant='outline'
-                className='hover:bg-blue-800 hover:text-white'
+                className='bg-blue-800 text-white hover:border-gray-600 hover:bg-gray-600'
               >
-                +{formatCurrency(packagePrice)}
+                Seç
               </Button>
             </div>
           </div>
