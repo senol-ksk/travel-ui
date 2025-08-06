@@ -293,7 +293,17 @@ export interface FlightSummaryResponse {
             pieceCount: number
           }
         }
-        freeVolatileData: object
+        freeVolatileData: {
+          ResBookDesigID: {
+            SeatsLeft: number
+            SeatsLeftSpecified: boolean
+            Value: string
+          }
+          ResBookDesigCode: string
+          Baggage: string
+          BrandName: string
+          Seq: string
+        }
       },
     ]
     flightPackageInfos: []
@@ -423,9 +433,9 @@ export interface HotelSummaryResponse {
       max_free_child_age: 0
       min_free_child_age: null
       images: {
-        category: 51
-        tag: ''
-        original: 'https://cdng.jollytur.com/files/cms/media/hotel/d98de462-ca8d-444d-9933-33c3c5185d0e.jpg'
+        category: number
+        tag: string | null
+        original: string
         large: null
         small: null
         mid: null
@@ -1382,14 +1392,14 @@ export interface TransferSummaryResponseViewDataResponser {
       traceId: null
     }
     eventMessages: []
-    appName: 'fulltrip.prod.webapp.html'
-    scopeCode: '2d932774-a9d8-4df9-aae7-5ad2727da1c7'
+    appName: string
+    scopeCode: string
     logSessionToken: null
     logSearchToken: null
   }
   bookingResponse: null
-  searchToken: 'F2212F1DC4A8A40CE0331219E633D7B27A166E6911DA1F2958B1D40B4E887F36'
-  sessionToken: 'A415CA28DF581F3BB0C8D719F45AF4790611068086DB9B4E30C07CB31678A6EB'
+  searchToken: string
+  sessionToken: string
   moduleName: 'Transfer'
   totalPrice: number
   priceCurrency: string

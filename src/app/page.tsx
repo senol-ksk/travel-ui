@@ -73,7 +73,7 @@ export default async function Home() {
           component={NextImage}
           src='https://ykmturizm.mncdn.com/11/Files/638737370698225204.jpg'
           fill
-          alt='Fulltrip'
+          alt='ParaflyTravel'
           priority
           className='absolute top-0 left-0 -z-50 hidden h-full w-full md:block'
           style={{

@@ -31,6 +31,8 @@ import { FaCar } from 'react-icons/fa6'
 import { FaBusSimple } from 'react-icons/fa6'
 import { BsLuggageFill } from 'react-icons/bs'
 import { TbArrowsRightLeft } from 'react-icons/tb'
+import { modals } from '@mantine/modals'
+import { LoginForm } from '@/app/auth/login/_components/login-form'
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
@@ -135,9 +137,7 @@ export const Header = () => {
                 ))
               )}
             </div>
-            {/* <Anchor component={Link} href='/kampanyalar'>
-              Kampanyalar
-            </Anchor> */}
+
             <div className='ms-auto flex items-center gap-3'>
               <Menu>
                 <Menu.Target>
@@ -216,9 +216,15 @@ export const Header = () => {
                   variant='outline'
                   radius='xl'
                   leftSection={<FaRegUserCircle />}
-                  component={Link}
-                  href={'/auth/login'}
+                  // component={Link}
+                  // href={'/auth/login'}
                   loading={session.status === 'loading'}
+                  onClick={() => {
+                    modals.open({
+                      title: 'Giriş Yap',
+                      children: <LoginForm />,
+                    })
+                  }}
                 >
                   Oturum Açın
                 </Button>

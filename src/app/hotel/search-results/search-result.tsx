@@ -35,7 +35,7 @@ import { PensionTypes } from './components/filters/pension-types'
 import { Themes } from './components/filters/themes'
 import { useMediaQuery } from '@mantine/hooks'
 import { FaCheck } from 'react-icons/fa'
-import { hotelSearchRequestModel } from './dummy'
+
 type IProps = {
   slug?: string
 }

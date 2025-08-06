@@ -118,7 +118,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 </Transition>
                 <Image
                   loading='lazy'
-                  fallbackSrc='https://fulltrip.com/Content/images/default-room.jpg'
+                  fallbackSrc='/default-room.jpg'
                   onLoad={(e) => {
                     setImageLoading(false)
                   }}

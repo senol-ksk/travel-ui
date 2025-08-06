@@ -10,6 +10,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { DatesProvider } from '@mantine/dates'
+import { ModalsProvider } from '@mantine/modals'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -49,11 +50,11 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <NuqsAdapter>
-      <DatesProvider settings={{ locale: 'tr' }}>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </DatesProvider>
+      <QueryClientProvider client={queryClient}>
+        <DatesProvider settings={{ locale: 'tr' }}>
+          <ModalsProvider>{children}</ModalsProvider>
+        </DatesProvider>
+      </QueryClientProvider>
     </NuqsAdapter>
   )
 }
