@@ -8,6 +8,8 @@ import {
   TextInput,
   PasswordInput,
   Checkbox,
+  Title,
+  Grid,
   LoadingOverlay,
 } from '@mantine/core'
 import { Link } from 'next-view-transitions'
@@ -20,6 +22,8 @@ import { modals } from '@mantine/modals'
 
 import { registerSchema, RegisterSchemaTypes } from './schema'
 import { registerActions } from './actions'
+import { Image } from '@mantine/core'
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
 
 export default function RegisterPage() {
   const form = useForm({
@@ -93,27 +97,83 @@ export default function RegisterPage() {
     },
   })
 
-  const handleSubmit = (data: RegisterSchemaTypes) => {
-    handleMutate.mutate(data)
-  }
-
   return (
-    <Container
-      pos={'relative'}
-      size={600}
-      py={{
-        base: 'md',
-        md: 'xl',
-      }}
-    >
-      <LoadingOverlay
-        visible={handleMutate.isPending}
-        overlayProps={{
-          radius: 'md',
-          blur: 2,
-        }}
-      />
-      <form onSubmit={form.handleSubmit(handleSubmit)} className='relative'>
+    <Container className='mt-5 grid grid-cols-4 gap-5 rounded-lg border p-0 shadow'>
+      <div className='col-span-2 rounded-l-lg border-r bg-blue-50 p-3 shadow'>
+        <Container className='grid gap-5 py-7'>
+          <Link href='/'>
+            <Image src='/logo.png' className='w-[25%]' alt='Paraflytravel' />
+          </Link>
+          <Grid gutter='xl'>
+            <Grid.Col>
+              <div className='flex items-center gap-2 font-bold'>
+                Hemen Üye Ol,  Seyahatini Planlamaya Başla!{' '}
+              </div>
+            </Grid.Col>
+            <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='grid'>
+                  <span className='font-bold'>
+                    Yolcu bilgilerinizi kaydedin
+                  </span>
+                  <span>
+                    Kendinize ve sevdiklerinize ait bilgileri kaydedin, bilet ve
+                    rezervasyon işlemlerinizi çok daha hızlı halledin.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col>
+
+            <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='flex flex-col'>
+                  <span className='font-bold'>
+                    Rezervasyonlarını kolayca yönet{' '}
+                  </span>
+                  <span>
+                    Rezervasyonlarınıza ve bilet bilgilerinize dilediğiniz zaman
+                    ulaşın.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col>
+
+            <Grid.Col>
+              <div className='flex items-start gap-4'>
+                <IoMdCheckmarkCircleOutline
+                  size={26}
+                  className='flex-shrink-0'
+                />
+                <div className='flex flex-col'>
+                  <span className='font-bold'>ParafPara sorgulama yapın </span>
+                  <span>
+                    Kredi kartı puanlarınızı hesabınıza aktarın, biriken
+                    puanlarla uçak ya da otobüs biletinizi alın, otel
+                    rezervasyonunuzu yapın.
+                  </span>
+                </div>
+              </div>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      </div>
+      <form
+        className='col-span-2 p-3 py-7'
+        onSubmit={form.handleSubmit((data) => {
+          console.log(data)
+          // handleMutate.mutate(data)
+        })}
+      >
+        <Title className='text-start text-xl'>Parafly Travel’a Üye Ol</Title>
+
         <div className='grid grid-cols-2 gap-3 md:gap-5'>
           <div>
             <TextInput
@@ -232,6 +292,8 @@ export default function RegisterPage() {
           <div className='col-span-2'>
             <Button
               fullWidth
+              size='md'
+              radius={'md'}
               type='submit'
               // disabled={!form.formState.isValid}
               loading={handleMutate.isPending}

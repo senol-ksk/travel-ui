@@ -16,7 +16,7 @@ import {
   Box,
   UnstyledButton,
 } from '@mantine/core'
-import { FaRegUserCircle } from 'react-icons/fa'
+import { FaRegUserCircle, FaUser } from 'react-icons/fa'
 import { useQuery } from '@tanstack/react-query'
 import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 import { IoIosLogOut } from 'react-icons/io'
@@ -53,7 +53,30 @@ export const Header = () => {
             />
           </Link>
 
-          <div className='ml-auto md:hidden'>
+          <div className='ml-auto flex items-center gap-1 md:hidden'>
+            {session.status === 'authenticated' ? (
+              <Button
+                component={Link}
+                href={'/account/'}
+                className='m-1 rounded-full bg-blue-800 p-3 text-start text-xs font-medium text-white'
+              >
+                {session?.data.user.name
+                  ? `${session.data.user.name.split(' ')[0][0].toUpperCase()}${session.data.user.name.split(' ').slice(-1)[0][0].toUpperCase()}`
+                  : ''}
+              </Button>
+            ) : (
+              <Button
+                variant='outline'
+                size='xs'
+                className='p-2'
+                radius={'xl'}
+                component={Link}
+                href={'/auth/login'}
+              >
+                <FaUser />
+              </Button>
+            )}
+
             <Burger
               opened={drawerOpened}
               onClick={toggleDrawer}
@@ -87,7 +110,7 @@ export const Header = () => {
             {/* <Anchor component={Link} href='/kampanyalar'>
               Kampanyalar
             </Anchor> */}
-            <div className='ms-auto flex items-center gap-5'>
+            <div className='ms-auto flex items-center gap-3'>
               <Menu>
                 <Menu.Target>
                   <UnstyledButton className='flex items-center gap-2'>
@@ -137,16 +160,14 @@ export const Header = () => {
               {session.status === 'authenticated' ? (
                 <Menu>
                   <Menu.Target>
-                    <ActionIcon
-                      variant='subtle'
-                      radius='xl'
-                      // leftSection={<FaRegUserCircle />}
+                    <Button
+                      size='sm'
+                      variant='outline'
+                      leftSection={<FaUser />}
+                      className='truncate rounded-lg bg-blue-800 text-start text-xs font-medium text-white'
                     >
-                      {/* <span className='block max-w-20 truncate'>
-                        {session.data?.user.name}
-                      </span> */}
-                      <FaRegUserCircle size={22} />
-                    </ActionIcon>
+                      {session?.data.user.name}
+                    </Button>
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Menu.Label>{session.data?.user.name}</Menu.Label>

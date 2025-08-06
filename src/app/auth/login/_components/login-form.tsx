@@ -75,7 +75,7 @@ export const LoginForm = () => {
               <TextInput
                 {...field}
                 size='md'
-                label='E-posta'
+                label='E-posta Adresi'
                 error={fieldState.error?.message}
                 autoComplete='email'
               />
@@ -98,12 +98,12 @@ export const LoginForm = () => {
             )
           }}
         />
-        <div className='flex justify-center'>
+        <div className='flex flex-col justify-center'>
           <Button
             type='submit'
             loading={form.formState.isSubmitting || form.formState.isLoading}
           >
-            Gönder
+            Giriş Yap
           </Button>
         </div>
         <div className='text-center'>
