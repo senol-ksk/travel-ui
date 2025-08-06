@@ -49,15 +49,13 @@ const Providers: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const queryClient = getQueryClient()
 
   return (
-    <ModalsProvider>
-      <NuqsAdapter>
+    <NuqsAdapter>
+      <QueryClientProvider client={queryClient}>
         <DatesProvider settings={{ locale: 'tr' }}>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
+          <ModalsProvider>{children}</ModalsProvider>
         </DatesProvider>
-      </NuqsAdapter>
-    </ModalsProvider>
+      </QueryClientProvider>
+    </NuqsAdapter>
   )
 }
 

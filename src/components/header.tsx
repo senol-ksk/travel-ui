@@ -12,7 +12,6 @@ import {
   Container,
   Skeleton,
   Menu,
-  ActionIcon,
   Box,
   UnstyledButton,
 } from '@mantine/core'
@@ -21,6 +20,8 @@ import { useQuery } from '@tanstack/react-query'
 import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 import { IoIosLogOut } from 'react-icons/io'
 import { IoIosArrowDown } from 'react-icons/io'
+import { modals } from '@mantine/modals'
+import { LoginForm } from '@/app/auth/login/_components/login-form'
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
@@ -107,9 +108,7 @@ export const Header = () => {
                 ))
               )}
             </div>
-            {/* <Anchor component={Link} href='/kampanyalar'>
-              Kampanyalar
-            </Anchor> */}
+
             <div className='ms-auto flex items-center gap-3'>
               <Menu>
                 <Menu.Target>
@@ -188,9 +187,15 @@ export const Header = () => {
                   variant='outline'
                   radius='xl'
                   leftSection={<FaRegUserCircle />}
-                  component={Link}
-                  href={'/auth/login'}
+                  // component={Link}
+                  // href={'/auth/login'}
                   loading={session.status === 'loading'}
+                  onClick={() => {
+                    modals.open({
+                      title: 'Giriş Yap',
+                      children: <LoginForm />,
+                    })
+                  }}
                 >
                   Oturum Açın
                 </Button>
