@@ -133,9 +133,9 @@ const TourSearchResultClient = () => {
     },
   ]
   const totalCount = searchData?.length ?? 0
-  const storedData = localStorage.getItem('tour-search')
-  const parsedData = storedData ? JSON.parse(storedData) : null
-  const destinationName = parsedData?.destination?.name ?? ''
+  // const storedData = localStorage.getItem('tour-search')
+  // const parsedData = storedData ? JSON.parse(storedData) : null
+  // const destinationName = parsedData?.destination?.name ?? ''
 
   if (
     !searchParamsQuery.data &&
