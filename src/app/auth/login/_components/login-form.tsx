@@ -45,6 +45,7 @@ export const LoginForm = () => {
         axiosOptions: {
           url: 'api/account/login',
           method: 'post',
+          withCredentials: true,
           data: {
             loginForm: {
               email: formData.email,
