@@ -11,6 +11,9 @@ import {
 import { formatCurrency } from '@/libs/util'
 // import { FlightSummary } from './products/flight'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
+
 import { HotelSummary } from './products/hotel'
 import {
   BusSummaryResponse,
@@ -21,8 +24,12 @@ import {
 } from '../../types'
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
-import { FlightSummary } from '@/components/book-results/flight'
+import { FlightSummary } from '@/app/reservation/(results)/callback/products/flight'
 import { BsFillCreditCardFill } from 'react-icons/bs'
+import { notFound } from 'next/navigation'
+import { resend } from '@/libs/resend'
+import EmailFlightBookResult from '@/emails/book-results/flight/flight'
+import EmailBookResult from '@/emails/book-results'
 
 type IProps = {
   searchParams: Promise<{
@@ -38,9 +45,13 @@ type IProps = {
 const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
   const { searchToken, sessionToken, shoppingFileId, productKey } =
     await searchParams
+
+  if (!(searchToken || sessionToken || shoppingFileId || productKey))
+    return notFound()
+
   const getSummaryData = await serviceRequest<OperationResultType>({
     axiosOptions: {
-      // url: `api/product/summary/withshoppingfileId`,
+      // url: `api/product/summary/withshoppingfileId` as number,
       url: `api/product/summary`,
       params: {
         searchToken,
@@ -51,10 +62,40 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     },
   })
 
+  if (!getSummaryData?.data && !getSummaryData?.success) return notFound()
+
   const getSummary = getSummaryData?.data
+
   const passengerData = getSummary?.passenger
 
   const productData = getSummary?.product.summaryResponse
+
+  if (getSummary && getSummaryData.success) {
+    resend()
+      .emails.send(
+        {
+          from: process.env.EMAIL_FROM,
+          to:
+            process.env.NODE_ENV === 'development'
+              ? 'senolk@lidyateknoloji.com'
+              : getSummary.passenger.passengers[0].email,
+
+          subject: 'Rezervasyon Bilgileriniz',
+          react: EmailBookResult({
+            data: getSummary,
+          }),
+        },
+        {
+          idempotencyKey: `bookResult/${getSummary.passenger.shoppingFileId}`,
+        }
+      )
+      .then((responseData) => {
+        console.log('email send response => ', responseData)
+      })
+      .catch((reason) => {
+        console.log('email send error => ', reason)
+      })
+  }
 
   return (
     <div className='mx-auto max-w-screen-sm pt-4'>

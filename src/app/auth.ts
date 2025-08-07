@@ -1,25 +1,27 @@
+import { serviceRequest } from '@/network'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
+import { Account } from '@/app/account/type'
+import { cookies } from 'next/headers'
+
+const getUserInfo = async () => {
+  const cookieStore = await cookies()
+
+  return serviceRequest<Account>({
+    axiosOptions: {
+      url: 'api/account/user-info',
+      headers: { Cookie: cookieStore.toString() },
+    },
+  })
+}
 
 declare module 'next-auth' {
   /**
-   * The shape of the user object returned in the OAuth providers' `profile` callback,
-   * or the second parameter of the `session` callback, when using a database.
-   */
-  // interface User {}
-  /**
-   * The shape of the account object returned in the OAuth providers' `account` callback,
-   * Usually contains information about the provider being used, like OAuth tokens (`access_token`, etc).
-   */
-  // interface Account {}
-
-  /**
-   * Returned by `useSession`, `auth`, contains information about the active session.
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */
   interface Session {
-    user: {
-      name: string
-    } & DefaultSession['user']
+    // user: Account & DefaultSession['user']
+    user: {} & DefaultSession['user']
   }
 }
 
@@ -27,21 +29,44 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: {
     signIn: '/auth/login',
   },
+  trustHost: true,
   session: {
     maxAge: 1200,
   },
+  // callbacks: {
+  //   async session({ session, token }) {
+  //     const userInfo = await getUserInfo()
+
+  //     console.log(userInfo)
+
+  //     if (userInfo?.success && userInfo.data) {
+  //       const { surname, name } = userInfo.data
+
+  //       return {
+  //         ...session,
+  //         user: {
+  //           ...session.user,
+  //           surname,
+  //           name,
+  //         },
+  //       }
+  //     }
+
+  //     return session
+  //   },
+  // },
   providers: [
     Credentials({
-      type: 'credentials',
-      credentials: { name: {} },
       authorize: async (credentials) => {
         if (!credentials || typeof credentials.name !== 'string') {
           return null
         }
 
-        return {
-          name: credentials.name,
-        }
+        const userInfo = await getUserInfo()
+
+        if (!userInfo?.success || !userInfo.data) return null
+
+        return { ...credentials, email: userInfo?.data?.email }
       },
     }),
   ],

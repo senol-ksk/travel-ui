@@ -16,7 +16,7 @@ import { useDisclosure } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
 import { useRef } from 'react'
-import { FlightSummary } from '@/components/book-results/flight'
+import { FlightSummary } from '@/app/reservation/(results)/callback/products/flight'
 import { FlightSummaryResponse } from '@/app/reservation/types'
 
 type IProps = {

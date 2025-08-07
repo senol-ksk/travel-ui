@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
-import { NextRequest } from 'next/server'
-import { request as axiosRequest, serviceRequest } from '@/network'
-import { ResponseStatus } from '@/app/reservation/types'
+import { type NextRequest } from 'next/server'
+import { serviceRequest } from '@/network'
 
 export async function POST(request: NextRequest) {
   const data = await request.formData()
@@ -24,12 +23,10 @@ export async function POST(request: NextRequest) {
     },
   })
 
-  console.log(bookResult)
+  if (bookResult && bookResult?.success && bookResult.data) {
+    const bookResultParams = new URLSearchParams(bookResult.data)
 
-  if (bookResult && bookResult?.success) {
-    const bookResultParams = new URLSearchParams(bookResult.data || '')
-
-    await serviceRequest({
+    const completeResponse = await serviceRequest({
       axiosOptions: {
         url: `/api/product/complete`,
         method: 'POST',

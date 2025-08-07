@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function NotFound() {
   return (
-    <Container component={Center} display={'flex'} className='h-full'>
+    <Container component={Center} display={'flex'} className='h-full py-12'>
       <div className='flex flex-col items-center gap-3'>
         <div className='mx-auto max-w-4xl'>
           <NextImage

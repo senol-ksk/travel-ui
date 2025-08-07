@@ -79,6 +79,14 @@ const nextConfig: NextConfig = {
         destination: '/online-operations',
       },
       {
+        source: '/confirm-email',
+        destination: '/auth/confirm-email',
+      },
+      {
+        source: '/sifre-yenileme',
+        destination: '/auth/password-renew',
+      },
+      {
         source: '/:slug',
         destination: '/contents/:slug',
       },
