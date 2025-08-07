@@ -163,7 +163,7 @@ export type OperationResultType = {
   }
   product: {
     summaryResponse: {
-      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental'
+      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental' | 'Tour'
     }
   }
 }

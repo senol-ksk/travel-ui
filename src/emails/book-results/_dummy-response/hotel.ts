@@ -1,0 +1,100 @@
+import { HotelSummaryResponse } from '@/app/reservation/types'
+
+export const hotelDummyOrderResultResponse = {
+  product: {
+    summaryResponse: {
+      moduleName: 'Bus',
+      roomGroup: {
+        hotel: {
+          name: 'Otel Adi madi bisiyler',
+          address: 'siracevizler cd. dogancay',
+          availability_score: null,
+          checkin_from: '12-04-2025T:00:00',
+          checkout_to: '12-04-2025T:00:00',
+          comment_info: {
+            comments: [
+              {
+                averageScore: 8,
+                commentDate: '2024-02-13T21:00:00Z',
+                endDate: '2023-07-15T21:00:00Z',
+                isSuggested: true,
+                name: 'Abdullah ',
+                negativeCotent: '',
+                positiveCotent: 'Fiyatından dolayı 1 gün konakladık ',
+                reasonLabel: 'İş Seyahati',
+                startDate: '2023-07-14T21:00:00Z',
+                surname: 'T***',
+                userCity: null,
+                userCountry: null,
+                userCountryCode: null,
+                withWhoLabel: '2 Erkek',
+              },
+            ],
+          },
+        },
+      },
+    } as HotelSummaryResponse,
+  },
+
+  passenger: {
+    modules: [1],
+    passengers: [
+      {
+        type: 0,
+        gender: 0,
+        fullName: 'SENOL  KESKIN',
+        birthday: '1980-03-02T03:00:00+03:00',
+        identityNumber: '65*******94',
+        bookingCode: '132YHR',
+        campaignCode: null,
+        eTicketNumber: '6242292735339',
+        firstName: 'SENOL',
+        lastName: 'KESKIN',
+        mobilePhoneNumber: '+90532*****35',
+        email: 'SENOLK@LIDYATEKNOLOJI.COM',
+        marketingAirlineCode: 'PC',
+        isRoundedTrip: true,
+        module: 1,
+        groupOrderIndex: 1,
+        localPassengerSequenceNo: 1,
+        localRelatedPassengerSequenceNo: null,
+        discount: {
+          value: 0,
+          currency: null,
+          rateValue: null,
+        },
+        productItemId: 843359,
+      },
+    ],
+    billingInformation: [
+      {
+        billingName: 'react test',
+        isCompany: false,
+        address: 'Kadikoy Kadikoy Istanbul',
+        taxNo: '10*******00',
+      },
+    ],
+    paymentInformation: {
+      basketTotal: 20585.3,
+      basketDiscountTotal: 750,
+      collectingTotal: 19835.3,
+      financellTotal: 0,
+      mlTotal: null,
+      rateOfInterest: 1,
+      installmentCount: 1,
+      bankName: 'HALKBANK',
+      encryptedCardHolder: 'S**** K*****',
+      encryptedCardNumber: '521378******9263',
+      sellingCurrency: 'TRY',
+    },
+    ssrList: [],
+    passengerCargoAddress: [],
+    bookingDateTime: '2025-08-01T11:56:36.392922',
+    fromSession: true,
+    authorizeKey: null,
+    shoppingFileId: 836551,
+    taxAmount: 8106.3,
+    shippingAmount: 0,
+    operationResultPromotionUsageList: null,
+  },
+}

@@ -1,15 +1,23 @@
 import {
   FlightSummaryResponse,
   OperationResultType,
+  HotelSummaryResponse,
 } from '@/app/reservation/types'
-import EmailFlightBookResult from './flight/flight'
+
 import {
   __dummy__flightPaymentSummaryResponse,
   __dummy__flightPaymentSummaryResponseIstAms_transfer,
 } from './_dummy-response/flight'
 import { EmailBody } from '../_components/body'
 import { Column, Heading, Row, Section } from '@react-email/components'
+import EmailHotelOrderResult from './hotel/hotel'
 
+import EmailFlightBookResult from './flight/flight'
+import { hotelDummyOrderResultResponse } from './_dummy-response/hotel'
+import EmailTourOrderResult from './tour/transfer'
+import EmailBusOrderResult from './bus/bus'
+import EmailCarRentalOrderResult from './car-rental/car-rental'
+import EmailTransferOrderResult from './transfer/transfer'
 export default function EmailBookResult({
   data,
 }: {
@@ -27,6 +35,21 @@ export default function EmailBookResult({
                 data={data.product.summaryResponse as FlightSummaryResponse}
               />
             )
+
+          case 'Hotel':
+            return (
+              <EmailHotelOrderResult
+                data={data.product.summaryResponse as HotelSummaryResponse}
+              />
+            )
+          case 'Tour':
+            return <EmailTourOrderResult />
+          case 'Bus':
+            return <EmailBusOrderResult />
+          case 'CarRental':
+            return <EmailCarRentalOrderResult />
+          case 'Transfer':
+            return <EmailTransferOrderResult />
 
           default:
             break
@@ -75,5 +98,6 @@ export default function EmailBookResult({
 }
 
 EmailBookResult.PreviewProps = {
-  data: __dummy__flightPaymentSummaryResponseIstAms_transfer,
+  // data: __dummy__flightPaymentSummaryResponseIstAms_transfer,
+  data: hotelDummyOrderResultResponse,
 }
