@@ -10,6 +10,7 @@ import {
 import {
   Accordion,
   Alert,
+  Badge,
   Box,
   Button,
   Checkbox,
@@ -1312,7 +1313,9 @@ const FlightSearchView = () => {
         }}
         title={
           <div className='flex flex-col items-center justify-center gap-2'>
-            <div className='text-2xl font-medium'>Uçuş Paketini Seçiniz</div>
+            <div className='text-xl font-medium'>
+              Uçuş Paketi Seçerek Daha Konforlu Seyahat Edin
+            </div>
             <div className='flex items-center justify-center gap-1'>
               <AirlineLogo
                 airlineCode={
@@ -1336,6 +1339,9 @@ const FlightSearchView = () => {
                 }
               </span>
               {''}-{''}
+              <Badge className='bg-blue absolute top-27 left-35 -translate-y-3 rounded p-3 text-xs text-white shadow-lg'>
+                Önerilen
+              </Badge>
               <span className='md:text-md text-sm font-semibold'>
                 {/* {selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0).ai} */}
                 {

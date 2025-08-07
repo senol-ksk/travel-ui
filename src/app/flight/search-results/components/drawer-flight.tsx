@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/libs/util'
-import { Button, rem, Stack } from '@mantine/core'
+import { Badge, Button, rem, Stack } from '@mantine/core'
 
 import clsx from 'clsx'
 import {
@@ -10,6 +10,7 @@ import {
 } from '../../type'
 import { MdCheck } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
+import { FaCheck } from 'react-icons/fa6'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -33,13 +34,16 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
     'border-t-green-700',
     'border-t-indigo-900',
     'border-t-purple-600',
+    'border-t-pink-500',
+    'border-t-red-600',
   ]
   // base price defined
   const mainPricePackage = data.flights.at(-1)?.fareInfo.totalPrice.value ?? 0
-
   return (
     <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
       {selectedFlightItemPackages?.packages?.map((selectedPackage, index) => {
+        const isSelected = index === 0
+
         const dynamicBorderColor =
           dynmicborderColors[index % dynmicborderColors.length]
         // package price defined
@@ -52,11 +56,12 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className={`flex cursor-pointer flex-col items-start gap-2 rounded-lg border border-t-10 p-2 md:p-4 ${dynamicBorderColor}`}
+            className={clsx(
+              `${dynamicBorderColor} relative flex cursor-pointer flex-col items-start gap-3 rounded-lg border border-t-10 p-2 shadow-xl md:p-4`,
+              isSelected ? 'bg-gray-200' : `hover:bg-gray-200`
+            )}
             role='button'
-            onClick={() => {
-              onSelect(selectedPackage)
-            }}
+            onClick={() => onSelect(selectedPackage)}
           >
             <div className='flex w-full cursor-pointer justify-between gap-2'>
               <div className='text-lg font-bold capitalize'>
@@ -613,9 +618,12 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 radius={'xl'}
                 size='lg'
                 variant='outline'
-                className='bg-blue-800 text-white hover:border-gray-600 hover:bg-gray-600'
+                className={`${isSelected ? 'gap-3 border-gray-500 bg-gray-600 text-white' : 'bg-blue-800 text-white hover:border-gray-600 hover:bg-gray-600'} `}
               >
-                Seç
+                <div className='flex items-center gap-2'>
+                  {isSelected && <FaCheck size={22} />}
+                  {isSelected ? 'Seçili' : 'Seç'}
+                </div>
               </Button>
             </div>
           </div>
