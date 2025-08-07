@@ -1,5 +1,5 @@
 import { formatCurrency } from '@/libs/util'
-import { Button, rem, Stack } from '@mantine/core'
+import { Badge, Button, rem, Stack } from '@mantine/core'
 
 import clsx from 'clsx'
 import {
@@ -10,6 +10,7 @@ import {
 } from '../../type'
 import { MdCheck } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
+import { FaCheck } from 'react-icons/fa6'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -30,16 +31,19 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
   // border colors dyanmic changing for per package
   const dynmicborderColors = [
     'border-t-gray-500',
-    'border-t-green-700',
     'border-t-indigo-900',
     'border-t-purple-600',
+    'border-t-pink-500',
+    'border-t-red-600',
+    'border-t-green-700',
   ]
   // base price defined
   const mainPricePackage = data.flights.at(-1)?.fareInfo.totalPrice.value ?? 0
-
   return (
-    <div className='grid grid-flow-col grid-rows-3 gap-3 sm:grid-rows-1'>
+    <div className='sm:grid sm:grid-flow-col sm:grid-rows-1 sm:gap-3'>
       {selectedFlightItemPackages?.packages?.map((selectedPackage, index) => {
+        const isSelected = index === 0
+
         const dynamicBorderColor =
           dynmicborderColors[index % dynmicborderColors.length]
         // package price defined
@@ -52,12 +56,18 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
-            className={`flex cursor-pointer flex-col items-start gap-2 rounded-lg border border-t-10 p-2 md:p-4 ${dynamicBorderColor}`}
+            className={clsx(
+              `${dynamicBorderColor} relative my-4 flex cursor-pointer flex-col items-start rounded-lg border border-t-10 p-2 shadow-xl md:gap-1 md:p-4`,
+              isSelected ? 'bg-gray-200' : `hover:bg-gray-200`
+            )}
             role='button'
-            onClick={() => {
-              onSelect(selectedPackage)
-            }}
+            onClick={() => onSelect(selectedPackage)}
           >
+            {isSelected && (
+              <Badge className='absolute -top-1 -right-2 flex -translate-y-3 rounded-md bg-green-800 px-6 py-3 text-sm text-white shadow-xl md:-left-3'>
+                Seçili
+              </Badge>
+            )}
             <div className='flex w-full cursor-pointer justify-between gap-2'>
               <div className='text-lg font-bold capitalize'>
                 {(() => {
@@ -79,11 +89,8 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   }
                 })()}
               </div>
-              <div className='text-xl font-bold'>
-                +{formatCurrency(packagePrice)}
-              </div>
             </div>
-            <Stack gap={rem(4)} className='mb-4 text-sm'>
+            <Stack gap={rem(4)} className='mb-10 text-sm'>
               {selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
                 .value > 0 && (
                 <div className='flex items-center gap-1'>
@@ -131,7 +138,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   </div>
                   <div className='flex items-center gap-1'>
                     <MdCheck size={18} className='text-green-800' /> 1 parça x 4
-                    kg kişisel eşya hakkı
+                    kg kişisel eşya
                   </div>
                 </>
               )}
@@ -237,23 +244,27 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
               {selectedPackage.flightDetailSegment.freeVolatileData
                 .BrandName === 'PREMIUM' && (
                 <>
-                  <div className={'flex items-center gap-1 text-green-800'}>
-                    <MdCheck size={18} className='text-green-800' /> Ücretsiz
-                    Değişiklik{' '}
-                    <span className='text-xs text-gray-600'>
+                  <div className={'grid items-center text-green-800'}>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Ücretsiz Değişiklik{' '}
+                    </div>
+                    {/* <span className='px-5 text-xs text-gray-600'>
                       (Uçuşa 1 saat kalana kadar)
-                    </span>
+                    </span> */}
                   </div>
                 </>
               )}
               {selectedPackage.flightDetails.freeVolatileData
                 .FlexibleReturnChangeRight && (
-                <div className='flex items-center gap-1 text-green-800'>
-                  <MdCheck size={18} className='text-green-800' />
-                  Esnek İade/Değişiklik Hakkı
-                  <span className='text-xs text-gray-600'>
+                <div className='grid items-center text-green-800'>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Esnek İade/Değişiklik Hakkı
+                  </div>
+                  {/* <span className='px-5 text-xs text-gray-600'>
                     (Uçuşa 1 saat kalana kadar)
-                  </span>
+                  </span> */}
                 </div>
               )}
               {selectedPackage.flightDetailSegment.bookingCode === 'PF' && (
@@ -270,7 +281,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   </div>
                 </>
               )}
-              {!(
+              {/* {!(
                 selectedPackage.flightDetailSegment.bookingCode !== 'EF' &&
                 selectedPackage.flightDetailSegment.operatingAirline.code !==
                   'PC'
@@ -281,14 +292,14 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                     <IoClose size={20} className='text-red-800' />
                     Değişiklik yapılamaz &amp; İade edilemez
                   </div>
-                )}
-              {selectedPackage.flightDetailSegment.freeVolatileData
+                )} */}
+              {/* {selectedPackage.flightDetailSegment.freeVolatileData
                 .BrandName === 'BASIC' && (
                 <div className='flex items-center gap-1 text-red-600'>
                   <IoClose size={20} className='text-red-800' />
                   Değişiklik yapılamaz &amp; İade edilemez
                 </div>
-              )}
+              )} */}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 selectedPackage.flightDetailSegment.bookingCode !==
@@ -611,11 +622,14 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 type='button'
                 fullWidth
                 radius={'xl'}
-                size='lg'
+                size='md'
                 variant='outline'
-                className='bg-blue-800 text-white hover:border-gray-600 hover:bg-gray-600'
+                className={`${isSelected ? 'gap-3 border-gray-500 bg-gray-600 text-white' : 'bg-blue-800 text-white hover:border-gray-600 hover:bg-gray-600'} `}
               >
-                Seç
+                <div className={clsx(`text-md flex items-center gap-1`)}>
+                  {isSelected && <FaCheck size={21} />}+
+                  {formatCurrency(packagePrice)}
+                </div>
               </Button>
             </div>
           </div>

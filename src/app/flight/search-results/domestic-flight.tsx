@@ -197,7 +197,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
         >
           {detailsOpened ? (
             <>
-              Uçuş Detayı Kapat <IoIosClose size={25} />
+              Detayı Kapat <IoIosClose size={25} />
             </>
           ) : (
             'Uçuş Detayları'
