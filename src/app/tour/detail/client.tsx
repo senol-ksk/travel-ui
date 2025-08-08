@@ -371,7 +371,6 @@ const TourDetailClient = () => {
                   <Title className='text-md mb-4 md:text-2xl'>
                     {detailQuery.data.package.title}
                   </Title>
-
                   <div className='my-3 grid grid-cols-1 gap-4 md:grid-cols-2'>
                     <div className='flex items-center gap-4'>
                       <div className='text-blue-800'>
@@ -391,23 +390,20 @@ const TourDetailClient = () => {
                         {totalNights} gece {totalDays} gün
                       </div>
                     </div>
-
-                    {detailQuery.data.detail.flightInformation?.length > 0 && (
-                      <div className='flex items-center gap-4'>
-                        <div className='text-blue-800'>
-                          <CiLocationOn size={22} />
-                        </div>
-                        <div
-                          className='flex items-center font-semibold'
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              detailQuery.data.detail.flightInformation[0],
-                          }}
-                        />
-                      </div>
-                    )}
                   </div>
-
+                  {detailQuery.data.detail.flightInformation?.length > 0 && (
+                    <div className='flex items-center gap-4 pt-4'>
+                      <div className='text-blue-800'>
+                        <CiLocationOn size={22} />
+                      </div>
+                      <div
+                        className='flex items-center font-semibold'
+                        dangerouslySetInnerHTML={{
+                          __html: detailQuery.data.detail.flightInformation[0],
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className='text-dark-200 mt-13 hidden text-sm md:flex'>
                     Not : Çocuk kategorisi 7-12 yaşları arasıdır. Tur sirküsü
                     yayımlandığı 03.02.2025 tarihinde geçerlidir. Aynı tura ait,
