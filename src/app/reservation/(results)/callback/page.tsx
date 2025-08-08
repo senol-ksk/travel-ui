@@ -70,7 +70,11 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
 
   const productData = getSummary?.product.summaryResponse
 
-  if (getSummary && getSummaryData.success) {
+  if (
+    getSummary &&
+    getSummaryData.success &&
+    getSummaryData.data?.product.summaryResponse.moduleName.length
+  ) {
     resend()
       .emails.send(
         {
@@ -119,14 +123,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
               <div>Bizi tercih ettiğiniz için teşekkür ederiz.</div>
             </div>
           </CheckoutCard>
-          <div className='text-xs'>
-            Rezervasyon oluşturulma tarihi:{' '}
-            <strong>
-              {dayjs(passengerData.bookingDateTime).format(
-                'DD MMMM YYYY HH:mm'
-              )}
-            </strong>
-          </div>
+
           <div>
             {(() => {
               switch (productData.moduleName) {
@@ -161,10 +158,10 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
               </Title>
               <Divider m={0} />
               <div className='grid gap-3 text-sm md:grid-cols-3'>
-                {passengerData?.passengers?.map((passenger) => {
+                {passengerData?.passengers?.map((passenger, passengerIndex) => {
                   return (
                     <div
-                      key={passenger.productItemId}
+                      key={passengerIndex}
                       className='rounded border border-gray-400 p-2'
                     >
                       <div>
