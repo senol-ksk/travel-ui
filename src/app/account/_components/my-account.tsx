@@ -5,27 +5,25 @@ import 'intl-tel-input/styles'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
-  Dialog,
   Input,
-  NativeSelect,
   NumberInput,
   Radio,
   Switch,
   TextInput,
+  Title,
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from '@/libs/zod'
 import IntlTelInput from 'intl-tel-input/react'
 import clsx from 'clsx'
-
 import { validTCKN } from '@/libs/tckn-validate'
-
-import { CountryOptions } from '@/app/reservation/components/countries'
 import { serviceRequest } from '@/network'
 import { useMutation } from '@tanstack/react-query'
 import { Account } from '../type'
 import { notifications } from '@mantine/notifications'
+import { MdOutlineMailOutline } from 'react-icons/md'
+import { Link } from 'next-view-transitions'
 
 const schema = z
   .object({
@@ -70,7 +68,6 @@ type IProps = {
 }
 
 const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
-  console.log(defaultValues)
   function handleSubmit(data: FormSchemaType) {
     submitMutation.mutate(data)
   }
@@ -99,6 +96,17 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
         })
       }
     },
+    onError: () => {
+      notifications.show({
+        title: 'Hata',
+        message: 'lütfen tekrar deneyiniz',
+        color: 'red',
+        position: 'top-right',
+        classNames: {
+          root: 'bg-red-50',
+        },
+      })
+    },
   })
   const form = useForm({
     resolver: zodResolver(schema),
@@ -106,7 +114,7 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
   })
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form onSubmit={form.handleSubmit(handleSubmit)} className='grid gap-15'>
       <div className='flex flex-col gap-5 md:grid md:grid-cols-2'>
         <div className='col-span-2 my-5'>
           <Controller
@@ -250,6 +258,7 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
           <Controller
             control={form.control}
             name='email'
+            disabled
             defaultValue={form.formState.defaultValues?.email ?? ''}
             render={({ field, fieldState }) => (
               <TextInput
@@ -313,7 +322,22 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
           </Input.Wrapper>
         </div>
       </div>
-
+      <div>
+        <Title order={3} className='border-b'>
+          Güvenlik
+        </Title>
+        <div className='flex items-center justify-between py-3'>
+          <div className='flex items-center gap-2'>
+            <MdOutlineMailOutline size={20} />
+            E-posta İşlemleri
+          </div>
+          <Link href='/account/change-mail'>
+            <div className='cursor-pointer text-blue-800 underline'>
+              E-posta Değiştir
+            </div>
+          </Link>{' '}
+        </div>
+      </div>
       <div className='my-10 grid justify-end gap-5 border-t py-5 md:flex md:justify-between'>
         <div className='hidden text-sm text-gray-600 md:flex'>
           Lütfen bilgilerinizi doğru girdiğinizden emin olunuz. <br />
