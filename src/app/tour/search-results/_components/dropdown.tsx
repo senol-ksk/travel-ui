@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { useState } from 'react'
 import classes from './Dropdown.module.css'
 import clsx from 'clsx'
+import { RxCalendar } from 'react-icons/rx'
 
 type IProps = {
   data: TourSearchResultSearchItem[]
@@ -44,6 +45,8 @@ const TourDropdown: React.FC<IProps> = ({ data, onSelect, defaultItem }) => {
     >
       <Combobox.Target>
         <InputBase
+          size='md'
+          radius={'md'}
           pointer
           type='button'
           component='button'
@@ -52,8 +55,11 @@ const TourDropdown: React.FC<IProps> = ({ data, onSelect, defaultItem }) => {
             combobox.toggleDropdown()
           }}
         >
-          {dayjs(defaultItem?.startDate).format(dateFormat)} {' - '}
-          {dayjs(defaultItem?.endDate).format(dateFormat)}
+          <div className='flex items-center gap-2'>
+            <RxCalendar size={20} />
+            {dayjs(defaultItem?.startDate).format(dateFormat)} {' - '}
+            {dayjs(defaultItem?.endDate).format(dateFormat)}
+          </div>
         </InputBase>
       </Combobox.Target>
       <Combobox.Dropdown>
@@ -66,11 +72,13 @@ const TourDropdown: React.FC<IProps> = ({ data, onSelect, defaultItem }) => {
                 className={clsx({ [classes.animateOption]: animating })}
                 style={{ animationDelay: `${index * 30}ms` }}
               >
-                <div>
-                  {dayjs(item.startDate).format(dateFormat)} {' - '}
-                  {dayjs(item.endDate).format(dateFormat)}
+                <div className='flex w-full items-center justify-between gap-2'>
+                  <div>
+                    {dayjs(item.startDate).format(dateFormat)} {' - '}
+                    {dayjs(item.endDate).format(dateFormat)}
+                  </div>
+                  <strong>{formatCurrency(item.tlPrice.value)}</strong>
                 </div>
-                <strong>{formatCurrency(item.tlPrice.value)}</strong>
               </Combobox.Option>
             ))}
           </ScrollArea.Autosize>
