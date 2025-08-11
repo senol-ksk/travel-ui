@@ -166,6 +166,15 @@ export type OperationResultType = {
       moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental' | 'Tour'
     }
   }
+  hotelCancelWarranty: {
+    selectingCancelWarranty: boolean
+    hasHotelWarranty: boolean
+    cancelWarrantyPrice: number
+    hotelWarrantyDiscountSelected: boolean
+    totalPrice: number
+    dayCount: number
+    couponActive: boolean
+  }
 }
 
 export interface FlightSummaryResponse {
