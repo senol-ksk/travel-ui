@@ -27,6 +27,7 @@ import {
   RiTimeLine,
   RiUserLine,
 } from 'react-icons/ri'
+import { TbArrowsRightLeft } from 'react-icons/tb'
 
 const defaultDate = dayjs().add(5, 'day').toISOString()
 
@@ -132,6 +133,13 @@ const TransferSearchEngine = () => {
 
     router.push(searchResultUrl)
   }
+  const switchWay = () => {
+    const origin = formActions.getValues('origin')
+    const destination = formActions.getValues('destination')
+    formActions.setValue('origin', destination)
+    formActions.setValue('destination', origin)
+    formActions.trigger(['origin', 'destination'])
+  }
 
   if (!mounted) {
     return <Skeleton h={70} />
@@ -139,8 +147,8 @@ const TransferSearchEngine = () => {
 
   return (
     <form onSubmit={formActions.handleSubmit(handleSubmit)}>
-      <div className='grid grid-cols-1 gap-3 md:grid-cols-34 md:gap-4'>
-        <div className='col-span-16 grid grid-cols-12 gap-2 md:col-span-15'>
+      <div className='grid grid-cols-1 gap-2 md:grid-cols-34'>
+        <div className='relative col-span-16 grid grid-cols-12 gap-2 md:col-span-15'>
           <div className='relative col-span-13 sm:col-span-6'>
             <RiMapPin2Line
               size={20}
@@ -151,9 +159,7 @@ const TransferSearchEngine = () => {
               inputProps={{ error: !!formActions.formState.errors.origin }}
               data={originLocations?.Result}
               isLoading={originLocationsIsLoading}
-              defaultValue={
-                formActions.formState.defaultValues?.origin?.PointName
-              }
+              defaultValue={formActions.getValues('origin').PointName}
               onChange={setOriginLocationInputValue}
               onSelect={(value, parentLocation) => {
                 formActions.setValue('origin', {
@@ -169,19 +175,27 @@ const TransferSearchEngine = () => {
               }}
             />
           </div>
+          <Button
+            onClick={switchWay}
+            className='absolute z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-gray-500 bg-white md:top-1/2 md:left-1/2'
+          >
+            <TbArrowsRightLeft
+              size={20}
+              className='rotate-90 text-blue-800 transition-transform md:rotate-0'
+            />
+          </Button>
           <div className='relative col-span-13 sm:col-span-6'>
             <RiMapPin2Line
               size={20}
-              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+              className='absolute top-1/2 left-0 z-10 mx-4 -translate-y-1/2'
             />
             <Locations
+              key={formActions.getValues('destination').Slug || 'destination'}
               label='Nereye'
               inputProps={{ error: !!formActions.formState.errors.destination }}
               data={destinationLocation?.Result}
               isLoading={destinationLocationLoading}
-              defaultValue={
-                formActions.formState.defaultValues?.destination?.PointName
-              }
+              defaultValue={formActions.getValues('destination').PointName}
               onChange={setDestinationLocationInputValue}
               onSelect={(value, parentLocation) => {
                 formActions.setValue('destination', {
