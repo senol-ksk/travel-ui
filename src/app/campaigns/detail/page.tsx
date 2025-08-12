@@ -18,7 +18,7 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
 
   return (
     <Container>
-      <div className='my-5 border p-3'>
+      <div className='my-5 p-3'>
         <div className='relative mb-5 w-full'>
           <AspectRatio ratio={25 / 12} className='mb-5 pb-5'>
             <Image
@@ -33,10 +33,11 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
             />
           </AspectRatio>
         </div>
-        <Title className='mt-5' fz={'h2'}>
+        <Title className='mt-5 mb-2' fz={'h1'}>
           {content?.title}
         </Title>
         <div
+          className=''
           dangerouslySetInnerHTML={{
             __html: content?.params.sort_description.value,
           }}
@@ -75,6 +76,7 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
         )}
 
         <Button
+          size='md'
           className='my-5'
           component={Link}
           href={content.params.link.value}
