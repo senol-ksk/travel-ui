@@ -8,7 +8,12 @@ const CampaignTopMenus = async () => {
   const campaignData = (await getCategoriesByParent())?.data
 
   return (
-    <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
+    <ScrollArea
+      scrollbars='x'
+      offsetScrollbars
+      scrollbarSize={13}
+      className='pb-3'
+    >
       <div className='flex gap-3'>
         <div>
           <Button

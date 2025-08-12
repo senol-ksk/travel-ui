@@ -43,7 +43,7 @@ const UpComingHolidays: React.FC<IProps> = ({ data }) => {
                   src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
                   className='h-full w-full object-cover transition-all duration-400 hover:scale-110'
                 />
-                <div className='absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/90 to-transparent p-4'>
+                <div className='pointer-events-none absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/90 to-transparent p-4'>
                   <div className='mb-3 text-center text-2xl font-bold break-words text-white md:px-10'>
                     {item.title}
                   </div>
