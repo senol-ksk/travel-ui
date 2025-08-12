@@ -55,7 +55,7 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
               component={Link}
               className='group block h-full w-full gap-3'
             >
-              <Box className='group mb-10 w-full rounded-xl border bg-white shadow-xl'>
+              <Box className='group mb-10 w-full rounded-xl bg-white shadow-xl'>
                 <div className='relative'>
                   <AspectRatio>
                     <Image
