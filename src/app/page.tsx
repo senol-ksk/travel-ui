@@ -16,6 +16,7 @@ import { HolidayThemes } from '@/components/home/holiday-themes'
 import { MainBannerCarousel } from '@/components/main-banner'
 import { serviceRequest } from '@/network'
 import { TourOpportunity } from '@/components/home/tour-opportunity'
+import { EbultenForm } from '@/components/home/ebulten-form'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -201,6 +202,7 @@ export default async function Home() {
           <div>
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
+          <EbultenForm />
         </Container>
       </div>
     </div>

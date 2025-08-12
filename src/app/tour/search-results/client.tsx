@@ -12,6 +12,7 @@ import {
   rem,
   RemoveScroll,
   Skeleton,
+  Spoiler,
   Stack,
   Title,
   Transition,
@@ -273,10 +274,10 @@ const TourSearchResultClient = () => {
                             </div>
                           </div>
                           <div>
-                            <Title order={3} fz={'h5'} mb={8}>
+                            <div className='mb-2 font-medium'>
                               Tur Süresi{' '}
                               <small className='text-gray-600'>(Gece)</small>
-                            </Title>
+                            </div>
                             <Checkbox.Group
                               onChange={(value) => {
                                 setFilterParams({
@@ -303,29 +304,36 @@ const TourSearchResultClient = () => {
                             </Checkbox.Group>
                           </div>
                           <div>
-                            <Title order={3} fz={'h5'} mb={8}>
-                              Bölgeler
-                            </Title>
-                            <Checkbox.Group
-                              onChange={(value) => {
-                                setFilterParams({
-                                  regions: value.length ? value : null,
-                                })
-                              }}
-                              value={
-                                filterParams.regions ? filterParams.regions : []
-                              }
+                            <div className='mb-2 font-medium'>Bölgeler</div>
+                            <Spoiler
+                              className='mb-5 grid gap-3 pb-3'
+                              maxHeight={360}
+                              showLabel='Daha fazla göster'
+                              hideLabel='Daha az göster'
                             >
-                              <Stack gap={rem(6)}>
-                                {regionChecks.map((region, regionIndex) => (
-                                  <Checkbox
-                                    key={regionIndex}
-                                    label={region}
-                                    value={slugify(region)}
-                                  />
-                                ))}
-                              </Stack>
-                            </Checkbox.Group>
+                              <Checkbox.Group
+                                onChange={(value) => {
+                                  setFilterParams({
+                                    regions: value.length ? value : null,
+                                  })
+                                }}
+                                value={
+                                  filterParams.regions
+                                    ? filterParams.regions
+                                    : []
+                                }
+                              >
+                                <Stack gap={rem(6)}>
+                                  {regionChecks.map((region, regionIndex) => (
+                                    <Checkbox
+                                      key={regionIndex}
+                                      label={region}
+                                      value={slugify(region)}
+                                    />
+                                  ))}
+                                </Stack>
+                              </Checkbox.Group>
+                            </Spoiler>
                           </div>
                         </Stack>
                       </div>

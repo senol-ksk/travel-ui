@@ -307,8 +307,9 @@ export const DetailClient = () => {
                     .format('DD MMMM YYYY, HH:mm')}
                 </div>
                 <div className='text-sm'>
-                  {carDetailQuery.data?.pickupStation.address.addressName}
+                  {carDetailQuery.data?.pickupStation.location.name}
                 </div>
+
                 <div
                   onClick={openWorkingInfoDrawer}
                   className='flex items-center gap-2'
@@ -335,7 +336,7 @@ export const DetailClient = () => {
                     .format('DD MMMM YYYY, HH:mm')}
                 </div>
                 <div className='text-sm'>
-                  {carDetailQuery.data?.returnStation.address.addressName}
+                  {carDetailQuery.data?.returnStation.location.name}
                 </div>
                 <div
                   onClick={openWorkingInfoDrawer}
@@ -482,7 +483,7 @@ export const DetailClient = () => {
             <div>Kartınızdan Çekilecek Tutar</div>
             <div>{formatCurrency(detailItem.totalPrice.value)}</div>
           </div>
-          <div className='text-sm text-gray-600'>
+          <div className='px-3 text-sm text-gray-600'>
             {formatCurrency(detailItem.basePrice.value)} / Günlük{' '}
           </div>
           {(selectedExtraOptionPrice || selectedInsurancePrice) > 0 && (

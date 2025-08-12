@@ -43,7 +43,7 @@ const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
           <Tabs.Panel value='get' className='grid' id='get'>
             <div className='text-md my-3 grid gap-2 font-medium'>
               <div className='text-md md:text-lg'>
-                {data.pickupStation.address.addressName}
+                {data.pickupStation.location.name}
               </div>
               <div>
                 {dayjs
@@ -51,30 +51,31 @@ const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
                   .format('DD MMMM YYYY, HH:mm')}
               </div>
             </div>{' '}
-            {data.pickupStation.times.map((timeItem, index) => {
-              const days = [
-                'Pazar',
-                'Pazartesi',
-                'Salı',
-                'Çarşamba',
-                'Perşembe',
-                'Cuma',
-                'Cumartesi',
-              ]
-              return (
-                <div
-                  key={index}
-                  className='m-5 grid grid-cols-2 items-center gap-2 md:grid-cols-4'
-                >
-                  <div className='col-span-1'>
-                    <strong>{days[Number(timeItem.day)]}</strong>
+            {data.pickupStation.times.length > 1 &&
+              data.pickupStation.times.map((timeItem, index) => {
+                const days = [
+                  'Pazar',
+                  'Pazartesi',
+                  'Salı',
+                  'Çarşamba',
+                  'Perşembe',
+                  'Cuma',
+                  'Cumartesi',
+                ]
+                return (
+                  <div
+                    key={index}
+                    className='m-5 grid grid-cols-2 items-center gap-2 md:grid-cols-4'
+                  >
+                    <div className='col-span-1'>
+                      <strong>{days[Number(timeItem.day)]}</strong>
+                    </div>
+                    <div className='col-span-1'>
+                      {timeItem.openingTime} - {timeItem.closingTime}
+                    </div>
                   </div>
-                  <div className='col-span-1'>
-                    {timeItem.openingTime} - {timeItem.closingTime}
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
             <div className='my-3 flex items-center gap-1 text-lg font-medium'>
               <div>Telefon :</div>
               {data.pickupStation.phoneNumbers.map((phoneNumber, index) => {
@@ -86,7 +87,7 @@ const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
           <Tabs.Panel value='give' className='grid' id='give'>
             <div className='text-md my-3 grid gap-2 font-medium'>
               <div className='text-md md:text-lg'>
-                {data.returnStation.address.addressName}
+                {data.returnStation.location.name}
               </div>
               <div>
                 {dayjs
@@ -94,30 +95,31 @@ const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
                   .format('DD MMMM YYYY, HH:mm')}
               </div>
             </div>{' '}
-            {data.returnStation.times.map((timeItem, index) => {
-              const days = [
-                'Pazar',
-                'Pazartesi',
-                'Salı',
-                'Çarşamba',
-                'Perşembe',
-                'Cuma',
-                'Cumartesi',
-              ]
-              return (
-                <div
-                  key={index}
-                  className='m-5 grid grid-cols-2 items-center gap-2 md:grid-cols-4'
-                >
-                  <div className='col-span-1'>
-                    <strong>{days[Number(timeItem.day)]}</strong>
+            {data.returnStation.times.length > 1 &&
+              data.returnStation.times.map((timeItem, index) => {
+                const days = [
+                  'Pazar',
+                  'Pazartesi',
+                  'Salı',
+                  'Çarşamba',
+                  'Perşembe',
+                  'Cuma',
+                  'Cumartesi',
+                ]
+                return (
+                  <div
+                    key={index}
+                    className='m-5 grid grid-cols-2 items-center gap-2 md:grid-cols-4'
+                  >
+                    <div className='col-span-1'>
+                      <strong>{days[Number(timeItem.day)]}</strong>
+                    </div>
+                    <div className='col-span-1'>
+                      {timeItem.openingTime} - {timeItem.closingTime}
+                    </div>
                   </div>
-                  <div className='col-span-1'>
-                    {timeItem.openingTime} - {timeItem.closingTime}
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
             <div className='my-3 flex items-center gap-1 text-lg font-medium'>
               <div>Telefon :</div>
               {data.returnStation.phoneNumbers.map((phoneNumber, index) => {
