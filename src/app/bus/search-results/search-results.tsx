@@ -67,7 +67,6 @@ const BusSearchResults: React.FC = () => {
 
   const seatData = seatRequestMutation.data
   const routeInfos = seatRequestMutation.data?.routeInfos
-  // console.log('Allah derim', routeInfos)
   const router = useTransitionRouter()
   const [seatSelectIsOpened, { open: openSeatSelect, close: closeSeatSelect }] =
     useDisclosure(false)

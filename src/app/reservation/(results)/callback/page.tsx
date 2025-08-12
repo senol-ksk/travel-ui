@@ -89,12 +89,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
           idempotencyKey: `bookResult/${getSummary.passenger.shoppingFileId}`,
         }
       )
-      .then((responseData) => {
-        console.log('email send response => ', responseData)
-      })
-      .catch((reason) => {
-        console.log('email send error => ', reason)
-      })
+      .then((responseData) => {})
+      .catch((reason) => {})
   }
 
   return (

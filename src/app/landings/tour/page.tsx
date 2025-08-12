@@ -71,7 +71,6 @@ export default async function TourLandingPage() {
       x.point !== 'abroad_tours' &&
       x.point !== 'sss'
   )
-  console.log(teasers)
 
   return (
     <div>

@@ -73,7 +73,6 @@ export const FlightOrderDetail = () => {
         const relatedSegments = flight.flightSegments.filter((segment) =>
           detail.flightSegmentKeys.includes(segment.key)
         )
-        console.log(relatedSegments)
 
         return relatedSegments.map((segment) => {
           const { arrivalTime, departureTime } = segment
