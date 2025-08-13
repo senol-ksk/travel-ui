@@ -12,10 +12,12 @@ const CampaignTopMenus = async () => {
       <div className='flex gap-3'>
         <div>
           <Button
+            radius={'md'}
+            className='font-normal hover:bg-blue-100'
             variant='default'
             component={Link}
             href={linkPrefix}
-            size='compact-md'
+            size='md'
           >
             Tümü
           </Button>
@@ -24,10 +26,12 @@ const CampaignTopMenus = async () => {
           return (
             <div key={item.id}>
               <Button
+                radius={'md'}
                 variant='default'
                 component={Link}
                 href={`${linkPrefix}?categoryId=${item.id}`}
-                size='compact-md'
+                size='md'
+                className='font-normal hover:bg-blue-100'
               >
                 {item.title}
               </Button>

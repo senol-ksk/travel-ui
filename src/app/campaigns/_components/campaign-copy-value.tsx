@@ -5,8 +5,8 @@ export function CampaignCopySection({ code }: { code: string }) {
   return (
     <>
       {code && (
-        <div className='my-5 inline-grid grid-cols-2 items-center gap-2 rounded-md border border-blue-600 p-2'>
-          <div className='col-span-1'>
+        <div className='my-5 inline-grid grid-cols-3 items-center gap-2 rounded-md border border-blue-600 p-2'>
+          <div className='col-span-2'>
             <div className='text-sm'>inidirim kodu:</div>
             <div className='text-2xl font-bold'>{code}</div>
           </div>
