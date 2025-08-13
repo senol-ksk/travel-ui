@@ -10,7 +10,6 @@ import { formatCurrency } from '@/libs/util'
 import { EmailCard } from '../../_components/email-card'
 import { __dummy__flightPaymentSummaryResponseIstAms_transfer } from '../_dummy-response/flight'
 import { EmailBody } from '../../_components/body'
-import { Svg } from '@/emails/_components/svg'
 
 type IProps = {
   data: OperationResultType
@@ -145,12 +144,6 @@ export default function EmailFlightBookResult({ data }: IProps) {
                     borderRadius: '10px',
                   }}
                 >
-                  <Svg>
-                    <path
-                      d='M2.9 3C4.9 1 7.2 0 10 0C12.7 0 15.1 1 17.1 2.9C19.1 4.9 20 7.2 20 10C20 12.8 19 15.1 17.1 17.1C15.1 19.1 12.8 20 10 20C7.2 20 4.9 19 2.9 17.1C1 15.1 0 12.8 0 10C0 7.3 1 4.9 2.9 3ZM10 11C10.5523 11 11 10.5523 11 10V6C11 5.44771 10.5523 5 10 5C9.44771 5 9 5.44771 9 6V10C9 10.5523 9.44771 11 10 11ZM10 15C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13C9.44771 13 9 13.4477 9 14C9 14.5523 9.44771 15 10 15Z'
-                      fill='white'
-                    />
-                  </Svg>
                   Transit vizeye ihtiyacınız olup olmadığını kontrol
                   ediniz.{' '}
                 </div>
@@ -220,12 +213,6 @@ export default function EmailFlightBookResult({ data }: IProps) {
               borderRadius: '10px',
             }}
           >
-            <Svg>
-              <path
-                d='M2.9 3C4.9 1 7.2 0 10 0C12.7 0 15.1 1 17.1 2.9C19.1 4.9 20 7.2 20 10C20 12.8 19 15.1 17.1 17.1C15.1 19.1 12.8 20 10 20C7.2 20 4.9 19 2.9 17.1C1 15.1 0 12.8 0 10C0 7.3 1 4.9 2.9 3ZM10 11C10.5523 11 11 10.5523 11 10V6C11 5.44771 10.5523 5 10 5C9.44771 5 9 5.44771 9 6V10C9 10.5523 9.44771 11 10 11ZM10 15C10.5523 15 11 14.5523 11 14C11 13.4477 10.5523 13 10 13C9.44771 13 9 13.4477 9 14C9 14.5523 9.44771 15 10 15Z'
-                fill='white'
-              />
-            </Svg>
             E-faturanız mail adresinize ayrıca gönderilecektir.
           </div>
         </EmailCard>
