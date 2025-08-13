@@ -69,7 +69,7 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
                     />
                   </AspectRatio>
                   {promotionText && (
-                    <span className='absolute top-3 left-3 rounded-lg bg-blue-800 px-2 py-1 text-xs text-white'>
+                    <span className='absolute top-3 left-3 rounded-lg bg-orange-500 px-2 py-1 text-xs text-white'>
                       {promotionText}
                     </span>
                   )}

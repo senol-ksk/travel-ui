@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Radio, Skeleton, Stack } from '@mantine/core'
+import { Button, Radio, Skeleton, Stack } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
@@ -19,6 +19,7 @@ import { useTransitionRouter } from 'next-view-transitions'
 import { serializeBusSearchParams } from './searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
 import { RiMapPin2Line } from 'react-icons/ri'
+import { TbArrowsRightLeft } from 'react-icons/tb'
 
 dayjs.extend(isToday)
 dayjs.extend(isTomorrow)
@@ -126,23 +127,29 @@ const BusSearchEngine = () => {
 
     router.push(url)
   }
-
+  const switchWay = () => {
+    const origin = formActions.getValues('Origin')
+    const destination = formActions.getValues('Destination')
+    formActions.setValue('Origin', destination)
+    formActions.setValue('Destination', origin)
+  }
   if (!mounted) return <Skeleton h={50} />
 
   return (
     <form className='block' onSubmit={formActions.handleSubmit(handleSubmit)}>
       <div className='grid grid-cols-12 gap-3 md:grid-cols-25 md:gap-3'>
-        <div className='col-span-12 grid gap-3 md:col-span-15 md:grid-cols-14'>
+        <div className='relative col-span-12 grid gap-3 md:col-span-15 md:grid-cols-14'>
           <div className='relative col-span-7'>
             <RiMapPin2Line
               size={20}
               className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
             />
             <BusLocations
+              key={formActions.watch('Origin').Slug || 'origin'}
               label='Nereden'
               data={pickupLocationData?.Result}
               isLoading={pickupLocationDataIsLoading}
-              defaultValue={formActions.formState.defaultValues?.Origin?.Name}
+              defaultValue={formActions.getValues('Origin').Name}
               onChange={(value) => {
                 setPickupLocation(value)
               }}
@@ -162,18 +169,26 @@ const BusSearchEngine = () => {
               }}
             />
           </div>
+          <Button
+            onClick={switchWay}
+            className='absolute z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-gray-500 bg-white md:top-1/2 md:left-1/2'
+          >
+            <TbArrowsRightLeft
+              size={20}
+              className='rotate-90 text-blue-800 transition-transform md:rotate-0'
+            />
+          </Button>
           <div className='relative col-span-7'>
             <RiMapPin2Line
               size={20}
-              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+              className='absolute top-1/2 left-0 z-10 mx-4 -translate-y-1/2'
             />
             <BusLocations
+              key={formActions.watch('Destination').Slug || 'destination'}
               label='Nereye'
               data={targeLocationData?.Result}
               isLoading={targetLocationDataIsLoading}
-              defaultValue={
-                formActions.formState.defaultValues?.Destination?.Name
-              }
+              defaultValue={formActions.getValues('Destination').Name}
               onChange={(value) => {
                 setTargetLocation(value)
               }}

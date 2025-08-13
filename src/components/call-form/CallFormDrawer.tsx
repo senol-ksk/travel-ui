@@ -11,9 +11,14 @@ const CallFormDrawer = () => {
   return (
     <div>
       <Container>
-        <div className='fixed right-6 bottom-6 z-50 hidden items-center gap-5 md:flex'>
-          <Button variant='filled' onClick={open} className='' size='md'>
-            <MdPhone size={20} />
+        <div className='fixed right-6 bottom-6 z-50 hidden items-center md:flex'>
+          <Button
+            variant='filled'
+            onClick={open}
+            size='md'
+            className='bg-orange-500'
+          >
+            <MdPhone size={24} className='mr-1' />
             <span> Biz Sizi Arayalım</span>
           </Button>
         </div>

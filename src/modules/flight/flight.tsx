@@ -10,7 +10,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useLocalStorage, useMounted } from '@mantine/hooks'
-import { Select, Radio, Group, Skeleton } from '@mantine/core'
+import { Select, Radio, Group, Skeleton, Button } from '@mantine/core'
 
 import { request } from '@/network'
 
@@ -21,6 +21,8 @@ import type { LocationResults } from '@/components/search-engine/locations/type'
 import { serializeFlightSearchParams } from './searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
 import { RiCalendarEventLine, RiMapPin2Line, RiUserLine } from 'react-icons/ri'
+import { TbArrowsRightLeft } from 'react-icons/tb'
+import { useState } from 'react'
 
 const formSchema = z.object({
   DepartureDate: z.coerce.date(),
@@ -193,7 +195,13 @@ export const Flight = () => {
     // router.push(`/flight-search?searchId=${generateUUID()}`)
     router.push(searchUrl)
   }
-
+  const switchWay = () => {
+    const origin = form.getValues('Origin')
+    const destinaton = form.getValues('Destination')
+    form.setValue('Origin', destinaton)
+    form.setValue('Destination', origin)
+    form.trigger(['Origin', 'Destination'])
+  }
   if (!mounted) return <Skeleton height={80} />
 
   return (
@@ -269,64 +277,73 @@ export const Flight = () => {
           }}
         />
       </div>
-      <div className='grid grid-cols-16 gap-2 md:grid-cols-25 md:gap-3'>
-        <div className='relative col-span-16 sm:col-span-6 md:col-span-6'>
-          <RiMapPin2Line
-            size={20}
-            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
-          />
-          <Locations
-            label='Nereden'
-            inputProps={{ error: !!form.formState.errors.Origin }}
-            data={originLocations?.Result}
-            isLoading={originLocationsIsLoading}
-            defaultValue={form.formState.defaultValues?.Origin?.Name}
-            onChange={(value) => {
-              if (value.length > 2) {
-                form.setValue('Origin.Slug', value)
-                form.trigger('Origin.Slug').then((value) => {
-                  if (value) {
-                    refetchOriginDestinations()
-                  }
-                })
-              }
-            }}
-            onSelect={(value) => {
-              form.setValue('Origin', value)
-            }}
-          />
+      <div className='grid grid-cols-16 items-center gap-2 md:grid-cols-25 md:gap-3'>
+        <div className='relative col-span-16 grid gap-2 md:col-span-12 md:grid-cols-12 md:gap-3'>
+          <div className='relative col-span-16 md:col-span-6'>
+            <RiMapPin2Line
+              size={20}
+              className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
+            />
+            <Locations
+              label='Nereden'
+              inputProps={{ error: !!form.formState.errors.Origin }}
+              data={originLocations?.Result}
+              isLoading={originLocationsIsLoading}
+              defaultValue={form.getValues('Origin')?.Name}
+              onChange={(value) => {
+                if (value.length > 2) {
+                  form.setValue('Origin.Slug', value)
+                  form.trigger('Origin.Slug').then((value) => {
+                    if (value) {
+                      refetchOriginDestinations()
+                    }
+                  })
+                }
+              }}
+              onSelect={(value) => {
+                form.setValue('Origin', value)
+              }}
+            />
+          </div>
+          <Button
+            onClick={switchWay}
+            className='absolute z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-gray-500 bg-white md:top-1/2 md:left-1/2'
+          >
+            <TbArrowsRightLeft
+              size={20}
+              className='rotate-90 text-blue-800 transition-transform md:rotate-0'
+            />
+          </Button>
+          <div className='relative col-span-16 md:col-span-6'>
+            <RiMapPin2Line
+              size={20}
+              className='absolute top-1/2 left-0 z-10 mx-4 -translate-y-1/2'
+            />
+
+            <Locations
+              label='Nereye?'
+              inputProps={{
+                error: !!form.formState.errors.Destination,
+              }}
+              defaultValue={form.getValues('Destination')?.Name}
+              data={destinationLocation?.Result}
+              isLoading={destinationLocationLoading}
+              onChange={(value) => {
+                if (value.length > 2) {
+                  form.setValue('Destination.Slug', value)
+                  form.trigger('Destination.Slug').then((value) => {
+                    if (value) {
+                      refetchTargetDestinations()
+                    }
+                  })
+                }
+              }}
+              onSelect={(value) => {
+                form.setValue('Destination', value)
+              }}
+            />
+          </div>
         </div>
-
-        <div className='relative col-span-16 sm:col-span-6 md:col-span-6'>
-          <RiMapPin2Line
-            size={20}
-            className='absolute top-1/2 left-0 z-10 mx-2 -translate-y-1/2'
-          />
-
-          <Locations
-            label='Nereye?'
-            inputProps={{
-              error: !!form.formState.errors.Destination,
-            }}
-            defaultValue={form.formState.defaultValues?.Destination?.Name}
-            data={destinationLocation?.Result}
-            isLoading={destinationLocationLoading}
-            onChange={(value) => {
-              if (value.length > 2) {
-                form.setValue('Destination.Slug', value)
-                form.trigger('Destination.Slug').then((value) => {
-                  if (value) {
-                    refetchTargetDestinations()
-                  }
-                })
-              }
-            }}
-            onSelect={(value) => {
-              form.setValue('Destination', value)
-            }}
-          />
-        </div>
-
         <div className='relative col-span-16 md:col-span-6'>
           <RiCalendarEventLine
             size={20}
@@ -376,7 +393,7 @@ export const Flight = () => {
             }}
           />
         </div>
-        <div className='sm:col-grid-2 col-span-16 p-0 lg:col-span-3'>
+        <div className='sm:col-grid-2 col-span-16 p-0 md:col-span-3'>
           <SearchEngineButton title='Uçuş Ara' />
         </div>
       </div>
