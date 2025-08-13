@@ -9,7 +9,6 @@ import {
   PassengerTypesIndexEnum,
 } from '@/types/passengerViewModel'
 import { formatCurrency } from '@/libs/util'
-// import { FlightSummary } from './products/flight'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
@@ -25,11 +24,10 @@ import {
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
 import { FlightSummary } from '@/app/reservation/(results)/callback/products/flight'
-import { BsFillCreditCardFill } from 'react-icons/bs'
 import { notFound } from 'next/navigation'
 import { resend } from '@/libs/resend'
-import EmailFlightBookResult from '@/emails/book-results/flight/flight'
 import EmailBookResult from '@/emails/book-results'
+import { CarSummary } from './products/car'
 
 type IProps = {
   searchParams: Promise<{
@@ -62,6 +60,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     },
   })
 
+  console.log(getSummaryData)
+
   if (!getSummaryData?.data && !getSummaryData?.success) return notFound()
 
   const getSummary = getSummaryData?.data
@@ -78,12 +78,11 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     resend()
       .emails.send(
         {
-          from: process.env.EMAIL_FROM,
-          to:
+          from:
             process.env.NODE_ENV === 'development'
-              ? 'senolk@lidyateknoloji.com'
-              : getSummary.passenger.passengers[0].email,
-
+              ? 'delivered@resend.dev'
+              : process.env.EMAIL_FROM,
+          to: getSummary.passenger.passengers[0].email,
           subject: 'Rezervasyon Bilgileriniz',
           react: EmailBookResult({
             data: getSummary,
@@ -93,8 +92,12 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
           idempotencyKey: `bookResult/${getSummary.passenger.shoppingFileId}`,
         }
       )
-      .then((responseData) => {})
-      .catch((reason) => {})
+      .then((responseData) => {
+        console.log(responseData)
+      })
+      .catch((reason) => {
+        console.log(reason)
+      })
   }
 
   return (
@@ -141,7 +144,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                       data={productData as TransferSummaryResponse}
                     />
                   )
-
+                case 'CarRental':
+                  return <CarSummary />
                 default:
                   break
               }
