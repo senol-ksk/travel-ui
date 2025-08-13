@@ -41,27 +41,31 @@ const UpComingHolidays: React.FC<IProps> = ({ data }) => {
               <div className='group relative aspect-[1/1] w-full overflow-hidden rounded-lg shadow-md'>
                 <BackgroundImage
                   src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
-                  className='h-full w-full object-cover brightness-80 transition-all duration-300 group-hover:brightness-100'
+                  className='h-full w-full object-cover transition-all duration-400 hover:scale-110'
                 />
-                <div className='absolute bottom-16 w-full text-center text-2xl font-bold break-words text-white'>
-                  {item.title}
+                <div className='pointer-events-none absolute right-0 bottom-0 left-0 bg-gradient-to-t from-black/90 to-transparent p-4'>
+                  <div className='mb-3 text-center text-2xl font-bold break-words text-white md:px-10'>
+                    {item.title}
+                  </div>
+                  <div className='flex justify-center'>
+                    {item.params.btn_text?.value.length > 0 && (
+                      <Badge
+                        color='white'
+                        className='mb-5 cursor-pointer p-4 text-black'
+                        radius='lg'
+                        size='lg'
+                      >
+                        {item.params.btn_text?.value}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-                {item.params.btn_text?.value.length > 0 && (
-                  <Badge
-                    color='white'
-                    className='absolute bottom-0 left-1/2 mb-5 -translate-x-1/2 transform cursor-pointer p-4 text-black'
-                    radius='lg'
-                    size='sm'
-                  >
-                    {item.params.btn_text?.value}
-                  </Badge>
-                )}
               </div>
               <Badge
                 color='white'
                 className='absolute top-10 left-2 transform bg-orange-700 p-3 text-white'
                 radius='md'
-                size='lg'
+                size='xl'
               >
                 %30 indirim
               </Badge>

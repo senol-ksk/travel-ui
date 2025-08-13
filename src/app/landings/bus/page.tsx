@@ -37,8 +37,6 @@ export default async function BusLandingPage() {
   const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
   const faqs = widgets.filter((item) => item.point === 'sss')
 
-  console.log(faqs)
-
   return (
     <div>
       <div className='border-b py-5'>

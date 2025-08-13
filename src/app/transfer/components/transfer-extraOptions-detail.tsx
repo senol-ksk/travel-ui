@@ -10,7 +10,6 @@ type IProps = {
 }
 
 const TransferExtraOptionsDetail: React.FC<IProps> = ({ data }) => {
-  console.log(data)
   if (!data) return null
   return (
     <>

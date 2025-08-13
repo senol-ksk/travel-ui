@@ -39,8 +39,6 @@ export const RegisterForm = () => {
         window.location.origin + '/'
       )
 
-      console.log(actionResponse)
-
       return actionResponse
     },
     onSuccess(query, variables) {

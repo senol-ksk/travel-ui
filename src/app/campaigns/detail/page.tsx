@@ -62,7 +62,7 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
         )}
         {content.params.terms_Of_conditions && (
           <div>
-            <Title order={2} fz={'h4'}>
+            <Title order={2} fz={'h3'} className='mb-2'>
               {content.params.terms_Of_conditions_title.value}
             </Title>
             <div>

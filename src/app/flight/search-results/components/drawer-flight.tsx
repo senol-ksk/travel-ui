@@ -52,7 +52,6 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         packagePrice =
           selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
         packagePrice = Math.max(0, packagePrice)
-        console.log(selectedPackage)
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
