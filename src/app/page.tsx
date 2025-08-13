@@ -179,7 +179,7 @@ export default async function Home() {
                     key={hotelPopularRegionsBtn.id}
                   >
                     <ScrollArea w={'100%'}>
-                      <div className='flex gap-3'>
+                      <div className='flex gap-3 pb-5'>
                         {hotelPopularRegionsBtn.params.destinations?.destinations.map(
                           (destination) => (
                             <CategoryLink

@@ -47,7 +47,6 @@ function ParafQuery() {
         <Grid.Col span={{ base: 12, md: 5 }}>
           <form
             onSubmit={form.handleSubmit((data) => {
-              console.log(data)
               getBonusInfoQuery.mutate(data)
             })}
           >

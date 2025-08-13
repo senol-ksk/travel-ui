@@ -171,7 +171,7 @@ const BusSearchEngine = () => {
           </div>
           <Button
             onClick={switchWay}
-            className='absolute z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-gray-500 bg-white md:top-1/2 md:left-1/2'
+            className='absolute top-1/2 right-0 z-20 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-gray-500 bg-white md:top-1/2 md:left-1/2'
           >
             <TbArrowsRightLeft
               size={20}

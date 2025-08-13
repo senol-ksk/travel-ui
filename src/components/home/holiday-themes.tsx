@@ -28,7 +28,7 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
 
       <div className='relative'>
         <Carousel
-          slideGap='lg'
+          slideGap='xs'
           slideSize='100%'
           withControls={false}
           getEmblaApi={(api) => (emblaRef.current = api)}
@@ -36,14 +36,14 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
           {data?.map((item) => (
             <Carousel.Slide
               key={item.id}
-              className='!basis-full sm:!basis-1/2 md:!basis-1/5'
+              className='!basis-full p-5 px-5 transition-all duration-400 hover:scale-110 sm:!basis-1/2 md:!basis-1/5'
             >
-              <Link href={item.params.link?.value || '#'}>
+              <Link href={item.params.link?.value || '#'} className=''>
                 <div className='relative'>
                   <Image
                     src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
                     alt={item.title}
-                    className='mx-auto h-50 w-50 rounded-full object-cover shadow-lg'
+                    className='mx-auto h-50 w-50 rounded-full object-cover shadow-2xl'
                   />
                 </div>
                 <Text size='md' fw={600} className='mt-2 text-center'>

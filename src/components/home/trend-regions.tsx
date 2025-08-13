@@ -46,10 +46,10 @@ const TrendRegions: React.FC<IProps> = ({ data }) => {
                 <Image
                   src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}
                   alt={item.title}
-                  className='h-full w-full object-cover transition-all duration-300'
+                  className='h-full w-full object-cover transition-all duration-400 hover:scale-110'
                 />
               </div>
-              <div className='absolute right-0 bottom-0 left-0 truncate bg-gradient-to-t from-black/70 to-transparent p-3 text-lg font-medium text-white'>
+              <div className='pointer-events-none absolute right-0 bottom-0 left-0 flex h-28 items-end truncate bg-gradient-to-t from-black/90 to-transparent p-3 text-xl font-medium text-white'>
                 {item.title}
               </div>
             </Link>

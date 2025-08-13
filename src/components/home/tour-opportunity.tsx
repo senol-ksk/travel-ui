@@ -1,6 +1,6 @@
 'use client'
 
-import { AspectRatio, Button } from '@mantine/core'
+import { AspectRatio, Badge, Button } from '@mantine/core'
 import { Carousel } from '@mantine/carousel'
 import { Box } from '@mantine/core'
 import Link from 'next/link'
@@ -55,7 +55,7 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
               component={Link}
               className='group block h-full w-full gap-3'
             >
-              <Box className='group mb-10 w-full rounded-xl border bg-white shadow-xl'>
+              <Box className='group mb-10 w-full rounded-xl bg-white shadow-xl'>
                 <div className='relative'>
                   <AspectRatio>
                     <Image
@@ -69,9 +69,13 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
                     />
                   </AspectRatio>
                   {promotionText && (
-                    <span className='absolute top-3 left-3 rounded-lg bg-orange-500 px-2 py-1 text-xs text-white'>
+                    <Badge
+                      size='lg'
+                      radius={'md'}
+                      className='absolute top-3 left-3 bg-orange-500'
+                    >
                       {promotionText}
-                    </span>
+                    </Badge>
                   )}
                 </div>
                 <div className='-mt-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>

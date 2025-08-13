@@ -46,7 +46,6 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
   const sortedRelatedItems = data.relatedItems.sort((a, b) =>
     dayjs(a.startDate).diff(b.startDate)
   )
-  console.log('relatedItems', data.relatedItems)
 
   const { searchParamsQuery } = useTourSearchResultsQuery()
   const [isImageLoading, setImageLoading] = useState(true)

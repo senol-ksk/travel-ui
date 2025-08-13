@@ -12,6 +12,7 @@ import NextImage from 'next/image'
 
 import visaLogo from '/public/logos/visa-logo.png'
 import { Link } from 'next-view-transitions'
+import { link } from 'fs'
 
 const Footer = async () => {
   const widgetCollection = await getWidgetsByCollectionSlug()
@@ -28,22 +29,40 @@ const Footer = async () => {
       <div>
         <Container className='flex flex-col gap-5 md:flex-row md:justify-between'>
           <div className='flex items-center justify-center gap-4 text-2xl text-blue-900'>
-            <div className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'>
+            <Link
+              href='https://www.facebook.com/paraflytravel'
+              className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'
+            >
               <RiFacebookFill />
-            </div>
-            <div className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'>
+            </Link>
+            <Link
+              href='https://www.instagram.com/paraflytravelcom'
+              className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'
+            >
               <RiTwitterXFill />
-            </div>
-            <div className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'>
+            </Link>
+            <Link
+              href='https://x.com/paraflytravel'
+              className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'
+            >
               <RiInstagramLine />
-            </div>
-            <div className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'>
+            </Link>
+            <Link
+              href='https://www.youtube.com/@paraf'
+              className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'
+            >
               <RiYoutubeFill />
-            </div>
-            <div className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'>
+            </Link>
+            {/* <Link
+              href='https://www.whatsapp.com/channel/0029Vau83EmCRs1qIYPnNO0a'
+              className='flex size-[32px] items-center justify-center rounded-full bg-white leading-none'
+            >
               <RiTiktokFill />
-            </div>
-            <div className='flex items-center gap-2'>
+            </Link> */}
+            <Link
+              href='https://www.whatsapp.com/channel/0029Vau83EmCRs1qIYPnNO0a'
+              className='flex items-center gap-2'
+            >
               <div className='relative size-[32px]'>
                 <Image
                   component={NextImage}
@@ -55,7 +74,7 @@ const Footer = async () => {
               <div className='leading-sm text-xs text-white'>
                 Whatsapp <br /> Kanal
               </div>
-            </div>
+            </Link>
           </div>
           <div className='flex justify-center'>
             <div>

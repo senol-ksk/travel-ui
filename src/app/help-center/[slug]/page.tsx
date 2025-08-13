@@ -116,7 +116,6 @@ export default async function HelpCenterPage({
           <div className='rounded-md border p-3'>
             {topMenu.map((item) =>
               item.params.menu.menus.map((menu) => {
-                console.log(menu)
                 return (
                   <div key={menu.id}>
                     <NavLink

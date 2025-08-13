@@ -7,8 +7,6 @@ type IProps = {
   routeInfos: RouteInfo[] | undefined
 }
 const TripDetail: React.FC<IProps> = ({ routeInfos }) => {
-  // console.log(routeInfos)
-
   const [opened, { open, close }] = useDisclosure(false)
 
   return (

@@ -29,7 +29,6 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
-import { CiFilter } from 'react-icons/ci'
 import { PiSuitcaseRolling } from 'react-icons/pi'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
@@ -66,7 +65,6 @@ import { Select } from '@mantine/core'
 import { FaCheck } from 'react-icons/fa'
 import { IoIosClose } from 'react-icons/io'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
-import { AirportCode } from '@/app/flight/type'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
   flightFareInfo: FlightFareInfo
@@ -305,10 +303,14 @@ const FlightSearchView = () => {
   }, [])
 
   useEffect(() => {
-    return () => {
-      resetSelectedFlights()
-    }
-  }, [resetSelectedFlights])
+    resetSelectedFlights()
+  }, [
+    resetSelectedFlights,
+    searchParams.origin, //when changes this conditions resetSelectedFlights gonna work !!! by.
+    searchParams.destination,
+    searchParams.departureDate,
+    searchParams.returnDate,
+  ])
 
   const selectedFlightKeys = useRef<string[]>([])
   const isFlightSubmitting = submitFlightData.isPending
@@ -316,24 +318,6 @@ const FlightSearchView = () => {
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
   const mounted = useMounted()
-  const filterOptions = [
-    {
-      label: 'Fiyata Göre Artan ',
-      value: SortOrderEnums.priceAsc,
-    },
-    {
-      label: 'Fiyata Göre Azalan',
-      value: SortOrderEnums.priceDesc,
-    },
-    {
-      label: 'En Erken',
-      value: SortOrderEnums.hourAsc,
-    },
-    {
-      label: 'En Hızlı',
-      value: SortOrderEnums.durationAsc,
-    },
-  ]
 
   if (!mounted)
     return (
@@ -343,13 +327,6 @@ const FlightSearchView = () => {
         <Skeleton h={16} radius='sm' w={'95%'} />
       </Container>
     )
-
-  const totalCount = searchQueryData?.length ?? 0
-  const storedData = localStorage.getItem('flight-search-engine')
-  const parsedData = storedData ? JSON.parse(storedData) : null
-  const destinationName =
-    parsedData?.Destination?.Name.split(' ')[0].split(',') ?? ''
-  const originName = parsedData?.Origin?.Name?.split(' ')[0].split(',') ?? ''
 
   return (
     <>
@@ -666,7 +643,7 @@ const FlightSearchView = () => {
                   isReturnFlightVisible ? (
                     <div>
                       <div className='not-only: @container mb-4 grid items-center rounded-lg border-2 border-blue-500 shadow'>
-                        <div className='flex items-center justify-between rounded-t-lg bg-blue-100 py-3 md:p-2'>
+                        <div className='flex items-center justify-center rounded-t-lg bg-blue-100 py-3 md:justify-between md:p-2'>
                           <div className='flex items-center justify-between'>
                             <div className='text-md flex items-center font-bold'>
                               <LuCircleCheckBig
@@ -706,7 +683,7 @@ const FlightSearchView = () => {
                           </div>
                           <div>
                             <Button
-                              className='text-blue hidden border border-gray-300 bg-white px-7 py-2 text-sm font-normal md:flex'
+                              className='text-blue hidden border border-gray-500 bg-white px-7 py-2 text-sm font-normal md:flex'
                               size='md'
                               radius='md'
                               variant='default'
@@ -897,7 +874,7 @@ const FlightSearchView = () => {
                               </div>
                               <div>
                                 <Button
-                                  className='text-blue border border-gray-300 bg-white px-5 py-2 text-sm font-normal'
+                                  className='text-blue border border-gray-500 bg-white px-5 py-2 text-sm font-normal'
                                   size='xs'
                                   radius='md'
                                   variant='default'

@@ -40,7 +40,6 @@ export default async function CarLandingPage() {
   )
   const faqs = widgets.filter((item) => item.point === 'sss')
   const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
-  console.log(popularDomesticLocations)
 
   return (
     <div className='py-6 md:py-10'>

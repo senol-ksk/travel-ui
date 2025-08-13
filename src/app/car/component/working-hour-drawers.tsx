@@ -8,8 +8,6 @@ type Props = {
   onClose: () => void
 }
 const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
-  console.log(data)
-
   return (
     <>
       <Drawer
