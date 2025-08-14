@@ -10,12 +10,13 @@ const TravelInsurancePackages = () => {
   return (
     <>
       <CheckoutCard>
-        {/* <TravelInsurancePackages /> */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <MdHealthAndSafety size={22} className='text-blue-800' />
-          <UnstyledButton type='button'>
-            <span className='text-xl font-bold'> Seyahat Sağlık Güvencesi</span>
-          </UnstyledButton>
+        <div className='flex items-center gap-3'>
+          <div>
+            <MdHealthAndSafety size={22} className='text-blue-800' />
+          </div>
+          <Title order={3} fz={'xl'}>
+            Seyahat Sağlık Güvencesi
+          </Title>
         </div>
 
         <div>
@@ -45,7 +46,7 @@ const TravelInsurancePackages = () => {
             size='xs'
             className='grid items-center text-gray-700 md:flex md:gap-2'
           >
-            * Seyahat Sağlık Güvence Paketi ,Tamamliyo Teknoloji A.Ş. tarafından
+            * Seyahat Sağlık Güvence Paketi, Tamamliyo Teknoloji A.Ş. tarafından
             sunulmaktadır.
             <UnstyledButton
               onClick={open}
