@@ -164,9 +164,9 @@ export const CarSearchResultItem: React.FC<Props> = ({ item, onSelect }) => {
       </div>
       {/*  MOBİL GÖRÜNÜM  */}
       <div>
-        <div className='grid grid-cols-6 gap-3 p-3 md:hidden'>
+        <div className='grid grid-cols-7 gap-3 p-3 md:hidden'>
           {/* Bilgiler */}
-          <div className='col-span-3'>
+          <div className='col-span-4'>
             <Title order={3} className='text-xl' lh='sm'>
               {item.carDetail.name}
             </Title>

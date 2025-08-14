@@ -1,8 +1,11 @@
 .root {
   @apply overflow-hidden rounded-full;
-
   border: 7px solid transparent;
 
+  @media (max-width: 768px) {
+    border: 4px solid transparent;
+  }
+  
   background:
     linear-gradient(white, white) padding-box,
     linear-gradient(
