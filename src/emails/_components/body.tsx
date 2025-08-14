@@ -1,16 +1,16 @@
 import { DEFAULT_THEME, em } from '@mantine/core'
 import {
   Body,
-  Html,
-  pixelBasedPreset,
-  Tailwind,
-  Img,
-  Container,
-  Link,
-  Section,
-  Text,
-  Row,
   Column,
+  Container,
+  Html,
+  Img,
+  Link,
+  pixelBasedPreset,
+  Row,
+  Section,
+  Tailwind,
+  Text,
 } from '@react-email/components'
 import dayjs from 'dayjs'
 import 'dayjs/locale/tr'
@@ -32,7 +32,7 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
             colors: {
               black: '#000',
               white: '#fff',
-              blue: { DEFAULT: '#1c7ed6' },
+
               gray: { DEFAULT: '#DEE2E6' },
               green: {
                 DEFAULT: DEFAULT_THEME.colors.green[0],
@@ -41,6 +41,10 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
                 300: DEFAULT_THEME.colors.green[3],
                 400: DEFAULT_THEME.colors.green[4],
                 500: DEFAULT_THEME.colors.green[5],
+                600: DEFAULT_THEME.colors.green[6],
+                700: DEFAULT_THEME.colors.green[7],
+                800: DEFAULT_THEME.colors.green[8],
+                900: DEFAULT_THEME.colors.green[9],
               },
               red: {
                 DEFAULT: DEFAULT_THEME.colors.red[0],
@@ -48,6 +52,23 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
                 200: DEFAULT_THEME.colors.red[2],
                 300: DEFAULT_THEME.colors.red[3],
                 400: DEFAULT_THEME.colors.red[4],
+                500: DEFAULT_THEME.colors.red[5],
+                600: DEFAULT_THEME.colors.red[6],
+                700: DEFAULT_THEME.colors.red[7],
+                800: DEFAULT_THEME.colors.red[8],
+                900: DEFAULT_THEME.colors.red[9],
+              },
+              blue: {
+                DEFAULT: DEFAULT_THEME.colors.blue[0],
+                100: DEFAULT_THEME.colors.blue[1],
+                200: DEFAULT_THEME.colors.blue[2],
+                300: DEFAULT_THEME.colors.blue[3],
+                400: DEFAULT_THEME.colors.blue[4],
+                500: DEFAULT_THEME.colors.blue[5],
+                600: DEFAULT_THEME.colors.blue[6],
+                700: DEFAULT_THEME.colors.blue[7],
+                800: DEFAULT_THEME.colors.blue[8],
+                900: DEFAULT_THEME.colors.blue[9],
               },
             },
             borderRadius: {
@@ -57,14 +78,6 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
               lg: '.5rem',
               full: '9999px',
             },
-            // padding: {
-            //   none: '0px',
-            //   xs: '4px',
-            //   sm: '8px',
-            //   md: '16px',
-            //   lg: '20px',
-            //   xl: '28px',
-            // },
           },
         }}
       >
@@ -89,28 +102,58 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
               }}
               className='p-4'
             >
-              <Section className='mb-3'>
+              <Section className='mb-3 rounded-lg bg-blue-700 p-2'>
                 <Row>
                   <Column align='center'>
                     <table>
                       <tr>
-                        <td className='px-[8px]'>
-                          <Link href={`${process.env.SITE_URL}/ucak`}>
+                        <td className='px-[18px]'>
+                          <Link
+                            className='text-white'
+                            href={`${process.env.SITE_URL}/ucak`}
+                          >
                             Uçak
                           </Link>
                         </td>
                         <td className='px-[8px]'>
-                          <Link href={`${process.env.SITE_URL}/otel`}>
+                          <Link
+                            className='text-white'
+                            href={`${process.env.SITE_URL}/otel`}
+                          >
                             Otel
                           </Link>
                         </td>
                         <td className='px-[8px]'>
-                          <Link href={`${process.env.SITE_URL}/arac`}>
+                          <Link
+                            className='text-white'
+                            href={`${process.env.SITE_URL}/arac`}
+                          >
                             Araç
                           </Link>
                         </td>
                         <td className='px-[8px]'>
-                          <Link href={`${process.env.SITE_URL}/tur`}>Tur</Link>
+                          <Link
+                            className='text-white'
+                            href={`${process.env.SITE_URL}/tur`}
+                          >
+                            Tur
+                          </Link>
+                        </td>
+                        <td className='px-[8px]'>
+                          <Link
+                            className='text-white'
+                            href={`${process.env.SITE_URL}/otobus`}
+                          >
+                            Otobüs
+                          </Link>
+                        </td>
+                        <td className='px-[8px]'>
+                          <Link
+                            className='text-white'
+                            href={`${process.env.SITE_URL}/transfer`}
+                          >
+                            Transfer
+                          </Link>
                         </td>
                       </tr>
                     </table>
@@ -119,16 +162,23 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
               </Section>
               <Section>
                 <Row>
-                  <Column>{children}</Column>
+                  <Column>{children} </Column>
                 </Row>
               </Section>
               <Row className='pt-3'>
                 <Column align='center'>
                   <Link
                     href='https://whatsapp.com/channel/0029Vau83EmCRs1qIYPnNO0a'
-                    className='border-green inline-block rounded-lg border border-solid p-3 text-black no-underline'
+                    className='inline-block rounded-lg border-solid border-green-800 p-2 text-black no-underline'
                   >
-                    Whatsapp kanalımızı takip edin
+                    <Row>
+                      <Column>
+                        <Img src='https://ykmturizm.mncdn.com/11/Files/email/img/whatsp.png' />
+                      </Column>
+                      <Column className='pl-2'>
+                        Whatsapp kanalımızı takip edin
+                      </Column>
+                    </Row>
                   </Link>
                 </Column>
               </Row>

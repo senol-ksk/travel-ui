@@ -9,7 +9,7 @@ import { EmailBody } from '../../_components/body'
 import { EmailCard } from '../../_components/email-card'
 import dayjs from 'dayjs'
 import { formatCurrency } from '@/libs/util'
-import clsx from 'clsx'
+import { SuccessCard } from '@/emails/_components/success-card'
 
 type IProps = {
   data: OperationResultType
@@ -21,39 +21,45 @@ export default function EmailHotelOrderResult({ data }: IProps) {
 
   return (
     <EmailBody>
-      <div className='bg-green mb-3 grid rounded-lg p-8 text-center font-bold'>
-        <Row className='pb-5'>
-          <Column align='center'>
-            <Img
-              src={`https://ykmturizm.mncdn.com/11/Files/email/img/check-icon.png`}
-              className='mx-auto'
-            />
-          </Column>
-        </Row>
-        <div>
-          Sayın {data.passenger.passengers[0].fullName},
-          <br /> İşleminiz başarı ile gerçekleşmiştir. Bir sonraki seyahatinizde
-          görüşmek üzere
-        </div>
-      </div>
+      <SuccessCard name={data.passenger.passengers[0].fullName} />
+
       {hotelCancelWarranty.couponActive && (
         <EmailCard
           title={
-            <div className='text-md text-red-400'>
+            <div className='text-md flex items-center gap-2 text-red-800'>
+              <img src='https://ykmturizm.mncdn.com/11/Files/email/img/red-info.png' />
               %25&#39;ini Şimdi, %75&#39;ini Tatilden Önce Öde Kampanya
               Bilgilendirme
             </div>
           }
         >
           <div>
-            Rezervasyonunuzun %25’i olan 12.500 TL ve güvence bedeli paketi olan
-            175.00 TL tahsil edilmiştir. Kalan 32.500,00 TL ilk tutarı, otele
-            giriş gününüze 4 kalaya (11 Haziran 2025) kadar, rezervasyonlarım
-            sayfanıza girerek tamamlayabilirsiniz. Kampanya veya fiyat
-            değişikliği olamsı halinde kalan tutar sabit kalacak ve
-            değişmeyecektir. Kalan tutarı taksitli ödemek isterseniz, ödeme
-            yaptığınız günkü “Parafflytravel.com” taksitli ödeme koşulları” baz
-            alınacaktır.{' '}
+            {hotelCancelWarranty.couponActive && (
+              <div>
+                Rezervasyonunuzun %25 olan:{' '}
+                <strong>
+                  {formatCurrency(
+                    passenger.paymentInformation.basketTotal -
+                      passenger.paymentInformation.basketDiscountTotal
+                  )}
+                </strong>{' '}
+                ve güvence paketi tahsil edilmiştir. Kalan{' '}
+                <strong>
+                  {formatCurrency(
+                    passenger.paymentInformation.basketDiscountTotal
+                  )}
+                </strong>{' '}
+                lik tutarı, otele giriş gününüze 4 gün kalaya (
+                {dayjs(roomGroup.checkInDate)
+                  .subtract(4, 'days')
+                  .format('DD MMMM YYYY')}
+                ) kadar, rezervasyonlarım sayfasına giderek tamamlayabilirsiniz.
+                Kampanya veya fiyat değişikliği olması halinde kalan tutar sabit
+                kalacak ve değişmeyecektir. Kalan tutarı taksitli ödemek
+                isterseniz, ödeme yaptığınız günkü taksitli ödeme koşulları baz
+                alınacaktır.
+              </div>
+            )}
           </div>
         </EmailCard>
       )}
@@ -187,14 +193,8 @@ export default function EmailHotelOrderResult({ data }: IProps) {
             </tr>
           </thead>
         </table>
-        <div
-          className='my-2 flex items-center gap-2 font-bold text-white'
-          style={{
-            padding: '10px;',
-            backgroundColor: '#1F6CE0',
-            borderRadius: '10px',
-          }}
-        >
+        <div className='my-2 flex items-center gap-2 rounded-lg bg-blue-700 p-[10px] font-bold text-white'>
+          <img src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png' />
           E-faturanız mail adresinize ayrıca gönderilecektir.
         </div>
       </EmailCard>
@@ -219,7 +219,11 @@ export default function EmailHotelOrderResult({ data }: IProps) {
               <tr>
                 <td>Son Ödeme Tarihi</td>
                 <td>:</td>
-                <td className='font-bold'>20-07-2001</td>
+                <td className='font-bold'>
+                  {dayjs(roomGroup.checkInDate)
+                    .subtract(4, 'days')
+                    .format('DD MMMM YYYY')}
+                </td>
               </tr>
               <tr>
                 <td>Kalan Ödeme Tutarı</td>

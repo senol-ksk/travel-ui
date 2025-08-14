@@ -10,6 +10,7 @@ import { formatCurrency } from '@/libs/util'
 import { EmailCard } from '../../_components/email-card'
 import { __dummy__flightPaymentSummaryResponseIstAms_transfer } from '../_dummy-response/flight'
 import { EmailBody } from '../../_components/body'
+import { SuccessCard } from '@/emails/_components/success-card'
 
 type IProps = {
   data: OperationResultType
@@ -23,6 +24,8 @@ export default function EmailFlightBookResult({ data }: IProps) {
 
   return (
     <EmailBody>
+      <SuccessCard name={data.passenger.passengers[0].fullName} />
+
       <div>
         {flightList.map((flight) => {
           return (
@@ -136,14 +139,7 @@ export default function EmailFlightBookResult({ data }: IProps) {
                 </EmailCard>
               </div>
               {flight.flightDetail.groupId === 0 && (
-                <div
-                  className='mb-2 flex items-center gap-2 font-bold text-white'
-                  style={{
-                    padding: '10px;',
-                    backgroundColor: '#1F6CE0',
-                    borderRadius: '10px',
-                  }}
-                >
+                <div className='mb-2 flex items-center gap-2 rounded-lg bg-blue-700 p-3 font-bold text-white'>
                   Transit vizeye ihtiyacınız olup olmadığını kontrol
                   ediniz.{' '}
                 </div>
@@ -205,14 +201,8 @@ export default function EmailFlightBookResult({ data }: IProps) {
               </tr>
             </thead>
           </table>
-          <div
-            className='my-2 flex items-center gap-2 font-bold text-white'
-            style={{
-              padding: '10px;',
-              backgroundColor: '#1F6CE0',
-              borderRadius: '10px',
-            }}
-          >
+          <div className='my-2 flex items-center gap-2 rounded-lg bg-blue-700 p-[10px] font-bold text-white'>
+            <img src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png' />
             E-faturanız mail adresinize ayrıca gönderilecektir.
           </div>
         </EmailCard>
