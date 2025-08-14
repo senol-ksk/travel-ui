@@ -89,6 +89,9 @@ const PaymentPage = () => {
     PaymentMethodEnums.CreditCard
   )
 
+  const [paymentButtonSectionIsVisible, setPaymentButtonSectionIsVisible] =
+    useState(true)
+
   const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
   })
@@ -118,10 +121,7 @@ const PaymentPage = () => {
 
       const paymentResponse = await serviceRequest<PaymentResponseType>({
         axiosOptions: {
-          url:
-            paymentMethod === PaymentMethodEnums.Bonus
-              ? 'api/payment/privilegeCardHandler'
-              : `api/payment/initProcess`,
+          url: `api/payment/initProcess`,
           method: 'post',
           data: {
             ...data,
@@ -194,6 +194,9 @@ const PaymentPage = () => {
               (item) => item.binList.includes(cardNumber.substring(0, 6))
             )
           : null
+
+        setPaymentButtonSectionIsVisible(true)
+        checkoutQuery.refetch()
       }
     },
   })
@@ -319,11 +322,7 @@ const PaymentPage = () => {
     <>
       <form
         onSubmit={formMethods.handleSubmit((data) => {
-          if (paymentMethod === PaymentMethodEnums.Bonus) {
-            handlePrivilegedCardMutation.mutate(data)
-          } else {
-            paymentMutation.mutate(data)
-          }
+          paymentMutation.mutate(data)
         })}
         className='relative grid gap-3 md:gap-5'
       >
@@ -354,34 +353,6 @@ const PaymentPage = () => {
           </div>
           <div className='flex flex-col gap-3 md:gap-5'>
             <div>
-              {/* <Switch
-                  label='ParafPara İLE ÖDE'
-                  disabled={handlePrivilegedCardMutation.isPending}
-                  checked={isPrivilegeCardCheck}
-                  onChange={(event) => {
-                    setIsPrivilegeCardCheck(event.currentTarget.checked)
-
-                    if (
-                      event.currentTarget.checked &&
-                      formMethods.formState.isValid
-                    ) {
-                      handlePrivilegedCardMutation.mutate({
-                        cardCvv: formMethods.getValues('cardCvv'),
-                        cardExpiredMonth:
-                          formMethods.getValues('cardExpiredMonth'),
-                        cardExpiredYear:
-                          formMethods.getValues('cardExpiredYear'),
-                        cardOwner: formMethods.getValues('cardOwner'),
-                        installment:
-                          formMethods.getValues('installment') ?? '1',
-                        cardNumber: formMethods.getValues('cardNumber'),
-                      })
-                    } else {
-                      handleCardNumberChange()
-                    }
-                  }}
-                /> */}
-
               <SegmentedControl
                 withItemsBorders={false}
                 classNames={paymentSegmentClasses}
@@ -427,6 +398,9 @@ const PaymentPage = () => {
                 value={'' + paymentMethod}
                 onChange={(value) => {
                   setPaymentMethod(+value)
+                  setPaymentButtonSectionIsVisible(
+                    +value === PaymentMethodEnums.CreditCard
+                  )
                 }}
               />
             </div>
@@ -698,45 +672,47 @@ const PaymentPage = () => {
           </div>
         </CheckoutCard>
 
-        <CheckoutCard>
-          <Text className='py-5 text-center md:px-10' fz={'sm'}>
-            Ödemeyi tamamla butonuna tıkladığımda{' '}
-            <span className='text-blue-800'>Mesafeli Satış Sözleşmesini</span>
-             ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
-             okuduğumu ve kabul ettiğimi onaylıyorum.
-          </Text>
-          <div className='flex justify-center'>
-            {checkoutQueryMemoData ? (
-              <div className='flex flex-col gap-3'>
-                <div className='flex items-center gap-3'>
-                  <div className='text-sm'>Ödenecek Tutar:</div>
-                  <div className='text-xl font-semibold'>
-                    <NumberFlow
-                      format={{
-                        style: 'currency',
-                        currency: 'TRY',
-                        currencyDisplay: 'narrowSymbol',
-                      }}
-                      value={
-                        checkoutQueryMemoData.viewBag.SummaryViewDataResponser
-                          .summaryResponse.totalPrice ?? 0
-                      }
-                    />
+        {paymentButtonSectionIsVisible && (
+          <CheckoutCard>
+            <Text className='py-5 text-center md:px-10' fz={'sm'}>
+              Ödemeyi tamamla butonuna tıkladığımda{' '}
+              <span className='text-blue-800'>Mesafeli Satış Sözleşmesini</span>
+               ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
+               okuduğumu ve kabul ettiğimi onaylıyorum.
+            </Text>
+            <div className='flex justify-center'>
+              {checkoutQueryMemoData ? (
+                <div className='flex flex-col gap-3'>
+                  <div className='flex items-center gap-3'>
+                    <div className='text-sm'>Ödenecek Tutar:</div>
+                    <div className='text-xl font-semibold'>
+                      <NumberFlow
+                        format={{
+                          style: 'currency',
+                          currency: 'TRY',
+                          currencyDisplay: 'narrowSymbol',
+                        }}
+                        value={
+                          checkoutQueryMemoData.viewBag.SummaryViewDataResponser
+                            .summaryResponse.totalPrice ?? 0
+                        }
+                      />
+                    </div>
                   </div>
+                  <Button
+                    className='my-3'
+                    size='lg'
+                    radius='md'
+                    type='submit'
+                    //  disabled={isPrivilegeCardCheck}
+                  >
+                    Ödemeyi Tamamla
+                  </Button>
                 </div>
-                <Button
-                  className='my-3'
-                  size='lg'
-                  radius='md'
-                  type='submit'
-                  //  disabled={isPrivilegeCardCheck}
-                >
-                  Ödemeyi Tamamla
-                </Button>
-              </div>
-            ) : null}
-          </div>
-        </CheckoutCard>
+              ) : null}
+            </div>
+          </CheckoutCard>
+        )}
       </form>
 
       <form

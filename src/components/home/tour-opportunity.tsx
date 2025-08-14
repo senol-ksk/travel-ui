@@ -44,6 +44,7 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
           subTitle,
           productKey,
           startDate,
+          endDate,
           price,
           promotionText,
         } = tour
@@ -81,13 +82,15 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
                 <div className='-mt-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
                   <div className='grid gap-3'>
                     <h3 className='text-md truncate font-semibold'>{title}</h3>
-                    <p className='text-xs'>
-                      {dayjs(startDate).format('YYYY DD MMM ddd ')}
+                    <p className='text-xs font-semibold'>
+                      {dayjs(startDate).format('DD MMM YYYY ddd ')}-{' '}
+                      {dayjs(endDate).format('DD MMM YYYY ddd')}
                     </p>
                     <p className='truncate text-xs text-gray-900'>{subTitle}</p>
                     <div className='flex items-center justify-between pt-5'>
-                      <p className='text-red text-xl font-bold'>
-                        {formatCurrency(price)}
+                      <p className='text-xl font-bold'>
+                        {formatCurrency(price)}{' '}
+                        <span className='text-xs text-gray-700'>/ Kişi</span>
                       </p>
                       <Button
                         className='transition-all ease-linear group-hover:bg-blue-800 group-hover:text-white'

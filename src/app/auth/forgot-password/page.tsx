@@ -61,7 +61,7 @@ export default function ForgotPasswordPage() {
         Lütfen kayıt olurken kullandığınız <strong>E-posta</strong> adresini
         girin.
       </Text>
-      <div className='py-md mt-5 px-80'>
+      <div className='py-md mt-5 md:px-80'>
         <TextInput
           {...form.register('email')}
           autoComplete='username'

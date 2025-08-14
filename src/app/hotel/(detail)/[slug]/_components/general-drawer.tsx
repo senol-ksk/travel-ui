@@ -52,7 +52,7 @@ const GeneralDrawer: React.FC<IProps> = ({
           </div>
           {/* <input value={JSON.stringify(data?.hotel, null, 2)} readOnly /> */}
           <div className='my-10'>
-            <ul className='grid-cols-auto flex gap-2'>
+            <ul className='grid-cols-auto flex gap-2 overflow-x-auto'>
               {data?.hotel.year_built && (
                 <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
                   <FaRegBuilding size={24} className='text-blue-700' />

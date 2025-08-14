@@ -126,7 +126,7 @@ const HotelRoom: React.FC<IProps> = ({
                     >
                       <IoClose color='white' />
                     </button>
-                    <div className='text-2xl font-bold'>{detail.roomType}</div>
+                    <div className='text-lg font-bold'>{detail.roomType}</div>
                   </div>
                 }
                 position='right'
