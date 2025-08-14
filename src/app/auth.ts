@@ -2,18 +2,19 @@ import { serviceRequest } from '@/network'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { Account } from '@/app/account/type'
-import { cookies } from 'next/headers'
+// import { cookies, headers } from 'next/headers'
 
-const getUserInfo = async () => {
-  const cookieStore = await cookies()
+// const getUserInfo = async () => {
+//   const cookieStore = await cookies()
 
-  return serviceRequest<Account>({
-    axiosOptions: {
-      url: 'api/account/user-info',
-      headers: { Cookie: cookieStore.toString() },
-    },
-  })
-}
+//   return serviceRequest<Account>({
+//     axiosOptions: {
+//       url: 'api/account/user-info',
+//       withCredentials: true,
+//       headers: { Cookie },
+//     },
+//   })
+// }
 
 declare module 'next-auth' {
   /**
@@ -62,11 +63,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null
         }
 
-        const userInfo = await getUserInfo()
+        // const userInfo = await getUserInfo()
 
-        if (!userInfo?.success || !userInfo.data) return null
+        // if (!userInfo?.success || !userInfo.data) return null
 
-        return { ...credentials, email: userInfo?.data?.email }
+        return { ...credentials }
       },
     }),
   ],
