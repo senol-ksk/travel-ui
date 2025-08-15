@@ -3,8 +3,6 @@
 import { useMemo } from 'react'
 import { LoadingOverlay, Skeleton } from '@mantine/core'
 
-import { CheckoutCard } from '@/components/card'
-
 import { useCheckoutMethods } from '@/app/reservation/checkout-query'
 import { ProductPassengerApiResponseModel } from '@/types/passengerViewModel'
 

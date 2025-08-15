@@ -1,11 +1,32 @@
-import { Group, Modal, Radio, Title, UnstyledButton, Text } from '@mantine/core'
+import {
+  Group,
+  Modal,
+  Radio,
+  Title,
+  UnstyledButton,
+  Text,
+  LoadingOverlay,
+} from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-
-import { CheckoutCard } from '@/components/card'
 import { MdHealthAndSafety } from 'react-icons/md'
 
-const TravelInsurancePackages = () => {
+import { CheckoutCard } from '@/components/card'
+import { InsuranceInfoApiResponse } from '@/types/passengerViewModel'
+
+type IProps = {
+  insurance: InsuranceInfoApiResponse
+  onChange: (state: boolean) => void
+  isPending: boolean
+}
+
+const TravelInsurancePackages: React.FC<IProps> = ({
+  insurance,
+  onChange = () => {},
+  isPending,
+}) => {
   const [opened, { open, close }] = useDisclosure(false)
+
+  const insuranceInfo = insurance.insurance.at(0)
 
   return (
     <>
@@ -24,15 +45,28 @@ const TravelInsurancePackages = () => {
           misiniz?
         </div>
 
-        <Radio.Group name='callCenterSupport_radio' defaultValue={'2'}>
+        <Radio.Group
+          name='callCenterSupport_radio'
+          defaultValue={'2'}
+          onChange={async (value) => {
+            onChange(value === '1')
+          }}
+          pos={'relative'}
+        >
+          <LoadingOverlay
+            visible={isPending}
+            loaderProps={{
+              type: 'dots',
+            }}
+          />
           <div className='grid gap-3 md:flex md:gap-5'>
-            <Radio.Card value='2' className='p-4 md:col-8'>
+            <Radio.Card value='2' className='p-4 md:col-8' disabled={isPending}>
               <Group wrap='nowrap'>
                 <Radio.Indicator />
                 <div>Hayır, İstemiyorum</div>
               </Group>
             </Radio.Card>
-            <Radio.Card value='1' className='p-4'>
+            <Radio.Card value='1' className='p-4' disabled={isPending}>
               <Group wrap='nowrap'>
                 <Radio.Indicator />
                 <div>Evet, İstiyorum</div>
@@ -46,8 +80,7 @@ const TravelInsurancePackages = () => {
             size='xs'
             className='grid items-center text-gray-700 md:flex md:gap-2'
           >
-            * Seyahat Sağlık Güvence Paketi, Tamamliyo Teknoloji A.Ş. tarafından
-            sunulmaktadır.
+            * {insuranceInfo?.providerName}
             <UnstyledButton
               onClick={open}
               type='button'
@@ -62,35 +95,21 @@ const TravelInsurancePackages = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title='Seyahat Sağlık Destek Paketi'
+        title={insuranceInfo?.insuranceCategoryTitle}
       >
         <div className='text-sm'>
-          <p>
-            Yüksek sağlık masraflarınızı karşılıyoruz, sizi tam anlamıyla
-            koruyoruz.
-          </p>
+          <p>{insuranceInfo?.insuranceDescripton}</p>
           <ul className='grid list-disc gap-2 ps-4 pt-2'>
-            <li>Tıbbi Tedavi: 5.000,00</li>
-            <li>Tıbbi Tahliye: 5.000,00</li>
-            <li>Tedavi Sonrası İkametgahınıza Dönüş: 5.000</li>
-            <li>Cenazelerin İadesi: 5.000</li>
-            <li>Tıbbi Tedavi Kalış Süresinin Uzatılması: 200.00 MAKS.4 GÜN</li>
-            <li>Refakatçi Transferi: Ekonomi Sınıfı Uçak Bileti</li>
-            <li>Refakatçi Konaklama Giderleri: 200.00 MAKS. 4 GÜN</li>
-            <li>
-              Aile Üyesinin Ölümü Nedeniyle İade: Ekonomi Sınıfı Uçak Bileti
-            </li>
-            <li>
-              Daimi İkametgahta Hasar Nedeniyle İade: Ekonomi Sınıfı Uçak Bileti
-            </li>
-            <li>
-              Kayıp Bagajın Kurtarılması ve Teslimi: Bilgi ve Organizasyon
-            </li>
-            <li>Bagaj Kaybı ve Hasarı: 300.00</li>
-            <li>Ferdi Kaza Ölüm ve Sakatlık: 10.000</li>
-            <li>Genel Bilgi Yardımı: Sınırsız</li>
-            <li>Tıbbi Destek: Bilgi ve Organizasyon</li>
-            <li>Gecikme: 100.00</li>
+            {insuranceInfo?.insuranceGuarantee &&
+              Object.entries(JSON.parse(insuranceInfo?.insuranceGuarantee)).map(
+                (item) => {
+                  return (
+                    <li key={item[0]}>
+                      {item[0]} {typeof item[1] === 'string' ? item[1] : ''}
+                    </li>
+                  )
+                }
+              )}
           </ul>
         </div>
       </Modal>

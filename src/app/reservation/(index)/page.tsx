@@ -9,7 +9,6 @@ import {
   Controller,
 } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
 import {
   Button,
@@ -22,7 +21,7 @@ import {
   Title,
 } from '@mantine/core'
 import IntlTelInput from 'intl-tel-input/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { createSerializer, useQueryStates } from 'nuqs'
 import dayjs from 'dayjs'
@@ -37,6 +36,7 @@ import {
   FlightAdditionalDataSubGroup,
   type FlightReservationSummary,
   GenderEnums,
+  InsuranceInfoApiResponse,
   PassengerTypesEnum,
   PassengerTypesIndexEnum,
   ProductPassengerApiResponseModel,
@@ -49,7 +49,7 @@ import { HotelPassengerInformationForm } from '@/components/checkout/hotel/passe
 
 import { BillingForm } from '../components/billing'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import NumberFlow from '@number-flow/react'
 
 import { FlightOptionalServices } from '@/app/reservation/(index)/flight-optional-services'
@@ -58,21 +58,6 @@ import { EarlyReservationInsurance } from './hotel/insurance-options'
 import { TourExtraServices } from './tour/extras'
 import { MdContactPhone } from 'react-icons/md'
 import { RiAccountCircleFill } from 'react-icons/ri'
-
-// function useZodForm<TSchema extends z.ZodType>(
-//   props: Omit<UseFormProps<TSchema['_input']>, 'resolver'> & {
-//     schema: TSchema
-//   }
-// ) {
-//   const form = useForm<TSchema['_input']>({
-//     ...props,
-//     resolver: zodResolver(props.schema, undefined, {
-//       raw: true,
-//     }),
-//   })
-
-//   return form
-// }
 
 export default function CheckoutPage() {
   const queryClient = useQueryClient()
@@ -120,6 +105,75 @@ export default function CheckoutPage() {
       })
     },
   })
+  const insuranceInfoQuery = useQuery({
+    enabled: !!checkQueryData?.data?.viewBag.Insurances,
+    queryKey: [
+      'insurance-info',
+      checkQueryData?.data?.viewBag.Insurances.logSearchToken,
+      checkQueryData?.data?.viewBag.Insurances.logSessionToken,
+      checkQueryData?.data?.viewBag.Insurances.sessionToken,
+      checkQueryData?.data?.viewBag.Insurances.traceId,
+      moduleName,
+    ],
+    queryFn: async () => {
+      const response = await serviceRequest<InsuranceInfoApiResponse>({
+        axiosOptions: {
+          url: 'api/product/getInsuranceInfo',
+          method: 'get',
+          params: {
+            searchToken:
+              checkQueryData?.data?.viewBag.Insurances.logSearchToken,
+            sessionToken:
+              checkQueryData?.data?.viewBag.Insurances.logSessionToken,
+            productSessionToken:
+              checkQueryData?.data?.viewBag.Insurances.sessionToken,
+            productSearchToken:
+              checkQueryData?.data?.viewBag.Insurances.traceId,
+            modulName: moduleName,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+          },
+        },
+      })
+
+      return response
+    },
+  })
+  const [insuranceSelectedState, setInsuranceSelectedState] = useState(false)
+  const setInsuranceMutation = useMutation({
+    mutationFn: async (isInsuranceActive: boolean) => {
+      const response = await serviceRequest({
+        axiosOptions: {
+          url: 'api/product/handleInsurance',
+          method: 'post',
+          data: {
+            ...queryStrings,
+            sessionToken: insuranceInfoQuery.data?.data?.sessionToken,
+            scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+            scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+            appName: process.env.NEXT_PUBLIC_APP_NAME,
+            // totalPrice: 0,
+            insuranceId: insuranceInfoQuery.data?.data?.insurance.at(0)?.id,
+            insuranceProductKey:
+              insuranceInfoQuery.data?.data?.insurance.at(0)?.productKey,
+            insurancePrice:
+              insuranceInfoQuery.data?.data?.insurance.at(0)?.price.value,
+            productSessionToken: queryStrings.sessionToken,
+            productSearchToken: insuranceInfoQuery.data?.data?.logSearchToken,
+            modulName: moduleName,
+            isInsuranceActive,
+          },
+        },
+      })
+      return response
+    },
+    onSuccess(query, state) {
+      if (query?.success) {
+        setInsuranceSelectedState(state)
+      }
+    },
+  })
 
   const passengerData = useMemo(
     () => checkQueryData?.data?.treeContainer.childNodes,
@@ -144,6 +198,12 @@ export default function CheckoutPage() {
       </CheckoutCard>
     )
   }
+  const totalPrice =
+    checkQueryData.data?.viewBag.SummaryViewDataResponser.summaryResponse
+      .totalPrice +
+    (insuranceSelectedState
+      ? (insuranceInfoQuery.data?.data?.insurance.at(0)?.price.value ?? 0)
+      : 0)
 
   return (
     <div className='relative'>
@@ -607,9 +667,17 @@ export default function CheckoutPage() {
               />
             )}
 
-          {moduleName !== 'TRANSFER' && moduleName !== 'TOUR' && (
-            <TravelInsurancePackages />
-          )}
+          {insuranceInfoQuery.data?.data &&
+            moduleName !== 'TRANSFER' &&
+            moduleName !== 'TOUR' && (
+              <TravelInsurancePackages
+                insurance={insuranceInfoQuery.data?.data}
+                onChange={(state) => {
+                  setInsuranceMutation.mutate(state)
+                }}
+                isPending={setInsuranceMutation.isPending}
+              />
+            )}
           <CheckoutCard>
             <BillingForm />
           </CheckoutCard>
@@ -652,11 +720,7 @@ export default function CheckoutPage() {
                             currency: 'TRY',
                             currencyDisplay: 'narrowSymbol',
                           }}
-                          value={
-                            checkQueryData.data?.viewBag
-                              .SummaryViewDataResponser.summaryResponse
-                              .totalPrice ?? 0
-                          }
+                          value={totalPrice}
                         />
                       </div>
                     </div>
