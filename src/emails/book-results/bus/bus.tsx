@@ -8,7 +8,8 @@ import { EmailCard } from '../../_components/email-card'
 import { EmailBody } from '../../_components/body'
 import dayjs from 'dayjs'
 import { SuccessCard } from '@/emails/_components/success-card'
-
+import { formatCurrency } from '@/libs/util'
+import { Img } from '@react-email/components'
 type IProps = {
   data: OperationResultType
 }
@@ -27,9 +28,10 @@ export default function EmailBusOrderResult({ data }: IProps) {
               <tr>
                 <td align='left'>Sefer Bilgileri</td>
                 <td align='right'>
-                  <img
+                  <Img
                     sizes='50px'
                     src={`https://eticket.ipektr.com/wsbos3/LogoVer.Aspx?fnum=${busJourney.companyId}`}
+                    alt={`${busJourney.company} logosu`}
                   />
                 </td>
               </tr>
@@ -99,73 +101,100 @@ export default function EmailBusOrderResult({ data }: IProps) {
         <table cellPadding={2}>
           <thead>
             <tr>
-              <td>İsim Soyisim</td>
+              <td width={150}>İsim Soyisim</td>
               <td>:</td>
-              <td>{data.passenger.passengers.at(0)?.fullName}</td>
+              <td className='font-bold'>
+                {data.passenger.passengers.at(0)?.fullName}
+              </td>
             </tr>
             <tr>
               <td>TC. Kimlik No</td>
               <td>:</td>
-              <td>{data.passenger.passengers.at(0)?.identityNumber}</td>
+              <td className='font-bold'>
+                {data.passenger.passengers.at(0)?.identityNumber}
+              </td>
             </tr>
             <tr>
               <td>GSM</td>
               <td>:</td>
-              <td>{data.passenger.passengers.at(0)?.mobilePhoneNumber}</td>
+              <td className='font-bold'>
+                {data.passenger.passengers.at(0)?.mobilePhoneNumber}
+              </td>
             </tr>
             <tr>
               <td>Adres</td>
               <td>:</td>
-              <td>{data.passenger.billingInformation.at(0)?.address}</td>
+              <td className='font-bold'>
+                {data.passenger.billingInformation.at(0)?.address}
+              </td>
             </tr>
           </thead>
         </table>
-        <div className='my-2 flex items-center gap-2 rounded-lg bg-blue-700 p-[10px] font-bold text-white'>
-          <img src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png' />
+        <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 font-bold text-white'>
+          <Img
+            className='mr-3'
+            src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png'
+            alt='Bilgi ikonu'
+          />
           E-faturanız mail adresinize ayrıca gönderilecektir.
         </div>
       </EmailCard>
       <EmailCard title='Ödeme Bilgileri'>
-        <Row cellPadding={2}>
-          <Column width={150}>
+        <table cellPadding={2}>
+          <tr>
+            <td width={150}>Toplam Fiyat</td>
+            <td>:</td>
+            <td className='font-bold'>
+              {formatCurrency(passenger.paymentInformation.basketTotal)}
+            </td>
+          </tr>
+          {passenger.paymentInformation.basketDiscountTotal > 0 && (
             <tr>
-              <td>Toplam Fiyat</td>
+              <td>İndirim Tutarı</td>
               <td>:</td>
               <td className='font-bold'>
-                {busJourney.totalPrice.value} {busJourney.totalPrice.currency}
-              </td>
-            </tr>
-            {busJourney.discount.value > 0 && (
-              <tr>
-                <td>İndirim Tutarı</td>
-                <td>:</td>
-
-                <td className='font-bold'>
-                  {busJourney.discount?.value || 0}{' '}
-                  {busJourney.totalPrice.currency}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>Kart Bilgisi</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {passenger.paymentInformation.encryptedCardNumber}
-              </td>
-            </tr>
-            <tr>
-              <td>Tahsil edilen Tutar</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {passenger.paymentInformation.installmentCount > 1 && (
-                  <>{passenger.paymentInformation.installmentCount} Taksit = </>
+                {formatCurrency(
+                  passenger.paymentInformation.basketDiscountTotal
                 )}
-                {passenger.paymentInformation.collectingTotal}{' '}
-                {passenger.paymentInformation.sellingCurrency}
               </td>
             </tr>
-          </Column>
-        </Row>
+          )}
+          {passenger.paymentInformation.basketDiscountTotal > 0 && (
+            <tr>
+              <td>ParafPara TL</td>
+              <td>:</td>
+              <td className='font-bold'>
+                {formatCurrency(
+                  passenger.paymentInformation.basketDiscountTotal
+                )}
+              </td>
+            </tr>
+          )}
+          <tr>
+            <td>Kredi Kartından Çekilen Tutar</td>
+            <td>:</td>
+            <td className='font-bold'>
+              {passenger.paymentInformation.installmentCount > 1 && (
+                <>{passenger.paymentInformation.installmentCount} Taksit =</>
+              )}
+              {formatCurrency(passenger.paymentInformation.collectingTotal)}
+            </td>
+          </tr>
+          <tr>
+            <td>Kart Numarası</td>
+            <td>:</td>
+            <td className='font-bold'>
+              {passenger.paymentInformation.encryptedCardNumber}
+            </td>
+          </tr>
+          <tr>
+            <td>Kart Sahibi</td>
+            <td>:</td>
+            <td className='font-bold'>
+              {passenger.paymentInformation.encryptedCardHolder}
+            </td>
+          </tr>
+        </table>
       </EmailCard>
     </EmailBody>
   )

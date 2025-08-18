@@ -180,59 +180,74 @@ export default function EmailFlightBookResult({ data }: IProps) {
           <table cellPadding={2}>
             <thead>
               <tr>
-                <td>İsim Soyisim</td>
+                <td width={150}>İsim Soyisim</td>
                 <td>:</td>
-                <td>{data.passenger.passengers.at(0)?.fullName}</td>
+                <td className='font-bold'>
+                  {data.passenger.passengers.at(0)?.fullName}
+                </td>
               </tr>
               <tr>
                 <td>TC. Kimlik No</td>
                 <td>:</td>
-                <td>{data.passenger.passengers.at(0)?.identityNumber}</td>
+                <td className='font-bold'>
+                  {data.passenger.passengers.at(0)?.identityNumber}
+                </td>
               </tr>
               <tr>
                 <td>GSM</td>
                 <td>:</td>
-                <td>{data.passenger.passengers.at(0)?.mobilePhoneNumber}</td>
+                <td className='font-bold'>
+                  {data.passenger.passengers.at(0)?.mobilePhoneNumber}
+                </td>
               </tr>
               <tr>
                 <td>Adres</td>
                 <td>:</td>
-                <td>{data.passenger.billingInformation.at(0)?.address}</td>
+                <td className='font-bold'>
+                  {data.passenger.billingInformation.at(0)?.address}
+                </td>
               </tr>
             </thead>
           </table>
-          <div className='my-2 flex items-center gap-2 rounded-lg bg-blue-700 p-[10px] font-bold text-white'>
-            <img src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png' />
+          <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 font-bold text-white'>
+            <Img
+              className='mr-3'
+              src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png'
+            />
             E-faturanız mail adresinize ayrıca gönderilecektir.
           </div>
         </EmailCard>
         <EmailCard title='Ödeme Bilgileri'>
           <table cellPadding={2}>
             <tr>
-              <td width={200}>Toplam Fiyat</td>
+              <td width={150}>Toplam Fiyat</td>
               <td>:</td>
               <td className='font-bold'>
                 {formatCurrency(passenger.paymentInformation.basketTotal)}
               </td>
             </tr>
-            <tr>
-              <td>İndirim Tutarı</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {formatCurrency(
-                  passenger.paymentInformation.basketDiscountTotal
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>ParafPara TL</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {formatCurrency(
-                  passenger.paymentInformation.basketDiscountTotal
-                )}
-              </td>
-            </tr>
+            {passenger.paymentInformation.basketDiscountTotal > 0 && (
+              <tr>
+                <td>İndirim Tutarı</td>
+                <td>:</td>
+                <td className='font-bold'>
+                  {formatCurrency(
+                    passenger.paymentInformation.basketDiscountTotal
+                  )}
+                </td>
+              </tr>
+            )}
+            {passenger.paymentInformation.basketDiscountTotal > 0 && (
+              <tr>
+                <td>ParafPara TL</td>
+                <td>:</td>
+                <td className='font-bold'>
+                  {formatCurrency(
+                    passenger.paymentInformation.basketDiscountTotal
+                  )}
+                </td>
+              </tr>
+            )}
             <tr>
               <td>Kredi Kartından Çekilen Tutar</td>
               <td>:</td>

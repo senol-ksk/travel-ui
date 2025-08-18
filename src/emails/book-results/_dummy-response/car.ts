@@ -901,13 +901,4 @@ export const __dummy__carRentalPaymentSummaryResponse = {
       },
     },
   },
-  hotelCancelWarranty: {
-    selectingCancelWarranty: false,
-    hasHotelWarranty: false,
-    cancelWarrantyPrice: 0,
-    hotelWarrantyDiscountSelected: false,
-    totalPrice: 0,
-    dayCount: 0,
-    couponActive: false,
-  },
 }

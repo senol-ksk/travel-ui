@@ -7,7 +7,7 @@ import {
 import EmailHotelOrderResult from './hotel/hotel'
 
 import EmailFlightBookResult from './flight/flight'
-import EmailTourOrderResult from './tour/transfer'
+import EmailTourOrderResult from './tour/tour'
 import EmailBusOrderResult from './bus/bus'
 import EmailCarRentalOrderResult from './car-rental/car-rental'
 import EmailTransferOrderResult from './transfer/transfer'
