@@ -85,14 +85,16 @@ const FlightOptionalServices: React.FC<IProps> = ({
         }
       })
 
-    baggageMutation.mutateAsync(baggageRequestArray)
+    baggageMutation.mutateAsync(baggageRequestArray, {
+      onSuccess: (query) => {},
+    })
   }
 
   if (!serviceTypes.length || !serviceTypes.includes('XBAG')) return null
 
   return (
     <CheckoutCard>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+      <div className='flex items-center gap-3'>
         <MdOutlineLuggage size={22} className='text-blue-800' />
         <UnstyledButton onClick={toggle} type='button'>
           <span className='text-xl font-bold'> Bagaj hakkını yükseltin</span>

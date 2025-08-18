@@ -34,7 +34,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { InstallmentApiResponse } from '@/types/global'
-import { InstallmentSelect } from '@/app/reservation/(index)/payment/instalment-table'
+import { InstallmentSelect } from '@/app/reservation/(index)/_components/instalment-table'
 import { useEffect, useMemo, useRef } from 'react'
 import { PartialPaymentResponseType } from '@/app/reservation/types'
 

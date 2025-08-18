@@ -263,8 +263,10 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <div className='grid grid-cols-2 gap-2 rounded bg-gray-50 md:grid-cols-12 md:gap-5 md:p-3'>
           <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
-              <div className='text-3xl font-semibold'>{hotel.name.trim()}</div>
-              <div className='flex items-center gap-20 py-2 text-sm text-blue-800'>
+              <div className='text-xl font-semibold md:text-3xl'>
+                {hotel.name.trim()}
+              </div>
+              <div className='gap-md flex items-center py-2 text-sm text-blue-800'>
                 <div className='flex gap-1'>
                   <span>
                     <RiMapPin2Line size={20} className='text-blue-800' />
@@ -424,7 +426,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
           data={hotelInfo}
           description={hotel.descriptions}
         />
-        <Title fz={'xxl'} id='rooms' className='p-2 md:p-0'>
+        <Title id='rooms' className='md:text-xxl p-2 text-xl md:p-0'>
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
@@ -490,7 +492,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                     onSelect={(selectedRoomGroup: HotelDetailRoomItem) => {
                       handleRoomSelect({
                         productKey: roomGroup.key,
-                        cancelWarranty: selectedRoomGroup.useCancelWarranty,
+                        cancelWarranty: false,
                       })
                     }}
                     onInstallmentClick={(selectedRoomGroup) => {
@@ -535,9 +537,8 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
 
         <Title
           order={2}
-          fz={'xxl'}
           id='facility-infos'
-          className='p-2 pt-6 md:mt-6 md:p-0'
+          className='md:text-xxl p-2 pt-6 text-xl md:mt-6 md:p-0'
         >
           Tesis Bilgileri
         </Title>
@@ -553,10 +554,9 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
           <div ref={ratingTargetRef}>
             <Title
               order={2}
-              fz={'xxl'}
               id='ratings'
               pb={'md'}
-              className='p-2 pt-6 md:mt-6 md:p-0'
+              className='md:text-xxl p-2 pt-6 text-xl md:mt-6 md:p-0'
             >
               Değerlendirmeler
             </Title>
@@ -597,9 +597,8 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
 
         <Title
           order={2}
-          fz={'xxl'}
           id='location'
-          className='p-2 pt-6 md:mt-6 md:p-0'
+          className='md:text-xxl p-2 pt-6 text-xl md:mt-6 md:p-0'
         >
           Konum Bilgileri{' '}
         </Title>

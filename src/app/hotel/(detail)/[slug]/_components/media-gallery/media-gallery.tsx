@@ -74,7 +74,9 @@ export const HotelMediaGallery: React.FC<IProps> = ({
         radius={'md'}
         opened={isMediaGalleryOpened}
         onClose={closeMediaGallery}
-        title={<div className='py-0 text-2xl font-bold'>{hotel.name}</div>}
+        title={
+          <div className='py-0 text-lg font-bold md:text-2xl'>{hotel.name}</div>
+        }
         classNames={{
           body: 'px-0 md:px-2 py-0',
         }}
