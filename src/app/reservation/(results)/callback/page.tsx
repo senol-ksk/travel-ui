@@ -9,7 +9,6 @@ import {
   PassengerTypesIndexEnum,
 } from '@/types/passengerViewModel'
 import { formatCurrency } from '@/libs/util'
-// import { FlightSummary } from './products/flight'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
@@ -25,11 +24,10 @@ import {
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
 import { FlightSummary } from '@/app/reservation/(results)/callback/products/flight'
-import { BsFillCreditCardFill } from 'react-icons/bs'
 import { notFound } from 'next/navigation'
 import { resend } from '@/libs/resend'
-import EmailFlightBookResult from '@/emails/book-results/flight/flight'
 import EmailBookResult from '@/emails/book-results'
+import { CarSummary } from './products/car'
 
 type IProps = {
   searchParams: Promise<{
@@ -62,6 +60,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     },
   })
 
+  console.log(getSummaryData)
+
   if (!getSummaryData?.data && !getSummaryData?.success) return notFound()
 
   const getSummary = getSummaryData?.data
@@ -70,16 +70,16 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
 
   const productData = getSummary?.product.summaryResponse
 
-  if (getSummary && getSummaryData.success) {
+  if (
+    getSummary &&
+    getSummaryData.success &&
+    getSummaryData.data?.product.summaryResponse.moduleName.length
+  ) {
     resend()
       .emails.send(
         {
           from: process.env.EMAIL_FROM,
-          to:
-            process.env.NODE_ENV === 'development'
-              ? 'senolk@lidyateknoloji.com'
-              : getSummary.passenger.passengers[0].email,
-
+          to: getSummary.passenger.passengers[0].email,
           subject: 'Rezervasyon Bilgileriniz',
           react: EmailBookResult({
             data: getSummary,
@@ -89,8 +89,12 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
           idempotencyKey: `bookResult/${getSummary.passenger.shoppingFileId}`,
         }
       )
-      .then((responseData) => {})
-      .catch((reason) => {})
+      .then((responseData) => {
+        console.log(responseData)
+      })
+      .catch((reason) => {
+        console.log(reason)
+      })
   }
 
   return (
@@ -115,14 +119,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
               <div>Bizi tercih ettiğiniz için teşekkür ederiz.</div>
             </div>
           </CheckoutCard>
-          <div className='text-xs'>
-            Rezervasyon oluşturulma tarihi:{' '}
-            <strong>
-              {dayjs(passengerData.bookingDateTime).format(
-                'DD MMMM YYYY HH:mm'
-              )}
-            </strong>
-          </div>
+
           <div>
             {(() => {
               switch (productData.moduleName) {
@@ -144,7 +141,8 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                       data={productData as TransferSummaryResponse}
                     />
                   )
-
+                case 'CarRental':
+                  return <CarSummary />
                 default:
                   break
               }
@@ -157,10 +155,10 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
               </Title>
               <Divider m={0} />
               <div className='grid gap-3 text-sm md:grid-cols-3'>
-                {passengerData?.passengers?.map((passenger) => {
+                {passengerData?.passengers?.map((passenger, passengerIndex) => {
                   return (
                     <div
-                      key={passenger.productItemId}
+                      key={passengerIndex}
                       className='rounded border border-gray-400 p-2'
                     >
                       <div>

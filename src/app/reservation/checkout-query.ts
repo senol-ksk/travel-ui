@@ -6,7 +6,6 @@ import { useQueryStates } from 'nuqs'
 
 import { serviceRequest } from '@/network'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { useRef } from 'react'
 
 const promotionText = 'LXMZ2HB66SGAES'
 
@@ -20,8 +19,6 @@ export interface BaggageRequestDataModel {
 export const useCheckoutMethods = () => {
   const [{ searchToken, sessionToken, productKey }] =
     useQueryStates(reservationParsers)
-
-  const moduleName = useRef('')
 
   const checkoutDataQuery = useQuery({
     queryKey: ['checkout', [searchToken, sessionToken, productKey]],
@@ -42,9 +39,6 @@ export const useCheckoutMethods = () => {
       return response
     },
   })
-
-  moduleName.current = checkoutDataQuery.data?.data?.viewBag
-    .ModuleName as string
 
   const baggageMutation = useMutation({
     mutationKey: ['baggage-selection'],
@@ -105,10 +99,15 @@ export const useCheckoutMethods = () => {
 
       return response
     },
+    onSuccess(query) {
+      if (query?.success) {
+        checkoutDataQuery.refetch()
+      }
+    },
   })
 
   const partialPaymentMutation = useMutation({
-    mutationKey: ['early-reservation-mutation'],
+    mutationKey: ['partial-payment-mutation'],
     mutationFn: async (isChecked: boolean) => {
       const response = await serviceRequest({
         axiosOptions: {
@@ -132,34 +131,17 @@ export const useCheckoutMethods = () => {
 
       return response
     },
-  })
-
-  const healthInsuranceMutations = useMutation({
-    mutationKey: ['health-insurance-mutation'],
-    mutationFn: async (isAdd: boolean) => {
-      const response = serviceRequest({
-        axiosOptions: {
-          url: isAdd
-            ? 'api/product/addHealthInsurance'
-            : 'api/product/removeHealthInsurance',
-          method: 'post',
-          data: {
-            searchToken,
-            sessionToken,
-            productSessionToken: searchToken,
-            productSearchToken: sessionToken,
-            modulName: moduleName.current,
-          },
-        },
-      })
-
-      return response
+    onSuccess(query) {
+      if (query?.success) {
+        checkoutDataQuery.refetch()
+      }
     },
   })
 
   return {
     checkoutDataQuery,
     baggageMutation,
+    checkoutData: checkoutDataQuery.data?.data,
     earlyReservationInsuranceMutation,
     partialPaymentMutation,
   }

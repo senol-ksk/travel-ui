@@ -32,9 +32,12 @@ import NumberFlow from '@number-flow/react'
 import { IoAirplaneSharp } from 'react-icons/io5'
 import { FlightTransferSummary } from './transfer'
 import { FlightRules } from './flight-rules'
+import { useCheckoutContext } from '../../store'
+
 const FlightSummary: React.FC<IProps> = ({ data }) => {
   const [openedPriceDetails, { toggle: togglePriceDetails }] =
     useDisclosure(false)
+  const totalPrice = useCheckoutContext((s) => s.totalPrice)
 
   const flightData = data.SummaryViewDataResponser
     .summaryResponse as FlightReservationSummary

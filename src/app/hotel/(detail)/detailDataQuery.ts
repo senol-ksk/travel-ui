@@ -24,13 +24,13 @@ const useHotelDataQuery = () => {
   const hotelDetailQuery = useQuery({
     enabled: !!searchParams,
     queryKey: ['hotel-detail', searchParams],
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
       const response = await serviceRequest<HotelDetailApiResponseData>({
         axiosOptions: {
-          signal,
+          // signal,
           url: 'api/hotel/detail',
-          method: 'post', // TODO: try to make this `GET` request
-          data: {
+          method: 'get',
+          params: {
             ...searchParams,
           },
         },
@@ -38,7 +38,6 @@ const useHotelDataQuery = () => {
 
       return response
     },
-    retry: 1,
   })
 
   const searchPanel = hotelDetailQuery.data?.data?.searchPanel

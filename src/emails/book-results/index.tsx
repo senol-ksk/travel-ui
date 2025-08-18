@@ -1,79 +1,49 @@
-import {
-  FlightSummaryResponse,
-  OperationResultType,
-} from '@/app/reservation/types'
-import EmailFlightBookResult from './flight/flight'
+import { OperationResultType } from '@/app/reservation/types'
+
 import {
   __dummy__flightPaymentSummaryResponse,
   __dummy__flightPaymentSummaryResponseIstAms_transfer,
 } from './_dummy-response/flight'
-import { EmailBody } from '../_components/body'
-import { Column, Heading, Row, Section } from '@react-email/components'
+import EmailHotelOrderResult from './hotel/hotel'
+
+import EmailFlightBookResult from './flight/flight'
+import EmailTourOrderResult from './tour/tour'
+import EmailBusOrderResult from './bus/bus'
+import EmailCarRentalOrderResult from './car-rental/car-rental'
+import EmailTransferOrderResult from './transfer/transfer'
 
 export default function EmailBookResult({
   data,
 }: {
   data: OperationResultType
 }) {
-  const moduleName = data.product.summaryResponse.moduleName
+  const { moduleName } = data.product.summaryResponse
+  switch (moduleName) {
+    case 'Flight':
+      return <EmailFlightBookResult data={data} />
 
-  return (
-    <EmailBody>
-      {(() => {
-        switch (moduleName) {
-          case 'Flight':
-            return (
-              <EmailFlightBookResult
-                data={data.product.summaryResponse as FlightSummaryResponse}
-              />
-            )
-
-          default:
-            break
-        }
-      })()}
-      <Section className='border-gray mb-4 rounded-lg border border-solid'>
-        <Heading
-          as='h3'
-          className='border-b-gray m-0 border-0 border-b border-solid p-3 text-base'
-        >
-          Yolcu Bilgileri
-        </Heading>
-
-        <div className='p-3'>
-          <Row cellPadding={6}>
-            <thead className='text-xs font-bold'>
-              <tr>
-                <Column>ADI SOYADI</Column>
-                <Column>E-BİLET NO.</Column>
-                <Column>PNR </Column>
-              </tr>
-            </thead>
-            <tbody className='text-sm'>
-              {data.passenger.passengers.map(
-                ({ fullName, identityNumber, bookingCode, ...passenger }) => {
-                  return (
-                    <tr key={identityNumber}>
-                      <Column>{fullName}</Column>
-                      <Column>
-                        <div>{passenger.eTicketNumber}</div>
-                      </Column>
-                      <Column>
-                        <div>{bookingCode}</div>
-                      </Column>
-                    </tr>
-                  )
-                }
-              )}
-            </tbody>
-          </Row>
-        </div>
-      </Section>
-      <div>odeme bilgileri</div>
-    </EmailBody>
-  )
+    case 'Hotel':
+      return <EmailHotelOrderResult data={data} />
+    case 'Tour':
+      return <EmailTourOrderResult data={data} />
+    case 'Bus':
+      return <EmailBusOrderResult data={data} />
+    case 'CarRental':
+      return <EmailCarRentalOrderResult data={data} />
+    case 'Transfer':
+      return <EmailTransferOrderResult data={data} />
+    default:
+      return <div>Plase choose a product</div>
+      break
+  }
 }
 
 EmailBookResult.PreviewProps = {
-  data: __dummy__flightPaymentSummaryResponseIstAms_transfer,
+  data: {
+    product: {
+      summaryResponse: {
+        moduleName: '',
+      },
+    },
+  },
 }

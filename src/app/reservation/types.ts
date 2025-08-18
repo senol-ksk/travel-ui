@@ -163,8 +163,17 @@ export type OperationResultType = {
   }
   product: {
     summaryResponse: {
-      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental'
+      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental' | 'Tour'
     }
+  }
+  hotelCancelWarranty: {
+    selectingCancelWarranty: boolean
+    hasHotelWarranty: boolean
+    cancelWarrantyPrice: number
+    hotelWarrantyDiscountSelected: boolean
+    totalPrice: number
+    dayCount: number
+    couponActive: boolean
   }
 }
 

@@ -278,71 +278,66 @@ export type ProductPassengerApiResponseModel = {
     isPassportReq: boolean
     isHESReq: boolean
     FlightArrivalDate: string
-    DateCountToArrival: 41
-    InsurancePrice: 0
-    Insurances: [
-      {
-        searchId: 0
-        insurance: [
-          {
-            productKey: 'heScao10dfizPkn3ago3d57XrFlqp6j+suxf9p7RZk6qxATNhoxG7DZB2PHqH6KoHKy+Aq+WbxQ1l6WTs1Hd+5nI1c58Oaaz8OW8+I5NFBGxl1WGs+diOJoAgK710olo'
-            price: {
-              value: 19.0
-              currency: 'TRY'
-              rateValue: null
-            }
-            id: 177
-            partnerId: 11
-            insuranceName: 'Seyahat Destek Hizmet Paketi'
-            insuranceDescripton: 'Seyahat Destek Hizmet Paketi ile yurt içi seyahatlerinizde beklenmedik sağlık sorunları durumunda tıbbi müdahalelerde geçerlidir.'
-            insuranceCategoryTitle: 'Seyahat Destek Hizmet Paketi'
-            insuranceGuarantee: '{\n  "Medical Park Hastaneler Grubundan Ayakta ve Yatarak Tedaviler İçin %10 indirim": "",\n  "Seyahat Sağlık Destek Hizmet paketi ile yurt içi seyahatlerinizde beklenmedik sağlık sorunları durumunda tıbbi müdahalelerde geçerlidir.": "",\n  "Sadece yurt içi seyahatlerde geçerli": "",\n  "5000₺\'ye kadar hastane masraflarını karşılayan seyahat sağlık sigortası": "",\n  "Online doktor hizmeti": "",\n  "Kayıp Bagajın Bulunup Ulaştırılması": ""\n}'
-            partnerName: 'Tamamliyo'
-            partnerFullName: 'Tamamliyo'
-            providerName: 'Seyahat Destek Hizmet Paketi , Tamamliyo Assistance Destek Hizmetleri A.Ş. tarafında sunulmaktadır.'
-            startDate: '2024-11-27T07:40:00'
-            endDate: '2024-11-28T07:40:00'
-          },
-        ]
-        sessionToken: '7E3175C8FDC0420E19D7D6B44A8E685B27EFE7F12ABEC41D9669FCF29409053B'
-        traceId: '738D00E2996563489F52CB7A25F1AAC938B757BA721C61028E77EC1BA4E54B26'
-        isSucceeded: boolean
-        diagnostics: {
-          sessionToken: string
-          providerId: ID
+    DateCountToArrival: number
+    InsurancePrice: number
+    Insurances: {
+      searchId: ID
+      insurance: [
+        {
+          productKey: string
+          price: ServicePriceType
+          id: ID
+          partnerId: ID
+          insuranceName: string
+          insuranceDescripton: string
+          insuranceCategoryTitle: string
+          insuranceGuarantee: string
+          partnerName: string
+          partnerFullName: string
           providerName: string
-          generatingRequestTime: string
-          callingServiceTime: string
-          generatingResponseTime: string
-          subDiagnostics: null
-          lastException: null
-          serviceRequestData: null
-          serviceResponseData: null
-          providerInfo: {
-            isActive: boolean
-            isProduction: boolean
-          }
-          traceId: null
+          startDate: string
+          endDate: string
+        },
+      ]
+      sessionToken: string
+      traceId: string
+      isSucceeded: boolean
+      diagnostics: {
+        sessionToken: string
+        providerId: ID
+        providerName: string
+        generatingRequestTime: string
+        callingServiceTime: string
+        generatingResponseTime: string
+        subDiagnostics: null
+        lastException: null
+        serviceRequestData: null
+        serviceResponseData: null
+        providerInfo: {
+          isActive: boolean
+          isProduction: boolean
         }
-        eventMessages: []
-        appName: string
-        scopeCode: string
-        logSessionToken: string
-        logSearchToken: string
-      },
-    ]
+        traceId: null
+      }
+      eventMessages: []
+      appName: string
+      scopeCode: string
+      logSessionToken: string
+      logSearchToken: string
+    }
+
     Reservable: 1 | 0 | null | undefined
   }
   treeContainer: {
     id: null
     orderId: 1
-    key: 'PRODUCT'
+    key: string
     items: [
       {
-        valueType: 'System.String, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e'
-        key: 'TYPE'
-        value: 'FLIGHT'
-        orderId: 0
+        valueType: string
+        key: string
+        value: string
+        orderId: ID
       },
     ]
     childNodes: {
@@ -361,8 +356,8 @@ export type ProductPassengerApiResponseModel = {
       key: 'Adult' | 'Child' | 'Infant'
       items: [
         {
-          valueType: 'TravelAccess.Core.Models.Product.OrderPassengerModel, Core.Models, Version=1.1.75.0, Culture=neutral, PublicKeyToken=null'
-          key: 'Data'
+          valueType: string
+          key: string
           value: {
             _passengerId: ID
             birthDate: string
@@ -403,14 +398,14 @@ export type ProductPassengerApiResponseModel = {
           orderId: ID
         },
         {
-          valueType: 'System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e'
+          valueType: string
           key: string
           value: boolean
           orderId: ID
         },
         {
-          valueType: 'TravelAccess.Business.Models.Flight.FlightDetailWebRequest, Business.Models, Version=1.5.6.0, Culture=neutral, PublicKeyToken=null'
-          key: 'SummaryRequest'
+          valueType: string
+          key: string
           value: {
             selectedProductKeys: string
             flightDetailToSearchReturnPath: null
@@ -721,7 +716,7 @@ export interface TourExtraOptionsItemType {
   description: string
   selected: true
   required: true
-  indexNo: 0
+  indexNo: number
   data: null
   filters:
     | {
@@ -1274,4 +1269,47 @@ export interface TourSummaryViewData {
   couponDiscountList: null
   extraCharges: null
   financellDiscount: ServicePriceType
+}
+
+export interface InsuranceInfoApiResponse {
+  searchId: ID
+  insurance: {
+    productKey: string
+    price: ServicePriceType
+    id: ID
+    partnerId: ID
+    insuranceName: string
+    insuranceDescripton: string
+    insuranceCategoryTitle: string
+    insuranceGuarantee: string
+    partnerName: string
+    partnerFullName: string
+    providerName: string
+    startDate: string
+    endDate: string
+  }[]
+  sessionToken: string
+  traceId: string
+  isSucceeded: boolean
+  diagnostics: {
+    sessionToken: string
+    providerId: ID
+    providerName: string
+    generatingRequestTime: string
+    callingServiceTime: string
+    generatingResponseTime: string
+    subDiagnostics: null
+    lastException: null
+    serviceRequestData: null
+    serviceResponseData: null
+    providerInfo: {
+      isActive: boolean
+      isProduction: boolean
+    }
+    traceId: null
+  }
+  appName: string
+  scopeCode: string
+  logSessionToken: string
+  logSearchToken: string
 }
