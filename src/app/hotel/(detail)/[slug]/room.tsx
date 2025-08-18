@@ -2,8 +2,6 @@ import { useState } from 'react'
 
 import {
   Button,
-  Checkbox,
-  Divider,
   Image,
   Title,
   Drawer,
@@ -12,7 +10,6 @@ import {
 } from '@mantine/core'
 
 import type {
-  HotelDetailApiResponseData,
   HotelDetailResponseHotelInfo,
   HotelDetailRoomDetail,
   HotelDetailRoomItem,
@@ -42,14 +39,10 @@ const HotelRoom: React.FC<IProps> = ({
   onInstallmentClick = () => null,
   hotelInfo,
 }) => {
-  const [isCancelWarrantyChecked, setWarrantyCheck] = useState(false)
   const rooms = roomGroup.rooms
   const diffPriceGaranty = hotelInfo?.themes.find((item) => item.id === 385)
   const roomKeys = rooms.map((x) => x.key)
-  const cancelWarrantyPrice = roomGroup.cancelWarrantyPrice.value
-  const hasCancelWarranty = cancelWarrantyPrice > 0
   const totalPrice = roomGroup.totalPrice.value
-  const totalPriceWithCancelWarranty = totalPrice + cancelWarrantyPrice
   const discountRate =
     roomGroup.discount.value > 0
       ? Math.round(
@@ -193,7 +186,7 @@ const HotelRoom: React.FC<IProps> = ({
                   </div>
                 </div>
               )}
-              {!roomGroup.nonRefundable && !isCancelWarrantyChecked && (
+              {!roomGroup.nonRefundable && (
                 <div className='flex items-center gap-1'>
                   <span className='text-green flex items-center font-semibold'>
                     <FaCheck size={15} className='mr-2' /> Ücretsiz İptal:{' '}
@@ -236,31 +229,6 @@ const HotelRoom: React.FC<IProps> = ({
                   )}
                 </div>
               )}
-              {hasCancelWarranty && (
-                <div className='my-2 flex w-80 items-center rounded-md border p-2'>
-                  <Checkbox
-                    defaultChecked={isCancelWarrantyChecked}
-                    size='sm'
-                    radius={'xl'}
-                    onChange={({ currentTarget }) => {
-                      setWarrantyCheck(currentTarget.checked)
-                      roomGroup.useCancelWarranty = currentTarget.checked
-                    }}
-                  />
-                  <div className='grid items-center'>
-                    <div className='flex items-center gap-1 text-blue-800'>
-                      <div>İptal Güvence Paketi Ekle </div>
-                      <Tooltip
-                        className='flex max-w-xs flex-col gap-1 text-sm whitespace-normal'
-                        label='İptal Güvence Paketi ile rezervasyonunuzu konaklama tarihine son 72 saat kalaya kadar koşulsuz iptal edebilirsiniz.'
-                      >
-                        <IoMdInformationCircleOutline />
-                      </Tooltip>
-                    </div>
-                    <strong>{formatCurrency(cancelWarrantyPrice)}</strong>{' '}
-                  </div>
-                </div>
-              )}
             </div>
             {isLastItem && (
               <div className='item-center m-2 justify-center self-end md:col-span-3 md:justify-self-end'>
@@ -280,13 +248,7 @@ const HotelRoom: React.FC<IProps> = ({
                       </div>
                     )}
                     <div className='text-center text-2xl font-bold md:text-end'>
-                      <PriceNumberFlow
-                        value={
-                          isCancelWarrantyChecked
-                            ? totalPriceWithCancelWarranty
-                            : roomGroup.totalPrice.value
-                        }
-                      />
+                      <PriceNumberFlow value={roomGroup.totalPrice.value} />
                     </div>
                   </div>
                 </div>
