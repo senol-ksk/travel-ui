@@ -449,7 +449,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <div className='relative grid gap-3 @lg:gap-5'>
           {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
             <div>
-              <div className='text-center text-gray-500'>Odalar yükleniyor</div>
+              {/* <div className='text-center text-gray-500'>Odalar yükleniyor</div> */}
               <div className='grid gap-2 rounded p-2'>
                 <div className='flex gap-3'>
                   <Skeleton height={140} radius='md' width='35%' />
