@@ -105,10 +105,15 @@ export const useCheckoutMethods = () => {
 
       return response
     },
+    onSuccess(query) {
+      if (query?.success) {
+        checkoutDataQuery.refetch()
+      }
+    },
   })
 
   const partialPaymentMutation = useMutation({
-    mutationKey: ['early-reservation-mutation'],
+    mutationKey: ['partial-payment-mutation'],
     mutationFn: async (isChecked: boolean) => {
       const response = await serviceRequest({
         axiosOptions: {
@@ -131,6 +136,11 @@ export const useCheckoutMethods = () => {
       })
 
       return response
+    },
+    onSuccess(query) {
+      if (query?.success) {
+        checkoutDataQuery.refetch()
+      }
     },
   })
 

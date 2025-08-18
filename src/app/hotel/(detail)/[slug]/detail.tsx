@@ -487,7 +487,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                     hotelInfo={page?.data?.hotelDetailResponse?.hotelInfo}
                     roomGroup={roomGroup}
                     roomDetails={roomDetails}
-                    onSelect={(selectedRoomGroup) => {
+                    onSelect={(selectedRoomGroup: HotelDetailRoomItem) => {
                       handleRoomSelect({
                         productKey: roomGroup.key,
                         cancelWarranty: selectedRoomGroup.useCancelWarranty,
