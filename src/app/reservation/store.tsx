@@ -1,46 +1,57 @@
+import { useContext, createContext, useRef } from 'react'
 import { createStore, useStore } from 'zustand'
-import { useContext } from 'react'
 
-interface BearProps {
-  bears: number
+interface CheckoutProps {
+  totalPrice: number
 }
 
-interface BearState extends BearProps {
-  addBear: () => void
+interface CheckoutStates extends CheckoutProps {
+  incrementTotalPrice: (by: number) => void
+  decrementTotalPrice: (by: number) => void
+  updateTotalPrice: (value: number) => void
 }
 
-type BearStore = ReturnType<typeof createBearStore>
+export type CheckoutStore = ReturnType<typeof createCheckoutStore>
 
-const createBearStore = (initProps?: Partial<BearProps>) => {
-  const DEFAULT_PROPS: BearProps = {
-    bears: 0,
+export const createCheckoutStore = (initProps?: Partial<CheckoutProps>) => {
+  const DEFAULT_PROPS: CheckoutProps = {
+    totalPrice: 0,
   }
-  return createStore<BearState>()((set) => ({
+  return createStore<CheckoutStates>()((set) => ({
     ...DEFAULT_PROPS,
     ...initProps,
-    addBear: () => set((state) => ({ bears: ++state.bears })),
+    incrementTotalPrice: (by) =>
+      set((state) => ({ totalPrice: state.totalPrice + by })),
+    decrementTotalPrice: (by) =>
+      set((state) => ({ totalPrice: state.totalPrice - by })),
+    updateTotalPrice: (value) => set((state) => ({ totalPrice: value })),
   }))
 }
-import { createContext, useRef } from 'react'
 
-export const BearContext = createContext<BearStore | null>(null)
+export const CheckoutContext = createContext<CheckoutStore | null>(null)
 
-type BearProviderProps = React.PropsWithChildren<BearProps>
+type CheckoutProviderProps = React.PropsWithChildren<CheckoutProps>
 
-function BearProvider({ children, ...props }: BearProviderProps) {
-  const storeRef = useRef<BearStore>(null)
+export function CheckoutProvider({
+  children,
+  ...props
+}: CheckoutProviderProps) {
+  const storeRef = useRef<CheckoutStore>(null)
   if (!storeRef.current) {
-    storeRef.current = createBearStore(props)
+    storeRef.current = createCheckoutStore(props)
   }
   return (
-    <BearContext.Provider value={storeRef.current}>
+    <CheckoutContext.Provider value={storeRef.current}>
       {children}
-    </BearContext.Provider>
+    </CheckoutContext.Provider>
   )
 }
 
-function useBearContext<T>(selector: (state: BearState) => T): T {
-  const store = useContext(BearContext)
-  if (!store) throw new Error('Missing BearContext.Provider in the tree')
+export function useCheckoutContext<T>(
+  selector: (state: CheckoutStates) => T
+): T {
+  const store = useContext(CheckoutContext)
+  if (!store) throw new Error('Missing CheckoutContext.Provider in the tree')
+
   return useStore(store, selector)
 }

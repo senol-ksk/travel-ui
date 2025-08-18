@@ -59,12 +59,16 @@ import { EarlyReservationInsurance } from '@/app/reservation/(index)/hotel/insur
 import { TourExtraServices } from '@/app/reservation/(index)/tour/extras'
 import { MdContactPhone } from 'react-icons/md'
 import { RiAccountCircleFill } from 'react-icons/ri'
+import { useCheckoutContext } from '../../store'
 
 export function CheckoutPassengerPage() {
   const queryClient = useQueryClient()
   const router = useRouter()
   const [queryStrings] = useQueryStates(reservationParsers)
-
+  const totalPriceStore = useCheckoutContext((s) => s.totalPrice)
+  const incrementTotalPrice = useCheckoutContext((s) => s.incrementTotalPrice)
+  const decrementTotalPrice = useCheckoutContext((s) => s.decrementTotalPrice)
+  const updateTotalPrice = useCheckoutContext((s) => s.updateTotalPrice)
   const { checkoutDataQuery } = useCheckoutMethods()
 
   const checkQueryData = useMemo(
@@ -107,7 +111,7 @@ export function CheckoutPassengerPage() {
     },
   })
   const insuranceInfoQuery = useQuery({
-    enabled: !!checkQueryData?.data?.viewBag.Insurances,
+    enabled: false,
     queryKey: [
       'insurance-info',
       checkQueryData?.data?.viewBag.Insurances.logSearchToken,
@@ -141,10 +145,11 @@ export function CheckoutPassengerPage() {
       return response
     },
   })
-  const [insuranceSelectedState, setInsuranceSelectedState] = useState(false)
+
+  const [insuranceSelected, setInsuranceSelected] = useState(false)
   const setInsuranceMutation = useMutation({
     mutationFn: async (isInsuranceActive: boolean) => {
-      const response = await serviceRequest({
+      const response = await serviceRequest<number>({
         axiosOptions: {
           url: 'api/product/handleInsurance',
           method: 'post',
@@ -154,12 +159,16 @@ export function CheckoutPassengerPage() {
             scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
             scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
             appName: process.env.NEXT_PUBLIC_APP_NAME,
-            // totalPrice: 0,
+            totalPrice: totalPriceStore,
             insuranceId: insuranceInfoQuery.data?.data?.insurance.at(0)?.id,
             insuranceProductKey:
               insuranceInfoQuery.data?.data?.insurance.at(0)?.productKey,
-            insurancePrice:
-              insuranceInfoQuery.data?.data?.insurance.at(0)?.price.value,
+            insurancePrice: isInsuranceActive
+              ? insuranceInfoQuery.data?.data?.insurance.at(0)?.price.value
+              : -(
+                  insuranceInfoQuery?.data?.data?.insurance.at(0)?.price
+                    ?.value ?? 0
+                ),
             productSessionToken: queryStrings.sessionToken,
             productSearchToken: insuranceInfoQuery.data?.data?.logSearchToken,
             modulName: moduleName,
@@ -170,9 +179,19 @@ export function CheckoutPassengerPage() {
       return response
     },
     onSuccess(query, state) {
-      if (query?.success) {
-        setInsuranceSelectedState(state)
+      if (
+        query?.success &&
+        query?.data &&
+        insuranceInfoQuery.data?.data?.insurance[0]
+      ) {
+        setInsuranceSelected(state)
+        updateTotalPrice(query?.data)
+      } else {
+        setInsuranceSelected(false)
       }
+    },
+    onError() {
+      setInsuranceSelected(false)
     },
   })
 
@@ -199,12 +218,6 @@ export function CheckoutPassengerPage() {
       </CheckoutCard>
     )
   }
-  const totalPrice =
-    checkQueryData.data?.viewBag.SummaryViewDataResponser.summaryResponse
-      .totalPrice +
-    (insuranceSelectedState
-      ? (insuranceInfoQuery.data?.data?.insurance.at(0)?.price.value ?? 0)
-      : 0)
 
   return (
     <div className='relative'>
@@ -676,6 +689,7 @@ export function CheckoutPassengerPage() {
                 onChange={(state) => {
                   setInsuranceMutation.mutate(state)
                 }}
+                isInsuranceSelected={insuranceSelected}
                 isPending={setInsuranceMutation.isPending}
               />
             )}
@@ -684,9 +698,6 @@ export function CheckoutPassengerPage() {
           </CheckoutCard>
           <CheckoutCard>
             <div className='text-sm'>
-              {/* <Title order={4} pb='md'>
-                Seyahatinizi inceleyin ve rezervasyon yapın
-              </Title> */}
               <List type='ordered' className='mt-3'>
                 <List.Item className='text-center text-sm'>
                   Tarihlerin ve saatlerin doğru olduğundan emin olmak için
@@ -721,7 +732,10 @@ export function CheckoutPassengerPage() {
                             currency: 'TRY',
                             currencyDisplay: 'narrowSymbol',
                           }}
-                          value={totalPrice}
+                          value={
+                            checkQueryData.data.viewBag.SummaryViewDataResponser
+                              .summaryResponse.totalPrice
+                          }
                         />
                       </div>
                     </div>

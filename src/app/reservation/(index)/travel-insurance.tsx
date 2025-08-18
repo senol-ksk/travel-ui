@@ -17,12 +17,14 @@ type IProps = {
   insurance: InsuranceInfoApiResponse
   onChange: (state: boolean) => void
   isPending: boolean
+  isInsuranceSelected: boolean
 }
 
 const TravelInsurancePackages: React.FC<IProps> = ({
   insurance,
   onChange = () => {},
   isPending,
+  isInsuranceSelected = false,
 }) => {
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -47,11 +49,11 @@ const TravelInsurancePackages: React.FC<IProps> = ({
 
         <Radio.Group
           name='callCenterSupport_radio'
-          defaultValue={'2'}
           onChange={async (value) => {
             onChange(value === '1')
           }}
           pos={'relative'}
+          value={isInsuranceSelected ? '1' : '2'}
         >
           <LoadingOverlay
             visible={isPending}

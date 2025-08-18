@@ -134,32 +134,10 @@ export const useCheckoutMethods = () => {
     },
   })
 
-  const healthInsuranceMutations = useMutation({
-    mutationKey: ['health-insurance-mutation'],
-    mutationFn: async (isAdd: boolean) => {
-      const response = serviceRequest({
-        axiosOptions: {
-          url: isAdd
-            ? 'api/product/addHealthInsurance'
-            : 'api/product/removeHealthInsurance',
-          method: 'post',
-          data: {
-            searchToken,
-            sessionToken,
-            productSessionToken: searchToken,
-            productSearchToken: sessionToken,
-            modulName: moduleName.current,
-          },
-        },
-      })
-
-      return response
-    },
-  })
-
   return {
     checkoutDataQuery,
     baggageMutation,
+    checkoutData: checkoutDataQuery.data?.data,
     earlyReservationInsuranceMutation,
     partialPaymentMutation,
   }
