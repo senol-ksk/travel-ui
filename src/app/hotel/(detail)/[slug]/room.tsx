@@ -69,9 +69,9 @@ const HotelRoom: React.FC<IProps> = ({
     <div className='rounded-lg border shadow-sm'>
       {rooms.map((room, roomIndex, roomsArray) => {
         const detail = details?.find((x) => x.roomKey === room.key)
-        const images = detail?.images.map((image) =>
-          image.thumbnailUrl ? image.thumbnailUrl?.trim() : image.url?.trim()
-        )
+        const images = detail?.images.map((image) => {
+          return image.url ? image.url?.trim() : image.thumbnailUrl?.trim()
+        })
         const isLastItem = roomsArray.length - 1 === roomIndex
         const themesPriceDiff =
           roomGroup.provider == 'JollyHotel' && diffPriceGaranty

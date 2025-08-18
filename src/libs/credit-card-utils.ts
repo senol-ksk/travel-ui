@@ -22,7 +22,7 @@ export const creditCardSchema = z.object({
 
 export const paymentValidationSchema = creditCardSchema.merge(
   z.object({
-    installment: z.string().default('1'),
+    installment: z.number().default(1),
   })
 )
 

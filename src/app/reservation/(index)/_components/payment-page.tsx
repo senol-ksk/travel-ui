@@ -59,7 +59,6 @@ import {
 } from '@/libs/credit-card-utils'
 
 import { MdCreditCard } from 'react-icons/md'
-// import { CreditCardForm } from '@/components/payment/credit-card'
 
 enum PaymentMethodEnums {
   CreditCard,
@@ -220,7 +219,7 @@ export const PaymentPageSection = () => {
 
     if (!cardNumber || cardNumber.length < 6 || !checkoutQueryMemoData) {
       installmentTableSelectOptions.current = null
-      formMethods.setValue('installment', '1')
+      formMethods.setValue('installment', 1)
       return
     }
 
@@ -314,6 +313,8 @@ export const PaymentPageSection = () => {
 
     checkoutQuery.refetch()
   }
+
+  console.log(formMethods.formState.errors)
 
   if (!reservationData || !queryStrings.productKey)
     return <div>Hata olustu</div>
@@ -619,7 +620,7 @@ export const PaymentPageSection = () => {
                           cardExpiredYear: formData.cardExpiredYear,
                           cardOwner: formData.cardOwner,
                           cardNumber: formData.cardNumber,
-                          installment: '1',
+                          installment: 1,
                         })
                       }
                     }}
@@ -664,8 +665,7 @@ export const PaymentPageSection = () => {
                         )
                   }
                   onChange={(value) => {
-                    // formMethods.setValue('')
-                    formMethods.setValue('installment', value)
+                    formMethods.setValue('installment', +value)
                   }}
                 />
               )}

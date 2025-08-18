@@ -457,7 +457,7 @@ export const HotelBookingSummary = () => {
                 {installmentList && installmentList.length > 0 && (
                   <InstallmentSelect
                     onChange={(value) => {
-                      form.setValue('installment', value)
+                      form.setValue('installment', +value)
                     }}
                     data={installmentList}
                   />

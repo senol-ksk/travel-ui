@@ -78,10 +78,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
     resend()
       .emails.send(
         {
-          from:
-            process.env.NODE_ENV === 'development'
-              ? 'delivered@resend.dev'
-              : process.env.EMAIL_FROM,
+          from: process.env.EMAIL_FROM,
           to: getSummary.passenger.passengers[0].email,
           subject: 'Rezervasyon Bilgileriniz',
           react: EmailBookResult({

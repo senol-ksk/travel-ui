@@ -6,7 +6,6 @@ import { useQueryStates } from 'nuqs'
 
 import { serviceRequest } from '@/network'
 import { reservationParsers } from '@/app/reservation/searchParams'
-import { useRef } from 'react'
 
 const promotionText = 'LXMZ2HB66SGAES'
 
@@ -20,8 +19,6 @@ export interface BaggageRequestDataModel {
 export const useCheckoutMethods = () => {
   const [{ searchToken, sessionToken, productKey }] =
     useQueryStates(reservationParsers)
-
-  const moduleName = useRef('')
 
   const checkoutDataQuery = useQuery({
     queryKey: ['checkout', [searchToken, sessionToken, productKey]],
@@ -42,9 +39,6 @@ export const useCheckoutMethods = () => {
       return response
     },
   })
-
-  moduleName.current = checkoutDataQuery.data?.data?.viewBag
-    .ModuleName as string
 
   const baggageMutation = useMutation({
     mutationKey: ['baggage-selection'],
