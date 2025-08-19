@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, ScrollArea, Skeleton, Tabs, TabsTab } from '@mantine/core'
+import { ScrollArea, Skeleton, Tabs, TabsTab } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 
 import {
@@ -51,17 +51,18 @@ export const SearchEngine = () => {
         setLatestSearch(val ?? '')
       }}
       classNames={{
-        tab: 'md:text-lg border-b-4 p-4 md:grow',
+        tab: 'md:text-lg p-4 md:grow',
         tabSection: 'hidden sm:flex',
         tabLabel: 'flex-none',
       }}
       keepMounted={false}
+      variant='unstyle'
     >
       <ScrollArea
         type='auto'
         scrollbars='x'
         scrollbarSize={0}
-        className='whitespace-nowrap'
+        className='border-b whitespace-nowrap'
       >
         <Tabs.List
           px={{
