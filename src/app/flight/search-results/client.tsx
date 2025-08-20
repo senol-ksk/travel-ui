@@ -9,17 +9,18 @@ import {
 } from '@mantine/hooks'
 import {
   Accordion,
+  ActionIcon,
   Alert,
   Badge,
   Box,
   Button,
   Checkbox,
   CloseButton,
+  Collapse,
   Container,
   Drawer,
   Loader,
   Modal,
-  NativeSelect,
   rem,
   RemoveScroll,
   Skeleton,
@@ -41,6 +42,7 @@ import {
 } from '@/app/flight/type'
 import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results/domestic-flight'
 import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
+import { Flight } from '@/modules/flight'
 
 import {
   filterParsers,
@@ -57,7 +59,7 @@ import 'dayjs/locale/tr'
 import { Virtuoso } from 'react-virtuoso'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
-import { MdOutlineAirplanemodeActive } from 'react-icons/md'
+import { MdManageSearch, MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
 import { LuCircleCheckBig } from 'react-icons/lu'
 import { FaArrowRightLong } from 'react-icons/fa6'
@@ -204,7 +206,6 @@ const FlightSearchView = () => {
     useQueryStates(filterParsers)
   const airlineDataObj = getAirlineByCodeList.data
 
-  // list `filteredData` in the client, for other calculations, mutations...etc, use query data itself
   const { filteredData } = useFilterActions(searchQueryData)
 
   const [isReturnFlightVisible, setIsReturnFlightVisible] = useState(false)
@@ -317,8 +318,10 @@ const FlightSearchView = () => {
 
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
-  const mounted = useMounted()
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
 
+  const mounted = useMounted()
   if (!mounted)
     return (
       <Container className='grid gap-3 py-4'>
@@ -327,9 +330,63 @@ const FlightSearchView = () => {
         <Skeleton h={16} radius='sm' w={'95%'} />
       </Container>
     )
+  const totalPassengerCount = () => {
+    let total = 0
+
+    if (searchParams.passengerCounts?.Adult) {
+      total = searchParams.passengerCounts?.Adult
+    }
+    if (searchParams?.passengerCounts?.Child) {
+      total += searchParams?.passengerCounts?.Child
+    }
+    if (searchParams?.passengerCounts?.Infant) {
+      total += searchParams?.passengerCounts?.Infant
+    }
+
+    return total
+  }
 
   return (
     <>
+      <div className='border-b py-3'>
+        <Container>
+          {!isBreakPointMatchesMd && (
+            <div className='text-blue-filled relative flex items-center gap-2 text-xs font-semibold'>
+              <button
+                className='absolute start-0 end-0 top-0 bottom-0 z-10'
+                onClick={toggleSearchEngineVisibility}
+              />
+              <div>
+                {
+                  getAirportsByCodeList.data?.find((airPort) =>
+                    searchParams.origin?.iata.includes(airPort.Code)
+                  )?.City
+                }
+              </div>
+              <div>
+                <FaArrowRightLong />
+              </div>
+              <div>
+                {
+                  getAirportsByCodeList.data?.find((airPort) =>
+                    searchParams.destination?.iata.includes(airPort.Code)
+                  )?.City
+                }
+              </div>
+              <div>|</div>
+              <div>{totalPassengerCount()} Yolcu</div>
+              <div className='relative z-0'>
+                <MdManageSearch className='text-xl' />
+              </div>
+            </div>
+          )}
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            <div className='pt-4 md:pt-0'>
+              <Flight />
+            </div>
+          </Collapse>
+        </Container>
+      </div>
       {searchResultsQuery.isLoading ||
       searchResultsQuery.isFetching ||
       searchResultsQuery.isFetchingNextPage ||
