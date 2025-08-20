@@ -1,14 +1,15 @@
 import { Column, Heading, Img, Row } from '@react-email/components'
 import { OperationResultType } from '@/app/reservation/types'
 import { EmailBody } from '../../_components/body'
-import { EmailCard } from '../../_components/email-card'
-import { SuccessCard } from '@/emails/_components/success-card'
+import { EmailCard } from '../../../app/order-components/email-card'
+import { SuccessCard } from '@/app/order-components/success-card'
 import { formatCurrency } from '@/libs/util'
 import { __dummy__TourDummyResponsePaymentSummaryResponse } from '../_dummy-response/tour'
 import dayjs from 'dayjs'
 import { TourSummaryViewData } from '@/types/passengerViewModel'
 import { Spoiler } from '@mantine/core'
 import Link from 'next/link'
+import { BillingCard } from '@/app/order-components/billing-card'
 
 type IProps = {
   data: OperationResultType
@@ -152,37 +153,14 @@ export default function EmailTourOrderResult({ data }: IProps) {
         </EmailCard>
       )}
       <EmailCard title='Fatura Bilgileri'>
-        <table cellPadding={2}>
-          <thead>
-            <tr>
-              <td width={150}>İsim Soyisim</td>
-              <td>:</td>
-              <td className='font-bold'>{firstPassenger.fullName}</td>
-            </tr>
-            <tr>
-              <td>TC Kimlik No</td>
-              <td>:</td>
-              <td className='font-bold'>{firstPassenger.identityNumber}</td>
-            </tr>
-            <tr>
-              <td>GSM</td>
-              <td>:</td>
-              <td className='font-bold'>{firstPassenger.mobilePhoneNumber}</td>
-            </tr>
-            <tr>
-              <td>Adres</td>
-              <td>:</td>
-              <td className='font-bold'>{billing?.address}</td>
-            </tr>
-          </thead>
-        </table>
-        <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 font-bold text-white'>
-          <Img
-            className='mr-3'
-            src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png'
-          />
-          E-faturanız mail adresinize ayrıca gönderilecektir.
-        </div>
+        <BillingCard
+          data={{
+            fullName: firstPassenger.fullName,
+            idNumber: firstPassenger.identityNumber,
+            gsm: firstPassenger.mobilePhoneNumber,
+            address: billing?.address,
+          }}
+        />
       </EmailCard>
 
       <EmailCard title='Ödeme Bilgileri'>

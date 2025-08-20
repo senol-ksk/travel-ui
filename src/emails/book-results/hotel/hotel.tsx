@@ -6,10 +6,11 @@ import { Column, Img, Row } from '@react-email/components'
 
 import { hotelDummyOrderResultResponse } from '../_dummy-response/hotel'
 import { EmailBody } from '../../_components/body'
-import { EmailCard } from '../../_components/email-card'
+import { EmailCard } from '../../../app/order-components/email-card'
 import dayjs from 'dayjs'
 import { formatCurrency } from '@/libs/util'
-import { SuccessCard } from '@/emails/_components/success-card'
+import { SuccessCard } from '@/app/order-components/success-card'
+import { BillingCard } from '@/app/order-components/billing-card'
 
 type IProps = {
   data: OperationResultType
@@ -18,7 +19,7 @@ type IProps = {
 export default function EmailHotelOrderResult({ data }: IProps) {
   const { roomGroup } = data.product.summaryResponse as HotelSummaryResponse
   const { passenger, hotelCancelWarranty } = data
-
+  const passengerInfo = data.passenger.passengers[0]
   return (
     <EmailBody>
       <SuccessCard name={data.passenger.passengers[0].fullName} />
@@ -172,45 +173,14 @@ export default function EmailHotelOrderResult({ data }: IProps) {
         </div>
       </EmailCard>
       <EmailCard title='Fatura Bilgileri'>
-        <table cellPadding={2}>
-          <thead>
-            <tr>
-              <td width={150}>İsim Soyisim</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {data.passenger.passengers.at(0)?.fullName}
-              </td>
-            </tr>
-            <tr>
-              <td>TC. Kimlik No</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {data.passenger.passengers.at(0)?.identityNumber}
-              </td>
-            </tr>
-            <tr>
-              <td>GSM</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {data.passenger.passengers.at(0)?.mobilePhoneNumber}
-              </td>
-            </tr>
-            <tr>
-              <td>Adres</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {data.passenger.billingInformation.at(0)?.address}
-              </td>
-            </tr>
-          </thead>
-        </table>
-        <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 font-bold text-white'>
-          <Img
-            className='mr-3'
-            src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png'
-          />
-          E-faturanız mail adresinize ayrıca gönderilecektir.
-        </div>
+        <BillingCard
+          data={{
+            fullName: passengerInfo.fullName,
+            idNumber: passengerInfo.identityNumber,
+            gsm: passengerInfo.mobilePhoneNumber,
+            address: data.passenger.billingInformation.at(0)?.address,
+          }}
+        />
       </EmailCard>
       <EmailCard title='Ödeme Bilgileri'>
         <table cellPadding={2}>
