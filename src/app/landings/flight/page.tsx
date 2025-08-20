@@ -24,6 +24,7 @@ import {
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
 import ProductBox from '../_components/box-link'
+import { Route } from 'next'
 
 export default async function FlightLandingPage() {
   const data = (
@@ -86,10 +87,10 @@ export default async function FlightLandingPage() {
                       image={flight.params.image.value}
                       title={flight.title}
                       url={
-                        flight.params.link.value &&
+                        (flight.params.link.value &&
                         flight.params.link.value.length > 0
                           ? `/flight/search-results?${flight.params.link.value}`
-                          : ''
+                          : '') as Route
                       }
                     />
                   ))}
@@ -109,10 +110,10 @@ export default async function FlightLandingPage() {
                       image={flight.params.image.value}
                       title={flight.title}
                       url={
-                        flight.params.link.value &&
+                        (flight.params.link.value &&
                         flight.params.link.value.length > 0
                           ? `/flight/search-results?${flight.params.link.value}`
-                          : ''
+                          : '') as Route
                       }
                     />
                   ))}

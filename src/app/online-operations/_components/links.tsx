@@ -5,6 +5,7 @@ import { UnstyledButton } from '@mantine/core'
 import clsx from 'clsx'
 import { Link } from 'next-view-transitions'
 import { ReactNode } from 'react'
+import { Route } from 'next'
 
 const pageLinks = [
   { title: 'Seyahatinizi Görüntüleyin', pathname: '/online-operations' },
@@ -20,7 +21,7 @@ export const OnlineOperationButtonLinks = () => {
   return pageLinks.map((pageLink, pageLinkIndex) => (
     <PageLinkButton
       key={pageLinkIndex}
-      link={pageLink.pathname}
+      link={pageLink.pathname as Route}
       isActive={pageLink.pathname === pathname}
     >
       {pageLink.title}
@@ -30,7 +31,7 @@ export const OnlineOperationButtonLinks = () => {
 
 type PageLinkProps = {
   children: ReactNode
-  link: string
+  link: Route
   isActive?: boolean
 }
 const PageLinkButton: React.FC<PageLinkProps> = ({

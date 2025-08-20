@@ -17,6 +17,7 @@ import { MainBannerCarousel } from '@/components/main-banner'
 import { serviceRequest } from '@/network'
 import { TourOpportunity } from '@/components/home/tour-opportunity'
 import { EbultenForm } from '@/components/home/ebulten-form'
+import { Route } from 'next'
 
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
@@ -142,7 +143,7 @@ export default async function Home() {
                         ?.map((hotelDestination) => (
                           <CategoryLink
                             key={hotelDestination.id}
-                            link={hotelDestination.params.link.value}
+                            link={hotelDestination.params.link.value as Route}
                             title={hotelDestination.title}
                           />
                         ))}
@@ -185,7 +186,9 @@ export default async function Home() {
                           (destination) => (
                             <CategoryLink
                               key={destination.id}
-                              link={`/otel-listesi/${destination.slug}`}
+                              link={
+                                `/otel-listesi/${destination.slug}` as Route
+                              }
                               title={destination.name}
                             />
                           )
@@ -209,7 +212,7 @@ export default async function Home() {
   )
 }
 
-const CategoryLink = ({ link, title }: { link: string; title: string }) => (
+const CategoryLink = ({ link, title }: { link: Route; title: string }) => (
   <Link
     href={link}
     className='block rounded-md border bg-white px-4 py-3 hover:bg-blue-100'

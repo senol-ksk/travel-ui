@@ -13,6 +13,7 @@ import NextImage from 'next/image'
 import visaLogo from '/public/logos/visa-logo.png'
 import { Link } from 'next-view-transitions'
 import { link } from 'fs'
+import { Route } from 'next'
 
 const Footer = async () => {
   const widgetCollection = await getWidgetsByCollectionSlug()
@@ -104,7 +105,7 @@ const Footer = async () => {
           <Container className='grid gap-4 md:flex md:gap-8'>
             {widget.params.footer_menu.menus.map((menu) => (
               <div key={menu.id}>
-                <Link className='hover:underline' href={`${menu.url}`}>
+                <Link className='hover:underline' href={`${menu.url}` as Route}>
                   {menu.title}
                 </Link>
               </div>

@@ -1,6 +1,7 @@
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
 import { Container, Title, Typography } from '@mantine/core'
+import { Route } from 'next'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
 
@@ -79,7 +80,7 @@ export default async function ContentPage({
           {widgets.map((widget) =>
             widget.params.menu.menus.map((menu) => (
               <div key={menu.id}>
-                <Link href={menu.url}>{menu.title}</Link>
+                <Link href={menu.url as Route}>{menu.title}</Link>
               </div>
             ))
           )}

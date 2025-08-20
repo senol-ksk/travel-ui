@@ -35,6 +35,7 @@ import { cleanObj } from '@/libs/util'
 import { useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
 import { SortBySelect } from './sort-by-select'
+import { Route } from 'next'
 
 export const createDetailParams = createSerializer(carDetailParams)
 
@@ -54,12 +55,12 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
 
   const handleCarSelect = (car: CarSearchResultItemType) => {
-    const detailParams = createDetailParams({
+    const detailParams = createDetailParams('/car/detail', {
       selectedProductKey: car.key,
       searchToken: searchRequestParams.params.searchToken,
       sessionToken: searchRequestParams.params.sessionToken,
-    })
-    router.push(`/car/detail${detailParams}`)
+    }) as Route
+    router.push(detailParams)
   }
 
   const allPages = carSearchResult?.data?.pages.flatMap((page) =>

@@ -54,6 +54,7 @@ import { HotelSearchEngine } from '@/modules/hotel'
 import { RiMapPin2Line } from 'react-icons/ri'
 import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
+import { Route } from 'next'
 
 type IProps = {
   slug: string
@@ -163,7 +164,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
       productKey,
       searchToken: hotelDetailData?.data?.searchPanel.searchToken,
       sessionToken: hotelDetailData?.data?.searchPanel.sessionToken,
-    })
+    }) as Route
 
     router.push(url)
   }

@@ -1,12 +1,13 @@
 import { Link } from 'next-view-transitions'
 import { Box } from '@mantine/core'
 import { cdnImageUrl } from '@/libs/cms-data'
+import { Route } from 'next'
 
 type ProductBoxProps = {
   image: string
   title: string
   description: string
-  url: string
+  url: Route
 }
 
 export default function ProductBox({

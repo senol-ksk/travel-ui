@@ -13,6 +13,7 @@ import {
   Title,
   Typography,
 } from '@mantine/core'
+import { Route } from 'next'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
 
@@ -120,7 +121,7 @@ export default async function HelpCenterPage({
                   <div key={menu.id}>
                     <NavLink
                       label={menu.title}
-                      href={menu.url}
+                      href={menu.url as Route}
                       component={Link}
                       variant={'/' + menuUrl === menu.url ? 'light' : 'subtle'}
                       active={'/' + menuUrl === menu.url}

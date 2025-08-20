@@ -10,6 +10,7 @@ import { formatCurrency, slugify, validateUrl } from '@/libs/util'
 import { cdnSiteImageUrl } from '@/libs/cms-data'
 import dayjs from 'dayjs'
 import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri'
+import { Route } from 'next'
 type IProps = {
   data: TourDealType[]
 }
@@ -49,10 +50,11 @@ const TourOpportunity: React.FC<IProps> = ({ data }) => {
           promotionText,
         } = tour
         const href = `/tour/detail?slug=${slugify(title.toLocaleLowerCase())}-${subDealId}&productKey=${productKey}`
+
         return (
           <Carousel.Slide key={id}>
             <Box
-              href={href}
+              href={href as Route}
               component={Link}
               className='group block h-full w-full gap-3'
             >

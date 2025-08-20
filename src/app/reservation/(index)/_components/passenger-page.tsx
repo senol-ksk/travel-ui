@@ -61,6 +61,7 @@ import { MdContactPhone } from 'react-icons/md'
 import { RiAccountCircleFill } from 'react-icons/ri'
 import { useCheckoutContext } from '../../store'
 import { convertPassengerTitle } from '@/libs/passenger-title'
+import { Route } from 'next'
 
 export function CheckoutPassengerPage() {
   const queryClient = useQueryClient()
@@ -232,7 +233,7 @@ export function CheckoutPassengerPage() {
               productKey: queryStrings.productKey,
               searchToken: queryStrings.searchToken,
               sessionToken: queryStrings.sessionToken,
-            })
+            }) as Route
 
             if (requestCheckout?.success) {
               queryClient.clear()
