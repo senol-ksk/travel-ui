@@ -97,7 +97,7 @@ const BusCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-between md:p-3'>
+                <div className='flex border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>

@@ -183,7 +183,7 @@ const HotelCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='items-center justify-between gap-3 border-t p-2 md:flex md:p-3'>
+                <div className='items-center justify-between gap-3 border-t p-3 md:flex'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>
