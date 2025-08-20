@@ -132,7 +132,6 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                     <HotelSummary
                       data={productData as HotelSummaryResponse}
                       passengerCount={passengerData?.passengers?.length}
-                      passengerData={passengerData}
                     />
                   )
                 case 'Bus':
