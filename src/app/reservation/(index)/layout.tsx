@@ -9,7 +9,7 @@ export default function ReservationMainLayout({
 }>) {
   return (
     <Suspense>
-      <Container className='px-0 py-2 md:px-2 md:py-5'>{children}</Container>
+      <Container className='py-5'>{children}</Container>
     </Suspense>
   )
 }
