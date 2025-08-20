@@ -33,7 +33,7 @@
 ```bash
 # .env.local dosyası oluştur
 LINEAR_API_KEY=linear_xxx...
-GITHUB_TOKEN=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
+# GITHUB_TOKEN=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
 ```
 
 ## 🚀 Test Etme
