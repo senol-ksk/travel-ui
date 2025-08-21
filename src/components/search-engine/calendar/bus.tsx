@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
-import { useClickOutside } from '@mantine/hooks'
+import { useClickOutside, useMediaQuery } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
 import type { DateValue } from '@mantine/dates'
 import classes from '@/styles/Datepicker.module.css'
@@ -21,13 +21,13 @@ type Props = {
   onDateSelect?: (date: DateValue) => void
   defaultDate: DateValue
 }
-const defaultFormat = 'DD MMM ddd'
 
 const BusCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
   defaultDate,
 }) => {
   const [rangeValue, setRangeValue] = useState<DateValue>(defaultDate)
+
   useEffect(() => {
     setRangeValue(defaultDate)
   }, [defaultDate])
@@ -45,6 +45,8 @@ const BusCalendar: React.FC<Props> = ({
 
     onDateSelect(date)
   }
+  const matches = useMediaQuery('(min-width: 48em)')
+  const numberOfColumns = matches ? 1 : 8
 
   return (
     <Provider>
@@ -86,15 +88,16 @@ const BusCalendar: React.FC<Props> = ({
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
                       classNames={classes}
-                      defaultValue={rangeValue}
+                      value={rangeValue}
                       renderDay={dayRenderer}
                       onDateChange={handleOfficialDates}
                       onNextMonth={handleOfficialDates}
                       onPreviousMonth={handleOfficialDates}
+                      numberOfColumns={numberOfColumns}
                     />
                   </div>
                 </div>
-                <div className='flex border-t p-2 md:justify-between md:p-3'>
+                <div className='flex border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>

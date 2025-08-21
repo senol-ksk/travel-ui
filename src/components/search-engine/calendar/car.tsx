@@ -164,7 +164,7 @@ const CarCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='flex items-center border-t p-2 md:justify-between md:p-3'>
+                <div className='flex items-center border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>

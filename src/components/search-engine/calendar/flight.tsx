@@ -1,34 +1,20 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 
 import clsx from 'clsx'
-import {
-  Button,
-  CloseButton,
-  Paper,
-  Transition,
-  Portal,
-  Indicator,
-  Tooltip,
-} from '@mantine/core'
+import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 
-import { useMediaQuery, useClickOutside, range } from '@mantine/hooks'
+import { useMediaQuery, useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
-import type {
-  DatePickerProps,
-  DatesRangeValue,
-  DateValue,
-} from '@mantine/dates'
+import type { DatesRangeValue, DateValue } from '@mantine/dates'
 
 import { IoArrowForwardSharp } from 'react-icons/io5'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import classes from '@/styles/Datepicker.module.css'
-import { useOfficialHolidayQuery } from './useOfficialHolidayQuery'
-import { OfficialHolidayServiceResponse } from '@/types/global'
 import { useOfficialDays } from './useOfficialDays'
 
 const today = dayjs()
@@ -226,7 +212,7 @@ const FlightCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='flex items-center border-t p-2 md:justify-between md:p-3'>
+                <div className='flex items-center border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>

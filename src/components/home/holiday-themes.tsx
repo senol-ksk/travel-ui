@@ -7,6 +7,7 @@ import { Widgets } from '@/types/cms-types'
 import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri'
 import { useRef } from 'react'
 import { EmblaCarouselType } from 'embla-carousel'
+import { Route } from 'next'
 
 type IProps = {
   data: Widgets
@@ -38,7 +39,7 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
               key={item.id}
               className='!basis-full p-5 px-5 transition-all duration-400 hover:scale-110 sm:!basis-1/2 md:!basis-1/5'
             >
-              <Link href={item.params.link?.value || '#'} className=''>
+              <Link href={item.params.link?.value as Route} className=''>
                 <div className='relative'>
                   <Image
                     src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}

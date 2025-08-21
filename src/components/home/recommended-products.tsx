@@ -5,6 +5,7 @@ import { Link } from 'next-view-transitions'
 import { Widgets } from '@/types/cms-types'
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
 import { cdnImageUrl } from '@/libs/cms-data'
+import { Route } from 'next'
 
 type IProps = {
   data: Widgets
@@ -51,7 +52,9 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
         return (
           <CarouselSlide key={item.id}>
             <Box
-              href={`/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}`}
+              href={
+                `/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}` as Route
+              }
               component={Link}
               className='group block h-full w-full gap-3'
             >

@@ -25,6 +25,7 @@ import { serializeTourSearchParams } from '@/modules/tour/searchResultParams'
 import { LandingSliderItem } from '@/app/tour/_components/landing-slider-item'
 import { notFound } from 'next/navigation'
 import { Carousel, CarouselSlide } from '@mantine/carousel'
+import { Route } from 'next'
 
 export default async function TourLandingPage() {
   const headersList = await headers()
@@ -48,7 +49,7 @@ export default async function TourLandingPage() {
       checkinDate,
       checkoutDate,
       destinationSlug,
-    })
+    }) as Route
 
     return serializedUrl
   }

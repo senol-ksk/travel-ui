@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Widgets } from '@/types/cms-types'
 import { useEffect, useState } from 'react'
 import { RiArrowRightLine, RiArrowLeftLine } from 'react-icons/ri'
+import { Route } from 'next'
 type IProps = {
   data: Widgets
 }
@@ -37,7 +38,7 @@ const UpComingHolidays: React.FC<IProps> = ({ data }) => {
             key={item.id}
             className='!basis-full sm:!basis-1/2 md:!basis-1/3'
           >
-            <Link href={item.params.link?.value || '#'} className='p-3'>
+            <Link href={item.params.link?.value as Route} className='p-3'>
               <div className='group relative aspect-[1/1] w-full overflow-hidden rounded-lg shadow-md'>
                 <BackgroundImage
                   src={`${process.env.NEXT_PUBLIC_CMS_CDN}/${item.params.image?.value}`}

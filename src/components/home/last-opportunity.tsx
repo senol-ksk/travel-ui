@@ -9,6 +9,7 @@ import { Widgets } from '@/types/cms-types'
 import React from 'react'
 import { cdnImageUrl } from '@/libs/cms-data'
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
+import { Route } from 'next'
 
 type IProps = {
   data: Widgets
@@ -71,9 +72,11 @@ const LastOpportunity: React.FC<IProps> = ({ data }) => {
               key={i}
               className='!basis-full gap-4 sm:!basis-1/2 md:!basis-1/4'
             >
-              <Link href={item.params.link?.value || '#'}>
+              <Link href={item.params.link?.value as Route}>
                 <Box
-                  href={`/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}`}
+                  href={
+                    `/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}` as Route
+                  }
                   component={Link}
                   className='group block h-full w-full'
                 >

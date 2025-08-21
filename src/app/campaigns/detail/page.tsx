@@ -5,6 +5,7 @@ import NextImage from 'next/image'
 import { getContentBySlugAsync } from '@/libs/cms-data'
 import { Link } from 'next-view-transitions'
 import { CampaignCopySection } from '@/app/campaigns/_components/campaign-copy-value'
+import { Route } from 'next'
 
 type PageProps = {
   searchParams: Promise<SearchParams>
@@ -79,7 +80,7 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
           size='md'
           className='my-5'
           component={Link}
-          href={content.params.link.value}
+          href={content.params.link.value as Route}
         >
           {content.params.btn_name.value}
         </Button>

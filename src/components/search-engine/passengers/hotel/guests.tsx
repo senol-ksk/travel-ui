@@ -1,13 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import clsx from 'clsx'
-import {
-  ActionIcon,
-  Button,
-  NativeSelect,
-  Select,
-  Title,
-  Text,
-} from '@mantine/core'
+import { ActionIcon, Button, NativeSelect, Title, Text } from '@mantine/core'
 import { FiMinus, FiPlus } from 'react-icons/fi'
 import { range } from '@mantine/hooks'
 import { FaPlus } from 'react-icons/fa6'
@@ -131,7 +124,7 @@ const HotelGuestsActions: React.FC<Props> = ({
         <div className='flex items-center justify-between'>
           <Text>
             Çocuk
-            <Text size='sm'>(2-16 Yaş arası)</Text>
+            <span className='text-sm'> (2-16 Yaş arası)</span>
           </Text>
           <div className='flex items-center justify-between gap-3'>
             <ActionIcon

@@ -53,6 +53,7 @@ import { CiCircleInfo } from 'react-icons/ci'
 import { RentTermsDrawer } from '@/app/car/component/rent-terms-drawer'
 import { CarSearchResultItem } from '../component/result-item'
 import { WorkingHoursDrawer } from '@/app/car/component/working-hour-drawers'
+import { Route } from 'next'
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
   const queryClient = useQueryClient()
@@ -113,7 +114,7 @@ export const DetailClient = () => {
         productKey: data?.data?.detailResponse.items.at(0)?.key,
         searchToken,
         sessionToken,
-      })
+      }) as Route
       router.push(url)
     },
   })

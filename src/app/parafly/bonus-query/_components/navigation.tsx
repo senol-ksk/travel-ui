@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { UnstyledButton } from '@mantine/core'
 import clsx from 'clsx'
 import { Link } from 'next-view-transitions'
+import { Route } from 'next'
 
 const pageLinks = [
   { title: 'ParafPara Sorgula', pathname: '/parafly/bonus-query' },
@@ -19,7 +20,7 @@ export const ParafNavigationLinks = () => {
   return pageLinks.map((pageLink, pageLinkIndex) => (
     <PageLinkButton
       key={pageLinkIndex}
-      link={pageLink.pathname}
+      link={pageLink.pathname as Route}
       isActive={pageLink.pathname === pathname}
     >
       {pageLink.title}
@@ -29,7 +30,7 @@ export const ParafNavigationLinks = () => {
 
 type PageLinkProps = {
   children: React.ReactNode
-  link: string
+  link: Route
   isActive?: boolean
 }
 const PageLinkButton: React.FC<PageLinkProps> = ({

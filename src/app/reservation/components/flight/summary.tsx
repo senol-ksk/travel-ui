@@ -1,13 +1,11 @@
 import { upperFirst, useDisclosure } from '@mantine/hooks'
-import { Button, Collapse, Drawer, Title, UnstyledButton } from '@mantine/core'
+import { Collapse, Title, UnstyledButton } from '@mantine/core'
 
 import {
   MdDescription,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
-  MdTransferWithinAStation,
 } from 'react-icons/md'
-import { FaArrowRightLong } from 'react-icons/fa6'
 
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -17,7 +15,6 @@ dayjs.extend(relativeTime)
 dayjs.extend(duration)
 
 import {
-  FlightPassengerTypes,
   FlightReservationSummary,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
@@ -33,6 +30,7 @@ import { IoAirplaneSharp } from 'react-icons/io5'
 import { FlightTransferSummary } from './transfer'
 import { FlightRules } from './flight-rules'
 import { useCheckoutContext } from '../../store'
+import { convertPassengerTitle } from '@/libs/passenger-title'
 
 const FlightSummary: React.FC<IProps> = ({ data }) => {
   const [openedPriceDetails, { toggle: togglePriceDetails }] =
@@ -224,11 +222,9 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                         className='flex items-center justify-between ps-2'
                       >
                         <div>
-                          {
-                            FlightPassengerTypes[
-                              passengerPrice.passengers[0].passengerType
-                            ]
-                          }
+                          {convertPassengerTitle(
+                            passengerPrice.passengers[0].passengerType
+                          )}
                         </div>
                         <div className='flex justify-end gap-1'>
                           <span>{passengerPrice.passengers.length} </span>
@@ -255,11 +251,9 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                         className='flex items-center justify-between ps-2'
                       >
                         <div>
-                          {
-                            FlightPassengerTypes[
-                              passengerPrice.passengers[0].passengerType
-                            ]
-                          }
+                          {convertPassengerTitle(
+                            passengerPrice.passengers[0].passengerType
+                          )}
                         </div>
                         <div className='flex justify-end gap-1'>
                           <span>{passengerPrice.passengers.length} </span>
@@ -286,11 +280,9 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                         className='flex items-center justify-between ps-2'
                       >
                         <div>
-                          {
-                            FlightPassengerTypes[
-                              passengerPrice.passengers[0].passengerType
-                            ]
-                          }
+                          {convertPassengerTitle(
+                            passengerPrice.passengers[0].passengerType
+                          )}
                         </div>
                         <div className='flex justify-end gap-1'>
                           <span>{passengerPrice.passengers.length} </span>

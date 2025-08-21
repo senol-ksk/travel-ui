@@ -11,6 +11,7 @@ import { GoPerson } from 'react-icons/go'
 import { PiSuitcaseRolling } from 'react-icons/pi'
 import { MdOutlineChevronRight } from 'react-icons/md'
 import { IoIosCheckmarkCircle } from 'react-icons/io'
+import { Route } from 'next'
 
 type Props = {
   data: TransferVehicle
@@ -28,7 +29,7 @@ export const TransferSearchItem: React.FC<Props> = ({
     searchToken,
     sessionToken,
     productKey: data.productKey,
-  })
+  }) as Route
 
   return (
     <div className='relative rounded-lg border shadow'>

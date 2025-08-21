@@ -53,7 +53,6 @@ export const MasterCardLogo = ({
   </svg>
 )
 
-import troyCardLogo from './troy-logo-14.png'
 export const TroyCardLogo = () => (
-  <Image src={troyCardLogo} width={21} height={10} alt='Troy' />
+  <Image src={'/troy-logo-14.png'} width={21} height={10} alt='Troy' />
 )

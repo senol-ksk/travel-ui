@@ -1,6 +1,7 @@
 import { Image } from '@mantine/core'
 import Link from 'next/link'
 import { Widgets } from '@/types/cms-types'
+import { Route } from 'next'
 
 type IProps = {
   data: Widgets
@@ -39,7 +40,7 @@ const TrendRegions: React.FC<IProps> = ({ data }) => {
             className={`group col-span-6 ${colWidth} ${rowLength} rounded-3xl`}
           >
             <Link
-              href={item.params.link?.value || '#'}
+              href={item.params.link?.value as Route}
               className='relative block h-full overflow-hidden rounded-3xl shadow-xl'
             >
               <div className='h-full w-full overflow-hidden'>

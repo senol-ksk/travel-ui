@@ -60,6 +60,8 @@ import { TourExtraServices } from '@/app/reservation/(index)/tour/extras'
 import { MdContactPhone } from 'react-icons/md'
 import { RiAccountCircleFill } from 'react-icons/ri'
 import { useCheckoutContext } from '../../store'
+import { convertPassengerTitle } from '@/libs/passenger-title'
+import { Route } from 'next'
 
 export function CheckoutPassengerPage() {
   const queryClient = useQueryClient()
@@ -231,7 +233,7 @@ export function CheckoutPassengerPage() {
               productKey: queryStrings.productKey,
               searchToken: queryStrings.searchToken,
               sessionToken: queryStrings.sessionToken,
-            })
+            }) as Route
 
             if (requestCheckout?.success) {
               queryClient.clear()
@@ -384,18 +386,9 @@ export function CheckoutPassengerPage() {
                                           className='font-semibold'
                                         >
                                           {Number(innerChildNodeIndex) + 1}.{' '}
-                                          {(() => {
-                                            switch (passengerType) {
-                                              case PassengerTypesEnum.Adult:
-                                                return 'Yetişkin'
-                                              case PassengerTypesEnum.Child:
-                                                return 'Çocuk'
-                                              case PassengerTypesEnum.Infant:
-                                                return 'Bebek'
-                                              default:
-                                                return innerChildNode.key
-                                            }
-                                          })()}{' '}
+                                          {convertPassengerTitle(
+                                            passengerType
+                                          )}{' '}
                                         </Title>
                                         <HotelPassengerInformationForm
                                           moduleName={moduleName}
@@ -480,7 +473,6 @@ export function CheckoutPassengerPage() {
                             <div key={index}>
                               {index > 0 && <hr className='m-5' />}
                               <Title order={2} size={'xl'} pb={15}>
-                                {/* {PassengerTypesIndexEnum[passengerType]} */}
                                 {(() => {
                                   switch (passengerType) {
                                     case 0:
@@ -558,21 +550,7 @@ export function CheckoutPassengerPage() {
                                     ? field?.gender.toString() === '1'
                                       ? 'Kadın'
                                       : 'Erkek'
-                                    : (() => {
-                                        switch (passengerType) {
-                                          case 0:
-                                            return 'Yetişkin'
-                                          case 1:
-                                            return 'Çocuk'
-                                          case 2:
-                                            return 'Bebek'
-
-                                          default:
-                                            return PassengerTypesIndexEnum[
-                                              passengerType
-                                            ]
-                                        }
-                                      })()}
+                                    : convertPassengerTitle(passengerType)}
                                 </div>
                               </div>
                               <PassengerInformationForm
