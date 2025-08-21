@@ -4,13 +4,11 @@ import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 import {
   RiFacebookFill,
   RiInstagramLine,
-  RiTiktokFill,
   RiTwitterXFill,
   RiYoutubeFill,
 } from 'react-icons/ri'
 import NextImage from 'next/image'
 
-import visaLogo from '/public/logos/visa-logo.png'
 import { Link } from 'next-view-transitions'
 import { link } from 'fs'
 import { Route } from 'next'
@@ -21,9 +19,6 @@ const Footer = async () => {
   const footerWidget = widgetCollectionData?.filter(
     (item) => item.point === 'footer'
   )
-  // const socialMenus = widgetCollectionData?.filter(
-  //   (item) => item.point === 'social_menu'
-  // )
 
   return (
     <footer className='flex flex-col gap-5 bg-blue-900 pt-5 text-white'>

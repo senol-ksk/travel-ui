@@ -22,7 +22,6 @@ import {
   Stack,
   Text,
   TextInput,
-  Title,
   UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
@@ -45,7 +44,7 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 
 import { InstallmentTableModal, InstallmentSelect } from './instalment-table'
 import { CheckoutCard } from '@/components/card'
-import threedImage from './threed-info.png'
+
 import { MasterCardLogo, TroyCardLogo } from '@/components/logo/credit-cards'
 import { Coupon } from '../../components/coupon'
 import { useCouponQuery } from '../useCouponQuery'
@@ -561,7 +560,7 @@ export const PaymentPageSection = () => {
                 <div className='flex items-center gap-5'>
                   <div>
                     <NextImage
-                      src={threedImage}
+                      src={'/threed-info.png'}
                       width={63}
                       height={29}
                       alt='3D Güvenli Ödeme Sistemi'
