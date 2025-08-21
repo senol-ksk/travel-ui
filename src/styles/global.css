@@ -28,10 +28,6 @@ body {
   @apply h-full;
 }
 
-body {
-  color: var(--mantine-color-dark-7);
-}
-
 .iti__selected-dial-code {
   @apply text-sm;
 }
@@ -53,4 +49,8 @@ body {
   --color-dark-900: var(--mantine-color-dark-9);
 
   --breakpoint-2xl: 96em;
+}
+
+:root {
+  --mantine-color-text: var(--mantine-color-dark-7);
 }

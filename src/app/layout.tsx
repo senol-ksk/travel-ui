@@ -44,11 +44,11 @@ export default function RootLayout({
         <html lang='tr' {...mantineHtmlProps}>
           <head>
             <link rel='icon' href='/favicon.ico' sizes='any' />
-            <ColorSchemeScript />
+            <ColorSchemeScript forceColorScheme='light' />
           </head>
 
           <body className='flex flex-col'>
-            <MantineProvider theme={mantineTheme} defaultColorScheme='light'>
+            <MantineProvider theme={mantineTheme} forceColorScheme='light'>
               <Providers>
                 <Notifications />
 
