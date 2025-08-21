@@ -5,7 +5,7 @@ export const formatCurrency = (
   amount: number,
   currency: 'TRY' | 'USD' | 'EUR' | undefined | null = 'TRY'
 ) => {
-  const formatted = new Intl.NumberFormat('ar', {
+  const formatted = new Intl.NumberFormat('tr-TR', {
     style: 'currency',
     currencyDisplay: 'narrowSymbol',
     currency: currency ?? 'TRY',

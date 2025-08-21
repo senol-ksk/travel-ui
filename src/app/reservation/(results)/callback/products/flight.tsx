@@ -16,21 +16,14 @@ export const FlightSummary: React.FC<IProps> = ({ data }) => {
       {data.flightList.map((flight) => {
         return (
           <div key={flight.flightDetail.key}>
-            <CheckoutCard>
+            <CheckoutCard
+              title={
+                flight.flightDetail.groupId === 0
+                  ? 'Gidiş Uçuşu'
+                  : 'Dönüş Uçuşu'
+              }
+            >
               <div className='grid gap-3'>
-                <div>
-                  <h3 className='m-0 flex items-baseline gap-2'>
-                    {flight.flightDetail.groupId === 0
-                      ? 'Gidiş Uçuşu'
-                      : 'Dönüş Uçuşu'}
-                    <small className='text-xs'>
-                      {dayjs(flight.flightSegments.at(0)?.departureTime).format(
-                        'DD MMMM YYYY'
-                      )}
-                    </small>
-                  </h3>
-                </div>
-                <Divider />
                 <div className='flex items-center gap-2'>
                   <div className='relative h-[30px] w-[30px]'>
                     <AspectRatio>
@@ -42,7 +35,7 @@ export const FlightSummary: React.FC<IProps> = ({ data }) => {
                       />
                     </AspectRatio>
                   </div>
-                  <div>
+                  <div className='text-sm text-gray-700'>
                     {
                       data.airlineList[
                         flight.flightSegments[0].marketingAirline.code
@@ -50,7 +43,9 @@ export const FlightSummary: React.FC<IProps> = ({ data }) => {
                     }{' '}
                     - {flight.flightSegments[0].flightNumber}
                   </div>
-                  <div>{CabinTypes[flight.flightSegments[0].cabinClass]}</div>
+                  <div className='text-sm text-gray-700'>
+                    {CabinTypes[flight.flightSegments[0].cabinClass]}
+                  </div>
                 </div>
                 <div className='flex'>
                   <div className='text-lg font-semibold'>
@@ -68,7 +63,7 @@ export const FlightSummary: React.FC<IProps> = ({ data }) => {
                   </div>
                 </div>
                 <div className='flex justify-between'>
-                  <div>
+                  <div className='text-sm text-gray-700'>
                     {
                       data.airportList[flight.flightSegments[0].origin.code]
                         .city
@@ -80,7 +75,7 @@ export const FlightSummary: React.FC<IProps> = ({ data }) => {
                     }
                     )
                   </div>
-                  <div>
+                  <div className='text-sm text-gray-700'>
                     {
                       data.airportList[
                         flight.flightSegments[0].destination.code
@@ -96,7 +91,7 @@ export const FlightSummary: React.FC<IProps> = ({ data }) => {
                   </div>
                 </div>
                 <Divider />
-                <div className='text-sm'>
+                <div className='text-sm text-gray-700'>
                   {flight.flightSegments[0].flightTime.split(':').at(0)}
                   sa {flight.flightSegments[0].flightTime.split(':').at(1)}
                   dk

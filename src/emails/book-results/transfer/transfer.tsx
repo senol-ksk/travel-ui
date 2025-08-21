@@ -5,10 +5,11 @@ import {
   OperationResultType,
 } from '@/app/reservation/types'
 import { EmailBody } from '@/emails/_components/body'
-import { EmailCard } from '@/emails/_components/email-card'
-import { SuccessCard } from '@/emails/_components/success-card'
+import { EmailCard } from '@/app/order-components/email-card'
+import { SuccessCard } from '@/app/order-components/success-card'
 import { __dummy__TransferDummyResponsePaymentSummaryResponse } from '../_dummy-response/transfer'
 import { formatCurrency } from '@/libs/util'
+import { BillingCard } from '@/app/order-components/billing-card'
 
 type IProps = {
   data: OperationResultType
@@ -19,7 +20,7 @@ export default function EmailTransferOrderResult({ data }: IProps) {
   const { selectResponse } = summary
   const { transferVehicle } = selectResponse
   const { passenger } = data
-
+  const passengerInfo = passenger.passengers[0]
   return (
     <EmailBody>
       <SuccessCard name={data.passenger.passengers[0].fullName} />
@@ -167,38 +168,14 @@ export default function EmailTransferOrderResult({ data }: IProps) {
       </EmailCard>
 
       <EmailCard title='Fatura Bilgileri'>
-        <table cellPadding={2}>
-          <thead className='font-bold'>
-            <tr>
-              <td width={150}>İsim Soyisim</td>
-              <td>:</td>
-              <td>{data.passenger.passengers.at(0)?.fullName}</td>
-            </tr>
-            <tr>
-              <td>TC. Kimlik No</td>
-              <td>:</td>
-              <td>{data.passenger.passengers.at(0)?.identityNumber}</td>
-            </tr>
-            <tr>
-              <td>GSM</td>
-              <td>:</td>
-              <td>{data.passenger.passengers.at(0)?.mobilePhoneNumber}</td>
-            </tr>
-            <tr>
-              <td>Adres</td>
-              <td>:</td>
-              <td>{data.passenger.billingInformation.at(0)?.address}</td>
-            </tr>
-          </thead>
-        </table>
-        <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 font-bold text-white'>
-          <img
-            className='mr-3'
-            src='https://ykmturizm.mncdn.com/11/Files/email/img/blue-info.png'
-            alt='Bilgi ikonu'
-          />
-          E-faturanız mail adresinize ayrıca gönderilecektir.
-        </div>
+        <BillingCard
+          data={{
+            fullName: passengerInfo.fullName,
+            idNumber: passengerInfo.identityNumber,
+            gsm: passengerInfo.mobilePhoneNumber,
+            address: data.passenger.billingInformation.at(0)?.address,
+          }}
+        />
       </EmailCard>
 
       <EmailCard title='Ödeme Bilgileri'>
