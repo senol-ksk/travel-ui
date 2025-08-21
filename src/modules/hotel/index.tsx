@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-import { Button, Skeleton } from '@mantine/core'
+import { Skeleton } from '@mantine/core'
 import { useLocalStorage, useMounted } from '@mantine/hooks'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
