@@ -42,6 +42,7 @@ import { PriceNumberFlow } from '@/components/price-numberflow'
 import { IoChevronForwardSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
 import { MdDescription } from 'react-icons/md'
+import { Route } from 'next'
 
 const transferExtraRequeireFields = z.object({
   PickupInfo: z.string().nonempty(),
@@ -183,7 +184,7 @@ export default function Page() {
         productKey: query?.data?.selectResponse.transferVehicle.productKey,
         sessionToken: searchParams.sessionToken,
         searchToken: searchParams.searchToken,
-      })
+      }) as Route
       router.push(url)
     },
   })

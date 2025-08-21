@@ -7,6 +7,7 @@ import {
   rem,
   Title,
 } from '@mantine/core'
+import { Route } from 'next'
 import { Link } from 'next-view-transitions'
 import NextImage from 'next/image'
 
@@ -27,7 +28,7 @@ const CategoryContents: React.FC<PageProps> = async ({ categoryId }) => {
           <Card
             radius={'md'}
             component={Link}
-            href={`${category.redirect}/${category.slug}`}
+            href={`${category.redirect}/${category.slug}` as Route}
             h={'100%'}
           >
             <CardSection>

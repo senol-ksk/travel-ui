@@ -10,6 +10,7 @@ import { Carousel } from '@mantine/carousel'
 import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
 import clsx from 'clsx'
 import { cdnImageUrl } from '@/libs/cms-data'
+import { Route } from 'next'
 
 type SlideType = {
   id: string
@@ -60,7 +61,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
             <Carousel.Slide key={slide.id}>
               <Box
                 component={Link}
-                href={slide.params.link?.value || '#'}
+                href={(slide.params.link?.value || '#') as Route}
                 className='block'
               >
                 <AspectRatio ratio={2.6 / 1}>

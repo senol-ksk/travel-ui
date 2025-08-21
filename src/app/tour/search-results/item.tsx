@@ -35,6 +35,7 @@ import { tourSearchResultParamParser } from '@/modules/tour/searchResultParams'
 import { WiDaySunny } from 'react-icons/wi'
 import { CiSun } from 'react-icons/ci'
 import { FiSun } from 'react-icons/fi'
+import { Route } from 'next'
 
 type Props = {
   // data: TourSearchResultSearchItem
@@ -58,7 +59,7 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
     searchToken: searchParamsQuery.data?.data?.params.searchToken,
     sessionToken: searchParamsQuery.data?.data?.sessionToken,
     isCruise: searchParams.isCruise,
-  })
+  }) as Route
   const startDate = selectedTour.startDate
   const endDate = selectedTour.endDate
   const dayjsStartDate = dayjs(startDate)

@@ -1,9 +1,10 @@
 import { AspectRatio, Box, Image } from '@mantine/core'
+import { Route } from 'next'
 import { Link } from 'next-view-transitions'
 import NextImage from 'next/image'
 
 type IProps = {
-  href: string
+  href: Route
   imageSrc: string
   title: string
 }

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
-import { useClickOutside } from '@mantine/hooks'
+import { useClickOutside, useMediaQuery } from '@mantine/hooks'
 import { DatePicker, type DateValue } from '@mantine/dates'
 import classes from '@/styles/Datepicker.module.css'
 
@@ -26,6 +26,8 @@ const TransferCalendar: React.FC<Props> = ({
   const [rangeValue, setRangeValue] = useState<DateValue | undefined>(
     defaultDate
   )
+  const matches = useMediaQuery('(min-width: 48em)')
+  const numberOfColumns = matches ? 1 : 8
 
   const { dayRenderer, handleOfficialDates, officialDayRenderer } =
     useOfficialDays({ numberOfColumns: 1 })
@@ -76,15 +78,16 @@ const TransferCalendar: React.FC<Props> = ({
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
                       classNames={classes}
-                      defaultValue={rangeValue}
+                      value={rangeValue}
                       renderDay={dayRenderer}
                       onDateChange={handleOfficialDates}
                       onNextMonth={handleOfficialDates}
                       onPreviousMonth={handleOfficialDates}
+                      numberOfColumns={numberOfColumns}
                     />
                   </div>
                 </div>
-                <div className='flex items-center border-t p-2 md:justify-between md:p-3'>
+                <div className='flex items-center border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>

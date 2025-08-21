@@ -4,8 +4,18 @@
   transition: color 100ms ease;
   justify-content: center;
   font-size: 14px;
+  border-bottom-width: 4px;
+  border-bottom-color: transparent;
+  border-bottom-style: solid;
 
   &[data-active] {
     color: var(--mantine-color-blue-filled);
+    border-bottom-color: var(--mantine-color-blue-filled);
+  }
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-5)
+    );
   }
 }

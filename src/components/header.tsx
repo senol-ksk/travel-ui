@@ -33,6 +33,7 @@ import { BsLuggageFill } from 'react-icons/bs'
 import { TbArrowsRightLeft } from 'react-icons/tb'
 import { modals } from '@mantine/modals'
 import { LoginForm } from '@/app/auth/login/_components/login-form'
+import { Route } from 'next'
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
@@ -129,7 +130,7 @@ export const Header = () => {
                   <div key={item.id}>
                     <Link
                       className='rounded p-2 hover:bg-blue-50'
-                      href={item.url}
+                      href={item.url as Route}
                     >
                       {item.title}
                     </Link>
@@ -199,7 +200,7 @@ export const Header = () => {
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Menu.Label>{session.data?.user.name}</Menu.Label>
-                    <Menu.Item component={Link} href={'/account/'}>
+                    <Menu.Item component={Link} href={'/account'}>
                       Hesabım
                     </Menu.Item>
                     <Menu.Item
@@ -263,7 +264,7 @@ export const Header = () => {
                       onClick={toggleDrawer}
                       leftSection={<FaRegUserCircle />}
                       component={Link}
-                      href={'/account/'}
+                      href={'/account'}
                     >
                       <span className='block truncate text-xs font-medium'>
                         {session.data?.user.name}
@@ -299,7 +300,7 @@ export const Header = () => {
                       }
                       onClick={toggleDrawer}
                       component={Link}
-                      href={item.url}
+                      href={item.url as Route}
                       key={item.id}
                       c={'dark'}
                     >

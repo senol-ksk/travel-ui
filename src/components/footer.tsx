@@ -4,15 +4,14 @@ import { getWidgetsByCollectionSlug } from '@/libs/cms-data'
 import {
   RiFacebookFill,
   RiInstagramLine,
-  RiTiktokFill,
   RiTwitterXFill,
   RiYoutubeFill,
 } from 'react-icons/ri'
 import NextImage from 'next/image'
 
-import visaLogo from '/public/logos/visa-logo.png'
 import { Link } from 'next-view-transitions'
 import { link } from 'fs'
+import { Route } from 'next'
 
 const Footer = async () => {
   const widgetCollection = await getWidgetsByCollectionSlug()
@@ -20,9 +19,6 @@ const Footer = async () => {
   const footerWidget = widgetCollectionData?.filter(
     (item) => item.point === 'footer'
   )
-  // const socialMenus = widgetCollectionData?.filter(
-  //   (item) => item.point === 'social_menu'
-  // )
 
   return (
     <footer className='flex flex-col gap-5 bg-blue-900 pt-5 text-white'>
@@ -104,7 +100,7 @@ const Footer = async () => {
           <Container className='grid gap-4 md:flex md:gap-8'>
             {widget.params.footer_menu.menus.map((menu) => (
               <div key={menu.id}>
-                <Link className='hover:underline' href={`${menu.url}`}>
+                <Link className='hover:underline' href={`${menu.url}` as Route}>
                   {menu.title}
                 </Link>
               </div>

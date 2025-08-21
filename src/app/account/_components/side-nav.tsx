@@ -21,7 +21,7 @@ export default function AccountSideNav({ insideClose }: Props) {
       <NavLink
         label='Hesap Bilgilerim'
         component={Link}
-        href={'/account/'}
+        href={'/account'}
         leftSection={<FaRegUserCircle />}
         onClick={insideClose}
       />

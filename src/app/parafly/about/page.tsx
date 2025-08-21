@@ -1,7 +1,5 @@
 import { Button, Image, Title } from '@mantine/core'
 import NextImage from 'next/image'
-
-import parafImage from './about-paraf.jpeg'
 import { MdOutlineChevronRight } from 'react-icons/md'
 
 export default function ParafCalculate() {
@@ -10,7 +8,7 @@ export default function ParafCalculate() {
       <Title mb={'md'}>Parafly Travel Nedir?</Title>
       <div>
         <Image
-          src={parafImage}
+          src={'/about-paraf.jpeg'}
           component={NextImage}
           width={860}
           height={431}

@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
-import { FaRegCalendarAlt } from 'react-icons/fa'
 
 import { useMediaQuery, useClickOutside } from '@mantine/hooks'
-import { DatePicker } from '@mantine/dates'
-import type { DatesRangeValue } from '@mantine/dates'
+import { DatePicker, type DatesRangeValue } from '@mantine/dates'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
@@ -69,9 +67,7 @@ const HotelCalendar: React.FC<Props> = ({
       onDateSelect(dates)
     }
   }
-  useEffect(() => {
-    setContainerTransitionState(showCalendar)
-  }, [showCalendar])
+
   useEffect(() => {
     if (rangeValue && rangeValue[0] && rangeValue[1]) {
       const startDate = dayjs(rangeValue[0])
@@ -175,7 +171,7 @@ const HotelCalendar: React.FC<Props> = ({
                       onChange={handleDateSelections}
                       type={'range'}
                       classNames={classes}
-                      numberOfColumns={matches ? 2 : 1}
+                      numberOfColumns={matches ? 2 : 12}
                       minDate={today.toDate()}
                       maxDate={maxDate.toDate()}
                       maxLevel='month'
@@ -187,7 +183,7 @@ const HotelCalendar: React.FC<Props> = ({
                     />
                   </div>
                 </div>
-                <div className='flex items-center justify-between gap-3 border-t p-2 md:p-3'>
+                <div className='items-center justify-between gap-3 border-t p-3 md:flex'>
                   <div className='hidden flex-col gap-1 md:flex'>
                     {officialDayRenderer()}
                   </div>
@@ -199,15 +195,17 @@ const HotelCalendar: React.FC<Props> = ({
                         </span>
                       )}
                     </div>
-                    <Button
-                      type='button'
-                      radius='xl'
-                      className='w-full md:w-auto'
-                      size='sm'
-                      onClick={() => setContainerTransitionState(false)}
-                    >
-                      Tamam
-                    </Button>
+                    <div>
+                      <Button
+                        type='button'
+                        radius='xl'
+                        className='w-full md:w-auto'
+                        size='sm'
+                        onClick={() => setContainerTransitionState(false)}
+                      >
+                        Tamam
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </Paper>

@@ -20,6 +20,7 @@ import {
 
 import { notFound } from 'next/navigation'
 import ProductBox from '../_components/box-link'
+import { Route } from 'next'
 
 export default async function HotelLandingPage() {
   const data = (
@@ -79,7 +80,7 @@ export default async function HotelLandingPage() {
                   url={
                     item.params.link.value.length > 0
                       ? `/hotel/search-results?${item.params.link.value}`
-                      : ''
+                      : '/'
                   }
                 />
               ))}
@@ -101,7 +102,7 @@ export default async function HotelLandingPage() {
                   url={
                     item.params.link.value.length > 0
                       ? `/hotel/search-results?${item.params.link.value}`
-                      : ''
+                      : '/'
                   }
                 />
               ))}

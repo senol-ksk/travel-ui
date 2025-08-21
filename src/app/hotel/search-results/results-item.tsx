@@ -5,7 +5,6 @@ import {
   Button,
   Image,
   List,
-  Popover,
   Rating,
   Skeleton,
   Title,
@@ -15,7 +14,7 @@ import {
 } from '@mantine/core'
 import { Link } from 'next-view-transitions'
 import { createSerializer, useQueryStates } from 'nuqs'
-import { FaRegCheckCircle, FaRegSmile } from 'react-icons/fa'
+import { FaRegCheckCircle } from 'react-icons/fa'
 import { GiKnifeFork } from 'react-icons/gi'
 import { IoChevronForward, IoStarSharp } from 'react-icons/io5'
 
@@ -33,6 +32,7 @@ import {
 import dayjs from 'dayjs'
 import { Carousel } from '@mantine/carousel'
 import { FaFaceSmile } from 'react-icons/fa6'
+import { Route } from 'next'
 
 type IProps = {
   hotelInfo: HotelSearchResultHotelInfo | undefined
@@ -92,7 +92,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
     type: searchParams.type,
     checkInDate: searchParams.checkinDate,
     checkOutDate: searchParams.checkoutDate,
-  })
+  }) as Route
 
   return (
     <div className='rounded-lg border border-gray-300 shadow'>

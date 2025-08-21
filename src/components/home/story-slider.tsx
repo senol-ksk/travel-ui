@@ -9,6 +9,7 @@ import { Carousel } from '@mantine/carousel'
 import { Widgets } from '@/types/cms-types'
 import aspectRatioClasses from './storyitems.module.css'
 import { cdnImageUrl } from '@/libs/cms-data'
+import { Route } from 'next'
 
 export const StorySliderSkeleton = () => {
   return (
@@ -82,7 +83,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
           <Carousel.Slide key={item.id}>
             <Box
               component={Link}
-              href={item.params.link.value}
+              href={item.params.link.value as Route}
               className='group block h-full'
             >
               <div className='flex h-full w-[90px] flex-col md:w-[160px]'>
