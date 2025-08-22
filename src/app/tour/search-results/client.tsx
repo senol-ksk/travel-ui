@@ -347,9 +347,7 @@ const TourSearchResultClient = () => {
             <div className='flex justify-between gap-3 md:px-0'>
               <Skeleton
                 className='hidden md:flex'
-                visible={
-                  !searchParamsQuery.isLoading && searchData?.length === 0
-                }
+                visible={searchRequestIsLoading || !filteredData}
               >
                 <div className='hidden items-center gap-2 md:flex'>
                   <div>
@@ -359,89 +357,99 @@ const TourSearchResultClient = () => {
                   </div>
                 </div>
               </Skeleton>
-              <div>
-                <Button
-                  size='sm'
-                  color='black'
-                  className='mx-1 flex border-gray-400 px-8 font-medium md:hidden'
-                  variant='outline'
-                  onClick={() => setFilterSectionIsOpened((prev) => !prev)}
-                >
-                  Filtreler
-                </Button>
-              </div>
-              <div>
-                <NativeSelect
-                  leftSection={<FaCheck />}
-                  className='font-medium md:hidden'
-                  data={[
-                    {
-                      label: 'Fiyata Göre Artan ',
-                      value: SortOrderEnums.priceAsc,
-                    },
-                    {
-                      label: 'Fiyata Göre Azalan',
-                      value: SortOrderEnums.priceDesc,
-                    },
-                    {
-                      label: 'En Erken',
-                      value: SortOrderEnums.dateAsc,
-                    },
-                    {
-                      label: 'En Geç',
-                      value: SortOrderEnums.dateDesc,
-                    },
-                  ]}
-                  onChange={({ target: { value } }) => {
-                    setFilterParams({
-                      order: value as SortOrderEnums,
-                    })
-                  }}
-                  value={order}
-                />
-              </div>
-              <Skeleton
-                className='hidden items-center justify-end gap-1 md:flex'
-                visible={
-                  !searchParamsQuery.isLoading && searchData?.length === 0
-                }
-              >
-                {filterOptions.map((option) => (
+
+              {totalCount > 0 && (
+                <div>
                   <Button
                     size='sm'
-                    className={
-                      order === option.value
-                        ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
-                        : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
-                    }
-                    key={option.value}
-                    leftSection={order === option.value ? <FaCheck /> : ''}
-                    color='blue'
-                    variant={order === option.value ? 'filled' : 'outline'}
-                    onClick={() =>
-                      setFilterParams({
-                        order: option.value,
-                      })
-                    }
+                    color='black'
+                    className='mx-1 flex border-gray-400 px-8 font-medium md:hidden'
+                    variant='outline'
+                    onClick={() => setFilterSectionIsOpened((prev) => !prev)}
                   >
-                    {option.label}
+                    Filtreler
                   </Button>
-                ))}
-              </Skeleton>
+                </div>
+              )}
+              {totalCount > 0 && (
+                <div>
+                  <NativeSelect
+                    leftSection={<FaCheck />}
+                    className='font-medium md:hidden'
+                    data={[
+                      {
+                        label: 'Fiyata Göre Artan ',
+                        value: SortOrderEnums.priceAsc,
+                      },
+                      {
+                        label: 'Fiyata Göre Azalan',
+                        value: SortOrderEnums.priceDesc,
+                      },
+                      {
+                        label: 'En Erken',
+                        value: SortOrderEnums.dateAsc,
+                      },
+                      {
+                        label: 'En Geç',
+                        value: SortOrderEnums.dateDesc,
+                      },
+                    ]}
+                    onChange={({ target: { value } }) => {
+                      setFilterParams({
+                        order: value as SortOrderEnums,
+                      })
+                    }}
+                    value={order}
+                  />
+                </div>
+              )}
+              {totalCount > 0 && (
+                <Skeleton
+                  className='hidden items-center justify-end gap-1 md:flex'
+                  visible={
+                    searchRequestIsLoading ||
+                    (!searchParamsQuery.isLoading && searchData?.length === 0)
+                  }
+                >
+                  {filterOptions.map((option) => (
+                    <Button
+                      size='sm'
+                      className={
+                        order === option.value
+                          ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                          : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
+                      }
+                      key={option.value}
+                      leftSection={order === option.value ? <FaCheck /> : ''}
+                      color='blue'
+                      variant={order === option.value ? 'filled' : 'outline'}
+                      onClick={() =>
+                        setFilterParams({
+                          order: option.value,
+                        })
+                      }
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </Skeleton>
+              )}
             </div>
-            <Skeleton
-              className='flex items-center gap-2 px-1 md:hidden'
-              visible={
-                searchResultsQuery.isFetching ||
-                searchResultsQuery.isLoading ||
-                !searchResultsQuery.data
-              }
-            >
-              <span className='text-sm font-semibold text-gray-500'>
-                Toplam <span className='text-xl font-bold'>{totalCount}</span>{' '}
-                Tur Bulundu
-              </span>
-            </Skeleton>
+            {totalCount > 0 && (
+              <Skeleton
+                className='flex items-center gap-2 px-1 md:hidden'
+                visible={
+                  searchResultsQuery.isFetching ||
+                  searchResultsQuery.isLoading ||
+                  !searchResultsQuery.data
+                }
+              >
+                <span className='text-sm font-semibold text-gray-500'>
+                  Toplam <span className='text-xl font-bold'>{totalCount}</span>{' '}
+                  Tur Bulundu
+                </span>
+              </Skeleton>
+            )}
             <div className='grid gap-5'>
               {!searchRequestIsLoading &&
                 searchResultsQuery.data &&
