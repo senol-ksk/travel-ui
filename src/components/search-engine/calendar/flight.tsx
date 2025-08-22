@@ -84,7 +84,7 @@ const FlightCalendar: React.FC<Props> = ({
         <Input
           label={
             tripKind === 'round-trip' ? (
-              <div className='flex w-full gap-[80px] md:px-2'>
+              <div className='flex w-full gap-[76px] md:px-2'>
                 <span>Gidiş</span>
                 <span>Dönüş</span>
               </div>
@@ -119,7 +119,7 @@ const FlightCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='fixed start-0 end-0 top-0 bottom-0 z-50 mx-auto sm:w-[25rem] md:absolute md:start-[-75px] md:end-auto md:bottom-auto md:w-[35rem] lg:w-[40rem]'
+              className='fixed start-0 end-0 top-0 bottom-0 z-50 mx-auto rounded-lg border sm:w-[25rem] md:absolute md:start-[-75px] md:end-auto md:bottom-auto md:w-[35rem] lg:w-[40rem]'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -131,15 +131,13 @@ const FlightCalendar: React.FC<Props> = ({
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='flex items-center gap-3 px-3 md:pt-3'>
+                  <div className='flex items-center gap-8 px-3 md:pt-3'>
                     <div className='flex'>
                       <button
                         type='button'
                         className={clsx(
-                          'w-50 border-b-4 px-2 text-start text-lg font-bold',
-                          {
-                            'border-blue-800': !formatedValues[0],
-                          }
+                          'border-b-4 px-2 text-start text-lg font-bold',
+                          rangeValue[0] ? 'border-blue-800' : 'border-gray-300'
                         )}
                       >
                         {formatedValues[0] ? (
@@ -154,14 +152,14 @@ const FlightCalendar: React.FC<Props> = ({
                         <div className='text-xl'>
                           <IoArrowForwardSharp />
                         </div>
-                        <div className='flex-1'>
+                        <div className='flex'>
                           <button
                             type='button'
                             className={clsx(
-                              'w-50 border-b-4 px-2 text-start text-lg font-bold',
-                              {
-                                'border-blue-800': !formatedValues[1],
-                              }
+                              'border-b-4 px-2 text-start text-lg font-bold',
+                              rangeValue[1]
+                                ? 'border-blue-800'
+                                : 'border-gray-300'
                             )}
                           >
                             {rangeValue[1] ? (

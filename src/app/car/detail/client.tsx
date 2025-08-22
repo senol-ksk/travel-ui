@@ -370,58 +370,53 @@ export const DetailClient = () => {
               sırasında firmaya ödenir.
             </div>
 
-            <Spoiler
-              className='mb-5 grid gap-3 pb-3'
-              maxHeight={185}
-              showLabel='Daha fazla göster'
-              hideLabel='Daha az göster'
-            >
-              <div className='flex flex-col gap-3'>
-                {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
-                  .filter((item) => item.isSelectable)
-                  .map((extraOption, extraOptionIndex) => {
-                    return (
-                      <div key={extraOptionIndex}>
-                        <Checkbox.Card
-                          p={12}
-                          checked={extraOption.selected || extraOption.isFree}
-                          disabled={extraOption.isFree}
-                          onChange={(checked) => {
-                            handleAdditionalOptionSelect({
-                              data: extraOption,
-                              checked,
-                              type: 'extra',
-                            })
-                          }}
-                          className={clsx({
-                            'border-blue-800': extraOption.selected,
-                            'text-blue-800': extraOption.selected,
-                          })}
-                        >
-                          <Group className='flex items-center gap-2'>
-                            <div>
-                              <Checkbox.Indicator
-                                size='md'
-                                disabled={extraOption.isFree}
-                              />
-                            </div>
-                            <div className='md:text-md flex flex-1 items-center justify-between text-sm font-medium'>
-                              <div>{extraOption.name}</div>
-                              <div className='md:text-md flex items-center gap-2 text-sm font-medium'>
+            <div className='flex flex-col gap-3 md:grid md:grid-cols-2'>
+              {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
+                .filter((item) => item.isSelectable)
+                .map((extraOption, extraOptionIndex) => {
+                  return (
+                    <div key={extraOptionIndex}>
+                      <Checkbox.Card
+                        p={12}
+                        checked={extraOption.selected || extraOption.isFree}
+                        disabled={extraOption.isFree}
+                        onChange={(checked) => {
+                          handleAdditionalOptionSelect({
+                            data: extraOption,
+                            checked,
+                            type: 'extra',
+                          })
+                        }}
+                        className={clsx({
+                          'border-blue-800': extraOption.selected,
+                          'text-blue-800': extraOption.selected,
+                        })}
+                      >
+                        <Group className='flex items-center gap-2'>
+                          <div>
+                            <Checkbox.Indicator
+                              size='md'
+                              disabled={extraOption.isFree}
+                            />
+                          </div>
+                          <div className='md:text-md flex flex-1 items-center justify-between text-sm font-medium'>
+                            <div>{extraOption.name}</div>
+                            <div className='md:text-md flex items-center gap-2 text-sm font-medium'>
+                              <div className='ms-auto font-semibold text-blue-700'>
                                 +{formatCurrency(extraOption.totalPrice.value)}
-                                {''}
-                                <span className='hidden text-xs text-gray-600 md:flex'>
-                                  / Gün
-                                </span>
                               </div>
+                              {''}
+                              <span className='hidden text-xs text-gray-600 md:flex'>
+                                / Gün
+                              </span>
                             </div>
-                          </Group>
-                        </Checkbox.Card>
-                      </div>
-                    )
-                  })}
-              </div>
-            </Spoiler>
+                          </div>
+                        </Group>
+                      </Checkbox.Card>
+                    </div>
+                  )
+                })}
+            </div>
           </div>
         )}
         {detailItem && detailItem.carInsurances.length > 0 && (
@@ -429,7 +424,8 @@ export const DetailClient = () => {
             <Title order={3} fz='lg'>
               Güvence Paketi Ekleyin
             </Title>
-            <div className='flex flex-col gap-3'>
+
+            <div className='flex flex-col gap-3 md:grid md:grid-cols-2'>
               {detailItem.carInsurances
                 .filter((item) => item.isSelectable)
                 .map((insuranceOption, insuranceOptionIndex) => (
@@ -454,9 +450,9 @@ export const DetailClient = () => {
                     >
                       <Group>
                         <Checkbox.Indicator disabled={insuranceOption.isFree} />
-                        <div className='flex-1 text-sm'>
+                        <div className='md:text-md flex flex-1 items-center justify-between text-sm font-medium'>
                           <div>{insuranceOption.description}</div>
-                          <div className='font-semibold text-blue-700'>
+                          <div className='ms-auto font-semibold text-blue-700'>
                             {formatCurrency(insuranceOption.totalPrice.value)}
                           </div>
                         </div>

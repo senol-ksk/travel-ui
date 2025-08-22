@@ -50,7 +50,7 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
               style={{ ...styles }}
               role='menu'
             >
-              <Paper className='flex h-full flex-col rounded-lg shadow-xl'>
+              <Paper className='flex h-full flex-col rounded-lg border shadow-xl'>
                 <div className='grid min-w-[320px] gap-7 p-5'>
                   <HotelGuestsActions
                     initialValues={roomState}

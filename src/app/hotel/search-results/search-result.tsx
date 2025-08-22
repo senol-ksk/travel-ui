@@ -77,7 +77,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
     },
   ]
   const totalCount =
-    searchParamsQuery.data?.hotelSearchResponse.totalHotelFound ?? 0
+    hotelSearchRequestQuery.data?.pages.at(-1)?.searchResults[0]
+      .totalHotelFound ?? 0
   const { orderBy, ...restFilterParams } = filterParams
   const [opened, { open, close }] = useDisclosure(false)
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -469,7 +470,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     <div className='hidden items-center gap-2 md:flex'>
                       <div>
                         <span className='text-lg font-bold'>
-                          {searchParams.destination}, Otelleri
+                          {searchParams.destination},
                         </span>{' '}
                         İçin{' '}
                         <span className='text-xl font-bold'>
@@ -610,8 +611,8 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     <>
                       <div>
                         <span className='text-sm font-semibold text-gray-500'>
-                          {searchParams.destination}, Otelleri İçin Toplam{' '}
-                          {totalCount} Tesis Bulundu
+                          {searchParams.destination}, İçin Toplam {totalCount}{' '}
+                          Tesis Bulundu
                         </span>{' '}
                       </div>
                     </>

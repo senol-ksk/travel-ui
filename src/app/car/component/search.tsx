@@ -12,6 +12,7 @@ import {
   RemoveScroll,
   ScrollAreaAutosize,
   Skeleton,
+  Spoiler,
   Stack,
   Title,
   Transition,
@@ -181,13 +182,90 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                 </div>
                               </div>
                               <Accordion
-                                defaultValue={['fuelType', 'provider']}
+                                defaultValue={['fuelType', 'provider', 'brand']}
                                 multiple
                                 classNames={{
                                   root: 'filter-accordion',
                                   control: 'text-md font-medium',
                                 }}
                               >
+                                <Accordion.Item value='provider'>
+                                  <Accordion.Control>
+                                    Kiralama Şirketi
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          provider: value.length ? value : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.provider
+                                          ? filterParams.provider
+                                          : []
+                                      }
+                                    >
+                                      <Spoiler
+                                        maxHeight={130}
+                                        showLabel='Daha fazla göster'
+                                        hideLabel='Daha az göster'
+                                      >
+                                        <Stack gap={rem(6)}>
+                                          {providerChecks.map(
+                                            (provider, providerIndex) => {
+                                              return (
+                                                <Checkbox
+                                                  key={providerIndex}
+                                                  label={provider}
+                                                  value={provider}
+                                                />
+                                              )
+                                            }
+                                          )}
+                                        </Stack>
+                                      </Spoiler>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                                <Accordion.Item value='brand'>
+                                  <Accordion.Control>Marka</Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Checkbox.Group
+                                      onChange={(value) => {
+                                        setFilterParams({
+                                          brand: value.length ? value : null,
+                                        })
+                                      }}
+                                      value={
+                                        filterParams.brand
+                                          ? filterParams.brand
+                                          : []
+                                      }
+                                    >
+                                      <ScrollAreaAutosize mah={200}>
+                                        <Stack gap={rem(6)}>
+                                          {brandChecks.map(
+                                            (data, dataIndex) => (
+                                              <Checkbox
+                                                key={dataIndex}
+                                                label={data
+                                                  .split(' ')
+                                                  .map(
+                                                    (item) =>
+                                                      upperFirst(
+                                                        item.toLocaleLowerCase()
+                                                      ) + ' '
+                                                  )}
+                                                value={data}
+                                              />
+                                            )
+                                          )}
+                                        </Stack>
+                                      </ScrollAreaAutosize>
+                                    </Checkbox.Group>
+                                  </Accordion.Panel>
+                                </Accordion.Item>
                                 <Accordion.Item value='fuelType'>
                                   <Accordion.Control>
                                     Yakıt Tipi
@@ -221,36 +299,40 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                     </Checkbox.Group>
                                   </Accordion.Panel>
                                 </Accordion.Item>
-                                <Accordion.Item value='provider'>
+                                <Accordion.Item value='category'>
                                   <Accordion.Control>
-                                    Kiralama Şirketi
+                                    Kategori
                                   </Accordion.Control>
                                   <Accordion.Panel>
                                     <Checkbox.Group
                                       onChange={(value) => {
                                         setFilterParams({
-                                          provider: value.length ? value : null,
+                                          category: value.length ? value : null,
                                         })
                                       }}
                                       value={
-                                        filterParams.provider
-                                          ? filterParams.provider
+                                        filterParams.category
+                                          ? filterParams.category
                                           : []
                                       }
                                     >
-                                      <Stack gap={rem(6)}>
-                                        {providerChecks.map(
-                                          (provider, providerIndex) => {
-                                            return (
+                                      <Spoiler
+                                        maxHeight={130}
+                                        showLabel='Daha fazla göster'
+                                        hideLabel='Daha az göster'
+                                      >
+                                        <Stack gap={rem(6)}>
+                                          {categoryChecks.map(
+                                            (data, dataIndex) => (
                                               <Checkbox
-                                                key={providerIndex}
-                                                label={provider}
-                                                value={provider}
+                                                key={dataIndex}
+                                                label={data}
+                                                value={data}
                                               />
                                             )
-                                          }
-                                        )}
-                                      </Stack>
+                                          )}
+                                        </Stack>
+                                      </Spoiler>
                                     </Checkbox.Group>
                                   </Accordion.Panel>
                                 </Accordion.Item>
@@ -318,75 +400,6 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                           )
                                         )}
                                       </Stack>
-                                    </Checkbox.Group>
-                                  </Accordion.Panel>
-                                </Accordion.Item>
-                                <Accordion.Item value='category'>
-                                  <Accordion.Control>
-                                    Kategori
-                                  </Accordion.Control>
-                                  <Accordion.Panel>
-                                    <Checkbox.Group
-                                      onChange={(value) => {
-                                        setFilterParams({
-                                          category: value.length ? value : null,
-                                        })
-                                      }}
-                                      value={
-                                        filterParams.category
-                                          ? filterParams.category
-                                          : []
-                                      }
-                                    >
-                                      <Stack gap={rem(6)}>
-                                        {categoryChecks.map(
-                                          (data, dataIndex) => (
-                                            <Checkbox
-                                              key={dataIndex}
-                                              label={data}
-                                              value={data}
-                                            />
-                                          )
-                                        )}
-                                      </Stack>
-                                    </Checkbox.Group>
-                                  </Accordion.Panel>
-                                </Accordion.Item>
-                                <Accordion.Item value='brand'>
-                                  <Accordion.Control>Marka</Accordion.Control>
-                                  <Accordion.Panel>
-                                    <Checkbox.Group
-                                      onChange={(value) => {
-                                        setFilterParams({
-                                          brand: value.length ? value : null,
-                                        })
-                                      }}
-                                      value={
-                                        filterParams.brand
-                                          ? filterParams.brand
-                                          : []
-                                      }
-                                    >
-                                      <ScrollAreaAutosize mah={200}>
-                                        <Stack gap={rem(6)}>
-                                          {brandChecks.map(
-                                            (data, dataIndex) => (
-                                              <Checkbox
-                                                key={dataIndex}
-                                                label={data
-                                                  .split(' ')
-                                                  .map(
-                                                    (item) =>
-                                                      upperFirst(
-                                                        item.toLocaleLowerCase()
-                                                      ) + ' '
-                                                  )}
-                                                value={data}
-                                              />
-                                            )
-                                          )}
-                                        </Stack>
-                                      </ScrollAreaAutosize>
                                     </Checkbox.Group>
                                   </Accordion.Panel>
                                 </Accordion.Item>
