@@ -13,6 +13,7 @@ import { Provider } from '@/components/search-engine/calendar/provider'
 import { Input } from '@/components/search-engine/input'
 import { RiCalendarEventLine } from 'react-icons/ri'
 import { useOfficialDays } from './useOfficialDays'
+import { clsx } from 'clsx'
 
 const today = dayjs()
 const maxDate = today.add(1, 'year')
@@ -66,7 +67,7 @@ const BusCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[420px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[350px] md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -77,6 +78,23 @@ const BusCalendar: React.FC<Props> = ({
                       size='lg'
                       onClick={() => setContainerTransitionState(false)}
                     />
+                  </div>
+                  <div className='flex items-center justify-center gap-8 px-3 md:pt-3'>
+                    <div className='flex'>
+                      <button
+                        type='button'
+                        className={clsx(
+                          'border-b-4 px-2 text-start text-lg font-bold',
+                          rangeValue ? 'border-blue-800' : 'border-gray-300'
+                        )}
+                      >
+                        {rangeValue ? (
+                          dayjs(rangeValue).format('DD MMM ddd')
+                        ) : (
+                          <span className='text-gray-400'>Gidiş Tarihi</span>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className='relative mx-auto grow overflow-y-auto overscroll-contain scroll-smooth'>

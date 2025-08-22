@@ -96,9 +96,9 @@ const HotelCalendar: React.FC<Props> = ({
 
         <Input
           label={
-            <div className='flex w-full gap-[84px] md:px-2'>
-              <span>Giriş</span>
-              <span>Çıkış</span>
+            <div className='flex w-full gap-[40px] md:px-2'>
+              <span>Giriş Tarihi</span>
+              <span>Çıkış Tarihi</span>
             </div>
           }
           onClick={() => setContainerTransitionState(true)}
@@ -124,7 +124,7 @@ const HotelCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 sm:p-20 md:absolute md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -140,9 +140,9 @@ const HotelCalendar: React.FC<Props> = ({
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',
-                        {
-                          'border-cyan-500': !rangeValue[0],
-                        }
+                        rangeValue[0] && dayjs(rangeValue[0]).isValid()
+                          ? 'border-blue-800'
+                          : 'border-gray-300'
                       )}
                     >
                       {formattedValues[0]}
@@ -153,11 +153,9 @@ const HotelCalendar: React.FC<Props> = ({
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',
-                        {
-                          'border-cyan-500':
-                            !(!rangeValue[0] && !rangeValue[1]) &&
-                            !rangeValue[1],
-                        }
+                        rangeValue[1] && dayjs(rangeValue[1]).isValid()
+                          ? 'border-blue-800'
+                          : 'border-gray-300'
                       )}
                     >
                       {formattedValues[1]}

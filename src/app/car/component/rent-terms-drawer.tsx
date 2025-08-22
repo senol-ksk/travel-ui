@@ -30,8 +30,7 @@ const RentTermsDrawer: React.FC<Props> = ({
         <MdInfoOutline size={20} />
       </Title>
       <Alert
-        color='orange'
-        className='border border-yellow-500'
+        className='border border-orange-300 bg-orange-50'
         mt={'md'}
         icon={<BsInfoCircle />}
       >

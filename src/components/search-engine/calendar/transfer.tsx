@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import dayjs from 'dayjs'
+import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
 import { useClickOutside, useMediaQuery } from '@mantine/hooks'
 import { DatePicker, type DateValue } from '@mantine/dates'
@@ -48,7 +49,9 @@ const TransferCalendar: React.FC<Props> = ({
         <Input
           label='Tarih'
           onClick={() => setContainerTransitionState(true)}
-          title={`${dayjs(rangeValue).format('DD MMMM')}`}
+          title={
+            rangeValue ? dayjs(rangeValue).format('DD MMMM') : 'Tarih Seçiniz'
+          }
         />
         <Transition
           mounted={containerTransitionState}
@@ -56,7 +59,7 @@ const TransferCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[420px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[350px] md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -67,6 +70,23 @@ const TransferCalendar: React.FC<Props> = ({
                       size='lg'
                       onClick={() => setContainerTransitionState(false)}
                     />
+                  </div>
+                  <div className='flex items-center justify-center gap-8 px-3 md:pt-3'>
+                    <div className='flex'>
+                      <button
+                        type='button'
+                        className={clsx(
+                          'border-b-4 px-2 text-center text-lg font-bold',
+                          rangeValue ? 'border-blue-800' : 'border-gray-300'
+                        )}
+                      >
+                        {rangeValue ? (
+                          dayjs(rangeValue).format('DD MMM ddd')
+                        ) : (
+                          <span className='text-gray-400'>Tarih Seçiniz</span>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className='relative mx-auto grow overflow-y-auto overscroll-contain scroll-smooth'>

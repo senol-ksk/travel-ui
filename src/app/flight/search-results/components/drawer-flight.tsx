@@ -11,6 +11,7 @@ import {
 import { MdCheck } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
 import { FaCheck } from 'react-icons/fa6'
+import { PiCheckFatFill } from 'react-icons/pi'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -56,18 +57,25 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
           <div
             key={selectedPackage.flightFareInfo.key}
             className={clsx(
-              `${dynamicBorderColor} relative my-4 flex cursor-pointer flex-col items-start rounded-lg border border-t-10 p-2 shadow-xl md:gap-1 md:p-4`,
+              `${dynamicBorderColor} relative my-10 flex cursor-pointer flex-col items-start rounded-lg border border-t-10 p-2 shadow-xl md:gap-1 md:p-4`,
               isSelected ? 'bg-gray-200' : `hover:bg-gray-200`
             )}
             role='button'
             onClick={() => onSelect(selectedPackage)}
           >
             {isSelected && (
-              <Badge className='absolute -top-1 -right-2 flex -translate-y-3 rounded-md bg-green-800 px-6 py-3 text-sm text-white shadow-xl md:-left-3'>
-                Seçili
-              </Badge>
+              <div className='absolute -top-9 right-0 flex -translate-y-3 md:left-0'>
+                <span className='relative rounded bg-green-900 px-4 py-1 text-sm text-white shadow-xl'>
+                  Seçilen
+                  <span className='absolute -bottom-2 left-1/2 h-0 w-0 -translate-x-1/2 border-t-8 border-r-8 border-l-8 border-t-green-900 border-r-transparent border-l-transparent'></span>
+                </span>
+              </div>
             )}
-            <div className='flex w-full cursor-pointer justify-between gap-2'>
+            <div className='mb-2 grid w-full cursor-pointer justify-between gap-1'>
+              <div className='text-2xl font-bold'>
+                {' '}
+                +{formatCurrency(packagePrice)}
+              </div>
               <div className='text-lg font-bold capitalize'>
                 {(() => {
                   switch (
@@ -625,9 +633,9 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 variant='outline'
                 className={`${isSelected ? 'gap-3 border-gray-500 bg-gray-600 text-white' : 'bg-blue-800 text-white hover:border-gray-600 hover:bg-gray-600'} `}
               >
-                <div className={clsx(`text-md flex items-center gap-1`)}>
-                  {isSelected && <FaCheck size={21} />}+
-                  {formatCurrency(packagePrice)}
+                <div className='flex items-center gap-2'>
+                  {isSelected && <FaCheck size={26} />}
+                  {isSelected ? 'SEÇİLİ' : 'SEÇ'}
                 </div>
               </Button>
             </div>
