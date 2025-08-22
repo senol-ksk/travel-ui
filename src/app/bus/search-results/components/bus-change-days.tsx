@@ -16,7 +16,7 @@ export const BusSearchPrevNextButtons: React.FC<IProps> = ({
       <Button
         size='md'
         variant='outline'
-        className='flex items-center gap-2 border-transparent bg-gray-100 hover:border-blue-800'
+        className='flex items-center gap-2 border-transparent bg-gray-200 hover:border-blue-800'
         onClick={handlePrevDay}
       >
         <MdKeyboardArrowLeft color='black' size={18} />
@@ -25,14 +25,14 @@ export const BusSearchPrevNextButtons: React.FC<IProps> = ({
         </span>
       </Button>
 
-      <div className='flex flex-grow justify-center rounded bg-gray-100 py-2 font-medium'>
+      <div className='flex flex-grow justify-center rounded bg-gray-200 py-2 font-medium'>
         {busDates}
       </div>
 
       <Button
         size='md'
         variant='outline'
-        className='flex items-center gap-2 border-transparent bg-gray-100 hover:border-blue-800'
+        className='flex items-center gap-2 border-transparent bg-gray-200 hover:border-blue-800'
         onClick={handleNextDay}
       >
         <span className='hidden font-normal text-black md:block'>

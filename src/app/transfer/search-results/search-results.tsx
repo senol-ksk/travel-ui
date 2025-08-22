@@ -240,10 +240,7 @@ const TransferSearchResults = () => {
             <div className='flex justify-between gap-1 pb-3'>
               <Skeleton
                 className='col-span-2 hidden md:flex'
-                visible={
-                  !transferSearchResultsQuery.data ||
-                  transferSearchResultsQuery.isLoading
-                }
+                visible={filteredData.length === 0}
               >
                 <>
                   <div className='hidden items-center gap-2 md:flex'>
@@ -258,10 +255,7 @@ const TransferSearchResults = () => {
               </Skeleton>
               <Skeleton
                 className='w-40 md:w-full'
-                visible={
-                  !transferSearchResultsQuery.data ||
-                  transferSearchResultsQuery.isLoading
-                }
+                visible={filteredData.length === 0}
               >
                 <Button
                   size='sm'
