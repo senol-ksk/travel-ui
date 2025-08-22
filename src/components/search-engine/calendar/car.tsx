@@ -104,7 +104,7 @@ const CarCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 sm:p-20 md:absolute md:start-[-240px] md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:start-[-240px] md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
@@ -120,9 +120,7 @@ const CarCalendar: React.FC<Props> = ({
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',
-                        {
-                          'border-cyan-500': !rangeValue[0],
-                        }
+                        rangeValue[0] ? 'border-blue-800' : 'border-gray-300'
                       )}
                     >
                       {formatedValues[0]}
@@ -133,11 +131,7 @@ const CarCalendar: React.FC<Props> = ({
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',
-                        {
-                          'border-cyan-500':
-                            !(!rangeValue[0] && !rangeValue[1]) &&
-                            !rangeValue[1],
-                        }
+                        rangeValue[1] ? 'border-blue-800' : 'border-gray-300'
                       )}
                     >
                       {formatedValues[1]}

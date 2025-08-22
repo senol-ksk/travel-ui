@@ -22,7 +22,7 @@ import {
 import { useState } from 'react'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useTransitionRouter } from 'next-view-transitions'
-import { createSerializer, useQueryStates } from 'nuqs'
+import { createSerializer, useQueryState, useQueryStates } from 'nuqs'
 
 import { useSearchRequest } from '@/app/bus/useSearchResults'
 import {
@@ -37,6 +37,7 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 import {
   busSearchParams,
   filterParsers,
+  serializeBusSearchParams,
   SortOrderEnums,
 } from '@/modules/bus/searchParams'
 import { useFilterActions } from './filter-actions'
@@ -44,6 +45,8 @@ import { cleanObj } from '@/libs/util'
 import { PriceNumberFlow } from '@/components/price-numberflow'
 import { FaCheck } from 'react-icons/fa'
 import { TripDetail } from '@/app/bus/search-results/components/trip-detail'
+import { BusSearchPrevNextButtons } from './components/bus-change-days'
+import dayjs from 'dayjs'
 const skeltonLoader = new Array(3).fill(true)
 
 const BusSearchResults: React.FC = () => {
@@ -72,7 +75,6 @@ const BusSearchResults: React.FC = () => {
     useDisclosure(false)
   const [selectedBus, setSelectedBus] = useState<BusSearchResultItem | null>()
   const [selectedSeats, setSelectedSeatsData] = useState<Seat[]>([])
-  const [selectedRouteInfos, setSelecetedRouteInfos] = useState<RouteInfo[]>([])
 
   if (
     searchRequestQuery.hasNextPage &&
@@ -161,10 +163,6 @@ const BusSearchResults: React.FC = () => {
       label: bus.company,
     })) ?? []
   const totalCount = busSearchResults?.length ?? 0
-  const storedData = localStorage.getItem('bus-search-engine')
-  const parsedData = storedData ? JSON.parse(storedData) : null
-  const destinationName = parsedData?.Destination?.Name ?? ''
-  const originName = parsedData?.Origin?.Name ?? ''
   const filterOptions = [
     {
       label: 'Fiyata Göre Artan ',
@@ -179,6 +177,8 @@ const BusSearchResults: React.FC = () => {
       value: SortOrderEnums.hourAsc,
     },
   ]
+  const [searchParamsBus, setSearchParamsBus] = useQueryStates(busSearchParams)
+
   if (!hasSearchResult) {
     return (
       <div className='container py-3'>
@@ -188,6 +188,33 @@ const BusSearchResults: React.FC = () => {
       </div>
     )
   }
+  const handlePrevDay = () => {
+    const currentDate = searchParamsBus.date
+    if (currentDate) {
+      const prevDate = dayjs(currentDate).subtract(1, 'day')
+      const today = dayjs().startOf('day')
+      if (prevDate.isBefore(today)) {
+        return
+      }
+      const url = serializeBusSearchParams('/bus/search-results', {
+        ...searchParamsBus,
+        date: prevDate.toDate(),
+      })
+      router.push(url)
+    }
+  }
+  const handleNextDay = () => {
+    const currentDate = searchParamsBus.date
+    if (currentDate) {
+      const nextDate = dayjs(currentDate).add(1, 'day')
+      const url = serializeBusSearchParams('/bus/search-results/', {
+        ...searchParamsBus,
+        date: nextDate.toDate(),
+      })
+      router.push(url)
+    }
+  }
+  const busDates = dayjs(searchParamsBus.date).format('DD MMM YYYY')
 
   return (
     <>
@@ -559,6 +586,11 @@ const BusSearchResults: React.FC = () => {
                     </div>
                   )}
                 </Skeleton>
+                <BusSearchPrevNextButtons
+                  busDates={busDates}
+                  handlePrevDay={handlePrevDay}
+                  handleNextDay={handleNextDay}
+                />
                 <div className='grid gap-4 pt-4'>
                   {searchToken &&
                     sessionToken &&
@@ -624,7 +656,6 @@ const BusSearchResults: React.FC = () => {
         onClose={() => {
           if (seatControlMutation.isPending || initBusPaymentProcess.isPending)
             return
-          setSelecetedRouteInfos([])
           setSelectedSeatsData([])
           setSelectedBus(null)
 

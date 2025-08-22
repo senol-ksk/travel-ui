@@ -9,9 +9,7 @@ import {
 } from '@mantine/hooks'
 import {
   Accordion,
-  ActionIcon,
   Alert,
-  Badge,
   Box,
   Button,
   Checkbox,
@@ -67,6 +65,7 @@ import { Select } from '@mantine/core'
 import { FaCheck } from 'react-icons/fa'
 import { IoIosClose } from 'react-icons/io'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
+import { IoSearchSharp } from 'react-icons/io5'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
   flightFareInfo: FlightFareInfo
@@ -348,37 +347,46 @@ const FlightSearchView = () => {
 
   return (
     <>
-      <div className='border-b py-3'>
+      <div className='border-b py-2'>
         <Container>
           {!isBreakPointMatchesMd && (
-            <div className='text-blue-filled relative flex items-center gap-2 text-xs font-semibold'>
-              <button
-                className='absolute start-0 end-0 top-0 bottom-0 z-10'
-                onClick={toggleSearchEngineVisibility}
-              />
-              <div>
-                {
-                  getAirportsByCodeList.data?.find((airPort) =>
-                    searchParams.origin?.iata.includes(airPort.Code)
-                  )?.City
-                }
+            <Skeleton
+              visible={
+                searchResultsQuery.isLoading ||
+                searchResultsQuery.isFetching ||
+                searchResultsQuery.isFetchingNextPage ||
+                searchSessionTokenQuery.isLoading
+              }
+            >
+              <div className='relative flex items-center gap-2 text-sm'>
+                <button
+                  className='absolute start-0 end-0 top-0 bottom-0 z-10'
+                  onClick={toggleSearchEngineVisibility}
+                />
+                <div>
+                  {
+                    getAirportsByCodeList.data?.find((airPort) =>
+                      searchParams.origin?.iata.includes(airPort.Code)
+                    )?.City
+                  }
+                </div>
+                <div>
+                  <FaArrowRightLong />
+                </div>
+                <div>
+                  {
+                    getAirportsByCodeList.data?.find((airPort) =>
+                      searchParams.destination?.iata.includes(airPort.Code)
+                    )?.City
+                  }
+                </div>
+                <div>|</div>
+                <div>{totalPassengerCount()} Yolcu</div>
+                <div className='z-0 ms-auto rounded-md bg-blue-200 p-2'>
+                  <IoSearchSharp size={24} className='text-blue-800' />
+                </div>
               </div>
-              <div>
-                <FaArrowRightLong />
-              </div>
-              <div>
-                {
-                  getAirportsByCodeList.data?.find((airPort) =>
-                    searchParams.destination?.iata.includes(airPort.Code)
-                  )?.City
-                }
-              </div>
-              <div>|</div>
-              <div>{totalPassengerCount()} Yolcu</div>
-              <div className='relative z-0'>
-                <MdManageSearch className='text-xl' />
-              </div>
-            </div>
+            </Skeleton>
           )}
           <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
             <div className='pt-4 md:pt-0'>
@@ -963,7 +971,7 @@ const FlightSearchView = () => {
                             )}
                         </div>
                       </div>
-                      <div className='flex items-center justify-between py-3'>
+                      <div className='flex items-center justify-between pb-3'>
                         <div className='text-xl font-medium md:text-2xl'>
                           Dönüş Uçuşunuzu Seçiniz
                         </div>
@@ -1053,7 +1061,7 @@ const FlightSearchView = () => {
                     </div>
                   ) : (
                     <Skeleton
-                      className='flex items-center justify-between py-3'
+                      className='flex items-center justify-between pb-3'
                       visible={
                         searchResultsQuery.isLoading ||
                         searchResultsQuery.isFetching ||
@@ -1355,35 +1363,44 @@ const FlightSearchView = () => {
             <div className='flex text-xl font-medium md:hidden'>
               Uçuş Paketinizi Seçiniz
             </div>
-            <div className='flex items-center justify-center gap-1'>
-              <AirlineLogo
-                airlineCode={
-                  selectedFlightItemPackages?.flights
-                    ?.at(-1)
-                    ?.segments?.at(0)
-                    ?.marketingAirline.code.toLowerCase() ?? ''
-                }
-              />
-              <span className='md:text-md text-sm font-semibold'>
+
+            <div className='flex items-center justify-center gap-3'>
+              <div className='flex items-center justify-center gap-1 font-semibold'>
                 {
-                  airlineDataObj
-                    ?.find(
-                      (airline) =>
-                        airline.Code ==
-                        selectedFlightItemPackages?.flights
-                          .at(-1)
-                          ?.segments.at(0)?.marketingAirline.code
-                    )
-                    ?.Value.at(0)?.Value
+                  getAirportsByCodeList.data?.find((airPort) =>
+                    searchParams.origin?.iata.includes(airPort.Code)
+                  )?.City
                 }
-              </span>
-              {''}-{''}
-              <span className='md:text-md text-sm font-semibold'>
+                {''} - {''}
                 {
-                  selectedFlightItemPackages?.flights?.at(-1)?.segments?.at(0)
-                    ?.origin.code
+                  getAirportsByCodeList.data?.find((airPort) =>
+                    searchParams.destination?.iata.includes(airPort.Code)
+                  )?.City
                 }
-              </span>
+              </div>
+              <div className='flex items-center justify-center gap-1'>
+                <AirlineLogo
+                  airlineCode={
+                    selectedFlightItemPackages?.flights
+                      ?.at(-1)
+                      ?.segments?.at(0)
+                      ?.marketingAirline.code.toLowerCase() ?? ''
+                  }
+                />
+                <span className='md:text-md text-sm font-semibold'>
+                  {
+                    airlineDataObj
+                      ?.find(
+                        (airline) =>
+                          airline.Code ==
+                          selectedFlightItemPackages?.flights
+                            .at(-1)
+                            ?.segments.at(0)?.marketingAirline.code
+                      )
+                      ?.Value.at(0)?.Value
+                  }
+                </span>
+              </div>
             </div>
           </div>
         }

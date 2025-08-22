@@ -18,7 +18,6 @@ import {
 import { hotelSocket } from './socket'
 import { cleanObj } from '@/libs/util'
 import dayjs from 'dayjs'
-import axios from 'axios'
 
 let appToken: GetSecurityTokenResponse | undefined | null
 

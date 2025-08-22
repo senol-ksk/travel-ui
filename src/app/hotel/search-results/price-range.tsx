@@ -31,6 +31,7 @@ const PriceRangeSlider: React.FC<IProps> = ({
   return (
     <>
       <RangeSlider
+        className='px-2'
         value={values}
         min={defaultRanges[0]}
         max={defaultRanges[1]}
@@ -45,7 +46,7 @@ const PriceRangeSlider: React.FC<IProps> = ({
         thumbSize={26}
         onChange={setValues}
       />
-      {/* <div className='pt-5'>
+      <div className='pt-5'>
         <div className='grid grid-cols-2 gap-2'>
           <div>
             <TextInput
@@ -62,7 +63,7 @@ const PriceRangeSlider: React.FC<IProps> = ({
             />
           </div>
         </div>
-      </div> */}
+      </div>
 
       <div className='pt-3 text-center'>
         <Button
