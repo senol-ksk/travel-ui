@@ -170,6 +170,10 @@ const HotelGuestsActions: React.FC<Props> = ({
         </div>
         {room.childAges.length ? (
           <div className='mt-5 grid grid-cols-2 gap-3'>
+            <div className='col-span-2 text-xs leading-tight text-red-700'>
+              Tesisten çıkış sırasında çocuğunuzun kaç yaşında olacağını seçin
+            </div>
+
             {room.childAges.map((child, ageIndex) => {
               return (
                 <NativeSelect

@@ -1,9 +1,6 @@
 import { useState } from 'react'
-
-import { Transition, Paper, Button, ActionIcon, Text } from '@mantine/core'
+import { Transition, Paper, Button, ActionIcon } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
-import { useForm } from 'react-hook-form'
-
 import { FiPlus, FiMinus } from 'react-icons/fi'
 
 import { Input } from '@/components/search-engine/input'
@@ -98,9 +95,8 @@ export const PassengerDropdown: React.FC<Props> = ({
         {(styles) => (
           <div
             ref={clickOutsideRef}
-            className='fixed start-0 end-0 top-20 bottom-0 z-50 sm:absolute sm:start-auto sm:bottom-auto md:-ms-1 md:-mt-1'
+            className='fixed start-0 end-0 top-0 bottom-0 z-50 sm:absolute sm:start-auto sm:bottom-auto md:top-20 md:-ms-1 md:-mt-1'
             style={{ ...styles }}
-            role='menu'
           >
             <Paper
               className='flex h-full flex-col rounded-lg shadow-xl'
