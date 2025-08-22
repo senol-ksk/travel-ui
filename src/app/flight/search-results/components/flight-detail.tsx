@@ -193,7 +193,9 @@ function FlightDetailsSearch({
                           <>
                             Bu uçuş için{' '}
                             <strong>
-                              {firstDepTimeOfLeg.format('D MMMM YYYY')}
+                              {firstDepTimeOfLeg
+                                .subtract(1, 'day')
+                                .format('D MMMM YYYY')}
                             </strong>{' '}
                             gecesi <br />
                             havaalanında olmanız gerekiyor.
