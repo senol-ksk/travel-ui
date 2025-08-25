@@ -417,7 +417,7 @@ const TourDetailClient = () => {
                   <div className='relative'>
                     <LoadingOverlay
                       visible={calculateTotalPriceQuery.isPending}
-                      zIndex={1000}
+                      zIndex={10}
                       overlayProps={{ radius: 'sm', blur: 2 }}
                       loaderProps={{ color: 'indigo', type: 'bars' }}
                     />
