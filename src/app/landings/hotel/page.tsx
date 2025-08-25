@@ -34,15 +34,16 @@ export default async function HotelLandingPage() {
   const { params, widgets } = data
 
   const popular_domestic_cities = widgets.filter(
-    (x) => x.point === 'popular_domestic_cities'
+    (x) => x.point === 'popular_places'
   )
   const popular_abroad_cities = widgets.filter(
-    (x) => x.point === 'popular_abroad_cities'
+    (x) => x.point === 'popular_places'
   )
   const faqs = widgets.filter((x) => x.point === 'sss')
   const teaser_bottom = widgets.filter(
     (widget) => widget.point === 'teaser_bottom'
   )
+  const teaser = widgets.filter((item) => item.point === 'teaser')
 
   return (
     <div>
@@ -65,6 +66,49 @@ export default async function HotelLandingPage() {
         </Container>
       </div>
       <Container className='grid gap-3 py-5 md:gap-7 md:py-10'>
+        <div>
+          <Title fz={'h3'} mb={'lg'}>
+            Seyahatinizi Yönetin
+          </Title>
+          <div className='flex gap-4 overflow-x-auto font-semibold md:grid md:grid-cols-3 md:gap-4'>
+            {teaser &&
+              teaser.length > 0 &&
+              teaser
+                .sort((a, b) => (a.ordering || 0) - (b.ordering || 0))
+                .map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.params?.link?.value}
+                    className='flex-shrink-0 md:flex-shrink'
+                  >
+                    <div className='grid min-w-[100px] items-center gap-2 rounded border bg-white p-1 md:min-w-0 md:p-3'>
+                      <div>
+                        <div
+                          style={{
+                            width: '50px',
+                            height: '50px',
+                          }}
+                          className='flex items-center justify-center rounded-full border bg-gray-300'
+                          dangerouslySetInnerHTML={{
+                            __html: item.params?.svg?.value || '',
+                          }}
+                        />
+                      </div>
+                      <div>
+                        {item.title}
+                        <br />
+                        <div
+                          className='text-sm font-normal text-gray-600'
+                          dangerouslySetInnerHTML={{
+                            __html: item.params?.description?.value,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+          </div>
+        </div>
         {popular_domestic_cities.length > 0 && (
           <div>
             <Title fz={'h3'} mb={'lg'}>
@@ -73,8 +117,8 @@ export default async function HotelLandingPage() {
             <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
               {popular_domestic_cities.map((item) => (
                 <ProductBox
+                  description=''
                   key={item.id}
-                  description={item.params.sort_desc.value}
                   image={item.params.image.value}
                   title={item.title}
                   url={
@@ -87,7 +131,7 @@ export default async function HotelLandingPage() {
             </div>
           </div>
         )}
-        {popular_abroad_cities.length > 0 && (
+        {/* {popular_abroad_cities.length > 0 && (
           <div>
             <Title fz={'h3'} mb={'lg'}>
               Yurt Dışı Popüler Şehirler
@@ -95,8 +139,8 @@ export default async function HotelLandingPage() {
             <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
               {popular_abroad_cities.map((item) => (
                 <ProductBox
+                  description=' '
                   key={item.id}
-                  description={item.params.sort_desc.value}
                   image={item.params.image.value}
                   title={item.title}
                   url={
@@ -108,7 +152,7 @@ export default async function HotelLandingPage() {
               ))}
             </div>
           </div>
-        )}
+        )} */}
         {teaser_bottom.length > 0 && (
           <div className='grid gap-6 rounded-md border bg-white p-3 md:p-6'>
             {teaser_bottom.map((teaser) => (

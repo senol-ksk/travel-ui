@@ -33,13 +33,14 @@ export default async function CarLandingPage() {
   const { params, widgets } = data
   const providers = widgets.find((item) => item.point === 'providers')
   const popularDomesticLocations = widgets.filter(
-    (item) => item.point === 'domestic_react_locations'
+    (item) => item.point === 'popular_domestic_locations'
   )
   const popularLocationsAbroad = widgets.filter(
-    (item) => item.point === 'int_react_locations'
+    (item) => item.point === 'popular_locations_abroad'
   )
   const faqs = widgets.filter((item) => item.point === 'sss')
   const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
+  const teaser = widgets.filter((item) => item.point === 'teaser')
 
   return (
     <div className='py-6 md:py-10'>
@@ -63,17 +64,51 @@ export default async function CarLandingPage() {
       </div>
 
       <Container pt={{ base: 'md', sm: 'xl' }}>
-        <div>
-          <Title order={2} fz={'h3'} className='pb-3 text-center'>
-            {providers?.title}
-          </Title>
+        <div className='grid gap-6 md:gap-12'>
           <div>
-            <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
-              <div className='flex gap-3'>
+            <Title fz={{ base: 'h4', md: 'h3' }} mb={'xl'}>
+              Yurt İçi Araç Kiralama Noktaları
+            </Title>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
+              {popularDomesticLocations.map((item) => (
+                <ProductBox
+                  key={item.id}
+                  description=''
+                  image={item.params.image.value}
+                  title={item.title}
+                  url={`/car/search-results?${item.params.link.value}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <Title fz={{ base: 'h4', md: 'h3' }} mb={'xl'}>
+              Yurt Dışı Araç Kiralama Noktaları
+            </Title>
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
+              {popularLocationsAbroad.map((item) => (
+                <ProductBox
+                  key={item.id}
+                  description=''
+                  image={item.params.image.value}
+                  title={item.title}
+                  url={`/car/search-results?${item.params.link.value}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <Title fz={{ base: 'h4', md: 'h3' }} className='pb-3 text-center'>
+              {providers?.title}
+            </Title>
+            <div className='overflow-x-auto'>
+              <div className='flex w-[200px] gap-3 md:w-0'>
                 {providers?.params.images.list.map(
                   (providerImageUrl, provideIndex) => {
                     return (
-                      <div key={provideIndex}>
+                      <div key={provideIndex} className='w-[130px]'>
                         <div className='flex h-[60px] w-[130px] items-center justify-center rounded-md border p-2'>
                           <div className='relative h-full w-full flex-1'>
                             <Image
@@ -91,46 +126,6 @@ export default async function CarLandingPage() {
                   }
                 )}
               </div>
-            </ScrollArea>
-          </div>
-        </div>
-        <div className='grid gap-6 pt-6 md:gap-12 md:pt-12'>
-          <div className='flex justify-center'>
-            <Title fz={'h3'}>Popüler araç kiralama noktaları</Title>
-          </div>
-
-          <div>
-            <Title order={4} fz={'h3'} mb={'lg'}>
-              Yurt İçi Araç Kiralama Noktaları
-            </Title>
-            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
-              {popularDomesticLocations.map((item) => (
-                <ProductBox
-                  key={item.id}
-                  description=''
-                  image={item.params.image.value}
-                  title={item.title}
-                  url={`/car/search-results?${item.params.link.value}`}
-                  // url={item.l}
-                />
-              ))}
-            </div>
-          </div>
-          <div>
-            <Title order={4} fz={'h3'} mb={'lg'}>
-              Yurt Dışı Araç Kiralama Noktaları
-            </Title>
-            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4'>
-              {popularLocationsAbroad.map((item) => (
-                <ProductBox
-                  key={item.id}
-                  description=''
-                  image={item.params.image.value}
-                  title={item.title}
-                  url={`/car/search-results?${item.params.link.value}`}
-                  // url={item.l}
-                />
-              ))}
             </div>
           </div>
 
@@ -138,7 +133,7 @@ export default async function CarLandingPage() {
             <div className='grid gap-6 rounded-md border bg-white p-3 md:p-6'>
               {teaser_bottom.map((teaser) => (
                 <article key={teaser.id}>
-                  <Title fz={'h3'} mb={'md'}>
+                  <Title fz={{ base: 'h4', md: 'h3' }} mb={'md'}>
                     {teaser.title}
                   </Title>
                   <Typography>
@@ -155,7 +150,7 @@ export default async function CarLandingPage() {
 
           {faqs.length > 0 && (
             <div>
-              <Title order={2} mb={'lg'} fz={'h3'}>
+              <Title fz={{ base: 'h4', md: 'h3' }} mb={'lg'}>
                 Sıkça Sorulan Sorular
               </Title>
               <Accordion

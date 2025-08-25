@@ -49,7 +49,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
           <Button
             size='md'
             variant='outline'
-            className='flex items-center gap-2 border-transparent bg-gray-100 hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-200 hover:border-blue-800'
             onClick={onPrevDay}
           >
             <MdKeyboardArrowLeft color='black' size={18} />
@@ -58,7 +58,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             </span>
           </Button>
 
-          <div className='flex flex-grow justify-center rounded bg-gray-100 py-2 font-medium'>
+          <div className='flex flex-grow justify-center rounded bg-gray-200 py-2 font-medium'>
             {(() => {
               const calendarDate =
                 isReturnFlightVisible && returnDate ? returnDate : departureDate
@@ -71,7 +71,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
           <Button
             size='md'
             variant='outline'
-            className='flex items-center gap-2 border-transparent bg-gray-100 hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-200 hover:border-blue-800'
             onClick={onNextDay}
           >
             <span className='hidden font-normal text-black md:block'>
@@ -95,7 +95,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='flex items-center gap-2 border-transparent bg-gray-100 py-2 font-normal hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-200 py-2 font-normal hover:border-blue-800'
             onClick={onPrevDay}
           >
             <MdKeyboardArrowLeft size={18} />
@@ -106,14 +106,14 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='flex items-center gap-2 border-transparent bg-gray-100 font-normal hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-200 font-normal hover:border-blue-800'
             onClick={onNextDay}
           >
             <span className='hidden md:block'>Sonraki Gün</span>
             <MdKeyboardArrowRight size={18} />
           </Button>
 
-          <div className='border-gray flex-grow rounded bg-gray-100 py-2 text-center text-sm font-medium'>
+          <div className='border-gray flex-grow rounded bg-gray-200 py-2 text-center text-sm font-medium'>
             {departureDate && returnDate ? (
               <>
                 <div className='hidden justify-center md:flex'>
@@ -141,7 +141,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='flex items-center gap-2 border-transparent bg-gray-100 font-normal hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-200 font-normal hover:border-blue-800'
             onClick={onPrevReturnDay}
           >
             <MdKeyboardArrowLeft size={18} />
@@ -152,7 +152,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='flex items-center gap-2 border-transparent bg-gray-100 font-normal hover:border-blue-800'
+            className='flex items-center gap-2 border-transparent bg-gray-200 font-normal hover:border-blue-800'
             onClick={onNextReturnDay}
           >
             <span className='hidden md:block'>Sonraki Gün</span>
@@ -166,14 +166,14 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='md:text-md flex items-center gap-2 border-transparent bg-gray-200 text-xs hover:border-blue-800'
             onClick={onPrevDay}
           >
             <MdKeyboardArrowLeft size={18} />
             <span className='hidden md:block'>Önceki Gün</span>
           </Button>
 
-          <div className='border-gray md:text-md flex-grow rounded bg-gray-100 text-center text-sm font-medium'>
+          <div className='border-gray md:text-md flex-grow rounded bg-gray-200 text-center text-sm font-medium'>
             {departureDate && returnDate ? (
               <>
                 <div className='hidden justify-center md:flex'>
@@ -202,7 +202,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             color='gray'
             size='sm'
             variant='outline'
-            className='md:text-md flex items-center gap-2 border-transparent bg-gray-100 text-xs hover:border-blue-800'
+            className='md:text-md flex items-center gap-2 border-transparent bg-gray-200 text-xs hover:border-blue-800'
             onClick={onNextDay}
           >
             <span className='hidden md:block'>Sonraki Gün</span>
