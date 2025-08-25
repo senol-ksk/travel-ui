@@ -274,7 +274,7 @@ const TransferSearchResults = () => {
                       size='sm'
                       className={
                         order === option.value
-                          ? 'rounded-md border-0 bg-blue-200 px-3 font-medium text-blue-700'
+                          ? 'rounded-md border-0 bg-blue-100 px-3 font-medium text-blue-700'
                           : 'rounded-md border-gray-400 px-3 font-medium text-black hover:bg-blue-50 hover:text-blue-700'
                       }
                       key={option.value}
@@ -333,10 +333,11 @@ const TransferSearchResults = () => {
             >
               <>
                 <div className='flex items-center gap-2 md:hidden'>
-                  <div className='text-sm font-semibold text-gray-500'>
-                    Transferiniz İçin Toplam{' '}
-                    <span className='text-xl font-bold'>{totalCount}</span> Araç
-                    Bulundu
+                  <div className='text-sm'>
+                    <span className='font-semibold'>Transferiniz</span> İçin
+                    Toplam{' '}
+                    <span className='text-xl font-semibold'>{totalCount}</span>{' '}
+                    Araç Bulundu
                   </div>
                 </div>
               </>

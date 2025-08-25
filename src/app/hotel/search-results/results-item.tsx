@@ -116,19 +116,21 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                     </div>
                   )}
                 </Transition>
-                <Image
-                  loading='lazy'
-                  fallbackSrc='/default-room.jpg'
-                  onLoad={(e) => {
-                    setImageLoading(false)
-                  }}
-                  h={'100%'}
-                  w={'100%'}
-                  src={hotelImageUrl}
-                  alt={hotelInfo?.name}
-                  radius={'md'}
-                  className='relative'
-                />
+                <Link href={detailUrl}>
+                  <Image
+                    loading='lazy'
+                    fallbackSrc='/default-room.jpg'
+                    onLoad={(e) => {
+                      setImageLoading(false)
+                    }}
+                    h={'100%'}
+                    w={'100%'}
+                    src={hotelImageUrl}
+                    alt={hotelInfo?.name}
+                    radius={'md'}
+                    className='relative'
+                  />
+                </Link>
                 {hotelInfo?.comment_info && (
                   <div className='absolute end-0 top-0 m-2 flex items-center gap-2 rounded bg-green-800 px-1 py-1 text-sm text-white md:hidden'>
                     <div>

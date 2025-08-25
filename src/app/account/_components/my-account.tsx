@@ -326,7 +326,7 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
         <Title order={3} className='border-b'>
           Güvenlik
         </Title>
-        <div className='flex items-center justify-between py-3'>
+        <div className='flex items-center justify-between pb-10 md:py-4'>
           <div className='flex items-center gap-2'>
             <MdOutlineMailOutline size={20} />
             E-posta İşlemleri
@@ -337,15 +337,21 @@ const MyAccount: React.FC<IProps> = ({ defaultValues }) => {
             </div>
           </Link>{' '}
         </div>
-      </div>
-      <div className='my-10 grid justify-end gap-5 border-t py-5 md:flex md:justify-between'>
-        <div className='hidden text-sm text-gray-600 md:flex'>
-          Lütfen bilgilerinizi doğru girdiğinizden emin olunuz. <br />
-          Aksi Durumda yurt dışına çıkışınız mümkün olmayacaktır{' '}
+        <div className='flex items-center justify-between gap-5 md:border-t md:py-5'>
+          <div className='hidden text-sm text-gray-600 md:flex'>
+            Lütfen bilgilerinizi doğru girdiğinizden emin olunuz. <br />
+            Aksi Durumda yurt dışına çıkışınız mümkün olmayacaktır{' '}
+          </div>
+
+          <Button
+            type='submit'
+            size='md'
+            loading={submitMutation.isPending}
+            className='w-full md:w-auto'
+          >
+            Değişiklikleri kaydet
+          </Button>
         </div>
-        <Button type='submit' size='md' loading={submitMutation.isPending}>
-          Değişiklikleri kaydet
-        </Button>
       </div>
     </form>
   )

@@ -416,7 +416,7 @@ const TourSearchResultClient = () => {
                       size='sm'
                       className={
                         order === option.value
-                          ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                          ? 'rounded-md border-0 bg-blue-100 font-medium text-blue-700'
                           : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                       }
                       key={option.value}
@@ -444,8 +444,9 @@ const TourSearchResultClient = () => {
                   !searchResultsQuery.data
                 }
               >
-                <span className='text-sm font-semibold text-gray-500'>
-                  Toplam <span className='text-xl font-bold'>{totalCount}</span>{' '}
+                <span className='text-sm'>
+                  Toplam{' '}
+                  <span className='text-xl font-semibold'>{totalCount}</span>{' '}
                   Tur Bulundu
                 </span>
               </Skeleton>
