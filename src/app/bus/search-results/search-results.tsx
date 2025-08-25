@@ -7,6 +7,7 @@ import {
   Button,
   Checkbox,
   CloseButton,
+  Collapse,
   Container,
   Drawer,
   Modal,
@@ -21,7 +22,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { useState } from 'react'
-import { useDisclosure, useMediaQuery } from '@mantine/hooks'
+import { upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useTransitionRouter } from 'next-view-transitions'
 import { createSerializer, useQueryState, useQueryStates } from 'nuqs'
 
@@ -48,6 +49,10 @@ import { FaCheck } from 'react-icons/fa'
 import { TripDetail } from '@/app/bus/search-results/components/trip-detail'
 import { BusSearchPrevNextButtons } from './components/bus-change-days'
 import dayjs from 'dayjs'
+import { BusSearchEngine } from '@/modules/bus'
+import { IoSearchSharp } from 'react-icons/io5'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import { useDestinationGetBySlug } from '@/hooks/destination'
 const skeltonLoader = new Array(3).fill(true)
 
 const BusSearchResults: React.FC = () => {
@@ -55,6 +60,8 @@ const BusSearchResults: React.FC = () => {
     useQueryStates(filterParsers)
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
 
   const {
     searchRequestQuery,
@@ -178,8 +185,14 @@ const BusSearchResults: React.FC = () => {
       value: SortOrderEnums.hourAsc,
     },
   ]
-  const [searchParamsBus, setSearchParamsBus] = useQueryStates(busSearchParams)
-
+  const [searchParamsBus] = useQueryStates(busSearchParams)
+  const destinationInfoQuery = useDestinationGetBySlug({
+    slugs: [
+      searchParamsBus?.originSlug as string,
+      searchParamsBus?.destinationSlug as string,
+    ],
+    moduleName: 'Bus',
+  })
   if (!hasSearchResult) {
     return (
       <div className='container py-3'>
@@ -219,6 +232,51 @@ const BusSearchResults: React.FC = () => {
 
   return (
     <>
+      <div className='border-b py-0 md:py-4'>
+        <Container>
+          <div className='relative flex items-center gap-2 py-2 text-xs font-semibold text-blue-800 md:hidden'>
+            <button
+              className='absolute start-0 end-0 top-0 bottom-0 z-10'
+              onClick={toggleSearchEngineVisibility}
+            />
+            <Skeleton
+              h={17}
+              w={'65%'}
+              pos={'absolute'}
+              visible={destinationInfoQuery.pending}
+            />
+            <div>
+              {
+                destinationInfoQuery.data.find(
+                  (destination) =>
+                    destination?.Result.Slug === searchParamsBus.originSlug
+                )?.Result.Name
+              }
+            </div>
+            <div>
+              <FaArrowRightLong />
+            </div>
+            <div>
+              {
+                destinationInfoQuery.data.find(
+                  (destination) =>
+                    destination?.Result.Slug === searchParamsBus.destinationSlug
+                )?.Result.Name
+              }
+            </div>
+            <div>{dayjs(searchParamsBus.date).format('DD MMMM')}</div>
+            <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+              <IoSearchSharp size={24} className='text-blue-800' />
+            </div>
+          </div>
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            <div className='py-3 md:py-0'>
+              <BusSearchEngine />
+            </div>
+          </Collapse>
+        </Container>
+      </div>
+
       <div className='relative'>
         {searchRequestQuery.isLoading ||
           (searchRequestQuery.isFetching && (

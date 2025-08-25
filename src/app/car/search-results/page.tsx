@@ -1,4 +1,4 @@
-import { Suspense, useId } from 'react'
+import { Suspense } from 'react'
 
 import { Skeleton } from '@mantine/core'
 import { type SearchParams } from 'nuqs'

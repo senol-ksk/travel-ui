@@ -193,6 +193,7 @@ const BillingForm = () => {
                                         .mobilPhoneNumber,
                                   }
                                 ),
+                                // @ts-expect-error watch for the package updates
                                 'data-variant': 'default',
 
                                 id: field.name,
@@ -400,6 +401,7 @@ const BillingForm = () => {
                                     !!formContext.formState?.errors.phoneNumber,
                                 }
                               ),
+                              // @ts-expect-error watch for the package updates
                               'data-variant': 'default',
                               id: field.name,
                               name: field.name,
