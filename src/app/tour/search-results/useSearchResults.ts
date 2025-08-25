@@ -89,5 +89,5 @@ export const useTourSearchResultsQuery = () => {
     },
   })
 
-  return { searchResultsQuery, searchParamsQuery }
+  return { searchResultsQuery, searchParamsQuery, searchParams }
 }

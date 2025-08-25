@@ -7,6 +7,7 @@ import {
   Button,
   Checkbox,
   CloseButton,
+  Collapse,
   Container,
   NativeSelect,
   rem,
@@ -29,15 +30,21 @@ import {
   TourSearchResultGroupedItem,
   TourSearchResultSearchItem,
 } from '@/modules/tour/type'
-import { useMediaQuery, useWindowScroll } from '@mantine/hooks'
+import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks'
 import { GoMoveToTop } from 'react-icons/go'
 import { useMemo, useRef, useState } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
 import { FaCheck } from 'react-icons/fa'
+import { useDestinationGetBySlug } from '@/hooks/destination'
+import { CruiseSearchEngine } from '@/modules/cruise'
+import { TourSearchEngine } from '@/modules/tour'
+import { IoSearchSharp } from 'react-icons/io5'
+import dayjs from 'dayjs'
 
 const TourSearchResultClient = () => {
-  const { searchResultsQuery, searchParamsQuery } = useTourSearchResultsQuery()
+  const { searchResultsQuery, searchParamsQuery, searchParams } =
+    useTourSearchResultsQuery()
   const [scroll, scrollTo] = useWindowScroll()
 
   const [{ order, ...filterParams }, setFilterParams] =
@@ -115,6 +122,8 @@ const TourSearchResultClient = () => {
   const filteredData = useFilterActions(searchGroupedData)
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
   const filterOptions = [
     {
       label: 'Fiyata Göre Artan ',
@@ -134,9 +143,11 @@ const TourSearchResultClient = () => {
     },
   ]
   const totalCount = searchData?.length ?? 0
-  // const storedData = localStorage.getItem('tour-search')
-  // const parsedData = storedData ? JSON.parse(storedData) : null
-  // const destinationName = parsedData?.destination?.name ?? ''
+
+  const destinationInfoQuery = useDestinationGetBySlug({
+    slugs: [searchParams.destinationSlug as string],
+    moduleName: 'Tour',
+  })
 
   if (
     !searchParamsQuery.data &&
@@ -189,6 +200,38 @@ const TourSearchResultClient = () => {
 
   return (
     <>
+      <div className='border-b py-0 md:p-5'>
+        <Container>
+          <div className='relative flex items-center gap-2 py-2 text-xs font-semibold text-blue-800 md:hidden'>
+            <button
+              className='absolute start-0 end-0 top-0 bottom-0 z-10'
+              onClick={toggleSearchEngineVisibility}
+            />
+            <div>
+              {destinationInfoQuery.data.find(
+                (destination) =>
+                  destination?.Result.Slug === searchParams.destinationSlug
+              )?.Result.Name ?? searchParams.destinationSlug}
+            </div>
+            <div>
+              {dayjs(searchParams.checkinDate).format('DD MMM YYYY')} -{' '}
+              {dayjs(searchParams.checkoutDate).format('DD MMM YYYY')}
+            </div>
+            <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+              <IoSearchSharp size={24} className='text-blue-800' />
+            </div>
+          </div>
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            <div className='py-3 md:py-0'>
+              {searchParams.isCruise ? (
+                <CruiseSearchEngine />
+              ) : (
+                <TourSearchEngine />
+              )}
+            </div>
+          </Collapse>
+        </Container>
+      </div>
       {searchRequestIsLoading ? (
         <div className='relative'>
           <Skeleton h={6} className='absolute start-0 end-0 top-0' radius={0} />
