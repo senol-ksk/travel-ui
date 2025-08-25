@@ -635,7 +635,7 @@ const BusSearchResults: React.FC = () => {
                   </div>
                 </Skeleton>
                 <Skeleton
-                  className='mt-3 flex items-center gap-2'
+                  className='my-3 flex items-center gap-2'
                   visible={
                     searchRequestQuery.isLoading ||
                     searchRequestQuery.isFetchingNextPage ||
@@ -644,9 +644,9 @@ const BusSearchResults: React.FC = () => {
                 >
                   {totalCount > 0 && (
                     <div className='flex items-center gap-2 md:hidden'>
-                      <span className='text-sm font-semibold text-gray-500'>
+                      <span className='text-sm'>
                         Toplam{' '}
-                        <span className='text-xl font-bold'>{totalCount}</span>{' '}
+                        <span className='text-lg font-bold'>{totalCount}</span>{' '}
                         Otobüs Seferi Bulundu
                       </span>{' '}
                     </div>

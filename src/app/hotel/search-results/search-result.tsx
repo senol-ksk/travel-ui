@@ -553,7 +553,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                           size='sm'
                           className={
                             filterParams.orderBy === option.value
-                              ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                              ? 'rounded-md border-0 bg-blue-100 font-medium text-blue-700'
                               : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                           }
                           key={option.value}
@@ -647,8 +647,14 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                   {searchParams.destination && (
                     <>
                       <div>
-                        <span className='text-sm font-semibold text-gray-500'>
-                          {searchParams.destination}, İçin Toplam {totalCount}{' '}
+                        <span className='text-sm'>
+                          <span className='font-semibold'>
+                            {searchParams.destination}
+                          </span>
+                          , için Toplam{' '}
+                          <span className='text-md font-semibold'>
+                            {totalCount}
+                          </span>{' '}
                           Tesis Bulundu
                         </span>{' '}
                       </div>

@@ -79,7 +79,7 @@ const PassengerForm: React.FC<IProps> = ({
         onSubmit(data)
       })}
     >
-      <div className='grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5'>
+      <div className='flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-5'>
         <div className='col-span-2 flex'>
           <Controller
             control={form.control}

@@ -456,7 +456,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
               <div className='grid gap-3 md:col-span-3'>
                 <div className='grid grid-cols-3 items-center gap-2 md:grid-cols-5'>
                   <Skeleton
-                    className='col-span-1 hidden md:col-span-3 md:flex'
+                    className='col-span-1 hidden py-1 md:col-span-3 md:flex'
                     visible={
                       carSearchResult.isFetching ||
                       carSearchResult.isFetchingNextPage ||
@@ -509,7 +509,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                         size='sm'
                         className={
                           order === option.value
-                            ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                            ? 'rounded-md border-0 bg-blue-100 font-medium text-blue-700'
                             : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                         }
                         key={option.value}
@@ -547,8 +547,12 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                   }
                 >
                   <>
-                    <span className='text-sm font-semibold text-gray-500'>
-                      Toplam {totalCount} Araç Bulundu
+                    <span className='text-sm'>
+                      Toplam{' '}
+                      <span className='text-md font-semibold'>
+                        {totalCount}
+                      </span>{' '}
+                      Araç Bulundu
                     </span>
                   </>
                 </Skeleton>
