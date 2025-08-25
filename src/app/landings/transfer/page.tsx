@@ -30,7 +30,7 @@ export default async function TransferLandingPage() {
   const { widgets, params } = data
   const teaser = widgets.filter((item) => item.point === 'teaser')
   const content = widgets?.find((x) => x.point == 'content')
-  const bottomContents = widgets?.filter((x) => x.point == 'bottom_contents')
+  const bottomContents = widgets?.filter((x) => x.point == 'bottom_content')
   const faqs = widgets?.filter((x) => x.point == 'sss')
   const populerTransferPoints = widgets?.filter(
     (x) => x.point == 'populer_transfer_points'
@@ -57,46 +57,7 @@ export default async function TransferLandingPage() {
         </Container>
       </div>
       <Container className='grid grid-cols-1 gap-8 py-5 md:gap-12 md:py-10'>
-        <div className='py-4 md:py-7'>
-          <div className='grid grid-cols-1 gap-2 sm:grid-cols-3 md:gap-4'>
-            {teaser.map((teaserItem) => (
-              <div
-                key={teaserItem.id}
-                className='flex items-center rounded border p-3'
-              >
-                {teaserItem.title}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {bottomContents.length > 0 &&
-          bottomContents.map((content) => {
-            return (
-              <div key={content.id}>
-                <Title order={3}>{content.title} </Title>
-                <div>
-                  <Typography>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: content.params.description.value,
-                      }}
-                    />
-                  </Typography>
-                </div>
-                <div>
-                  <Image
-                    component={NextImage}
-                    src={cdnImageUrl(content.params.image.value)}
-                    alt={content.title}
-                    radius={'md'}
-                  />
-                </div>
-              </div>
-            )
-          })}
-
-        {content && (
+        {/* {content && (
           <div>
             <Title order={2} mb={'md'}>
               {content.title}
@@ -123,11 +84,11 @@ export default async function TransferLandingPage() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {populerTransferPoints.length > 0 && (
           <div>
-            <Title order={2} fz={'h3'} mb={'lg'}>
+            <Title fz={'h3'} mb={'lg'}>
               Popüler Transfer Noktaları
             </Title>
             <div className='grid grid-cols-1 gap-3 sm:grid-cols-3 md:grid-cols-4'>
@@ -150,7 +111,25 @@ export default async function TransferLandingPage() {
             </div>
           </div>
         )}
-
+        {bottomContents.length > 0 &&
+          bottomContents.map((content) => {
+            return (
+              <div key={content.id} className='rounded-md border p-3'>
+                <Title order={2} mb={'lg'} fz={'h3'}>
+                  {content.title}{' '}
+                </Title>
+                <div>
+                  <Typography>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: content.params.description.value,
+                      }}
+                    />
+                  </Typography>
+                </div>
+              </div>
+            )
+          })}
         {faqs.length > 0 && (
           <div>
             <Title order={2} mb={'lg'} fz={'h3'}>

@@ -6,7 +6,7 @@ import { Route } from 'next'
 type ProductBoxProps = {
   image: string
   title: string
-  description: string
+  description?: string
   url: Route
 }
 

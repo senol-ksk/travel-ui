@@ -14,6 +14,7 @@ import {
   rem,
   RemoveScroll,
   Skeleton,
+  Spoiler,
   Stack,
   Title,
   Transition,
@@ -426,22 +427,29 @@ const BusSearchResults: React.FC = () => {
                                       }
                                     >
                                       <Stack gap={rem(6)}>
-                                        {companyIdChecks
-                                          ?.filter(
-                                            (item, itemIndex, itemArr) =>
-                                              itemArr.findIndex(
-                                                (item2) => item.id === item2.id
-                                              ) === itemIndex
-                                          )
-                                          .map((item, itemIndex) => {
-                                            return (
-                                              <Checkbox
-                                                key={itemIndex}
-                                                label={item.label}
-                                                value={item.id.toString()}
-                                              />
+                                        <Spoiler
+                                          maxHeight={100}
+                                          showLabel={'Daha Fazla Göster'}
+                                          hideLabel={'Daha Az Göster'}
+                                        >
+                                          {companyIdChecks
+                                            ?.filter(
+                                              (item, itemIndex, itemArr) =>
+                                                itemArr.findIndex(
+                                                  (item2) =>
+                                                    item.id === item2.id
+                                                ) === itemIndex
                                             )
-                                          })}
+                                            .map((item, itemIndex) => {
+                                              return (
+                                                <Checkbox
+                                                  key={itemIndex}
+                                                  label={item.label}
+                                                  value={item.id.toString()}
+                                                />
+                                              )
+                                            })}
+                                        </Spoiler>
                                       </Stack>
                                     </Checkbox.Group>
                                   </Accordion.Panel>
@@ -586,11 +594,21 @@ const BusSearchResults: React.FC = () => {
                     </div>
                   )}
                 </Skeleton>
-                <BusSearchPrevNextButtons
-                  busDates={busDates}
-                  handlePrevDay={handlePrevDay}
-                  handleNextDay={handleNextDay}
-                />
+                {totalCount > 0 && (
+                  <Skeleton
+                    visible={
+                      searchRequestQuery.isLoading ||
+                      searchRequestQuery.isFetchingNextPage ||
+                      searchRequestQuery.isFetching
+                    }
+                  >
+                    <BusSearchPrevNextButtons
+                      busDates={busDates}
+                      handlePrevDay={handlePrevDay}
+                      handleNextDay={handleNextDay}
+                    />
+                  </Skeleton>
+                )}
                 <div className='grid gap-4 pt-4'>
                   {searchToken &&
                     sessionToken &&
