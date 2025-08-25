@@ -239,7 +239,13 @@ const BusSearchResults: React.FC = () => {
               className='absolute start-0 end-0 top-0 bottom-0 z-10'
               onClick={toggleSearchEngineVisibility}
             />
-            <div className='flex gap-1'>
+            <Skeleton
+              h={17}
+              w={'65%'}
+              pos={'absolute'}
+              visible={destinationInfoQuery.pending}
+            />
+            <div>
               {
                 destinationInfoQuery.data.find(
                   (destination) =>
@@ -250,7 +256,7 @@ const BusSearchResults: React.FC = () => {
             <div>
               <FaArrowRightLong />
             </div>
-            <div className='flex gap-1'>
+            <div>
               {
                 destinationInfoQuery.data.find(
                   (destination) =>
