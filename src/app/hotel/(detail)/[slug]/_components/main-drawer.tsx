@@ -185,87 +185,93 @@ const MainDrawer: React.FC<IProps> = ({
                             </ul>
                           </Spoiler>
                         </div>
-                        <ul className='grid-cols-auto my-2 flex gap-2'>
-                          {data?.hotel.year_built && (
-                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
-                              <FaRegBuilding
-                                size={24}
-                                className='text-blue-700'
-                              />
-                              <div className='grid gap-0'>
-                                <div className='font-medium text-blue-800'>
-                                  Bina Yaşı
+                        <div className='overflow-x-auto'>
+                          <ul className='grid-cols-auto my-2 flex w-[100px] gap-2'>
+                            {data?.hotel.year_built && (
+                              <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                                <FaRegBuilding
+                                  size={24}
+                                  className='text-blue-700'
+                                />
+                                <div className='grid gap-0'>
+                                  <div className='font-medium text-blue-800'>
+                                    Bina Yaşı
+                                  </div>
+                                  <div className='font-semibold'>
+                                    {' '}
+                                    {data?.hotel.year_built}
+                                  </div>
                                 </div>
-                                <div className='font-semibold'>
-                                  {' '}
-                                  {data?.hotel.year_built}
+                              </li>
+                            )}
+                            {Number(data?.hotel.nr_rooms) > 0 && (
+                              <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                                <MdOutlineBed
+                                  size={24}
+                                  className='text-blue-700'
+                                />
+                                <div className='grid gap-0'>
+                                  <div className='font-medium text-blue-800'>
+                                    Oda
+                                  </div>
+                                  <div className='font-semibold'>
+                                    {' '}
+                                    {data?.hotel.nr_rooms}
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                          )}
-                          {Number(data?.hotel.nr_rooms) > 0 && (
-                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
-                              <MdOutlineBed
-                                size={24}
-                                className='text-blue-700'
-                              />
-                              <div className='grid gap-0'>
-                                <div className='font-medium text-blue-800'>
-                                  Oda
+                              </li>
+                            )}
+                            {Number(data?.hotel.nr_restaurants) > 0 && (
+                              <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                                <FaBellConcierge
+                                  size={24}
+                                  className='text-blue-700'
+                                />
+                                <div className='grid gap-0'>
+                                  <div className='font-medium text-blue-800'>
+                                    Restaurant
+                                  </div>
+                                  <div className='font-semibold'>
+                                    {data?.hotel.nr_restaurants}
+                                  </div>
                                 </div>
-                                <div className='font-semibold'>
-                                  {' '}
-                                  {data?.hotel.nr_rooms}
+                              </li>
+                            )}
+                            {Number(data?.hotel.nr_bars) > 0 && (
+                              <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                                <FaGlassMartiniAlt
+                                  size={24}
+                                  className='text-blue-700'
+                                />
+                                <div className='grid gap-0'>
+                                  <div className='font-medium text-blue-800'>
+                                    Bar
+                                  </div>
+                                  <div className='font-semibold'>
+                                    {data?.hotel.nr_bars}
+                                  </div>
                                 </div>
-                              </div>
-                            </li>
-                          )}
-                          {Number(data?.hotel.nr_restaurants) > 0 && (
-                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
-                              <FaBellConcierge
-                                size={24}
-                                className='text-blue-700'
-                              />
-                              <div className='grid gap-0'>
-                                <div className='font-medium text-blue-800'>
-                                  Restaurant
-                                </div>
-                                <div className='font-semibold'>
-                                  {data?.hotel.nr_restaurants}
-                                </div>
-                              </div>
-                            </li>
-                          )}
-                          {Number(data?.hotel.nr_bars) > 0 && (
-                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
-                              <FaGlassMartiniAlt
-                                size={24}
-                                className='text-blue-700'
-                              />
-                              <div className='grid gap-0'>
-                                <div className='font-medium text-blue-800'>
-                                  Bar
-                                </div>
-                                <div className='font-semibold'>
-                                  {data?.hotel.nr_bars}
-                                </div>
-                              </div>
-                            </li>
-                          )}
-                          {data?.hotel.nr_halls && data?.hotel.nr_halls > 0 && (
-                            <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
-                              <FaDoorOpen size={24} className='text-blue-700' />
-                              <div className='grid gap-0'>
-                                <div className='font-medium text-blue-800'>
-                                  Salon
-                                </div>
-                                <div className='font-semibold'>
-                                  {data?.hotel.nr_halls}
-                                </div>
-                              </div>
-                            </li>
-                          )}
-                        </ul>
+                              </li>
+                            )}
+                            {data?.hotel.nr_halls &&
+                              data?.hotel.nr_halls > 0 && (
+                                <li className='flex items-center gap-3 rounded border bg-gray-50 p-1 px-4'>
+                                  <FaDoorOpen
+                                    size={24}
+                                    className='text-blue-700'
+                                  />
+                                  <div className='grid gap-0'>
+                                    <div className='font-medium text-blue-800'>
+                                      Salon
+                                    </div>
+                                    <div className='font-semibold'>
+                                      {data?.hotel.nr_halls}
+                                    </div>
+                                  </div>
+                                </li>
+                              )}
+                          </ul>
+                        </div>
                       </div>
                       <div className='mb-3 rounded bg-white p-3'>
                         <Spoiler

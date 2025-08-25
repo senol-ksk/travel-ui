@@ -231,7 +231,7 @@ const HotelRoom: React.FC<IProps> = ({
               )}
             </div>
             {isLastItem && (
-              <div className='item-center m-2 justify-center self-end md:col-span-3 md:justify-self-end'>
+              <div className='item-center justify-center self-end md:col-span-3 md:justify-self-end'>
                 <div>
                   <div>
                     {discountRate > 0 && (
