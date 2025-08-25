@@ -2,11 +2,11 @@ import {
   Container,
   Title,
   Image,
-  Button,
   Accordion,
   AccordionItem,
   AccordionControl,
   AccordionPanel,
+  Typography,
 } from '@mantine/core'
 import NextImage from 'next/image'
 import { headers } from 'next/headers'
@@ -18,14 +18,12 @@ import {
   TourLandingParams,
   TourLandingWidget,
 } from '@/types/cms-types'
-import { Link } from 'next-view-transitions'
 import dayjs from 'dayjs'
 
 import { serializeTourSearchParams } from '@/modules/tour/searchResultParams'
-import { LandingSliderItem } from '@/app/tour/_components/landing-slider-item'
 import { notFound } from 'next/navigation'
-import { Carousel, CarouselSlide } from '@mantine/carousel'
 import { Route } from 'next'
+import ProductBox from '../_components/box-link'
 
 export default async function TourLandingPage() {
   const headersList = await headers()
@@ -66,13 +64,7 @@ export default async function TourLandingPage() {
   const shipSeeAll = widgets?.find((x) => x.point == 'ship_see_all')
   const faqs = widgets?.filter((x) => x.point == 'sss')
   const europe_tours = widgets?.filter((x) => x.point == 'europe_tours')
-  const teasers = widgets?.filter(
-    (x) =>
-      x.point !== 'europe_tours' &&
-      x.point !== 'abroad_tours' &&
-      x.point !== 'sss'
-  )
-
+  const bottom_content = widgets?.filter((x) => x.point == 'bottom_content')
   return (
     <div>
       <div className='relative border-b py-4'>
@@ -96,137 +88,91 @@ export default async function TourLandingPage() {
       <Container className='grid grid-cols-1 gap-8 py-5 md:gap-12 md:py-10'>
         {abroadTours.length > 0 && (
           <div>
-            <div className='flex items-center justify-between gap-2 pb-3'>
-              <Title order={2} fz={'h3'}>
-                Ramazan Bayramı Turları
-              </Title>
-              {abroadSeeAll && (
-                <div>
-                  <Button
-                    component={Link}
-                    href={generateSearchURL(abroadSeeAll?.params.link.value)}
-                    size='compact-sm'
-                  >
-                    {abroadSeeAll?.title}
-                  </Button>
-                </div>
-              )}
+            <Title fz={'h3'} mb={'lg'}>
+              Bayram Turları
+            </Title>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {abroadTours.map((tour) => (
+                <ProductBox
+                  key={tour.id}
+                  description=''
+                  image={tour.params.image.value}
+                  title={tour.title}
+                  url={generateSearchURL(tour.params.link.value)}
+                />
+              ))}
             </div>
-            <Carousel slideSize={'auto'} slideGap={'lg'}>
-              {abroadTours.map((tour) => {
-                return (
-                  <CarouselSlide key={tour.id}>
-                    <LandingSliderItem
-                      href={generateSearchURL(tour.params.link.value)}
-                      imageSrc={cdnImageUrl(tour.params.image.value)}
-                      title={tour.title}
-                    />
-                  </CarouselSlide>
-                )
-              })}
-            </Carousel>
           </div>
         )}
         {aidTours.length > 0 && (
           <div>
-            <div className='flex items-center justify-between gap-2 pb-3'>
-              <Title order={3} fz={'h3'}>
-                {aidTitle?.title}
-              </Title>
-              {aidSeeAll && (
-                <div>
-                  <Button
-                    component={Link}
-                    href={generateSearchURL(aidSeeAll?.params.link.value)}
-                    size='compact-sm'
-                  >
-                    {abroadSeeAll?.title}
-                  </Button>
-                </div>
-              )}
+            <Title fz={'h3'} mb={'lg'}>
+              {aidTitle?.title}
+            </Title>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {aidTours.map((tour) => (
+                <ProductBox
+                  key={tour.id}
+                  description=''
+                  image={tour.params.image.value}
+                  title={tour.title}
+                  url={generateSearchURL(tour.params.link.value)}
+                />
+              ))}
             </div>
-
-            <Carousel slideSize={'auto'} slideGap={'lg'}>
-              {aidTours.map((tour) => {
-                return (
-                  <CarouselSlide key={tour.id}>
-                    <LandingSliderItem
-                      href={generateSearchURL(tour.params.link.value)}
-                      imageSrc={cdnImageUrl(tour.params.image.value)}
-                      title={tour.title}
-                    />
-                  </CarouselSlide>
-                )
-              })}
-            </Carousel>
           </div>
         )}
         {shipTours.length > 0 && (
           <div>
-            <div className='flex items-center justify-between gap-2 pb-3'>
-              <Title order={3} fz={'h3'}>
-                Gemi Turları
-              </Title>
-              {shipSeeAll && (
-                <div>
-                  <Button
-                    component={Link}
-                    href={generateSearchURL(shipSeeAll?.params.link.value)}
-                    size='compact-sm'
-                  >
-                    {shipSeeAll?.title}
-                  </Button>
-                </div>
-              )}
+            <Title fz={'h3'} mb={'lg'}>
+              Gemi Turları
+            </Title>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {shipTours.map((tour) => (
+                <ProductBox
+                  key={tour.id}
+                  description=''
+                  image={tour.params.image.value}
+                  title={tour.title}
+                  url={generateSearchURL(tour.params.link.value)}
+                />
+              ))}
             </div>
-            <Carousel slideSize={'auto'} slideGap={'lg'}>
-              {shipTours.map((tour) => {
-                return (
-                  <CarouselSlide key={tour.id}>
-                    <LandingSliderItem
-                      href={generateSearchURL(tour.params.link.value)}
-                      imageSrc={cdnImageUrl(tour.params.image.value)}
-                      title={tour.title}
-                    />
-                  </CarouselSlide>
-                )
-              })}
-            </Carousel>
           </div>
         )}
         {europe_tours.length > 0 && (
           <div>
-            <div className='flex items-center justify-between gap-2 pb-3'>
-              <Title order={3} fz={'h3'}>
-                Avrupa Turları
-              </Title>
-              {shipSeeAll && (
-                <div>
-                  <Button
-                    component={Link}
-                    href={generateSearchURL(shipSeeAll?.params.link.value)}
-                    size='compact-sm'
-                  >
-                    {shipSeeAll?.title}
-                  </Button>
-                </div>
-              )}
+            <Title fz={'h3'} mb={'lg'}>
+              Avrupa Turları
+            </Title>
+            <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+              {europe_tours.map((tour) => (
+                <ProductBox
+                  key={tour.id}
+                  description=''
+                  image={tour.params.image.value}
+                  title={tour.title}
+                  url={generateSearchURL(tour.params.link.value)}
+                />
+              ))}
             </div>
-            <Carousel slideSize={'auto'} slideGap={'lg'}>
-              {europe_tours.map((tour) => {
-                return (
-                  <CarouselSlide key={tour.id}>
-                    <LandingSliderItem
-                      href={generateSearchURL(tour.params.link.value)}
-                      imageSrc={cdnImageUrl(tour.params.image.value)}
-                      title={tour.title}
-                    />
-                  </CarouselSlide>
-                )
-              })}
-            </Carousel>
           </div>
         )}
+        {bottom_content.length > 0 &&
+          bottom_content.map((content) => (
+            <div key={content.id} className='rounded-md border p-3'>
+              <Title order={2} fz={'h3'}>
+                {content.title}
+              </Title>
+              <Typography>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: content.params.description.value,
+                  }}
+                />
+              </Typography>
+            </div>
+          ))}
         {faqs?.length > 0 && (
           <div>
             <Title order={2} mb={'lg'} fz={'h3'}>

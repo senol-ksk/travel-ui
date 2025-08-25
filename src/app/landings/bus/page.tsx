@@ -36,6 +36,7 @@ export default async function BusLandingPage() {
   )
   const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
   const faqs = widgets.filter((item) => item.point === 'sss')
+  const teaser = widgets.filter((item) => item.point === 'teaser')
 
   return (
     <div>
@@ -48,10 +49,10 @@ export default async function BusLandingPage() {
         </Container>
       </div>
       <div className='py-5 md:py-9'>
-        <Container className='grid grid-cols-1 gap-8 md:gap-12'>
+        <Container className='grid grid-cols-1 md:gap-12'>
           {popularBusServices.length > 0 && (
             <div>
-              <Title order={2} fz={'h3'}>
+              <Title order={2} fz={'h3'} mb={'lg'}>
                 Populer Otobüs Seferleri
               </Title>
               <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4'>
