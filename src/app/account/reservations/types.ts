@@ -3,8 +3,9 @@ export type ModuleNames =
   | 'Visa'
   | 'Transfer'
   | 'CarRental'
-  | 'Tour'
   | 'Hotel'
+  | 'Tour'
+  | 'Bus'
 
 export type ReservationFlight = {
   shoppingFileId: ID
