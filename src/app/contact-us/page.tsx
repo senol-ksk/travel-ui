@@ -1,5 +1,4 @@
-import { Container, Text, Title } from '@mantine/core'
-
+import { Container, Title } from '@mantine/core'
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
 import { notFound } from 'next/navigation'
@@ -53,35 +52,64 @@ export default async function ContactPage() {
   const { params } = data
 
   return (
-    <Container className='flex flex-col gap-3 py-4 md:gap-5 md:py-6'>
-      <Title>{params.title.value}</Title>
-      <Text>
-        Seyahat hizmetlerimizle ilgili taleplerinizi bu form aracılığıyla bize
-        iletebilirsiniz.
-      </Text>
-      <div className='flex flex-col gap-2'>
-        <Title order={2}>İletişim</Title>
-        <div>
-          <strong>{params.address.value}</strong>: {params.address_value.value}
-        </div>
-        <div>
-          <strong>{params.call.value}</strong>:{' '}
-          <a href={`tel:${params.call_value.value.trim()}`}>
-            {params.call_value.value}
-          </a>
-        </div>
-        <div>
-          <strong>{params.fax.value}</strong>: {params.fax_value.value}
-        </div>
-        <div>
-          <strong>{params.email.value}</strong>:{' '}
-          <a href={`mailto:${params.email_value.value}`}>
-            {params.email_value.value}
-          </a>
-        </div>
-      </div>
+    <Container className='mt-5 space-y-6 rounded-md border p-4 shadow'>
       <div>
-        <div dangerouslySetInnerHTML={{ __html: params.map.value }} />
+        <div className='mb-5 px-7'>
+          <Title order={2} className='mb-4'>
+            İletişim Bilgileri
+          </Title>
+
+          <div className='space-y-3'>
+            <div className='flex items-start gap-3'>
+              <div className='flex items-center gap-2'>
+                <strong className='text-gray-800'>
+                  {params.address.value}:
+                </strong>
+                <div className='text-gray-600'>
+                  {params.address_value.value}
+                </div>
+              </div>
+            </div>
+
+            <div className='flex items-start gap-3'>
+              <div className='flex items-center gap-2'>
+                <strong className='text-gray-800'>{params.call.value}:</strong>
+                <a
+                  href={`tel:${params.call_value.value.trim()}`}
+                  className='text-blue-600 hover:underline'
+                >
+                  {params.call_value.value}
+                </a>
+              </div>
+            </div>
+
+            <div className='flex items-start gap-3'>
+              <div className='flex items-center gap-2'>
+                <strong className='text-gray-800'>{params.fax.value}:</strong>
+                <div className='text-gray-600'>{params.fax_value.value}</div>
+              </div>
+            </div>
+
+            <div className='flex items-start gap-3'>
+              <div className='flex items-center gap-2'>
+                <strong className='text-gray-800'>{params.email.value}:</strong>
+                <a
+                  href={`mailto:${params.email_value.value}`}
+                  className='text-blue-600 hover:underline'
+                >
+                  {params.email_value.value}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className='space-y-4'>
+            <div className='overflow-hidden rounded-md border'>
+              <div dangerouslySetInnerHTML={{ __html: params.map.value }} />
+            </div>
+          </div>
+        </div>
       </div>
     </Container>
   )
