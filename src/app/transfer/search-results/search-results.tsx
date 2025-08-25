@@ -35,6 +35,7 @@ import { TransferSearchEngine } from '@/modules/transfer'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { IoSearchSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
+import { useDestinationGetBySlug } from '@/hooks/destination'
 
 const skeltonLoader = new Array(3).fill(true)
 
@@ -91,6 +92,13 @@ const TransferSearchResults = () => {
   }
   const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
     useDisclosure(false)
+  const destinationInfoQuery = useDestinationGetBySlug({
+    slugs: [
+      searchParams.originSlug as string,
+      searchParams.destinationSlug as string,
+    ],
+    moduleName: 'Transfer',
+  })
 
   return (
     <>
@@ -103,28 +111,25 @@ const TransferSearchResults = () => {
             />
             <div>
               <div className='flex items-center gap-2'>
-                <div className='flex gap-1'>
-                  {searchParams.originSlug
-                    ?.replaceAll('-', ' ')
-                    .split(' ')
-                    .map((item) => (
-                      <span key={item}>
-                        {upperFirst(item.toLocaleLowerCase())}
-                      </span>
-                    ))}
+                <div>
+                  {
+                    destinationInfoQuery.data.find(
+                      (destination) =>
+                        destination?.Result.Slug === searchParams.originSlug
+                    )?.Result.Name
+                  }
                 </div>
                 <div>
                   <FaArrowRightLong />
                 </div>
-                <div className='flex gap-1'>
-                  {searchParams.destinationSlug
-                    ?.replaceAll('-', ' ')
-                    .split(' ')
-                    .map((item) => (
-                      <span key={item}>
-                        {upperFirst(item.toLocaleLowerCase())}
-                      </span>
-                    ))}
+                <div>
+                  {
+                    destinationInfoQuery.data.find(
+                      (destination) =>
+                        destination?.Result.Slug ===
+                        searchParams.destinationSlug
+                    )?.Result.Name
+                  }
                 </div>
               </div>
               <div className='flex-1 grow'>
