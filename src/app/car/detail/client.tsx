@@ -54,6 +54,7 @@ import { RentTermsDrawer } from '@/app/car/component/rent-terms-drawer'
 import { CarSearchResultItem } from '../component/result-item'
 import { WorkingHoursDrawer } from '@/app/car/component/working-hour-drawers'
 import { Route } from 'next'
+import { CarBottomSticky } from './_components/bottom-sticky'
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
   const queryClient = useQueryClient()
@@ -471,7 +472,7 @@ export const DetailClient = () => {
           />
         </div>
       </div>
-      <div className='sticky grid w-full md:top-1 md:col-span-2'>
+      <div className='hidden md:sticky md:top-1 md:col-span-2 md:grid md:w-full'>
         <div className='flex flex-col gap-3 rounded-md border bg-white p-4'>
           <Title order={4} fw='normal'>
             Fiyat Özeti
@@ -518,6 +519,13 @@ export const DetailClient = () => {
           </div>
         </div>
       </div>
+      <CarBottomSticky
+        detailItem={detailItem}
+        selectedExtraOptionPrice={selectedExtraOptionPrice}
+        selectedInsurancePrice={selectedInsurancePrice}
+        onCarSelect={handleCarSelect}
+        isLoading={mutateReservation.isPending}
+      />
     </div>
   )
 }
