@@ -96,7 +96,7 @@ export const useTransferSearchResults = () => {
     },
   })
 
-  return { searchResultsQuery, sessionToken, searchToken }
+  return { searchResultsQuery, sessionToken, searchToken, searchParams }
 }
 
 interface TransferApiSearchParams {

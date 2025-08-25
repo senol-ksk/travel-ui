@@ -3,11 +3,11 @@ import dayjs from 'dayjs'
 import { useRef } from 'react'
 import { createSerializer, useQueryStates } from 'nuqs'
 import { useTransitionRouter } from 'next-view-transitions'
-import { useTimeout } from '@mantine/hooks'
 
 import { flightSearchParams } from '@/modules/flight/searchParams'
 import type {
   AirlineCodeServiceResponse,
+  AirportCode,
   AirportCodeServiceResponse,
   ClientDataType,
   FlightDetail,
@@ -22,25 +22,19 @@ import {
   serviceRequest,
 } from '@/network'
 
-import { days, delayCodeExecution } from '@/libs/util'
+import { delayCodeExecution } from '@/libs/util'
 import { reservationParsers } from '@/app/reservation/searchParams'
 
 const requestedDayFormat = 'YYYY-MM-DD'
 
 import { removeDuplicateFlights } from './search-results/filter-actions'
-import router from 'next/router'
 
 const useSearchResultsQueries = () => {
+  const airPortFlatList: Array<AirportCode> = []
   const [searchParams] = useQueryStates(flightSearchParams)
 
   const appToken = useRef<string>(null)
   const router = useTransitionRouter()
-
-  // const timeoutEnded = useRef(false)
-  // const { start: startSearchResultsTimeout, clear: clearSearchResultsTimeout } =
-  //   useTimeout(() => {
-  //     timeoutEnded.current = true
-  //   }, 60 * 1000)
 
   const generateFlightSearchPanel = () => {
     const FlightSearchPanel = {
@@ -107,7 +101,6 @@ const useSearchResultsQueries = () => {
     queryKey: ['flight-search-token', searchParams],
     queryFn: async () => {
       const response = await getFlightSearchSessionToken()
-      // startSearchResultsTimeout()
 
       return response
     },
@@ -255,10 +248,6 @@ const useSearchResultsQueries = () => {
           }
         })
         .map((clientObj, clientObjIndex, clientObjArr) => {
-          const isDomestic = clientObj.details.every(
-            (detail) => detail.isDomestic
-          )
-
           const seqIds = clientObj.segments.flatMap(
             (client) => client.freeVolatileData.Seq
           )
@@ -306,7 +295,6 @@ const useSearchResultsQueries = () => {
 
         return lastPageParams
       }
-      // clearSearchResultsTimeout()
       return undefined
     },
   })
@@ -360,25 +348,6 @@ const useSearchResultsQueries = () => {
     ].sort()
   }
 
-  const getAirlineByCodeList = useQuery({
-    enabled: !!searchResultsQuery.data?.length,
-    queryKey: ['airline-code-list', airlineQueryParamsCodeArr().sort()],
-    queryFn: async () => {
-      const response = (await request({
-        url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairlinebycodelist',
-        params: {
-          l: 'tr_TR',
-          cl: airlineQueryParamsCodeArr().toString(),
-        },
-      })) as AirlineCodeServiceResponse
-
-      return response
-    },
-    select(query) {
-      return query.Result
-    },
-  })
-
   const airportQueryParamsCodeArr = () => {
     const airports = searchResultsQuery?.data
       ?.flatMap((item) =>
@@ -407,6 +376,33 @@ const useSearchResultsQueries = () => {
       return response
     },
     select(query) {
+      query.Result.forEach((item) => {
+        const airportListHasValue = airPortFlatList.find(
+          (airPorts) => airPorts.Code === item.Code
+        )
+        if (!airportListHasValue) {
+          airPortFlatList.push(item)
+        }
+      })
+      return query.Result
+    },
+  })
+
+  const getAirlineByCodeList = useQuery({
+    enabled: !!searchResultsQuery.data?.length,
+    queryKey: ['airline-code-list', airlineQueryParamsCodeArr().sort()],
+    queryFn: async () => {
+      const response = (await request({
+        url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairlinebycodelist',
+        params: {
+          l: 'tr_TR',
+          cl: airlineQueryParamsCodeArr().toString(),
+        },
+      })) as AirlineCodeServiceResponse
+
+      return response
+    },
+    select(query) {
       return query.Result
     },
   })
@@ -418,6 +414,7 @@ const useSearchResultsQueries = () => {
     searchSessionTokenQuery,
     getAirlineByCodeList,
     getAirportsByCodeList,
+    airPortFlatList,
   }
 }
 

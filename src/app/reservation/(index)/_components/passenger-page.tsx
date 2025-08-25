@@ -293,6 +293,7 @@ export function CheckoutPassengerPage() {
                                   !!formMethods.formState?.errors?.contactGSM,
                               }
                             ),
+                            // @ts-expect-error watch for the package updates
                             'data-variant': 'default',
                             name: field.name,
                             id: 'contactGSM',

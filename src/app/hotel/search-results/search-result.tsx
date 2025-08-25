@@ -4,6 +4,7 @@ import {
   Accordion,
   Alert,
   Button,
+  Collapse,
   Container,
   Drawer,
   LoadingOverlay,
@@ -35,6 +36,8 @@ import { PensionTypes } from './components/filters/pension-types'
 import { Themes } from './components/filters/themes'
 import { useMediaQuery } from '@mantine/hooks'
 import { FaCheck } from 'react-icons/fa'
+import { IoSearchSharp } from 'react-icons/io5'
+import dayjs from 'dayjs'
 
 type IProps = {
   slug?: string
@@ -81,27 +84,61 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
       .totalHotelFound ?? 0
   const { orderBy, ...restFilterParams } = filterParams
   const [opened, { open, close }] = useDisclosure(false)
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
+  const totalPassengerCount = () => {
+    const total = searchParams.rooms.reduce((a, b) => {
+      a += b.adult + b.child
+      return a
+    }, 0)
+
+    return total
+  }
 
   return (
     <>
-      <div className='border-b py-4'>
+      <div className='border-b md:py-4'>
         <Container>
-          {searchParams.destination && (
-            <HotelSearchEngine
-              defaultValues={{
-                checkinDate: searchParams.checkinDate,
-                checkoutDate: searchParams.checkoutDate,
-                destination: {
-                  id: searchParams.destinationId ?? 0,
-                  name: searchParams.destination ?? '',
-                  slug: searchParams.slug ?? '',
-                  type: searchParams.type ?? 0,
-                },
-                rooms: searchParams.rooms,
-              }}
+          <div className='relative py-2 text-xs font-semibold text-blue-800 md:hidden'>
+            <button
+              className='absolute start-0 end-0 top-0 bottom-0 z-10'
+              onClick={toggleSearchEngineVisibility}
             />
-          )}
+
+            <div className='flex items-center gap-2'>
+              <div>{searchParams.destination}</div>
+              <div>|</div>
+              <div>
+                {dayjs(searchParams.checkinDate).format('DD MMMM')} -{' '}
+                {dayjs(searchParams.checkoutDate).format('DD MMMM')}
+              </div>
+              <div>|</div>
+              <div>{totalPassengerCount()} Yolcu</div>
+              <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+                <IoSearchSharp size={24} className='text-blue-800' />
+              </div>
+            </div>
+          </div>
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            {searchParams.destination && (
+              <div className='pb-3 md:pb-0'>
+                <HotelSearchEngine
+                  defaultValues={{
+                    checkinDate: searchParams.checkinDate,
+                    checkoutDate: searchParams.checkoutDate,
+                    destination: {
+                      id: searchParams.destinationId ?? 0,
+                      name: searchParams.destination ?? '',
+                      slug: searchParams.slug ?? '',
+                      type: searchParams.type ?? 0,
+                    },
+                    rooms: searchParams.rooms,
+                  }}
+                />
+              </div>
+            )}
+          </Collapse>
         </Container>
       </div>
       {(hotelSearchRequestQuery.isLoading || searchParamsQuery.isLoading) && (
@@ -115,7 +152,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
         <div className='py-5 lg:py-10'>
           <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
             <div className='hidden md:col-span-1 md:block'>
-              {isMobile ? (
+              {!isBreakPointMatchesMd ? (
                 <Drawer opened={opened} onClose={close}>
                   {mounted && (
                     <div className='relative'>
@@ -516,7 +553,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                           size='sm'
                           className={
                             filterParams.orderBy === option.value
-                              ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                              ? 'rounded-md border-0 bg-blue-100 font-medium text-blue-700'
                               : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                           }
                           key={option.value}
@@ -610,8 +647,14 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                   {searchParams.destination && (
                     <>
                       <div>
-                        <span className='text-sm font-semibold text-gray-500'>
-                          {searchParams.destination}, İçin Toplam {totalCount}{' '}
+                        <span className='text-sm'>
+                          <span className='font-semibold'>
+                            {searchParams.destination}
+                          </span>
+                          , için Toplam{' '}
+                          <span className='text-md font-semibold'>
+                            {totalCount}
+                          </span>{' '}
                           Tesis Bulundu
                         </span>{' '}
                       </div>

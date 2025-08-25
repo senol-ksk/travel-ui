@@ -43,8 +43,12 @@ export default function RootLayout({
       <SessionProvider>
         <html lang='tr' {...mantineHtmlProps}>
           <head>
-            <link rel='icon' href='/favicon.ico' sizes='any' />
             <ColorSchemeScript forceColorScheme='light' />
+            <link rel='icon' href='/favicon.ico' sizes='any' />
+            <meta
+              name='viewport'
+              content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no'
+            />
           </head>
 
           <body className='flex flex-col'>
