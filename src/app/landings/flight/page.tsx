@@ -50,6 +50,10 @@ export default async function FlightLandingPage() {
   const teaser_bottom = widgets.filter(
     (widget) => widget.point === 'teaser_bottom'
   )
+  const teaser = widgets.filter((item) => item.point === 'teaser')
+  const bottomContents = widgets.filter(
+    (widget) => widget.point === 'bottom_contents'
+  )
 
   return (
     <>
@@ -72,8 +76,52 @@ export default async function FlightLandingPage() {
         </Container>
       </div>
       <div>
-        <Container className='py-10'>
+        <Container className='grid gap-3 py-5 md:gap-7 md:py-10'>
           <div className='flex flex-col gap-7 md:gap-12'>
+            <div>
+              <Title fz={'h3'} mb={'lg'}>
+                Seyahatinizi Yönetin
+              </Title>
+              <div className='flex gap-4 overflow-x-auto font-semibold md:grid md:grid-cols-3 md:gap-4'>
+                {teaser &&
+                  teaser.length > 0 &&
+                  teaser
+                    .sort((a, b) => (a.ordering || 0) - (b.ordering || 0))
+                    .map((item) => (
+                      <a
+                        key={item.id}
+                        href={item.params?.link?.value}
+                        className='flex-shrink-0 md:flex-shrink'
+                      >
+                        <div className='grid min-w-[100px] items-center gap-2 rounded border bg-white p-1 md:min-w-0 md:p-3'>
+                          <div>
+                            <div
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                              }}
+                              className='flex items-center justify-center rounded-full border bg-gray-300'
+                              dangerouslySetInnerHTML={{
+                                __html: item.params?.svg?.value || '',
+                              }}
+                            />
+                          </div>
+                          <div>
+                            {item.title}
+                            <br />
+                            <div
+                              className='text-sm font-normal text-gray-600'
+                              dangerouslySetInnerHTML={{
+                                __html: item.params?.description?.value,
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+              </div>
+            </div>
+
             {popularDomesticFlights.length > 0 && (
               <div>
                 <Title fz={'h3'} mb={'lg'}>
@@ -125,8 +173,8 @@ export default async function FlightLandingPage() {
                 <Title fz={'h3'} mb={'lg'}>
                   Popüler Hava Yolları
                 </Title>
-                <ScrollArea scrollbars='x' offsetScrollbars scrollbarSize={6}>
-                  <div className='flex gap-4 whitespace-nowrap'>
+                <div className='overflow-x-auto'>
+                  <div className='flex w-[200px] gap-3 md:w-0'>
                     {popular_airlines.map((airline) => (
                       <div
                         key={airline.id}
@@ -144,7 +192,7 @@ export default async function FlightLandingPage() {
                       </div>
                     ))}
                   </div>
-                </ScrollArea>
+                </div>
               </div>
             )}
             {teaser_bottom.length > 0 && (
@@ -158,6 +206,24 @@ export default async function FlightLandingPage() {
                       <div
                         dangerouslySetInnerHTML={{
                           __html: teaser.params.description.value,
+                        }}
+                      />
+                    </Typography>
+                  </article>
+                ))}
+              </div>
+            )}
+            {bottomContents.length > 0 && (
+              <div className='grid gap-6 rounded-md border bg-white p-3 md:p-6'>
+                {bottomContents.map((content) => (
+                  <article key={content.id}>
+                    <Title fz={'h3'} mb={'md'}>
+                      {content.title}
+                    </Title>
+                    <Typography>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: content.params.description.value,
                         }}
                       />
                     </Typography>

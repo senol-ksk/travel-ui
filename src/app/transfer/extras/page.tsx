@@ -53,19 +53,9 @@ const transferExtraRequeireFields = z.object({
     z
       .object({
         isSelected: z.boolean().default(false).optional(),
-        description: z.string().optional(),
         id: z.string().or(z.number()).optional(),
       })
       .optional()
-      .superRefine((field, ctx) => {
-        if (field?.isSelected && !field?.description?.length) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: 'Lütfen bir açıklama girin.',
-            path: ['description'],
-          })
-        }
-      })
   ),
 })
 
@@ -163,7 +153,7 @@ export default function Page() {
         ExtraServiceInfo: data.Extras.filter((extra) => {
           return extra?.isSelected
         }).map((extra) => {
-          return extra && extra.id ? { [extra?.id]: extra?.description } : null
+          return extra && extra.id ? { [extra?.id]: '' } : null
         }),
       }
 
@@ -278,7 +268,7 @@ export default function Page() {
                             return (
                               <TextInput
                                 {...field}
-                                size='xl'
+                                size='md'
                                 label={
                                   <div className='text-md'>Uçuş Numarası *</div>
                                 }
@@ -309,6 +299,7 @@ export default function Page() {
                             return (
                               <Textarea
                                 {...field}
+                                size='md'
                                 error={fieldState.error?.message}
                                 label='Açıklama'
                                 description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
@@ -345,7 +336,7 @@ export default function Page() {
                           render={({ field, fieldState }) => (
                             <TextInput
                               {...field}
-                              size='xl'
+                              size='md'
                               label={
                                 <div className='text-md'>
                                   Alınış Yeri Bilgisi *
@@ -373,6 +364,7 @@ export default function Page() {
                           render={({ field }) => (
                             <Textarea
                               {...field}
+                              size='md'
                               label='Açıklama'
                               description='İletmek istediğiniz notlar var ise bu alana girebilirsiniz.'
                               inputWrapperOrder={[
@@ -436,25 +428,6 @@ export default function Page() {
                                 <div>
                                   {formatCurrency(extra.priceWithMarkup.amount)}
                                 </div>
-                              </div>
-                              <div
-                                className='pt-3'
-                                hidden={
-                                  !formActions.watch(`Extras.${extraIndex}`)
-                                    ?.isSelected
-                                }
-                              >
-                                <Controller
-                                  control={formActions.control}
-                                  name={`Extras.${extraIndex}.description`}
-                                  defaultValue=''
-                                  render={({ field, fieldState }) => (
-                                    <TextInput
-                                      {...field}
-                                      error={fieldState.error?.message}
-                                    />
-                                  )}
-                                />
                               </div>
                             </div>
                             {!lastItem ? <Divider my={'md'} /> : null}
@@ -544,19 +517,14 @@ export default function Page() {
           </Container>
         </div>
         <div className='fixed right-0 bottom-0 left-0 z-50 md:hidden'>
-          <div className='grid grid-cols-17 items-center gap-2 rounded-t-lg bg-white px-1 py-5 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
-            <Title
-              order={3}
-              className='col-span-10 items-center justify-center text-center'
-            >
-              {formatCurrency(totalPriceState)}
-            </Title>
+          <div className='flex items-center justify-between rounded-t-lg bg-white p-5 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
+            <Title order={3}>{formatCurrency(totalPriceState)}</Title>
             <Button
+              size='md'
               type='submit'
-              className='col-span-7 text-white'
               radius={'md'}
               loading={reservationPageMutation.isPending}
-              rightSection={<IoChevronForwardSharp size={20} />}
+              rightSection={<IoChevronForwardSharp />}
             >
               Devam et{' '}
             </Button>{' '}

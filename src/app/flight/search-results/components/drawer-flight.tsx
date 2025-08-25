@@ -72,10 +72,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
               </div>
             )}
             <div className='mb-2 grid w-full cursor-pointer justify-between gap-1'>
-              <div className='text-2xl font-bold'>
-                {' '}
-                +{formatCurrency(packagePrice)}
-              </div>
+              <div className='text-2xl font-bold'> +{packagePrice} TL</div>
               <div className='text-lg font-bold capitalize'>
                 {(() => {
                   switch (
