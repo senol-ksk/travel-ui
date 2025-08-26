@@ -55,7 +55,7 @@ export const ParafCalculate = () => {
     mutationFn: async (params: SchemaType) => {
       const response = await serviceRequest<number>({
         axiosOptions: {
-          url: 'api/prodcut/calculateBonus',
+          url: 'api/product/calculateBonus',
           method: 'get',
           params,
         },
@@ -92,7 +92,7 @@ export const ParafCalculate = () => {
               >
                 <Group>
                   <Radio value='1' label='Yurt içi' />
-                  <Radio value='2' label='Yurtdışı' />
+                  <Radio value='2' label='Yurt dışı' />
                 </Group>
               </Radio.Group>
             )}
@@ -125,9 +125,6 @@ export const ParafCalculate = () => {
                   thousandSeparator='.'
                   decimalSeparator=','
                   suffix=' TL'
-                  classNames={{
-                    input: 'text-center',
-                  }}
                 />
               )}
             />
@@ -153,7 +150,7 @@ export const ParafCalculate = () => {
         </Stack>
         <LoadingOverlay visible={calculateMutation.isPending} />
       </Grid.Col>
-      <Grid.Col span={{ base: 12, md: 5 }} offset={{ md: 2 }} visibleFrom='md'>
+      <Grid.Col span={{ base: 12, md: 4 }} offset={{ md: 3 }} visibleFrom='md'>
         <Image
           component={NextImage}
           src={'/paraf_kart_2x.webp'}
