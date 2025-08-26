@@ -45,7 +45,7 @@ const PensionTypes: React.FC<IProps> = ({ data = [] }) => {
 
   return (
     <>
-      <div className='pb-3'>
+      {/* <div className='pb-3'>
         <TextInput
           leftSection={<IoSearchOutline size={16} />}
           placeholder='Filtrele'
@@ -65,7 +65,7 @@ const PensionTypes: React.FC<IProps> = ({ data = [] }) => {
             handleSearchInput(event.currentTarget.value)
           }}
         />
-      </div>
+      </div> */}
       <ScrollArea.Autosize mah={rem(200)} type='always' scrollbars='y'>
         <Checkbox.Group
           value={

@@ -98,11 +98,11 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
                 key={snap}
                 bg={isActiveState ? 'blue.8' : 'blue.2'}
                 bdrs={'100%'}
-                size={isActiveState ? 16 : 12}
+                size={isActiveState ? 21 : 14}
                 onClick={() => {
                   emblaApi.scrollTo(snapIndex)
                 }}
-                className='transition-all ease-in'
+                className='transition-all ease-in hover:scale-200'
               />
             )
           })}

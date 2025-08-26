@@ -133,7 +133,7 @@ const FlightCalendar: React.FC<Props> = ({
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='flex items-center justify-center gap-8 md:justify-start'>
+                  <div className='flex items-center justify-center gap-8 pb-5 md:justify-start md:pb-0'>
                     <div className='flex'>
                       <div
                         className={clsx(

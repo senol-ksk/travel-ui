@@ -1,10 +1,16 @@
 import { getCategoriesByParent } from '@/libs/cms-data'
 import { Button, ScrollArea } from '@mantine/core'
 import { Link } from 'next-view-transitions'
+import { SearchParams } from 'nuqs'
 
 const linkPrefix = '/kampanyalar'
 
-const CampaignTopMenus = async () => {
+type CampaignTopMenusProps = {
+  searchParams: Promise<SearchParams>
+}
+
+const CampaignTopMenus = async ({ searchParams }: CampaignTopMenusProps) => {
+  const { categoryId } = await searchParams
   const campaignData = (await getCategoriesByParent())?.data
 
   return (
@@ -18,7 +24,7 @@ const CampaignTopMenus = async () => {
         <div>
           <Button
             radius={'md'}
-            className='font-normal hover:bg-blue-100'
+            className={`font-normal hover:bg-blue-100 ${!categoryId ? 'bg-blue-800 text-white hover:bg-blue-800' : ''}`}
             variant='default'
             component={Link}
             href={linkPrefix}
@@ -28,6 +34,7 @@ const CampaignTopMenus = async () => {
           </Button>
         </div>
         {campaignData?.map((item) => {
+          const isActive = categoryId === String(item.id)
           return (
             <div key={item.id}>
               <Button
@@ -36,7 +43,7 @@ const CampaignTopMenus = async () => {
                 component={Link}
                 href={`${linkPrefix}?categoryId=${item.id}`}
                 size='md'
-                className='font-normal hover:bg-blue-100'
+                className={`font-normal hover:bg-blue-100 ${isActive ? 'bg-blue-800 text-white hover:bg-blue-800' : ''}`}
               >
                 {item.title}
               </Button>

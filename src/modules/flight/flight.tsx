@@ -267,7 +267,7 @@ export const Flight = () => {
                 classNames={{
                   input: 'bg-blue-100 text-sm font-medium border-gray-700',
                   dropdown: 'min-w-[265px] py-[15px] md:ml-[77px] text-xs',
-                  option: 'text-[17px] py-[12px] hover:bg-blue-100 text-xs',
+                  option: 'text-[17px] py-[12px]  hover:bg-blue-100 text-xs',
                 }}
               />
             )

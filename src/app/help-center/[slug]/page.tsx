@@ -16,6 +16,7 @@ import {
 import { Route } from 'next'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
+import { FaArrowRight } from 'react-icons/fa'
 
 type CMSHelpCenterParams = {
   sub_title: {
@@ -118,15 +119,16 @@ export default async function HelpCenterPage({
             {topMenu.map((item) =>
               item.params.menu.menus.map((menu) => {
                 return (
-                  <div key={menu.id}>
-                    <NavLink
-                      label={menu.title}
-                      href={menu.url as Route}
-                      component={Link}
-                      variant={'/' + menuUrl === menu.url ? 'light' : 'subtle'}
-                      active={'/' + menuUrl === menu.url}
+                  <Link
+                    key={menu.id}
+                    href={menu.url as Route}
+                    className={`flex items-center justify-between gap-2 rounded-md p-2 hover:text-blue-800 ${'/' + menuUrl === menu.url ? 'bg-blue-100 text-blue-800' : ''}`}
+                  >
+                    <span>{menu.title}</span>
+                    <FaArrowRight
+                      className={`${'/' + menuUrl === menu.url ? 'text-blue-800 opacity-100' : 'opacity-0'}`}
                     />
-                  </div>
+                  </Link>
                 )
               })
             )}

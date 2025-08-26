@@ -492,7 +492,7 @@ const FlightSearchView = () => {
                               searchSessionTokenQuery.isLoading
                             }
                           >
-                            <div className='justify-self-end font-medium'>
+                            <div className='mx-3 justify-self-end font-medium'>
                               <Select
                                 checkIconPosition='left'
                                 leftSection={<FaCheck />}

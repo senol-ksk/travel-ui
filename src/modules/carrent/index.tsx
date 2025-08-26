@@ -23,7 +23,7 @@ import { RiMapPin2Line, RiTimeLine } from 'react-icons/ri'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
 const defaultDates = {
-  drop_date: dayjs().add(2, 'day').toDate(),
+  drop_date: dayjs().add(6, 'day').toDate(),
   pickup_date: dayjs().add(3, 'day').toDate(),
 }
 

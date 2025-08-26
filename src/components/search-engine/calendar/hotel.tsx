@@ -137,7 +137,7 @@ const HotelCalendar: React.FC<Props> = ({
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='flex items-center justify-center gap-3 px-3 md:justify-start md:pt-3'>
+                  <div className='flex items-center justify-center gap-3 px-3 pb-3 md:justify-start md:pt-3 md:pb-0'>
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',
