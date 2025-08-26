@@ -5,7 +5,7 @@ import { useTransitionRouter } from 'next-view-transitions'
 import dayjs from 'dayjs'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 
-import { z } from 'zod'
+import { z } from '@/libs/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -22,7 +22,6 @@ import { serializeFlightSearchParams } from './searchParams'
 import { SearchEngineButton } from '@/components/search-engine/search-button'
 import { RiCalendarEventLine, RiMapPin2Line, RiUserLine } from 'react-icons/ri'
 import { TbArrowsRightLeft } from 'react-icons/tb'
-import { useState } from 'react'
 
 const formSchema = z.object({
   DepartureDate: z.coerce.date(),
@@ -267,10 +266,8 @@ export const Flight = () => {
                 }}
                 classNames={{
                   input: 'bg-blue-100 text-sm font-medium border-gray-700',
-                  dropdown:
-                    'min-w-[265px] py-[15px] md:ml-[77px] text-xs font-semibold',
-                  option:
-                    'text-[17px] py-[12px] font-semibold hover:bg-blue-100 text-xs',
+                  dropdown: 'min-w-[265px] py-[15px] md:ml-[77px] text-xs',
+                  option: 'text-[17px] py-[12px] hover:bg-blue-100 text-xs',
                 }}
               />
             )
