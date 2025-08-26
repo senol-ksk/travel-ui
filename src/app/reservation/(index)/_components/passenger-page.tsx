@@ -116,10 +116,10 @@ export function CheckoutPassengerPage() {
     enabled: false,
     queryKey: [
       'insurance-info',
-      checkQueryData?.data?.viewBag.Insurances.logSearchToken,
-      checkQueryData?.data?.viewBag.Insurances.logSessionToken,
-      checkQueryData?.data?.viewBag.Insurances.sessionToken,
-      checkQueryData?.data?.viewBag.Insurances.traceId,
+      checkQueryData?.data?.viewBag.Insurances?.logSearchToken,
+      checkQueryData?.data?.viewBag.Insurances?.logSessionToken,
+      checkQueryData?.data?.viewBag.Insurances?.sessionToken,
+      checkQueryData?.data?.viewBag.Insurances?.traceId,
       moduleName,
     ],
     queryFn: async () => {
@@ -129,13 +129,13 @@ export function CheckoutPassengerPage() {
           method: 'get',
           params: {
             searchToken:
-              checkQueryData?.data?.viewBag.Insurances.logSearchToken,
+              checkQueryData?.data?.viewBag.Insurances?.logSearchToken,
             sessionToken:
-              checkQueryData?.data?.viewBag.Insurances.logSessionToken,
+              checkQueryData?.data?.viewBag.Insurances?.logSessionToken,
             productSessionToken:
-              checkQueryData?.data?.viewBag.Insurances.sessionToken,
+              checkQueryData?.data?.viewBag.Insurances?.sessionToken,
             productSearchToken:
-              checkQueryData?.data?.viewBag.Insurances.traceId,
+              checkQueryData?.data?.viewBag.Insurances?.traceId,
             modulName: moduleName,
             scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
             scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
