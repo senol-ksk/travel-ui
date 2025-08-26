@@ -2,6 +2,7 @@ import { Container, Title } from '@mantine/core'
 import { getContent } from '@/libs/cms-data'
 import { CmsContent } from '@/types/cms-types'
 import { notFound } from 'next/navigation'
+import { HelpPage } from './_components/help-form-page'
 
 type CMSContactParams = {
   title: {
@@ -53,6 +54,7 @@ export default async function ContactPage() {
 
   return (
     <Container className='mt-5 space-y-6 rounded-md border p-4 shadow'>
+      <HelpPage />
       <div>
         <div className='mb-5 px-7'>
           <Title order={2} className='mb-4'>

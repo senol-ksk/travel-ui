@@ -62,10 +62,9 @@ const birth_date_months = () =>
   dayjs.months().map((month, index) => {
     const currentIndex = index + 1
     const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
-    const label = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex} ${month}`
 
     return {
-      label,
+      label: '',
       value,
     }
   })

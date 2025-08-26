@@ -116,7 +116,7 @@ const CarCalendar: React.FC<Props> = ({
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='inline-flex items-center gap-3 px-3 md:pt-3'>
+                  <div className='inline-flex items-center gap-3 px-3 pb-3 md:pt-3 md:pb-0'>
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',

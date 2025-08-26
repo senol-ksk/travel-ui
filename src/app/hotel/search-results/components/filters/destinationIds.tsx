@@ -57,7 +57,7 @@ const DestinationIds: React.FC<IProps> = ({ destinationsInfo = [] }) => {
           }}
         />
       </div>
-      <ScrollArea h={200} type='always' scrollbars='y'>
+      <ScrollArea h={150} type='always' scrollbars='y'>
         <Checkbox.Group
           value={
             filterParams.destinationIds?.length
