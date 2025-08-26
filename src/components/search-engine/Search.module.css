@@ -7,6 +7,11 @@
   border-bottom-width: 4px;
   border-bottom-color: transparent;
   border-bottom-style: solid;
+  padding: var(--mantine-spacing-md);
+
+  @mixin larger-than $mantine-breakpoint-md {
+    flex-grow: 1;
+  }
 
   &[data-active] {
     color: var(--mantine-color-blue-filled);
@@ -17,5 +22,18 @@
       var(--mantine-color-gray-0),
       var(--mantine-color-dark-5)
     );
+    border-bottom-color: var(--mantine-color-dark-1);
+  }
+}
+
+.tabLabel {
+  flex: none;
+}
+
+.tabSection {
+  display: none;
+
+  @mixin larger-than $mantine-breakpoint-sm {
+    display: flex;
   }
 }

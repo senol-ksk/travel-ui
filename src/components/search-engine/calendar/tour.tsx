@@ -2,10 +2,8 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
-
 import { useMediaQuery, useClickOutside } from '@mantine/hooks'
-import { DatePicker } from '@mantine/dates'
-import type { DatesRangeValue } from '@mantine/dates'
+import { type DatesRangeValue, DatePicker } from '@mantine/dates'
 import classes from '@/styles/Datepicker.module.css'
 
 import { Provider } from '@/components/search-engine/calendar/provider'

@@ -4,6 +4,7 @@ const config = {
     '@tailwindcss/postcss': {},
     'postcss-preset-mantine': {
       autoRem: true,
+      lightDarkFunction: false,
     },
     'postcss-simple-vars': {
       variables: {
