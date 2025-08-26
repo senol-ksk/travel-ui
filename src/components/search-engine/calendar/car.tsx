@@ -4,11 +4,10 @@ import { useState } from 'react'
 import dayjs from 'dayjs'
 import clsx from 'clsx'
 import { Button, CloseButton, Paper, Transition, Portal } from '@mantine/core'
-import { FaRegCalendarAlt } from 'react-icons/fa'
 
 import { useMediaQuery, useClickOutside } from '@mantine/hooks'
 import { DatePicker } from '@mantine/dates'
-import type { DatesRangeValue, DateValue } from '@mantine/dates'
+import type { DatesRangeValue } from '@mantine/dates'
 import classes from '@/styles/Datepicker.module.css'
 
 import { Provider } from '@/components/search-engine/calendar/provider'
@@ -41,14 +40,14 @@ const CarCalendar: React.FC<Props> = ({
   const { dayRenderer, handleOfficialDates, officialDayRenderer } =
     useOfficialDays({ numberOfColumns: 2 })
 
-  const [formatedValues, setFormatedValues] = useState<
+  const [formattedValues, setFormattedValues] = useState<
     [string | null, string | null]
   >([
     rangeValue[0] ? dayjs(rangeValue[0]).format(defaultFormat) : 'Giriş Tarihi',
     rangeValue[1] ? dayjs(rangeValue[1]).format(defaultFormat) : 'Çıkış Tarihi',
   ])
 
-  const matches = useMediaQuery('(min-width: 48em)')
+  const matches = useMediaQuery('(min-width: 62em)')
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
   const clickOutsideRef = useClickOutside(() =>
@@ -59,7 +58,7 @@ const CarCalendar: React.FC<Props> = ({
     setRangeValue(dates)
 
     onDateSelect(dates)
-    setFormatedValues([
+    setFormattedValues([
       dates[0] ? dayjs(dates[0]).format(defaultFormat) : 'Teslim Tarihi',
       dates[1] ? dayjs(dates[1]).format(defaultFormat) : 'Bırakış Tarihi',
     ])
@@ -91,7 +90,7 @@ const CarCalendar: React.FC<Props> = ({
 
         <Transition
           mounted={containerTransitionState}
-          transition='pop-top-right'
+          transition='pop-top-left'
           onExit={() => {
             if (!rangeValue[1]) {
               handleDateSelections([
@@ -104,59 +103,57 @@ const CarCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:start-[-240px] md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:end-auto md:bottom-auto md:-ms-1 md:-mt-1 md:p-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
-              <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl'>
-                <div>
+              <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl md:h-auto'>
+                <div className='pb-3'>
                   <div className='flex justify-end p-2 md:hidden'>
                     <CloseButton
                       size='lg'
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='inline-flex items-center gap-3 px-3 md:pt-3'>
+                  <div className='flex items-center justify-center gap-3 px-3 md:justify-start md:pt-3'>
                     <div
                       className={clsx(
-                        'inline-flex border-b-4 px-2 text-start text-lg font-bold',
+                        'border-b-4 px-2 text-start text-lg font-bold',
                         rangeValue[0] ? 'border-blue-800' : 'border-gray-300'
                       )}
                     >
-                      {formatedValues[0]}
+                      {formattedValues[0]}
                     </div>
                     <div>
                       <MdOutlineArrowForward size={20} />
                     </div>
                     <div
                       className={clsx(
-                        'inline-flex border-b-4 px-2 text-start text-lg font-bold',
+                        'border-b-4 px-2 text-start text-lg font-bold',
                         rangeValue[1] ? 'border-blue-800' : 'border-gray-300'
                       )}
                     >
-                      {formatedValues[1]}
+                      {formattedValues[1]}
                     </div>
                   </div>
                 </div>
-                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
-                  <div>
-                    <DatePicker
-                      highlightToday
-                      allowSingleDateInRange
-                      onChange={handleDateSelections}
-                      type={'range'}
-                      numberOfColumns={matches ? 2 : 13}
-                      minDate={today.toDate()}
-                      maxDate={maxDate.toDate()}
-                      maxLevel='month'
-                      classNames={classes}
-                      defaultValue={rangeValue}
-                      renderDay={dayRenderer}
-                      onDateChange={handleOfficialDates}
-                      onNextMonth={handleOfficialDates}
-                      onPreviousMonth={handleOfficialDates}
-                    />
-                  </div>
+                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth pb-2'>
+                  <DatePicker
+                    highlightToday
+                    allowSingleDateInRange
+                    onChange={handleDateSelections}
+                    type={'range'}
+                    numberOfColumns={matches ? 2 : 13}
+                    minDate={today.toDate()}
+                    maxDate={maxDate.toDate()}
+                    maxLevel='month'
+                    classNames={classes}
+                    defaultValue={rangeValue}
+                    renderDay={dayRenderer}
+                    onDateChange={handleOfficialDates}
+                    onNextMonth={handleOfficialDates}
+                    onPreviousMonth={handleOfficialDates}
+                  />
                 </div>
                 <div className='flex items-center border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>

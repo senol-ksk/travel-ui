@@ -37,14 +37,14 @@ const FlightCalendar: React.FC<Props> = ({
     defaultDates?.at(1) || null,
   ])
 
-  const [formatedValues, setFormatedValues] = useState<
+  const [formattedDateValues, setFormattedValues] = useState<
     [string | null, string | null]
   >([
     dayjs(defaultDates?.at(0)).format(defaultFormat),
     dayjs(defaultDates?.at(1)).format(defaultFormat),
   ])
 
-  const matches = useMediaQuery('(min-width: 48em)')
+  const matches = useMediaQuery('(min-width: 62em)')
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
   const clickOutsideRef = useClickOutside(() =>
@@ -55,23 +55,23 @@ const FlightCalendar: React.FC<Props> = ({
     useOfficialDays({ numberOfColumns: 2 })
 
   const handleDateSelections = (dates: DatesRangeValue | DateValue) => {
-    let departurDate
+    let departureDate
     let returnDate
 
     if (Array.isArray(dates)) {
-      departurDate = dates.at(0)
+      departureDate = dates.at(0)
       returnDate = dates.at(1)
       onDateSelect(dates)
-      setFormatedValues([
-        dayjs(departurDate).format(defaultFormat),
+      setFormattedValues([
+        dayjs(departureDate).format(defaultFormat),
         dayjs(returnDate).format(defaultFormat),
       ])
     } else if (dayjs(dates).isValid()) {
-      departurDate = dates
+      departureDate = dates
       onDateSelect([dates, dates])
-      setFormatedValues([
-        dayjs(departurDate).format(defaultFormat),
-        dayjs(departurDate).format(defaultFormat),
+      setFormattedValues([
+        dayjs(departureDate).format(defaultFormat),
+        dayjs(departureDate).format(defaultFormat),
       ])
     }
   }
@@ -96,12 +96,14 @@ const FlightCalendar: React.FC<Props> = ({
           title={
             tripKind === 'round-trip' ? (
               <div className='flex w-full items-center justify-between gap-2 md:px-2'>
-                <span>{formatedValues[0] ?? 'Gidiş'}</span>
+                <span>{formattedDateValues[0] ?? 'Gidiş'}</span>
                 <span>-</span>
-                <span>{formatedValues[1] ?? 'Dönüş'}</span>
+                <span>{formattedDateValues[1] ?? 'Dönüş'}</span>
               </div>
             ) : (
-              <span className='md:px-2'>{formatedValues[0] ?? 'Gidiş'}</span>
+              <span className='md:px-2'>
+                {formattedDateValues[0] ?? 'Gidiş'}
+              </span>
             )
           }
         />
@@ -119,33 +121,32 @@ const FlightCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='fixed start-0 end-0 top-0 bottom-0 z-50 mx-auto rounded-lg border sm:w-[25rem] md:absolute md:start-[-75px] md:end-auto md:bottom-auto md:w-[35rem] lg:w-[40rem]'
+              className='fixed start-0 end-0 top-0 bottom-0 z-50 mx-auto rounded-lg border md:absolute md:start-[-75px] md:end-auto md:bottom-auto'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
               <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl'>
-                <div>
+                <div className='px-3 pt-3'>
                   <div className='flex justify-end p-2 md:hidden'>
                     <CloseButton
                       size='lg'
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='flex items-center gap-8 px-3 md:pt-3'>
+                  <div className='flex items-center justify-center gap-8 md:justify-start'>
                     <div className='flex'>
-                      <button
-                        type='button'
+                      <div
                         className={clsx(
                           'border-b-4 px-2 text-start text-lg font-bold',
                           rangeValue[0] ? 'border-blue-800' : 'border-gray-300'
                         )}
                       >
-                        {formatedValues[0] ? (
-                          formatedValues[0]
+                        {formattedDateValues[0] ? (
+                          formattedDateValues[0]
                         ) : (
                           <span className='text-gray-400'>Gidiş</span>
                         )}
-                      </button>
+                      </div>
                     </div>
                     {tripKind === 'round-trip' && (
                       <>
@@ -163,7 +164,7 @@ const FlightCalendar: React.FC<Props> = ({
                             )}
                           >
                             {rangeValue[1] ? (
-                              formatedValues[1]
+                              formattedDateValues[1]
                             ) : (
                               <span className='text-gray-400'>Dönüş</span>
                             )}
@@ -173,42 +174,40 @@ const FlightCalendar: React.FC<Props> = ({
                     )}
                   </div>
                 </div>
-                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
-                  <div>
-                    <DatePicker
-                      highlightToday
-                      onChange={(dates) => {
-                        if (Array.isArray(dates)) {
-                          setRangeValue(dates)
+                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth p-3'>
+                  <DatePicker
+                    highlightToday
+                    onChange={(dates) => {
+                      if (Array.isArray(dates)) {
+                        setRangeValue(dates)
 
-                          setFormatedValues([
-                            dayjs(dates[0]).format(defaultFormat),
-                            dayjs(dates[1]).format(defaultFormat),
-                          ])
-                        } else {
-                          setRangeValue([dates, dates])
-                          setFormatedValues([
-                            dayjs(dates).format(defaultFormat),
-                            dayjs(dates).format(defaultFormat),
-                          ])
-                        }
-                      }}
-                      type={tripKind === 'one-way' ? 'default' : 'range'}
-                      allowSingleDateInRange
-                      numberOfColumns={numberOfColumns}
-                      minDate={today.toDate()}
-                      maxDate={maxDate.toDate()}
-                      maxLevel='month'
-                      classNames={classes}
-                      value={
-                        tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
+                        setFormattedValues([
+                          dayjs(dates[0]).format(defaultFormat),
+                          dayjs(dates[1]).format(defaultFormat),
+                        ])
+                      } else {
+                        setRangeValue([dates, dates])
+                        setFormattedValues([
+                          dayjs(dates).format(defaultFormat),
+                          dayjs(dates).format(defaultFormat),
+                        ])
                       }
-                      renderDay={dayRenderer}
-                      onDateChange={handleOfficialDates}
-                      onNextMonth={handleOfficialDates}
-                      onPreviousMonth={handleOfficialDates}
-                    />
-                  </div>
+                    }}
+                    type={tripKind === 'one-way' ? 'default' : 'range'}
+                    allowSingleDateInRange
+                    numberOfColumns={numberOfColumns}
+                    minDate={today.toDate()}
+                    maxDate={maxDate.toDate()}
+                    maxLevel='month'
+                    classNames={classes}
+                    value={
+                      tripKind === 'one-way' ? rangeValue?.at(0) : rangeValue
+                    }
+                    renderDay={dayRenderer}
+                    onDateChange={handleOfficialDates}
+                    onNextMonth={handleOfficialDates}
+                    onPreviousMonth={handleOfficialDates}
+                  />
                 </div>
                 <div className='flex items-center border-t p-3 md:justify-between'>
                   <div className='hidden flex-col gap-1 md:flex'>
