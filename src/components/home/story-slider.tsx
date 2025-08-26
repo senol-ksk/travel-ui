@@ -95,7 +95,7 @@ const StorySlider: React.FC<IProps> = ({ data }) => {
                     {item.title}
                   </Text>
                 </div>
-                <div className='mx-auto mt-auto mb-15 h-[5px] w-[69px] rounded bg-blue-200 opacity-100 transition-opacity duration-400 group-hover:opacity-0' />
+                <div className='mx-auto mt-auto mb-10 h-[5px] w-[69px] rounded bg-blue-200 opacity-100 transition-opacity duration-400 group-hover:opacity-0' />
               </div>
             </Box>
           </Carousel.Slide>

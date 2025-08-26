@@ -4,6 +4,8 @@ import { Container, Title, Typography } from '@mantine/core'
 import { Route } from 'next'
 import { Link } from 'next-view-transitions'
 import { notFound } from 'next/navigation'
+import { FaArrowRight } from 'react-icons/fa'
+import { headers } from 'next/headers'
 
 type CmsParams = {
   content: {
@@ -56,6 +58,8 @@ export default async function ContentPage({
   params: Promise<{ slug: string[] }>
 }) {
   const { slug } = await params
+  const headersList = await headers()
+  const currentPath = headersList.get('x-pathname') || `/${slug.join('/')}`
 
   const data = (
     await getContent<CmsContent<CMSWidgets[], CmsParams>>(slug.join('/'))
@@ -74,18 +78,30 @@ export default async function ContentPage({
       }}
       className='flex flex-col gap-3 md:gap-5'
     >
-      <Title>{title}</Title>
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-4'>
-        <div className='md:col-span-1'>
+        <div className='max-h-[300px] w-full max-w-xs flex-shrink-0 gap-4 overflow-y-auto rounded-md border p-2 shadow md:col-span-1'>
           {widgets.map((widget) =>
-            widget.params.menu.menus.map((menu) => (
-              <div key={menu.id}>
-                <Link href={menu.url as Route}>{menu.title}</Link>
-              </div>
-            ))
+            widget.params.menu.menus.map((menu) => {
+              const isActive = menu.url === currentPath
+              return (
+                <Link
+                  href={menu.url as Route}
+                  key={menu.id}
+                  className={`group my-1 flex items-center justify-between rounded-md p-2 transition-all duration-100 ${isActive ? 'bg-blue-100 text-blue-800' : 'hover:text-blue-800'}`}
+                >
+                  <div>{menu.title}</div>
+                  <FaArrowRight
+                    className={`transition-opacity duration-100 ${isActive ? 'opacity-100' : 'opacity-0'}`}
+                  />
+                </Link>
+              )
+            })
           )}
         </div>
-        <div className='md:col-span-3'>
+        <div className='rounded-md border p-2 shadow md:col-span-3'>
+          <Title order={2} className='mb-3'>
+            {title}
+          </Title>
           <Typography>
             <div
               dangerouslySetInnerHTML={{ __html: cmsParams.content.value }}

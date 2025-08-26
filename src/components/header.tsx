@@ -117,7 +117,7 @@ export const Header = () => {
           </div>
 
           <Box className='hidden flex-1 items-center md:flex'>
-            <div className='flex items-center gap-2 px-3 md:gap-4 md:px-5'>
+            <div className='flex items-center gap-2 px-3 font-medium md:gap-4 md:px-5'>
               {headerData.isLoading ? (
                 <div className='flex gap-2'>
                   <Skeleton h={20} className='size-20 grow' />
@@ -139,7 +139,7 @@ export const Header = () => {
               )}
             </div>
 
-            <div className='ms-auto flex items-center gap-3'>
+            <div className='ms-auto flex items-center gap-3 font-medium'>
               <Menu>
                 <Menu.Target>
                   <UnstyledButton className='flex items-center gap-2'>
@@ -149,17 +149,26 @@ export const Header = () => {
                     </div>
                   </UnstyledButton>
                 </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item component={Link} href='/online-operations'>
+                <Menu.Dropdown className='rounded-md border shadow'>
+                  <Menu.Item
+                    component={Link}
+                    href='/online-operations'
+                    className='text-md font-medium'
+                  >
                     Seyahatinizi Görüntüleyin
                   </Menu.Item>
                   <Menu.Item
+                    className='text-md font-medium'
                     component={Link}
                     href='/online-operations/cancel-flight'
                   >
                     Uçak İptal İade
                   </Menu.Item>
-                  <Menu.Item component={Link} href='/online-operations/checkin'>
+                  <Menu.Item
+                    className='text-md font-medium'
+                    component={Link}
+                    href='/online-operations/checkin'
+                  >
                     Online Check-in
                   </Menu.Item>
                 </Menu.Dropdown>
@@ -174,14 +183,26 @@ export const Header = () => {
                     </div>
                   </UnstyledButton>
                 </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item component={Link} href='/parafly/bonus-query'>
+                <Menu.Dropdown className='rounded-md border shadow'>
+                  <Menu.Item
+                    component={Link}
+                    href='/parafly/bonus-query'
+                    className='text-md font-medium'
+                  >
                     ParafPara Sorgula
                   </Menu.Item>
-                  <Menu.Item component={Link} href='/parafly/calculate'>
+                  <Menu.Item
+                    component={Link}
+                    href='/parafly/calculate'
+                    className='text-md font-medium'
+                  >
                     ParafPara Hesapla
                   </Menu.Item>
-                  <Menu.Item component={Link} href='/parafly/about'>
+                  <Menu.Item
+                    component={Link}
+                    href='/parafly/about'
+                    className='text-md font-medium'
+                  >
                     Parafly Travel Nedir?
                   </Menu.Item>
                 </Menu.Dropdown>
