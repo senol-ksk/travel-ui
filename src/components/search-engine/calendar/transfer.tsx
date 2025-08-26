@@ -71,7 +71,7 @@ const TransferCalendar: React.FC<Props> = ({
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='flex items-center justify-center gap-8 px-3 md:pt-3'>
+                  <div className='flex items-center justify-center gap-8 px-3 pb-5 md:pt-3 md:pb-0'>
                     <div className='flex'>
                       <button
                         type='button'

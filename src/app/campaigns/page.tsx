@@ -17,7 +17,7 @@ const CampaignsDefault: React.FC<PageProps> = async ({ searchParams }) => {
         Kampanyalar
       </Title>
       <Suspense fallback={<Skeleton height={20} />}>
-        <CampaignTopMenus />
+        <CampaignTopMenus searchParams={searchParams} />
       </Suspense>
       <div className='pt-5'>
         <Suspense

@@ -43,7 +43,7 @@ export default async function CarLandingPage() {
   const teaser = widgets.filter((item) => item.point === 'teaser')
 
   return (
-    <div className='py-6 md:py-10'>
+    <div>
       <div className='relative border-b py-4'>
         <Image
           component={NextImage}
