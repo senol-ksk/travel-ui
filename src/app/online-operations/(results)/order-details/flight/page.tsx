@@ -1,4 +1,4 @@
-import { Container, Skeleton } from '@mantine/core'
+import { Skeleton } from '@mantine/core'
 import { Suspense } from 'react'
 import { FlightOrderDetail } from './_components/detail'
 
