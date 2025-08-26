@@ -46,7 +46,7 @@ const BusCalendar: React.FC<Props> = ({
 
     onDateSelect(date)
   }
-  const matches = useMediaQuery('(min-width: 48em)')
+  const matches = useMediaQuery('(min-width: 62em)')
   const numberOfColumns = matches ? 1 : 8
 
   return (
@@ -67,11 +67,11 @@ const BusCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[350px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg sm:p-20 md:absolute md:bottom-auto md:-ms-1 md:-mt-1 md:w-[350px] md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
-              <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl'>
+              <Paper className='mx-auto flex h-full flex-col rounded-lg border shadow-xl'>
                 <div>
                   <div className='flex justify-end p-2 md:hidden'>
                     <CloseButton
@@ -98,7 +98,7 @@ const BusCalendar: React.FC<Props> = ({
                   </div>
                 </div>
                 <div className='relative mx-auto grow overflow-y-auto overscroll-contain scroll-smooth'>
-                  <div>
+                  <div className='py-3'>
                     <DatePicker
                       highlightToday
                       onChange={handleDateSelections}

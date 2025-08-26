@@ -43,7 +43,7 @@ const HotelCalendar: React.FC<Props> = ({
     rangeValue[1] ? dayjs(rangeValue[1]).format(defaultFormat) : 'Çıkış Tarihi',
   ])
 
-  const matches = useMediaQuery('(min-width: 48em)')
+  const matches = useMediaQuery('(min-width: 62em)')
   const [containerTransitionState, setContainerTransitionState] =
     useState(false)
   const [numberOfNights, setNumberOfNights] = useState<number | null>(null)
@@ -86,6 +86,7 @@ const HotelCalendar: React.FC<Props> = ({
       setNumberOfNights(null)
     }
   }, [rangeValue])
+
   return (
     <Provider>
       <div className='relative h-full'>
@@ -112,7 +113,7 @@ const HotelCalendar: React.FC<Props> = ({
         />
         <Transition
           mounted={containerTransitionState}
-          transition='pop-top-right'
+          transition='pop-top-left'
           onExit={() => {
             if (!rangeValue[1]) {
               handleDateSelections([
@@ -124,11 +125,11 @@ const HotelCalendar: React.FC<Props> = ({
         >
           {(styles) => (
             <div
-              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:-end-2 md:bottom-auto md:-ms-1 md:-mt-1 md:w-[600px] md:p-0 2xl:start-0'
+              className='z-overlay fixed start-0 end-0 top-0 bottom-0 rounded-lg border sm:p-20 md:absolute md:start-auto md:end-auto md:bottom-auto md:-ms-1 md:-mt-1 md:p-0 2xl:start-0'
               ref={clickOutsideRef}
               style={{ ...styles }}
             >
-              <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl'>
+              <Paper className='mx-auto flex h-full flex-col rounded-lg shadow-xl md:h-auto'>
                 <div>
                   <div className='flex justify-end p-2 md:hidden'>
                     <CloseButton
@@ -136,7 +137,7 @@ const HotelCalendar: React.FC<Props> = ({
                       onClick={() => setContainerTransitionState(false)}
                     />
                   </div>
-                  <div className='inline-flex items-center gap-3 px-3 pb-3 md:pt-3 md:pb-0'>
+                  <div className='flex items-center justify-center gap-3 px-3 pb-3 md:justify-start md:pt-3 md:pb-0'>
                     <div
                       className={clsx(
                         'inline-flex border-b-4 px-2 text-start text-lg font-bold',
@@ -162,24 +163,22 @@ const HotelCalendar: React.FC<Props> = ({
                     </div>
                   </div>
                 </div>
-                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth'>
-                  <div>
-                    <DatePicker
-                      highlightToday
-                      onChange={handleDateSelections}
-                      type={'range'}
-                      classNames={classes}
-                      numberOfColumns={matches ? 2 : 12}
-                      minDate={today.toDate()}
-                      maxDate={maxDate.toDate()}
-                      maxLevel='month'
-                      defaultValue={rangeValue}
-                      renderDay={dayRenderer}
-                      onDateChange={handleOfficialDates}
-                      onNextMonth={handleOfficialDates}
-                      onPreviousMonth={handleOfficialDates}
-                    />
-                  </div>
+                <div className='relative grow overflow-y-auto overscroll-contain scroll-smooth p-3'>
+                  <DatePicker
+                    highlightToday
+                    onChange={handleDateSelections}
+                    type={'range'}
+                    classNames={classes}
+                    numberOfColumns={matches ? 2 : 12}
+                    minDate={today.toDate()}
+                    maxDate={maxDate.toDate()}
+                    maxLevel='month'
+                    defaultValue={rangeValue}
+                    renderDay={dayRenderer}
+                    onDateChange={handleOfficialDates}
+                    onNextMonth={handleOfficialDates}
+                    onPreviousMonth={handleOfficialDates}
+                  />
                 </div>
                 <div className='items-center justify-between gap-3 border-t p-3 md:flex'>
                   <div className='hidden flex-col gap-1 md:flex'>

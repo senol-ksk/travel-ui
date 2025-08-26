@@ -1,6 +1,4 @@
 .monthCell {
-  width: 46px;
-  height: 46px;
   position: relative;
   z-index: 1;
 }
@@ -10,16 +8,16 @@
 
 .levelsGroup {
   flex-direction: column;
-  padding-top: 12px;
+  /* padding-top: 12px; */
   /* align-items: center; */
-  @media (min-width: $mantine-breakpoint-sm) {
+  @media (min-width: $mantine-breakpoint-md) {
     flex-direction: row;
   }
 }
 .day {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 46px;
+  height: 46px;
   font-size: var(--mantine-font-size-md);
   border-radius: 50%;
   &[data-in-range] {
@@ -55,12 +53,13 @@
   border: 1px solid black;
   border-radius: 50%;
   display: none;
+
   @media (min-width: $mantine-breakpoint-sm) {
     display: flex;
   }
 }
 .calendarHeader {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-bottom: 12px;
+
   margin: auto;
 }

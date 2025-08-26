@@ -50,11 +50,13 @@ export const SearchEngine = () => {
       onChange={(val) => {
         setLatestSearch(val ?? '')
       }}
-      classNames={{
-        tab: 'md:text-lg p-4 md:grow',
-        tabSection: 'hidden sm:flex',
-        tabLabel: 'flex-none',
-      }}
+      // classNames={{
+      //   ...classes,
+      //   // tab: 'md:text-lg p-4 md:grow',
+      //   tabSection: 'hidden sm:flex',
+      //   tabLabel: 'flex-none',
+      // }}
+      classNames={classes}
       keepMounted={false}
       variant='unstyle'
     >
@@ -69,26 +71,22 @@ export const SearchEngine = () => {
             sm: 'sm',
             md: 'lg',
           }}
-          className='flex-nowrap'
         >
           <TabsTab
             value={searchModules.flight.value}
             leftSection={<RiPlaneLine size={20} />}
-            className={classes.tab}
           >
             {searchModules.flight.title}
           </TabsTab>
           <TabsTab
             value={searchModules.hotel.value}
             leftSection={<RiBuilding4Line size={20} />}
-            className={classes.tab}
           >
             {searchModules.hotel.title}
           </TabsTab>
           <TabsTab
             value={searchModules.carRental.value}
             leftSection={<RiCarLine size={20} />}
-            className={classes.tab}
           >
             {searchModules.carRental.title}
           </TabsTab>
@@ -97,39 +95,31 @@ export const SearchEngine = () => {
             className='relative block'
           >
             <div className='absolute start-0 end-0 top-0 bottom-0 z-10' />
-            <TabsTab
-              value={'feribot'}
-              leftSection={<RiShip2Line size={20} />}
-              className={classes.tab}
-            >
+            <TabsTab value={'feribot'} leftSection={<RiShip2Line size={20} />}>
               <div>Feribot</div>
             </TabsTab>
           </a>
           <TabsTab
             value={searchModules.bus.value}
             leftSection={<RiBusFill size={20} />}
-            className={classes.tab}
           >
             {searchModules.bus.title}
           </TabsTab>
           <TabsTab
             value={searchModules.transfer.value}
             leftSection={<RiRouteLine size={20} />}
-            className={classes.tab}
           >
             {searchModules.transfer.title}
           </TabsTab>
           <TabsTab
             value={searchModules.tour.value}
             leftSection={<RiSuitcaseLine size={20} />}
-            className={classes.tab}
           >
             {searchModules.tour.title}
           </TabsTab>
           <TabsTab
             value={searchModules.cruise.value}
             leftSection={<RiShipLine size={20} />}
-            className={classes.tab}
           >
             {searchModules.cruise.title}
           </TabsTab>
