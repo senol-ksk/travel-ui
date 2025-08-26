@@ -62,9 +62,9 @@ const birth_date_months = () =>
   dayjs.months().map((month, index) => {
     const currentIndex = index + 1
     const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
-
+    const label = month
     return {
-      label: '',
+      label,
       value,
     }
   })
@@ -73,7 +73,7 @@ const passportMonths = () =>
   dayjs.months().map((month, index) => {
     const currentIndex = index + 1
     const value = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex}`
-    const label = `${currentIndex < 10 ? `0${currentIndex}` : currentIndex} ${month}`
+    const label = month
     return {
       label,
       value,
@@ -401,12 +401,12 @@ export const PassengerInformationForm: React.FC<IProps> = ({
           </Input.Wrapper>
         </div>
         <div
-          className={clsx('col-span-2 gap-3 sm:grid-cols-3', {
+          className={clsx('col-span-2 gap-3 sm:grid-cols-4', {
             grid: methods.watch(`${namePrefix}.nationality_Check`),
             hidden: !methods.watch(`${namePrefix}.nationality_Check`),
           })}
         >
-          <div>
+          <div className='md:col-span-1'>
             <Controller
               control={methods.control}
               name={`${namePrefix}.passportCountry`}
@@ -433,7 +433,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               )}
             />
           </div>
-          <div>
+          <div className='md:col-span-1'>
             <Controller
               control={methods.control}
               name={`${namePrefix}.passportNo`}
@@ -448,7 +448,7 @@ export const PassengerInformationForm: React.FC<IProps> = ({
               )}
             />
           </div>
-          <div>
+          <div className='col-span-2'>
             <Input.Label htmlFor={`${namePrefix}_${name_passportValid_day}`}>
               <div className='text-sm font-normal'>
                 {' '}

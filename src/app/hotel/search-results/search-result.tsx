@@ -149,7 +149,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
         </div>
       )}
       <Container className='px-0'>
-        <div className='py-5 lg:py-10'>
+        <div className='md:py-10'>
           <div className='grid items-start gap-4 md:grid-cols-4 md:gap-2'>
             <div className='hidden md:col-span-1 md:block'>
               {!isBreakPointMatchesMd ? (
@@ -503,21 +503,24 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     searchQueryStatus.current === 'loading'
                   }
                 >
-                  {totalCount > 0 && (
-                    <div className='hidden items-center gap-2 md:flex'>
-                      <div>
-                        <span className='text-lg font-bold'>
-                          {searchParams.destination},
-                        </span>{' '}
-                        İçin{' '}
-                        <span className='text-xl font-bold'>
-                          {' '}
-                          {totalCount}{' '}
-                        </span>
-                        Tesis Bulundu
+                  {!hotelSearchRequestQuery.isLoading &&
+                    !searchParamsQuery.isLoading &&
+                    searchQueryStatus.current !== 'loading' &&
+                    totalCount > 0 && (
+                      <div className='hidden items-center gap-2 md:flex'>
+                        <div>
+                          <span className='text-lg font-bold'>
+                            {searchParams.destination},
+                          </span>{' '}
+                          İçin{' '}
+                          <span className='text-xl font-bold'>
+                            {' '}
+                            {totalCount}{' '}
+                          </span>
+                          Tesis Bulundu
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </Skeleton>
 
                 <div className='flex items-center justify-between gap-1'>
@@ -644,22 +647,20 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     searchQueryStatus.current === 'loading'
                   }
                 >
-                  {searchParams.destination && (
-                    <>
-                      <div>
-                        <span className='text-sm'>
-                          <span className='font-semibold'>
-                            {searchParams.destination}
-                          </span>
-                          , için Toplam{' '}
-                          <span className='text-md font-semibold'>
-                            {totalCount}
-                          </span>{' '}
-                          Tesis Bulundu
+                  <>
+                    <div>
+                      <span className='text-sm'>
+                        <span className='font-semibold'>
+                          {searchParams.destination}
+                        </span>
+                        , için Toplam{' '}
+                        <span className='text-md font-semibold'>
+                          {totalCount}
                         </span>{' '}
-                      </div>
-                    </>
-                  )}
+                        Tesis Bulundu
+                      </span>{' '}
+                    </div>
+                  </>
                 </Skeleton>
               </div>
               {!hotelSearchRequestQuery.isFetching &&
