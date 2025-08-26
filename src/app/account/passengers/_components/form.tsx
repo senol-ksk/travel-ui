@@ -79,7 +79,7 @@ const PassengerForm: React.FC<IProps> = ({
         onSubmit(data)
       })}
     >
-      <div className='grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-5'>
+      <div className='flex flex-col gap-3 md:grid md:grid-cols-2 md:gap-5'>
         <div className='col-span-2 flex'>
           <Controller
             control={form.control}
@@ -262,6 +262,7 @@ const PassengerForm: React.FC<IProps> = ({
                         className: clsx('m_8fb7ebe7 mantine-Input-input py-5', {
                           'border-rose-500': !!fieldState.error?.message,
                         }),
+                        // @ts-expect-error watch for the package updates
                         'data-variant': 'default',
                         id: field.name,
                         name: field.name,

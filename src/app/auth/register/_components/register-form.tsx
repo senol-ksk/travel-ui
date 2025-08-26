@@ -225,6 +225,7 @@ export const RegisterForm = () => {
                               'border-rose-500': !!fieldState.error?.message,
                             }
                           ),
+                          // @ts-expect-error watch for the package updates
                           'data-variant': 'default',
                           id: field.name,
                           name: field.name,

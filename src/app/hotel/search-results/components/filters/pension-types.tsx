@@ -13,6 +13,7 @@ import {
 import { useQueryStates } from 'nuqs'
 
 import { hotelFilterSearchParams } from '@/modules/hotel/searchParams'
+import { IoSearchOutline } from 'react-icons/io5'
 
 type IProps = {
   data: HotelSearchResponsePensionTypes[] | undefined | null
@@ -46,6 +47,8 @@ const PensionTypes: React.FC<IProps> = ({ data = [] }) => {
     <>
       {/* <div className='pb-3'>
         <TextInput
+          leftSection={<IoSearchOutline size={16} />}
+          placeholder='Filtrele'
           size='xs'
           type='search'
           rightSection={

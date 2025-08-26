@@ -40,7 +40,7 @@ import {
 } from '@/app/flight/type'
 import { MemoizedFlightSearchResultsDomestic } from '@/app/flight/search-results/domestic-flight'
 import { MemoizedFlightSearchResultsInternational } from '@/app/flight/search-results/international-flight'
-import { Flight } from '@/modules/flight'
+import { Flight as FlightSearchEngine } from '@/modules/flight'
 
 import {
   filterParsers,
@@ -60,7 +60,7 @@ import { AirlineLogo } from '@/components/airline-logo'
 import { MdManageSearch, MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
 import { LuCircleCheckBig } from 'react-icons/lu'
-import { FaArrowRightLong } from 'react-icons/fa6'
+import { FaArrowRightLong, FaMagnifyingGlass } from 'react-icons/fa6'
 import { Select } from '@mantine/core'
 import { FaCheck } from 'react-icons/fa'
 import { IoIosClose } from 'react-icons/io'
@@ -86,7 +86,9 @@ const FlightSearchView = () => {
     getAirlineByCodeList,
     getAirportsByCodeList,
     searchParams,
+    airPortFlatList,
   } = useSearchResultsQueries()
+  console.log(airPortFlatList)
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
@@ -358,15 +360,17 @@ const FlightSearchView = () => {
                 searchSessionTokenQuery.isLoading
               }
             >
-              <div className='relative flex items-center gap-2 text-sm'>
+              <div className='relative flex items-center gap-2 text-xs font-semibold text-blue-800'>
                 <button
                   className='absolute start-0 end-0 top-0 bottom-0 z-10'
                   onClick={toggleSearchEngineVisibility}
                 />
                 <div>
                   {
-                    getAirportsByCodeList.data?.find((airPort) =>
-                      searchParams.origin?.iata.includes(airPort.Code)
+                    airPortFlatList?.find(
+                      (airPort) =>
+                        airPort.Code === searchParams.origin?.code ||
+                        searchParams.origin?.iata.includes(airPort.Code)
                     )?.City
                   }
                 </div>
@@ -375,14 +379,16 @@ const FlightSearchView = () => {
                 </div>
                 <div>
                   {
-                    getAirportsByCodeList.data?.find((airPort) =>
-                      searchParams.destination?.iata.includes(airPort.Code)
+                    airPortFlatList?.find(
+                      (airPort) =>
+                        airPort.Code === searchParams.destination?.code ||
+                        searchParams.destination?.iata.includes(airPort.Code)
                     )?.City
                   }
                 </div>
                 <div>|</div>
                 <div>{totalPassengerCount()} Yolcu</div>
-                <div className='z-0 ms-auto rounded-md bg-blue-200 p-2'>
+                <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
                   <IoSearchSharp size={24} className='text-blue-800' />
                 </div>
               </div>
@@ -390,7 +396,7 @@ const FlightSearchView = () => {
           )}
           <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
             <div className='pt-4 md:pt-0'>
-              <Flight />
+              <FlightSearchEngine />
             </div>
           </Collapse>
         </Container>
@@ -1280,7 +1286,7 @@ const FlightSearchView = () => {
                     return true
                   })
                   ?.map((result) => {
-                    const segmentAirlines = result.segments.map((item) =>
+                    const segmentAirlines = result?.segments?.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code
                         ? item.marketingAirline.code
                         : item.operatingAirline.code

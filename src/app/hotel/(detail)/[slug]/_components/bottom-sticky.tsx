@@ -34,8 +34,8 @@ const BottomSticky: React.FC<IProps> = ({ roomGroup }) => {
 
   return (
     <div className='z-max fixed right-0 bottom-0 left-0 md:hidden'>
-      <div className='flex items-center justify-between rounded-t-lg bg-white px-4 py-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
-        <div className='flex flex-col gap-1'>
+      <div className='flex items-center justify-between rounded-t-lg bg-white px-4 py-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
+        <div className='flex flex-col'>
           <div className='grid items-center'>
             <div className='text-sm text-gray-500 line-through'>
               {formatCurrency(discountPrice)}
@@ -44,7 +44,7 @@ const BottomSticky: React.FC<IProps> = ({ roomGroup }) => {
               <PriceNumberFlow value={roomGroup.totalPrice.value} />
             </div>
           </div>
-          <div className='flex items-center gap-3 text-xs text-gray-600'>
+          <div className='flex items-center gap-1 text-xs text-gray-600'>
             {nightCount > 0 && <div>{nightCount} Gece</div>}
             {discountRate > 0 && (
               <div className='flex items-center gap-1 text-orange-700'>

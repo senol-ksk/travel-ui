@@ -14,7 +14,7 @@ export default async function ChangePage() {
   return (
     <div>
       <Title order={2} className='text-center'>
-        Paraflytravel için yeni şifrenizi oluşturun.
+        Paraflytravel için yeni e-mail adresinizi oluşturun.
       </Title>
       <Suspense fallback={<ChangeSkeleton />}>
         <div>

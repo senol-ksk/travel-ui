@@ -7,6 +7,7 @@ import {
   Button,
   Checkbox,
   CloseButton,
+  Collapse,
   Container,
   rem,
   RemoveScroll,
@@ -19,7 +20,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { createSerializer, useQueryStates } from 'nuqs'
-import { upperFirst, useMediaQuery } from '@mantine/hooks'
+import { upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
 
 import { useCarSearchResults } from '@/app/car/search-results/useSearchResult'
 import { CarSearchResultItem } from '@/app/car/component/result-item'
@@ -36,7 +37,10 @@ import { cleanObj } from '@/libs/util'
 import { useState } from 'react'
 import { FaCheck } from 'react-icons/fa'
 import { SortBySelect } from './sort-by-select'
-import { Route } from 'next'
+import { type Route } from 'next'
+import { CarRentSearchPanel } from '@/modules/carrent'
+import { IoSearchSharp } from 'react-icons/io5'
+import dayjs from 'dayjs'
 
 export const createDetailParams = createSerializer(carDetailParams)
 
@@ -111,8 +115,45 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
     carSearchResult.fetchNextPage()
   }
 
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
+
   return (
-    <div>
+    <>
+      <div className='border-t bg-white shadow'>
+        <Container>
+          <div className='relative flex items-center gap-2 py-2 text-xs font-semibold text-blue-800 md:hidden'>
+            <button
+              className='absolute start-0 end-0 top-0 bottom-0 z-10'
+              onClick={toggleSearchEngineVisibility}
+            />
+            <div>
+              <div>
+                {
+                  searchRequestParams.params.carRentalSearchPanel.origin.at(0)
+                    ?.name
+                }
+              </div>
+              <div>
+                {dayjs(
+                  searchRequestParams.params.carRentalSearchPanel.pickupDate
+                ).format('DD MMM')}{' '}
+                - {searchRequestParams.params.carRentalSearchPanel.pickupHour}
+                :00
+              </div>
+            </div>
+
+            <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+              <IoSearchSharp size={24} className='text-blue-800' />
+            </div>
+          </div>
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            <div className='py-3'>
+              <CarRentSearchPanel />
+            </div>
+          </Collapse>
+        </Container>
+      </div>
       <div className='relative'>
         <div className='absolute start-0 end-0 top-0 h-[20] overflow-hidden'>
           {carSearchResult.isFetching ||
@@ -415,7 +456,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
               <div className='grid gap-3 md:col-span-3'>
                 <div className='grid grid-cols-3 items-center gap-2 md:grid-cols-5'>
                   <Skeleton
-                    className='col-span-1 hidden md:col-span-3 md:flex'
+                    className='col-span-1 hidden py-1 md:col-span-3 md:flex'
                     visible={
                       carSearchResult.isFetching ||
                       carSearchResult.isFetchingNextPage ||
@@ -468,7 +509,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                         size='sm'
                         className={
                           order === option.value
-                            ? 'rounded-md border-0 bg-blue-200 font-medium text-blue-700'
+                            ? 'rounded-md border-0 bg-blue-100 font-medium text-blue-700'
                             : 'rounded-md border-gray-400 font-normal text-black hover:bg-blue-50 hover:text-blue-700'
                         }
                         key={option.value}
@@ -506,8 +547,12 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                   }
                 >
                   <>
-                    <span className='text-sm font-semibold text-gray-500'>
-                      Toplam {totalCount} Araç Bulundu
+                    <span className='text-sm'>
+                      Toplam{' '}
+                      <span className='text-md font-semibold'>
+                        {totalCount}
+                      </span>{' '}
+                      Araç Bulundu
                     </span>
                   </>
                 </Skeleton>
@@ -555,6 +600,6 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
           </div>
         </Container>
       </div>
-    </div>
+    </>
   )
 }

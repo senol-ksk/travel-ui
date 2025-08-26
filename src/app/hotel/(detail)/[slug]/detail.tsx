@@ -218,17 +218,20 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                 Harita Görünümü
               </Button>
             </div>
-            <div className='absolute end-2 bottom-2 z-10'>
+            <div className='absolute end-2 bottom-2 z-10 mx-2'>
               <Button
                 color={'black'}
                 opacity={'.75'}
-                leftSection={<MdOutlineCameraAlt size={20} />}
+                leftSection={<MdOutlineCameraAlt size={18} />}
                 onClick={openMediaGallery}
               >
                 Galeri ({hotel.images.length})
               </Button>
             </div>
-            <div onClick={openMediaGallery} className='cursor-pointer'>
+            <div
+              onClick={openMediaGallery}
+              className='cursor-pointer px-2 sm:px-0'
+            >
               <div className='grid auto-cols-fr gap-4 sm:grid-cols-4 md:grid-rows-2'>
                 <figure
                   style={{ contentVisibility: 'auto' }}
