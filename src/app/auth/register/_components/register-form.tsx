@@ -225,7 +225,6 @@ export const RegisterForm = () => {
                               'border-rose-500': !!fieldState.error?.message,
                             }
                           ),
-                          'data-variant': 'default',
                           id: field.name,
                           name: field.name,
                           type: 'tel',

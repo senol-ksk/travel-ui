@@ -293,7 +293,6 @@ export function CheckoutPassengerPage() {
                                   !!formMethods.formState?.errors?.contactGSM,
                               }
                             ),
-                            'data-variant': 'default',
                             name: field.name,
                             id: 'contactGSM',
                           }}

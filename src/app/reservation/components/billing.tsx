@@ -193,8 +193,6 @@ const BillingForm = () => {
                                         .mobilPhoneNumber,
                                   }
                                 ),
-                                'data-variant': 'default',
-
                                 id: field.name,
                                 name: field.name,
                               }}
@@ -400,7 +398,6 @@ const BillingForm = () => {
                                     !!formContext.formState?.errors.phoneNumber,
                                 }
                               ),
-                              'data-variant': 'default',
                               id: field.name,
                               name: field.name,
                             }}

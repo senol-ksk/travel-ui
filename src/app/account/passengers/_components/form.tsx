@@ -262,7 +262,6 @@ const PassengerForm: React.FC<IProps> = ({
                         className: clsx('m_8fb7ebe7 mantine-Input-input py-5', {
                           'border-rose-500': !!fieldState.error?.message,
                         }),
-                        'data-variant': 'default',
                         id: field.name,
                         name: field.name,
                       }}
