@@ -3,12 +3,10 @@ name: CI for Pull Request
 on:
   push:
     branches:
-      - main
       - develop
   pull_request:
     branches:
       - 'main'
-      - 'develop'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
