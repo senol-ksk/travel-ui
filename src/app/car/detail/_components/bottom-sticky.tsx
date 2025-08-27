@@ -74,6 +74,7 @@ const CarBottomSticky: React.FC<IProps> = ({
         <Button
           onClick={onCarSelect}
           variant='default'
+          size='md'
           className='bg-primary border-none text-white'
           radius={'md'}
           loading={isLoading}

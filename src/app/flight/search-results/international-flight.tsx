@@ -231,7 +231,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                 <IoIosClose size={25} />
               </>
             ) : (
-              'Uçuş Detayları'
+              'Uçuş Detayı'
             )}
           </Button>
         </div>
