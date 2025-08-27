@@ -42,15 +42,11 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
     <div className='sm:grid sm:grid-flow-col sm:grid-rows-1 sm:gap-3'>
       {selectedFlightItemPackages?.packages?.map((selectedPackage, index) => {
         const isSelected = index === 0
-
         const dynamicBorderColor =
           dynamicBorderColors[index % dynamicBorderColors.length]
-        // package price defined
-        let packagePrice = selectedPackage.flightFareInfo.totalPrice.value
-        // package base price calculated
-        packagePrice =
+        const packagePrice =
           selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
-        packagePrice = Math.max(0, packagePrice)
+
         return (
           <div
             key={selectedPackage.flightFareInfo.key}

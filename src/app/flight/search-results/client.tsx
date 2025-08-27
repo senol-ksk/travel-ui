@@ -1375,16 +1375,24 @@ const FlightSearchView = () => {
                 {
                   getAirportsByCodeList.data?.find(
                     (airPort) =>
-                      searchParams.origin?.code === airPort.Code ||
-                      searchParams.origin?.iata.includes(airPort.Code)
+                      searchParams[
+                        isReturnFlightVisible ? 'destination' : 'origin'
+                      ]?.code === airPort.Code ||
+                      searchParams[
+                        isReturnFlightVisible ? 'destination' : 'origin'
+                      ]?.iata.includes(airPort.Code)
                   )?.City
                 }
                 {''} - {''}
                 {
                   getAirportsByCodeList.data?.find(
                     (airPort) =>
-                      searchParams.destination?.code === airPort.Code ||
-                      searchParams.destination?.iata.includes(airPort.Code)
+                      searchParams[
+                        isReturnFlightVisible ? 'origin' : 'destination'
+                      ]?.code === airPort.Code ||
+                      searchParams[
+                        isReturnFlightVisible ? 'origin' : 'destination'
+                      ]?.iata.includes(airPort.Code)
                   )?.City
                 }
               </div>
