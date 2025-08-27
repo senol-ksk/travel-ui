@@ -26,9 +26,21 @@ import {
   Title,
   Transition,
   UnstyledButton,
+  Select,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { PiSuitcaseRolling } from 'react-icons/pi'
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import 'dayjs/locale/tr'
+import { Virtuoso } from 'react-virtuoso'
+import { MdOutlineAirplanemodeActive } from 'react-icons/md'
+import { LuCircleCheckBig } from 'react-icons/lu'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import { FaCheck } from 'react-icons/fa'
+import { IoSearchSharp } from 'react-icons/io5'
+import { IoIosClose } from 'react-icons/io'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -50,22 +62,10 @@ import {
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { DrawerFlight } from './components/drawer-flight'
-import dayjs from 'dayjs'
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
-import 'dayjs/locale/tr'
-import { Virtuoso } from 'react-virtuoso'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
-import { MdManageSearch, MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
-import { LuCircleCheckBig } from 'react-icons/lu'
-import { FaArrowRightLong, FaMagnifyingGlass } from 'react-icons/fa6'
-import { Select } from '@mantine/core'
-import { FaCheck } from 'react-icons/fa'
-import { IoIosClose } from 'react-icons/io'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
-import { IoSearchSharp } from 'react-icons/io5'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
   flightFareInfo: FlightFareInfo
@@ -88,7 +88,7 @@ const FlightSearchView = () => {
     searchParams,
     airPortFlatList,
   } = useSearchResultsQueries()
-  console.log(airPortFlatList)
+
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
