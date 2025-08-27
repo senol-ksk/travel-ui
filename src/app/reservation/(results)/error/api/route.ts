@@ -1,5 +1,6 @@
+import { type Route } from 'next'
 import { redirect } from 'next/navigation'
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData()
@@ -11,6 +12,6 @@ export async function POST(request: NextRequest) {
   )
 
   return redirect(
-    `${request.nextUrl.origin}/reservation/error?status=${status}&message=${message}`
+    `${request.nextUrl.origin}/reservation/error?status=${status}&message=${message}` as Route
   )
 }
