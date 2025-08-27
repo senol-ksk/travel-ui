@@ -1,17 +1,15 @@
-import { formatCurrency } from '@/libs/util'
-import { Badge, Button, rem, Stack } from '@mantine/core'
+import { Button, rem, Stack } from '@mantine/core'
+import { MdCheck } from 'react-icons/md'
+import { IoClose } from 'react-icons/io5'
+import { FaCheck } from 'react-icons/fa6'
 
 import clsx from 'clsx'
-import {
+import type {
   ClientDataType,
   FlightDetail,
   FlightDetailSegment,
   FlightFareInfo,
-} from '../../type'
-import { MdCheck } from 'react-icons/md'
-import { IoClose } from 'react-icons/io5'
-import { FaCheck } from 'react-icons/fa6'
-import { PiCheckFatFill } from 'react-icons/pi'
+} from '@/app/flight/type'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -29,8 +27,8 @@ type IProps = {
 
 const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
   const selectedFlightItemPackages = data
-  // border colors dyanmic changing for per package
-  const dynmicborderColors = [
+  // border colors dynamic changing for per package
+  const dynamicBorderColors = [
     'border-t-gray-500',
     'border-t-indigo-900',
     'border-t-purple-600',
@@ -46,10 +44,10 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
         const isSelected = index === 0
 
         const dynamicBorderColor =
-          dynmicborderColors[index % dynmicborderColors.length]
+          dynamicBorderColors[index % dynamicBorderColors.length]
         // package price defined
         let packagePrice = selectedPackage.flightFareInfo.totalPrice.value
-        // package base prıce calculated
+        // package base price calculated
         packagePrice =
           selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
         packagePrice = Math.max(0, packagePrice)
@@ -73,8 +71,12 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
             )}
             <div className='mb-2 grid w-full cursor-pointer justify-between gap-1'>
               <div className='text-2xl font-bold'>
-                {' '}
-                +{packagePrice.toFixed(0)} TL
+                +
+                {new Intl.NumberFormat('tr', {
+                  currency: 'TRY',
+                }).format(packagePrice)}{' '}
+                TL
+                {/* +{packagePrice.toFixed(0)} TL */}
               </div>
               <div className='text-lg font-bold capitalize'>
                 {(() => {

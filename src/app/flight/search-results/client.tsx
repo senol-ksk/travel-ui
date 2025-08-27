@@ -1373,14 +1373,18 @@ const FlightSearchView = () => {
             <div className='flex items-center justify-center gap-3'>
               <div className='flex items-center justify-center gap-1 font-semibold'>
                 {
-                  getAirportsByCodeList.data?.find((airPort) =>
-                    searchParams.origin?.iata.includes(airPort.Code)
+                  getAirportsByCodeList.data?.find(
+                    (airPort) =>
+                      searchParams.origin?.code === airPort.Code ||
+                      searchParams.origin?.iata.includes(airPort.Code)
                   )?.City
                 }
                 {''} - {''}
                 {
-                  getAirportsByCodeList.data?.find((airPort) =>
-                    searchParams.destination?.iata.includes(airPort.Code)
+                  getAirportsByCodeList.data?.find(
+                    (airPort) =>
+                      searchParams.destination?.code === airPort.Code ||
+                      searchParams.destination?.iata.includes(airPort.Code)
                   )?.City
                 }
               </div>
