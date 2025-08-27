@@ -3,7 +3,7 @@ name: CI for Pull Request
 on:
   push:
     branches:
-      - develop
+      - 'develop'
   pull_request:
     branches:
       - 'main'
