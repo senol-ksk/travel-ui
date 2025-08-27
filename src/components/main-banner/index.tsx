@@ -102,7 +102,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
                 onClick={() => {
                   emblaApi.scrollTo(snapIndex)
                 }}
-                className='transition-all ease-in hover:scale-200'
+                className='transition-all ease-in hover:scale-140'
               />
             )
           })}

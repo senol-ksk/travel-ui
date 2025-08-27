@@ -907,7 +907,7 @@ const FlightSearchView = () => {
                                       Detayı Kapat <IoIosClose size={25} />
                                     </>
                                   ) : (
-                                    'Uçuş Detayları'
+                                    'Uçuş Detayı'
                                   )}
                                 </Button>
                               </div>
@@ -939,7 +939,7 @@ const FlightSearchView = () => {
                                       Detayı Kapat <IoIosClose size={25} />
                                     </>
                                   ) : (
-                                    'Uçuş Detayları'
+                                    'Uçuş Detayı'
                                   )}
                                 </Button>
                               </div>
@@ -1352,7 +1352,7 @@ const FlightSearchView = () => {
         </div>
       </Container>
       <Drawer
-        size={'lg'}
+        size={isBreakPointMatchesMd ? 'lg' : '100%'}
         opened={packageDrawerOpened}
         onClose={closePackageDrawer}
         position='bottom'
