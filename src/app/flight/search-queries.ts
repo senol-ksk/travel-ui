@@ -30,7 +30,7 @@ const requestedDayFormat = 'YYYY-MM-DD'
 import { removeDuplicateFlights } from './search-results/filter-actions'
 
 const useSearchResultsQueries = () => {
-  const airPortFlatList: Array<AirportCode> = []
+  const airPortFlatList: Array<AirportCode> = useRef([]).current
   const [searchParams] = useQueryStates(flightSearchParams)
 
   const appToken = useRef<string>(null)

@@ -1373,7 +1373,7 @@ const FlightSearchView = () => {
             <div className='flex items-center justify-center gap-3'>
               <div className='flex items-center justify-center gap-1 font-semibold'>
                 {
-                  getAirportsByCodeList.data?.find(
+                  airPortFlatList.find(
                     (airPort) =>
                       searchParams[
                         isReturnFlightVisible ? 'destination' : 'origin'
@@ -1385,7 +1385,7 @@ const FlightSearchView = () => {
                 }
                 {''} - {''}
                 {
-                  getAirportsByCodeList.data?.find(
+                  airPortFlatList?.find(
                     (airPort) =>
                       searchParams[
                         isReturnFlightVisible ? 'origin' : 'destination'
