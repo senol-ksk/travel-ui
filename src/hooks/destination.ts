@@ -1,7 +1,7 @@
 import { ModuleNames } from '@/app/account/reservations/types'
 import { LocationResult } from '@/components/search-engine/locations/type'
 import { request } from '@/network'
-import { useQueries, useQuery } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 
 export const useDestinationGetBySlug = ({
   slugs,
