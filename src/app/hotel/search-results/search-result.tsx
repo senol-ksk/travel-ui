@@ -675,48 +675,77 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     Aradığınız kriterlerde sonuç bulunamadı.
                   </Alert>
                 )}
-              {hotelSearchRequestQuery.data?.pages.map((page) => {
-                if (!page) return null
-                return (
-                  page.searchResults.length &&
-                  page.searchResults.map((results, resultIndex) => {
-                    const hotelInfos = results.hotelInfos
-                    const roomDetails =
-                      results.roomDetails && Object.values(results.roomDetails)
+              {hotelSearchRequestQuery.isLoading ||
+              searchParamsQuery.isLoading ||
+              searchQueryStatus.current === 'loading' ? (
+                <>
+                  {[1, 2, 3].map((index) => (
+                    <div key={index} className='mb-4 rounded-lg border p-4'>
+                      <div className='flex gap-4'>
+                        <Skeleton height={120} width={120} radius='md' />
+                        <div className='flex-1 space-y-3'>
+                          <Skeleton height={20} width='60%' />
+                          <Skeleton height={16} width='40%' />
+                          <Skeleton height={16} width='80%' />
+                          <div className='flex gap-2'>
+                            <Skeleton height={24} width={60} />
+                            <Skeleton height={24} width={60} />
+                            <Skeleton height={24} width={60} />
+                          </div>
+                          <div className='flex justify-between'>
+                            <Skeleton height={20} width='30%' />
+                            <Skeleton height={32} width={100} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                hotelSearchRequestQuery.data?.pages.map((page) => {
+                  if (!page) return null
+                  return (
+                    page.searchResults.length &&
+                    page.searchResults.map((results, resultIndex) => {
+                      const hotelInfos = results.hotelInfos
+                      const roomDetails =
+                        results.roomDetails &&
+                        Object.values(results.roomDetails)
 
-                    return results.items.map((result) => {
-                      const hotelInfo = hotelInfos.find(
-                        (hotelInfo) => hotelInfo.id === result.hotelId
-                      )
-                      const roomDetail = roomDetails?.find(
-                        (room) => room.roomKey == result.rooms[0].key
-                      )
+                      return results.items.map((result) => {
+                        const hotelInfo = hotelInfos.find(
+                          (hotelInfo) => hotelInfo.id === result.hotelId
+                        )
+                        const roomDetail = roomDetails?.find(
+                          (room) => room.roomKey == result.rooms[0].key
+                        )
 
-                      return (
-                        <HotelSearchResultItem
-                          searchToken={
-                            searchParamsQuery.data?.hotelSearchApiRequest
-                              .hotelSearchModuleRequest.searchToken as string
-                          }
-                          sessionToken={
-                            searchParamsQuery.data?.hotelSearchApiRequest
-                              .hotelSearchModuleRequest.sessionToken as string
-                          }
-                          key={result.hotelId}
-                          roomDetail={roomDetail}
-                          hotelInfo={hotelInfo}
-                          resultItem={result}
-                          onMapClick={() => {
-                            openMapsModal()
-                            setHotelInfo(hotelInfo)
-                          }}
-                          campaignContents={hotelCampaignsQuery?.data}
-                        />
-                      )
+                        return (
+                          <HotelSearchResultItem
+                            searchToken={
+                              searchParamsQuery.data?.hotelSearchApiRequest
+                                .hotelSearchModuleRequest.searchToken as string
+                            }
+                            sessionToken={
+                              searchParamsQuery.data?.hotelSearchApiRequest
+                                .hotelSearchModuleRequest.sessionToken as string
+                            }
+                            key={result.hotelId}
+                            roomDetail={roomDetail}
+                            hotelInfo={hotelInfo}
+                            resultItem={result}
+                            onMapClick={() => {
+                              openMapsModal()
+                              setHotelInfo(hotelInfo)
+                            }}
+                            campaignContents={hotelCampaignsQuery?.data}
+                          />
+                        )
+                      })
                     })
-                  })
-                )
-              })}
+                  )
+                })
+              )}
               {hotelSearchRequestQuery.data?.pages &&
                 hotelSearchRequestQuery.data?.pages?.filter(
                   (page) => page && page.searchResults[0]?.items.length > 0

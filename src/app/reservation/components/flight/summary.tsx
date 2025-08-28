@@ -26,7 +26,7 @@ type IProps = {
 import { CheckoutCard } from '@/components/card'
 import { formatCurrency } from '@/libs/util'
 import NumberFlow from '@number-flow/react'
-import { IoAirplaneSharp } from 'react-icons/io5'
+import { IoAirplaneSharp, IoInformationCircle } from 'react-icons/io5'
 import { FlightTransferSummary } from './transfer'
 import { FlightRules } from './flight-rules'
 import { useCheckoutContext } from '../../store'
@@ -105,7 +105,7 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                           </>
                         )}
                     </div>
-                    <div className='flex gap-2'>
+                    <div className='flex items-center gap-2'>
                       <div className='leading-none'>
                         <AirlineLogo
                           airlineCode={
@@ -118,7 +118,7 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                           }
                         />
                       </div>
-                      <div className='flex items-center gap-2'>
+                      <div>
                         {
                           airlines[
                             flightSegmentsFirstItem.marketingAirline.code
@@ -127,11 +127,18 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                         {' - '}
                         {flightSegmentsFirstItem.flightNumber}
                         {' - '}
-                        {upperFirst(
-                          (
-                            flightDetail.freeVolatileData?.BrandName ??
-                            flightDetail.freeVolatileData?.brandname
-                          )?.toLowerCase() ?? ''
+                        {flightDetail.freeVolatileData?.BrandName && (
+                          <div className='flex items-center gap-1 py-2'>
+                            <IoInformationCircle size={16} />
+                            <div>
+                              {upperFirst(
+                                (
+                                  flightDetail.freeVolatileData?.BrandName ??
+                                  flightDetail.freeVolatileData?.brandname
+                                )?.toLowerCase() ?? ''
+                              )}
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -162,7 +169,10 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                       </div>
                     </div>
                     {hasTransfer && (
-                      <FlightTransferSummary flightSegments={flightSegments} />
+                      <FlightTransferSummary
+                        flightSegments={flightSegments}
+                        data={data}
+                      />
                     )}
                   </div>
                 )

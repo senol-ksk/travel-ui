@@ -21,6 +21,43 @@ export type ReservationFlight = {
   firstFlightDate: string
 }
 
+export type OrderPassengerModel = {
+  passengerId: number
+  model_PassengerId: number
+  declaredAge: number
+  productType: number
+  checkinDate: string
+  calculationYearBased: boolean
+  calculationYearType: number
+  sequenceNo: number
+  type: number
+  gender: number
+  FirstName: string
+  LastName: string
+  middleName?: string
+  birthDate: string
+  nationality: string
+  nationality_Check?: string
+  citizenNo?: string
+  passportNo?: string
+  mobilePhoneNumber?: string
+  email?: string
+  isContact: boolean
+  flightFrequencyNo?: string
+  notes?: string
+  passportValidityDate?: string
+  webUserId: number
+  passportCountry?: string
+  groupOrderIndex: number
+  passengerKey?: string
+  isRecord: boolean
+  listFlightFrequencyAirline?: string[]
+  listFlightFrequencyNo?: string[]
+  registeredPassengerId: number
+  isDontValidate: boolean
+  hesCode?: string
+}
+
 export type SummaryPassengerData = {
   modules: number[]
   passengers: {

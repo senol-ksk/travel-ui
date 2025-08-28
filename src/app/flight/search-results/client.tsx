@@ -1371,18 +1371,14 @@ const FlightSearchView = () => {
             </div>
 
             <div className='flex items-center justify-center gap-3'>
-              <div className='flex items-center justify-center gap-1 font-semibold'>
-                {
-                  getAirportsByCodeList.data?.find((airPort) =>
-                    searchParams.origin?.iata.includes(airPort.Code)
-                  )?.City
-                }
+              <div className='md:text-md flex items-center justify-center gap-1 text-xs font-semibold'>
+                {getAirportsByCodeList.data?.find((airPort) =>
+                  searchParams.origin?.iata.includes(airPort.Code)
+                )?.City ?? searchParams.origin?.code}
                 {''} - {''}
-                {
-                  getAirportsByCodeList.data?.find((airPort) =>
-                    searchParams.destination?.iata.includes(airPort.Code)
-                  )?.City
-                }
+                {getAirportsByCodeList.data?.find((airPort) =>
+                  searchParams.destination?.iata.includes(airPort.Code)
+                )?.City ?? searchParams.destination?.code}
               </div>
               <div className='flex items-center justify-center gap-1'>
                 <AirlineLogo
@@ -1393,7 +1389,7 @@ const FlightSearchView = () => {
                       ?.marketingAirline.code.toLowerCase() ?? ''
                   }
                 />
-                <span className='md:text-md text-sm font-semibold'>
+                <span className='md:text-md text-xs font-semibold'>
                   {
                     airlineDataObj
                       ?.find(

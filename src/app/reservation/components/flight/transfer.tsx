@@ -1,6 +1,7 @@
 import {
   FlightReservationFlightList,
   FlightReservationSummary,
+  ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
 import { Box, Collapse, Divider, UnstyledButton } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -10,12 +11,19 @@ import { MdTransferWithinAStation } from 'react-icons/md'
 
 type IProps = {
   flightSegments: FlightReservationFlightList['flightSegments']
+  data: ProductPassengerApiResponseModel['viewBag']
 }
 
-export const FlightTransferSummary: React.FC<IProps> = ({ flightSegments }) => {
+export const FlightTransferSummary: React.FC<IProps> = ({
+  flightSegments,
+  data,
+}) => {
   const [opened, { toggle }] = useDisclosure(false)
 
   const transferCount = flightSegments.length - 1
+  const flightData = data.SummaryViewDataResponser
+    .summaryResponse as FlightReservationSummary
+  const airports = flightData.airportList
 
   return (
     <div className=''>
@@ -56,12 +64,18 @@ export const FlightTransferSummary: React.FC<IProps> = ({ flightSegments }) => {
             if (segmentIndex === 0) return
 
             return (
-              <div key={segment.key} className='grid gap-2'>
-                <div className='flex items-center gap-3'>
+              <div key={segment.key} className='mb-4 grid'>
+                <div className='grid items-center gap-1'>
                   {transferCount > 1 && <div>{segmentIndex}. Aktarma</div>}
 
-                  <div>
-                    <strong>Bekleme Süresi:</strong> {transferDuration}
+                  <div className='flex items-center gap-2'>
+                    <strong>Bekleme Süresi:</strong>
+                    <span>{transferDuration}</span>
+
+                    <div>
+                      {airports[segment.origin.code].city} (
+                      {segment.origin.code})
+                    </div>
                   </div>
                 </div>
               </div>

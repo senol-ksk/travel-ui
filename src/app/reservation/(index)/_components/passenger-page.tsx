@@ -62,6 +62,7 @@ import { RiAccountCircleFill } from 'react-icons/ri'
 import { useCheckoutContext } from '../../store'
 import { convertPassengerTitle } from '@/libs/passenger-title'
 import { Route } from 'next'
+import { RegisteredList } from './registered-list'
 
 export function CheckoutPassengerPage() {
   const queryClient = useQueryClient()
@@ -379,16 +380,19 @@ export function CheckoutPassengerPage() {
                                   return (
                                     <div key={innerChildNode.orderId}>
                                       <div>
-                                        <Title
-                                          order={5}
-                                          pb={10}
-                                          className='font-semibold'
-                                        >
-                                          {Number(innerChildNodeIndex) + 1}.{' '}
-                                          {convertPassengerTitle(
-                                            passengerType
-                                          )}{' '}
-                                        </Title>
+                                        <div className='flex items-center justify-between'>
+                                          <Title
+                                            order={5}
+                                            pb={10}
+                                            className='font-semibold'
+                                          >
+                                            {Number(innerChildNodeIndex) + 1}.{' '}
+                                            {convertPassengerTitle(
+                                              passengerType
+                                            )}{' '}
+                                          </Title>
+                                          <RegisteredList />
+                                        </div>
                                         <HotelPassengerInformationForm
                                           moduleName={moduleName}
                                           fieldProps={{
@@ -471,20 +475,22 @@ export function CheckoutPassengerPage() {
                           return (
                             <div key={index}>
                               {index > 0 && <hr className='m-5' />}
-                              <Title order={2} size={'xl'} pb={15}>
-                                {(() => {
-                                  switch (passengerType) {
-                                    case 0:
-                                      return 'Yetişkin'
+                              <div className='flex items-center justify-between'>
+                                <Title order={2} size={'xl'} pb={15}>
+                                  {(() => {
+                                    switch (passengerType) {
+                                      case 0:
+                                        return 'Yetişkin'
 
-                                    default:
-                                      return PassengerTypesIndexEnum[
-                                        passengerType
-                                      ]
-                                  }
-                                })()}
-                              </Title>
-
+                                      default:
+                                        return PassengerTypesIndexEnum[
+                                          passengerType
+                                        ]
+                                    }
+                                  })()}
+                                </Title>
+                                <RegisteredList />
+                              </div>
                               <PassengerInformationForm
                                 moduleName={moduleName}
                                 fieldProps={{
@@ -542,15 +548,18 @@ export function CheckoutPassengerPage() {
 
                           return (
                             <div key={index}>
-                              <div className='mb-3 flex items-center gap-1 font-semibold'>
-                                <div className='font-bold'>{index + 1}.</div>
-                                <div>
-                                  {moduleName.toLowerCase() === 'bus'
-                                    ? field?.gender.toString() === '1'
-                                      ? 'Kadın'
-                                      : 'Erkek'
-                                    : convertPassengerTitle(passengerType)}
+                              <div className='flex items-center justify-between'>
+                                <div className='mb-3 flex items-center gap-1 font-semibold'>
+                                  <div className='font-bold'>{index + 1}.</div>
+                                  <div>
+                                    {moduleName.toLowerCase() === 'bus'
+                                      ? field?.gender.toString() === '1'
+                                        ? 'Kadın'
+                                        : 'Erkek'
+                                      : convertPassengerTitle(passengerType)}
+                                  </div>
                                 </div>
+                                <RegisteredList />
                               </div>
                               <PassengerInformationForm
                                 moduleName={moduleName}
