@@ -1,6 +1,6 @@
 'use client'
 
-import { useTransferSearchResults } from './useSearchResults'
+import { useState } from 'react'
 import {
   Alert,
   Button,
@@ -18,24 +18,24 @@ import {
   Transition,
   UnstyledButton,
 } from '@mantine/core'
+import dayjs from 'dayjs'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
+import { FaCheck } from 'react-icons/fa'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import { IoSearchSharp } from 'react-icons/io5'
 
 import { TransferSearchItem } from '@/app/transfer/search-results/search-item'
+import { useQueryStates } from 'nuqs'
 import {
   filterParsers,
   SortOrderEnums,
 } from '@/modules/transfer/searchParams.client'
-import { useQueryStates } from 'nuqs'
 import { useFilterActions } from './useFilterActions'
 import { PriceRangeSlider } from './_components/price-slider'
 import { cleanObj, formatCurrency } from '@/libs/util'
-import { useState } from 'react'
-import { upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { FaCheck } from 'react-icons/fa'
 import { TransferSearchEngine } from '@/modules/transfer'
-import { FaArrowRightLong } from 'react-icons/fa6'
-import { IoSearchSharp } from 'react-icons/io5'
-import dayjs from 'dayjs'
 import { useDestinationGetBySlug } from '@/hooks/destination'
+import { useTransferSearchResults } from './useSearchResults'
 
 const skeltonLoader = new Array(3).fill(true)
 

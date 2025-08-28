@@ -64,7 +64,7 @@ export const LoginForm = () => {
     onSuccess: async (query) => {
       await signIn('credentials', {
         name: query.data?.name,
-        redirect: false,
+        // redirect: false,
       })
 
       modals.closeAll()
