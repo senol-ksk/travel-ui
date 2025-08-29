@@ -49,18 +49,20 @@ const CommentsDrawer: React.FC<IProps> = ({ data }) => {
           {comments.map((comment, index) => (
             <Card
               key={index}
-              className='w-full bg-blue-50 text-sm'
+              className='w-full bg-blue-50 text-sm font-medium'
               padding='lg'
               shadow='sm'
               radius='md'
             >
               <Group mb='xs'>
-                <Text size='sm'>Çok iyi</Text>
+                <Text size='sm' className='font-medium'>
+                  Çok iyi
+                </Text>
                 <Badge color='blue' size='lg' radius='md'>
                   {comment.averageScore}
                 </Badge>
               </Group>
-              <Text size='sm'>
+              <Text size='sm' className='font-medium'>
                 {comment.withWhoLabel} {comment.reasonLabel}
               </Text>
               <div className='h-full overflow-hidden pt-2 text-sm'>
