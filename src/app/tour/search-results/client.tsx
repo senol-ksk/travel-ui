@@ -278,7 +278,7 @@ const TourSearchResultClient = () => {
                           >
                             <UnstyledButton
                               fz='xs'
-                              className='font-semibold text-blue-500'
+                              className='px-4 font-semibold text-blue-500'
                               onClick={() => {
                                 setFilterParams(null)
                               }}
