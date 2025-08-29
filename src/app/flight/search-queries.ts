@@ -270,11 +270,23 @@ const useSearchResultsQueries = () => {
             )
           })
 
+          // Find the corresponding search result to get providerName ~thanks ai
+          const searchResult = pages
+            .flatMap((page) => page.data?.searchResults || [])
+            .find(
+              (result) =>
+                result.flightFareInfos &&
+                Object.values(result.flightFareInfos).some(
+                  (fare) => fare.key === clientObj.fareInfo.key
+                )
+            )
+
           return {
             fareInfo: clientObj.fareInfo,
             details: clientObj.details,
             segments: clientObj.segments,
             package: packages,
+            providerName: searchResult?.diagnostics?.providerName,
           }
         }) as ClientDataType[]
 
