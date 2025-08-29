@@ -460,7 +460,7 @@ const FlightSearchView = () => {
                           </Title>
                           <div>
                             <UnstyledButton
-                              className='font-semibold text-blue-500'
+                              className='px-4 font-semibold text-blue-500'
                               fz='xs'
                               hidden={
                                 !Object.values(filterParams).find(Boolean)
@@ -890,7 +890,7 @@ const FlightSearchView = () => {
                                             {numSegments - 1} Aktarma
                                           </span>
                                         ) : (
-                                          <span className='md-text-md text-sm text-green-800'>
+                                          <span className='md:text-md text-sm font-medium text-green-800'>
                                             Aktarmasız
                                           </span>
                                         )

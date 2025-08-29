@@ -55,6 +55,7 @@ import { CarSearchResultItem } from '../component/result-item'
 import { WorkingHoursDrawer } from '@/app/car/component/working-hour-drawers'
 import { Route } from 'next'
 import { CarBottomSticky } from './_components/bottom-sticky'
+import { truncate } from 'fs/promises'
 export const DetailClient = () => {
   const [params] = useQueryStates(carDetailParams)
   const queryClient = useQueryClient()
@@ -370,54 +371,61 @@ export const DetailClient = () => {
               talepler garanti edilemez ve Ek hizmetlerin ücreti araç teslimi
               sırasında firmaya ödenir.
             </div>
-
-            <div className='flex flex-col gap-3 md:grid md:grid-cols-2'>
-              {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
-                .filter((item) => item.isSelectable)
-                .map((extraOption, extraOptionIndex) => {
-                  return (
-                    <div key={extraOptionIndex}>
-                      <Checkbox.Card
-                        p={12}
-                        checked={extraOption.selected || extraOption.isFree}
-                        disabled={extraOption.isFree}
-                        onChange={(checked) => {
-                          handleAdditionalOptionSelect({
-                            data: extraOption,
-                            checked,
-                            type: 'extra',
-                          })
-                        }}
-                        className={clsx({
-                          'border-blue-800': extraOption.selected,
-                          'text-blue-800': extraOption.selected,
-                        })}
-                      >
-                        <Group className='flex items-center gap-2'>
-                          <div>
-                            <Checkbox.Indicator
-                              size='md'
-                              disabled={extraOption.isFree}
-                            />
-                          </div>
-                          <div className='md:text-md flex flex-1 items-center justify-between text-sm font-medium'>
-                            <div>{extraOption.name}</div>
-                            <div className='md:text-md flex items-center gap-2 text-sm font-medium'>
-                              <div className='ms-auto font-semibold text-blue-700'>
-                                +{formatCurrency(extraOption.totalPrice.value)}
-                              </div>
-                              {''}
-                              <span className='hidden text-xs text-gray-600 md:flex'>
-                                / Gün
-                              </span>
+            <Spoiler
+              maxHeight={245}
+              showLabel='Daha fazla göster'
+              hideLabel='Daha az göster'
+            >
+              <div className='flex flex-col gap-3'>
+                {carDetailQuery?.data?.detailResponse?.items[0]?.carExtraOption
+                  .filter((item) => item.isSelectable)
+                  .map((extraOption, extraOptionIndex) => {
+                    return (
+                      <div key={extraOptionIndex}>
+                        <Checkbox.Card
+                          p={12}
+                          checked={extraOption.selected || extraOption.isFree}
+                          disabled={extraOption.isFree}
+                          onChange={(checked) => {
+                            handleAdditionalOptionSelect({
+                              data: extraOption,
+                              checked,
+                              type: 'extra',
+                            })
+                          }}
+                          className={clsx({
+                            'border-blue-800': extraOption.selected,
+                            'text-blue-800': extraOption.selected,
+                          })}
+                        >
+                          <Group className='flex items-center gap-2'>
+                            <div>
+                              <Checkbox.Indicator
+                                size='md'
+                                disabled={extraOption.isFree}
+                              />
                             </div>
-                          </div>
-                        </Group>
-                      </Checkbox.Card>
-                    </div>
-                  )
-                })}
-            </div>
+                            <div className='md:text-md flex flex-1 items-center justify-between text-sm font-medium'>
+                              <div>
+                                <div>{extraOption.name}</div>
+                              </div>
+                              <div className='md:text-md flex items-center gap-2 text-sm font-medium'>
+                                <div className='ms-auto font-semibold text-blue-700'>
+                                  +
+                                  {formatCurrency(extraOption.totalPrice.value)}
+                                </div>
+                                <span className='hidden text-xs text-gray-600 md:flex'>
+                                  / Gün
+                                </span>
+                              </div>
+                            </div>
+                          </Group>
+                        </Checkbox.Card>
+                      </div>
+                    )
+                  })}
+              </div>
+            </Spoiler>
           </div>
         )}
         {detailItem && detailItem.carInsurances.length > 0 && (
@@ -426,7 +434,7 @@ export const DetailClient = () => {
               Güvence Paketi Ekleyin
             </Title>
 
-            <div className='flex flex-col gap-3 md:grid md:grid-cols-2'>
+            <div className='flex flex-col gap-3'>
               {detailItem.carInsurances
                 .filter((item) => item.isSelectable)
                 .map((insuranceOption, insuranceOptionIndex) => (

@@ -45,7 +45,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
         <div className='mx-auto max-w-6xl'>
           {isSticky && (
             <>
-              <div className='hidden items-center px-3 pt-2 font-medium md:flex md:gap-10 md:text-2xl'>
+              <div className='hidden items-center gap-10 px-3 pt-1 font-medium md:flex md:text-2xl'>
                 <div className='font-semibold text-gray-700'>
                   {hotelInfo?.hotel.name}
                 </div>
@@ -56,7 +56,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
               </div>
             </>
           )}
-          <div className='mt-3 flex items-center justify-between gap-4 md:mt-0 md:flex-row'>
+          <div className='flex items-center justify-between gap-4 md:mt-0 md:flex-row'>
             <TableOfContents
               classNames={classes}
               variant='filled'
