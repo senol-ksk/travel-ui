@@ -36,7 +36,7 @@ const BillingForm = () => {
         defaultChecked={opened}
         onChange={() => toggle()}
         classNames={{
-          label: 'font-semibold text-lg',
+          label: 'font-semibold text-xl',
           body: 'items-center',
         }}
       />
