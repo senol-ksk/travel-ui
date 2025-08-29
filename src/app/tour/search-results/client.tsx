@@ -338,7 +338,7 @@ const TourSearchResultClient = () => {
                               <Stack gap={rem(6)}>
                                 {nightCountChecks.map((count) => (
                                   <Checkbox
-                                    label={count}
+                                    label={<div>{count} Gece</div>}
                                     value={count.toString()}
                                     key={count}
                                   />

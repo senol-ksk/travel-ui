@@ -693,7 +693,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 </>
               )}
               {/* Turkish Airlines - Business Fly */}
-              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+              {/* {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'TK' &&
                 !(
                   selectedPackage.flightDetailSegment.freeVolatileData
@@ -705,7 +705,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                     <MdCheck size={18} className='text-green-800' />1 X 8 Kg El
                     Bagajı
                   </div>
-                )}
+                )} */}
               {/* Turkish Airlines - Bagaj Hakları */}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'TK' &&
@@ -805,22 +805,6 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                     Cezasız İade
                   </div>
                 )}
-              {/* Turkish Airlines - İptal Edilemez */}
-              {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'TK' && (
-                <div className='flex items-center gap-1 text-red-600'>
-                  <IoClose size={20} className='text-red-800' />
-                  İptal edilemez
-                </div>
-              )}
-              {/* Turkish Airlines - İkram Servisi */}
-              {selectedPackage.flightDetailSegment.operatingAirline.code ===
-                'TK' && (
-                <div className='flex items-center gap-1'>
-                  <MdCheck size={18} className='text-green-800' />
-                  İkram Servisi
-                </div>
-              )}
               {/* AJet Airlines - PREMIUM */}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'VF' &&
