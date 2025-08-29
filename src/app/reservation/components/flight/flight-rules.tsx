@@ -4,7 +4,7 @@ import { Button, Modal, Title } from '@mantine/core'
 import { upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { AirlineLogo } from '@/components/airline-logo'
 import { IoAirplaneSharp } from 'react-icons/io5'
-import { FlightTransferSummary } from './transfer'
+import { FlightDetailSummary } from './details'
 import dayjs from 'dayjs'
 
 type Iprops = {
@@ -39,10 +39,14 @@ const FlightRules: React.FC<Iprops> = ({ data }) => {
         size={'xl'}
         opened={opened}
         onClose={close}
-        title={<div className='text-xl'>Uçuş Kuralları</div>}
+        title={
+          <div className='text-xl font-semibold text-blue-800'>
+            Uçuş Kuralları
+          </div>
+        }
         transitionProps={{ transition: 'fade', duration: 200 }}
       >
-        <div className='mb-3 grid items-center gap-2 border p-2 text-sm md:flex md:justify-around'>
+        <div className='mb-3 grid items-center gap-2 rounded-md border border-blue-800 p-2 text-sm md:flex md:justify-around'>
           {flightData.flightList
             .sort((a, b) => a.flightDetail.groupId - b.flightDetail.groupId)
             .map((flightItem) => {
@@ -91,21 +95,36 @@ const FlightRules: React.FC<Iprops> = ({ data }) => {
             })}
         </div>
         <div>
-          <div className='text-lg font-semibold'>Genel Kurallar</div>
-          <ul className='list-disc p-3'>
-            <li>
+          <div className='text-lg font-semibold text-blue-800'>
+            Genel Kurallar
+          </div>
+          <ul className='list-disc space-y-1 p-3'>
+            <li className='text-sm text-gray-700'>
               Havayolları genellikle biletlerin sıralı olarak kullanılmasını
-              şart koşar. Bu nedenle gidişi kullanılmayan biletlerin dönüşleri
-              havayolu şirketleri tarafından otomatik olarak iptal edilir.
+              şart koşar.
             </li>
-            <li>
-              Herhangi bir gecikme yaşamamak adına uçuştan 180 dakika önce
-              havalimanında olarak bagaj kontrolü ve check-in işlemlerinizi
-              tamamlamanız tavsiye edilir.
+            <li className='text-sm text-gray-700'>
+              Gidişi kullanılmayan biletlerin dönüşleri havayolu şirketleri
+              tarafından otomatik olarak iptal edilir.
             </li>
-            <li>
+            <li className='text-sm text-gray-700'>
               Değişiklik işlemlerinde mevcut sınıftan daha yüksek bir sınıfa
-              değişiklik yapılıyorsa, sınıf ve/veya paket farkı ücreti alınır.
+              değişiklik yapılıyorsa, sınıf farkı ücreti alınır.
+            </li>
+            <li className='text-sm text-gray-700'>
+              İptal işlemlerinde havayolu şirketinin iptal politikaları
+              geçerlidir.
+            </li>
+            <li className='text-sm text-gray-700'>
+              Bilet değişiklikleri ve iptalleri için aldığınız kurum ile
+              iletişime geçin.
+            </li>
+            <li className='text-sm text-gray-700'>
+              Uçuş saatinden önce havalimanında olarak gerekli işlemleri
+              tamamlamanız önerilir.
+            </li>
+            <li className='text-sm text-gray-700'>
+              Bagaj kuralları havayolu şirketine göre değişiklik gösterebilir.
             </li>
           </ul>
         </div>

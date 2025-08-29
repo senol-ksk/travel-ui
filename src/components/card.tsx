@@ -9,7 +9,7 @@ export const CheckoutCard: React.FC<{
 }> = ({ children, title, className }) => (
   <div
     className={twMerge(
-      `grid gap-4 rounded-md border bg-white p-3 shadow-xs`,
+      `grid gap-4 rounded-md border bg-white p-2 shadow-xs md:p-3`,
       className
     )}
   >

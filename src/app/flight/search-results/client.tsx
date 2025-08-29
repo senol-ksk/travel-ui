@@ -27,6 +27,7 @@ import {
   Transition,
   UnstyledButton,
   Select,
+  Spoiler,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { PiSuitcaseRolling } from 'react-icons/pi'
@@ -216,6 +217,7 @@ const FlightSearchView = () => {
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
     packages: SelectedPackageStateProps[] | undefined | null
     flights: ClientDataType[]
+    providerName?: string
   } | null>()
   const [
     packageDrawerOpened,
@@ -267,6 +269,7 @@ const FlightSearchView = () => {
         prevValues?.flights.length && flight.fareInfo.groupId !== 0
           ? [prevValues.flights[0], flight]
           : [flight],
+      providerName: flight.providerName,
     }))
 
     openPackageDrawer()
@@ -637,25 +640,32 @@ const FlightSearchView = () => {
                                     : []
                                 }
                               >
-                                <Stack gap={6}>
-                                  {airlineDataObj?.map((airline) => {
-                                    return (
-                                      <div key={airline.Code}>
-                                        <Checkbox
-                                          name='airlines'
-                                          label={
-                                            airline.Value.find(
-                                              (airlineValue) =>
-                                                airlineValue.LangCode ===
-                                                'tr_TR'
-                                            )?.Value
-                                          }
-                                          value={airline.Code}
-                                        />
-                                      </div>
-                                    )
-                                  })}
-                                </Stack>
+                                <Spoiler
+                                  maxHeight={205}
+                                  showLabel='Daha fazla göster'
+                                  hideLabel='Daha az göster'
+                                  className='w-full'
+                                >
+                                  <Stack gap={6}>
+                                    {airlineDataObj?.map((airline) => {
+                                      return (
+                                        <div key={airline.Code}>
+                                          <Checkbox
+                                            name='airlines'
+                                            label={
+                                              airline.Value.find(
+                                                (airlineValue) =>
+                                                  airlineValue.LangCode ===
+                                                  'tr_TR'
+                                              )?.Value
+                                            }
+                                            value={airline.Code}
+                                          />
+                                        </div>
+                                      )
+                                    })}
+                                  </Stack>
+                                </Spoiler>
                               </Checkbox.Group>
                             </Accordion.Panel>
                           </Accordion.Item>
@@ -674,27 +684,34 @@ const FlightSearchView = () => {
                                     : []
                                 }
                               >
-                                <Stack gap={6}>
-                                  {getAirportsByCodeList.data?.map(
-                                    (airports) => {
-                                      return (
-                                        <div key={airports.Code}>
-                                          <Checkbox
-                                            name='airports'
-                                            label={
-                                              airports.Value.find(
-                                                (airportValue) =>
-                                                  airportValue.LangCode ===
-                                                  'tr_TR'
-                                              )?.Value
-                                            }
-                                            value={airports.Code}
-                                          />
-                                        </div>
-                                      )
-                                    }
-                                  )}
-                                </Stack>
+                                <Spoiler
+                                  maxHeight={220}
+                                  showLabel='Daha fazla göster'
+                                  hideLabel='Daha az göster'
+                                  className='w-full'
+                                >
+                                  <Stack gap={6}>
+                                    {getAirportsByCodeList.data?.map(
+                                      (airports) => {
+                                        return (
+                                          <div key={airports.Code}>
+                                            <Checkbox
+                                              name='airports'
+                                              label={
+                                                airports.Value.find(
+                                                  (airportValue) =>
+                                                    airportValue.LangCode ===
+                                                    'tr_TR'
+                                                )?.Value
+                                              }
+                                              value={airports.Code}
+                                            />
+                                          </div>
+                                        )
+                                      }
+                                    )}
+                                  </Stack>
+                                </Spoiler>
                               </Checkbox.Group>
                             </Accordion.Panel>
                           </Accordion.Item>
@@ -1405,7 +1422,7 @@ const FlightSearchView = () => {
                       ?.marketingAirline.code.toLowerCase() ?? ''
                   }
                 />
-                <span className='md:text-md text-sm font-semibold'>
+                <span className='md:text-md text-xs font-semibold'>
                   {
                     airlineDataObj
                       ?.find(

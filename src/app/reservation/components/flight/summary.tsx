@@ -26,8 +26,7 @@ type IProps = {
 import { CheckoutCard } from '@/components/card'
 import { formatCurrency } from '@/libs/util'
 import NumberFlow from '@number-flow/react'
-import { IoAirplaneSharp } from 'react-icons/io5'
-import { FlightTransferSummary } from './transfer'
+import { FlightDetailSummary } from './details'
 import { FlightRules } from './flight-rules'
 import { useCheckoutContext } from '../../store'
 import { convertPassengerTitle } from '@/libs/passenger-title'
@@ -39,8 +38,6 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
 
   const flightData = data.SummaryViewDataResponser
     .summaryResponse as FlightReservationSummary
-  const airlines = flightData.airlineList
-  const airports = flightData.airportList
   const fareInfo = flightData.flightFareInfo
   const { passengerPrices } = fareInfo
   const serviceCharge = passengerPrices.reduce((a, b) => {
@@ -50,7 +47,7 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
   const { couponDiscountList } = flightData
 
   return (
-    <div>
+    <div className='-mx-4 md:mx-0 md:p-0'>
       <div className='grid gap-5'>
         <CheckoutCard>
           <div className='grid gap-4 text-sm'>
@@ -87,8 +84,8 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                         </Title>
                       )}
                     </div>
-                    <div className='mt-2 flex items-center justify-between'>
-                      <Title order={5} className='font-semibold'>
+                    <div className='mt-2 flex items-baseline justify-between'>
+                      <Title order={4} className='font-semibold'>
                         {flightDetail.groupId === 0
                           ? 'Gidiş Uçuşu'
                           : 'Dönüş Uçuşu'}
@@ -105,65 +102,10 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                           </>
                         )}
                     </div>
-                    <div className='flex gap-2'>
-                      <div className='leading-none'>
-                        <AirlineLogo
-                          airlineCode={
-                            flightSegmentsFirstItem.marketingAirline.code
-                          }
-                          alt={
-                            airlines[
-                              flightSegmentsFirstItem.marketingAirline.code
-                            ]
-                          }
-                        />
-                      </div>
-                      <div className='flex items-center gap-2'>
-                        {
-                          airlines[
-                            flightSegmentsFirstItem.marketingAirline.code
-                          ]
-                        }
-                        {' - '}
-                        {flightSegmentsFirstItem.flightNumber}
-                        {' - '}
-                        {upperFirst(
-                          (
-                            flightDetail.freeVolatileData?.BrandName ??
-                            flightDetail.freeVolatileData?.brandname
-                          )?.toLowerCase() ?? ''
-                        )}
-                      </div>
-                    </div>
-                    <div>
-                      <strong className='text-sm font-medium'>
-                        {firstDepartureTime.format('HH:mm')}
-                        {' - '}
-                        {lastArrivalTime.format('HH:mm')}
-                      </strong>{' '}
-                      {lastArrivalTime.format('DD MMMM YYYY dddd')} (
-                      {totalFlightDuration.format('H')}s{' '}
-                      {totalFlightDuration.format('mm')}dk)
-                    </div>
-                    <div className='flex items-center gap-2'>
-                      <div>
-                        {airports[flightSegmentsFirstItem.origin.code].city} (
-                        {flightSegmentsFirstItem.origin.code})
-                      </div>
-                      <div>
-                        <IoAirplaneSharp />
-                      </div>
-                      <div>
-                        {
-                          airports[flightSegmentsLastItem?.destination.code]
-                            .city
-                        }
-                        ({flightSegmentsLastItem?.destination.code})
-                      </div>
-                    </div>
-                    {hasTransfer && (
-                      <FlightTransferSummary flightSegments={flightSegments} />
-                    )}
+                    <FlightDetailSummary
+                      flightSegments={flightSegments}
+                      data={data}
+                    />
                   </div>
                 )
               })}

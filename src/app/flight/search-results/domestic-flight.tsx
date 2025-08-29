@@ -161,7 +161,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                       {lastArrivalTime.format('HH:mm')}
 
                       {arrivalIsAfter && (
-                        <sup className='absolute -end-4 -top-2 text-xs leading-none font-normal text-red-700'>
+                        <sup className='absolute -end-4 -top-2 text-xs leading-none font-bold text-red-700'>
                           +1
                         </sup>
                       )}
