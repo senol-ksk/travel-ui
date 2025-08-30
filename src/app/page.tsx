@@ -1,6 +1,18 @@
-import { Container, Title, Image, ScrollArea } from '@mantine/core'
+import {
+  Container,
+  Title,
+  Image,
+  ScrollArea,
+  Tabs,
+  TabsList,
+  TabsTab,
+  TabsPanel,
+  SimpleGrid,
+  Anchor,
+} from '@mantine/core'
 import NextImage from 'next/image'
 import { Link } from 'next-view-transitions'
+import { Route } from 'next'
 
 import { SearchEngine } from '@/components/search-engine/'
 import { StorySlider } from '@/components/home/story-slider'
@@ -17,11 +29,13 @@ import { MainBannerCarousel } from '@/components/main-banner'
 import { serviceRequest } from '@/network'
 import { TourOpportunity } from '@/components/home/tour-opportunity'
 import { EbultenForm } from '@/components/home/ebulten-form'
-import { Route } from 'next'
 
+import populerDestinationClasses from '@/styles/OutlineTabs.module.css'
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
     ?.data
+
+  const landingMenus = cmsData?.params.landing_menu
 
   const dealsOfWeekData = cmsData?.widgets.filter(
     (x) => x.point === 'deals_of_week'
@@ -206,6 +220,48 @@ export default async function Home() {
             {holidayThemesData && <HolidayThemes data={holidayThemesData} />}
           </div>
           <EbultenForm />
+          {landingMenus && landingMenus.menus.length > 0 && (
+            <div>
+              <Tabs
+                defaultValue={'' + landingMenus?.menus[0].id}
+                variant='unstyle'
+                classNames={populerDestinationClasses}
+                visibleFrom='sm'
+              >
+                <TabsList className='gap-2'>
+                  {landingMenus?.menus
+                    .sort((a, b) => a.ordering - b.ordering)
+                    .map((menu) => {
+                      return (
+                        <TabsTab key={menu.id} value={'' + menu.id}>
+                          {menu.title}
+                        </TabsTab>
+                      )
+                    })}
+                </TabsList>
+
+                <div className='pt-3 md:pt-8'>
+                  {landingMenus?.menus.map((menu) => (
+                    <TabsPanel value={'' + menu.id} key={menu.id}>
+                      <SimpleGrid cols={{ base: 2, md: 4 }} spacing={'xs'}>
+                        {menu.items.map((item) => (
+                          <div key={item.id}>
+                            <Anchor
+                              href={item.url as Route}
+                              className='text-dark-700'
+                              component={Link}
+                            >
+                              {item.title}
+                            </Anchor>
+                          </div>
+                        ))}
+                      </SimpleGrid>
+                    </TabsPanel>
+                  ))}
+                </div>
+              </Tabs>
+            </div>
+          )}
         </Container>
       </div>
     </div>
