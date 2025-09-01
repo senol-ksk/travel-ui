@@ -18,10 +18,10 @@ const HolidayThemes: React.FC<IProps> = ({ data }) => {
 
   return (
     <div className='relative'>
-      <h2 className='my-3 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
+      <h2 className='mt-15 mb-5 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
         Tatil Temaları
       </h2>
-      <p className='mb-10 text-center text-sm text-gray-600 md:text-base'>
+      <p className='text-center text-sm text-gray-600 md:text-base'>
         Tatil planlarına başlamadan önce size fikir verebilecek farklı
         kriterlere göre sınıflandırılmış otellere göz atabilir, detaylı bilgi
         sahibi olabilirsiniz.
