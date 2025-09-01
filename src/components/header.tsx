@@ -117,9 +117,12 @@ export const Header = () => {
           </div>
 
           <Box className='hidden flex-1 items-center md:flex'>
-            <div className='flex items-center gap-2 px-3 font-medium md:gap-4 md:px-5'>
+            <div className='flex items-center gap-3 font-medium'>
               {headerData.isLoading ? (
                 <div className='flex gap-2'>
+                  <Skeleton h={20} className='size-20 grow' />
+                  <Skeleton h={20} className='size-20 grow' />
+                  <Skeleton h={20} className='size-20 grow' />
                   <Skeleton h={20} className='size-20 grow' />
                   <Skeleton h={20} className='size-20 grow' />
                   <Skeleton h={20} className='size-20 grow' />
@@ -140,73 +143,86 @@ export const Header = () => {
             </div>
 
             <div className='ms-auto flex items-center gap-3 font-medium'>
-              <Menu>
-                <Menu.Target>
-                  <UnstyledButton className='flex items-center gap-2'>
-                    <div>Online İşlemler</div>
-                    <div>
-                      <IoIosArrowDown />
-                    </div>
-                  </UnstyledButton>
-                </Menu.Target>
-                <Menu.Dropdown className='rounded-md border shadow'>
-                  <Menu.Item
-                    component={Link}
-                    href='/online-operations'
-                    className='text-md font-medium'
-                  >
-                    Seyahatinizi Görüntüleyin
-                  </Menu.Item>
-                  <Menu.Item
-                    className='text-md font-medium'
-                    component={Link}
-                    href='/online-operations/cancel-flight'
-                  >
-                    Uçak İptal İade
-                  </Menu.Item>
-                  <Menu.Item
-                    className='text-md font-medium'
-                    component={Link}
-                    href='/online-operations/checkin'
-                  >
-                    Online Check-in
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
+              {headerData.isLoading ? (
+                <div className='flex gap-2'>
+                  <Skeleton h={20} className='size-30 grow' />
+                </div>
+              ) : (
+                <Menu>
+                  <Menu.Target>
+                    <UnstyledButton className='flex items-center gap-2'>
+                      <div>Online İşlemler</div>
+                      <div>
+                        <IoIosArrowDown />
+                      </div>
+                    </UnstyledButton>
+                  </Menu.Target>
+                  <Menu.Dropdown className='rounded-md border shadow'>
+                    <Menu.Item
+                      component={Link}
+                      href='/online-operations'
+                      className='text-md font-medium'
+                    >
+                      Seyahatinizi Görüntüleyin
+                    </Menu.Item>
+                    <Menu.Item
+                      className='text-md font-medium'
+                      component={Link}
+                      href='/online-operations/cancel-flight'
+                    >
+                      Uçak İptal İade
+                    </Menu.Item>
+                    <Menu.Item
+                      className='text-md font-medium'
+                      component={Link}
+                      href='/online-operations/checkin'
+                    >
+                      Online Check-in
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              )}
+
               {/* Parafly alanı */}
-              <Menu>
-                <Menu.Target>
-                  <UnstyledButton className='flex items-center gap-2'>
-                    <div>Parafly</div>
-                    <div>
-                      <IoIosArrowDown />
-                    </div>
-                  </UnstyledButton>
-                </Menu.Target>
-                <Menu.Dropdown className='rounded-md border shadow'>
-                  <Menu.Item
-                    component={Link}
-                    href='/parafly/bonus-query'
-                    className='text-md font-medium'
-                  >
-                    ParafPara Sorgula
-                  </Menu.Item>
-                  <Menu.Item
-                    component={Link}
-                    href='/parafly/calculate'
-                    className='text-md font-medium'
-                  >
-                    ParafPara Hesapla
-                  </Menu.Item>
-                  <Menu.Item
-                    component={Link}
-                    href='/parafly/about'
-                    className='text-md font-medium'
-                  >
-                    Parafly Travel Nedir?
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
+              {headerData.isLoading ? (
+                <div className='flex gap-2'>
+                  <Skeleton h={20} className='size-20 grow' />
+                </div>
+              ) : (
+                <Menu>
+                  <Menu.Target>
+                    <UnstyledButton className='flex items-center gap-2'>
+                      <div>Parafly</div>
+                      <div>
+                        <IoIosArrowDown />
+                      </div>
+                    </UnstyledButton>
+                  </Menu.Target>
+                  <Menu.Dropdown className='rounded-md border shadow'>
+                    <Menu.Item
+                      component={Link}
+                      href='/parafly/bonus-query'
+                      className='text-md font-medium'
+                    >
+                      ParafPara Sorgula
+                    </Menu.Item>
+                    <Menu.Item
+                      component={Link}
+                      href='/parafly/calculate'
+                      className='text-md font-medium'
+                    >
+                      ParafPara Hesapla
+                    </Menu.Item>
+                    <Menu.Item
+                      component={Link}
+                      href='/parafly/about'
+                      className='text-md font-medium'
+                    >
+                      Parafly Travel Nedir?
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              )}
               {session.status === 'authenticated' ? (
                 <Menu>
                   <Menu.Target>
@@ -238,8 +254,6 @@ export const Header = () => {
                   variant='outline'
                   radius='xl'
                   leftSection={<FaRegUserCircle />}
-                  // component={Link}
-                  // href={'/auth/login'}
                   loading={session.status === 'loading'}
                   onClick={() => {
                     modals.open({
@@ -260,9 +274,7 @@ export const Header = () => {
             padding='md'
             styles={{
               header: {
-                borderBottom: '1px solid #eaeaea',
                 boxShadow: '0 0 2px 0 gray',
-                padding: '10px 20px',
               },
             }}
             title={
@@ -297,6 +309,7 @@ export const Header = () => {
                       radius='xl'
                       leftSection={<FaRegUserCircle />}
                       component={Link}
+                      onClick={toggleDrawer}
                       href={'/auth/login'}
                       loading={session.status === 'loading'}
                     >

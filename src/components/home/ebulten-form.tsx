@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
 import { notifications } from '@mantine/notifications'
+import Link from 'next/link'
 const schema = z.object({
   email: z.string().email(),
 })
@@ -58,7 +59,7 @@ const EbultenForm = () => {
     },
   })
   return (
-    <Box className='rounded-2xl bg-blue-700 p-6 text-white shadow-lg md:p-10'>
+    <Box className='mt-15 rounded-2xl bg-blue-700 p-6 text-white shadow-lg md:p-10'>
       <div className='flex flex-col gap-6 md:flex-row md:items-center md:justify-between'>
         <div className='flex flex-col items-start gap-4 md:flex-row md:items-center'>
           <div className='rounded-full bg-white p-3'>
@@ -71,7 +72,7 @@ const EbultenForm = () => {
             <Text size='sm' className='mt-1 text-start'>
               En son fırsatları, özel indirimleri, seyahat ilhamını alın ve
               dünyayı tek seferde bir tatille fethedin.{' '}
-              <strong>#Travelfulltrip</strong>
+              <strong>#ParaflyTravel</strong>
             </Text>
           </div>
         </div>
@@ -104,9 +105,12 @@ const EbultenForm = () => {
           <Text size='xs' className='text-white/80'>
             Bu onay kutusunu tıklayarak, ParaflyTravel’dan haber bültenleri ve
             teklifler almayı kabul ediyorum.
-            <a href='#' className='ml-1 underline'>
+            <Link
+              href='/kullanim-sartlari-ve-genel-kosullar'
+              className='ml-1 underline'
+            >
               Ayrıntılar
-            </a>
+            </Link>
           </Text>
         </div>
       </div>
