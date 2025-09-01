@@ -194,7 +194,6 @@ export const PaymentPageSection = () => {
           : null
 
         setPaymentButtonSectionIsVisible(true)
-        checkoutQuery.refetch()
       }
     },
   })
