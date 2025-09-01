@@ -1,13 +1,13 @@
 import { CheckIcon, Title, Alert } from '@mantine/core'
 import { CgDanger } from 'react-icons/cg'
 import dayjs from 'dayjs'
-import Image from 'next/image'
 
 import { HotelSummaryResponse } from '@/app/reservation/types'
 import { EmailCard } from '@/app/order-components/email-card'
 import { CheckoutCard } from '@/components/card'
 import { formatCurrency } from '@/libs/util'
 import { SummaryPassengerData } from '@/app/account/reservations/types'
+import { Img } from '@react-email/components'
 
 type IProps = {
   data: HotelSummaryResponse
@@ -27,7 +27,7 @@ const HotelSummary: React.FC<IProps> = ({
       <CheckoutCard title='Otel Bilgisi'>
         <div className='grid gap-4 md:grid-cols-6 md:gap-3'>
           <div className='md:col-span-2'>
-            <Image
+            <Img
               width={310}
               height={200}
               src={roomGroup.hotel.images.at(0)?.original || ''}

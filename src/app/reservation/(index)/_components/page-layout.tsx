@@ -23,8 +23,54 @@ export const ReservationLayout = ({
     checkoutDataQuery.isLoading
   )
     return (
-      <div>
-        <Skeleton h={20} />
+      <div className='grid gap-3 md:grid-cols-3'>
+        <div className='order-1 md:col-span-2'>
+          <div className='mb-4 rounded-md border bg-white p-6 shadow'>
+            <div className='space-y-2'>
+              <div className='grid grid-cols-2 gap-4 pt-4'>
+                <Skeleton h={10} radius='md' />
+                <Skeleton h={10} radius='md' />
+              </div>
+              <div className='grid grid-cols-2 gap-4 pt-4'>
+                <Skeleton h={30} radius='md' />
+                <Skeleton h={30} radius='md' />
+              </div>
+            </div>
+          </div>
+
+          <div className='rounded-md border bg-white p-6 shadow'>
+            <div className='space-y-2'>
+              <div className='grid grid-cols-2 gap-4 pt-4'>
+                <Skeleton h={10} radius='md' />
+                <Skeleton h={10} radius='md' />
+              </div>
+              <div className='grid grid-cols-2 gap-4 pt-4'>
+                <Skeleton h={30} radius='md' />
+                <Skeleton h={30} radius='md' />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className='sticky top-0 z-10 order-2 flex h-fit flex-col gap-3 md:order-1'>
+          <div className='grid gap-5'>
+            <div className='hidden rounded-md border p-2 shadow-xs md:block md:p-4'>
+              <Skeleton h={16} w='80%' radius='md' />
+            </div>
+
+            <div className='rounded-md border bg-white p-4 shadow'>
+              <div className='space-y-3'>
+                <Skeleton h={20} w='50%' radius='md' />
+                <Skeleton h={16} w='70%' radius='md' />
+                <Skeleton h={16} w='60%' radius='md' />
+                <div className='border-t pt-3'>
+                  <Skeleton h={18} w='40%' radius='md' />
+                  <Skeleton h={24} w='80%' radius='md' className='mt-2' />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
 

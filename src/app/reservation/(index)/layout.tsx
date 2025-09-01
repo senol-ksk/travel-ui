@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import { Container } from '@mantine/core'
 
-// import '@/styles/reservation.css'
 export default function ReservationMainLayout({
   children,
 }: Readonly<{
