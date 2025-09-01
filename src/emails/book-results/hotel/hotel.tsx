@@ -193,11 +193,30 @@ export default function EmailHotelOrderResult({ data }: IProps) {
           </tr>
           {hotelCancelWarranty.couponActive && (
             <>
+              {passenger.paymentInformation.mlTotal &&
+                passenger.paymentInformation.mlTotal > 0 && (
+                  <tr>
+                    <td>ParafPara TL</td>
+                    <td>:</td>
+                    <td className='font-bold'>
+                      {formatCurrency(passenger.paymentInformation.mlTotal)}
+                    </td>
+                  </tr>
+                )}
               <tr>
-                <td>Ön Ödeme Tutarı</td>
+                <td>Ön Ödeme</td>
                 <td>:</td>
                 <td className='font-bold'>
                   {formatCurrency(passenger.paymentInformation.collectingTotal)}
+                </td>
+              </tr>
+              <tr>
+                <td>Kalan Tutar</td>
+                <td>:</td>
+                <td className='font-bold'>
+                  {formatCurrency(
+                    passenger.paymentInformation.basketDiscountTotal
+                  )}
                 </td>
               </tr>
               <tr>
@@ -207,15 +226,6 @@ export default function EmailHotelOrderResult({ data }: IProps) {
                   {dayjs(roomGroup.checkInDate)
                     .subtract(4, 'days')
                     .format('DD MMMM YYYY')}
-                </td>
-              </tr>
-              <tr>
-                <td>Kalan Ödeme Tutarı</td>
-                <td>:</td>
-                <td className='font-bold'>
-                  {formatCurrency(
-                    passenger.paymentInformation.basketDiscountTotal
-                  )}
                 </td>
               </tr>
             </>
@@ -235,12 +245,20 @@ export default function EmailHotelOrderResult({ data }: IProps) {
             </td>
           </tr>
           <tr>
+            <td>Ödeme Yöntemi</td>
+            <td>:</td>
+            <td className='font-bold'>
+              {passenger.paymentInformation.installmentCount > 1 ? (
+                <>{passenger.paymentInformation.installmentCount} Taksit</>
+              ) : (
+                'Tek Çekim'
+              )}
+            </td>
+          </tr>
+          <tr>
             <td>Tahsil Edilen Tutar</td>
             <td>:</td>
             <td className='font-bold'>
-              {passenger.paymentInformation.installmentCount > 1 && (
-                <>{passenger.paymentInformation.installmentCount} Taksit =</>
-              )}
               {formatCurrency(passenger.paymentInformation.collectingTotal)}
             </td>
           </tr>
