@@ -173,7 +173,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                             !Object.values(restFilterParams).find(Boolean)
                           }
                           fz='xs'
-                          className='font-semibold text-blue-500'
+                          className='px-4 font-semibold text-blue-500'
                           onClick={() => {
                             setFilterParams(null)
                           }}
@@ -343,7 +343,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                             !Object.values(restFilterParams).find(Boolean)
                           }
                           fz='xs'
-                          className='font-semibold text-blue-500'
+                          className='px-4 font-semibold text-blue-500'
                           onClick={() => {
                             setFilterParams(null)
                           }}

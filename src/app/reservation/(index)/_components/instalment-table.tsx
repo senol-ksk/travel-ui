@@ -24,14 +24,20 @@ const InstallmentTableModal: React.FC<IProps> = ({ data }) => {
     )
 
   return (
-    <Table striped withColumnBorders>
+    <Table withTableBorder withColumnBorders withRowBorders striped>
       <Table.Thead>
         <Table.Tr>
-          <Table.Td>Kartlar</Table.Td>
-          <Table.Td>Peşin</Table.Td>
+          <Table.Th className='text-center font-semibold'>Kartlar</Table.Th>
+          <Table.Th className='text-center font-semibold'>Peşin</Table.Th>
           {installmentCountArr.map(
             (count) =>
-              count && count > 1 && <Table.Th key={count}>{count}</Table.Th>
+              count &&
+              count > 1 && (
+                <Table.Th key={count} className='text-center font-semibold'>
+                  <div>{count} Taksit</div>
+                  <div className='font-normal'> Taksit | Toplam</div>
+                </Table.Th>
+              )
           )}
         </Table.Tr>
       </Table.Thead>
@@ -55,6 +61,7 @@ const InstallmentTableModal: React.FC<IProps> = ({ data }) => {
                   src={`https://fulltripstatic.mncdn.com/5/Content/img/card-logos/${installmentData.toLowerCase()}.png`}
                   maw={90}
                   alt={installmentData}
+                  mx={'auto'}
                 />
               </Table.Td>
               {installmentCountArr.map((installmentCount) => {
@@ -62,17 +69,18 @@ const InstallmentTableModal: React.FC<IProps> = ({ data }) => {
                   (item) => item.installmentCount === installmentCount
                 )
                 return (
-                  <Table.Td key={installmentCount} className='text-center'>
+                  <Table.Td
+                    key={installmentCount}
+                    className='leading-md text-center'
+                  >
                     {relatedInstallment ? (
                       relatedInstallment.installmentCount === 1 ? (
-                        <div>
-                          <div>
-                            {formatCurrency(relatedInstallment.totalAmount)}
-                          </div>
+                        <div className='text-md font-semibold'>
+                          {formatCurrency(relatedInstallment.totalAmount)}
                         </div>
                       ) : (
                         <div>
-                          <div className='pb-1 text-sm text-gray-500'>
+                          <div className='text-dark-700 text-xs'>
                             {formatCurrency(
                               relatedInstallment.amountPerInstallment
                             )}{' '}

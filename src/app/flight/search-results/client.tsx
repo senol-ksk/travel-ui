@@ -26,9 +26,22 @@ import {
   Title,
   Transition,
   UnstyledButton,
+  Select,
+  Spoiler,
 } from '@mantine/core'
 import { useQueryStates } from 'nuqs'
 import { PiSuitcaseRolling } from 'react-icons/pi'
+import dayjs from 'dayjs'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import 'dayjs/locale/tr'
+import { Virtuoso } from 'react-virtuoso'
+import { MdOutlineAirplanemodeActive } from 'react-icons/md'
+import { LuCircleCheckBig } from 'react-icons/lu'
+import { FaArrowRightLong } from 'react-icons/fa6'
+import { FaCheck } from 'react-icons/fa'
+import { IoSearchSharp } from 'react-icons/io5'
+import { IoIosClose } from 'react-icons/io'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -50,22 +63,10 @@ import {
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { DrawerFlight } from './components/drawer-flight'
-import dayjs from 'dayjs'
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
-import 'dayjs/locale/tr'
-import { Virtuoso } from 'react-virtuoso'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
-import { MdManageSearch, MdOutlineAirplanemodeActive } from 'react-icons/md'
 import { formatCurrency } from '@/libs/util'
-import { LuCircleCheckBig } from 'react-icons/lu'
-import { FaArrowRightLong, FaMagnifyingGlass } from 'react-icons/fa6'
-import { Select } from '@mantine/core'
-import { FaCheck } from 'react-icons/fa'
-import { IoIosClose } from 'react-icons/io'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
-import { IoSearchSharp } from 'react-icons/io5'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
   flightFareInfo: FlightFareInfo
@@ -88,7 +89,7 @@ const FlightSearchView = () => {
     searchParams,
     airPortFlatList,
   } = useSearchResultsQueries()
-  console.log(airPortFlatList)
+
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
@@ -216,6 +217,7 @@ const FlightSearchView = () => {
   const [selectedFlightItemPackages, setSelectedFlightItemPackages] = useState<{
     packages: SelectedPackageStateProps[] | undefined | null
     flights: ClientDataType[]
+    providerName?: string
   } | null>()
   const [
     packageDrawerOpened,
@@ -267,6 +269,7 @@ const FlightSearchView = () => {
         prevValues?.flights.length && flight.fareInfo.groupId !== 0
           ? [prevValues.flights[0], flight]
           : [flight],
+      providerName: flight.providerName,
     }))
 
     openPackageDrawer()
@@ -457,7 +460,7 @@ const FlightSearchView = () => {
                           </Title>
                           <div>
                             <UnstyledButton
-                              className='font-semibold text-blue-500'
+                              className='px-4 font-semibold text-blue-500'
                               fz='xs'
                               hidden={
                                 !Object.values(filterParams).find(Boolean)
@@ -637,25 +640,32 @@ const FlightSearchView = () => {
                                     : []
                                 }
                               >
-                                <Stack gap={6}>
-                                  {airlineDataObj?.map((airline) => {
-                                    return (
-                                      <div key={airline.Code}>
-                                        <Checkbox
-                                          name='airlines'
-                                          label={
-                                            airline.Value.find(
-                                              (airlineValue) =>
-                                                airlineValue.LangCode ===
-                                                'tr_TR'
-                                            )?.Value
-                                          }
-                                          value={airline.Code}
-                                        />
-                                      </div>
-                                    )
-                                  })}
-                                </Stack>
+                                <Spoiler
+                                  maxHeight={205}
+                                  showLabel='Daha fazla göster'
+                                  hideLabel='Daha az göster'
+                                  className='w-full'
+                                >
+                                  <Stack gap={6}>
+                                    {airlineDataObj?.map((airline) => {
+                                      return (
+                                        <div key={airline.Code}>
+                                          <Checkbox
+                                            name='airlines'
+                                            label={
+                                              airline.Value.find(
+                                                (airlineValue) =>
+                                                  airlineValue.LangCode ===
+                                                  'tr_TR'
+                                              )?.Value
+                                            }
+                                            value={airline.Code}
+                                          />
+                                        </div>
+                                      )
+                                    })}
+                                  </Stack>
+                                </Spoiler>
                               </Checkbox.Group>
                             </Accordion.Panel>
                           </Accordion.Item>
@@ -674,27 +684,34 @@ const FlightSearchView = () => {
                                     : []
                                 }
                               >
-                                <Stack gap={6}>
-                                  {getAirportsByCodeList.data?.map(
-                                    (airports) => {
-                                      return (
-                                        <div key={airports.Code}>
-                                          <Checkbox
-                                            name='airports'
-                                            label={
-                                              airports.Value.find(
-                                                (airportValue) =>
-                                                  airportValue.LangCode ===
-                                                  'tr_TR'
-                                              )?.Value
-                                            }
-                                            value={airports.Code}
-                                          />
-                                        </div>
-                                      )
-                                    }
-                                  )}
-                                </Stack>
+                                <Spoiler
+                                  maxHeight={220}
+                                  showLabel='Daha fazla göster'
+                                  hideLabel='Daha az göster'
+                                  className='w-full'
+                                >
+                                  <Stack gap={6}>
+                                    {getAirportsByCodeList.data?.map(
+                                      (airports) => {
+                                        return (
+                                          <div key={airports.Code}>
+                                            <Checkbox
+                                              name='airports'
+                                              label={
+                                                airports.Value.find(
+                                                  (airportValue) =>
+                                                    airportValue.LangCode ===
+                                                    'tr_TR'
+                                                )?.Value
+                                              }
+                                              value={airports.Code}
+                                            />
+                                          </div>
+                                        )
+                                      }
+                                    )}
+                                  </Stack>
+                                </Spoiler>
                               </Checkbox.Group>
                             </Accordion.Panel>
                           </Accordion.Item>
@@ -873,7 +890,7 @@ const FlightSearchView = () => {
                                             {numSegments - 1} Aktarma
                                           </span>
                                         ) : (
-                                          <span className='md-text-md text-sm text-green-800'>
+                                          <span className='md:text-md text-sm font-medium text-green-800'>
                                             Aktarmasız
                                           </span>
                                         )
@@ -1371,14 +1388,30 @@ const FlightSearchView = () => {
             </div>
 
             <div className='flex items-center justify-center gap-3'>
-              <div className='md:text-md flex items-center justify-center gap-1 text-xs font-semibold'>
-                {getAirportsByCodeList.data?.find((airPort) =>
-                  searchParams.origin?.iata.includes(airPort.Code)
-                )?.City ?? searchParams.origin?.code}
+              <div className='flex items-center justify-center gap-1 font-semibold'>
+                {
+                  airPortFlatList.find(
+                    (airPort) =>
+                      searchParams[
+                        isReturnFlightVisible ? 'destination' : 'origin'
+                      ]?.code === airPort.Code ||
+                      searchParams[
+                        isReturnFlightVisible ? 'destination' : 'origin'
+                      ]?.iata.includes(airPort.Code)
+                  )?.City
+                }
                 {''} - {''}
-                {getAirportsByCodeList.data?.find((airPort) =>
-                  searchParams.destination?.iata.includes(airPort.Code)
-                )?.City ?? searchParams.destination?.code}
+                {
+                  airPortFlatList?.find(
+                    (airPort) =>
+                      searchParams[
+                        isReturnFlightVisible ? 'origin' : 'destination'
+                      ]?.code === airPort.Code ||
+                      searchParams[
+                        isReturnFlightVisible ? 'origin' : 'destination'
+                      ]?.iata.includes(airPort.Code)
+                  )?.City
+                }
               </div>
               <div className='flex items-center justify-center gap-1'>
                 <AirlineLogo

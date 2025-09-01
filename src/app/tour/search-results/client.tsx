@@ -278,7 +278,7 @@ const TourSearchResultClient = () => {
                           >
                             <UnstyledButton
                               fz='xs'
-                              className='font-semibold text-blue-500'
+                              className='px-4 font-semibold text-blue-500'
                               onClick={() => {
                                 setFilterParams(null)
                               }}
@@ -338,7 +338,7 @@ const TourSearchResultClient = () => {
                               <Stack gap={rem(6)}>
                                 {nightCountChecks.map((count) => (
                                   <Checkbox
-                                    label={count}
+                                    label={<div>{count} Gece</div>}
                                     value={count.toString()}
                                     key={count}
                                   />

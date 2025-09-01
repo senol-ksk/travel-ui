@@ -124,7 +124,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                           <div>{totalFlightDuration.format('mm')}dk</div>
                         </div>
                         <div className='flex justify-center'>
-                          <div className='text-sm text-gray-500'>
+                          <div className='text-sm font-medium text-green-800'>
                             {hasTransferStop ? (
                               <span className='text-red-700'>
                                 {relatedSegment.length - 1} Aktarma

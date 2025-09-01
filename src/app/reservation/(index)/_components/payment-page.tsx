@@ -313,8 +313,6 @@ export const PaymentPageSection = () => {
     checkoutQuery.refetch()
   }
 
-  console.log(formMethods.formState.errors)
-
   if (!reservationData || !queryStrings.productKey)
     return <div>Hata olustu</div>
 
@@ -637,6 +635,8 @@ export const PaymentPageSection = () => {
             )}
 
             {checkoutQueryMemoData.paymentIndexModel &&
+              installmentTableSelectOptions?.current &&
+              installmentTableSelectOptions?.current.length > 0 &&
               checkoutQueryMemoData?.paymentIndexModel?.installment &&
               cardNumber && (
                 <InstallmentSelect
@@ -743,7 +743,7 @@ export const PaymentPageSection = () => {
           opened={isOpenInstallmentTable}
           onClose={closeInstallmentTableModal}
           title='Tüm Kartlara Göre Taksit Tablosu'
-          size={'auto'}
+          size={'xl'}
         >
           <InstallmentTableModal
             data={

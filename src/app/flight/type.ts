@@ -124,6 +124,8 @@ export interface FlightDetailSegment {
     Owner: string
     ResponseID: string
     BrandName: string
+    BrandCode: string
+    BrandFeatures: []
     uniquecounter: number
     paxsegrefid: string
     direction: number
@@ -192,6 +194,7 @@ export interface ClientDataType {
     details: FlightDetail[]
     segments: FlightDetailSegment[]
   }[]
+  providerName?: string
 }
 
 export interface AirlineCodeServiceResponse {

@@ -120,11 +120,13 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                         <div className='flex justify-center'>
                           <div className='text-sm text-gray-500'>
                             {hasTransferStop ? (
-                              <span className='text-red-600'>
+                              <span className='font-medium text-red-600'>
                                 {relatedSegment.length - 1} Aktarma
                               </span>
                             ) : (
-                              <span className='text-green-800'>Aktarmasız</span>
+                              <span className='font-medium text-green-800'>
+                                Aktarmasız
+                              </span>
                             )}
                           </div>
                         </div>

@@ -1,17 +1,15 @@
-import { formatCurrency } from '@/libs/util'
-import { Badge, Button, rem, Stack } from '@mantine/core'
+import { Button, rem, Stack } from '@mantine/core'
+import { MdCheck } from 'react-icons/md'
+import { IoClose } from 'react-icons/io5'
+import { FaCheck } from 'react-icons/fa6'
 
 import clsx from 'clsx'
-import {
+import type {
   ClientDataType,
   FlightDetail,
   FlightDetailSegment,
   FlightFareInfo,
-} from '../../type'
-import { MdCheck } from 'react-icons/md'
-import { IoClose } from 'react-icons/io5'
-import { FaCheck } from 'react-icons/fa6'
-import { PiCheckFatFill } from 'react-icons/pi'
+} from '@/app/flight/type'
 
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -23,14 +21,15 @@ type IProps = {
   data: {
     packages: SelectedPackageStateProps[] | undefined | null
     flights: ClientDataType[]
+    providerName?: string
   }
   onSelect: (selectedPackage: SelectedPackageStateProps) => void
 }
 
 const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
   const selectedFlightItemPackages = data
-  // border colors dyanmic changing for per package
-  const dynmicborderColors = [
+
+  const dynamicBorderColors = [
     'border-t-gray-500',
     'border-t-indigo-900',
     'border-t-purple-600',
@@ -44,15 +43,11 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
     <div className='sm:grid sm:grid-flow-col sm:grid-rows-1 sm:gap-3'>
       {selectedFlightItemPackages?.packages?.map((selectedPackage, index) => {
         const isSelected = index === 0
-
         const dynamicBorderColor =
-          dynmicborderColors[index % dynmicborderColors.length]
-        // package price defined
-        let packagePrice = selectedPackage.flightFareInfo.totalPrice.value
-        // package base prıce calculated
-        packagePrice =
+          dynamicBorderColors[index % dynamicBorderColors.length]
+        const packagePrice =
           selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
-        packagePrice = Math.max(0, packagePrice)
+        console.log(data)
         return (
           <div
             key={selectedPackage.flightFareInfo.key}
@@ -73,8 +68,12 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
             )}
             <div className='mb-2 grid w-full cursor-pointer justify-between gap-1'>
               <div className='text-2xl font-bold'>
-                {' '}
-                +{packagePrice.toFixed(0)} TL
+                +
+                {new Intl.NumberFormat('tr', {
+                  currency: 'TRY',
+                }).format(packagePrice)}{' '}
+                TL
+                {/* +{packagePrice.toFixed(0)} TL */}
               </div>
               <div className='text-lg font-bold capitalize'>
                 {(() => {
@@ -97,7 +96,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                 })()}
               </div>
             </div>
-            <Stack gap={rem(4)} className='mb-10 text-sm'>
+            <Stack gap={rem(4)} className='mb-16 text-sm'>
               {selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
                 .value > 0 && (
                 <div className='flex items-center gap-1'>
@@ -132,32 +131,17 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   )}
                 </>
               )}
-              {(selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'PREMIUM' ||
-                selectedPackage.flightDetailSegment.freeVolatileData
-                  .BrandName === 'BASIC' ||
-                selectedPackage.flightDetailSegment.freeVolatileData
-                  .BrandName === 'FLEX') && (
-                <>
-                  <div className='flex items-center gap-1'>
-                    <MdCheck size={18} className='text-green-800' />1 parça x 8
-                    kg kabin bagajı
-                  </div>
-                  <div className='flex items-center gap-1'>
-                    <MdCheck size={18} className='text-green-800' /> 1 parça x 4
-                    kg kişisel eşya
-                  </div>
-                </>
-              )}
               {selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'PREMIUM' && (
-                <>
-                  <div className='flex items-center gap-1'>
-                    <MdCheck size={18} className='text-green-800' />
-                    Sandviç İkramı
-                  </div>
-                </>
-              )}
+                .BrandName === 'PREMIUM' &&
+                selectedPackage.flightDetailSegment.freeVolatileData.Owner ===
+                  'VF' && (
+                  <>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Sandviç İkramı
+                    </div>
+                  </>
+                )}
               {selectedPackage?.flightDetailSegment && (
                 <>
                   {selectedPackage.flightDetailSegment.bookingCode === 'PF' && (
@@ -184,7 +168,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                     Standart koltuk seçimi
                   </div>
                 ))}
-              {(selectedPackage.flightDetailSegment.freeVolatileData
+              {/* {(selectedPackage.flightDetailSegment.freeVolatileData
                 .BrandName === 'ADVANTAGE' ||
                 selectedPackage.flightDetailSegment.freeVolatileData
                   .BrandName === 'EXTRA') && (
@@ -192,8 +176,8 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   <MdCheck size={18} className='text-green-800' />
                   Sandviç İkramı
                 </div>
-              )}
-              {selectedPackage.flightDetailSegment.freeVolatileData
+              )} */}
+              {/* {selectedPackage.flightDetailSegment.freeVolatileData
                 .BrandName === 'EXTRA' &&
                 selectedPackage.flightDetailSegment.operatingAirline.code ===
                   'PC' && (
@@ -201,7 +185,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                     <MdCheck size={18} className='text-green-800' />
                     Film, Dizi, Müzik, Oyun
                   </div>
-                )}
+                )} */}
               {selectedPackage.flightDetails.freeVolatileData
                 .AllSeatSelection && (
                 <div className='flex items-center gap-1'>
@@ -236,32 +220,33 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   </div>
                 ))}
               {selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'FLEX' && (
-                <>
-                  <div className={'flex items-center gap-1 text-red-800'}>
-                    <IoClose size={20} className='text-red-800' />
-                    Ücretli Değişiklik
-                  </div>
-                  <div className={'flex items-center gap-1 text-red-800'}>
-                    <IoClose size={20} className='text-red-800' />
-                    Kesintili İade Hakkı
-                  </div>
-                </>
-              )}
-              {selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'PREMIUM' && (
-                <>
-                  <div className={'grid items-center text-green-800'}>
-                    <div className='flex items-center gap-1'>
-                      <MdCheck size={18} className='text-green-800' />
-                      Ücretsiz Değişiklik{' '}
+                .BrandName === 'FLEX' &&
+                selectedPackage.flightDetailSegment.freeVolatileData.Owner ===
+                  'VF' && (
+                  <>
+                    <div className={'flex items-center gap-1 text-red-800'}>
+                      <IoClose size={20} className='text-red-800' />
+                      Ücretli Değişiklik
                     </div>
-                    {/* <span className='px-5 text-xs text-gray-600'>
-                      (Uçuşa 1 saat kalana kadar)
-                    </span> */}
-                  </div>
-                </>
-              )}
+                    <div className={'flex items-center gap-1 text-red-800'}>
+                      <IoClose size={20} className='text-red-800' />
+                      Kesintili İade Hakkı
+                    </div>
+                  </>
+                )}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'PREMIUM' &&
+                selectedPackage.flightDetailSegment.freeVolatileData.Owner ===
+                  'VF' && (
+                  <>
+                    <div className={'grid items-center text-green-800'}>
+                      <div className='flex items-center gap-1'>
+                        <MdCheck size={18} className='text-green-800' />
+                        Ücretsiz Değişiklik{' '}
+                      </div>
+                    </div>
+                  </>
+                )}
               {selectedPackage.flightDetails.freeVolatileData
                 .FlexibleReturnChangeRight && (
                 <div className='grid items-center text-green-800'>
@@ -288,25 +273,15 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   </div>
                 </>
               )}
-              {/* {!(
-                selectedPackage.flightDetailSegment.bookingCode !== 'EF' &&
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandName === 'BASIC' &&
                 selectedPackage.flightDetailSegment.operatingAirline.code !==
-                  'PC'
-              ) &&
-                selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
-                  .value <= 15 && (
+                  'BA' && (
                   <div className='flex items-center gap-1 text-red-600'>
                     <IoClose size={20} className='text-red-800' />
                     Değişiklik yapılamaz &amp; İade edilemez
                   </div>
-                )} */}
-              {/* {selectedPackage.flightDetailSegment.freeVolatileData
-                .BrandName === 'BASIC' && (
-                <div className='flex items-center gap-1 text-red-600'>
-                  <IoClose size={20} className='text-red-800' />
-                  Değişiklik yapılamaz &amp; İade edilemez
-                </div>
-              )} */}
+                )}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'AA' &&
                 selectedPackage.flightDetailSegment.bookingCode !==
@@ -349,7 +324,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                     1x23 Kg Bagaj Hakkı
                   </div>
                 )}
-              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+              {/* {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'UA' ||
                 (selectedPackage.flightDetailSegment.operatingAirline.code ===
                   'LO' &&
@@ -359,7 +334,7 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                       <MdCheck size={18} className='text-green-800' />
                       1x23 Kg Bagaj Hakkı
                     </div>
-                  ))}
+                  ))} */}
               {selectedPackage.flightDetailSegment.operatingAirline.code ===
                 'VF' ||
                 (selectedPackage.flightDetailSegment.operatingAirline.code ===
@@ -621,6 +596,1111 @@ const DrawerFlight: React.FC<IProps> = ({ data, onSelect }) => {
                   <div className='flex items-center gap-1'>
                     <MdCheck size={18} className='text-green-800' />
                     Esnek İptal (Uçuşa kadar)
+                  </div>
+                )}
+              {data.providerName === 'SabreATPCO' &&
+                ((selectedPackage.flightDetailSegment.operatingAirline.code !==
+                  'AF' &&
+                  selectedPackage.flightDetailSegment.operatingAirline.code !==
+                    'KL' &&
+                  selectedPackage.flightDetailSegment.operatingAirline.code !==
+                    'LH' &&
+                  selectedPackage.flightDetailSegment.operatingAirline.code !==
+                    'BA' &&
+                  selectedPackage.flightDetailSegment.operatingAirline.code !==
+                    'EY' &&
+                  selectedPackage.flightDetailSegment.operatingAirline.code !==
+                    'EK') ||
+                  selectedPackage.flightDetailSegment.marketingAirline.code !==
+                    selectedPackage.flightDetailSegment.operatingAirline
+                      .code) &&
+                selectedPackage.flightDetailSegment.freeVolatileData.BrandFeatures.map(
+                  (item, index) => (
+                    <div key={index} className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      {item}
+                    </div>
+                  )
+                )}
+              {/* SunExpress Airlines - SUNLIGHT */}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'SUNLIGHT' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />1 Parça 4 kg
+                  Kabin bagajı (40x30x20cm)
+                </div>
+              )}
+              {/* SunExpress Airlines - SUNVALUE */}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'SUNVALUE' && (
+                <>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 Parça 8 kg
+                    Kabin bagajı (55x40x23cm)
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 20
+                    kg bagaj
+                  </div>
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Değişiklik Yapılamaz
+                  </div>
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    İptal/İade Yapılamaz
+                  </div>
+                </>
+              )}
+              {/* SunExpress Airlines - SUNECOPLUS */}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'SUNECOPLUS' && (
+                <>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 Parça 8 kg
+                    Kabin bagaj (55x40x23cm)
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 20
+                    kg bagaj
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız Değişiklik (7 Güne kadar + Fiyat Farkı)
+                  </div>
+                </>
+              )}
+              {/* SunExpress Airlines - SUNCOMFORT */}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'SUNCOMFORT' && (
+                <>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 Parça 8 kg
+                    Kabin bagaj (55x40x23cm)
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 25
+                    kg bagaj
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Standart Koltuk Seçimi
+                  </div>
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız Değişiklik (3 Güne kadar + Fiyat Farkı)
+                  </div>
+                </>
+              )}
+              {/* Turkish Airlines - Business Fly */}
+              {/* {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'TK' &&
+                !(
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BF' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BL'
+                ) && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 X 8 Kg El
+                    Bagajı
+                  </div>
+                )} */}
+              {/* Turkish Airlines - Bagaj Hakları */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'TK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'GN' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'LG') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 23
+                    kg bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'TK' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FL' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 30
+                    kg bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'TK' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BF' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 30
+                    kg bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'TK' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BL' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 parça X 20
+                    kg bagaj
+                  </div>
+                )}
+              {/* Turkish Airlines - Business Fly El Bagajı */}
+              {(selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'BF' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BL') &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'TK' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 X 8 Kg El
+                    Bagajı
+                  </div>
+                )}
+              {/* Turkish Airlines - Bonus Mil */}
+              {(selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'BL' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FL') &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'TK' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Yüzde 50 Ekstra Bonus Mil
+                  </div>
+                )}
+              {/* Turkish Airlines - Fast Track */}
+              {(selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'BF' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BL' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FL') &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'TK' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Fast Track (Mevcutsa)
+                  </div>
+                )}
+              {/* Turkish Airlines - Öncelikli Check-In */}
+              {(selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'BF' ||
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BL') &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'TK' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Öncelikli Check-İn
+                  </div>
+                )}
+              {/* Turkish Airlines - Cezasız İade */}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'BL' &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'TK' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız İade
+                  </div>
+                )}
+              {/* AJet Airlines - PREMIUM */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'VF' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'PREMIUM' && (
+                  <>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Sandviç İkramı
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Dilediğiniz Koltuk Seçimi
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Cezasız Değişiklik
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Cezasız İade Hakkı
+                    </div>
+                  </>
+                )}
+              {/* AJet Airlines - BASIC */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'VF' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BASIC' && (
+                  <>
+                    <div className='flex items-center gap-1 text-red-600'>
+                      <IoClose size={20} className='text-red-800' />
+                      Değişiklik Yapılamaz
+                    </div>
+                    <div className='flex items-center gap-1 text-red-600'>
+                      <IoClose size={20} className='text-red-800' />
+                      İade Edilemez
+                    </div>
+                  </>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'VF' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOJET' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX') && (
+                  <>
+                    <div className='flex items-center gap-1 text-red-600'>
+                      <IoClose size={20} className='text-red-800' />
+                      Ücretli Değişiklik
+                    </div>
+                    <div className='flex items-center gap-1 text-red-600'>
+                      <IoClose size={20} className='text-red-800' />
+                      İade Edilemez
+                    </div>
+                  </>
+                )}
+              {/* AJet Airlines - FLEX İade */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'VF' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FLEX' && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Kesintili İade Hakkı
+                  </div>
+                )}
+              {/* KLM & Air France Airlines */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'KL' && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />1 Küçük çanta
+                  (40 x 30 x 15 cm)
+                </div>
+              )}
+              {/* KLM & Air France - El Bagajı */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'LIGHT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'STANDARD' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 x El
+                    bagajı (55 x 35 x 25 cm)*
+                  </div>
+                )}
+              {/* KLM & Air France - Business El Bagajı */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BIZSTAND' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 x El
+                    bagajı (55 x 35 x 25 cm)*
+                  </div>
+                )}
+              {/* KLM & Air France - Bagaj Hakları */}
+              {/* {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'STANDARD' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 23
+                    kg Kabin bagaj
+                  </div>
+                )} */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BIZSTAND' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 parça X 32
+                    kg Kabin bagaj
+                  </div>
+                )}
+              {/* KLM & Air France - Koltuk Seçimi */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'LIGHT' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretli Koltuk Seçimi
+                  </div>
+                )}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSTAND' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz Koltuk Seçimi
+                  </div>
+                )}
+              {/* KLM & Air France - Lounge Erişimi */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BIZSTAND' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Lounge Erişimi
+                  </div>
+                )}
+              {/* KLM & Air France - Değişiklik Kuralları */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'LIGHT' && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Değişiklik Yapılamaz
+                  </div>
+                )}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'STANDARD' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSTAND') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Ücretli Değişiklik
+                  </div>
+                )}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz Değişiklik
+                  </div>
+                )}
+              {/* KLM & Air France - İade Kuralları */}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'LIGHT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'STANDARD' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSTAND') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    İptal Edilemez
+                  </div>
+                )}
+              {(selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'AF' ||
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'KL') &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    İade Edilebilir (Uçuşa kadar)
+                  </div>
+                )}
+              {/* Lufthansa Airlines */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'CLASSIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 Küçük
+                    çanta (40 x 30 x 10 cm) deneme
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'CLASSIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 x El
+                    bagajı (55 x 40 x 23 cm)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BUSINESS' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 x El
+                    bagajı (55 x 40 x 23 cm)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BUSINESS' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 parça X 32
+                    kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'CLASSIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Standart Koltuk Seçimi
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'CLASSIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Mil Kazanımı
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BUSINESS' && (
+                  <>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Lounge Erişimi
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Ücretsiz İkram
+                    </div>
+                  </>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BUSINESS' && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Değişiklik Yapılamaz
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'CLASSIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'FLEX') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Ücretli Değişiklik
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'CLASSIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    İptal Edilemez
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'LH' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'FLEX' && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Cezalı İade Edilebilir (Uçuşa kadar)
+                  </div>
+                )}
+              {/* British Airways */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'NOBAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 x El
+                    bagajı 8 Kg
+                  </div>
+                )}
+              {/* {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 parça X 23
+                    kg Kabin bagaj
+                  </div>
+                )} */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BUSINESS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />2 parça X
+                      32 kg Kabin bagaj
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Öncelikli Check-in
+                    </div>
+                    <div className='flex items-center gap-1'>
+                      <MdCheck size={18} className='text-green-800' />
+                      Business Lounge
+                    </div>
+                  </>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'NOBAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BAG') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretli Koltuk Seçimi
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECONSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Koltuk Seçimi
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'NOBAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz İkram
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'NOBAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Uçuş Öncesi Ücretli Değişiklik (48 Saate Kadar)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECONSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZFLEX') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Uçuş Öncesi Cezasız Değişiklik (48 Saate Kadar)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'NOBAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BAG' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BUSINESS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BIZSEL') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    İptal Edilemez
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECONSEL' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECONFLEX') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Cezalı İade Edilebilir (Uçuşa kadar)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'BA' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BIZFLEX' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız İade Edilebilir (48 Saate Kadar)
+                  </div>
+                )}
+              {/* Emirates Airlines */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECOFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 x El
+                    bagajı 7 Kg
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BSFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />2 x El
+                    bagajı 7 Kg
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLEX' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    30 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLXPLUS' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    35 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BSFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    40 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECOFLXPLUS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz İkram
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'BSFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Business Lounge
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'ECOFLXPLUS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Standart Koltuk Seçimi
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLEX') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Ücretli Değişiklik
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLXPLUS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz Değişiklik
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLEX' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLEX') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Cezalı İade Edilebilir
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EK' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'ECOFLXPLUS' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'BSFLXPLUS') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız İade Edilebilir
+                  </div>
+                )}
+              {/* Etihad Airways */}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YBASIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YDELUXE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />1 x El
+                    bagajı 7 Kg
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YVALUE' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    25 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YCOMFORT' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    30 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'JVALUE' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    35 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YDELUXE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    40 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'JDELUXE' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    50 kg Kabin bagaj
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'JVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Öncelikli Check-in
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'JCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Business Lounge
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YBASIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YDELUXE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Ücretsiz İkram
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YDELUXE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Standart Koltuk Seçimi
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YBASIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YVALUE') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Değişiklik Yapılamaz
+                  </div>
+                )}
+              {!(
+                selectedPackage.flightDetailSegment.bookingCode !== 'EF' &&
+                selectedPackage.flightDetailSegment.operatingAirline.code !==
+                  'PC'
+              ) &&
+                selectedPackage.flightDetailSegment.baggageAllowance.maxWeight
+                  .value <= 15 && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Değişiklik yapılamaz &amp; İade edilemez
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YBASIC' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'YVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JVALUE') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    İade Edilemez
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JVALUE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Ücretli Değişiklik (48 Saate Kadar)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YDELUXE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız Değişiklik (48 Saate Kadar)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YCOMFORT' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JCOMFORT') && (
+                  <div className='flex items-center gap-1 text-red-600'>
+                    <IoClose size={20} className='text-red-800' />
+                    Cezalı İade (48 Saate Kadar)
+                  </div>
+                )}
+              {selectedPackage.flightDetailSegment.operatingAirline.code ===
+                'EY' &&
+                (selectedPackage.flightDetailSegment.freeVolatileData
+                  .BrandCode === 'YDELUXE' ||
+                  selectedPackage.flightDetailSegment.freeVolatileData
+                    .BrandCode === 'JDELUXE') && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Cezasız İade (48 Saate Kadar)
+                  </div>
+                )}
+              {/* Package Contents */}
+              {/* {selectedPackage.flightDetailSegment.freeVolatileData.SeatSelection && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Standart koltuk seçimi
+                </div>
+              )} */}
+              {/* {selectedPackage.flightDetailSegment.packageContents?.StandartSeatSelection && (
+                <div className='flex items-center gap-1'>
+                  <MdCheck size={18} className='text-green-800' />
+                  Standart Koltuk Seçimi
+                </div>
+              )} */}
+              {selectedPackage.flightDetailSegment.freeVolatileData
+                .BrandCode === 'EXTRA' &&
+                selectedPackage.flightDetailSegment.operatingAirline.code ===
+                  'PC' && (
+                  <div className='flex items-center gap-1'>
+                    <MdCheck size={18} className='text-green-800' />
+                    Sandviç İkramı
                   </div>
                 )}
             </Stack>
