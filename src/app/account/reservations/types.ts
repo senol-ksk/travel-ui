@@ -31,16 +31,16 @@ export type OrderPassengerModel = {
   calculationYearType: number
   sequenceNo: number
   type: number
-  gender: number
+  Gender: number
   FirstName: string
   LastName: string
   middleName?: string
   birthDate: string
   nationality: string
   nationality_Check?: string
-  citizenNo?: string
+  CitizenNo?: string
   passportNo?: string
-  mobilePhoneNumber?: string
+  MobilePhoneNumber?: string
   email?: string
   isContact: boolean
   flightFrequencyNo?: string

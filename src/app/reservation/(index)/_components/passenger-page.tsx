@@ -62,7 +62,7 @@ import { RiAccountCircleFill } from 'react-icons/ri'
 import { useCheckoutContext } from '../../store'
 import { convertPassengerTitle } from '@/libs/passenger-title'
 import { Route } from 'next'
-import { RegisteredList } from './registered-list'
+// import { RegisteredList } from './registered-list'
 
 export function CheckoutPassengerPage() {
   const queryClient = useQueryClient()
@@ -391,7 +391,7 @@ export function CheckoutPassengerPage() {
                                               passengerType
                                             )}{' '}
                                           </Title>
-                                          <RegisteredList />
+                                          {/* <RegisteredList /> */}
                                         </div>
                                         <HotelPassengerInformationForm
                                           moduleName={moduleName}
@@ -489,7 +489,7 @@ export function CheckoutPassengerPage() {
                                     }
                                   })()}
                                 </Title>
-                                <RegisteredList />
+                                {/* <RegisteredList /> */}
                               </div>
                               <PassengerInformationForm
                                 moduleName={moduleName}
@@ -559,7 +559,7 @@ export function CheckoutPassengerPage() {
                                       : convertPassengerTitle(passengerType)}
                                   </div>
                                 </div>
-                                <RegisteredList />
+                                {/* <RegisteredList /> */}
                               </div>
                               <PassengerInformationForm
                                 moduleName={moduleName}
