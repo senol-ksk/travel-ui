@@ -1,0 +1,14 @@
+.tab {
+  font-weight: var(--font-weight-normal);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--mantine-color-gray-4);
+  border-radius: 8px;
+  font-size: var(--mantine-font-size-md);
+
+  &[data-active] {
+    border-color: var(--mantine-primary-color-8);
+    background-color: var(--mantine-primary-color-8);
+    color: white;
+  }
+}
