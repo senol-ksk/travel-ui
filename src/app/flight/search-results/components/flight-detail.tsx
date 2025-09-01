@@ -41,7 +41,6 @@ function FlightDetailsSearch({
     return airport.Value[0]?.Value
   }
   const [activeLegGroupId, setActiveLegGroupId] = React.useState<number>(0)
-
   return (
     <Collapse
       in={opened}
@@ -59,15 +58,20 @@ function FlightDetailsSearch({
           >
             Gidiş Uçuşu
           </Button>
-          <Button
-            className='border-0'
-            onClick={() => setActiveLegGroupId(1)}
-            variant={activeLegGroupId === 1 ? 'filled' : 'default'}
-            color={activeLegGroupId === 1 ? 'gray' : ''}
-            radius='md'
-          >
-            Dönüş Uçuşu
-          </Button>
+          {detailSegments.map((roundTrip, index) => {
+            return roundTrip.groupId === 1 ? (
+              <Button
+                key={index}
+                className='border-0'
+                onClick={() => setActiveLegGroupId(1)}
+                variant={activeLegGroupId === 1 ? 'filled' : 'default'}
+                color={activeLegGroupId === 1 ? 'gray' : ''}
+                radius='md'
+              >
+                Dönüş Uçuşu
+              </Button>
+            ) : null
+          })}
         </div>
       )}
       <div className='w-full rounded-lg p-3'>
@@ -75,6 +79,8 @@ function FlightDetailsSearch({
           const relatedSegments = detailSegments.filter(
             (s) => s.groupId === detailLeg.groupId
           )
+          console.log('details', relatedSegments)
+
           const isCurrentLegVisible =
             isDomestic ||
             (!isDomestic && detailLeg.groupId === activeLegGroupId)

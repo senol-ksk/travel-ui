@@ -174,8 +174,12 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
           onClick={togglePriceDetails}
         >
           <div className='flex items-center gap-1'>
-            <span>Toplam Tutar</span>
-            <span className='text-3xl'>
+            <span className='font-semibold'>
+              {data.HotelCancelWarrantyPriceStatusModel?.couponActive
+                ? 'Ön Ödeme Tutarı (%25)'
+                : 'Toplam Tutar'}
+            </span>
+            <span className='text-xl'>
               {openedPriceDetails ? (
                 <MdKeyboardArrowUp />
               ) : (
@@ -184,24 +188,24 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
             </span>
           </div>
           <div className='text-lg font-semibold'>
-            {formatCurrency(
-              data.SummaryViewDataResponser.summaryResponse.totalPrice
-            )}
+            {formatCurrency(summaryResponse.totalPrice)}
           </div>
         </UnstyledButton>
         <Collapse in={openedPriceDetails}>
-          <div className='grid gap-2 pt-3 text-sm'>
-            {couponDiscountList && couponDiscountList.length > 0 && (
-              <div className='flex items-center justify-between font-semibold text-green-700'>
-                <div>İndirim Kuponu</div>
-                <div>
-                  -
-                  {formatCurrency(
-                    couponDiscountList?.at(0)?.discountPrice.value ?? 0
-                  )}
+          <div className='grid gap-2 text-sm'>
+            {!data.HotelCancelWarrantyPriceStatusModel?.couponActive &&
+              couponDiscountList &&
+              couponDiscountList.length > 0 && (
+                <div className='flex items-center justify-between font-semibold text-green-700'>
+                  <div>İndirim Kuponu</div>
+                  <div>
+                    -
+                    {formatCurrency(
+                      couponDiscountList?.at(0)?.discountPrice.value ?? 0
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {roomGroup.rooms.map((room, roomIndex, roomGroupArr) => {
               const adults = passengers.filter((passenger) => {
@@ -223,7 +227,7 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
                     <div>{roomIndex + 1}. Oda Bilgisi</div>
                     <div>{nightStay} Gece</div>
                   </div>
-                  <div className='flex items-center justify-between ps-4 font-semibold'>
+                  <div className='flex items-center justify-between font-semibold'>
                     <div className='flex items-baseline gap-1'>
                       <span>Oda Fiyatı</span>
                       <small>
@@ -232,13 +236,82 @@ const HotelSummarySection: React.FC<IProps> = ({ data }) => {
                           ? `+ ${infants.length} Çocuk`
                           : null}
                         )
-                      </small>{' '}
+                      </small>
                     </div>
                     <div>{formatCurrency(room.totalPrice.value)}</div>
                   </div>
                 </Fragment>
               )
             })}
+            {!data.HotelCancelWarrantyPriceStatusModel?.couponActive &&
+              !data.HotelCancelWarrantyPriceStatusModel.hasHotelWarranty && (
+                <div className='mt-3 border-t pt-3'>
+                  <div className='flex items-center justify-between font-semibold'>
+                    <div>Toplam Fiyat</div>
+                    <div>{formatCurrency(summaryResponse.totalPrice)}</div>
+                  </div>
+                </div>
+              )}
+            {data.HotelCancelWarrantyPriceStatusModel?.couponActive &&
+              data.HotelCancelWarrantyPriceStatusModel.hasHotelWarranty &&
+              (summaryResponse?.couponDiscountList?.at(0)?.discountPrice
+                ?.value ?? 0) > 0 && (
+                <>
+                  <div className='border-t pt-3'>
+                    <div className='flex items-center justify-between font-semibold text-green-700'>
+                      <div>Ön Ödeme Tutarı (%25)</div>
+                      <div>
+                        {formatCurrency(
+                          summaryResponse.totalPrice -
+                            (roomGroup.cancelWarrantyPrice?.value || 0)
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='flex items-center justify-between font-semibold text-green-700'>
+                      <div>İptal ve İade Paketi</div>
+                      <div>
+                        {formatCurrency(
+                          roomGroup.cancelWarrantyPrice?.value || 0
+                        )}
+                      </div>
+                    </div>
+
+                    <div className='flex items-center justify-between font-semibold'>
+                      <div>Şimdi Ödenecek Toplam</div>
+                      <div>{formatCurrency(summaryResponse.totalPrice)}</div>
+                    </div>
+
+                    <div className='flex items-center justify-between font-semibold'>
+                      <div>Kalan Ödeme Tutarı</div>
+                      <div>
+                        {formatCurrency(
+                          summaryResponse.couponDiscountList?.at(0)
+                            ?.discountPrice.value ?? 0
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='mt-3 rounded-md bg-red-50 p-3'>
+                    <div className='text-xs text-red-700'>
+                      Kalan tutar, son tarih{' '}
+                      {dayjs(roomGroup.checkInDate)
+                        .subtract(4, 'days')
+                        .format('DD.MM.YYYY')}{' '}
+                      saate kadar ödenmelidir. Şimdi ödenecek tutar, konaklama
+                      bedelinin %25&apos;inin ve varsa ek hizmetlerin bedelinin
+                      toplamıdır.
+                    </div>
+                  </div>
+                  <div className='mt-2 rounded-md bg-green-50 p-3'>
+                    <div className='text-xs text-green-700'>
+                      %25&apos;ini Şimdi, %75&apos;ini Tatilden Önce Öde!
+                      kampanyasından faydalandınız.
+                    </div>
+                  </div>
+                </>
+              )}
           </div>
         </Collapse>
       </CheckoutCard>

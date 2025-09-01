@@ -78,6 +78,7 @@ type IProps = {
   data: HotelDetailResponseHotelInfo | undefined
   opened: boolean
   onClose: () => void
+  showCommentsTab?: boolean
 }
 
 const MainDrawer: React.FC<IProps> = ({
@@ -85,9 +86,12 @@ const MainDrawer: React.FC<IProps> = ({
   data,
   opened,
   onClose,
+  showCommentsTab = false,
 }) => {
   const featureValues = Object.entries(description)
   if (featureValues.length === 0) return null
+
+  const defaultTab = showCommentsTab ? 'drawerComments' : 'facilityInfos'
 
   return (
     <>
@@ -119,7 +123,7 @@ const MainDrawer: React.FC<IProps> = ({
           >
             <div className='flex gap-5'>
               <Tabs
-                defaultValue='facilityInfos'
+                defaultValue={defaultTab}
                 classNames={{
                   tab: 'border-b-5 rounded md:p-1',
                   tabSection: 'hidden sm:flex',

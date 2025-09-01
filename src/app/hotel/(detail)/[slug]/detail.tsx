@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import {
   Alert,
   Button,
@@ -93,6 +93,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
     generalInfoDrawerOpened,
     { open: openGeneralInfoDrawer, close: closeGeneralInfoDrawer },
   ] = useDisclosure(false)
+  const [showCommentsTab, setShowCommentsTab] = useState(false)
   const selectedRoomPrice = useRef(0)
 
   const hotelDetailData = hotelDetailQuery.data
@@ -155,6 +156,15 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         ? totalPriceWithCancelWarranty
         : totalPrice
     }
+  }
+  const handleCommentClick = () => {
+    setShowCommentsTab(true)
+    openGeneralInfoDrawer()
+  }
+
+  const handleDrawerClose = () => {
+    setShowCommentsTab(false)
+    closeGeneralInfoDrawer()
   }
 
   const handleReservation = (productKey: string) => {
@@ -426,9 +436,10 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         </div>
         <MainDrawer
           opened={generalInfoDrawerOpened}
-          onClose={closeGeneralInfoDrawer}
+          onClose={handleDrawerClose}
           data={hotelInfo}
           description={hotel.descriptions}
+          showCommentsTab={showCommentsTab}
         />
         <Title id='rooms' className='md:text-xxl p-2 text-xl md:p-0'>
           Odalar
@@ -565,7 +576,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
               Değerlendirmeler
             </Title>
             <div className='gap-2 rounded bg-gray-50 p-3'>
-              <div className='flex items-center justify-between rounded bg-white p-3'>
+              <div className='flex items-center justify-between rounded-lg bg-white p-3'>
                 <div className='hidden items-center gap-2 self-end text-blue-800 md:flex'>
                   <div className='rounded-md bg-blue-100 p-4 px-5 text-xl leading-none font-bold'>
                     {hotel.comment_info?.averageScore}
@@ -576,7 +587,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                       <Button
                         className='border-0 bg-transparent p-0 text-sm font-normal text-black'
                         size='md'
-                        onClick={openGeneralInfoDrawer}
+                        onClick={handleCommentClick}
                       >
                         {hotel.comment_info?.comments?.length ?? 0}{' '}
                         değerlendirme
@@ -586,14 +597,19 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                 </div>
 
                 <Button
-                  onClick={openGeneralInfoDrawer}
+                  onClick={handleCommentClick}
                   className='bg-transparent p-0 font-normal text-blue-700'
                 >
                   Tüm Yorumları Göster <MdKeyboardArrowRight size={20} />
                 </Button>
               </div>
-              <div className='mt-3 rounded bg-white'>
-                {hotel.comment_info && <Comments data={hotel.comment_info} />}
+              <div className='mt-3 rounded-xl bg-white'>
+                {hotel.comment_info && (
+                  <Comments
+                    data={hotel.comment_info}
+                    onCommentClick={handleCommentClick}
+                  />
+                )}
               </div>
             </div>
           </div>

@@ -6,15 +6,16 @@ import { useEffect, useState } from 'react'
 
 type IProps = {
   data: HotelCommentInfo
+  onCommentClick?: () => void
 }
 
-const Comments: React.FC<IProps> = ({ data }) => {
+const Comments: React.FC<IProps> = ({ data, onCommentClick }) => {
   const { comments } = data
   const [slideSize, setSlideSize] = useState('100%')
 
   useEffect(() => {
     const handleResize = () => {
-      setSlideSize(window.innerWidth >= 768 ? '30%' : '100%')
+      setSlideSize(window.innerWidth >= 768 ? '25%' : '100%')
     }
 
     handleResize()
@@ -26,7 +27,7 @@ const Comments: React.FC<IProps> = ({ data }) => {
   return (
     <div>
       <Carousel
-        withIndicators
+        className='p-3'
         slideSize={slideSize}
         slideGap='md'
         emblaOptions={{ align: 'start' }}
@@ -34,31 +35,36 @@ const Comments: React.FC<IProps> = ({ data }) => {
         {comments.map((comment, index) => (
           <Carousel.Slide key={index}>
             <Card
-              className='bg-blue-50 text-sm'
+              className='h-full cursor-pointer bg-blue-50 text-sm hover:bg-blue-100'
               padding='lg'
               shadow='sm'
-              radius='md'
+              radius='lg'
+              onClick={onCommentClick}
             >
-              <Group mb='xs'>
-                <Text size='sm'>Çok iyi</Text>
-                <Badge color='green' size='lg' radius='md'>
-                  {comment.averageScore}
-                </Badge>
-              </Group>
-              <Text size='sm'>
+              {comment.averageScore > 0 && (
+                <Group mb='xs'>
+                  <Text size='sm'>Çok iyi</Text>
+                  <Badge color='green' size='lg' radius='md'>
+                    {comment.averageScore}
+                  </Badge>
+                </Group>
+              )}
+              <Text size='sm' className='truncate font-medium'>
                 {comment.withWhoLabel} {comment.reasonLabel}
               </Text>
 
-              <div className='pt-2 text-sm'>
-                <Text lineClamp={6} fz={'sm'}>
+              <div className='flex-1 pt-2 text-sm'>
+                <Text lineClamp={4} fz={'sm'} className='h-20'>
                   {comment.positiveCotent}
                 </Text>
               </div>
               <Divider my={'sm'} />
-              <div>
-                {comment.name} {comment.surname}
+              <div className='text-xs'>
+                <div className='truncate'>
+                  {comment.name} {comment.surname}
+                </div>
+                <div>{dayjs(comment.commentDate).format('MMMM YYYY')}</div>
               </div>
-              <div>{dayjs(comment.commentDate).format('MMMM YYYY')}</div>
             </Card>
           </Carousel.Slide>
         ))}
