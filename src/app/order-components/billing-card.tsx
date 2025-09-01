@@ -1,5 +1,4 @@
 import { Img } from '@react-email/components'
-import Image from 'next/image'
 import { ReactNode } from 'react'
 
 type IProps = {
@@ -13,7 +12,7 @@ type IProps = {
 export const BillingCard: React.FC<IProps> = ({ data }) => {
   return (
     <>
-      <div className='space-y-3 text-sm'>
+      <div className='grid gap-2 text-sm'>
         <div className='flex items-center gap-2'>
           <div className='w-32 font-medium'>İsim Soyisim</div>
           <div>:</div>
@@ -36,7 +35,7 @@ export const BillingCard: React.FC<IProps> = ({ data }) => {
         </div>
       </div>
       <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 text-sm font-bold text-white'>
-        <Image
+        <Img
           alt='ikon'
           width={20}
           height={20}
