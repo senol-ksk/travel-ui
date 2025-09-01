@@ -118,7 +118,7 @@ export default async function Home() {
         </div>
       )}
       <div>
-        <Container className='flex flex-col gap-3 md:gap-10'>
+        <Container className='flex flex-col gap-7 md:gap-10'>
           {opportunities && (
             <div className='mx-auto'>
               <MainBannerCarousel
@@ -226,19 +226,26 @@ export default async function Home() {
                 defaultValue={'' + landingMenus?.menus[0].id}
                 variant='unstyle'
                 classNames={populerDestinationClasses}
-                visibleFrom='sm'
+                // visibleFrom='sm'
               >
-                <TabsList className='gap-2'>
-                  {landingMenus?.menus
-                    .sort((a, b) => a.ordering - b.ordering)
-                    .map((menu) => {
-                      return (
-                        <TabsTab key={menu.id} value={'' + menu.id}>
-                          {menu.title}
-                        </TabsTab>
-                      )
-                    })}
-                </TabsList>
+                <ScrollArea
+                  type='auto'
+                  scrollbars='x'
+                  scrollbarSize={0}
+                  className='whitespace-nowrap'
+                >
+                  <TabsList className='flex-nowrap gap-2'>
+                    {landingMenus?.menus
+                      .sort((a, b) => a.ordering - b.ordering)
+                      .map((menu) => {
+                        return (
+                          <TabsTab key={menu.id} value={'' + menu.id}>
+                            {menu.title}
+                          </TabsTab>
+                        )
+                      })}
+                  </TabsList>
+                </ScrollArea>
 
                 <div className='pt-3 md:pt-8'>
                   {landingMenus?.menus.map((menu) => (

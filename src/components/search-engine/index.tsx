@@ -50,12 +50,6 @@ export const SearchEngine = () => {
       onChange={(val) => {
         setLatestSearch(val ?? '')
       }}
-      // classNames={{
-      //   ...classes,
-      //   // tab: 'md:text-lg p-4 md:grow',
-      //   tabSection: 'hidden sm:flex',
-      //   tabLabel: 'flex-none',
-      // }}
       classNames={classes}
       keepMounted={false}
       variant='unstyle'
