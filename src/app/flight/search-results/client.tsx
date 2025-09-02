@@ -349,7 +349,7 @@ const FlightSearchView = () => {
 
     return total
   }
-
+  const activeTripKind = searchParams.activeTripKind
   return (
     <>
       <div className='border-b py-2'>
@@ -1189,6 +1189,7 @@ const FlightSearchView = () => {
               returnDate={searchParams.returnDate ?? ''}
               isDomestic={isDomestic ?? false}
               isReturnFlightVisible={isReturnFlightVisible}
+              activeTripKind={activeTripKind || ''}
             />
             <div className='grid gap-3 pt-3 md:gap-5'>
               {!searchResultsQuery.isFetchingNextPage &&
