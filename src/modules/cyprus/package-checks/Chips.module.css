@@ -1,0 +1,32 @@
+.root {
+  --chip-size: var(--chip-size-md);
+  --chip-radius: 6px;
+  --chip-fz: var(--mantine-font-size-md);
+  --chip-padding: 0 36px 0 17px;
+  --chip-checked-padding: var(--chip-padding);
+}
+
+.label {
+  position: relative;
+  padding: var(--chip-padding);
+
+  &[data-checked] {
+    .chipIcon {
+      display: none;
+    }
+  }
+}
+
+.iconWrapper {
+  position: absolute;
+  inset-inline-end: 5px;
+}
+
+.chipIcon {
+  position: absolute;
+  inset-inline-end: 5px;
+  display: flex;
+  top: 0;
+  bottom: 0;
+  align-items: center;
+}
