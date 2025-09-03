@@ -78,13 +78,6 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
                   </td>
                 </tr>
                 <tr>
-                  <td>Ekstralar</td>
-                  <td>:</td>
-                  <td>
-                    {car.navigationSystem?.isAvailable ? 'Navigasyon' : '—'}
-                  </td>
-                </tr>
-                <tr>
                   <td>Süre</td>
                   <td>:</td>
                   <td>{dayCount} Gün</td>
@@ -184,7 +177,7 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
                 </Column>
                 <Column>{dayjs(p.birthday).format('DD.MM.YYYY')}</Column>
                 <Column>{p.identityNumber}</Column>
-                <Column>{data.passenger.shoppingFileId}</Column>
+                <Column>{p.bookingCode}</Column>
               </tr>
             ))}
           </tbody>
@@ -213,7 +206,48 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
           }}
         />
       </EmailCard>
+      {(() => {
+        const carExtraOptions = detail.carExtraOption
+        const carInsurances = detail.carInsurances
+        const hasSelectedExtras =
+          carExtraOptions?.some((option) => option.selected) ||
+          carInsurances?.some((insurance) => insurance.selected)
 
+        return hasSelectedExtras ? (
+          <EmailCard title={'Ekstra Seçenekler'}>
+            <table cellPadding={4}>
+              <tbody>
+                {carInsurances
+                  ?.filter((insurance) => insurance.selected)
+                  .map((insurance, index) => (
+                    <tr key={`insurance-${index}`}>
+                      <td>{insurance.description}</td>
+                      <td>:</td>
+                      <td>
+                        {insurance.isFree
+                          ? 'Ücretsiz'
+                          : `${insurance.totalPrice.value} ${insurance.totalPrice.currency}`}
+                      </td>
+                    </tr>
+                  ))}
+                {carExtraOptions
+                  ?.filter((option) => option.selected)
+                  .map((option, index) => (
+                    <tr key={`extra-${index}`}>
+                      <td>{option.name}</td>
+                      <td>:</td>
+                      <td className='font-bold'>
+                        {option.isFree
+                          ? 'Ücretsiz'
+                          : `${formatCurrency(option.totalPrice.value)}`}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </EmailCard>
+        ) : null
+      })()}
       <EmailCard title={'Ödeme Bilgileri'}>
         <table cellPadding={2}>
           <tbody>
@@ -224,15 +258,28 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
                 {formatCurrency(detail.totalPrice.value)}
               </td>
             </tr>
-            {detail.discount.value > 0 ? (
+            {passenger.paymentInformation.basketDiscountTotal > 0 ? (
               <tr>
                 <td>İndirim Tutarı</td>
                 <td>:</td>
                 <td className='font-bold'>
-                  {detail.discount.value} {detail.discount.currency}
+                  -
+                  {formatCurrency(
+                    passenger.paymentInformation.basketDiscountTotal
+                  )}
                 </td>
               </tr>
             ) : null}
+            {passenger.paymentInformation.mlTotal &&
+              passenger.paymentInformation.mlTotal > 0 && (
+                <tr>
+                  <td>ParafPara TL</td>
+                  <td>:</td>
+                  <td className='font-bold'>
+                    {formatCurrency(passenger.paymentInformation.mlTotal)}
+                  </td>
+                </tr>
+              )}
             <tr>
               <td>Kart Numarası</td>
               <td>:</td>
@@ -248,14 +295,17 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
               </td>
             </tr>
             <tr>
-              <td>Tahsil Edilen Tutar</td>
+              <td>Kredi Kartından Çekilecek Tutar</td>
               <td>:</td>
               <td className='font-bold'>
                 {passenger.paymentInformation.installmentCount > 1 ? (
                   <>{passenger.paymentInformation.installmentCount} Taksit = </>
                 ) : null}
-                {passenger.paymentInformation.collectingTotal}{' '}
-                {passenger.paymentInformation.sellingCurrency}
+                {formatCurrency(
+                  detail.totalPrice.value -
+                    (passenger.paymentInformation.basketDiscountTotal || 0) -
+                    (passenger.paymentInformation.mlTotal || 0)
+                )}{' '}
               </td>
             </tr>
           </tbody>

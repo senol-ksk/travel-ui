@@ -6,9 +6,9 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
         type: 0,
         gender: 0,
         fullName: 'BASAR  YILDIRIM',
-        birthday: '1945-12-16T02:00:00+02:00',
+        birthday: '2000-11-17T02:00:00+02:00',
         identityNumber: '11*******10',
-        bookingCode: 'PKT_515367',
+        bookingCode: 'PKT_518221',
         campaignCode: null,
         eTicketNumber: null,
         firstName: 'BASAR',
@@ -26,7 +26,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
           currency: null,
           rateValue: null,
         },
-        productItemId: 845710,
+        productItemId: 848751,
       },
     ],
     billingInformation: [
@@ -38,12 +38,12 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
       },
     ],
     paymentInformation: {
-      basketTotal: 13440,
+      basketTotal: 8145.46,
       basketDiscountTotal: 0,
-      collectingTotal: 13440,
+      collectingTotal: 8145.46,
       financellTotal: 0,
-      mlTotal: null,
-      rateOfInterest: 1,
+      mlTotal: 8145.46,
+      rateOfInterest: 2,
       installmentCount: 1,
       bankName: 'HALKBANK',
       encryptedCardHolder: 'B**** Y*******',
@@ -54,7 +54,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
       {
         productType: 4,
         model_PassengerId: 1,
-        passengerId: 914820,
+        passengerId: 918541,
         ssrCode: 'OTOBÜS BINIS NOKTASI',
         ssrValue: 'OTOBÜS BINIS NOKTASI',
         firstName: 'BASAR',
@@ -65,20 +65,20 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
       {
         productType: 4,
         model_PassengerId: 1,
-        passengerId: 914820,
-        ssrCode: 'ERKEN REZERVASYON',
-        ssrValue: 'ERKEN REZERVASYON',
+        passengerId: 918541,
+        ssrCode: 'ZORUNLU SEYAHAT SIGORTASI',
+        ssrValue: 'ZORUNLU SEYAHAT SIGORTASI',
         firstName: 'BASAR',
         lastName: 'YILDIRIM',
         marketingAirlineCode: '',
-        specialRequestInfo: 'ERKEN REZERVASYON',
+        specialRequestInfo: 'ZORUNLU SEYAHAT SIGORTASI',
       },
     ],
     passengerCargoAddress: [],
-    bookingDateTime: '2025-08-14T14:37:13.737196',
+    bookingDateTime: '2025-09-02T09:26:06.9352556',
     fromSession: true,
     authorizeKey: null,
-    shoppingFileId: 838264,
+    shoppingFileId: 840536,
     taxAmount: 0,
     shippingAmount: 0,
     operationResultPromotionUsageList: null,
@@ -86,26 +86,9 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
   product: {
     summaryResponse: {
       package: {
-        title: '29 Ekim Özel Karadeniz ve Yaylalar Turu 3 Gece ',
-        description:
-          'Samsun, Ordu, Boztepe, Giresun, Trabzon, Uzungöl, Sümela Manastırı, Ayder, Rize',
+        title: 'Kapadokya Turu 2 Gece Konaklama ',
+        description: 'Ihlara, Ürgüp, Yer Altı Şehri, Paşabağ, Avanos',
         countries: [
-          {
-            code: '2',
-            title: 'Türkiye',
-          },
-          {
-            code: '2',
-            title: 'Türkiye',
-          },
-          {
-            code: '2',
-            title: 'Türkiye',
-          },
-          {
-            code: '2',
-            title: 'Türkiye',
-          },
           {
             code: '2',
             title: 'Türkiye',
@@ -113,53 +96,37 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
         ],
         cities: [
           {
-            code: '2255',
-            title: 'İstanbul',
-          },
-          {
-            code: '5882',
-            title: 'Samsun',
-          },
-          {
-            code: '5879',
-            title: 'Ordu',
-          },
-          {
-            code: '5275',
-            title: 'Trabzon',
-          },
-          {
-            code: '4342',
-            title: 'Rize',
+            code: '3541',
+            title: 'Nevşehir',
           },
         ],
         group: {
-          code: '98',
-          title: 'Karadeniz Turları',
+          code: '83',
+          title: 'Kapadokya Turları',
         },
         region: {
-          code: '3958',
-          title: 'Karadeniz Yaylalar ve Batum Turu 3 Gece',
+          code: '2945',
+          title: 'Kapadokya Turu 2 Gece',
         },
         imageUrl:
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0001.jpg',
-        startDate: '2025-10-26T00:00:00',
-        endDate: '2025-10-31T00:00:00',
-        tourTime: 5,
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0002.jpg',
+        startDate: '2025-11-06T00:00:00',
+        endDate: '2025-11-09T00:00:00',
+        tourTime: 3,
         hotelInformations: [
           {
-            name: '',
+            name: '0* Grand Öztürk Otel Nevşehir',
             rating: 0,
           },
         ],
         priceInformations: {
           priceForDouble: {
-            value: 16000,
+            value: 6000,
             currency: 'TRY',
             rateValue: null,
           },
           priceForSingle: {
-            value: 22000,
+            value: 8000,
             currency: 'TRY',
             rateValue: null,
           },
@@ -169,7 +136,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
               startAge: 2,
               endAge: 7,
               price: {
-                value: 12000,
+                value: 3500,
                 currency: 'TRY',
                 rateValue: null,
               },
@@ -178,7 +145,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
               startAge: 7,
               endAge: 12,
               price: {
-                value: 15000,
+                value: 5000,
                 currency: 'TRY',
                 rateValue: null,
               },
@@ -186,22 +153,22 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
           ],
         },
         quota: 7,
-        discountDescription: 'ERKEN REZERVASYON INDIRIMI:39899\n',
+        discountDescription: null,
         extraServices: [
           {
             name: 'Paket Hizmeti 1. Oda (1 Yetişkin 0 Çocuk 0 Bebek)',
             unitPrice: {
-              value: 22400,
+              value: 8145.46,
               currency: 'TRY',
               rateValue: null,
             },
             unitPriceTl: {
-              value: 22400,
+              value: 8145.46,
               currency: 'TRY',
               rateValue: null,
             },
             totalPriceTl: {
-              value: 22400,
+              value: 8145.46,
               currency: 'TRY',
               rateValue: null,
             },
@@ -215,13 +182,13 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             extraServiceCodes: null,
             extraServiceValues: null,
             commissionTlPrice: {
-              value: 17600,
+              value: 6400,
               currency: 'TRY',
               rateValue: null,
             },
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK5N9ZnDzd51ZVToURqzvInU=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTrtRVdU7eWwIFnLwkAf9nE=',
             totalPrice: {
-              value: 22400,
+              value: 8145.46,
               currency: 'TRY',
               rateValue: null,
             },
@@ -243,7 +210,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             buyFee: {
               code: '%10.0',
               price: {
-                value: 2000,
+                value: 727.27,
                 currency: 'TRY',
                 rateValue: null,
               },
@@ -251,7 +218,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             fee: {
               code: '%12.0',
               price: {
-                value: 2400,
+                value: 872.73,
                 currency: 'TRY',
                 rateValue: null,
               },
@@ -263,7 +230,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
           {
             name: 'İPTAL İADE GÜVENCE PAKETİ',
             unitPrice: {
-              value: 3054.54,
+              value: 1527.28,
               currency: 'TRY',
               rateValue: null,
             },
@@ -290,7 +257,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
               currency: 'TRY',
               rateValue: null,
             },
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK89coypwcvQWEc9seIB57QMH3iSXoUg/LCe+biCEf+bj',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeHHj9D+mAURAmvX9L6blWL9mPYzYXVOxLbdkUKtL3pi',
             totalPrice: {
               value: 0,
               currency: 'TRY',
@@ -355,15 +322,15 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             amount: 1,
             extraServiceType: 80,
             extraServiceCodes:
-              '194939@194938@194941@194944@194936@194937@194945@194940@194943@194942',
+              '180294@180288@180289@180298@180291@180295@180296@180297@180290@180293@180292',
             extraServiceValues:
-              'ADAPAZARI OTOGAR ÖNÜ@BOLU OTOGAR ÖNÜ@Düzce Türsan Tesisleri@GEBZE CENTER AVM ÖNÜ@İZMİT HALKEVİ DURAĞI@İZMİT OTOGAR ÖNÜ OTOBÜS DURAKLARI@KADIKÖY TEPE NAUTİLUS AVM YANI@KARTAL KÖPRÜSÜ ( E - 5 ANKARA YÖNÜ )@-ŞİŞLİ PRONTO TUR MERKEZ OFİS ÖNÜ@-YENİBOSNA AİRPORT AVM OTOPARKI',
+              '23.30 KADIKÖY TEPE NAUTİLUS AVM YANI@ADAPAZARI OTOGAR ÖNÜ@ANKARA SÖĞÜTÖZÜ@BOLU OTOGAR ÖNÜ@Düzce Türsan Tesisleri@GEBZE CENTER AVM ÖNÜ@İZMİT HALKEVİ DURAĞI@İZMİT OTOGAR ÖNÜ OTOBÜS DURAKLARI@KARTAL KÖPRÜSÜ ( E - 5 ANKARA YÖNÜ )@-ŞİŞLİ PRONTO TUR MERKEZ OFİS ÖNÜ@-YENİBOSNA AİRPORT AVM OTOPARKI',
             commissionTlPrice: {
               value: 0,
               currency: 'TRY',
               rateValue: null,
             },
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK89coypwcvQWEc9seIB57QNDWknC9ICm0jCCCL2cgV9I',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeHHj9D+mAURAmvX9L6blWKZpiUvb16v8daSzQwSzYvn',
             totalPrice: {
               value: 0,
               currency: 'TRY',
@@ -405,38 +372,38 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             serviceCharges: null,
           },
           {
-            name: 'ERKEN REZERVASYON',
+            name: 'ZORUNLU SEYAHAT SİGORTASI',
             unitPrice: {
-              value: -8960,
+              value: 0,
               currency: 'TRY',
               rateValue: null,
             },
             unitPriceTl: {
-              value: -8960,
+              value: 0,
               currency: 'TRY',
               rateValue: null,
             },
             totalPriceTl: {
-              value: -8960,
+              value: 0,
               currency: 'TRY',
               rateValue: null,
             },
             isPackage: false,
             unitPriceFor: 0,
             isMandatory: true,
-            mandatoryDescription: 'ERKEN REZERVASYON',
+            mandatoryDescription: 'ZORUNLU SEYAHAT SİGORTASI',
             amount: 1,
-            extraServiceType: 0,
-            extraServiceCodes: null,
-            extraServiceValues: null,
+            extraServiceType: 83,
+            extraServiceCodes: '',
+            extraServiceValues: '',
             commissionTlPrice: {
               value: 0,
               currency: 'TRY',
               rateValue: null,
             },
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK8gTprbDIH+ar8GRWQJQR0BG1zYvbgpG0cydrr35dLd9',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeHHj9D+mAURAmvX9L6blWJYKcn/FWy/jq3M1G9i3Orj',
             totalPrice: {
-              value: -8960,
+              value: 0,
               currency: 'TRY',
               rateValue: null,
             },
@@ -458,7 +425,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             buyFee: {
               code: '%10.0',
               price: {
-                value: -800,
+                value: 0,
                 currency: 'TRY',
                 rateValue: null,
               },
@@ -466,7 +433,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             fee: {
               code: '%12.0',
               price: {
-                value: -960,
+                value: 0,
                 currency: 'TRY',
                 rateValue: null,
               },
@@ -478,14 +445,14 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
         ],
         detail: {
           images: [
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0001.jpg',
-            'https://www.youtube.com/embed//yN1MO0xn7F0?rel=0',
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0002.jpg',
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0003.jpg',
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0004.jpg',
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0005.jpg',
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0006.jpg',
-            'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0007.jpg',
+            'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0002.jpg',
+            'https://www.youtube.com/embed/Sm7x_IPZess?rel=0',
+            'https://www.youtube.com/embed/8nOSFJrhxTE?rel=0',
+            'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0001.jpg',
+            'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0006.jpg',
+            'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0003.jpg',
+            'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0004.jpg',
+            'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0005.jpg',
           ],
           countryInformation: {
             name: 'Türkiye',
@@ -499,140 +466,135 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             {
               title: '',
               description:
-                '<p style="margin-left:0px !important; margin-right:0px !important"><strong>HAREKET</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,&nbsp;</strong> sizleri 20.00 Yenibosna Airport Avm Otoparkı - 20.30 Şişli Prontotour Merkez Ofis &Ouml;n&uuml; - 21.00 Kadık&ouml;y Tepe Nautilus AVM Yanı (Ayrılık &Ccedil;eşme Metro İstasyonu İspark Otoparkı) - 21.15 Kartal K&ouml;pr&uuml;s&uuml; ( E-5 Ankara Y&ouml;n&uuml;) - 21.45 Gebze Avm Center &Ouml;n&uuml;nden alarak gece yolculuğumuza başlıyoruz.</p>\n',
+                '<p style="margin-left: 0px !important; margin-right: 0px !important"><strong>HAREKET</strong></p>\n\n<p style="text-align: justify"><strong>Turumuz,&nbsp;</strong>Akşam&nbsp;22.00 Yenibosna&nbsp;Airport Avm Otoparkı&nbsp;-&nbsp;22.30 Şişli Pronto Tour Merkez Ofis &Ouml;n&uuml; - 23.30 Kadık&ouml;y Tepe Nautilus AVM Yanı&nbsp;(Ayrılık &Ccedil;eşme Metro İstasyonu İspark Otoparkı)&nbsp;- 23.45 Kartal K&ouml;pr&uuml;s&uuml; ( E-5 Ankara Y&ouml;n&uuml;) - 00.00&nbsp;Gebze Center Avm&nbsp;&Ouml;n&uuml;nden&nbsp;hareket ile gece yolculuğu ile başlıyor.</p>\n',
             },
             {
               title: '',
               description:
-                '<p style="text-align:justify"><strong>SAMSUN &ndash; ATAT&Uuml;RK HEYKELİ &ndash; BANDIRMA VAPURU - &Uuml;NYE - FATSA &ndash; ORDU - GİRESUN &ndash; GİRESUN KALESİ</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz, </strong>22.30 İzmit Halk Evi Durağı (İzmit - Adapazarı Y&ouml;n&uuml;nden) -&nbsp;22.40 İzmit Otogar &Ouml;n&uuml; Otob&uuml;s Durakları (ROMATEM Karşısı) &ndash; 23.10 Adapazarı Otogar &ouml;n&uuml;nden&nbsp;- 01.30 Bolu Otogar &Ouml;n&uuml;nden sizleri otob&uuml;s&uuml;m&uuml;ze alarak Samsun&rsquo;a hareket ediyoruz. İlk olarak Samsun Meydanı&rsquo;nda bulunan ATAT&Uuml;RK Heykelini g&ouml;r&uuml;yoruz. Sonrasında doğu park alanı i&ccedil;inde yer alan ATAMIZI Samsun&rsquo;a ulaştıran&nbsp;Bandırma Vapurunu ( Panaromik) ve Atamızın silah arkadaşları ile T&uuml;t&uuml;n&nbsp;Limanından Samsun&#39;a &ccedil;ıkışlarını anlatan heykelleri&nbsp;g&ouml;rd&uuml;kten sonra Samsun&#39;dan ayrılıyoruz. &Uuml;nye - Fatsa &uuml;zerinden Ordu&rsquo;ya varıyoruz. Ordu&#39;da vereceğimiz serbest zamanda dileyen misafirlerimiz teleferik ile Boztepe&#39;ye &ccedil;ıkabilirler (Ekstra). Serbest zaman sonrasında Ordu&#39;dan ayrılarak&nbsp;Giresun&rsquo;a ulaşıyoruz. Giresun&rsquo;dan ge&ccedil;erken bir yanımızda yakın tarihimizin bir par&ccedil;ası, milli m&uuml;cadelenin &ouml;nemli isimlerinden Topal Osman&rsquo;ın Mezarının da i&ccedil;inde bulunduğu Giresun Kalesi (Panoramik), diğer tarafımızda ise Karadeniz&rsquo;in tek adası olan Giresun Adasını (Panoramik) g&ouml;rerek Giresun&#39;a varıyoruz. Burada fındık alacağımız bir noktada kısa bir mola verdikten sonra otelimize doğru hareket ediyoruz. Akşam yemeği ve konaklama otelimizde.</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı: </strong>Yol &Uuml;st&uuml; Tesislerde Ekstra Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği: </strong>Terme Ulusoy Tesisleri: Terme Pidesi (Extra)</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>Konaklama:</strong> Ma&ccedil;ka<strong>&nbsp;</strong>veya Trabzon<strong>&nbsp;</strong>Otelleri vb.</p>\n\n<p style="text-align:justify"><strong>Rota: </strong>İstanbul &ndash; Samsun (737 km) &nbsp;Samsun - Giresun (195 km) Giresun - Ma&ccedil;ka ( 168)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe: </strong>1100 Km</p>\n\n<p style="text-align:justify"><strong>Otele Giriş Saati: 18.30</strong></p>\n',
+                '<p style="text-align:justify"><strong>G&Ouml;REME A&Ccedil;IK HAVA M&Uuml;ZESİ &ndash; &Uuml;RG&Uuml;P &ndash; ASMALI KONAK - U&Ccedil;HİSAR KALESİ &ndash; MUSTAFAPAŞA &ndash; ONYX TAŞ AT&Ouml;LYESİ</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz, </strong>00.30 İzmit Halk Evi Durağı (İzmit - Adapazarı y&ouml;n&uuml;nden) - 00.40 İzmit Otogar &Ouml;n&uuml; Otob&uuml;s Durakları (ROMATEM Karşısı) &ndash; 01.20 Adapazarı Otoban &Ccedil;ıkışı Total Benzin İstasyonu - 05.30 Ankara S&ouml;ğ&uuml;t&ouml;z&uuml; Ulusoy Terminali &Ouml;n&uuml;nden katılacak misafirlerimizle&nbsp; ile başlıyor. Doğal g&uuml;zelliklerini 3917 m. y&uuml;ksekliğindeki Erciyes Dağı ve 3268 m. y&uuml;ksekliğindeki Hasan Dağı&rsquo;na bor&ccedil;lu olan, Perslerin &ldquo;G&uuml;zel Atlar Diyarı&rdquo; diye adlandırdıkları Kapadokya b&ouml;lgesine doğru yol alıyoruz.&nbsp;Sabah saatlerinde Tuz G&ouml;l&uuml;&#39;n&uuml; panoramik g&ouml;rerek yolda serbest kahvaltı molası veriyoruz. Kahvaltının ardından G&ouml;reme Vadisi i&ccedil;indeki G&ouml;reme A&ccedil;ık Hava M&uuml;zesi&#39;ni ziyaret ediyoruz. Bu muhteşem m&uuml;ze i&ccedil;indeki kaya kiliseleri (Elmalı, Yılanlı, Barbara Kiliseleri), yemekhane, mutfak, kiler ve İncil&#39;in baştan sona resmedildiği Tokalı Kilise gibi &ouml;nemli yerleri g&ouml;rmek i&ccedil;in zaman ayırıyoruz. &Uuml;rg&uuml;p şehir merkezinde panoramik bir tur yaparak şarap mahzenlerini geziyor ve Kapadokya&#39;nın eşsiz şaraplarını tatma fırsatı buluyoruz. Ardından Şapkalı Peribacaları ve Kapadokya&#39;nın sembol&uuml; olan &Uuml;&ccedil; G&uuml;zeller Peribacaları&#39;nı ziyaret ediyoruz. Daha sonra Mustafapaşa&#39;ya giderek bu tarihi b&ouml;lgede dolaşıyoruz ve Rum taş iş&ccedil;iliğinin en g&uuml;zel &ouml;rneklerini g&ouml;r&uuml;yoruz. Mustafapaşa&#39;nın mistik sokaklarında yapacağımız keyifli bir y&uuml;r&uuml;y&uuml;ş&uuml;n ardından b&ouml;lgenin en y&uuml;ksek noktası olan U&ccedil;hisar Kalesi&#39;ni panoramik olarak g&ouml;rme ve fotoğraflama imkanı buluyoruz. G&uuml;vercinlik Vadisini ve U&ccedil;hisar Kalesi&rsquo;nin fotoğrafını &ccedil;ekip&nbsp;b&ouml;lgeye &ouml;zg&uuml; kabak &ccedil;ekirdeği ve diğer y&ouml;resel doğal &uuml;r&uuml;nleri&nbsp;bulabileceğiniz mağazada kısa bir mola veriyoruz. Alışveriş molamızın ardından&nbsp;Onyx Taş At&ouml;lyesinde taşların &ouml;zellikleri ve işlenişi hakkında bilgi alıyoruz. Akşam yemeği ve konaklama i&ccedil;in otelimize hareket ediyoruz.&nbsp;</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı:</strong> Yol &Uuml;st&uuml; Mola Tesislerinde Ekstra Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği: </strong>Restaurantta Ekstra Set Men&uuml; Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>Konaklama: </strong>Se&ccedil;ilen Otelde Konaklama Yapılacaktır.</p>\n\n<p style="text-align:justify"><strong>Rota:</strong> İstanbul &ndash; Aksaray (670 km) Aksaray &ndash; Nevşehir (80 km) B&ouml;lge İ&ccedil;i Gezileri (70 km)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe:</strong> 820 km</p>\n\n<p style="text-align:justify"><strong>Otele Giriş Saati: </strong>18.00</p>\n',
             },
             {
               title: '',
               description:
-                '<p style="text-align:justify"><strong>TRABZON &ndash; AYASOFYA M&Uuml;ZESİ &ndash; S&Uuml;MELA MANASTIRI - &Ccedil;AY FABRİKASI - S&Uuml;RMENE - RİZE BEZİ - BATUM TURU</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,</strong>&nbsp;sabah otelimizde alacağımız kahvaltı sonrasında başlıyor. Trabzon Ma&ccedil;ka&rsquo;da bulunan Altındere Milli Parkına hareket ediyoruz. Yeşilliklerin i&ccedil;inde bulunan Karadağ&rsquo;ın eteklerinde kayaya oyularak inşa edilmiş olan S&uuml;mela Manastırının mimari harikasını g&ouml;rd&uuml;ğ&uuml;n&uuml;zde, şaşkınlığınızı gizleyemeyeceksiniz.&nbsp;Ayazma, Kaya Kiliseleri, Su Kemerleri, Kaya Freskleri&nbsp;g&ouml;rd&uuml;kten sonra&nbsp;Trabzon&rsquo;a varıyoruz. 13.yy da I. Manuel Komnenos zamanında yapılmış, 1572 tarihinde camiye &ccedil;evrilen, ardından 1964 tarihinde m&uuml;zeye &ccedil;evrilmiş olan Kommenos Devletinin &ouml;nemli eserlerinden biri olan Ayasofya M&uuml;zesini geziyoruz. Ardından &ouml;ğle yemeğimizi alıyoruz. Yemek sonrasında Soğuksu Mevkiine doğru yola &ccedil;ıkıyoruz. Burada Trabzon&rsquo;a has olan Telk&acirc;ri Sanatının &ouml;rneklerini g&ouml;rebileceğimiz ve satın alabileceğimiz telk&acirc;ri at&ouml;lyesi ve mağazası gezintinin ardından 20.yy şaheseri olan Atat&uuml;rk K&ouml;şk&uuml;&#39;n&uuml; ziyaret ediyoruz.&nbsp;Ulu &Ouml;nder, bu k&ouml;şk&uuml; 1924 ve 1930 yıllarında ziyaret etmiş ve 1937 yılında bir kez kalmış, vasiyetinin bir kısmını da bu k&ouml;şkte yazmıştır. K&ouml;şk&rsquo;&uuml;n mimarisi ve bah&ccedil;esi sizleri b&uuml;y&uuml;leyecek cinsten. Atat&uuml;rk K&ouml;şk&uuml; gezimizin ardından, S&uuml;rmene&rsquo;de bulunan &ccedil;ay fabrikamıza hareket ediyoruz. &Ccedil;ayın dalından koparılıp bardaklarımıza gelişine dek izlediği s&uuml;reci yerinde &ouml;ğreniyoruz. Alacağımız bilgiler sonrasında dileyenler hediyelik &ccedil;ay alışverişini bu noktadan yapabilirler. &Ccedil;ay fabrikası ziyaretimiz sonrasında ise yine S&uuml;rmene denince ilk akla gelen unsurlardan olan S&uuml;rmene Bı&ccedil;ağı Mağazasına&nbsp;gidiyoruz. S&uuml;rmene Bı&ccedil;ağı hakkında da bilgilendikten ve alışverişimizi yaptıktan sonra, Rize şehrimizi panaromik g&ouml;rerek Rize Bezinin tanıtılacağı ve alışverişinin yapılacağı at&ouml;lyemize varıyoruz. At&ouml;lye gezimizin ardından otelimize ulaşıyoruz. Konaklama Oda kahvaltı olacaktır. Dileyen misafirlerimiz ile Batum&#39;a hareket ediyoruz <strong>(Ekstra) (Katılımcı sayısının minumum 10 kişi olması gerekir).</strong> Sarp Sınır Kapısında giriş işlemlerimizi tamamladıktan sonra G&uuml;rcistan / Acara b&ouml;lgesine ge&ccedil;iyoruz. Hz. İsa&rsquo;nın On İki Havarisinden biri olan St. Mathias`in mezarının da bulunduğu Roma d&ouml;neminden kalan ve en son Osmanlılar d&ouml;neminde kullanılan Gonio (Apsaros Kalesi&#39;ni Panoramik) g&ouml;r&uuml;yoruz. Batum şehir merkezine doğru devam ederken Bayburt&#39;tan doğup Batum sınırlarına kadar kendine keskin &ccedil;izgiler oluşturan &Ccedil;oruh Nehri&#39;ni ve &uuml;zerindeki eski Gonio K&ouml;pr&uuml;s&uuml;&#39;n&uuml; g&ouml;r&uuml;yoruz.&nbsp;Batum kent merkezini gezmeye başlıyoruz. Burada; Orta Cami, Saat Kulesi, Piazza Meydanı, H&uuml;k&uuml;met Binası, Poseidon Heykeli, Tiyatro Binası, Astronomik Saat,&nbsp;Aziz Nikolaos Kilisesi,&nbsp;Medea Heykeli&#39;ni, Batum Limanı&#39;nı, Ali ve Nino&rsquo;nun heykeli ve yeni oluşturulan y&uuml;z&uuml;yle Avrupa Meydanı&rsquo;nı g&ouml;r&uuml;yoruz. Batum Bulvarı&#39;nda gezinti yaptıktan sonra alışveriş i&ccedil;in serbest zaman veriyoruz. T&uuml;rkiye&rsquo;ye girerken DutyFree&rsquo;den alışveriş yapma imk&acirc;nı bulacaksınız. T&uuml;rkiye&rsquo;ye giriş yaptıktan sonra otelimize ge&ccedil;iyoruz.</p>\n\n<p style="text-align:justify"><strong>NOT:</strong> T&uuml;rkiye ile G&uuml;rcistan Devletleri arasında yapılan anlaşma gereği TC vatandaşları Batum&#39;a &uuml;zerinde TC kimlik numarası bulunan n&uuml;fuz c&uuml;zdanı ile ge&ccedil;iş yapabilmektedir. Bunun dışındaki kimlik kartları ile (ehliyet, kurum kimlikleri vs.) ge&ccedil;iş yapılamamaktadır. Ailesi ile birlikte (Anne ve Babanın Aynı Anda) seyahat etmeyecek olan 18 yaş altı misafirlerimizin BATUM&#39;A ge&ccedil;işleri i&ccedil;in NOTER&rsquo;den onaylı MUVAVFAKATNAME almaları gerekmektedir. Bebekler, &Ccedil;ocuklar d&acirc;hil kimliklerde fotoğraf olması zorunludur.&nbsp;</p>\n\n<p style="text-align:justify"><strong>DİKKAT:</strong>&nbsp;TC NOLU N&Uuml;FUS H&Uuml;VİYET C&Uuml;ZDANINIZI SEYAHATE &Ccedil;IKARKEN YANINIZA ALMAYI UNUTMAYINIZ. YURTDIŞI &Ccedil;IKIŞ &Uuml;CRETİ MİSAFİR TARAFINDAN &Ouml;DENİR. RESMİ OLARAK 01.09.2019 TARİHİ İTİBARİ İLE ESKİ&nbsp; N&Uuml;FUS C&Uuml;ZDANLARI İLE&nbsp;G&Uuml;RCİSTAN&#39;A&nbsp;GE&Ccedil;İŞ SAĞLANAMAYACATIR.</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği:</strong> Ak&ccedil;aabat K&ouml;ftesi, Kaygana, Alabalık, Kuymak(Ekstra)</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Hopa veya Batum da Ekstra olarak alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Konaklama:</strong>&nbsp;Hopa Otelleri vb.</p>\n\n<p style="text-align:justify"><strong>Rota:</strong> Ma&ccedil;ka &ndash;&nbsp;S&uuml;mela Manastırı&nbsp;(24 km) S&uuml;mela Manastırı -&nbsp;Trabzon (&nbsp;54 km) Trabzon - Hopa (170 km)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe: </strong>248 Km</p>\n\n<p style="text-align:justify"><strong>Otele Giriş Saati:</strong> 20.00</p>\n\n<p style="text-align:justify">&nbsp;</p>\n',
+                '<p style="text-align:justify"><strong>G&Uuml;VERCİNLİK VADİSİ &ndash; DEVELİ VADİ - &Ccedil;AVUŞİN &ndash; PAŞABAĞ &ndash; AVANOS &ndash; KIZILIRMAK KENARINDA Y&Uuml;R&Uuml;Y&Uuml;Ş - HACI BEKTAŞ &ndash; I VELİ&nbsp;</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,</strong> otelimizde alınan&nbsp;kahvaltı sonrasında başlıyor <strong>(Kahvaltı &ouml;ncesi dileyen misafirlerimiz ekstra BALON TURU, ATV TURU, Balon Kalkış İzleme Turu&nbsp;etkinliklerine katılabilirler)</strong>. İlk durak noktamız Deri At&ouml;lyesi ve mağazası olacak. Burada verdiğimiz serbest zamanın ardından &ccedil;ok başlı Peribacalarının en g&uuml;zel &ouml;rneklerini g&ouml;receğimiz Paşabağ&rsquo;da (Keşişler Vadisi) fotoğraf molası veriyoruz. İlgin&ccedil; Peribacası oluşumlarını i&ccedil;erisinde barındıran, adını da deve şeklindeki peribacasından alan Develi Vadi (Dervent Vadisi) gezisinin ardından &ccedil;anak-&ccedil;&ouml;mleği ile meşhur Avanos&rsquo;a gidiyoruz. Avanos&rsquo;da Kızılırmak&rsquo;ı g&ouml;r&uuml;p, Kızılırmak&rsquo;ın &ccedil;amurundan yapılan &ccedil;anak - &ccedil;&ouml;mleklere dair bilgi alıyoruz. Sonrasında Horasan&rsquo;da d&uuml;nyaya gelen, 13.yy&rsquo;dan bug&uuml;ne evrensel g&ouml;r&uuml;şleriyle her kesimi kucaklayan, Yeni&ccedil;erilerin de Piri, Hacıbektaş-ı Veli&rsquo;nin T&uuml;rbesinin bulunduğu Hacıbektaş il&ccedil;esine gidiyoruz. Hacı Bektaş-ı Veli M&uuml;zesinde; Balım Sultan T&uuml;rbesi, G&uuml;ven&ccedil; Abdal T&uuml;rbesi, Hacı Bektaş-i Veli T&uuml;rbesi, Kırklar Meydanı, Pir Evi, &Uuml;&ccedil;&uuml;nc&uuml; Avlu, Kiler Evi, Meydan Evi, Meydan Evi Cami, Aş Evi, İkinci Avlu (Derg&acirc;h Avlusu), Birinci Avlu&rsquo;yu (Nadar Avlusu) geziyoruz. Hacıbektaş&rsquo;tan otelimize d&ouml;n&uuml;yoruz. Akşam yemeği ve konaklama otelimizde. Akşam yemeği sonrasında dileyen misafirlerimizle Kapadokya turlarının olmazsa olmazlarından y&ouml;reye &ouml;zg&uuml; T&uuml;rk Gecesi&rsquo;ne&nbsp; gidiyoruz. (Ekstra)</p>\n\n<p><strong>Sabah Kahvaltısı:</strong> Otelde&nbsp; Alınacak Olup Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>&Ouml;ğle Yemeği: </strong>Restaurantta Ekstra A&ccedil;ık B&uuml;fe Olarak Alınacaktır.</p>\n\n<p><strong>Akşam Yemeği:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>Konaklama:&nbsp;</strong>Se&ccedil;ilen Otelde Konaklama Yapılacaktır.</p>\n\n<p><strong>Rota: </strong>B&ouml;lge İ&ccedil;i Gezileri (160 km)</p>\n\n<p><strong>Toplam Kat Edilecek Mesafe: </strong>160 Km</p>\n\n<p><strong>Otele Giriş Saati: </strong>18.00</p>\n',
             },
             {
               title: '',
               description:
-                '<p style="text-align:justify"><strong>AYDER YAYLASI &ndash; GELİN D&Uuml;VENİ ŞELALESİ - FIRTINA DERESİ &ndash; ZİLKALE &ndash;&nbsp; RAFTİNG </strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,</strong> sabah otelimizde alacağımız kahvaltı sonrasında başlıyor.&nbsp;Ayder&#39;e doğru yola &ccedil;ıkıyoruz. Karadenizin en g&uuml;zel vadilerinden Fırtına Deresi&rsquo;nin yanında &ouml;ğle yemeği i&ccedil;in mola veriyoruz.&nbsp;Keyifli &ouml;ğle yemeğinin ardından, Fırtına Deresi&rsquo;ni takip ederken kestane, kızılağa&ccedil;, doğu ladini gibi Doğu Karadeniz bitki &ouml;rt&uuml;s&uuml;n&uuml;n en zengin &ouml;rneklerini g&ouml;rerek Hala Deresi&rsquo;nin yanındaki tarihi Osmanlı Taş k&ouml;pr&uuml;lerinden Mikron veya Kale K&ouml;pr&uuml;s&uuml;nde fotoğraf molası veriyoruz. Ka&ccedil;kar Dağları&rsquo;nın en g&uuml;zel noktasından biri olan Ayder Yaylasında keyifli bir y&uuml;r&uuml;y&uuml;ş yapıyoruz. Gelin D&uuml;veni Şelalesi ve diğer şelaleleri g&ouml;r&uuml;yoruz. Galerd&uuml;z&uuml; ve Kalegon gezileri sonrası yaylada serbest zamanda keyifli bir y&uuml;r&uuml;y&uuml;ş yapıp y&ouml;re insanlarıyla keyifli bir sohbet yapabilirsiniz. Ayder Yaylasında kendinizi bambaşka bir d&uuml;nyada hissedeceksiniz.</p>\n\n<p style="text-align:justify">Arzu eden konuklarımız i&ccedil;in farklı tur alternatiflerimizi değerlendiriyoruz.</p>\n\n<p style="text-align:justify"><strong>1.Se&ccedil;enek Zilkale, &Ccedil;at Vadisi ve Palovit Şelalesi Turu: </strong>&Ccedil;amlıhemşin&rsquo;den bineceğimiz minib&uuml;slerle muhteşem bir tura başlıyoruz. Fırtına vadisini oluşturan &ouml;nemli vadilerden olan &Ccedil;at Vadisi&rsquo;ne giriş yapıyoruz. İlk olarak Ortan K&ouml;y&uuml;&rsquo;nden ge&ccedil;erek SEVDALUK dizisi ve diğer bir&ccedil;ok yapımın &ccedil;ekimlerinin de yapıldığı ve eski adı &Ccedil;in&ccedil;iva olan Şenyuva K&ouml;y&uuml;&rsquo;n&uuml; g&ouml;r&uuml;yoruz. Burada vadi i&ccedil;erisinde onlarcası olan Taş K&ouml;pr&uuml;lerden, geniş ve uzun olanlarından birinde fotoğraf molası veriyoruz. Bu b&ouml;lgede bulunan ve &uuml;lkemizin en yaşlı konakları olan Fırtına Konaklarının arasından &Ccedil;at Vadisi&rsquo;nin vahşi doğasında y&uuml;kselen Zilkale&#39;ye doğru yola &ccedil;ıkıyoruz. Zilkale&rsquo;nin Kartal Yuvasını andıran g&ouml;r&uuml;nt&uuml;s&uuml;ne hayran kalacaksınız. Deniz seviyesinden 750 mt, &Ccedil;at Deresi&rsquo;nden ise 100 mt. y&uuml;kseklikte bulunan Zilkale&rsquo;de ge&ccedil;ireceğimiz zamanda, hayatınızın en g&uuml;zel fotoğraf karelerine ulaşabilirsiniz. G&uuml;zel dakikaların ardından daha da yukarı tırmanıp, muhteşem manzarası ve yazı kışa &ccedil;eviren serinliğiyle &uuml;nl&uuml; Palovit Şelalesi&rsquo;ne ulaşıyoruz. Yaşayacağımız hoş dakikaların ardından Şenyuva K&ouml;y&uuml;&rsquo;ne d&ouml;nerek sizlere &ccedil;ay molası veriyoruz. Harika manzaraya karşı &ccedil;aylarınızı yudumladıktan sonra minib&uuml;slerimize binerek &Ccedil;amlıhemşin&rsquo;e geri d&ouml;n&uuml;yoruz&nbsp;<strong>Ekstra.</strong></p>\n\n<p style="text-align:justify"><strong>2.Se&ccedil;enek: </strong>Fırtına Deresinde yaklaşık 1,5 saat s&uuml;ren hafif bir parkurda RAFTİNG<strong> Ekstra.</strong></p>\n\n<p style="text-align:justify">Gezilerimizin ardından otelimize yerleşiyoruz. Akşam yemeği ve konaklama otelimizde.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>&Ouml;ğle Yemeği:</strong>&nbsp; Fırtına Vadisinde Ekstra Olarak Alınacaktır.</p>\n\n<p><strong>Akşam Yemeği:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>Konaklama: </strong>Rize<strong>&nbsp;</strong>Otelleri vb.</p>\n\n<p><strong>Rota:&nbsp;</strong>Hopa -&nbsp;Batum&nbsp;(46 km) Batum - Ayder ( 123 km)</p>\n\n<p><strong>Toplam Kat Edilecek Mesafe:&nbsp;</strong>169<strong> </strong>Km</p>\n\n<p><strong>Otele Giriş Saati: </strong>19.00 - 20.00</p>\n',
-            },
-            {
-              title: '',
-              description:
-                '<p style="text-align:justify"><strong>&Ccedil;E&Ccedil;EVA &Ccedil;AY BAH&Ccedil;ELERİ - OF &ndash; UZUNG&Ouml;L</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz, </strong>sabah otelimizde alacağımız kahvaltı sonrasında başlıyor. Nasıl ki Isparta&rsquo;nın Kuyucak K&ouml;y&uuml; mor lavantalarıyla &uuml;nl&uuml; ise, Rize&rsquo;ye bağlı&nbsp;&Ccedil;e&ccedil;eva K&ouml;y&uuml;&#39;de&nbsp;yemyeşil &ccedil;ay tarlalarıyla &uuml;nl&uuml;. Gelmek isteyen misafirlerimiz ile k&ouml;ye minib&uuml;slerle hareket ediyoruz&nbsp; (Ekstra). &Ccedil;e&ccedil;eva&rsquo;nın doğal fonu olan &ccedil;ay bah&ccedil;eleri; bakımlı &ccedil;ay setleriyle &ouml;r&uuml;l&uuml; ve ilelebet s&uuml;recekmiş gibi uzayıp giden bu tarlalar sadece &Ccedil;e&ccedil;eva K&ouml;y&uuml;&rsquo;nde b&ouml;ylesine d&uuml;zenli. Burada vereceğimiz fotoğraf molamızın ardından Karadeniz&rsquo;in simgesi haline gelen Uzung&ouml;l&rsquo;e hareket ediyoruz. Uzung&ouml;l&rsquo;&uuml; doyasıya yaşamanız&nbsp;i&ccedil;in sizlere yeteri kadar bol serbest vakit veriyoruz. Serbest vakit sonrasında,&nbsp;Uzung&ouml;l&rsquo;den keyifli bir şekilde ayrılıp, İstanbul&rsquo;a olan d&ouml;n&uuml;ş yolculuğumuza başlıyoruz. D&ouml;n&uuml;ş yolunda y&ouml;resel &uuml;r&uuml;nler alabileceğiniz bir noktada mola veriyoruz. Bal, Tereyağ,&nbsp;gibi y&ouml;resel &uuml;r&uuml;nler alabilirsiniz. Ardından&nbsp;Osmancık - Bolu - Adapazarı - İzmit g&uuml;zerg&acirc;hı ile sabah saatlerinde İstanbul&#39;a varıyor ve bir başka Prontotour organizasyonunda buluşmak &uuml;zere siz değerli misafirlerimizi aldığımız noktalara bırakarak vedalaşıyoruz. Hoşcakalın&hellip;</p>\n\n<p><strong>Sabah Kahvaltısı:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>&Ouml;ğle Yemeği:</strong> Uzung&ouml;l&#39;de Serbest Zaman(Ekstra)</p>\n\n<p><strong>Akşam Yemeği:</strong>&nbsp;Yol &Uuml;st&uuml; Mola Tesislerinde Ekstra Olarak Alınacaktır.</p>\n\n<p><strong>Konaklama:&nbsp;Bu Gece Konaklama Yoktur.</strong></p>\n\n<p><strong>Rota:</strong> Ayder - Uzung&ouml;l (145 km) Uzung&ouml;l - İstanbul (1145 km)</p>\n\n<p><strong>Toplam Kat Edilecek Mesafe:</strong> 1290 Km</p>\n\n<p><strong>Varış Saati: </strong>06.00 - 07.00&nbsp;&nbsp;(Varış saatleri, normal hava ve yol şartlarına g&ouml;re yaklaşık olarak verilmiştir)</p>\n\n<p><strong>Toplam Kilometre: </strong>2807 km</p>\n\n<p style="text-align:justify">Amasya Lalehan Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 13663</p>\n\n<p style="text-align:justify">G&uuml;muşhane Zigana G&uuml;m&uuml;şkayak Tesisleri: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 13663</p>\n\n<p style="text-align:justify">G&uuml;m&uuml;şhane Ramada Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 14864</p>\n\n<p style="text-align:justify">Ordu Anemon Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 12871</p>\n\n<p style="text-align:justify">Giresun H&uuml;seyin Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 18329</p>\n\n<p style="text-align:justify">Trabzon B&uuml;y&uuml;k S&uuml;mela Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 7149</p>\n\n<p style="text-align:justify">Trabzon Bayrak Grand Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 19695</p>\n\n<p style="text-align:justify">Rize Newarise Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 20896</p>\n\n<p style="text-align:justify">Rize Green Suada Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 13418</p>\n\n<p style="text-align:justify">Hopa Terzioğlu Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 14013</p>\n\n<p style="text-align:justify">Hopa Heyamo Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 2022-8-0063</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>*** Yukarıda b&ouml;lgelere g&ouml;re anlaşmalı otellerimizin listesi belirtilmiştir. Yoğun d&ouml;nemlerde liste dışındaki otellerde de konaklama yapılabilmektedir.</strong></p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>İPTAL VE İADE G&Uuml;VENCE PAKETİ: </strong></p>\n\n<p style="text-align:justify">Tura &Ccedil;ıkış &nbsp;G&uuml;n&uuml;nden; 72 Saat (3 G&uuml;n) &Ouml;ncesine Kadar Rezervasyon İptal Talebinde Bulunulması veya Değişiklik Halinde Koşulsuz Y&uuml;zde 100 Kesintisiz İade Garantisi Sunuluyor. 1, 2 veya 3 Gece Konaklamalı Turlarda Paket Bedeli Kişi Başı 3000&nbsp;TL&rsquo;dir. 4 Gece ve &Uuml;zeri Konaklamalı Turlarda Paket Bedeli Kişi Başı 5000 TL&rsquo;dir. U&ccedil;aklı Turlarda İptal İade G&uuml;vence Paketi Eklenememektedir.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>1618 NOLU ZORUNLU SEYAHAT SIGORTASI KAPSAMI</strong></p>\n\n<p style="text-align:justify">Sağlık sigortası değildir, tedavi masraflarını karşılamaz. (&Ouml;zel sağlık sigortası misafire ait &ouml;zel harcamadır)</p>\n\n<p style="text-align:justify"><strong>BİLGİLENDİRME</strong><br />\n<strong>* </strong>Kalınacak yayla otelleri Bungalov ve standart yayla oteli yapısına sahip olup, konaklamaların t&uuml;m&uuml; otel tarafından belirlenir. Otellerde y&ouml;resel yemek olma zorunluluğu yoktur.&nbsp;<br />\n* Tur esnasında program yoğunluğundan dolayı bankamatik, d&ouml;viz b&uuml;rosu vs. bulmak her zaman m&uuml;mk&uuml;n olmadığından, misafirlerimizin bu duruma karşı hazırlıklı olmasında fayda vardır.<br />\n* Ger&ccedil;ekleştirilecek programlar i&ccedil;erisinde g&uuml;n i&ccedil;inde uzun yollar kat edilebilir. Konuyla ilgili bilgilendirme rehberiniz tarafından sizlere yapılacaktır.<br />\n* &Ouml;ğle yemeklerinde y&ouml;reye &ouml;zg&uuml; ekonomik men&uuml;ler oluşturulmuştur.<br />\n* &Ouml;ğle ve akşam yemeklerinde b&ouml;lge yoğunluğuna bağlı olarak gruplara ayrılan masalar kullanılır.</p>\n\n<p style="text-align:justify"><strong>İKLİM</strong></p>\n\n<p style="text-align:justify">Her mevsimi yağışlı olan genelde ılıman bir iklim tipidir. Cephe ve orograf&icirc;k yağışlar h&acirc;kimdir. B&ouml;lgede kıyıya paralel y&uuml;ksek dağların bulunması yağışların fazlalaşmasına ortam hazırlamıştır. B&ouml;lgede yağış miktarları arasında olmasa da en fazla yağış sonbaharda en az yağış ise ilkbaharda g&ouml;r&uuml;l&uuml;r. B&ouml;lge nemlilik a&ccedil;ısından da &uuml;lkemizin en nemli b&ouml;lgesidir. Bu nedenle b&ouml;lgede yıllık ve g&uuml;nl&uuml;k sıcaklık farkı fazla değildir. Aynı zamanda b&ouml;lgede kış &ccedil;ok soğuk olmaz, ancak yağışlı ge&ccedil;er. Yağışlar daha &ccedil;ok yağmur şeklinde olup kar yağışı, don olayları g&ouml;r&uuml;lebildiği gibi sık sık sis de g&ouml;r&uuml;l&uuml;r. B&ouml;lgede yaz ayları da ılıman ge&ccedil;er. En sıcak ayın ortalaması 22&deg;C-24&deg;C&#39;ı ge&ccedil;mez. En soğuk ayın ortalama sıcaklığı ise her zaman 0&deg;C&#39;ın &uuml;zerindedir. Zaman zaman kuzeybatıdan gelen soğuk hava k&uuml;tleleri b&ouml;lgeyi etkilese de, bu etki b&ouml;lgenin doğusuna gidildik&ccedil;e kaybolur. B&ouml;lge coğraf&icirc; &ouml;zelliklerine g&ouml;re, sıcaklık ve yağış bakımından değişiklikler g&ouml;stermektedir. Karadeniz &uuml;zerinden gelen serin ve nemli havanın Kuzey Anadolu Dağları boyunca y&uuml;kselmesi ile yağışlar meydana gelir. Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde y&uuml;ksekliğin fazla olması nedeniyle en fazla yağış bu b&ouml;l&uuml;mde g&ouml;r&uuml;l&uuml;r. Yıllık yağış miktarı ortalama 2000 mm&#39;dir (Rize 2300 mm). Kuzey Anadolu Dağlarının g&uuml;ney kesiminde ise bu değer, 300 mm&#39;ye kadar d&uuml;şer. Orta Karadeniz B&ouml;l&uuml;m&uuml; ise, y&uuml;ksekliğin azalması nedeniyle b&ouml;lgenin en az yağış alan b&ouml;l&uuml;m&uuml;d&uuml;r. Burada yıllık yağış miktarı ortalama 700 mm kadardır. Batı Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde ise y&uuml;kseltinin Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;ne g&ouml;re daha az olmasına paralel olarak bu b&ouml;l&uuml;mde yağışlar Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;ne g&ouml;re daha azdır. Yıllık yağış miktarı ortalama 1200 mm civarındadır. B&ouml;lge genelinde yıllık yağış miktarı &ouml;zellikle Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde 2000 mm&#39;nin &uuml;zerine &ccedil;ıkabildiği gibi Orta Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde 600 mm&#39;ye kadar d&uuml;şebilmektedir.</p>\n\n<p style="text-align:justify"><strong>OTOB&Uuml;SLER</strong></p>\n\n<p style="text-align:justify">MERCEDES TRAVEGO &amp; TOURISMO: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">MAN FORTUNA: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.<br />\n&nbsp;</p>\n\n<p style="text-align:justify">NEOPLAN CITYLINER / TOURLINER: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">TEMSA SAFIR / MARATON: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">MIDIBUSLER</p>\n\n<p style="text-align:justify">ISUZU TURKUAZ: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">NOVO LUX: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">SULTAN OTOGAR: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">NOT: Turlarımızda kişi sayısına g&ouml;re, yukarıda belirtilen ara&ccedil; tiplerinden herhangi birisi kullanılır.</p>\n\n<p style="text-align:justify">TUR PROGRAMLARIMIZ 6502 NOLU T&Uuml;KETİCİ KANUNUNA UYGUN OLARAK HAZIRLANMIŞTIR.</p>\n',
+                '<p style="text-align:justify"><strong>YERALTI ŞEHRİ -&nbsp;&nbsp;NARLIG&Ouml;L &ndash; IHLARA VADİSİ&nbsp;</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,&nbsp;</strong>otelimizde alınan&nbsp;kahvaltı sonrasında başlıyor. İlk durağımız, d&uuml;şman baskınlarından ka&ccedil;an binlerce kişinin, aylarca yaşayabileceği m&uuml;hendislik harikası olan Derinkuyu Yeraltı Şehri (Kaymaklı Yeraltı Şehri veya &Ouml;zkonak Yeraltı Şehri) olacak. Sonrasında Narlıg&ouml;l Krater G&ouml;l&uuml;&rsquo;nde vereceğimiz serbest zaman sonrasında Melendiz &Ccedil;ayı&rsquo;nın oluşturduğu doğa harikası bir kanyon-vadi olan Ihlara Vadisi&rsquo;ne gidiyoruz. Burada Ağa&ccedil;altı ve Yılanlı Kiliselerini geziyoruz (Yol &ccedil;alışması olduğunda Belisırma K&ouml;y&uuml; veya Selimiye tarafından&nbsp;Ihlara Vadisi turu yapılacaktır). G&uuml;zel bir y&uuml;r&uuml;y&uuml;ş&uuml;n ardından İstanbul&rsquo;a doğru yola &ccedil;ıkıyoruz. Ankara - Bolu g&uuml;zerg&acirc;hında yol alarak akşam saatlerinde siz sayın misafirlerimizi Prontotour&#39;un diğer seyahatlerinde tekrar g&ouml;r&uuml;şmek &uuml;zere, aldığımız noktalara bırakıyoruz. Hoş&ccedil;akalın.</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı: </strong>Otelde&nbsp; Alınacaktır. Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği:</strong> Restaurantta Ekstra A&ccedil;ık B&uuml;fe Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Yoldaki Dinlenme Tesislerinde Ekstra Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Konaklama: </strong>DİKKAT BU GECE OTEL KONAKLAMASI YOKTUR.</p>\n\n<p style="text-align:justify"><strong>Rota: </strong>Nevşehir &ndash; Derinkuyu&nbsp; (30 km) Derinkuyu &ndash; Aksaray (70 km) Aksaray &ndash; İstanbul (670 km)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe: </strong>770 Km</p>\n\n<p style="text-align:justify"><strong>Toplam Tur Mesafesi:</strong> 1750 Km</p>\n\n<p style="text-align:justify"><strong>Varış Saati: </strong>23.00 (Varış saatleri, normal hava ve yol şartlarına g&ouml;re yaklaşık olarak verilmiştir)</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p>Dilekkaya Otel&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 12331</p>\n\n<p>Perisia&nbsp;Otel&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 2375</p>\n\n<p>Kral Otel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 7883</p>\n\n<p>Grand &Ouml;zt&uuml;rk Otel&nbsp; &nbsp; &nbsp; : K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 12282</p>\n\n<p>&nbsp;</p>\n\n<p style="text-align:justify"><strong>İPTAL VE İADE G&Uuml;VENCE PAKETİ:</strong> Tura &Ccedil;ıkış &nbsp;G&uuml;n&uuml;nden; 72 Saat (3 G&uuml;n) &Ouml;ncesine Kadar Rezervasyon İptal Talebinde Bulunulması veya Değişiklik Halinde Koşulsuz Y&uuml;zde 100 Kesintisiz İade Garantisi Sunuluyor. 1, 2 veya 3 Gece Konaklamalı Turlarda Paket Bedeli Kişi Başı 3000&nbsp;TL&rsquo;dir. 4 Gece ve &Uuml;zeri Konaklamalı Turlarda Paket Bedeli Kişi Başı 5000 TL&rsquo;dir. U&ccedil;aklı Turlarda İptal İade G&uuml;vence Paketi Eklenememektedir.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>1618 NOLU ZORUNLU SEYAHAT SIGORTASI KAPSAMI</strong></p>\n\n<p style="text-align:justify">Sağlık sigortası değildir, tedavi masraflarını karşılamaz. (&Ouml;zel sağlık sigortası misafire ait &ouml;zel harcamadır)</p>\n\n<p style="text-align:justify"><strong>T&Uuml;RK GECESİ</strong></p>\n\n<p style="text-align:justify">Kapadokya b&ouml;lgesine has olan, kayanın i&ccedil;ine oyma olarak yapılmış otantik mek&acirc;nlarda ger&ccedil;ekleştirilen eğlencede, &uuml;lkemizin her y&ouml;resine ait halk dansları sergilenmekte ve oryantal sahne almaktadır. &Ccedil;eşitli m&uuml;zik g&ouml;sterilerine, animasyonlara ve eğlencelere de yer verilen gecede sınırsız yerli alkoll&uuml; ve alkols&uuml;z i&ccedil;ecek ve onlara uygun mezeler ikram edilmektedir.</p>\n\n<p style="text-align:justify"><strong>BALON TURU</strong></p>\n\n<p style="text-align:justify">Hava ve mevsim şartlarına g&ouml;re değişen 60 &ndash; 75 dk arası s&uuml;recek turumuz otelinize transferimizle son buluyor. Sabah saat 5 civarı, ara&ccedil;larımız, siz saygıdeğer konuklarımızı otelinizden alarak kalkış alanına getirir. Balonlar yerde u&ccedil;uşa hazırlanırken, konuklarımız a&ccedil;ık b&uuml;fe hafif bir kahvaltı yaparlar. Kısa s&uuml;ren bir hazırlıktan sonra balonlar g&uuml;ndoğumuna yakın u&ccedil;uşa başlarlar. U&ccedil;uş yaklaşık 1 saat s&uuml;rer. U&ccedil;uş s&uuml;resince balonumuz ile yaklaşık 1000 feetlik y&uuml;ksekliğe &ccedil;ıkarak konuklarımıza g&uuml;neş doğumunu izleme fırsatı verir. Ayrıca vadi i&ccedil;lerine girerek peribacalarını ve vadi manzaralarını seyretme, fotoğraf &ccedil;ekme ve video kaydı imk&acirc;nı sunar. U&ccedil;uş sonunda konuklarımız i&ccedil;in şampanyalı bir kutlama yapılır. Ayrıca u&ccedil;uş hatırası olarak u&ccedil;uş sertifikası verilecektir. T&uuml;m balon u&ccedil;uş macerası yaklaşık 3 saat s&uuml;rmekte olup, sabah 8 civarında konuklarımız tekrar konakladıkları otellerine veya gezi noktasına bırakılacaktır.</p>\n\n<p style="text-align:justify"><strong>ATV TURU</strong></p>\n\n<p style="text-align:justify">Hava ve mevsim şartlarına g&ouml;re değişen 45 - 60 dk arası s&uuml;recek turumuz otelimize transferimizle son buluyor. Sabah saat 5 civarı, ara&ccedil;larımız, siz saygıdeğer konuklarımızı otelinizden alarak kalkış alanına getirir. Burada alacağımız hafif bir kahvaltının ardından ATV ara&ccedil;larımıza binerek otob&uuml;slerle ulaşılamayan vadi i&ccedil;lerine giriş sağlanır ve enfes manzaraların fotoğraflanması sağlanır. ATV turumuzda yoğun olarak girilen vadiler; Aşk Vadisi, Keşişler Vadisi gibi etkileyici vadiler olacaktır.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>B&Ouml;LGEDEKİ ALIŞVERİŞ YERLERİMİZ</strong></p>\n\n<p style="text-align:justify">Onyx Taşı İ&ccedil;in Sayan Onyx Taş At&ouml;lyesi, &Ccedil;anak &Ccedil;&ouml;mlek İ&ccedil;in Konak &Ccedil;&ouml;mlek&ccedil;ilik veya Hisar, Şarap İ&ccedil;in Turasan Şarapları</p>\n\n<p style="text-align:justify"><strong>GECE TURLARI</strong></p>\n\n<p style="text-align:justify">Gece Turları ve Diğer Ekstra Turlar; T&uuml;m Gece Turları Ekstra Olup Katılıma ve Kişi Sayısına Bağlı Olarak Ger&ccedil;ekleştirilir.</p>\n\n<p style="text-align:justify"><strong>İKLİM</strong></p>\n\n<p style="text-align:justify">B&ouml;lgenin &ccedil;evresi y&uuml;ksek dağlarla &ccedil;evrili olduğundan, denizlerin nemli ılıman havası b&ouml;lgeye sokulamaz.&nbsp;Bu nedenle b&ouml;lgede, yazları sıcak ve kurak, kışları soğuk ve kar yağışlı karasal iklim h&acirc;kimdir. B&ouml;lgede, doğuya doğru gidildik&ccedil;e y&uuml;ksekliğin artmasına bağlı olarak karasallık derecesi artar ve kış sıcaklıkları &ccedil;ok d&uuml;ş&uuml;k değerlere ulaşır.&nbsp;İ&ccedil; Anadolu, &uuml;lkemizin en az yağış alan b&ouml;lgesidir. Ortalama yağış 400 mm civarındadır. B&ouml;lge, en fazla yağısı ilkbahar aylarında sağanak halinde alır. En kurak mevsim yazdır. Yazların kurak olması ve yaz kuraklığının erken başlaması sebze t&uuml;r&uuml; bitkiler &uuml;zerinde olumsuz etki yapar. B&ouml;lgenin ve &uuml;lkemizin en az yağışlı yeri Tuz G&ouml;l&uuml; &ccedil;evresidir(320 mm) .Yağışların azlığı b&ouml;lgenin deniz etkisine kapalı olmasından kaynaklanmaktadır. Denizden gelen nemli hava k&uuml;tlesi, nemini, dağların denize bakan yama&ccedil;larında yağış halinde bırakır. İ&ccedil; Anadolu B&ouml;lgesi&#39;ne doğru eserken artık kurudur.</p>\n\n<p style="text-align:justify"><strong>OTOB&Uuml;SLER</strong></p>\n\n<p style="text-align:justify">MERCEDES TRAVEGO &amp; TOURISMO: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">MAN FORTUNA: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.<br />\n<br />\nNEOPLAN CITYLINER / TOURLINER: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">TEMSA SAFIR / MARATON: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify"><strong>MIDIBUSLER</strong></p>\n\n<p style="text-align:justify">ISUZU TURKUAZ: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">NOVO LUX: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">TEMSA PRESTIGE: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify"><strong>MINIBUSLER</strong></p>\n\n<p style="text-align:justify">MERCEDES SPRİNTER: 12+1 veya 16 + 1 Koltuklandırma, &Ouml;zel Tasarlanmış Yatar Otob&uuml;s&nbsp; Koltuklu, Abs, Asr, Klima, 1 Adet Buzdolabı, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">WOLKSWAGEN CRAFTER: 12+1 veya 16 + 1 Koltuklandırma, &Ouml;zel Tasarlanmış Yatar Otob&uuml;s&nbsp; Koltuklu, Abs, Asr, Klima, 1 Adet Buzdolabı, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify"><strong>NOT: Turlarımızda kişi sayısına g&ouml;re, yukarıda belirtilen ara&ccedil; tiplerinden herhangi birisi kullanılır.</strong></p>\n\n<p style="text-align:justify"><strong>TUR PROGRAMLARIMIZ 6502 NOLU T&Uuml;KETİCİ KANUNUNA UYGUN OLARAK HAZIRLANMIŞTIR.</strong></p>\n',
             },
           ],
           departureInformation: '',
           includedInformation:
-            '<p><br/>&nbsp; Otellerde 2&nbsp;Gece Yarım Pansiyon Konaklama</p>\n\n<p><br/>&nbsp; &nbsp;Hopa Konaklama&nbsp;Oda Kahvaltı</p>\n\n<p><br/>&nbsp; Turizm Belgeli&nbsp;Otob&uuml;sler İle Ulaşım</p>\n\n<p><br/>&nbsp;&nbsp;Prontotour G&uuml;vencesi</p>\n\n<p><br/>&nbsp; Profesyonel T&uuml;rk&ccedil;e Rehberlik Hizmeti</p>\n\n<p><br/>&nbsp; 3&nbsp;Sabah Kahvaltısı</p>\n\n<p><br/>&nbsp; A&ccedil;ık B&uuml;fe veya Set Men&uuml; 2&nbsp;Akşam Yemeği</p>\n',
+            '<p><br/>&nbsp; Otellerde&nbsp;2 Gece Yarım Pansiyon Konaklama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; Turizm Belgeli Otob&uuml;sler İle Ulaşım&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp;&nbsp;Prontotour G&uuml;vencesi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; Profesyonel T&uuml;rk&ccedil;e Rehberlik Hizmeti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; 2 Sabah Kahvaltısı&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; A&ccedil;ık B&uuml;fe veya Set Men&uuml;&nbsp;2 Akşam Yemeği</p>\n\n<p><br/>&nbsp; 1618 Nolu Turizm Kanununa G&ouml;re Zorunlu Seyahat Sigortası</p>\n',
           notIncludedInformation:
-            '<p><br/> &nbsp;T&uuml;m &Ouml;ğlen Yemekleri</p>\n\n<p><br/>&nbsp; T&uuml;m Yemeklerde Alınan İ&ccedil;ecekler</p>\n\n<p><br/>&nbsp; Batum daki veya Hopa daki Akşam Yemeği</p>\n\n<p><br/>&nbsp; T&uuml;m &Ouml;zel Harcamalar</p>\n\n<p><br/>&nbsp; Ekstra Belirtilen T&uuml;m Organizasyonlar</p>\n\n<p><br/>&nbsp; M&uuml;ze Giriş &Uuml;cretleri ve S&uuml;mela Manastırı Minib&uuml;s &Uuml;creti</p>\n\n<p><br/> Yayla Minib&uuml;s &Uuml;cretleri</p>\n\n<p><br/>&nbsp; Yurt Dışı &Ccedil;ıkış Har&ccedil; Pulu</p>\n\n<p><br/> Batum Turu</p>\n',
+            '<p><br/>&nbsp; T&uuml;m &Ouml;ğlen Yemekleri&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; T&uuml;m Yemeklerde Alınan İ&ccedil;ecekler</p>\n\n<p>&nbsp;<br/>&nbsp; T&uuml;m &Ouml;zel Harcamalar&nbsp; &nbsp;</p>\n\n<p>&nbsp;<br/>&nbsp; Ekstra Belirtilen T&uuml;m Organizasyonlar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p>&nbsp;&nbsp;<br/>&nbsp; M&uuml;ze Giriş &Uuml;cretleri</p>\n',
           flightInformation: [],
           hotelRooms: [
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK/foVZbyGg53ZNy39OmV/aA=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTBNz2PACRxtA88jBmnzyiI=',
               adultCount: 1,
               childCount: 0,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKyEmQnUe3CsZj4qx4aAuJMk=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMQkhnCLYJm2RT+Sgc4C9yTc=',
               adultCount: 1,
               childCount: 1,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK1eIiuUENcr1zmw2d5b+kXA=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMZvf/lGeahNYIIJ9cgTMjqg=',
               adultCount: 1,
               childCount: 2,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKx/8XpBHtvkLM9k7KvrHgGQ=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeTW+wYSCnIYbpWFzgXYsbw=',
               adultCount: 2,
               childCount: 0,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK0mJqyr3pWi+lOEhVme1MyE=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMejmNuFXCSEkQG17jLdjUd0=',
               adultCount: 2,
               childCount: 1,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKwiPd0eCZW3N6gUnr3WQ3fM=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMRhc+/vZwsutNXcqz+oi1/Y=',
               adultCount: 2,
               childCount: 2,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK/XyY8o5oJVqxgF9pqbqZ9Q=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMedWnobGOugEgZ6rk7PfVys=',
               adultCount: 3,
               childCount: 0,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKzRW8wv3zmYfrdLEW8Ire5M=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMRo+FBR/9VLMnvWvclw44a0=',
               adultCount: 3,
               childCount: 1,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK3LsVAautng+KGG+9jjHtjY=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMXpo9ggqTnQ6A7o8rr2+sRY=',
               adultCount: 3,
               childCount: 2,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK68bJ70vfmZzzlfwk6lIbY8=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMffQcW1iMJ5aox6nyirQCEc=',
               adultCount: 4,
               childCount: 0,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK6kMrCp+srAX8f+QTK5RYus=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMb94eYKX25eow9dnURoaMOs=',
               adultCount: 4,
               childCount: 1,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKxkxJx355PvL95BeU06KWMc=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMWCgBP9CUxFYNpWSFu5HYtU=',
               adultCount: 4,
               childCount: 2,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK4iimsDUqhzwvP7pyss76/8=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMex6mbKFFBrcjIlWDEjWmrw=',
               adultCount: 5,
               childCount: 0,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK6YWThqLQ3kKsTrv2axa9OE=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTBKlYTTGSQEzA1GvLrtTSo=',
               adultCount: 5,
               childCount: 1,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKwH/ZOYM++BALklywbkzSTE=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMYHNdXf8RMK5QXeKPYkXEXc=',
               adultCount: 5,
               childCount: 2,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK5utV4SoHn2WQLvIYM6hfJU=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMdXbw6G97V11ohZZyw3HKZs=',
               adultCount: 6,
               childCount: 0,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK+ApZhjID5fpZAmBn9rDKLc=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeX2VsKhLy043x+EMSJiSE8=',
               adultCount: 6,
               childCount: 1,
               additionalBedCount: 0,
             },
             {
-              key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK2FaYX9wQJWa9ZwM3pD9Vis=',
+              key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTW9bpsE5fAkDCp9y8OQjbg=',
               adultCount: 6,
               childCount: 2,
               additionalBedCount: 0,
@@ -641,7 +603,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
           additionalSSRData: {
             items: [
               {
-                uniqueIdentifier: 'f745e9c0-b040-411b-886e-243d29a8cd2a',
+                uniqueIdentifier: '7c6507b3-f1d8-4a8c-91e8-9f873f08eef5',
                 code: 'BedType',
                 included: true,
                 description: 'Bed Type  (T)win Bed (F)rench Bed',
@@ -663,7 +625,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
                 ],
               },
               {
-                uniqueIdentifier: '4e571a5e-f999-4bce-9c10-e8334618967a',
+                uniqueIdentifier: 'ef7c279f-f702-4e80-80a2-2c3a47ab9d74',
                 code: 'PickUpPoint',
                 included: true,
                 description: 'Bus Pick Up Point',
@@ -675,13 +637,13 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
                   {
                     key: 'PickUpPointCode',
                     value:
-                      '194939@194938@194941@194944@194936@194937@194945@194940@194943@194942',
+                      '180294@180288@180289@180298@180291@180295@180296@180297@180290@180293@180292',
                     indexNo: 0,
                   },
                   {
                     key: 'PickUpPointExplain',
                     value:
-                      'ADAPAZARI OTOGAR ÖNÜ@BOLU OTOGAR ÖNÜ@Düzce Türsan Tesisleri@GEBZE CENTER AVM ÖNÜ@İZMİT HALKEVİ DURAĞI@İZMİT OTOGAR ÖNÜ OTOBÜS DURAKLARI@KADIKÖY TEPE NAUTİLUS AVM YANI@KARTAL KÖPRÜSÜ ( E - 5 ANKARA YÖNÜ )@-ŞİŞLİ PRONTO TUR MERKEZ OFİS ÖNÜ@-YENİBOSNA AİRPORT AVM OTOPARKI',
+                      '23.30 KADIKÖY TEPE NAUTİLUS AVM YANI@ADAPAZARI OTOGAR ÖNÜ@ANKARA SÖĞÜTÖZÜ@BOLU OTOGAR ÖNÜ@Düzce Türsan Tesisleri@GEBZE CENTER AVM ÖNÜ@İZMİT HALKEVİ DURAĞI@İZMİT OTOGAR ÖNÜ OTOBÜS DURAKLARI@KARTAL KÖPRÜSÜ ( E - 5 ANKARA YÖNÜ )@-ŞİŞLİ PRONTO TUR MERKEZ OFİS ÖNÜ@-YENİBOSNA AİRPORT AVM OTOPARKI',
                     indexNo: 0,
                   },
                 ],
@@ -691,29 +653,29 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
               type: 2,
               ownerKey: 'ProntoTour',
               identifier:
-                'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK8eq9Z53HuxxKnvW1t1oakE2wxAgCWQ5YhD7dAicYpEv',
+                'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMXRCHfz1sWMt9BRo+bwNbVR8RMoch08Nl4fdOw0AHZSV',
             },
             subGroups: [],
           },
         },
         tlPrice: {
-          value: 13440,
+          value: 8145.46,
           currency: 'TRY',
           rateValue: null,
         },
         calculatedId: null,
-        slug: 'karadeniz-yaylalar-ve-batum-turu-3-gece-11258343',
-        slugId: '11258343',
+        slug: 'kapadokya-turu-2-gece-11248314',
+        slugId: '11248314',
         isDomestic: true,
         commission: 80,
-        key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK8eq9Z53HuxxKnvW1t1oakE2wxAgCWQ5YhD7dAicYpEv',
+        key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMXRCHfz1sWMt9BRo+bwNbVR8RMoch08Nl4fdOw0AHZSV',
         totalPrice: {
-          value: 13440,
+          value: 8145.46,
           currency: 'TRY',
           rateValue: null,
         },
         basePrice: {
-          value: 13440,
+          value: 8145.46,
           currency: 'TRY',
           rateValue: null,
         },
@@ -723,14 +685,14 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
           rateValue: null,
         },
         discount: {
-          value: 6400,
-          currency: 'TRY',
+          value: 0,
+          currency: null,
           rateValue: null,
         },
         buyFee: {
           code: '%10.0',
           price: {
-            value: 1200,
+            value: 727.27,
             currency: 'TRY',
             rateValue: null,
           },
@@ -738,7 +700,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
         fee: {
           code: '%12.0',
           price: {
-            value: 1440,
+            value: 872.73,
             currency: 'TRY',
             rateValue: null,
           },
@@ -789,14 +751,14 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
       },
       detail: {
         images: [
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0001.jpg',
-          'https://www.youtube.com/embed//yN1MO0xn7F0?rel=0',
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0002.jpg',
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0003.jpg',
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0004.jpg',
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0005.jpg',
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0006.jpg',
-          'https://www.prontotour.com/images/Tour/Orj/karadeniz_turlari_karadeniz__98_3958_0007.jpg',
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0002.jpg',
+          'https://www.youtube.com/embed/Sm7x_IPZess?rel=0',
+          'https://www.youtube.com/embed/8nOSFJrhxTE?rel=0',
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0001.jpg',
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0006.jpg',
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0003.jpg',
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0004.jpg',
+          'https://www.prontotour.com/images/Tour/Orj/kapadokya_turlari_kapadokya__83_2945_0005.jpg',
         ],
         countryInformation: {
           name: 'Türkiye',
@@ -810,140 +772,135 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
           {
             title: '',
             description:
-              '<p style="margin-left:0px !important; margin-right:0px !important"><strong>HAREKET</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,&nbsp;</strong> sizleri 20.00 Yenibosna Airport Avm Otoparkı - 20.30 Şişli Prontotour Merkez Ofis &Ouml;n&uuml; - 21.00 Kadık&ouml;y Tepe Nautilus AVM Yanı (Ayrılık &Ccedil;eşme Metro İstasyonu İspark Otoparkı) - 21.15 Kartal K&ouml;pr&uuml;s&uuml; ( E-5 Ankara Y&ouml;n&uuml;) - 21.45 Gebze Avm Center &Ouml;n&uuml;nden alarak gece yolculuğumuza başlıyoruz.</p>\n',
+              '<p style="margin-left: 0px !important; margin-right: 0px !important"><strong>HAREKET</strong></p>\n\n<p style="text-align: justify"><strong>Turumuz,&nbsp;</strong>Akşam&nbsp;22.00 Yenibosna&nbsp;Airport Avm Otoparkı&nbsp;-&nbsp;22.30 Şişli Pronto Tour Merkez Ofis &Ouml;n&uuml; - 23.30 Kadık&ouml;y Tepe Nautilus AVM Yanı&nbsp;(Ayrılık &Ccedil;eşme Metro İstasyonu İspark Otoparkı)&nbsp;- 23.45 Kartal K&ouml;pr&uuml;s&uuml; ( E-5 Ankara Y&ouml;n&uuml;) - 00.00&nbsp;Gebze Center Avm&nbsp;&Ouml;n&uuml;nden&nbsp;hareket ile gece yolculuğu ile başlıyor.</p>\n',
           },
           {
             title: '',
             description:
-              '<p style="text-align:justify"><strong>SAMSUN &ndash; ATAT&Uuml;RK HEYKELİ &ndash; BANDIRMA VAPURU - &Uuml;NYE - FATSA &ndash; ORDU - GİRESUN &ndash; GİRESUN KALESİ</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz, </strong>22.30 İzmit Halk Evi Durağı (İzmit - Adapazarı Y&ouml;n&uuml;nden) -&nbsp;22.40 İzmit Otogar &Ouml;n&uuml; Otob&uuml;s Durakları (ROMATEM Karşısı) &ndash; 23.10 Adapazarı Otogar &ouml;n&uuml;nden&nbsp;- 01.30 Bolu Otogar &Ouml;n&uuml;nden sizleri otob&uuml;s&uuml;m&uuml;ze alarak Samsun&rsquo;a hareket ediyoruz. İlk olarak Samsun Meydanı&rsquo;nda bulunan ATAT&Uuml;RK Heykelini g&ouml;r&uuml;yoruz. Sonrasında doğu park alanı i&ccedil;inde yer alan ATAMIZI Samsun&rsquo;a ulaştıran&nbsp;Bandırma Vapurunu ( Panaromik) ve Atamızın silah arkadaşları ile T&uuml;t&uuml;n&nbsp;Limanından Samsun&#39;a &ccedil;ıkışlarını anlatan heykelleri&nbsp;g&ouml;rd&uuml;kten sonra Samsun&#39;dan ayrılıyoruz. &Uuml;nye - Fatsa &uuml;zerinden Ordu&rsquo;ya varıyoruz. Ordu&#39;da vereceğimiz serbest zamanda dileyen misafirlerimiz teleferik ile Boztepe&#39;ye &ccedil;ıkabilirler (Ekstra). Serbest zaman sonrasında Ordu&#39;dan ayrılarak&nbsp;Giresun&rsquo;a ulaşıyoruz. Giresun&rsquo;dan ge&ccedil;erken bir yanımızda yakın tarihimizin bir par&ccedil;ası, milli m&uuml;cadelenin &ouml;nemli isimlerinden Topal Osman&rsquo;ın Mezarının da i&ccedil;inde bulunduğu Giresun Kalesi (Panoramik), diğer tarafımızda ise Karadeniz&rsquo;in tek adası olan Giresun Adasını (Panoramik) g&ouml;rerek Giresun&#39;a varıyoruz. Burada fındık alacağımız bir noktada kısa bir mola verdikten sonra otelimize doğru hareket ediyoruz. Akşam yemeği ve konaklama otelimizde.</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı: </strong>Yol &Uuml;st&uuml; Tesislerde Ekstra Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği: </strong>Terme Ulusoy Tesisleri: Terme Pidesi (Extra)</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>Konaklama:</strong> Ma&ccedil;ka<strong>&nbsp;</strong>veya Trabzon<strong>&nbsp;</strong>Otelleri vb.</p>\n\n<p style="text-align:justify"><strong>Rota: </strong>İstanbul &ndash; Samsun (737 km) &nbsp;Samsun - Giresun (195 km) Giresun - Ma&ccedil;ka ( 168)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe: </strong>1100 Km</p>\n\n<p style="text-align:justify"><strong>Otele Giriş Saati: 18.30</strong></p>\n',
+              '<p style="text-align:justify"><strong>G&Ouml;REME A&Ccedil;IK HAVA M&Uuml;ZESİ &ndash; &Uuml;RG&Uuml;P &ndash; ASMALI KONAK - U&Ccedil;HİSAR KALESİ &ndash; MUSTAFAPAŞA &ndash; ONYX TAŞ AT&Ouml;LYESİ</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz, </strong>00.30 İzmit Halk Evi Durağı (İzmit - Adapazarı y&ouml;n&uuml;nden) - 00.40 İzmit Otogar &Ouml;n&uuml; Otob&uuml;s Durakları (ROMATEM Karşısı) &ndash; 01.20 Adapazarı Otoban &Ccedil;ıkışı Total Benzin İstasyonu - 05.30 Ankara S&ouml;ğ&uuml;t&ouml;z&uuml; Ulusoy Terminali &Ouml;n&uuml;nden katılacak misafirlerimizle&nbsp; ile başlıyor. Doğal g&uuml;zelliklerini 3917 m. y&uuml;ksekliğindeki Erciyes Dağı ve 3268 m. y&uuml;ksekliğindeki Hasan Dağı&rsquo;na bor&ccedil;lu olan, Perslerin &ldquo;G&uuml;zel Atlar Diyarı&rdquo; diye adlandırdıkları Kapadokya b&ouml;lgesine doğru yol alıyoruz.&nbsp;Sabah saatlerinde Tuz G&ouml;l&uuml;&#39;n&uuml; panoramik g&ouml;rerek yolda serbest kahvaltı molası veriyoruz. Kahvaltının ardından G&ouml;reme Vadisi i&ccedil;indeki G&ouml;reme A&ccedil;ık Hava M&uuml;zesi&#39;ni ziyaret ediyoruz. Bu muhteşem m&uuml;ze i&ccedil;indeki kaya kiliseleri (Elmalı, Yılanlı, Barbara Kiliseleri), yemekhane, mutfak, kiler ve İncil&#39;in baştan sona resmedildiği Tokalı Kilise gibi &ouml;nemli yerleri g&ouml;rmek i&ccedil;in zaman ayırıyoruz. &Uuml;rg&uuml;p şehir merkezinde panoramik bir tur yaparak şarap mahzenlerini geziyor ve Kapadokya&#39;nın eşsiz şaraplarını tatma fırsatı buluyoruz. Ardından Şapkalı Peribacaları ve Kapadokya&#39;nın sembol&uuml; olan &Uuml;&ccedil; G&uuml;zeller Peribacaları&#39;nı ziyaret ediyoruz. Daha sonra Mustafapaşa&#39;ya giderek bu tarihi b&ouml;lgede dolaşıyoruz ve Rum taş iş&ccedil;iliğinin en g&uuml;zel &ouml;rneklerini g&ouml;r&uuml;yoruz. Mustafapaşa&#39;nın mistik sokaklarında yapacağımız keyifli bir y&uuml;r&uuml;y&uuml;ş&uuml;n ardından b&ouml;lgenin en y&uuml;ksek noktası olan U&ccedil;hisar Kalesi&#39;ni panoramik olarak g&ouml;rme ve fotoğraflama imkanı buluyoruz. G&uuml;vercinlik Vadisini ve U&ccedil;hisar Kalesi&rsquo;nin fotoğrafını &ccedil;ekip&nbsp;b&ouml;lgeye &ouml;zg&uuml; kabak &ccedil;ekirdeği ve diğer y&ouml;resel doğal &uuml;r&uuml;nleri&nbsp;bulabileceğiniz mağazada kısa bir mola veriyoruz. Alışveriş molamızın ardından&nbsp;Onyx Taş At&ouml;lyesinde taşların &ouml;zellikleri ve işlenişi hakkında bilgi alıyoruz. Akşam yemeği ve konaklama i&ccedil;in otelimize hareket ediyoruz.&nbsp;</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı:</strong> Yol &Uuml;st&uuml; Mola Tesislerinde Ekstra Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği: </strong>Restaurantta Ekstra Set Men&uuml; Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>Konaklama: </strong>Se&ccedil;ilen Otelde Konaklama Yapılacaktır.</p>\n\n<p style="text-align:justify"><strong>Rota:</strong> İstanbul &ndash; Aksaray (670 km) Aksaray &ndash; Nevşehir (80 km) B&ouml;lge İ&ccedil;i Gezileri (70 km)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe:</strong> 820 km</p>\n\n<p style="text-align:justify"><strong>Otele Giriş Saati: </strong>18.00</p>\n',
           },
           {
             title: '',
             description:
-              '<p style="text-align:justify"><strong>TRABZON &ndash; AYASOFYA M&Uuml;ZESİ &ndash; S&Uuml;MELA MANASTIRI - &Ccedil;AY FABRİKASI - S&Uuml;RMENE - RİZE BEZİ - BATUM TURU</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,</strong>&nbsp;sabah otelimizde alacağımız kahvaltı sonrasında başlıyor. Trabzon Ma&ccedil;ka&rsquo;da bulunan Altındere Milli Parkına hareket ediyoruz. Yeşilliklerin i&ccedil;inde bulunan Karadağ&rsquo;ın eteklerinde kayaya oyularak inşa edilmiş olan S&uuml;mela Manastırının mimari harikasını g&ouml;rd&uuml;ğ&uuml;n&uuml;zde, şaşkınlığınızı gizleyemeyeceksiniz.&nbsp;Ayazma, Kaya Kiliseleri, Su Kemerleri, Kaya Freskleri&nbsp;g&ouml;rd&uuml;kten sonra&nbsp;Trabzon&rsquo;a varıyoruz. 13.yy da I. Manuel Komnenos zamanında yapılmış, 1572 tarihinde camiye &ccedil;evrilen, ardından 1964 tarihinde m&uuml;zeye &ccedil;evrilmiş olan Kommenos Devletinin &ouml;nemli eserlerinden biri olan Ayasofya M&uuml;zesini geziyoruz. Ardından &ouml;ğle yemeğimizi alıyoruz. Yemek sonrasında Soğuksu Mevkiine doğru yola &ccedil;ıkıyoruz. Burada Trabzon&rsquo;a has olan Telk&acirc;ri Sanatının &ouml;rneklerini g&ouml;rebileceğimiz ve satın alabileceğimiz telk&acirc;ri at&ouml;lyesi ve mağazası gezintinin ardından 20.yy şaheseri olan Atat&uuml;rk K&ouml;şk&uuml;&#39;n&uuml; ziyaret ediyoruz.&nbsp;Ulu &Ouml;nder, bu k&ouml;şk&uuml; 1924 ve 1930 yıllarında ziyaret etmiş ve 1937 yılında bir kez kalmış, vasiyetinin bir kısmını da bu k&ouml;şkte yazmıştır. K&ouml;şk&rsquo;&uuml;n mimarisi ve bah&ccedil;esi sizleri b&uuml;y&uuml;leyecek cinsten. Atat&uuml;rk K&ouml;şk&uuml; gezimizin ardından, S&uuml;rmene&rsquo;de bulunan &ccedil;ay fabrikamıza hareket ediyoruz. &Ccedil;ayın dalından koparılıp bardaklarımıza gelişine dek izlediği s&uuml;reci yerinde &ouml;ğreniyoruz. Alacağımız bilgiler sonrasında dileyenler hediyelik &ccedil;ay alışverişini bu noktadan yapabilirler. &Ccedil;ay fabrikası ziyaretimiz sonrasında ise yine S&uuml;rmene denince ilk akla gelen unsurlardan olan S&uuml;rmene Bı&ccedil;ağı Mağazasına&nbsp;gidiyoruz. S&uuml;rmene Bı&ccedil;ağı hakkında da bilgilendikten ve alışverişimizi yaptıktan sonra, Rize şehrimizi panaromik g&ouml;rerek Rize Bezinin tanıtılacağı ve alışverişinin yapılacağı at&ouml;lyemize varıyoruz. At&ouml;lye gezimizin ardından otelimize ulaşıyoruz. Konaklama Oda kahvaltı olacaktır. Dileyen misafirlerimiz ile Batum&#39;a hareket ediyoruz <strong>(Ekstra) (Katılımcı sayısının minumum 10 kişi olması gerekir).</strong> Sarp Sınır Kapısında giriş işlemlerimizi tamamladıktan sonra G&uuml;rcistan / Acara b&ouml;lgesine ge&ccedil;iyoruz. Hz. İsa&rsquo;nın On İki Havarisinden biri olan St. Mathias`in mezarının da bulunduğu Roma d&ouml;neminden kalan ve en son Osmanlılar d&ouml;neminde kullanılan Gonio (Apsaros Kalesi&#39;ni Panoramik) g&ouml;r&uuml;yoruz. Batum şehir merkezine doğru devam ederken Bayburt&#39;tan doğup Batum sınırlarına kadar kendine keskin &ccedil;izgiler oluşturan &Ccedil;oruh Nehri&#39;ni ve &uuml;zerindeki eski Gonio K&ouml;pr&uuml;s&uuml;&#39;n&uuml; g&ouml;r&uuml;yoruz.&nbsp;Batum kent merkezini gezmeye başlıyoruz. Burada; Orta Cami, Saat Kulesi, Piazza Meydanı, H&uuml;k&uuml;met Binası, Poseidon Heykeli, Tiyatro Binası, Astronomik Saat,&nbsp;Aziz Nikolaos Kilisesi,&nbsp;Medea Heykeli&#39;ni, Batum Limanı&#39;nı, Ali ve Nino&rsquo;nun heykeli ve yeni oluşturulan y&uuml;z&uuml;yle Avrupa Meydanı&rsquo;nı g&ouml;r&uuml;yoruz. Batum Bulvarı&#39;nda gezinti yaptıktan sonra alışveriş i&ccedil;in serbest zaman veriyoruz. T&uuml;rkiye&rsquo;ye girerken DutyFree&rsquo;den alışveriş yapma imk&acirc;nı bulacaksınız. T&uuml;rkiye&rsquo;ye giriş yaptıktan sonra otelimize ge&ccedil;iyoruz.</p>\n\n<p style="text-align:justify"><strong>NOT:</strong> T&uuml;rkiye ile G&uuml;rcistan Devletleri arasında yapılan anlaşma gereği TC vatandaşları Batum&#39;a &uuml;zerinde TC kimlik numarası bulunan n&uuml;fuz c&uuml;zdanı ile ge&ccedil;iş yapabilmektedir. Bunun dışındaki kimlik kartları ile (ehliyet, kurum kimlikleri vs.) ge&ccedil;iş yapılamamaktadır. Ailesi ile birlikte (Anne ve Babanın Aynı Anda) seyahat etmeyecek olan 18 yaş altı misafirlerimizin BATUM&#39;A ge&ccedil;işleri i&ccedil;in NOTER&rsquo;den onaylı MUVAVFAKATNAME almaları gerekmektedir. Bebekler, &Ccedil;ocuklar d&acirc;hil kimliklerde fotoğraf olması zorunludur.&nbsp;</p>\n\n<p style="text-align:justify"><strong>DİKKAT:</strong>&nbsp;TC NOLU N&Uuml;FUS H&Uuml;VİYET C&Uuml;ZDANINIZI SEYAHATE &Ccedil;IKARKEN YANINIZA ALMAYI UNUTMAYINIZ. YURTDIŞI &Ccedil;IKIŞ &Uuml;CRETİ MİSAFİR TARAFINDAN &Ouml;DENİR. RESMİ OLARAK 01.09.2019 TARİHİ İTİBARİ İLE ESKİ&nbsp; N&Uuml;FUS C&Uuml;ZDANLARI İLE&nbsp;G&Uuml;RCİSTAN&#39;A&nbsp;GE&Ccedil;İŞ SAĞLANAMAYACATIR.</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği:</strong> Ak&ccedil;aabat K&ouml;ftesi, Kaygana, Alabalık, Kuymak(Ekstra)</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Hopa veya Batum da Ekstra olarak alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Konaklama:</strong>&nbsp;Hopa Otelleri vb.</p>\n\n<p style="text-align:justify"><strong>Rota:</strong> Ma&ccedil;ka &ndash;&nbsp;S&uuml;mela Manastırı&nbsp;(24 km) S&uuml;mela Manastırı -&nbsp;Trabzon (&nbsp;54 km) Trabzon - Hopa (170 km)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe: </strong>248 Km</p>\n\n<p style="text-align:justify"><strong>Otele Giriş Saati:</strong> 20.00</p>\n\n<p style="text-align:justify">&nbsp;</p>\n',
+              '<p style="text-align:justify"><strong>G&Uuml;VERCİNLİK VADİSİ &ndash; DEVELİ VADİ - &Ccedil;AVUŞİN &ndash; PAŞABAĞ &ndash; AVANOS &ndash; KIZILIRMAK KENARINDA Y&Uuml;R&Uuml;Y&Uuml;Ş - HACI BEKTAŞ &ndash; I VELİ&nbsp;</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,</strong> otelimizde alınan&nbsp;kahvaltı sonrasında başlıyor <strong>(Kahvaltı &ouml;ncesi dileyen misafirlerimiz ekstra BALON TURU, ATV TURU, Balon Kalkış İzleme Turu&nbsp;etkinliklerine katılabilirler)</strong>. İlk durak noktamız Deri At&ouml;lyesi ve mağazası olacak. Burada verdiğimiz serbest zamanın ardından &ccedil;ok başlı Peribacalarının en g&uuml;zel &ouml;rneklerini g&ouml;receğimiz Paşabağ&rsquo;da (Keşişler Vadisi) fotoğraf molası veriyoruz. İlgin&ccedil; Peribacası oluşumlarını i&ccedil;erisinde barındıran, adını da deve şeklindeki peribacasından alan Develi Vadi (Dervent Vadisi) gezisinin ardından &ccedil;anak-&ccedil;&ouml;mleği ile meşhur Avanos&rsquo;a gidiyoruz. Avanos&rsquo;da Kızılırmak&rsquo;ı g&ouml;r&uuml;p, Kızılırmak&rsquo;ın &ccedil;amurundan yapılan &ccedil;anak - &ccedil;&ouml;mleklere dair bilgi alıyoruz. Sonrasında Horasan&rsquo;da d&uuml;nyaya gelen, 13.yy&rsquo;dan bug&uuml;ne evrensel g&ouml;r&uuml;şleriyle her kesimi kucaklayan, Yeni&ccedil;erilerin de Piri, Hacıbektaş-ı Veli&rsquo;nin T&uuml;rbesinin bulunduğu Hacıbektaş il&ccedil;esine gidiyoruz. Hacı Bektaş-ı Veli M&uuml;zesinde; Balım Sultan T&uuml;rbesi, G&uuml;ven&ccedil; Abdal T&uuml;rbesi, Hacı Bektaş-i Veli T&uuml;rbesi, Kırklar Meydanı, Pir Evi, &Uuml;&ccedil;&uuml;nc&uuml; Avlu, Kiler Evi, Meydan Evi, Meydan Evi Cami, Aş Evi, İkinci Avlu (Derg&acirc;h Avlusu), Birinci Avlu&rsquo;yu (Nadar Avlusu) geziyoruz. Hacıbektaş&rsquo;tan otelimize d&ouml;n&uuml;yoruz. Akşam yemeği ve konaklama otelimizde. Akşam yemeği sonrasında dileyen misafirlerimizle Kapadokya turlarının olmazsa olmazlarından y&ouml;reye &ouml;zg&uuml; T&uuml;rk Gecesi&rsquo;ne&nbsp; gidiyoruz. (Ekstra)</p>\n\n<p><strong>Sabah Kahvaltısı:</strong> Otelde&nbsp; Alınacak Olup Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>&Ouml;ğle Yemeği: </strong>Restaurantta Ekstra A&ccedil;ık B&uuml;fe Olarak Alınacaktır.</p>\n\n<p><strong>Akşam Yemeği:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>Konaklama:&nbsp;</strong>Se&ccedil;ilen Otelde Konaklama Yapılacaktır.</p>\n\n<p><strong>Rota: </strong>B&ouml;lge İ&ccedil;i Gezileri (160 km)</p>\n\n<p><strong>Toplam Kat Edilecek Mesafe: </strong>160 Km</p>\n\n<p><strong>Otele Giriş Saati: </strong>18.00</p>\n',
           },
           {
             title: '',
             description:
-              '<p style="text-align:justify"><strong>AYDER YAYLASI &ndash; GELİN D&Uuml;VENİ ŞELALESİ - FIRTINA DERESİ &ndash; ZİLKALE &ndash;&nbsp; RAFTİNG </strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,</strong> sabah otelimizde alacağımız kahvaltı sonrasında başlıyor.&nbsp;Ayder&#39;e doğru yola &ccedil;ıkıyoruz. Karadenizin en g&uuml;zel vadilerinden Fırtına Deresi&rsquo;nin yanında &ouml;ğle yemeği i&ccedil;in mola veriyoruz.&nbsp;Keyifli &ouml;ğle yemeğinin ardından, Fırtına Deresi&rsquo;ni takip ederken kestane, kızılağa&ccedil;, doğu ladini gibi Doğu Karadeniz bitki &ouml;rt&uuml;s&uuml;n&uuml;n en zengin &ouml;rneklerini g&ouml;rerek Hala Deresi&rsquo;nin yanındaki tarihi Osmanlı Taş k&ouml;pr&uuml;lerinden Mikron veya Kale K&ouml;pr&uuml;s&uuml;nde fotoğraf molası veriyoruz. Ka&ccedil;kar Dağları&rsquo;nın en g&uuml;zel noktasından biri olan Ayder Yaylasında keyifli bir y&uuml;r&uuml;y&uuml;ş yapıyoruz. Gelin D&uuml;veni Şelalesi ve diğer şelaleleri g&ouml;r&uuml;yoruz. Galerd&uuml;z&uuml; ve Kalegon gezileri sonrası yaylada serbest zamanda keyifli bir y&uuml;r&uuml;y&uuml;ş yapıp y&ouml;re insanlarıyla keyifli bir sohbet yapabilirsiniz. Ayder Yaylasında kendinizi bambaşka bir d&uuml;nyada hissedeceksiniz.</p>\n\n<p style="text-align:justify">Arzu eden konuklarımız i&ccedil;in farklı tur alternatiflerimizi değerlendiriyoruz.</p>\n\n<p style="text-align:justify"><strong>1.Se&ccedil;enek Zilkale, &Ccedil;at Vadisi ve Palovit Şelalesi Turu: </strong>&Ccedil;amlıhemşin&rsquo;den bineceğimiz minib&uuml;slerle muhteşem bir tura başlıyoruz. Fırtına vadisini oluşturan &ouml;nemli vadilerden olan &Ccedil;at Vadisi&rsquo;ne giriş yapıyoruz. İlk olarak Ortan K&ouml;y&uuml;&rsquo;nden ge&ccedil;erek SEVDALUK dizisi ve diğer bir&ccedil;ok yapımın &ccedil;ekimlerinin de yapıldığı ve eski adı &Ccedil;in&ccedil;iva olan Şenyuva K&ouml;y&uuml;&rsquo;n&uuml; g&ouml;r&uuml;yoruz. Burada vadi i&ccedil;erisinde onlarcası olan Taş K&ouml;pr&uuml;lerden, geniş ve uzun olanlarından birinde fotoğraf molası veriyoruz. Bu b&ouml;lgede bulunan ve &uuml;lkemizin en yaşlı konakları olan Fırtına Konaklarının arasından &Ccedil;at Vadisi&rsquo;nin vahşi doğasında y&uuml;kselen Zilkale&#39;ye doğru yola &ccedil;ıkıyoruz. Zilkale&rsquo;nin Kartal Yuvasını andıran g&ouml;r&uuml;nt&uuml;s&uuml;ne hayran kalacaksınız. Deniz seviyesinden 750 mt, &Ccedil;at Deresi&rsquo;nden ise 100 mt. y&uuml;kseklikte bulunan Zilkale&rsquo;de ge&ccedil;ireceğimiz zamanda, hayatınızın en g&uuml;zel fotoğraf karelerine ulaşabilirsiniz. G&uuml;zel dakikaların ardından daha da yukarı tırmanıp, muhteşem manzarası ve yazı kışa &ccedil;eviren serinliğiyle &uuml;nl&uuml; Palovit Şelalesi&rsquo;ne ulaşıyoruz. Yaşayacağımız hoş dakikaların ardından Şenyuva K&ouml;y&uuml;&rsquo;ne d&ouml;nerek sizlere &ccedil;ay molası veriyoruz. Harika manzaraya karşı &ccedil;aylarınızı yudumladıktan sonra minib&uuml;slerimize binerek &Ccedil;amlıhemşin&rsquo;e geri d&ouml;n&uuml;yoruz&nbsp;<strong>Ekstra.</strong></p>\n\n<p style="text-align:justify"><strong>2.Se&ccedil;enek: </strong>Fırtına Deresinde yaklaşık 1,5 saat s&uuml;ren hafif bir parkurda RAFTİNG<strong> Ekstra.</strong></p>\n\n<p style="text-align:justify">Gezilerimizin ardından otelimize yerleşiyoruz. Akşam yemeği ve konaklama otelimizde.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>&Ouml;ğle Yemeği:</strong>&nbsp; Fırtına Vadisinde Ekstra Olarak Alınacaktır.</p>\n\n<p><strong>Akşam Yemeği:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>Konaklama: </strong>Rize<strong>&nbsp;</strong>Otelleri vb.</p>\n\n<p><strong>Rota:&nbsp;</strong>Hopa -&nbsp;Batum&nbsp;(46 km) Batum - Ayder ( 123 km)</p>\n\n<p><strong>Toplam Kat Edilecek Mesafe:&nbsp;</strong>169<strong> </strong>Km</p>\n\n<p><strong>Otele Giriş Saati: </strong>19.00 - 20.00</p>\n',
-          },
-          {
-            title: '',
-            description:
-              '<p style="text-align:justify"><strong>&Ccedil;E&Ccedil;EVA &Ccedil;AY BAH&Ccedil;ELERİ - OF &ndash; UZUNG&Ouml;L</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz, </strong>sabah otelimizde alacağımız kahvaltı sonrasında başlıyor. Nasıl ki Isparta&rsquo;nın Kuyucak K&ouml;y&uuml; mor lavantalarıyla &uuml;nl&uuml; ise, Rize&rsquo;ye bağlı&nbsp;&Ccedil;e&ccedil;eva K&ouml;y&uuml;&#39;de&nbsp;yemyeşil &ccedil;ay tarlalarıyla &uuml;nl&uuml;. Gelmek isteyen misafirlerimiz ile k&ouml;ye minib&uuml;slerle hareket ediyoruz&nbsp; (Ekstra). &Ccedil;e&ccedil;eva&rsquo;nın doğal fonu olan &ccedil;ay bah&ccedil;eleri; bakımlı &ccedil;ay setleriyle &ouml;r&uuml;l&uuml; ve ilelebet s&uuml;recekmiş gibi uzayıp giden bu tarlalar sadece &Ccedil;e&ccedil;eva K&ouml;y&uuml;&rsquo;nde b&ouml;ylesine d&uuml;zenli. Burada vereceğimiz fotoğraf molamızın ardından Karadeniz&rsquo;in simgesi haline gelen Uzung&ouml;l&rsquo;e hareket ediyoruz. Uzung&ouml;l&rsquo;&uuml; doyasıya yaşamanız&nbsp;i&ccedil;in sizlere yeteri kadar bol serbest vakit veriyoruz. Serbest vakit sonrasında,&nbsp;Uzung&ouml;l&rsquo;den keyifli bir şekilde ayrılıp, İstanbul&rsquo;a olan d&ouml;n&uuml;ş yolculuğumuza başlıyoruz. D&ouml;n&uuml;ş yolunda y&ouml;resel &uuml;r&uuml;nler alabileceğiniz bir noktada mola veriyoruz. Bal, Tereyağ,&nbsp;gibi y&ouml;resel &uuml;r&uuml;nler alabilirsiniz. Ardından&nbsp;Osmancık - Bolu - Adapazarı - İzmit g&uuml;zerg&acirc;hı ile sabah saatlerinde İstanbul&#39;a varıyor ve bir başka Prontotour organizasyonunda buluşmak &uuml;zere siz değerli misafirlerimizi aldığımız noktalara bırakarak vedalaşıyoruz. Hoşcakalın&hellip;</p>\n\n<p><strong>Sabah Kahvaltısı:</strong> Otelde Alınacak Olup, Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p><strong>&Ouml;ğle Yemeği:</strong> Uzung&ouml;l&#39;de Serbest Zaman(Ekstra)</p>\n\n<p><strong>Akşam Yemeği:</strong>&nbsp;Yol &Uuml;st&uuml; Mola Tesislerinde Ekstra Olarak Alınacaktır.</p>\n\n<p><strong>Konaklama:&nbsp;Bu Gece Konaklama Yoktur.</strong></p>\n\n<p><strong>Rota:</strong> Ayder - Uzung&ouml;l (145 km) Uzung&ouml;l - İstanbul (1145 km)</p>\n\n<p><strong>Toplam Kat Edilecek Mesafe:</strong> 1290 Km</p>\n\n<p><strong>Varış Saati: </strong>06.00 - 07.00&nbsp;&nbsp;(Varış saatleri, normal hava ve yol şartlarına g&ouml;re yaklaşık olarak verilmiştir)</p>\n\n<p><strong>Toplam Kilometre: </strong>2807 km</p>\n\n<p style="text-align:justify">Amasya Lalehan Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 13663</p>\n\n<p style="text-align:justify">G&uuml;muşhane Zigana G&uuml;m&uuml;şkayak Tesisleri: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 13663</p>\n\n<p style="text-align:justify">G&uuml;m&uuml;şhane Ramada Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 14864</p>\n\n<p style="text-align:justify">Ordu Anemon Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 12871</p>\n\n<p style="text-align:justify">Giresun H&uuml;seyin Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 18329</p>\n\n<p style="text-align:justify">Trabzon B&uuml;y&uuml;k S&uuml;mela Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 7149</p>\n\n<p style="text-align:justify">Trabzon Bayrak Grand Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 19695</p>\n\n<p style="text-align:justify">Rize Newarise Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 20896</p>\n\n<p style="text-align:justify">Rize Green Suada Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 13418</p>\n\n<p style="text-align:justify">Hopa Terzioğlu Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 14013</p>\n\n<p style="text-align:justify">Hopa Heyamo Otel: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 2022-8-0063</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>*** Yukarıda b&ouml;lgelere g&ouml;re anlaşmalı otellerimizin listesi belirtilmiştir. Yoğun d&ouml;nemlerde liste dışındaki otellerde de konaklama yapılabilmektedir.</strong></p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>İPTAL VE İADE G&Uuml;VENCE PAKETİ: </strong></p>\n\n<p style="text-align:justify">Tura &Ccedil;ıkış &nbsp;G&uuml;n&uuml;nden; 72 Saat (3 G&uuml;n) &Ouml;ncesine Kadar Rezervasyon İptal Talebinde Bulunulması veya Değişiklik Halinde Koşulsuz Y&uuml;zde 100 Kesintisiz İade Garantisi Sunuluyor. 1, 2 veya 3 Gece Konaklamalı Turlarda Paket Bedeli Kişi Başı 3000&nbsp;TL&rsquo;dir. 4 Gece ve &Uuml;zeri Konaklamalı Turlarda Paket Bedeli Kişi Başı 5000 TL&rsquo;dir. U&ccedil;aklı Turlarda İptal İade G&uuml;vence Paketi Eklenememektedir.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>1618 NOLU ZORUNLU SEYAHAT SIGORTASI KAPSAMI</strong></p>\n\n<p style="text-align:justify">Sağlık sigortası değildir, tedavi masraflarını karşılamaz. (&Ouml;zel sağlık sigortası misafire ait &ouml;zel harcamadır)</p>\n\n<p style="text-align:justify"><strong>BİLGİLENDİRME</strong><br />\n<strong>* </strong>Kalınacak yayla otelleri Bungalov ve standart yayla oteli yapısına sahip olup, konaklamaların t&uuml;m&uuml; otel tarafından belirlenir. Otellerde y&ouml;resel yemek olma zorunluluğu yoktur.&nbsp;<br />\n* Tur esnasında program yoğunluğundan dolayı bankamatik, d&ouml;viz b&uuml;rosu vs. bulmak her zaman m&uuml;mk&uuml;n olmadığından, misafirlerimizin bu duruma karşı hazırlıklı olmasında fayda vardır.<br />\n* Ger&ccedil;ekleştirilecek programlar i&ccedil;erisinde g&uuml;n i&ccedil;inde uzun yollar kat edilebilir. Konuyla ilgili bilgilendirme rehberiniz tarafından sizlere yapılacaktır.<br />\n* &Ouml;ğle yemeklerinde y&ouml;reye &ouml;zg&uuml; ekonomik men&uuml;ler oluşturulmuştur.<br />\n* &Ouml;ğle ve akşam yemeklerinde b&ouml;lge yoğunluğuna bağlı olarak gruplara ayrılan masalar kullanılır.</p>\n\n<p style="text-align:justify"><strong>İKLİM</strong></p>\n\n<p style="text-align:justify">Her mevsimi yağışlı olan genelde ılıman bir iklim tipidir. Cephe ve orograf&icirc;k yağışlar h&acirc;kimdir. B&ouml;lgede kıyıya paralel y&uuml;ksek dağların bulunması yağışların fazlalaşmasına ortam hazırlamıştır. B&ouml;lgede yağış miktarları arasında olmasa da en fazla yağış sonbaharda en az yağış ise ilkbaharda g&ouml;r&uuml;l&uuml;r. B&ouml;lge nemlilik a&ccedil;ısından da &uuml;lkemizin en nemli b&ouml;lgesidir. Bu nedenle b&ouml;lgede yıllık ve g&uuml;nl&uuml;k sıcaklık farkı fazla değildir. Aynı zamanda b&ouml;lgede kış &ccedil;ok soğuk olmaz, ancak yağışlı ge&ccedil;er. Yağışlar daha &ccedil;ok yağmur şeklinde olup kar yağışı, don olayları g&ouml;r&uuml;lebildiği gibi sık sık sis de g&ouml;r&uuml;l&uuml;r. B&ouml;lgede yaz ayları da ılıman ge&ccedil;er. En sıcak ayın ortalaması 22&deg;C-24&deg;C&#39;ı ge&ccedil;mez. En soğuk ayın ortalama sıcaklığı ise her zaman 0&deg;C&#39;ın &uuml;zerindedir. Zaman zaman kuzeybatıdan gelen soğuk hava k&uuml;tleleri b&ouml;lgeyi etkilese de, bu etki b&ouml;lgenin doğusuna gidildik&ccedil;e kaybolur. B&ouml;lge coğraf&icirc; &ouml;zelliklerine g&ouml;re, sıcaklık ve yağış bakımından değişiklikler g&ouml;stermektedir. Karadeniz &uuml;zerinden gelen serin ve nemli havanın Kuzey Anadolu Dağları boyunca y&uuml;kselmesi ile yağışlar meydana gelir. Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde y&uuml;ksekliğin fazla olması nedeniyle en fazla yağış bu b&ouml;l&uuml;mde g&ouml;r&uuml;l&uuml;r. Yıllık yağış miktarı ortalama 2000 mm&#39;dir (Rize 2300 mm). Kuzey Anadolu Dağlarının g&uuml;ney kesiminde ise bu değer, 300 mm&#39;ye kadar d&uuml;şer. Orta Karadeniz B&ouml;l&uuml;m&uuml; ise, y&uuml;ksekliğin azalması nedeniyle b&ouml;lgenin en az yağış alan b&ouml;l&uuml;m&uuml;d&uuml;r. Burada yıllık yağış miktarı ortalama 700 mm kadardır. Batı Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde ise y&uuml;kseltinin Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;ne g&ouml;re daha az olmasına paralel olarak bu b&ouml;l&uuml;mde yağışlar Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;ne g&ouml;re daha azdır. Yıllık yağış miktarı ortalama 1200 mm civarındadır. B&ouml;lge genelinde yıllık yağış miktarı &ouml;zellikle Doğu Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde 2000 mm&#39;nin &uuml;zerine &ccedil;ıkabildiği gibi Orta Karadeniz B&ouml;l&uuml;m&uuml;&#39;nde 600 mm&#39;ye kadar d&uuml;şebilmektedir.</p>\n\n<p style="text-align:justify"><strong>OTOB&Uuml;SLER</strong></p>\n\n<p style="text-align:justify">MERCEDES TRAVEGO &amp; TOURISMO: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">MAN FORTUNA: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.<br />\n&nbsp;</p>\n\n<p style="text-align:justify">NEOPLAN CITYLINER / TOURLINER: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">TEMSA SAFIR / MARATON: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">MIDIBUSLER</p>\n\n<p style="text-align:justify">ISUZU TURKUAZ: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">NOVO LUX: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">SULTAN OTOGAR: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">NOT: Turlarımızda kişi sayısına g&ouml;re, yukarıda belirtilen ara&ccedil; tiplerinden herhangi birisi kullanılır.</p>\n\n<p style="text-align:justify">TUR PROGRAMLARIMIZ 6502 NOLU T&Uuml;KETİCİ KANUNUNA UYGUN OLARAK HAZIRLANMIŞTIR.</p>\n',
+              '<p style="text-align:justify"><strong>YERALTI ŞEHRİ -&nbsp;&nbsp;NARLIG&Ouml;L &ndash; IHLARA VADİSİ&nbsp;</strong></p>\n\n<p style="text-align:justify"><strong>Turumuz,&nbsp;</strong>otelimizde alınan&nbsp;kahvaltı sonrasında başlıyor. İlk durağımız, d&uuml;şman baskınlarından ka&ccedil;an binlerce kişinin, aylarca yaşayabileceği m&uuml;hendislik harikası olan Derinkuyu Yeraltı Şehri (Kaymaklı Yeraltı Şehri veya &Ouml;zkonak Yeraltı Şehri) olacak. Sonrasında Narlıg&ouml;l Krater G&ouml;l&uuml;&rsquo;nde vereceğimiz serbest zaman sonrasında Melendiz &Ccedil;ayı&rsquo;nın oluşturduğu doğa harikası bir kanyon-vadi olan Ihlara Vadisi&rsquo;ne gidiyoruz. Burada Ağa&ccedil;altı ve Yılanlı Kiliselerini geziyoruz (Yol &ccedil;alışması olduğunda Belisırma K&ouml;y&uuml; veya Selimiye tarafından&nbsp;Ihlara Vadisi turu yapılacaktır). G&uuml;zel bir y&uuml;r&uuml;y&uuml;ş&uuml;n ardından İstanbul&rsquo;a doğru yola &ccedil;ıkıyoruz. Ankara - Bolu g&uuml;zerg&acirc;hında yol alarak akşam saatlerinde siz sayın misafirlerimizi Prontotour&#39;un diğer seyahatlerinde tekrar g&ouml;r&uuml;şmek &uuml;zere, aldığımız noktalara bırakıyoruz. Hoş&ccedil;akalın.</p>\n\n<p style="text-align:justify"><strong>Sabah Kahvaltısı: </strong>Otelde&nbsp; Alınacaktır. Tur &Uuml;cretine D&acirc;hildir.</p>\n\n<p style="text-align:justify"><strong>&Ouml;ğle Yemeği:</strong> Restaurantta Ekstra A&ccedil;ık B&uuml;fe Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Akşam Yemeği: </strong>Yoldaki Dinlenme Tesislerinde Ekstra Olarak Alınacaktır.</p>\n\n<p style="text-align:justify"><strong>Konaklama: </strong>DİKKAT BU GECE OTEL KONAKLAMASI YOKTUR.</p>\n\n<p style="text-align:justify"><strong>Rota: </strong>Nevşehir &ndash; Derinkuyu&nbsp; (30 km) Derinkuyu &ndash; Aksaray (70 km) Aksaray &ndash; İstanbul (670 km)</p>\n\n<p style="text-align:justify"><strong>Toplam Kat Edilecek Mesafe: </strong>770 Km</p>\n\n<p style="text-align:justify"><strong>Toplam Tur Mesafesi:</strong> 1750 Km</p>\n\n<p style="text-align:justify"><strong>Varış Saati: </strong>23.00 (Varış saatleri, normal hava ve yol şartlarına g&ouml;re yaklaşık olarak verilmiştir)</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p>Dilekkaya Otel&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 12331</p>\n\n<p>Perisia&nbsp;Otel&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 2375</p>\n\n<p>Kral Otel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 7883</p>\n\n<p>Grand &Ouml;zt&uuml;rk Otel&nbsp; &nbsp; &nbsp; : K&uuml;lt&uuml;r ve Turizm Bakanlığı - Turizm İşletme Belgesi: 12282</p>\n\n<p>&nbsp;</p>\n\n<p style="text-align:justify"><strong>İPTAL VE İADE G&Uuml;VENCE PAKETİ:</strong> Tura &Ccedil;ıkış &nbsp;G&uuml;n&uuml;nden; 72 Saat (3 G&uuml;n) &Ouml;ncesine Kadar Rezervasyon İptal Talebinde Bulunulması veya Değişiklik Halinde Koşulsuz Y&uuml;zde 100 Kesintisiz İade Garantisi Sunuluyor. 1, 2 veya 3 Gece Konaklamalı Turlarda Paket Bedeli Kişi Başı 3000&nbsp;TL&rsquo;dir. 4 Gece ve &Uuml;zeri Konaklamalı Turlarda Paket Bedeli Kişi Başı 5000 TL&rsquo;dir. U&ccedil;aklı Turlarda İptal İade G&uuml;vence Paketi Eklenememektedir.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>1618 NOLU ZORUNLU SEYAHAT SIGORTASI KAPSAMI</strong></p>\n\n<p style="text-align:justify">Sağlık sigortası değildir, tedavi masraflarını karşılamaz. (&Ouml;zel sağlık sigortası misafire ait &ouml;zel harcamadır)</p>\n\n<p style="text-align:justify"><strong>T&Uuml;RK GECESİ</strong></p>\n\n<p style="text-align:justify">Kapadokya b&ouml;lgesine has olan, kayanın i&ccedil;ine oyma olarak yapılmış otantik mek&acirc;nlarda ger&ccedil;ekleştirilen eğlencede, &uuml;lkemizin her y&ouml;resine ait halk dansları sergilenmekte ve oryantal sahne almaktadır. &Ccedil;eşitli m&uuml;zik g&ouml;sterilerine, animasyonlara ve eğlencelere de yer verilen gecede sınırsız yerli alkoll&uuml; ve alkols&uuml;z i&ccedil;ecek ve onlara uygun mezeler ikram edilmektedir.</p>\n\n<p style="text-align:justify"><strong>BALON TURU</strong></p>\n\n<p style="text-align:justify">Hava ve mevsim şartlarına g&ouml;re değişen 60 &ndash; 75 dk arası s&uuml;recek turumuz otelinize transferimizle son buluyor. Sabah saat 5 civarı, ara&ccedil;larımız, siz saygıdeğer konuklarımızı otelinizden alarak kalkış alanına getirir. Balonlar yerde u&ccedil;uşa hazırlanırken, konuklarımız a&ccedil;ık b&uuml;fe hafif bir kahvaltı yaparlar. Kısa s&uuml;ren bir hazırlıktan sonra balonlar g&uuml;ndoğumuna yakın u&ccedil;uşa başlarlar. U&ccedil;uş yaklaşık 1 saat s&uuml;rer. U&ccedil;uş s&uuml;resince balonumuz ile yaklaşık 1000 feetlik y&uuml;ksekliğe &ccedil;ıkarak konuklarımıza g&uuml;neş doğumunu izleme fırsatı verir. Ayrıca vadi i&ccedil;lerine girerek peribacalarını ve vadi manzaralarını seyretme, fotoğraf &ccedil;ekme ve video kaydı imk&acirc;nı sunar. U&ccedil;uş sonunda konuklarımız i&ccedil;in şampanyalı bir kutlama yapılır. Ayrıca u&ccedil;uş hatırası olarak u&ccedil;uş sertifikası verilecektir. T&uuml;m balon u&ccedil;uş macerası yaklaşık 3 saat s&uuml;rmekte olup, sabah 8 civarında konuklarımız tekrar konakladıkları otellerine veya gezi noktasına bırakılacaktır.</p>\n\n<p style="text-align:justify"><strong>ATV TURU</strong></p>\n\n<p style="text-align:justify">Hava ve mevsim şartlarına g&ouml;re değişen 45 - 60 dk arası s&uuml;recek turumuz otelimize transferimizle son buluyor. Sabah saat 5 civarı, ara&ccedil;larımız, siz saygıdeğer konuklarımızı otelinizden alarak kalkış alanına getirir. Burada alacağımız hafif bir kahvaltının ardından ATV ara&ccedil;larımıza binerek otob&uuml;slerle ulaşılamayan vadi i&ccedil;lerine giriş sağlanır ve enfes manzaraların fotoğraflanması sağlanır. ATV turumuzda yoğun olarak girilen vadiler; Aşk Vadisi, Keşişler Vadisi gibi etkileyici vadiler olacaktır.</p>\n\n<p style="text-align:justify">&nbsp;</p>\n\n<p style="text-align:justify"><strong>B&Ouml;LGEDEKİ ALIŞVERİŞ YERLERİMİZ</strong></p>\n\n<p style="text-align:justify">Onyx Taşı İ&ccedil;in Sayan Onyx Taş At&ouml;lyesi, &Ccedil;anak &Ccedil;&ouml;mlek İ&ccedil;in Konak &Ccedil;&ouml;mlek&ccedil;ilik veya Hisar, Şarap İ&ccedil;in Turasan Şarapları</p>\n\n<p style="text-align:justify"><strong>GECE TURLARI</strong></p>\n\n<p style="text-align:justify">Gece Turları ve Diğer Ekstra Turlar; T&uuml;m Gece Turları Ekstra Olup Katılıma ve Kişi Sayısına Bağlı Olarak Ger&ccedil;ekleştirilir.</p>\n\n<p style="text-align:justify"><strong>İKLİM</strong></p>\n\n<p style="text-align:justify">B&ouml;lgenin &ccedil;evresi y&uuml;ksek dağlarla &ccedil;evrili olduğundan, denizlerin nemli ılıman havası b&ouml;lgeye sokulamaz.&nbsp;Bu nedenle b&ouml;lgede, yazları sıcak ve kurak, kışları soğuk ve kar yağışlı karasal iklim h&acirc;kimdir. B&ouml;lgede, doğuya doğru gidildik&ccedil;e y&uuml;ksekliğin artmasına bağlı olarak karasallık derecesi artar ve kış sıcaklıkları &ccedil;ok d&uuml;ş&uuml;k değerlere ulaşır.&nbsp;İ&ccedil; Anadolu, &uuml;lkemizin en az yağış alan b&ouml;lgesidir. Ortalama yağış 400 mm civarındadır. B&ouml;lge, en fazla yağısı ilkbahar aylarında sağanak halinde alır. En kurak mevsim yazdır. Yazların kurak olması ve yaz kuraklığının erken başlaması sebze t&uuml;r&uuml; bitkiler &uuml;zerinde olumsuz etki yapar. B&ouml;lgenin ve &uuml;lkemizin en az yağışlı yeri Tuz G&ouml;l&uuml; &ccedil;evresidir(320 mm) .Yağışların azlığı b&ouml;lgenin deniz etkisine kapalı olmasından kaynaklanmaktadır. Denizden gelen nemli hava k&uuml;tlesi, nemini, dağların denize bakan yama&ccedil;larında yağış halinde bırakır. İ&ccedil; Anadolu B&ouml;lgesi&#39;ne doğru eserken artık kurudur.</p>\n\n<p style="text-align:justify"><strong>OTOB&Uuml;SLER</strong></p>\n\n<p style="text-align:justify">MERCEDES TRAVEGO &amp; TOURISMO: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">MAN FORTUNA: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.<br />\n<br />\nNEOPLAN CITYLINER / TOURLINER: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify">TEMSA SAFIR / MARATON: 46+1+1 Koltuklandırma, Abs, Asr, Klimalı, Karoseri İndirme Kaldırma Sistemi Tempomat (Hız Sınırlayıcı ve Sabitleyici), TV, DVD Player (DVD, VCD, CD, MP3), &Ouml;nde ve Ortada 15&quot; LCD monit&ouml;r.</p>\n\n<p style="text-align:justify"><strong>MIDIBUSLER</strong></p>\n\n<p style="text-align:justify">ISUZU TURKUAZ: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">NOVO LUX: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">TEMSA PRESTIGE: 31+1 Veya 27 + 1 Koltuklandırma, Yatar Otob&uuml;s Koltuklu, Abs, Asr, Klima, 1 Adet Monit&ouml;r, 1 Adet Buzdolabı, Su Isıtıcılı Mutfak &Uuml;nitesi, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify"><strong>MINIBUSLER</strong></p>\n\n<p style="text-align:justify">MERCEDES SPRİNTER: 12+1 veya 16 + 1 Koltuklandırma, &Ouml;zel Tasarlanmış Yatar Otob&uuml;s&nbsp; Koltuklu, Abs, Asr, Klima, 1 Adet Buzdolabı, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify">WOLKSWAGEN CRAFTER: 12+1 veya 16 + 1 Koltuklandırma, &Ouml;zel Tasarlanmış Yatar Otob&uuml;s&nbsp; Koltuklu, Abs, Asr, Klima, 1 Adet Buzdolabı, Okuma Lambaları, Rehber Anonsu İ&ccedil;in Ses Sistemi, Cd Ve Dvd Oynatıcı.</p>\n\n<p style="text-align:justify"><strong>NOT: Turlarımızda kişi sayısına g&ouml;re, yukarıda belirtilen ara&ccedil; tiplerinden herhangi birisi kullanılır.</strong></p>\n\n<p style="text-align:justify"><strong>TUR PROGRAMLARIMIZ 6502 NOLU T&Uuml;KETİCİ KANUNUNA UYGUN OLARAK HAZIRLANMIŞTIR.</strong></p>\n',
           },
         ],
         departureInformation: '',
         includedInformation:
-          '<p><br/>&nbsp; Otellerde 2&nbsp;Gece Yarım Pansiyon Konaklama</p>\n\n<p><br/>&nbsp; &nbsp;Hopa Konaklama&nbsp;Oda Kahvaltı</p>\n\n<p><br/>&nbsp; Turizm Belgeli&nbsp;Otob&uuml;sler İle Ulaşım</p>\n\n<p><br/>&nbsp;&nbsp;Prontotour G&uuml;vencesi</p>\n\n<p><br/>&nbsp; Profesyonel T&uuml;rk&ccedil;e Rehberlik Hizmeti</p>\n\n<p><br/>&nbsp; 3&nbsp;Sabah Kahvaltısı</p>\n\n<p><br/>&nbsp; A&ccedil;ık B&uuml;fe veya Set Men&uuml; 2&nbsp;Akşam Yemeği</p>\n',
+          '<p><br/>&nbsp; Otellerde&nbsp;2 Gece Yarım Pansiyon Konaklama&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; Turizm Belgeli Otob&uuml;sler İle Ulaşım&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp;&nbsp;Prontotour G&uuml;vencesi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; Profesyonel T&uuml;rk&ccedil;e Rehberlik Hizmeti&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; 2 Sabah Kahvaltısı&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; A&ccedil;ık B&uuml;fe veya Set Men&uuml;&nbsp;2 Akşam Yemeği</p>\n\n<p><br/>&nbsp; 1618 Nolu Turizm Kanununa G&ouml;re Zorunlu Seyahat Sigortası</p>\n',
         notIncludedInformation:
-          '<p><br/> &nbsp;T&uuml;m &Ouml;ğlen Yemekleri</p>\n\n<p><br/>&nbsp; T&uuml;m Yemeklerde Alınan İ&ccedil;ecekler</p>\n\n<p><br/>&nbsp; Batum daki veya Hopa daki Akşam Yemeği</p>\n\n<p><br/>&nbsp; T&uuml;m &Ouml;zel Harcamalar</p>\n\n<p><br/>&nbsp; Ekstra Belirtilen T&uuml;m Organizasyonlar</p>\n\n<p><br/>&nbsp; M&uuml;ze Giriş &Uuml;cretleri ve S&uuml;mela Manastırı Minib&uuml;s &Uuml;creti</p>\n\n<p><br/> Yayla Minib&uuml;s &Uuml;cretleri</p>\n\n<p><br/>&nbsp; Yurt Dışı &Ccedil;ıkış Har&ccedil; Pulu</p>\n\n<p><br/> Batum Turu</p>\n',
+          '<p><br/>&nbsp; T&uuml;m &Ouml;ğlen Yemekleri&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p><br/>&nbsp; T&uuml;m Yemeklerde Alınan İ&ccedil;ecekler</p>\n\n<p>&nbsp;<br/>&nbsp; T&uuml;m &Ouml;zel Harcamalar&nbsp; &nbsp;</p>\n\n<p>&nbsp;<br/>&nbsp; Ekstra Belirtilen T&uuml;m Organizasyonlar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>\n\n<p>&nbsp;&nbsp;<br/>&nbsp; M&uuml;ze Giriş &Uuml;cretleri</p>\n',
         flightInformation: [],
         hotelRooms: [
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK/foVZbyGg53ZNy39OmV/aA=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTBNz2PACRxtA88jBmnzyiI=',
             adultCount: 1,
             childCount: 0,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKyEmQnUe3CsZj4qx4aAuJMk=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMQkhnCLYJm2RT+Sgc4C9yTc=',
             adultCount: 1,
             childCount: 1,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK1eIiuUENcr1zmw2d5b+kXA=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMZvf/lGeahNYIIJ9cgTMjqg=',
             adultCount: 1,
             childCount: 2,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKx/8XpBHtvkLM9k7KvrHgGQ=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeTW+wYSCnIYbpWFzgXYsbw=',
             adultCount: 2,
             childCount: 0,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK0mJqyr3pWi+lOEhVme1MyE=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMejmNuFXCSEkQG17jLdjUd0=',
             adultCount: 2,
             childCount: 1,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKwiPd0eCZW3N6gUnr3WQ3fM=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMRhc+/vZwsutNXcqz+oi1/Y=',
             adultCount: 2,
             childCount: 2,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK/XyY8o5oJVqxgF9pqbqZ9Q=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMedWnobGOugEgZ6rk7PfVys=',
             adultCount: 3,
             childCount: 0,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKzRW8wv3zmYfrdLEW8Ire5M=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMRo+FBR/9VLMnvWvclw44a0=',
             adultCount: 3,
             childCount: 1,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK3LsVAautng+KGG+9jjHtjY=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMXpo9ggqTnQ6A7o8rr2+sRY=',
             adultCount: 3,
             childCount: 2,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK68bJ70vfmZzzlfwk6lIbY8=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMffQcW1iMJ5aox6nyirQCEc=',
             adultCount: 4,
             childCount: 0,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK6kMrCp+srAX8f+QTK5RYus=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMb94eYKX25eow9dnURoaMOs=',
             adultCount: 4,
             childCount: 1,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKxkxJx355PvL95BeU06KWMc=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMWCgBP9CUxFYNpWSFu5HYtU=',
             adultCount: 4,
             childCount: 2,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK4iimsDUqhzwvP7pyss76/8=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMex6mbKFFBrcjIlWDEjWmrw=',
             adultCount: 5,
             childCount: 0,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK6YWThqLQ3kKsTrv2axa9OE=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTBKlYTTGSQEzA1GvLrtTSo=',
             adultCount: 5,
             childCount: 1,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkKwH/ZOYM++BALklywbkzSTE=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMYHNdXf8RMK5QXeKPYkXEXc=',
             adultCount: 5,
             childCount: 2,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK5utV4SoHn2WQLvIYM6hfJU=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMdXbw6G97V11ohZZyw3HKZs=',
             adultCount: 6,
             childCount: 0,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK+ApZhjID5fpZAmBn9rDKLc=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMeX2VsKhLy043x+EMSJiSE8=',
             adultCount: 6,
             childCount: 1,
             additionalBedCount: 0,
           },
           {
-            key: 'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK2FaYX9wQJWa9ZwM3pD9Vis=',
+            key: 'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMTW9bpsE5fAkDCp9y8OQjbg=',
             adultCount: 6,
             childCount: 2,
             additionalBedCount: 0,
@@ -952,7 +909,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
         additionalSSRData: {
           items: [
             {
-              uniqueIdentifier: 'f745e9c0-b040-411b-886e-243d29a8cd2a',
+              uniqueIdentifier: '7c6507b3-f1d8-4a8c-91e8-9f873f08eef5',
               code: 'BedType',
               included: true,
               description: 'Bed Type  (T)win Bed (F)rench Bed',
@@ -974,7 +931,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
               ],
             },
             {
-              uniqueIdentifier: '4e571a5e-f999-4bce-9c10-e8334618967a',
+              uniqueIdentifier: 'ef7c279f-f702-4e80-80a2-2c3a47ab9d74',
               code: 'PickUpPoint',
               included: true,
               description: 'Bus Pick Up Point',
@@ -986,13 +943,13 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
                 {
                   key: 'PickUpPointCode',
                   value:
-                    '194939@194938@194941@194944@194936@194937@194945@194940@194943@194942',
+                    '180294@180288@180289@180298@180291@180295@180296@180297@180290@180293@180292',
                   indexNo: 0,
                 },
                 {
                   key: 'PickUpPointExplain',
                   value:
-                    'ADAPAZARI OTOGAR ÖNÜ@BOLU OTOGAR ÖNÜ@Düzce Türsan Tesisleri@GEBZE CENTER AVM ÖNÜ@İZMİT HALKEVİ DURAĞI@İZMİT OTOGAR ÖNÜ OTOBÜS DURAKLARI@KADIKÖY TEPE NAUTİLUS AVM YANI@KARTAL KÖPRÜSÜ ( E - 5 ANKARA YÖNÜ )@-ŞİŞLİ PRONTO TUR MERKEZ OFİS ÖNÜ@-YENİBOSNA AİRPORT AVM OTOPARKI',
+                    '23.30 KADIKÖY TEPE NAUTİLUS AVM YANI@ADAPAZARI OTOGAR ÖNÜ@ANKARA SÖĞÜTÖZÜ@BOLU OTOGAR ÖNÜ@Düzce Türsan Tesisleri@GEBZE CENTER AVM ÖNÜ@İZMİT HALKEVİ DURAĞI@İZMİT OTOGAR ÖNÜ OTOBÜS DURAKLARI@KARTAL KÖPRÜSÜ ( E - 5 ANKARA YÖNÜ )@-ŞİŞLİ PRONTO TUR MERKEZ OFİS ÖNÜ@-YENİBOSNA AİRPORT AVM OTOPARKI',
                   indexNo: 0,
                 },
               ],
@@ -1002,7 +959,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
             type: 2,
             ownerKey: 'ProntoTour',
             identifier:
-              'vL3g0UF4Stnx6If7XVyjXC1P5kWzsuda+um5c7pEMiJfeLfBXFcp890zO1IyIkCJ3UoO3Z7deVLKiX7GP2FkK8eq9Z53HuxxKnvW1t1oakE2wxAgCWQ5YhD7dAicYpEv',
+              'XVOkeBgi/UqBAk/qhJpx77jb+nNV8BibCBFBmOHI/Qw6Q/NnauNe+AgBr6tg5K6Ds8WuiACoDjVJpvQInbfDMXRCHfz1sWMt9BRo+bwNbVR8RMoch08Nl4fdOw0AHZSV',
           },
           subGroups: [],
         },
@@ -1014,7 +971,7 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
       tourExtraServiceToDetailReturnPath: null,
       location: null,
       moduleName: 'Tour',
-      totalPrice: 13440,
+      totalPrice: 8145.46,
       priceCurrency: 'TRY',
       loyaltyMultiple: 3,
       couponDiscountList: null,
@@ -1025,5 +982,14 @@ export const __dummy__TourDummyResponsePaymentSummaryResponse = {
         rateValue: null,
       },
     },
+  },
+  hotelCancelWarranty: {
+    selectingCancelWarranty: false,
+    hasHotelWarranty: false,
+    cancelWarrantyPrice: 0,
+    hotelWarrantyDiscountSelected: false,
+    totalPrice: 0,
+    dayCount: 0,
+    couponActive: false,
   },
 }
