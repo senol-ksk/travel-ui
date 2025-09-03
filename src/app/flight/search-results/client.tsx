@@ -62,7 +62,7 @@ import {
 } from '@/modules/flight/searchParams'
 import { useFilterActions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
-import { DrawerFlight } from './components/drawer-flight'
+import { PackageFlightDrawer } from './components/package-flight-drawer'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
 import { formatCurrency } from '@/libs/util'
@@ -349,7 +349,7 @@ const FlightSearchView = () => {
 
     return total
   }
-
+  const activeTripKind = searchParams.activeTripKind
   return (
     <>
       <div className='border-b py-2'>
@@ -1189,6 +1189,7 @@ const FlightSearchView = () => {
               returnDate={searchParams.returnDate ?? ''}
               isDomestic={isDomestic ?? false}
               isReturnFlightVisible={isReturnFlightVisible}
+              activeTripKind={activeTripKind || ''}
             />
             <div className='grid gap-3 pt-3 md:gap-5'>
               {!searchResultsQuery.isFetchingNextPage &&
@@ -1376,7 +1377,7 @@ const FlightSearchView = () => {
         classNames={{
           title: 'flex-1 text-center font-normal',
           close:
-            'bg-blue-800 text-white absolute top-3 right-0 flex -translate-y-3 rounded-l-md w-10 h-10 items-center justify-center',
+            'bg-blue-800 text-white absolute top-3 right-0 flex -translate-y-3 rounded-bl-md w-12 h-12 items-center justify-center',
         }}
         title={
           <div className='flex flex-col items-center justify-center gap-2'>
@@ -1442,7 +1443,7 @@ const FlightSearchView = () => {
       >
         <Container>
           {selectedFlightItemPackages && (
-            <DrawerFlight
+            <PackageFlightDrawer
               data={selectedFlightItemPackages}
               onSelect={(selectedPackage) => {
                 handlePackageSelect(selectedPackage)

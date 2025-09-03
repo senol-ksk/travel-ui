@@ -79,7 +79,7 @@ function FlightDetailsSearch({
           const relatedSegments = detailSegments.filter(
             (s) => s.groupId === detailLeg.groupId
           )
-          console.log('details', relatedSegments)
+          // console.log('details', relatedSegments)
 
           const isCurrentLegVisible =
             isDomestic ||

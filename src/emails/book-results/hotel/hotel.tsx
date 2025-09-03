@@ -112,12 +112,7 @@ export default function EmailHotelOrderResult({ data }: IProps) {
                       roomGroup.checkInDate,
                       'day'
                     )}{' '}
-                    Gece /{' '}
-                    {dayjs(roomGroup.checkOutDate).diff(
-                      roomGroup.checkInDate,
-                      'day'
-                    ) + 1}{' '}
-                    Gün
+                    Gece
                   </td>
                 </tr>
                 <tr>
@@ -127,6 +122,13 @@ export default function EmailHotelOrderResult({ data }: IProps) {
                   <td>:</td>
                   <td>{data.passenger.passengers.length} Kişi</td>
                 </tr>
+                {roomGroup.earlyBooking && (
+                  <tr>
+                    <td>Rezervasyon</td>
+                    <td>:</td>
+                    <td>Erken Rezervasyon</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </Column>
@@ -140,17 +142,19 @@ export default function EmailHotelOrderResult({ data }: IProps) {
               <Column>Adı Soyadı</Column>
               <Column>Doğum Tarihi</Column>
               <Column>TC. No</Column>
+              <Column>Rezervasyon No.</Column>
             </tr>
           </thead>
           <tbody>
             {data.passenger.passengers.map(
-              ({ fullName, gender, identityNumber, birthday }) => {
+              ({ fullName, gender, identityNumber, birthday, bookingCode }) => {
                 return (
                   <tr key={identityNumber}>
                     <Column>{gender == 0 ? 'Bay' : 'Bayan'}</Column>
                     <Column>{fullName}</Column>
                     <Column>{dayjs(birthday).format('DD.MM.YYYY')}</Column>
                     <Column>{identityNumber}</Column>
+                    <Column>{bookingCode}</Column>
                   </tr>
                 )
               }
@@ -183,7 +187,7 @@ export default function EmailHotelOrderResult({ data }: IProps) {
         />
       </EmailCard>
       <EmailCard title='Ödeme Bilgileri'>
-        <table cellPadding={2}>
+        <table cellPadding={4}>
           <tr>
             <td width={150}>Toplam Fiyat</td>
             <td>:</td>
@@ -191,18 +195,30 @@ export default function EmailHotelOrderResult({ data }: IProps) {
               {formatCurrency(passenger.paymentInformation.basketTotal)}
             </td>
           </tr>
-          {hotelCancelWarranty.couponActive && (
+          {passenger.paymentInformation.basketDiscountTotal > 0 &&
+            !roomGroup?.earlyBooking && (
+              <tr>
+                <td>İndirim Tutarı</td>
+                <td>:</td>
+                <td className='font-bold'>
+                  {formatCurrency(
+                    passenger.paymentInformation.basketDiscountTotal
+                  )}
+                </td>
+              </tr>
+            )}
+          {passenger.paymentInformation.mlTotal &&
+            passenger.paymentInformation.mlTotal > 0 && (
+              <tr>
+                <td>ParafPara TL</td>
+                <td>:</td>
+                <td className='font-bold'>
+                  {formatCurrency(passenger.paymentInformation.mlTotal)}
+                </td>
+              </tr>
+            )}
+          {roomGroup?.earlyBooking && (
             <>
-              {passenger.paymentInformation.mlTotal &&
-                passenger.paymentInformation.mlTotal > 0 && (
-                  <tr>
-                    <td>ParafPara TL</td>
-                    <td>:</td>
-                    <td className='font-bold'>
-                      {formatCurrency(passenger.paymentInformation.mlTotal)}
-                    </td>
-                  </tr>
-                )}
               <tr>
                 <td>Ön Ödeme</td>
                 <td>:</td>
@@ -256,23 +272,21 @@ export default function EmailHotelOrderResult({ data }: IProps) {
             </td>
           </tr>
           <tr>
-            <td>Tahsil Edilen Tutar</td>
+            <td>Kredi Kartından Çekilecek Tutar</td>
             <td>:</td>
             <td className='font-bold'>
-              {formatCurrency(passenger.paymentInformation.collectingTotal)}
+              {formatCurrency(
+                Math.abs(
+                  (passenger.paymentInformation.basketTotal || 0) -
+                    (passenger.paymentInformation.basketDiscountTotal || 0) -
+                    (passenger.paymentInformation.mlTotal || 0)
+                )
+              )}
             </td>
           </tr>
         </table>
       </EmailCard>
-      <div
-        className='rounded-md border bg-blue-100'
-        style={{
-          borderColor: '#ECF4FD',
-          backgroundColor: '#ECF4FD',
-          borderRadius: '10px',
-          padding: '10px',
-        }}
-      >
+      <div className='rounded-lg border bg-blue-50 p-3'>
         <div className='text-sm font-bold'>Bilgilendirme</div>
         <ul>
           <li>
