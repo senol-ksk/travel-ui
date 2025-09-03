@@ -27,35 +27,73 @@ export default function EmailTourOrderResult({ data }: IProps) {
       <SuccessCard name={firstPassenger.fullName} />
       <EmailCard title='Tur Bilgisi'>
         <table cellPadding={4}>
-          <span className='text-lg font-bold'>{tour.title}</span>
-          <tbody>
-            <tr>
-              <td width={150}>Giriş Tarihi</td>
-              <td>:</td>
-              <td>{dayjs(tour.startDate).format('DD MMMM YYYY dddd')}</td>
-            </tr>
-            <tr>
-              <td>Çıkış Tarihi</td>
-              <td>:</td>
-              <td>{dayjs(tour.endDate).format('DD MMMM YYYY dddd')}</td>
-            </tr>
-            {tour.hotelInformations?.[0]?.name &&
-              tour.hotelInformations[0].name.trim() !== '' && (
-                <tr>
-                  <td>Konaklama</td>
-                  <td>:</td>
-                  <td>{tour.hotelInformations[0].name}</td>
-                </tr>
-              )}
-            {tour.detail.flightInformation &&
-              tour.detail.flightInformation.length > 0 && (
-                <tr>
-                  <td>Ulaşım</td>
-                  <td>:</td>
-                  <td>{tour.detail.flightInformation}</td>
-                </tr>
-              )}
-          </tbody>
+          <tr>
+            <td width={310} valign='top'>
+              <Img
+                className='rounded-lg'
+                width={310}
+                height={200}
+                src={tour.imageUrl}
+                alt={tour.title}
+              />
+            </td>
+            <td valign='top'>
+              <span className='text-lg font-bold'>{tour.title}</span>
+              <table cellPadding={4}>
+                <tbody>
+                  <tr>
+                    <td width={150}>Giriş Tarihi</td>
+                    <td>:</td>
+                    <td>{dayjs(tour.startDate).format('DD MMMM YYYY dddd')}</td>
+                  </tr>
+                  <tr>
+                    <td>Çıkış Tarihi</td>
+                    <td>:</td>
+                    <td>{dayjs(tour.endDate).format('DD MMMM YYYY dddd')}</td>
+                  </tr>
+                  <tr>
+                    <td>Süre</td>
+                    <td>:</td>
+                    <td>{tour.tourTime} Gün</td>
+                  </tr>
+                  {tour.hotelInformations?.[0]?.name &&
+                    tour.hotelInformations[0].name.trim() !== '' && (
+                      <tr>
+                        <td>Konaklama</td>
+                        <td>:</td>
+                        <td>{tour.hotelInformations[0].name}</td>
+                      </tr>
+                    )}
+                  {tour.detail.flightInformation &&
+                    tour.detail.flightInformation.length > 0 && (
+                      <tr>
+                        <td>Ulaşım</td>
+                        <td>:</td>
+                        <td>{tour.detail.flightInformation}</td>
+                      </tr>
+                    )}
+                  {tour.group &&
+                    tour.group.title &&
+                    tour.group.title.trim() !== '' && (
+                      <tr>
+                        <td>Grup</td>
+                        <td>:</td>
+                        <td>{tour.group.title}</td>
+                      </tr>
+                    )}
+                  {tour.region &&
+                    tour.region.title &&
+                    tour.region.title.trim() !== '' && (
+                      <tr>
+                        <td>Bölge</td>
+                        <td>:</td>
+                        <td>{tour.region.title}</td>
+                      </tr>
+                    )}
+                </tbody>
+              </table>
+            </td>
+          </tr>
         </table>
       </EmailCard>
 
@@ -175,18 +213,29 @@ export default function EmailTourOrderResult({ data }: IProps) {
               <td>İndirim Tutarı</td>
               <td>:</td>
               <td className='font-bold'>
-                {formatCurrency(payment.basketDiscountTotal)}
+                -{formatCurrency(payment.basketDiscountTotal)}
               </td>
+            </tr>
+          )}
+          {payment.mlTotal && payment.mlTotal > 0 && (
+            <tr>
+              <td>ParafPara TL</td>
+              <td>:</td>
+              <td className='font-bold'>{formatCurrency(payment.mlTotal)}</td>
             </tr>
           )}
           <tr>
             <td>Kredi Kartından Çekilen Tutar</td>
             <td>:</td>
             <td className='font-bold'>
-              {payment.installmentCount > 1 && (
+              {payment.installmentCount > 1 ? (
                 <>{payment.installmentCount} Taksit = </>
-              )}
-              {formatCurrency(payment.collectingTotal)}
+              ) : null}
+              {formatCurrency(
+                payment.basketTotal -
+                  (payment.basketDiscountTotal || 0) -
+                  (payment.mlTotal || 0)
+              )}{' '}
             </td>
           </tr>
           <tr>

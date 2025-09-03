@@ -223,6 +223,20 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                   {formatCurrency(passengerData.paymentInformation.basketTotal)}
                 </div>
               </div>
+              {passengerData.paymentInformation.basketDiscountTotal > 0 &&
+                productData.moduleName === 'Hotel' &&
+                (productData as HotelSummaryResponse).roomGroup
+                  ?.earlyBooking && (
+                  <div className='flex items-center gap-2'>
+                    <div className='w-36 font-medium'>İndirim Tutarı</div>
+                    <div>:</div>
+                    <div className='font-bold text-green-600'>
+                      {formatCurrency(
+                        passengerData.paymentInformation.basketDiscountTotal
+                      )}
+                    </div>
+                  </div>
+                )}
               {passengerData.paymentInformation.mlTotal &&
                 passengerData.paymentInformation.mlTotal > 0 && (
                   <div className='flex items-center gap-2'>
@@ -299,11 +313,18 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                 </div>
               </div>
               <div className='flex items-center gap-2'>
-                <div className='w-36 font-medium'>Kredi Kartından Çekilen</div>
+                <div className='w-36 font-medium'>
+                  Kredi Kartından Çekilecek Tutar
+                </div>
                 <div>:</div>
                 <div className='font-bold'>
                   {formatCurrency(
-                    passengerData.paymentInformation.collectingTotal
+                    Math.abs(
+                      (passengerData.paymentInformation.basketTotal || 0) -
+                        (passengerData.paymentInformation.basketDiscountTotal ||
+                          0) -
+                        (passengerData.paymentInformation.mlTotal || 0)
+                    )
                   )}
                 </div>
               </div>

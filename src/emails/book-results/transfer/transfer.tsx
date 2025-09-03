@@ -51,16 +51,14 @@ export default function EmailTransferOrderResult({ data }: IProps) {
                     saate kadar iptal ve değişiklik
                   </td>
                 </tr>
-                {transferVehicle.extraServices &&
-                  transferVehicle.extraServices.length > 0 &&
-                  transferVehicle.extraServices.map(
-                    (
-                      service: { name?: string; description?: string },
-                      index
-                    ) => (
+                {transferVehicle.transferData.bookDetail.extraServices &&
+                  transferVehicle.transferData.bookDetail.extraServices.length >
+                    0 &&
+                  transferVehicle.transferData.bookDetail.extraServices.map(
+                    (service, index) => (
                       <tr key={index}>
                         <td>
-                          {service.name ||
+                          {service.title ||
                             service.description ||
                             'Ekstra Hizmet'}
                         </td>
@@ -162,10 +160,37 @@ export default function EmailTransferOrderResult({ data }: IProps) {
           <div className='mt-3 font-bold'>Alış Yeri Adres Bilgisi</div>
           <div>{selectResponse.pickupDescription}</div>
 
-          <div className='mt-3 font-bold'> Alış Yeri Adres Bilgisi</div>
+          <div className='mt-3 font-bold'>Varış Yeri Adres Bilgisi</div>
           <div>{selectResponse.dropDescription}</div>
         </div>
       </EmailCard>
+
+      {transferVehicle.transferData.bookDetail.extraServices &&
+        transferVehicle.transferData.bookDetail.extraServices.length > 0 && (
+          <EmailCard title='Ekstra Hizmetler'>
+            <table cellPadding={4}>
+              <tbody>
+                {transferVehicle.transferData.bookDetail.extraServices.map(
+                  (service, index) => (
+                    <tr key={index}>
+                      <td width={200}>
+                        {service.title ||
+                          service.description ||
+                          'Ekstra Hizmet'}
+                      </td>
+                      <td>:</td>
+                      <td className='font-bold'>
+                        {service.priceWithMarkup.amount === 0
+                          ? 'Ücretsiz'
+                          : `${formatCurrency(service.priceWithMarkup.amount)} ${service.priceWithMarkup.transferCurrencyType === 1 ? 'TL' : 'USD'}`}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </EmailCard>
+        )}
 
       <EmailCard title='Fatura Bilgileri'>
         <BillingCard
@@ -179,7 +204,7 @@ export default function EmailTransferOrderResult({ data }: IProps) {
       </EmailCard>
 
       <EmailCard title='Ödeme Bilgileri'>
-        <table cellPadding={2}>
+        <table cellPadding={4}>
           <tr>
             <td width={150}>Toplam Fiyat</td>
             <td>:</td>
@@ -192,23 +217,34 @@ export default function EmailTransferOrderResult({ data }: IProps) {
               <td>İndirim Tutarı</td>
               <td>:</td>
               <td className='font-bold'>
+                -
                 {formatCurrency(
                   passenger.paymentInformation.basketDiscountTotal
                 )}
               </td>
             </tr>
           )}
-          {passenger.paymentInformation.basketDiscountTotal > 0 && (
-            <tr>
-              <td>ParafPara TL</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {formatCurrency(
-                  passenger.paymentInformation.basketDiscountTotal
-                )}
-              </td>
-            </tr>
-          )}
+          {passenger.paymentInformation.mlTotal &&
+            passenger.paymentInformation.mlTotal > 0 && (
+              <tr>
+                <td>ParafPara TL</td>
+                <td>:</td>
+                <td className='font-bold'>
+                  {formatCurrency(passenger.paymentInformation.mlTotal)}
+                </td>
+              </tr>
+            )}
+          <tr>
+            <td>Ödeme Yöntemi</td>
+            <td>:</td>
+            <td className='font-bold'>
+              {passenger.paymentInformation.installmentCount > 1 ? (
+                <>{passenger.paymentInformation.installmentCount} Taksit</>
+              ) : (
+                'Tek Çekim'
+              )}
+            </td>
+          </tr>
           <tr>
             <td>Kredi Kartından Çekilen Tutar</td>
             <td>:</td>
@@ -216,7 +252,13 @@ export default function EmailTransferOrderResult({ data }: IProps) {
               {passenger.paymentInformation.installmentCount > 1 && (
                 <>{passenger.paymentInformation.installmentCount} Taksit =</>
               )}
-              {formatCurrency(passenger.paymentInformation.collectingTotal)}
+              {formatCurrency(
+                Math.abs(
+                  passenger.paymentInformation.basketTotal -
+                    (passenger.paymentInformation.basketDiscountTotal || 0) -
+                    (passenger.paymentInformation.mlTotal || 0)
+                )
+              )}
             </td>
           </tr>
           <tr>
@@ -239,5 +281,5 @@ export default function EmailTransferOrderResult({ data }: IProps) {
   )
 }
 EmailTransferOrderResult.PreviewProps = {
-  data: __dummy__TransferDummyResponsePaymentSummaryResponse,
+  data: __dummy__TransferDummyResponsePaymentSummaryResponse.data,
 }

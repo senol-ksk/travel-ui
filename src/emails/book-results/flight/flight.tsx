@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import { Fragment } from 'react'
 import { formatCurrency } from '@/libs/util'
 import { EmailCard } from '../../../app/order-components/email-card'
-import { __dummy__flightPaymentSummaryResponseIstAms_transfer } from '../_dummy-response/flight'
+import { __dummy__flightPaymentSummaryResponse } from '../_dummy-response/flight'
 import { EmailBody } from '../../_components/body'
 import { SuccessCard } from '@/app/order-components/success-card'
 import { BillingCard } from '@/app/order-components/billing-card'
@@ -155,7 +155,7 @@ export default function EmailFlightBookResult({ data }: IProps) {
               <tr>
                 <Column>ADI SOYADI</Column>
                 <Column>E-BİLET NO.</Column>
-                <Column>PNR </Column>
+                <Column>PNR KODU</Column>
               </tr>
             </thead>
             <tbody className='text-sm'>
@@ -201,33 +201,24 @@ export default function EmailFlightBookResult({ data }: IProps) {
                 <td>İndirim Tutarı</td>
                 <td>:</td>
                 <td className='font-bold'>
+                  -
                   {formatCurrency(
                     passenger.paymentInformation.basketDiscountTotal
                   )}
                 </td>
               </tr>
             )}
-            {passenger.paymentInformation.basketDiscountTotal > 0 && (
-              <tr>
-                <td>ParafPara TL</td>
-                <td>:</td>
-                <td className='font-bold'>
-                  {formatCurrency(
-                    passenger.paymentInformation.basketDiscountTotal
-                  )}
-                </td>
-              </tr>
-            )}
-            <tr>
-              <td>Kredi Kartından Çekilen Tutar</td>
-              <td>:</td>
-              <td className='font-bold'>
-                {passenger.paymentInformation.installmentCount > 1 && (
-                  <>{passenger.paymentInformation.installmentCount} Taksit =</>
-                )}
-                {formatCurrency(passenger.paymentInformation.collectingTotal)}
-              </td>
-            </tr>
+            {passenger.paymentInformation.mlTotal &&
+              passenger.paymentInformation.mlTotal > 0 && (
+                <tr>
+                  <td>ParafPara TL</td>
+                  <td>:</td>
+                  <td className='font-bold'>
+                    {formatCurrency(passenger.paymentInformation.mlTotal)}
+                  </td>
+                </tr>
+              )}
+
             <tr>
               <td>Kart Numarası</td>
               <td>:</td>
@@ -242,6 +233,30 @@ export default function EmailFlightBookResult({ data }: IProps) {
                 {passenger.paymentInformation.encryptedCardHolder}
               </td>
             </tr>
+            <tr>
+              <td>Ödeme Yöntemi</td>
+              <td>:</td>
+              <td className='font-bold'>
+                {passenger.paymentInformation.installmentCount > 1 ? (
+                  <>{passenger.paymentInformation.installmentCount} Taksit</>
+                ) : (
+                  'Tek Çekim'
+                )}
+              </td>
+            </tr>
+            <tr>
+              <td>Kredi Kartından Çekilecek Tutar</td>
+              <td>:</td>
+              <td className='font-bold'>
+                {formatCurrency(
+                  Math.abs(
+                    (passenger.paymentInformation.basketTotal || 0) -
+                      (passenger.paymentInformation.basketDiscountTotal || 0) -
+                      (passenger.paymentInformation.mlTotal || 0)
+                  )
+                )}
+              </td>
+            </tr>
           </table>
         </EmailCard>
       </div>
@@ -250,5 +265,5 @@ export default function EmailFlightBookResult({ data }: IProps) {
 }
 
 EmailFlightBookResult.PreviewProps = {
-  data: __dummy__flightPaymentSummaryResponseIstAms_transfer,
+  data: __dummy__flightPaymentSummaryResponse.data,
 }
