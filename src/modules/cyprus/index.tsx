@@ -9,6 +9,7 @@ import { RiMapPin2Line } from 'react-icons/ri'
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import dayjs from 'dayjs'
 import { CyprusSearchPassengers } from './passengers-dropdown'
+import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 
 type PackageValues = ('2' | '1')[]
 
@@ -115,7 +116,13 @@ const CyprusSearchEngine = () => {
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 6, md: 3 }}>
-          <CyprusSearchPassengers />
+          <HotelPassengerDropdown
+            initialValues={[{ adult: 2, child: 0, childAges: [] }]}
+            // onChange={(params) => {
+            //   // form.setValue('rooms', params)
+            //   console.log(params)
+            // }}
+          />
         </Grid.Col>
         <Grid.Col span={{ md: 1 }}>
           <Box
