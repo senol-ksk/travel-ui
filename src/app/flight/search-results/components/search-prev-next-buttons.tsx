@@ -6,6 +6,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { SearchResult } from '@/app/car/search-results/search-result'
 
 type IProps = {
+  activeTripKind: string
   searchResultsQuery: {
     isLoading: boolean
     isFetching: boolean
@@ -23,6 +24,7 @@ type IProps = {
 }
 
 const SearchPrevNextButtons: React.FC<IProps> = ({
+  activeTripKind,
   searchSessionTokenQuery,
   searchResultsQuery,
   onPrevDay,
@@ -36,7 +38,7 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
 }) => {
   return (
     <>
-      {isDomestic && (
+      {!isDomestic && activeTripKind === '1' ? (
         <Skeleton
           className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'
           visible={
@@ -80,8 +82,61 @@ const SearchPrevNextButtons: React.FC<IProps> = ({
             <MdKeyboardArrowRight size={18} color='black' className='md:mt-1' />
           </Button>
         </Skeleton>
+      ) : (
+        isDomestic && (
+          <Skeleton
+            className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'
+            visible={
+              searchResultsQuery.isLoading ||
+              searchResultsQuery.isFetching ||
+              searchResultsQuery.isFetchingNextPage ||
+              searchSessionTokenQuery.isLoading
+            }
+          >
+            <Button
+              size='md'
+              variant='outline'
+              className='flex items-center gap-2 border-transparent bg-gray-200 hover:border-blue-800'
+              onClick={onPrevDay}
+            >
+              <MdKeyboardArrowLeft color='black' size={18} />
+              <span className='hidden font-normal text-black md:block'>
+                Önceki Gün
+              </span>
+            </Button>
+
+            <div className='flex flex-grow justify-center rounded bg-gray-200 py-2 font-medium'>
+              {(() => {
+                const calendarDate =
+                  isReturnFlightVisible && returnDate
+                    ? returnDate
+                    : departureDate
+                return calendarDate
+                  ? dayjs(calendarDate).format('D MMM YYYY, ddd')
+                  : ''
+              })()}
+            </div>
+
+            <Button
+              size='md'
+              variant='outline'
+              className='flex items-center gap-2 border-transparent bg-gray-200 hover:border-blue-800'
+              onClick={onNextDay}
+            >
+              <span className='hidden font-normal text-black md:block'>
+                Sonraki Gün
+              </span>
+              <MdKeyboardArrowRight
+                size={18}
+                color='black'
+                className='md:mt-1'
+              />
+            </Button>
+          </Skeleton>
+        )
       )}
-      {!isDomestic && returnDate && (
+
+      {!isDomestic && activeTripKind === '2' && (
         <Skeleton
           className='sticky top-0 z-10 mt-3 flex items-center justify-between gap-1 text-center'
           visible={

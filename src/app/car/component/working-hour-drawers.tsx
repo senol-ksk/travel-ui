@@ -6,8 +6,14 @@ type Props = {
   data: DetailResponseData
   opened: boolean
   onClose: () => void
+  defaultTab: 'get' | 'give'
 }
-const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
+const WorkingHoursDrawer: React.FC<Props> = ({
+  data,
+  opened,
+  onClose,
+  defaultTab,
+}) => {
   return (
     <>
       <Drawer
@@ -22,7 +28,7 @@ const WorkingHoursDrawer: React.FC<Props> = ({ data, opened, onClose }) => {
         }}
       >
         <Tabs
-          defaultValue='get'
+          defaultValue={defaultTab}
           classNames={{
             tab: 'border-b-5 rounded md:p-1',
             tabSection: 'hidden sm:flex',

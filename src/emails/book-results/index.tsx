@@ -1,9 +1,6 @@
 import { OperationResultType } from '@/app/reservation/types'
 
-import {
-  __dummy__flightPaymentSummaryResponse,
-  __dummy__flightPaymentSummaryResponseIstAms_transfer,
-} from './_dummy-response/flight'
+import { __dummy__flightPaymentSummaryResponse } from './_dummy-response/flight'
 import EmailHotelOrderResult from './hotel/hotel'
 
 import EmailFlightBookResult from './flight/flight'

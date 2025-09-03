@@ -4,6 +4,7 @@ import Image from 'next/image'
 
 import { TourSummaryResponse } from '@/app/reservation/types'
 import { CheckoutCard } from '@/components/card'
+import { Img } from '@react-email/components'
 
 type IProps = {
   data: TourSummaryResponse
@@ -17,7 +18,7 @@ const TourSummary: React.FC<IProps> = ({ data, passengerCount }) => {
       <CheckoutCard title='Tur Bilgisi'>
         <div className='grid gap-4 md:grid-cols-6 md:gap-3'>
           <div className='md:col-span-2'>
-            <Image
+            <Img
               width={310}
               height={200}
               src={tourPackage.imageUrl}
