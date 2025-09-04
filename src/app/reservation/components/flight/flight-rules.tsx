@@ -29,7 +29,7 @@ const FlightRules: React.FC<Iprops> = ({ data }) => {
   const totalFlightDuration = dayjs.duration(
     lastArrivalTime.diff(firstDepartureTime)
   )
-
+  console.log(flightData.flightList[0].flightDetail.freeVolatileData)
   return (
     <>
       <Button className='text-blue-500' variant='transparent' onClick={open}>

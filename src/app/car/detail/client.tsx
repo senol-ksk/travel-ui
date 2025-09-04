@@ -183,8 +183,12 @@ export const DetailClient = () => {
     }
   }
   const [
-    workingInfoOpened,
-    { open: openWorkingInfoDrawer, close: closeWorkingInfoDrawer },
+    workingGoOpened,
+    { open: openWorkingGoDrawer, close: closeWorkingGoDrawer },
+  ] = useDisclosure(false)
+  const [
+    workingReturnOpened,
+    { open: openWorkingReturnDrawer, close: closeWorkingReturnDrawer },
   ] = useDisclosure(false)
   if (!carDetailQuery.data && carDetailQuery.isLoading) {
     return (
@@ -314,7 +318,7 @@ export const DetailClient = () => {
                 </div>
 
                 <div
-                  onClick={openWorkingInfoDrawer}
+                  onClick={openWorkingGoDrawer}
                   className='flex items-center gap-2'
                 >
                   <div className='cursor-pointer text-blue-700'>
@@ -325,14 +329,15 @@ export const DetailClient = () => {
                 {carDetailQuery.data != null && (
                   <WorkingHoursDrawer
                     data={carDetailQuery.data}
-                    opened={workingInfoOpened}
-                    onClose={closeWorkingInfoDrawer}
+                    opened={workingGoOpened}
+                    onClose={closeWorkingGoDrawer}
+                    defaultTab='get'
                   />
                 )}
               </div>
 
               <div>
-                <div className='text-sm'>Teslim ediş</div>
+                <div className='text-sm'>Teslim Ediş</div>
                 <div className='text-md font-semibold'>
                   {dayjs
                     .utc(detailItem.carDetail.returnDate)
@@ -342,7 +347,7 @@ export const DetailClient = () => {
                   {carDetailQuery.data?.returnStation.location.name}
                 </div>
                 <div
-                  onClick={openWorkingInfoDrawer}
+                  onClick={openWorkingReturnDrawer}
                   className='flex items-center gap-2'
                 >
                   <div className='cursor-pointer text-blue-700'>
@@ -353,8 +358,9 @@ export const DetailClient = () => {
                 {carDetailQuery.data != null && (
                   <WorkingHoursDrawer
                     data={carDetailQuery.data}
-                    opened={workingInfoOpened}
-                    onClose={closeWorkingInfoDrawer}
+                    opened={workingReturnOpened}
+                    onClose={closeWorkingReturnDrawer}
+                    defaultTab='give'
                   />
                 )}
               </div>

@@ -62,12 +62,7 @@ const HotelSummary: React.FC<IProps> = ({
                     roomGroup.checkInDate,
                     'day'
                   )}{' '}
-                  Gece /{' '}
-                  {dayjs(roomGroup.checkOutDate).diff(
-                    roomGroup.checkInDate,
-                    'day'
-                  ) + 1}{' '}
-                  Gün
+                  Gece
                 </div>
               </div>
               {passengerCount && (
@@ -144,7 +139,9 @@ const HotelSummary: React.FC<IProps> = ({
             <div className='text-sm font-bold'>İptal Koşulları:</div>
             <div className='text-sm'>
               {roomGroup.nonRefundable ? (
-                <span className='font-medium text-red-600'>İptal Edilemez</span>
+                <span className='font-medium text-red-600'>
+                  İptal/İade Edilemez
+                </span>
               ) : (
                 <span className='font-medium text-green-600'>
                   Ücretsiz İptal
