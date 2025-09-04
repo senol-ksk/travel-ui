@@ -2,19 +2,21 @@
 
 import { useState } from 'react'
 import { Box, Button, Grid } from '@mantine/core'
+import { RiMapPin2Line } from 'react-icons/ri'
+import dayjs from 'dayjs'
+
 import { CyprusSearchEnginePackagesCheck } from './package-checks/package-checks'
 import { Locations } from '@/components/search-engine/locations/hotel/locations'
-import { SearchEngineButton } from '@/components/search-engine/search-button'
-import { RiMapPin2Line } from 'react-icons/ri'
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
-import dayjs from 'dayjs'
-import { CyprusSearchPassengers } from './passengers-dropdown'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 
 type PackageValues = ('2' | '1')[]
 
 const CyprusSearchEngine = () => {
-  const [selectedPackages, setSelectedPackages] = useState<PackageValues>([])
+  const [selectedPackages, setSelectedPackages] = useState<PackageValues>([
+    '1',
+    '2',
+  ])
   const isTransferOrFlightSelected =
     selectedPackages.includes('1') || selectedPackages.includes('2')
 
@@ -58,7 +60,7 @@ const CyprusSearchEngine = () => {
               // })
               // form.trigger('destination')
             }}
-            defaultValue={'mardin spor'}
+            defaultValue={'Kıbrıs'}
           />
         </Grid.Col>
         {isTransferOrFlightSelected && (
@@ -90,38 +92,22 @@ const CyprusSearchEngine = () => {
                 // })
                 // form.trigger('destination')
               }}
-              defaultValue={'mardin spor hava alani'}
+              defaultValue={'İstanbul Sabiha Gökçen Havaalanı (SAW)'}
             />
           </Grid.Col>
         )}
         <Grid.Col span={{ sm: 6, md: 3 }} pos={'relative'}>
-          {/* <RiMapPin2Line
-            size={20}
-            className='absolute top-1/2 left-1 z-10 mx-2 -translate-y-1/2'
-          /> */}
           <HotelCalendar
             defaultDates={[new Date(), dayjs().add(2, 'days').toDate()]}
             onDateSelect={(dates) => {
               const checkinDate = dates[0]
               const checkoutDate = dates[1]
-
-              // if (checkinDate && dayjs(checkoutDate).isValid()) {
-              //   form.setValue('checkinDate', new Date(checkinDate))
-              // }
-
-              // if (checkoutDate && dayjs(checkoutDate).isValid()) {
-              //   form.setValue('checkoutDate', new Date(checkoutDate))
-              // }
             }}
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 6, md: 3 }}>
           <HotelPassengerDropdown
             initialValues={[{ adult: 2, child: 0, childAges: [] }]}
-            // onChange={(params) => {
-            //   // form.setValue('rooms', params)
-            //   console.log(params)
-            // }}
           />
         </Grid.Col>
         <Grid.Col span={{ md: 1 }}>
@@ -131,7 +117,12 @@ const CyprusSearchEngine = () => {
             display={'grid'}
             mx={'auto'}
           >
-            <Button type='submit' className='h-full rounded-xl px-0' size='lg'>
+            <Button
+              type='submit'
+              className='h-full rounded-xl px-0'
+              size='lg'
+              mih={42}
+            >
               Ara
             </Button>
           </Box>
