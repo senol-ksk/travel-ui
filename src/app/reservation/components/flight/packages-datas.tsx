@@ -21,7 +21,8 @@ export const PackagesDatas: React.FC<IProps> = ({
   const owner = flightToUse.flightDetail.freeVolatileData.Owner
   const brandName = flightToUse.flightDetail.freeVolatileData.BrandName
   const isDomestic = flightToUse.flightDetail.isDomestic
-  const brandFeatures = flightToUse.flightDetail.freeVolatileData.BrandFeatures
+  const brandFeatures =
+    flightToUse.flightDetail.freeVolatileData.BrandFeatures || []
   const operatingAirlineInt =
     flightToUse.flightSegments[0].operatingAirline.code
   const marketingAirlineInt =
@@ -542,7 +543,7 @@ export const PackagesDatas: React.FC<IProps> = ({
           operatingAirlineInt !== 'BA' &&
           operatingAirlineInt !== 'EY' &&
           operatingAirlineInt !== 'EK') ||
-          marketingAirlineInt === operatingAirlineInt) && (
+          marketingAirlineInt !== operatingAirlineInt) && (
           <>
             {brandFeatures.map((feature: string) => (
               <div key={feature} className='flex items-center gap-2'>

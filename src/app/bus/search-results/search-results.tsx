@@ -412,6 +412,9 @@ const BusSearchResults: React.FC = () => {
                                                 (item2) => item.id === item2.id
                                               ) === itemIndex
                                           )
+                                          .sort((a, b) =>
+                                            a.label.localeCompare(b.label)
+                                          )
                                           .map((item, itemIndex) => {
                                             return (
                                               <Checkbox
@@ -498,9 +501,13 @@ const BusSearchResults: React.FC = () => {
                                                     item.id === item2.id
                                                 ) === itemIndex
                                             )
+                                            .sort((a, b) =>
+                                              a.label.localeCompare(b.label)
+                                            )
                                             .map((item, itemIndex) => {
                                               return (
                                                 <Checkbox
+                                                  className='my-1'
                                                   key={itemIndex}
                                                   label={item.label}
                                                   value={item.id.toString()}

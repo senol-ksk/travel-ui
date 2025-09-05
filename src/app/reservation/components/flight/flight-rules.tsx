@@ -58,41 +58,38 @@ const FlightRules: React.FC<Iprops> = ({ data, flightType }) => {
             )
 
             return (
-              <>
-                <div
-                  key={flightDetail.key}
-                  className='grid items-center gap-2 rounded-md p-2 md:flex'
-                >
-                  <Title order={6} className='flex items-center gap-2'>
-                    <RiFlightTakeoffLine size={24} className='text-blue-800' />
-                    <div>
-                      {flightDetail.groupId === 0
-                        ? 'Gidiş Uçuşu :'
-                        : 'Dönüş Uçuşu :'}
-                    </div>
-                  </Title>
+              <div
+                key={flightDetail.key}
+                className='grid items-center gap-2 rounded-md p-2 md:flex'
+              >
+                <Title order={6} className='flex items-center gap-2'>
+                  <RiFlightTakeoffLine size={24} className='text-blue-800' />
+                  <div>
+                    {flightDetail.groupId === 0
+                      ? 'Gidiş Uçuşu :'
+                      : 'Dönüş Uçuşu :'}
+                  </div>
+                </Title>
 
-                  <div className='flex items-center gap-2'>
-                    <div>
-                      {airports[flightSegmentsFirstItem.origin.code].city} (
-                      {flightSegmentsFirstItem.origin.code})
-                    </div>
-                    <div>
-                      <IoAirplaneSharp />
-                    </div>
-                    <div>
-                      {airports[flightSegmentsLastItem?.destination.code].city}(
-                      {flightSegmentsLastItem?.destination.code})
-                    </div>
+                <div className='flex items-center gap-2'>
+                  <div>
+                    {airports[flightSegmentsFirstItem.origin.code].city} (
+                    {flightSegmentsFirstItem.origin.code})
                   </div>
                   <div>
-                    {lastArrivalTime.format('DD MMMM YYYY dddd')} (
-                    {totalFlightDuration.format('H')}s{' '}
-                    {totalFlightDuration.format('mm')}dk)
+                    <IoAirplaneSharp />
+                  </div>
+                  <div>
+                    {airports[flightSegmentsLastItem?.destination.code].city}(
+                    {flightSegmentsLastItem?.destination.code})
                   </div>
                 </div>
-                <div></div>
-              </>
+                <div>
+                  {lastArrivalTime.format('DD MMMM YYYY dddd')} (
+                  {totalFlightDuration.format('H')}s{' '}
+                  {totalFlightDuration.format('mm')}dk)
+                </div>
+              </div>
             )
           })}
         </div>
