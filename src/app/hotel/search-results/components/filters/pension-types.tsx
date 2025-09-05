@@ -79,17 +79,19 @@ const PensionTypes: React.FC<IProps> = ({ data = [] }) => {
         >
           <Stack gap={4} p={rem(4)}>
             {filteredData && filteredData?.length > 0 ? (
-              filteredData?.map((dataItem) => {
-                if (!dataItem.type) return null
+              filteredData
+                ?.sort((a, b) => a.type.localeCompare(b.type))
+                .map((dataItem) => {
+                  if (!dataItem.type) return null
 
-                return (
-                  <Checkbox
-                    key={dataItem.id}
-                    label={dataItem.type}
-                    value={'' + dataItem.id}
-                  />
-                )
-              })
+                  return (
+                    <Checkbox
+                      key={dataItem.id}
+                      label={dataItem.type}
+                      value={'' + dataItem.id}
+                    />
+                  )
+                })
             ) : (
               <Alert color='red' variant='light' p={5}>
                 Sonuç bulunamadı.

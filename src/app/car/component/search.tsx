@@ -253,8 +253,9 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                         hideLabel='Daha az göster'
                                       >
                                         <Stack gap={rem(6)}>
-                                          {providerChecks.map(
-                                            (provider, providerIndex) => {
+                                          {providerChecks
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map((provider, providerIndex) => {
                                               return (
                                                 <Checkbox
                                                   key={providerIndex}
@@ -262,8 +263,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                                   value={provider}
                                                 />
                                               )
-                                            }
-                                          )}
+                                            })}
                                         </Stack>
                                       </Spoiler>
                                     </Checkbox.Group>
@@ -286,8 +286,9 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                     >
                                       <ScrollAreaAutosize mah={200}>
                                         <Stack gap={rem(6)}>
-                                          {brandChecks.map(
-                                            (data, dataIndex) => (
+                                          {brandChecks
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map((data, dataIndex) => (
                                               <Checkbox
                                                 key={dataIndex}
                                                 label={data
@@ -300,8 +301,7 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                                   )}
                                                 value={data}
                                               />
-                                            )
-                                          )}
+                                            ))}
                                         </Stack>
                                       </ScrollAreaAutosize>
                                     </Checkbox.Group>
@@ -327,15 +327,21 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                       }
                                     >
                                       <Stack gap={rem(6)}>
-                                        {fuelTypeChecks?.map((fuelType) => {
-                                          return (
-                                            <Checkbox
-                                              key={fuelType}
-                                              label={FuelTypes[fuelType]}
-                                              value={'' + fuelType}
-                                            />
+                                        {fuelTypeChecks
+                                          ?.sort((a, b) =>
+                                            FuelTypes[a].localeCompare(
+                                              FuelTypes[b]
+                                            )
                                           )
-                                        })}
+                                          .map((fuelType) => {
+                                            return (
+                                              <Checkbox
+                                                key={fuelType}
+                                                label={FuelTypes[fuelType]}
+                                                value={'' + fuelType}
+                                              />
+                                            )
+                                          })}
                                       </Stack>
                                     </Checkbox.Group>
                                   </Accordion.Panel>
@@ -363,15 +369,15 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                         hideLabel='Daha az göster'
                                       >
                                         <Stack gap={rem(6)}>
-                                          {categoryChecks.map(
-                                            (data, dataIndex) => (
+                                          {categoryChecks
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map((data, dataIndex) => (
                                               <Checkbox
                                                 key={dataIndex}
                                                 label={data}
                                                 value={data}
                                               />
-                                            )
-                                          )}
+                                            ))}
                                         </Stack>
                                       </Spoiler>
                                     </Checkbox.Group>
@@ -400,12 +406,12 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                                     >
                                       <Stack gap={rem(6)}>
                                         <Checkbox
-                                          label='Otomatik Vites'
-                                          value={'1'}
+                                          label='Manuel Vites'
+                                          value={'0'}
                                         />
                                         <Checkbox
-                                          label='Düz Vites'
-                                          value={'0'}
+                                          label='Otomatik Vites'
+                                          value={'1'}
                                         />
                                       </Stack>
                                     </Checkbox.Group>
