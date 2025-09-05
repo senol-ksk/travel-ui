@@ -11,11 +11,13 @@ import { RiUserLine } from 'react-icons/ri'
 type Props = {
   onChange?: (params: HotelRoomOptionTypes[]) => void
   initialValues: HotelRoomOptionTypes[]
+  maxRoomCount?: number
 }
 
 export const HotelPassengerDropdown: React.FC<Props> = ({
   onChange = () => {},
   initialValues,
+  maxRoomCount = 2,
 }) => {
   const [roomState, setRoomState] = useState(initialValues)
 
@@ -54,6 +56,7 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
                 <div className='grid min-w-[320px] gap-7 p-5'>
                   <HotelGuestsActions
                     initialValues={roomState}
+                    maxRoomCount={maxRoomCount}
                     onChange={(params) => {
                       onChange(params)
                       setRoomState(params)

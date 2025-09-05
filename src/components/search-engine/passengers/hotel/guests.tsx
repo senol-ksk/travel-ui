@@ -9,6 +9,7 @@ import { HotelRoomOptionTypes } from '@/modules/hotel/searchParams'
 type Props = {
   onChange?: (params: HotelRoomOptionTypes[]) => void
   initialValues: HotelRoomOptionTypes[]
+  maxRoomCount?: number
 }
 
 type HandleChildAgesParam = {
@@ -20,6 +21,7 @@ type HandleChildAgesParam = {
 const HotelGuestsActions: React.FC<Props> = ({
   initialValues,
   onChange = () => null,
+  maxRoomCount = 2,
 }) => {
   const [roomState, setRoomState] =
     useState<HotelRoomOptionTypes[]>(initialValues)
@@ -198,32 +200,34 @@ const HotelGuestsActions: React.FC<Props> = ({
           </div>
         ) : null}
 
-        <div className='pt-2 text-end'>
-          <Button
-            size='sm'
-            variant='subtle'
-            color={roomState.length > 1 ? 'red' : 'blue'}
-            type='button'
-            leftSection={<FaPlus />}
-            onClick={() => {
-              let nextState = roomState
+        {maxRoomCount > 1 && (
+          <div className='pt-2 text-end'>
+            <Button
+              size='sm'
+              variant='subtle'
+              color={roomState.length > maxRoomCount - 1 ? 'red' : 'blue'}
+              type='button'
+              leftSection={<FaPlus />}
+              onClick={() => {
+                let nextState = roomState
 
-              if (roomState.length > 1) {
-                nextState.splice(index, 1)
-                setRoomState([...nextState])
-              } else {
-                nextState = [
-                  ...nextState,
-                  { adult: 1, child: 0, childAges: [] },
-                ]
-                setRoomState(nextState)
-              }
-              onChange(nextState)
-            }}
-          >
-            {roomState.length > 1 ? 'Odayı Sil' : 'Oda Ekle'}
-          </Button>
-        </div>
+                if (roomState.length === maxRoomCount) {
+                  nextState.splice(index, 1)
+                  setRoomState([...nextState])
+                } else {
+                  nextState = [
+                    ...nextState,
+                    { adult: 1, child: 0, childAges: [] },
+                  ]
+                  setRoomState(nextState)
+                }
+                onChange(nextState)
+              }}
+            >
+              {roomState.length > maxRoomCount - 1 ? 'Odayı Sil' : 'Oda Ekle'}
+            </Button>
+          </div>
+        )}
       </div>
     )
   })
