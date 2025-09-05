@@ -76,9 +76,7 @@ export const FlightDetailSummary: React.FC<IProps> = ({
               {segment.freeVolatileData?.BrandName && (
                 <div className='flex items-center gap-2'>
                   <div className='text-sm text-gray-600'>
-                    {upperFirst(
-                      segment.freeVolatileData.BrandName.toLowerCase()
-                    )}
+                    {segment.freeVolatileData.BrandName.toUpperCase()}
                   </div>
                   <div className='flex items-center gap-1'>
                     <IoInformationCircle

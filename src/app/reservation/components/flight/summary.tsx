@@ -1,4 +1,4 @@
-import { upperFirst, useDisclosure } from '@mantine/hooks'
+import { useDisclosure } from '@mantine/hooks'
 import { Collapse, Title, UnstyledButton } from '@mantine/core'
 
 import {
@@ -18,7 +18,6 @@ import {
   FlightReservationSummary,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
-import { AirlineLogo } from '@/components/airline-logo'
 
 type IProps = {
   data: ProductPassengerApiResponseModel['viewBag']
@@ -90,17 +89,21 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                           ? 'Gidiş Uçuşu'
                           : 'Dönüş Uçuşu'}
                       </Title>
-                      {flightDetail.groupId === 0 &&
-                        data.SummaryViewDataResponser.summaryResponse && (
-                          <>
-                            <FlightRules
-                              data={
-                                data.SummaryViewDataResponser
-                                  .summaryResponse as FlightReservationSummary
-                              }
-                            />
-                          </>
-                        )}
+                      {data.SummaryViewDataResponser.summaryResponse && (
+                        <>
+                          <FlightRules
+                            data={
+                              data.SummaryViewDataResponser
+                                .summaryResponse as FlightReservationSummary
+                            }
+                            flightType={
+                              flightDetail.groupId === 0
+                                ? 'departure'
+                                : 'return'
+                            }
+                          />
+                        </>
+                      )}
                     </div>
                     <FlightDetailSummary
                       flightSegments={flightSegments}
