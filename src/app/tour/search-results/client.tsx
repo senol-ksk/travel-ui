@@ -367,13 +367,15 @@ const TourSearchResultClient = () => {
                                 }
                               >
                                 <Stack gap={rem(6)}>
-                                  {regionChecks.map((region, regionIndex) => (
-                                    <Checkbox
-                                      key={regionIndex}
-                                      label={region}
-                                      value={slugify(region)}
-                                    />
-                                  ))}
+                                  {regionChecks
+                                    .sort((a, b) => a.localeCompare(b))
+                                    .map((region, regionIndex) => (
+                                      <Checkbox
+                                        key={regionIndex}
+                                        label={region}
+                                        value={slugify(region)}
+                                      />
+                                    ))}
                                 </Stack>
                               </Checkbox.Group>
                             </Spoiler>
