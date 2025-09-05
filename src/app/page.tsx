@@ -151,7 +151,7 @@ export default async function Home() {
               {hotelDestinations && hotelDestinations?.length > 0 && (
                 <div className='hidden gap-3 overflow-hidden py-8 whitespace-nowrap md:flex'>
                   <ScrollArea w={'100%'}>
-                    <div className='flex gap-3'>
+                    <div className='flex gap-3 pb-5'>
                       {hotelDestinations
                         ?.sort((a, b) => a.ordering - b.ordering)
                         ?.map((hotelDestination) => (
