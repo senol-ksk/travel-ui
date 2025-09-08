@@ -338,10 +338,7 @@ export default function HolidaysPage() {
                   </div>
                   <div>
                     <div className='grid grid-cols-2 gap-2'>
-                      <Link
-                        href={holiday.hotellink as any} // eslint-disable-line @typescript-eslint/no-explicit-any
-                        className='col-span-1'
-                      >
+                      <a href={holiday.hotellink} className='col-span-1'>
                         <Button
                           variant='default'
                           fullWidth
@@ -350,28 +347,20 @@ export default function HolidaysPage() {
                         >
                           {holiday.hotelButton}
                         </Button>
-                      </Link>
-                      <Link
-                        href={
-                          (holiday.hotellink || '/hotel/search-results') as any // eslint-disable-line @typescript-eslint/no-explicit-any
-                        }
-                      >
+                      </a>
+                      <a href={holiday.hotellink}>
                         <Button
                           variant='default'
                           fullWidth
                           size='sm'
                           className='text-blue-600 hover:bg-blue-100'
                         >
-                          {holiday.hotelIntButton || holiday.hotelIntButton}
+                          {holiday.hotelIntButton}
                         </Button>
-                      </Link>
+                      </a>
                     </div>
                     <div className='mt-2 grid grid-cols-2 gap-2'>
-                      <Link
-                        href={
-                          (holiday.tourIntlink || '/tour/search-results') as any // eslint-disable-line @typescript-eslint/no-explicit-any
-                        }
-                      >
+                      <a href={holiday.tourIntlink}>
                         <Button
                           variant='default'
                           fullWidth
@@ -380,11 +369,8 @@ export default function HolidaysPage() {
                         >
                           {holiday.tourIntButton}
                         </Button>
-                      </Link>
-                      <Link
-                        href={holiday.tourlink as any} // eslint-disable-line @typescript-eslint/no-explicit-any
-                        className='col-span-1'
-                      >
+                      </a>
+                      <a href={holiday.tourlink} className='col-span-1'>
                         <Button
                           variant='default'
                           fullWidth
@@ -393,7 +379,7 @@ export default function HolidaysPage() {
                         >
                           {holiday.tourButton}
                         </Button>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </Card>
