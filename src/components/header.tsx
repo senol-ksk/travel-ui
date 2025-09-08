@@ -380,7 +380,7 @@ export const Header = () => {
           </Box>
         </Container>
       </header>
-      <Container className='hidden items-center font-medium md:flex'>
+      <Container className='hidden items-center text-sm font-medium md:flex'>
         {headerData.isLoading ? (
           <div className='flex gap-2 p-3'>
             <Skeleton h={20} className='size-20 grow' />
