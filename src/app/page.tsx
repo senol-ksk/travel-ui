@@ -31,6 +31,7 @@ import { TourOpportunity } from '@/components/home/tour-opportunity'
 import { EbultenForm } from '@/components/home/ebulten-form'
 
 import populerDestinationClasses from '@/styles/OutlineTabs.module.css'
+import { HomeTourDom } from '@/components/home/home-tours'
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
     ?.data
@@ -47,7 +48,7 @@ export default async function Home() {
   const recommendedProductsData = cmsData?.widgets.filter(
     (x) => x.point === 'hotel_deals'
   )
-  const hotelDestinations = cmsData?.widgets.filter(
+  const hotelDestinationsBtns = cmsData?.widgets.filter(
     (x) => x.point === 'hotel_deals_btns'
   )
   const holidayThemesData = cmsData?.widgets.filter(
@@ -65,6 +66,9 @@ export default async function Home() {
   )
   const lastOpportunityData = cmsData?.widgets.filter(
     (x) => x.point === 'last_opportunity'
+  )
+  const homeTourDomData = cmsData?.widgets.filter(
+    (x) => x.point === 'home_tour_dom'
   )
 
   const tourDeals = await serviceRequest<TourDealType[]>({
@@ -87,7 +91,7 @@ export default async function Home() {
       <div className='relative'>
         <Image
           component={NextImage}
-          src='https://ykmturizm.mncdn.com/11/Files/638737370698225204.jpg'
+          src='https://ykmturizm.mncdn.com/11/Files/638923998198240440.jpg'
           fill
           alt='ParaflyTravel'
           priority
@@ -148,11 +152,11 @@ export default async function Home() {
               <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:mb-0 md:text-3xl'>
                 Tavsiye Ettiğimiz Oteller
               </h2>
-              {hotelDestinations && hotelDestinations?.length > 0 && (
+              {hotelDestinationsBtns && hotelDestinationsBtns?.length > 0 && (
                 <div className='hidden gap-3 overflow-hidden py-8 whitespace-nowrap md:flex'>
                   <ScrollArea w={'100%'}>
                     <div className='flex gap-3 pb-5'>
-                      {hotelDestinations
+                      {hotelDestinationsBtns
                         ?.sort((a, b) => a.ordering - b.ordering)
                         ?.map((hotelDestination) => (
                           <CategoryLink
@@ -168,6 +172,16 @@ export default async function Home() {
 
               <div>
                 <RecommendedProducts data={recommendedProductsData} />
+              </div>
+            </div>
+          )}
+          {homeTourDomData && homeTourDomData.length > 0 && (
+            <div>
+              <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:mb-0 md:text-3xl'>
+                Yurtiçi Kültür Turları
+              </h2>
+              <div>
+                <HomeTourDom data={homeTourDomData} />
               </div>
             </div>
           )}

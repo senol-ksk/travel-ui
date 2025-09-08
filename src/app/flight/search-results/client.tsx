@@ -626,7 +626,7 @@ const FlightSearchView = () => {
                             </Accordion.Panel>
                           </Accordion.Item>
                           <Accordion.Item value='airlines'>
-                            <Accordion.Control>Hava Yolları</Accordion.Control>
+                            <Accordion.Control>HavaYolları</Accordion.Control>
                             <Accordion.Panel>
                               <Checkbox.Group
                                 onChange={(value) => {
@@ -647,23 +647,29 @@ const FlightSearchView = () => {
                                   className='w-full'
                                 >
                                   <Stack gap={6}>
-                                    {airlineDataObj?.map((airline) => {
-                                      return (
-                                        <div key={airline.Code}>
-                                          <Checkbox
-                                            name='airlines'
-                                            label={
-                                              airline.Value.find(
-                                                (airlineValue) =>
-                                                  airlineValue.LangCode ===
-                                                  'tr_TR'
-                                              )?.Value
-                                            }
-                                            value={airline.Code}
-                                          />
-                                        </div>
+                                    {airlineDataObj
+                                      ?.sort((a, b) =>
+                                        a.Value[0].Value.localeCompare(
+                                          b.Value[0].Value
+                                        )
                                       )
-                                    })}
+                                      .map((airline) => {
+                                        return (
+                                          <div key={airline.Code}>
+                                            <Checkbox
+                                              name='airlines'
+                                              label={
+                                                airline.Value.find(
+                                                  (airlineValue) =>
+                                                    airlineValue.LangCode ===
+                                                    'tr_TR'
+                                                )?.Value
+                                              }
+                                              value={airline.Code}
+                                            />
+                                          </div>
+                                        )
+                                      })}
                                   </Stack>
                                 </Spoiler>
                               </Checkbox.Group>
@@ -691,8 +697,13 @@ const FlightSearchView = () => {
                                   className='w-full'
                                 >
                                   <Stack gap={6}>
-                                    {getAirportsByCodeList.data?.map(
-                                      (airports) => {
+                                    {getAirportsByCodeList.data
+                                      ?.sort((a, b) =>
+                                        a.Value[0].Value.localeCompare(
+                                          b.Value[0].Value
+                                        )
+                                      )
+                                      .map((airports) => {
                                         return (
                                           <div key={airports.Code}>
                                             <Checkbox
@@ -708,8 +719,7 @@ const FlightSearchView = () => {
                                             />
                                           </div>
                                         )
-                                      }
-                                    )}
+                                      })}
                                   </Stack>
                                 </Spoiler>
                               </Checkbox.Group>
