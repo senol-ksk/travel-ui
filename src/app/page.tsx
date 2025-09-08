@@ -96,6 +96,9 @@ export default async function Home() {
             clipPath: 'ellipse(90% 90% at 50% 00%)',
           }}
         />
+        <div className='absolute top-0 left-0 m-1 rounded bg-gray-200 p-1 text-center text-xs opacity-75'>
+          Yeni Karamürsel Turizm ve Seyahat Acentası Belge No: 3102
+        </div>
         <div>
           <Container className='px-0 md:px-4 md:pt-[58px]'>
             <Title
