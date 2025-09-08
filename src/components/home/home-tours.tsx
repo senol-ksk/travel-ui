@@ -107,7 +107,6 @@ export const HomeTourDom: React.FC<IProps> = ({ data }) => {
                     <p className='text-xs text-gray-600'>
                       Çift kişilik odada kişi başı fiyatlarıdır.
                     </p>
-                    efendi
                   </div>
                 </div>
               </Box>
