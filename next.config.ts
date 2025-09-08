@@ -1,6 +1,7 @@
 import { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   typedRoutes: true,
+  output: 'standalone',
   experimental: {
     optimizePackageImports: [
       '@mantine/core',
