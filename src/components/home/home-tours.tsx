@@ -1,4 +1,4 @@
-import { AspectRatio, Title, Box, Image, Badge } from '@mantine/core'
+import { AspectRatio, Title, Box, Image, Badge, Button } from '@mantine/core'
 import { Carousel, CarouselSlide } from '@mantine/carousel'
 import { Link } from 'next-view-transitions'
 
@@ -32,22 +32,6 @@ export const HomeTourDom: React.FC<IProps> = ({ data }) => {
       }
     >
       {data?.map((item) => {
-        const mainPrice = Number(
-          item.params.price.value
-            .replace('₺', '')
-            .trim()
-            .replace(/\./g, '')
-            .replace(',', '.')
-        )
-        const discPrice = Number(
-          item.params.discount_price.value
-            .replace('₺', '')
-            .trim()
-            .replace(/\./g, '')
-            .replace(',', '.')
-        )
-        const discedPrice = ((mainPrice - discPrice) / mainPrice) * 100
-
         return (
           <CarouselSlide key={item.id}>
             <Box
@@ -66,47 +50,51 @@ export const HomeTourDom: React.FC<IProps> = ({ data }) => {
                       className='rounded-t-xl'
                     />
                   </AspectRatio>
-                  {item.params.discount_price?.value && (
-                    <Badge
-                      size='lg'
-                      radius={'md'}
-                      className='absolute top-2 left-3 bg-orange-500'
-                    >
-                      %{discedPrice} indirim
-                    </Badge>
-                  )}
+
                   {item.params.tag.value && (
                     <Badge
                       size='lg'
                       radius={'md'}
-                      className='absolute top-10 left-3 bg-blue-900 font-normal'
+                      className='absolute top-4 left-3 bg-blue-900 font-normal'
                     >
                       {item.params.tag.value}
                     </Badge>
                   )}
                 </div>
-                <div className='-mt-xl relative z-10 grid gap-3 rounded-xl border border-t-5 border-t-transparent bg-white px-5 py-3 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
+                <div className='-mt-xl relative z-10 grid h-35 gap-3 rounded-xl border border-t-5 border-t-transparent bg-white p-5 transition-all group-hover:shadow-[0_-6px_0_0_var(--mantine-color-blue-8)]'>
                   <Title order={3} fz='md' lineClamp={1}>
                     {item.title}
                   </Title>
                   <div className='items-end justify-between'>
-                    <div>
-                      <p className='text-sm font-bold text-gray-600 line-through'>
-                        {item.params.price?.value}₺
-                      </p>
-                      <p className='text-xl font-bold'>
-                        <span className='text-red-800'>
-                          {item.params.discount_price?.value}₺
-                        </span>
-                        <span className='text-sm font-normal'>
-                          {' '}
-                          &apos;den itibaren
-                        </span>
-                      </p>
+                    <div className='flex items-end justify-between'>
+                      <div>
+                        <p className='text-sm font-bold text-gray-600 line-through'>
+                          {item.params.price?.value}
+                        </p>
+                        <p className='text-xl font-bold'>
+                          <span
+                            className={
+                              item.params.discount_price.value &&
+                              item.params.discount_price?.value !== '0' &&
+                              item.params.discount_price?.value.length > 0
+                                ? 'text-red-800'
+                                : 'text-green-800'
+                            }
+                          >
+                            {item.params.discount_price?.value}
+                          </span>
+                        </p>
+                      </div>
+                      <Button
+                        className='transition-all ease-linear group-hover:bg-blue-800 group-hover:text-white'
+                        variant='light'
+                        color='blue'
+                        size='sm'
+                        radius='xl'
+                      >
+                        İncele
+                      </Button>
                     </div>
-                    <p className='text-xs text-gray-600'>
-                      Çift kişilik odada kişi başı fiyatlarıdır.
-                    </p>
                   </div>
                 </div>
               </Box>

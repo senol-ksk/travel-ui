@@ -36,7 +36,7 @@ const PensionTypes: React.FC<IProps> = ({ data = [] }) => {
           .filter((dataItem) => !!dataItem.type)
           ?.filter((dataItem) =>
             dataItem.type
-              .toLocaleLowerCase()
+              ?.toLocaleLowerCase()
               .includes(searchTerm.toLocaleLowerCase())
           )
       )
@@ -80,7 +80,12 @@ const PensionTypes: React.FC<IProps> = ({ data = [] }) => {
           <Stack gap={4} p={rem(4)}>
             {filteredData && filteredData?.length > 0 ? (
               filteredData
-                ?.sort((a, b) => a.type.localeCompare(b.type))
+                ?.sort((a, b) => {
+                  if (!a.type && !b.type) return 0
+                  if (!a.type) return 1
+                  if (!b.type) return -1
+                  return a.type.localeCompare(b.type)
+                })
                 .map((dataItem) => {
                   if (!dataItem.type) return null
 
