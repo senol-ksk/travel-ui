@@ -84,7 +84,8 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
             c='blue.8'
             bdrs={'100%'}
             onClick={() => emblaApi?.scrollPrev()}
-            size={'40'}
+            size={'50'}
+            className='transition-all ease-in hover:scale-110'
           >
             <RiArrowLeftLine />
           </ActionIcon>
@@ -114,7 +115,8 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
             c='blue.8'
             bdrs={'100%'}
             onClick={() => emblaApi?.scrollNext()}
-            size={'40'}
+            size={'50'}
+            className='transition-all ease-in hover:scale-110'
           >
             <RiArrowRightLine />
           </ActionIcon>
