@@ -100,7 +100,7 @@ export default async function Home() {
             clipPath: 'ellipse(90% 90% at 50% 00%)',
           }}
         />
-        <div className='absolute top-0 right-0 m-1 rounded bg-gray-200 p-1 text-center text-xs opacity-85'>
+        <div className='absolute top-0 right-0 m-1 hidden rounded bg-gray-200 p-1 text-center text-xs opacity-85 md:flex'>
           Yeni Karamürsel Turizm ve Seyahat Acentası Belge No: 3102
         </div>
         <div>
@@ -111,7 +111,9 @@ export default async function Home() {
             >
               Parafly ile ParafPara&apos;ların keyfini çıkarın!
             </Title>
-
+            <div className='mb-1 rounded bg-gray-200 p-1 py-2 text-center text-xs opacity-85 md:hidden'>
+              Yeni Karamürsel Turizm ve Seyahat Acentası Belge No: 3102
+            </div>
             <div className='z-50 bg-white shadow-lg md:rounded-lg md:border'>
               <SearchEngine />
             </div>
@@ -186,6 +188,7 @@ export default async function Home() {
               <div>
                 <HomeTourDom data={homeTourDomData} />
               </div>
+              <div>* Çift kişilik odada kişi fiyatıdır.</div>
             </div>
           )}
           {tourDeals?.data && tourDeals.data?.length > 0 && (

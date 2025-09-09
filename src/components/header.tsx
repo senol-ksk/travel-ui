@@ -380,44 +380,46 @@ export const Header = () => {
           </Box>
         </Container>
       </header>
-      <Container className='hidden items-center text-sm font-medium md:flex'>
-        {headerData.isLoading ? (
-          <div className='flex gap-2 p-3'>
-            <Skeleton h={20} className='size-20 grow' />
-            <Skeleton h={20} className='size-20 grow' />
-            <Skeleton h={20} className='size-20 grow' />
-            <Skeleton h={20} className='size-20 grow' />
-            <Skeleton h={20} className='size-20 grow' />
-            <Skeleton h={20} className='size-20 grow' />
-          </div>
-        ) : (
-          headerData.data &&
-          headerData.data?.params.main_menu.menus.map((item) => (
-            <div key={item.id}>
-              <Link
-                className='rounded px-4 py-1 hover:rounded-full hover:bg-blue-50'
-                href={item.url as Route}
-              >
-                {item.title}
-              </Link>
+      <div className='border-b shadow'>
+        <Container className='hidden w-full items-center text-sm font-medium md:flex'>
+          {headerData.isLoading ? (
+            <div className='flex gap-2 p-3'>
+              <Skeleton h={20} className='size-20 grow' />
+              <Skeleton h={20} className='size-20 grow' />
+              <Skeleton h={20} className='size-20 grow' />
+              <Skeleton h={20} className='size-20 grow' />
+              <Skeleton h={20} className='size-20 grow' />
+              <Skeleton h={20} className='size-20 grow' />
             </div>
-          ))
-        )}
-        {headerData.isLoading ? (
-          <div className='flex gap-2'>
-            <Skeleton h={20} className='size-20 grow' />
-          </div>
-        ) : (
-          headerData.data && (
-            <Link
-              className='rounded py-3 hover:bg-blue-50'
-              href='/landings/holidays'
-            >
-              Resmi Tatil Günleri
-            </Link>
-          )
-        )}
-      </Container>
+          ) : (
+            headerData.data &&
+            headerData.data?.params.main_menu.menus.map((item) => (
+              <div key={item.id}>
+                <Link
+                  className='rounded px-4 py-1 hover:rounded-full hover:bg-blue-50'
+                  href={item.url as Route}
+                >
+                  {item.title}
+                </Link>
+              </div>
+            ))
+          )}
+          {headerData.isLoading ? (
+            <div className='flex gap-2'>
+              <Skeleton h={20} className='size-20 grow' />
+            </div>
+          ) : (
+            headerData.data && (
+              <Link
+                className='rounded py-3 hover:bg-blue-50'
+                href='/landings/holidays'
+              >
+                Resmi Tatil Günleri
+              </Link>
+            )
+          )}
+        </Container>
+      </div>
     </>
   )
 }
