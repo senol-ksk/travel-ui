@@ -55,6 +55,7 @@ import { RiMapPin2Line } from 'react-icons/ri'
 import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
 import { Route } from 'next'
+import { CiCircleInfo } from 'react-icons/ci'
 
 type IProps = {
   slug: string
@@ -725,8 +726,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         opened={installmentTableOpened}
         onClose={closeInstallmentTable}
         title='Tüm Kartlara Göre Taksit Tablosu'
-        size={'auto'}
-        scrollAreaComponent={ScrollArea.Autosize}
+        size='auto'
       >
         {roomInstallmentQuery.isPending && (
           <div className='flex h-[500px] items-center justify-center'>
