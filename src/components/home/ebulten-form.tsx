@@ -59,7 +59,7 @@ const EbultenForm = () => {
     },
   })
   return (
-    <Box className='mt-15 rounded-2xl bg-blue-700 p-6 text-white shadow-lg md:p-10'>
+    <Box className='my-15 rounded-2xl bg-blue-700 p-6 text-white shadow-lg md:p-10'>
       <div className='flex flex-col gap-6 md:flex-row md:items-center md:justify-between'>
         <div className='flex flex-col items-start gap-4 md:flex-row md:items-center'>
           <div className='rounded-full bg-white p-3'>
