@@ -46,6 +46,7 @@ type IProps = {
 const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   const mounted = useMounted()
   const [searchParams] = useQueryStates(hotelSearchParamParser)
+  console.log(searchParams)
 
   const {
     hotelSearchRequestQuery,

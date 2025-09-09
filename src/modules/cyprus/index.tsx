@@ -1,43 +1,147 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Button, Grid } from '@mantine/core'
+import { Box, Button, Grid, Skeleton } from '@mantine/core'
 import { RiMapPin2Line } from 'react-icons/ri'
 import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { type Route } from 'next'
 
+import { z } from '@/libs/zod'
 import { CyprusSearchEnginePackagesCheck } from './package-checks/package-checks'
 import { Locations } from '@/components/search-engine/locations/hotel/locations'
 import { HotelCalendar } from '@/components/search-engine/calendar/hotel'
 import { HotelPassengerDropdown } from '@/components/search-engine/passengers/hotel'
 import { LocationResults } from '@/components/search-engine/locations/hotel/type'
 import { request } from '@/network'
-import { z } from '@/libs/zod'
+import { useDestinationGetBySlug } from '@/hooks/destination'
+import { useTransitionRouter } from 'next-view-transitions'
+import { cyprusRoomParser, cyprusSearchSerializer } from './searchParams'
+import { useGetAirportByCodeList } from '@/hooks/useGetAirport'
 
 type PackageValues = ('2' | '1')[]
 
-const cyprusSearchEngineSchema = z.object({
-  slug: z.string(),
-  start_date: z.coerce.date(),
-  end_date: z.coerce.date(),
-  isFlightChoose: z.boolean(),
-  isTransferChoose: z.boolean(),
-  adults: z.number(),
-  children: z.number(),
-  airport: z.string(),
-})
-
-const CyprusSearchEngine = () => {
-  const form = useForm({
-    resolver: zodResolver(cyprusSearchEngineSchema),
+const cyprusSearchEngineSchema = z
+  .object({
+    name: z.string(), // hotel name indeed
+    slug: z.string(), // hotel slug indeed
+    id: z.number(), // hotel slug indeed
+    checkInDate: z.coerce.date(),
+    checkOutDate: z.coerce.date(),
+    isFlight: z.boolean(),
+    isTransfer: z.boolean(),
+    airportCode: z.string().optional(),
+    airport: z
+      .object({
+        code: z.string(),
+        name: z.string(),
+      })
+      .optional(),
+    rooms: cyprusRoomParser,
+    type: z.number(),
+  })
+  .superRefine((values, ctx) => {
+    if ((values.isFlight || values.isTransfer) && !values.airport?.code) {
+      ctx.addIssue({
+        path: ['airportCode'],
+        message: 'Zorunlu alan',
+        code: 'custom',
+      })
+    }
   })
 
-  const [selectedPackages, setSelectedPackages] = useState<PackageValues>([
-    '1',
-    '2',
+type CyprusSearchEngineSearchParams = z.infer<typeof cyprusSearchEngineSchema>
+const defaultDates: [Date, Date] = [
+  dayjs().add(1, 'months').toDate(),
+  dayjs().add(1, 'months').add(5, 'days').toDate(),
+]
+
+type IProps = {
+  defaultValues?: {
+    checkInDate?: CyprusSearchEngineSearchParams['checkInDate']
+    checkOutDate?: CyprusSearchEngineSearchParams['checkOutDate']
+    isFlight?: CyprusSearchEngineSearchParams['isFlight']
+    isTransfer?: CyprusSearchEngineSearchParams['isTransfer']
+    rooms?: CyprusSearchEngineSearchParams['rooms']
+    slug?: CyprusSearchEngineSearchParams['slug']
+    airportCode?: CyprusSearchEngineSearchParams['airportCode']
+  }
+}
+
+const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
+  const form = useForm({
+    resolver: zodResolver(cyprusSearchEngineSchema),
+    defaultValues: {
+      checkInDate: defaultValues?.checkInDate ?? defaultDates[0],
+      checkOutDate: defaultValues?.checkOutDate ?? defaultDates[1],
+      isFlight: defaultValues?.isFlight ?? true,
+      isTransfer: defaultValues?.isTransfer ?? true,
+      rooms: defaultValues?.rooms ?? [
+        { adult: 2, child: 0, childBirthdays: [] },
+      ],
+      slug: defaultValues?.slug,
+      airportCode: defaultValues?.airportCode,
+    },
+  })
+  const router = useTransitionRouter()
+
+  const getDefaultHotelLocation = useDestinationGetBySlug({
+    moduleName: 'Hotel',
+    slugs: [form.formState.defaultValues?.slug ?? 'kibris'],
+  })
+  const defaultHotelLocationData = getDefaultHotelLocation?.data[0]
+  const getAirportInfo = useGetAirportByCodeList([
+    form.formState.defaultValues?.airportCode ?? '',
   ])
+
+  if (getAirportInfo.data && !form.formState.defaultValues?.airport) {
+    const airportInfo = getAirportInfo.data[0]
+    form.setValue('airportCode', airportInfo.Code)
+    form.setValue('airport', {
+      code: airportInfo.Code,
+      name: airportInfo.Value.find((lang) => lang.LangCode === 'tr_TR')
+        ?.Value as string,
+    })
+  }
+  if (
+    (!form.getValues('slug') &&
+      !form.formState.defaultValues?.slug &&
+      defaultHotelLocationData?.Result.Slug) ||
+    (!form.getValues('name') &&
+      !form.formState.defaultValues?.name &&
+      defaultHotelLocationData?.Result.Name)
+  ) {
+    form.setValue(
+      'slug',
+      getDefaultHotelLocation?.data.at(0)?.Result.Slug as string,
+      {
+        shouldValidate: true,
+      }
+    )
+    form.setValue(
+      'name',
+      getDefaultHotelLocation?.data.at(0)?.Result.Name as string,
+      {
+        shouldValidate: true,
+      }
+    )
+    form.setValue(
+      'type',
+      getDefaultHotelLocation?.data.at(0)?.Result.Type as number,
+      {
+        shouldValidate: true,
+      }
+    )
+    form.setValue(
+      'id',
+      getDefaultHotelLocation?.data.at(0)?.Result.Id as number,
+      {
+        shouldValidate: true,
+      }
+    )
+  }
 
   const [destinationLocationInputValue, setDestinationLocationInputValue] =
     useState('')
@@ -66,7 +170,7 @@ const CyprusSearchEngine = () => {
   const [airlineLocationInputValue, setAirlineLocationInputValue] = useState('')
   const { data: airlineLocations, isLoading: airlineLocationsIsLoading } =
     useQuery<LocationResults>({
-      queryKey: ['flight-origin-locations', airlineLocationInputValue],
+      queryKey: ['cyprus-flight-origin-locations', airlineLocationInputValue],
       enabled:
         !!airlineLocationInputValue && airlineLocationInputValue.length > 0,
       queryFn: async () => {
@@ -84,23 +188,36 @@ const CyprusSearchEngine = () => {
     })
 
   const isTransferOrFlightSelected =
-    selectedPackages.includes('1') || selectedPackages.includes('2')
+    form.getValues('isTransfer') || form.getValues('isFlight')
+
+  const submitSearchResults = (data: CyprusSearchEngineSearchParams) => {
+    const searchUrl = cyprusSearchSerializer(
+      '/cyprus/search-results',
+      data
+    ) as Route
+
+    router.push(searchUrl)
+  }
 
   return (
-    <form
-      onSubmit={form.handleSubmit((data) => {
-        console.log(data)
-      })}
-    >
+    <form onSubmit={form.handleSubmit(submitSearchResults)}>
       <div className='leading-md text-sm'>
         Seyahatinizi oluşturmak için bir paket seçin
       </div>
       <CyprusSearchEnginePackagesCheck
-        selectedPackages={selectedPackages}
+        selectedPackages={[
+          form.getValues('isFlight') ? '1' : '',
+          form.getValues('isTransfer') ? '2' : '',
+        ]}
         onChange={(value) => {
-          form.setValue('isFlightChoose', value.includes('1'))
-          form.setValue('isTransferChoose', value.includes('2'))
-          setSelectedPackages(value as PackageValues)
+          form.setValue('isFlight', value.includes('1'), {
+            shouldValidate: true,
+          })
+          form.setValue('isTransfer', value.includes('2'), {
+            shouldValidate: true,
+          })
+          form.trigger(['isTransfer', 'isFlight'])
+          // setSelectedPackages(value as PackageValues)
         }}
       />
       <Grid gutter={'xs'} mt={'sm'}>
@@ -111,24 +228,34 @@ const CyprusSearchEngine = () => {
           }}
           pos={'relative'}
         >
-          <RiMapPin2Line
-            size={20}
-            className='absolute top-1/2 left-1 z-10 mx-2 -translate-y-1/2'
-          />
-          <Locations
-            label='Gidilecek Yer'
-            data={destinationLocation}
-            isLoading={destinationLocationLoading}
-            onChange={(value) => {
-              console.log(value)
-              setDestinationLocationInputValue(value)
-            }}
-            inputProps={{ error: !!form.formState.errors.slug }}
-            onSelect={(data) => {
-              form.setValue('slug', data.Slug)
-              form.trigger('slug')
-            }}
-          />
+          <Skeleton visible={getDefaultHotelLocation.pending}>
+            <>
+              <RiMapPin2Line
+                size={20}
+                className='absolute top-1/2 left-1 mx-2 -translate-y-1/2'
+              />
+              <Locations
+                label='Gidilecek Yer'
+                data={destinationLocation}
+                isLoading={destinationLocationLoading}
+                onChange={(value) => {
+                  setDestinationLocationInputValue(value)
+                }}
+                inputProps={{ error: !!form.formState.errors.slug }}
+                onSelect={(data) => {
+                  form.setValue('slug', data.Slug)
+                  form.setValue('name', data.Name)
+                  form.setValue('type', data.Type)
+                  form.setValue('id', +data.Id)
+                  form.trigger(['slug', 'name', 'type', 'id'])
+                }}
+                defaultValue={
+                  form.getValues('name') ??
+                  getDefaultHotelLocation.data[0]?.Result.Name
+                }
+              />
+            </>
+          </Skeleton>
         </Grid.Col>
         {isTransferOrFlightSelected && (
           <Grid.Col
@@ -138,56 +265,80 @@ const CyprusSearchEngine = () => {
             }}
             pos={'relative'}
           >
-            <RiMapPin2Line
-              size={20}
-              className='absolute top-1/2 left-1 z-10 mx-2 -translate-y-1/2'
-            />
-            <Locations
-              label='Gidiş Dönüş Havalimanı'
-              data={airlineLocations?.Result}
-              isLoading={airlineLocationsIsLoading}
-              onChange={(value) => {
-                setAirlineLocationInputValue(value)
-              }}
-              // inputProps={{ error: !!form.formState.errors.destination }}
-              onSelect={(data) => {
-                // form.setValue('destination', {
-                //   id: data.Id,
-                //   name: data.Name,
-                //   slug: data.Slug,
-                //   type: data.Type,
-                // })
-                // form.trigger('destination')
-              }}
-            />
+            <Skeleton visible={getAirportInfo.isLoading}>
+              <RiMapPin2Line
+                size={20}
+                className='absolute top-1/2 left-1 mx-2 -translate-y-1/2'
+              />
+              <Locations
+                label='Gidiş Dönüş Havalimanı'
+                data={airlineLocations?.Result}
+                isLoading={airlineLocationsIsLoading}
+                onChange={(value) => {
+                  setAirlineLocationInputValue(value)
+                }}
+                inputProps={{
+                  error:
+                    !!form.formState.errors.airport?.message ||
+                    !!form.formState.errors.airportCode?.message,
+                }}
+                defaultValue={form.getValues('airport.name')}
+                onSelect={(data) => {
+                  form.setValue('airport', {
+                    code: data.Code,
+                    name: data.Name,
+                  })
+                  form.setValue('airportCode', data.Code)
+                  form.trigger(['airport', 'airportCode'])
+                }}
+              />
+            </Skeleton>
           </Grid.Col>
         )}
         <Grid.Col span={{ sm: 6, md: 3 }} pos={'relative'}>
           <HotelCalendar
-            defaultDates={[new Date(), dayjs().add(2, 'days').toDate()]}
+            defaultDates={[
+              form.getValues('checkInDate') ??
+                form.formState.defaultValues?.checkInDate ??
+                defaultDates[0],
+              form.getValues('checkOutDate') ??
+                form.formState.defaultValues?.checkOutDate ??
+                defaultDates[1],
+            ]}
             onDateSelect={(dates) => {
               const checkinDate = dates[0]
               const checkoutDate = dates[1]
-              form.setValue('start_date', dayjs(dates[0]).toDate())
-              form.setValue('end_date', dayjs(dates[1]).toDate())
+              form.setValue('checkInDate', dayjs(checkinDate).toDate())
+              form.setValue('checkOutDate', dayjs(checkoutDate).toDate())
             }}
           />
         </Grid.Col>
         <Grid.Col span={{ sm: 6, md: 3 }}>
           <HotelPassengerDropdown
-            initialValues={[{ adult: 2, child: 0, childAges: [] }]}
+            initialValues={[
+              {
+                adult:
+                  form.getValues('rooms').at(0)?.adult ??
+                  form.formState.defaultValues?.rooms?.at(0)?.adult ??
+                  2,
+                child:
+                  form.getValues('rooms').at(0)?.child ??
+                  form.formState.defaultValues?.rooms?.at(0)?.child ??
+                  0,
+                childAges: form.getValues('rooms').at(0)?.childBirthdays ?? [],
+              },
+            ]}
             maxRoomCount={1}
             onChange={(params) => {
-              console.log(params)
-              const adultCounts = params.reduce((a, b) => {
-                return b.adult + a
-              }, 0)
-              const childCounts = params.reduce((a, b) => {
-                return b.child + a
-              }, 0)
+              const rooms = params.map((room) => {
+                return {
+                  adult: room.adult,
+                  child: room.child,
+                  childBirthdays: room.childAges,
+                }
+              }) as CyprusSearchEngineSearchParams['rooms']
 
-              form.setValue('adults', adultCounts)
-              form.setValue('children', childCounts)
+              form.setValue('rooms', rooms)
             }}
           />
         </Grid.Col>
@@ -203,6 +354,7 @@ const CyprusSearchEngine = () => {
               className='h-full rounded-xl px-0'
               size='lg'
               mih={42}
+              loading={form.formState.isSubmitting}
             >
               Ara
             </Button>

@@ -42,7 +42,7 @@ export const Locations: React.FC<Props> = ({
     setLocationContainerOpened(false)
   )
   const [originValue, setOriginValue] = useState('')
-  const [locatioName, setLocationName] = useState<string>(defaultValue)
+  // const [locatioName, setLocationName] = useState<string>(defaultValue)
 
   const focusTrapRef = useFocusTrap(true)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -55,7 +55,7 @@ export const Locations: React.FC<Props> = ({
           setLocationContainerOpened(true)
         }}
         error={!!inputProps?.error}
-        title={locatioName}
+        title={defaultValue}
       />
       <Transition mounted={locationContainerOpened} transition='pop-top-right'>
         {(styles) => (
@@ -124,7 +124,7 @@ export const Locations: React.FC<Props> = ({
                               type='button'
                               className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
                               onClick={() => {
-                                setLocationName(Name)
+                                // setLocationName(Name)
                                 onSelect(location)
                                 setLocationContainerOpened(false)
                               }}
@@ -148,7 +148,6 @@ export const Locations: React.FC<Props> = ({
                             type='button'
                             className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
                             onClick={() => {
-                              setLocationName(destination.Name)
                               onSelect(destination)
                               setLocationContainerOpened(false)
                             }}

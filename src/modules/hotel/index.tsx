@@ -148,7 +148,10 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
               })
               form.trigger('destination')
             }}
-            defaultValue={form.formState.defaultValues?.destination?.name}
+            defaultValue={
+              form.getValues('destination')?.name ??
+              form.formState.defaultValues?.destination?.name
+            }
           />
         </div>
         <div className='col-span-17 sm:col-span-6 md:col-span-5'>

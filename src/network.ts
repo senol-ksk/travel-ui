@@ -90,12 +90,80 @@ async function serviceRequest<DataType>({
   }
 }
 
-async function olRequest() {}
+export type OLResponse<T> = {
+  success: boolean
+  code: number
+  data: T
+  sessionToken: string | null
+}
+
+type OlRequestDataType = AxiosRequestConfig['data']
+
+interface OlRequestWithParamsType extends OlRequestDataType {
+  params?: AxiosRequestConfig['data']
+  returnType?: string
+  requestType?: string
+}
+
+async function olRequest<T>({
+  apiAction,
+  apiRoute,
+  data,
+  signal,
+}: {
+  apiAction: string
+  apiRoute: string
+  data?: OlRequestWithParamsType
+  signal?: AxiosRequestConfig['signal']
+}): Promise<OLResponse<T> | undefined> {
+  const isServer = typeof window === 'undefined' || !window
+  const url = isServer
+    ? `${process.env.OL_ROUTE}`
+    : `${process.env.NEXT_PUBLIC_OL_ROUTE}`
+
+  const device = isServer
+    ? `${process.env.DEVICE_ID}`
+    : `${process.env.NEXT_PUBLIC_DEVICE_ID}`
+
+  if (!appToken) {
+    await getsecuritytoken()
+  }
+
+  const response = await request({
+    url,
+    method: 'post',
+    signal,
+    data: {
+      params: {
+        appName: process.env.NEXT_PUBLIC_APP_NAME,
+        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+        ...data?.params,
+      },
+      languageCode: 'tr_TR',
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
+      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
+      device,
+      apiAction,
+      apiRoute,
+      requestType: data?.requestType,
+      returnType: data?.returnType,
+    },
+    headers: {
+      appToken,
+      appName: process.env.NEXT_PUBLIC_APP_NAME,
+    },
+  })
+
+  return response
+}
 
 const authToken = md5(
   process.env.NEXT_PUBLIC_DEVICE_ID + process.env.NEXT_PUBLIC_SECURE_STRING
 ).toLocaleUpperCase()
 
+let appToken = ''
 export const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   const getToken = await request({
     url: process.env.NEXT_PUBLIC_SECURITY_ROUTE,
@@ -110,8 +178,6 @@ export const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
 
   return getToken
 }
-
-let appToken = ''
 
 export const getSessionToken = async (): Promise<string | undefined> => {
   if (!appToken) await getsecuritytoken()
@@ -235,4 +301,4 @@ export const getFlightSearchSessionToken = async () => {
   }
 }
 
-export { request, serviceRequest }
+export { request, serviceRequest, olRequest }
