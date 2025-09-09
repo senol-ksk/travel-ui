@@ -158,7 +158,12 @@ export const SearchEngine = () => {
         </Tabs.Panel>
 
         <Tabs.Panel value={searchModules.cyprus.value}>
-          <CyprusSearchEngine />
+          <CyprusSearchEngine
+            defaultValues={{
+              isTransfer: true,
+              isFlight: true,
+            }}
+          />
         </Tabs.Panel>
       </div>
     </Tabs>

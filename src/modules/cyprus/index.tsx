@@ -27,7 +27,7 @@ const cyprusSearchEngineSchema = z
   .object({
     name: z.string(), // hotel name indeed
     slug: z.string(), // hotel slug indeed
-    id: z.number(), // hotel slug indeed
+    id: z.number(), // hotel id indeed
     checkInDate: z.coerce.date(),
     checkOutDate: z.coerce.date(),
     isFlight: z.boolean(),
@@ -76,8 +76,14 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
     defaultValues: {
       checkInDate: defaultValues?.checkInDate ?? defaultDates[0],
       checkOutDate: defaultValues?.checkOutDate ?? defaultDates[1],
-      isFlight: defaultValues?.isFlight ?? true,
-      isTransfer: defaultValues?.isTransfer ?? true,
+      isFlight:
+        typeof defaultValues?.isFlight === 'boolean'
+          ? defaultValues?.isFlight
+          : true,
+      isTransfer:
+        typeof defaultValues?.isTransfer === 'boolean'
+          ? defaultValues?.isTransfer
+          : true,
       rooms: defaultValues?.rooms ?? [
         { adult: 2, child: 0, childBirthdays: [] },
       ],
@@ -228,7 +234,9 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
           }}
           pos={'relative'}
         >
-          <Skeleton visible={getDefaultHotelLocation.pending}>
+          {getDefaultHotelLocation.pending ? (
+            <Skeleton className='z-30 size-full' />
+          ) : (
             <>
               <RiMapPin2Line
                 size={20}
@@ -255,7 +263,7 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
                 }
               />
             </>
-          </Skeleton>
+          )}
         </Grid.Col>
         {isTransferOrFlightSelected && (
           <Grid.Col
@@ -265,34 +273,38 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
             }}
             pos={'relative'}
           >
-            <Skeleton visible={getAirportInfo.isLoading}>
-              <RiMapPin2Line
-                size={20}
-                className='absolute top-1/2 left-1 mx-2 -translate-y-1/2'
-              />
-              <Locations
-                label='Gidiş Dönüş Havalimanı'
-                data={airlineLocations?.Result}
-                isLoading={airlineLocationsIsLoading}
-                onChange={(value) => {
-                  setAirlineLocationInputValue(value)
-                }}
-                inputProps={{
-                  error:
-                    !!form.formState.errors.airport?.message ||
-                    !!form.formState.errors.airportCode?.message,
-                }}
-                defaultValue={form.getValues('airport.name')}
-                onSelect={(data) => {
-                  form.setValue('airport', {
-                    code: data.Code,
-                    name: data.Name,
-                  })
-                  form.setValue('airportCode', data.Code)
-                  form.trigger(['airport', 'airportCode'])
-                }}
-              />
-            </Skeleton>
+            {getAirportInfo.isLoading ? (
+              <Skeleton className='z-30 size-full' />
+            ) : (
+              <>
+                <RiMapPin2Line
+                  size={20}
+                  className='absolute top-1/2 left-1 mx-2 -translate-y-1/2'
+                />
+                <Locations
+                  label='Gidiş Dönüş Havalimanı'
+                  data={airlineLocations?.Result}
+                  isLoading={airlineLocationsIsLoading}
+                  onChange={(value) => {
+                    setAirlineLocationInputValue(value)
+                  }}
+                  inputProps={{
+                    error:
+                      !!form.formState.errors.airport?.message ||
+                      !!form.formState.errors.airportCode?.message,
+                  }}
+                  defaultValue={form.getValues('airport.name')}
+                  onSelect={(data) => {
+                    form.setValue('airport', {
+                      code: data.Code,
+                      name: data.Name,
+                    })
+                    form.setValue('airportCode', data.Code)
+                    form.trigger(['airport', 'airportCode'])
+                  }}
+                />
+              </>
+            )}
           </Grid.Col>
         )}
         <Grid.Col span={{ sm: 6, md: 3 }} pos={'relative'}>

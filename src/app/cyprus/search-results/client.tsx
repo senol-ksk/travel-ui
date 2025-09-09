@@ -6,6 +6,7 @@ import { Container } from '@mantine/core'
 
 const CyprusSearchResults = () => {
   const { cyprusSearchResultsQuery, searchParams } = useCyprusSearchResults()
+
   return (
     <>
       <div className='border-b py-3'>
