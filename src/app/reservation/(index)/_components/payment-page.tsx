@@ -741,8 +741,8 @@ export const PaymentPageSection = () => {
         <Modal
           opened={isOpenInstallmentTable}
           onClose={closeInstallmentTableModal}
-          title='Tüm Kartlara Göre Taksit Tablosu'
-          size={'xl'}
+          title='Kartlara Göre Taksit Tablosu'
+          size={'auto'}
         >
           <InstallmentTableModal
             data={

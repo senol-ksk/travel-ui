@@ -1179,7 +1179,7 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
           )
         })}
       </div>
-      <div className='flex items-center md:justify-center'>
+      <div className='sticky bottom-0 flex items-center md:justify-center'>
         <Button
           type='button'
           radius={'xl'}
