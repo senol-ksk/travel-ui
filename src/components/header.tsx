@@ -34,6 +34,7 @@ import { TbArrowsRightLeft } from 'react-icons/tb'
 import { modals } from '@mantine/modals'
 import { LoginForm } from '@/app/auth/login/_components/login-form'
 import { Route } from 'next'
+import { FiPhone } from 'react-icons/fi'
 
 export const Header = () => {
   const [drawerOpened, setDrawerOpened] = useState(false)
@@ -63,338 +64,361 @@ export const Header = () => {
   type IconKey = keyof typeof iconMap
 
   return (
-    <header className='border-b bg-white'>
-      <Container>
-        <Box className='flex items-center py-4'>
-          <Link href='/'>
-            <Image
-              src='/logo.png'
-              width={118}
-              height={41}
-              alt='Paraflytravel'
-              priority
-            />
-          </Link>
-          <Drawer opened={opened} onClose={close} className='md:hidden'>
-            <div className='flex flex-col gap-2'>
-              <div>
-                <PersonLetters />
+    <>
+      <header className='border-b bg-white'>
+        <Container>
+          <Box className='flex items-center py-2'>
+            <Link href='/'>
+              <Image
+                src='/logo.png'
+                width={118}
+                height={41}
+                alt='Paraflytravel'
+                priority
+              />
+            </Link>
+            <Drawer opened={opened} onClose={close} className='md:hidden'>
+              <div className='flex flex-col gap-2'>
+                <div>
+                  <PersonLetters />
+                </div>
+                <div className='rounded-md border p-2 shadow'>
+                  <AccountSideNav insideClose={close} />
+                </div>
               </div>
-              <div className='rounded-md border p-2 shadow'>
-                <AccountSideNav insideClose={close} />
-              </div>
-            </div>
-          </Drawer>
-          <div className='ml-auto flex items-center gap-1 md:hidden'>
-            {session.status === 'authenticated' ? (
-              <Button
-                onClick={open}
-                className='m-1 rounded-full bg-blue-800 p-2 text-start text-xs font-medium text-white'
-              >
-                {session?.data.user.name
-                  ? `${session.data.user.name.split(' ')[0][0].toUpperCase()}${session.data.user.name.split(' ').slice(-1)[0][0].toUpperCase()}`
-                  : ''}
-              </Button>
-            ) : (
-              <Button
-                variant='outline'
-                size='xs'
-                className='p-2'
-                radius={'xl'}
-                component={Link}
-                href={'/auth/login'}
-              >
-                <FaUser />
-              </Button>
-            )}
-
-            <Burger
-              opened={drawerOpened}
-              onClick={toggleDrawer}
-              size='sm'
-              title='Menü Aç/Kapat'
-            />
-          </div>
-
-          <Box className='hidden flex-1 items-center md:flex'>
-            <div className='flex items-center gap-3 font-medium'>
-              {headerData.isLoading ? (
-                <div className='flex gap-2'>
-                  <Skeleton h={20} className='size-20 grow' />
-                  <Skeleton h={20} className='size-20 grow' />
-                  <Skeleton h={20} className='size-20 grow' />
-                  <Skeleton h={20} className='size-20 grow' />
-                  <Skeleton h={20} className='size-20 grow' />
-                  <Skeleton h={20} className='size-20 grow' />
-                </div>
-              ) : (
-                headerData.data &&
-                headerData.data?.params.main_menu.menus.map((item) => (
-                  <div key={item.id}>
-                    <Link
-                      className='rounded p-2 hover:bg-blue-50'
-                      href={item.url as Route}
-                    >
-                      {item.title}
-                    </Link>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className='ms-auto flex items-center gap-3 font-medium'>
-              {headerData.isLoading ? (
-                <div className='flex gap-2'>
-                  <Skeleton h={20} className='size-30 grow' />
-                </div>
-              ) : (
-                <Menu>
-                  <Menu.Target>
-                    <UnstyledButton className='flex items-center gap-2'>
-                      <div>Online İşlemler</div>
-                      <div>
-                        <IoIosArrowDown />
-                      </div>
-                    </UnstyledButton>
-                  </Menu.Target>
-                  <Menu.Dropdown className='rounded-md border shadow'>
-                    <Menu.Item
-                      component={Link}
-                      href='/online-operations'
-                      className='text-md font-medium'
-                    >
-                      Seyahatinizi Görüntüleyin
-                    </Menu.Item>
-                    <Menu.Item
-                      className='text-md font-medium'
-                      component={Link}
-                      href='/online-operations/cancel-flight'
-                    >
-                      Uçak İptal İade
-                    </Menu.Item>
-                    <Menu.Item
-                      className='text-md font-medium'
-                      component={Link}
-                      href='/online-operations/checkin'
-                    >
-                      Online Check-in
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              )}
-
-              {/* Parafly alanı */}
-              {headerData.isLoading ? (
-                <div className='flex gap-2'>
-                  <Skeleton h={20} className='size-20 grow' />
-                </div>
-              ) : (
-                <Menu>
-                  <Menu.Target>
-                    <UnstyledButton className='flex items-center gap-2'>
-                      <div>Parafly</div>
-                      <div>
-                        <IoIosArrowDown />
-                      </div>
-                    </UnstyledButton>
-                  </Menu.Target>
-                  <Menu.Dropdown className='rounded-md border shadow'>
-                    <Menu.Item
-                      component={Link}
-                      href='/parafly/bonus-query'
-                      className='text-md font-medium'
-                    >
-                      ParafPara Sorgula
-                    </Menu.Item>
-                    <Menu.Item
-                      component={Link}
-                      href='/parafly/calculate'
-                      className='text-md font-medium'
-                    >
-                      ParafPara Hesapla
-                    </Menu.Item>
-                    <Menu.Item
-                      component={Link}
-                      href='/parafly/about'
-                      className='text-md font-medium'
-                    >
-                      Parafly Travel Nedir?
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              )}
+            </Drawer>
+            <div className='ml-auto flex items-center gap-1 md:hidden'>
               {session.status === 'authenticated' ? (
-                <Menu>
-                  <Menu.Target>
-                    <Button
-                      size='sm'
-                      variant='outline'
-                      leftSection={<FaUser />}
-                      className='truncate rounded-lg bg-blue-800 text-start text-xs font-medium text-white'
-                    >
-                      {session?.data.user.name}
-                    </Button>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Label>{session.data?.user.name}</Menu.Label>
-                    <Menu.Item component={Link} href={'/account'}>
-                      Hesabım
-                    </Menu.Item>
-                    <Menu.Item
-                      onClick={() => signOut()}
-                      className='text-red-500'
-                      leftSection={<IoIosLogOut size={18} />}
-                    >
-                      Oturumu Kapatın
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                <Button
+                  onClick={open}
+                  className='m-1 rounded-full bg-blue-800 p-2 text-start text-xs font-medium text-white'
+                >
+                  {session?.data.user.name
+                    ? `${session.data.user.name.split(' ')[0][0].toUpperCase()}${session.data.user.name.split(' ').slice(-1)[0][0].toUpperCase()}`
+                    : ''}
+                </Button>
               ) : (
                 <Button
                   variant='outline'
-                  radius='xl'
-                  leftSection={<FaRegUserCircle />}
-                  loading={session.status === 'loading'}
-                  onClick={() => {
-                    modals.open({
-                      title: 'Giriş Yap',
-                      children: <LoginForm />,
-                    })
-                  }}
+                  size='xs'
+                  className='p-2'
+                  radius={'xl'}
+                  component={Link}
+                  href={'/auth/login'}
                 >
-                  Oturum Açın
+                  <FaUser />
                 </Button>
               )}
+
+              <Burger
+                opened={drawerOpened}
+                onClick={toggleDrawer}
+                size='sm'
+                title='Menü Aç/Kapat'
+              />
             </div>
-          </Box>
 
-          <Drawer
-            opened={drawerOpened}
-            onClose={toggleDrawer}
-            padding='md'
-            styles={{
-              header: {
-                boxShadow: '0 0 2px 0 gray',
-              },
-            }}
-            title={
-              <div className='gap-lg flex items-center justify-end'>
-                <Link onClick={toggleDrawer} href='/'>
-                  <Image
-                    src='/logo.png'
-                    width={118}
-                    height={41}
-                    alt='Paraflytravel'
-                    priority
-                  />
-                </Link>
+            <Box className='hidden flex-1 items-center md:flex'>
+              <div className='ms-auto flex items-center gap-7 font-medium'>
+                <a
+                  href='tel:08508780400'
+                  className='flex items-center gap-1 hover:underline'
+                >
+                  <FiPhone />
+                  0850 878 0 400
+                </a>
 
-                <div>
-                  {session.status === 'authenticated' ? (
-                    <Button
-                      variant='outline'
-                      radius='xl'
-                      onClick={toggleDrawer}
-                      leftSection={<FaRegUserCircle />}
-                      component={Link}
-                      href={'/account'}
-                    >
-                      <span className='block truncate text-xs font-medium'>
-                        {session.data?.user.name}
-                      </span>
-                    </Button>
-                  ) : (
-                    <Button
-                      variant='outline'
-                      radius='xl'
-                      leftSection={<FaRegUserCircle />}
-                      component={Link}
-                      onClick={toggleDrawer}
-                      href={'/auth/login'}
-                      loading={session.status === 'loading'}
-                    >
-                      Giriş Yap
-                    </Button>
-                  )}
-                </div>
+                {headerData.isLoading ? (
+                  <div className='flex gap-2'>
+                    <Skeleton h={20} className='size-30 grow' />
+                  </div>
+                ) : (
+                  <Menu>
+                    <Menu.Target>
+                      <UnstyledButton className='flex items-center gap-2'>
+                        <div>Online İşlemler</div>
+                        <div>
+                          <IoIosArrowDown />
+                        </div>
+                      </UnstyledButton>
+                    </Menu.Target>
+                    <Menu.Dropdown className='rounded-md border shadow'>
+                      <Menu.Item
+                        component={Link}
+                        href='/online-operations'
+                        className='text-md font-medium'
+                      >
+                        Seyahatinizi Görüntüleyin
+                      </Menu.Item>
+                      <Menu.Item
+                        className='text-md font-medium'
+                        component={Link}
+                        href='/online-operations/cancel-flight'
+                      >
+                        Uçak İptal İade
+                      </Menu.Item>
+                      <Menu.Item
+                        className='text-md font-medium'
+                        component={Link}
+                        href='/online-operations/checkin'
+                      >
+                        Online Check-in
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                )}
+
+                {/* Parafly alanı */}
+                {headerData.isLoading ? (
+                  <div className='flex gap-2'>
+                    <Skeleton h={20} className='size-20 grow' />
+                  </div>
+                ) : (
+                  <Menu>
+                    <Menu.Target>
+                      <UnstyledButton className='flex items-center gap-2'>
+                        <div>Parafly</div>
+                        <div>
+                          <IoIosArrowDown />
+                        </div>
+                      </UnstyledButton>
+                    </Menu.Target>
+                    <Menu.Dropdown className='rounded-md border shadow'>
+                      <Menu.Item
+                        component={Link}
+                        href='/parafly/bonus-query'
+                        className='text-md font-medium'
+                      >
+                        ParafPara Sorgula
+                      </Menu.Item>
+                      <Menu.Item
+                        component={Link}
+                        href='/parafly/calculate'
+                        className='text-md font-medium'
+                      >
+                        ParafPara Hesapla
+                      </Menu.Item>
+                      <Menu.Item
+                        component={Link}
+                        href='/parafly/about'
+                        className='text-md font-medium'
+                      >
+                        Parafly Travel Nedir?
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                )}
+                {session.status === 'authenticated' ? (
+                  <Menu>
+                    <Menu.Target>
+                      <Button
+                        size='sm'
+                        variant='outline'
+                        leftSection={<FaUser />}
+                        className='truncate rounded-lg bg-blue-800 text-start text-xs font-medium text-white'
+                      >
+                        {session?.data.user.name}
+                      </Button>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Label>{session.data?.user.name}</Menu.Label>
+                      <Menu.Item component={Link} href={'/account'}>
+                        Hesabım
+                      </Menu.Item>
+                      <Menu.Item
+                        onClick={() => signOut()}
+                        className='text-red-500'
+                        leftSection={<IoIosLogOut size={18} />}
+                      >
+                        Oturumu Kapatın
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
+                ) : (
+                  <Button
+                    variant='outline'
+                    radius='xl'
+                    leftSection={<FaRegUserCircle />}
+                    loading={session.status === 'loading'}
+                    onClick={() => {
+                      modals.open({
+                        title: 'Giriş Yap',
+                        children: <LoginForm />,
+                      })
+                    }}
+                  >
+                    Oturum Açın
+                  </Button>
+                )}
               </div>
-            }
-            size='sm'
-          >
-            <div className='mt-4 flex flex-col gap-4'>
-              {headerData.data &&
-                headerData.data?.params.main_menu.menus.map((item) => {
-                  const IconComponent = iconMap[item.title as IconKey]
-                  return (
-                    <Anchor
-                      className={
-                        item.title == 'Kampanyalar'
-                          ? 'border-t border-gray-400 pt-4'
-                          : ''
-                      }
-                      onClick={toggleDrawer}
-                      component={Link}
-                      href={item.url as Route}
-                      key={item.id}
-                      c={'dark'}
-                    >
-                      {IconComponent && (
-                        <IconComponent
-                          size={18}
-                          className='me-3 inline-block'
-                        />
-                      )}
-                      {item.title}
-                    </Anchor>
-                  )
-                })}
+            </Box>
+
+            <Drawer
+              opened={drawerOpened}
+              onClose={toggleDrawer}
+              padding='md'
+              styles={{
+                header: {
+                  boxShadow: '0 0 2px 0 gray',
+                },
+              }}
+              title={
+                <div className='gap-lg flex items-center justify-end'>
+                  <Link onClick={toggleDrawer} href='/'>
+                    <Image
+                      src='/logo.png'
+                      width={118}
+                      height={41}
+                      alt='Paraflytravel'
+                      priority
+                    />
+                  </Link>
+
+                  <div>
+                    {session.status === 'authenticated' ? (
+                      <Button
+                        variant='outline'
+                        radius='xl'
+                        onClick={toggleDrawer}
+                        leftSection={<FaRegUserCircle />}
+                        component={Link}
+                        href={'/account'}
+                      >
+                        <span className='block truncate text-xs font-medium'>
+                          {session.data?.user.name}
+                        </span>
+                      </Button>
+                    ) : (
+                      <Button
+                        variant='outline'
+                        radius='xl'
+                        leftSection={<FaRegUserCircle />}
+                        component={Link}
+                        onClick={toggleDrawer}
+                        href={'/auth/login'}
+                        loading={session.status === 'loading'}
+                      >
+                        Giriş Yap
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              }
+              size='sm'
+            >
+              <div className='mt-4 flex flex-col gap-4'>
+                {headerData.data &&
+                  headerData.data?.params.main_menu.menus.map((item) => {
+                    const IconComponent = iconMap[item.title as IconKey]
+                    return (
+                      <Anchor
+                        className={
+                          item.title == 'Kampanyalar'
+                            ? 'border-t border-gray-400 pt-4'
+                            : ''
+                        }
+                        onClick={toggleDrawer}
+                        component={Link}
+                        href={item.url as Route}
+                        key={item.id}
+                        c={'dark'}
+                      >
+                        {IconComponent && (
+                          <IconComponent
+                            size={18}
+                            className='me-3 inline-block'
+                          />
+                        )}
+                        {item.title}
+                      </Anchor>
+                    )
+                  })}
+              </div>
+              <Grid gutter={'md'} className='mt-4'>
+                <Grid.Col span={12}>
+                  <Anchor
+                    component={Link}
+                    onClick={toggleDrawer}
+                    href='/online-operations'
+                    c={'dark'}
+                  >
+                    Seyahatinizi Görüntüleyin
+                  </Anchor>
+                </Grid.Col>
+                <Grid.Col span={12}>
+                  <Anchor
+                    onClick={toggleDrawer}
+                    component={Link}
+                    href='/online-operations/cancel-flight'
+                    c={'dark'}
+                  >
+                    Bilet İptal, İade İşlemleri
+                  </Anchor>
+                </Grid.Col>
+                <Grid.Col span={12}>
+                  <Anchor
+                    onClick={toggleDrawer}
+                    component={Link}
+                    href='/online-operations/checkin'
+                    c={'dark'}
+                  >
+                    Online Check in
+                  </Anchor>
+                </Grid.Col>
+                <Grid.Col span={12}>
+                  <Anchor
+                    onClick={toggleDrawer}
+                    component={Link}
+                    href='/iletisim'
+                    c={'dark'}
+                  >
+                    Yardım
+                  </Anchor>
+                </Grid.Col>
+              </Grid>
+            </Drawer>
+          </Box>
+        </Container>
+      </header>
+      <Container className='hidden items-center text-sm font-medium md:flex'>
+        {headerData.isLoading ? (
+          <div className='flex gap-2 p-3'>
+            <Skeleton h={20} className='size-20 grow' />
+            <Skeleton h={20} className='size-20 grow' />
+            <Skeleton h={20} className='size-20 grow' />
+            <Skeleton h={20} className='size-20 grow' />
+            <Skeleton h={20} className='size-20 grow' />
+            <Skeleton h={20} className='size-20 grow' />
+          </div>
+        ) : (
+          headerData.data &&
+          headerData.data?.params.main_menu.menus.map((item) => (
+            <div key={item.id}>
+              <Link
+                className='rounded px-4 py-1 hover:rounded-full hover:bg-blue-50'
+                href={item.url as Route}
+              >
+                {item.title}
+              </Link>
             </div>
-            <Grid gutter={'md'} className='mt-4'>
-              <Grid.Col span={12}>
-                <Anchor
-                  component={Link}
-                  onClick={toggleDrawer}
-                  href='/online-operations'
-                  c={'dark'}
-                >
-                  Seyahatinizi Görüntüleyin
-                </Anchor>
-              </Grid.Col>
-              <Grid.Col span={12}>
-                <Anchor
-                  onClick={toggleDrawer}
-                  component={Link}
-                  href='/online-operations/cancel-flight'
-                  c={'dark'}
-                >
-                  Bilet İptal, İade İşlemleri
-                </Anchor>
-              </Grid.Col>
-              <Grid.Col span={12}>
-                <Anchor
-                  onClick={toggleDrawer}
-                  component={Link}
-                  href='/online-operations/checkin'
-                  c={'dark'}
-                >
-                  Online Check in
-                </Anchor>
-              </Grid.Col>
-              <Grid.Col span={12}>
-                <Anchor
-                  onClick={toggleDrawer}
-                  component={Link}
-                  href='/iletisim'
-                  c={'dark'}
-                >
-                  Yardım
-                </Anchor>
-              </Grid.Col>
-            </Grid>
-          </Drawer>
-        </Box>
+          ))
+        )}
+        {headerData.isLoading ? (
+          <div className='flex gap-2'>
+            <Skeleton h={20} className='size-20 grow' />
+          </div>
+        ) : (
+          headerData.data && (
+            <Link
+              className='rounded py-3 hover:bg-blue-50'
+              href='/landings/holidays'
+            >
+              Resmi Tatil Günleri
+            </Link>
+          )
+        )}
       </Container>
-    </header>
+    </>
   )
 }
 
