@@ -180,7 +180,7 @@ export default async function Home() {
           )}
           {homeTourDomData && homeTourDomData.length > 0 && (
             <div>
-              <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:mb-0 md:text-3xl'>
+              <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
                 Yurtiçi Kültür Turları
               </h2>
               <div>
