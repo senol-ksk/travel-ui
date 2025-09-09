@@ -145,9 +145,7 @@ export default function EmailTransferOrderResult({ data }: IProps) {
                 </Column>
                 <Column width={120}>{passengerInfo.identityNumber}</Column>
                 <Column width={150}>
-                  <div className='font-bold text-blue-600'>
-                    {passengerInfo.bookingCode}
-                  </div>
+                  <div>{passengerInfo.bookingCode}</div>
                 </Column>
               </tr>
             ))}
