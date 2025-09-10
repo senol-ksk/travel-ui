@@ -15,7 +15,7 @@ export const useDestinationGetBySlug = ({
       queryKey: ['destination-slug', slug, moduleName],
       queryFn: async () => {
         const response = (await request({
-          url: `https://apipfn.lidyateknoloji.com/d/v1.1/api/${moduleName.toLowerCase()}/getbyslug`,
+          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/${moduleName.toLowerCase()}/getbyslug`,
           params: {
             slug,
           },

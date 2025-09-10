@@ -13,10 +13,9 @@ export default async function CyprusDetail({
   searchParams: Promise<SearchParams>
 }) {
   const { slug } = await params
-  const { productKey, searchToken, sessionToken, checkInDate, checkOutDate } =
-    await cyprusHotelDetailLoader(searchParams)
+  const queryParams = await cyprusHotelDetailLoader(searchParams)
 
-  if (!productKey || !searchToken || !sessionToken || !slug) {
+  if (!queryParams) {
     notFound()
   }
 
@@ -32,14 +31,7 @@ export default async function CyprusDetail({
         </Container>
       }
     >
-      <CyprusHotelDetail
-        checkInDate={checkInDate}
-        checkOutDate={checkOutDate}
-        slug={slug}
-        productKey={productKey}
-        searchToken={searchToken}
-        sessionToken={sessionToken}
-      />
+      <CyprusHotelDetail searchParams={queryParams} slug={slug} />
     </Suspense>
   )
 }

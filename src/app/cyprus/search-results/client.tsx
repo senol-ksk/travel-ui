@@ -37,8 +37,7 @@ const CyprusSearchResults = () => {
                 searchToken,
                 sessionToken,
                 productKey: item.key,
-                checkInDate: new Date(item.checkInDate),
-                checkOutDate: new Date(item.checkOutDate),
+                ...searchParams,
               }
             )
 

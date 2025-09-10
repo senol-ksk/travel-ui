@@ -1,6 +1,8 @@
 import {
   createLoader,
   createSerializer,
+  inferParserType,
+  parseAsBoolean,
   parseAsIsoDate,
   parseAsString,
 } from 'nuqs/server'
@@ -11,6 +13,8 @@ const cyprusHotelDetailSearchParams = {
   productKey: parseAsString,
   checkInDate: parseAsIsoDate,
   checkOutDate: parseAsIsoDate,
+  isTransfer: parseAsBoolean.withDefault(true),
+  isFlight: parseAsBoolean.withDefault(true),
 }
 
 export const cyprusHotelDetailSerializer = createSerializer(
@@ -20,3 +24,7 @@ export const cyprusHotelDetailSerializer = createSerializer(
 export const cyprusHotelDetailLoader = createLoader(
   cyprusHotelDetailSearchParams
 )
+
+export type CyprusHotelDetailSearchParamTypes = inferParserType<
+  typeof cyprusHotelDetailSearchParams
+>

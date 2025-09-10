@@ -32,7 +32,7 @@
     "@mantine/notifications": "^8.3.0",
     "@mantine/nprogress": "^8.3.0",
     "@number-flow/react": "^0.5.10",
-    "@react-email/components": "0.5.2",
+    "@react-email/components": "0.5.3",
     "@tanstack/react-query": "^5.87.1",
     "@vis.gl/react-google-maps": "^1.5.5",
     "axios": "^1.11.0",
@@ -66,7 +66,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@react-email/preview-server": "^4.2.9",
+    "@react-email/preview-server": "^4.2.11",
     "@tailwindcss/postcss": "^4.1.13",
     "@tanstack/eslint-plugin-query": "^5.83.1",
     "@testing-library/dom": "^10.4.1",
@@ -95,7 +95,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
-    "react-email": "4.2.9",
+    "react-email": "4.2.11",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
