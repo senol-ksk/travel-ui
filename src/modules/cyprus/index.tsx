@@ -3,10 +3,13 @@
 import { useState } from 'react'
 import { Box, Button, Grid, Skeleton } from '@mantine/core'
 import { RiMapPin2Line } from 'react-icons/ri'
-import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
+
 import { type Route } from 'next'
 
 import { z } from '@/libs/zod'
@@ -74,8 +77,12 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
   const form = useForm({
     resolver: zodResolver(cyprusSearchEngineSchema),
     defaultValues: {
-      checkInDate: defaultValues?.checkInDate ?? defaultDates[0],
-      checkOutDate: defaultValues?.checkOutDate ?? defaultDates[1],
+      checkInDate: dayjs(
+        defaultValues?.checkInDate ?? defaultDates[0]
+      ).toDate(),
+      checkOutDate: dayjs(
+        defaultValues?.checkOutDate ?? defaultDates[1]
+      ).toDate(),
       isFlight:
         typeof defaultValues?.isFlight === 'boolean'
           ? defaultValues?.isFlight
@@ -197,6 +204,7 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
     form.getValues('isTransfer') || form.getValues('isFlight')
 
   const submitSearchResults = (data: CyprusSearchEngineSearchParams) => {
+    console.log(data)
     const searchUrl = cyprusSearchSerializer(
       '/cyprus/search-results',
       data
@@ -320,8 +328,9 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
             onDateSelect={(dates) => {
               const checkinDate = dates[0]
               const checkoutDate = dates[1]
-              form.setValue('checkInDate', dayjs(checkinDate).toDate())
-              form.setValue('checkOutDate', dayjs(checkoutDate).toDate())
+
+              form.setValue('checkInDate', dayjs.utc(checkinDate).toDate())
+              form.setValue('checkOutDate', dayjs.utc(checkoutDate).toDate())
             }}
           />
         </Grid.Col>

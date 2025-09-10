@@ -92,7 +92,13 @@ export const useCyprusSearchResults = () => {
     },
   })
 
-  return { cyprusSearchResultsQuery, searchSessionTokenQuery, searchParams }
+  return {
+    cyprusSearchResultsQuery,
+    searchSessionTokenQuery,
+    searchParams,
+    searchToken: searchSessionTokenQuery.data?.searchToken,
+    sessionToken: searchSessionTokenQuery.data?.sessionToken,
+  }
 }
 
 const dummySp = {

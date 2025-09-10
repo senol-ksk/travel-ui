@@ -5,6 +5,18 @@ import { ResponseStatus } from './app/reservation/types'
 import { GetSecurityTokenResponse } from './types/global'
 import md5 from 'md5'
 
+const isServer = typeof window === 'undefined' || !window
+
+const appName = isServer
+  ? process.env.APP_NAME
+  : process.env.NEXT_PUBLIC_APP_NAME
+const scopeName = isServer
+  ? process.env.SCOPE_NAME
+  : process.env.NEXT_PUBLIC_SCOPE_NAME
+const scopeCode = isServer
+  ? process.env.SCOPE_CODE
+  : process.env.NEXT_PUBLIC_SCOPE_CODE
+
 const client = axios.create({
   baseURL: '/',
 })
@@ -85,8 +97,6 @@ async function serviceRequest<DataType>({
     }
 
     console.log('Unhandled error ===> ', err)
-
-    // return err
   }
 }
 
@@ -116,7 +126,6 @@ async function olRequest<T>({
   data?: OlRequestWithParamsType
   signal?: AxiosRequestConfig['signal']
 }): Promise<OLResponse<T> | undefined> {
-  const isServer = typeof window === 'undefined' || !window
   const url = isServer
     ? `${process.env.OL_ROUTE}`
     : `${process.env.NEXT_PUBLIC_OL_ROUTE}`
@@ -129,27 +138,32 @@ async function olRequest<T>({
     await getsecuritytoken()
   }
 
+  const payload = {
+    params: {
+      apiAction,
+      apiRoute,
+      appName,
+      scopeName,
+      scopeCode,
+      ...data?.params,
+    },
+    languageCode: 'tr_TR',
+    appName,
+    scopeName,
+    scopeCode,
+    device,
+    apiAction,
+    apiRoute,
+    requestType: data?.requestType,
+    returnType: data?.returnType,
+    sessionToken: data?.params.sessionToken,
+  }
+
   const response = await request({
     url,
     method: 'post',
     signal,
-    data: {
-      params: {
-        appName: process.env.NEXT_PUBLIC_APP_NAME,
-        scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-        scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-        ...data?.params,
-      },
-      languageCode: 'tr_TR',
-      appName: process.env.NEXT_PUBLIC_APP_NAME,
-      scopeName: process.env.NEXT_PUBLIC_SCOPE_NAME,
-      scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
-      device,
-      apiAction,
-      apiRoute,
-      requestType: data?.requestType,
-      returnType: data?.returnType,
-    },
+    data: payload,
     headers: {
       appToken,
       appName: process.env.NEXT_PUBLIC_APP_NAME,
@@ -166,11 +180,15 @@ const authToken = md5(
 let appToken = ''
 export const getsecuritytoken = async (): Promise<GetSecurityTokenResponse> => {
   const getToken = await request({
-    url: process.env.NEXT_PUBLIC_SECURITY_ROUTE,
+    url: isServer
+      ? process.env.SECURITY_ROUTE
+      : process.env.NEXT_PUBLIC_SECURITY_ROUTE,
     method: 'post',
     data: {
       authToken,
-      envName: process.env.NEXT_PUBLIC_APP_NAME,
+      envName: isServer
+        ? process.env.APP_NAME
+        : process.env.NEXT_PUBLIC_APP_NAME,
     },
   })
 
@@ -183,7 +201,9 @@ export const getSessionToken = async (): Promise<string | undefined> => {
   if (!appToken) await getsecuritytoken()
 
   const response = await request({
-    url: process.env.NEXT_PUBLIC_GET_SESSION_TOKEN,
+    url: isServer
+      ? process.env.GET_SESSION_TOKEN
+      : process.env.NEXT_PUBLIC_GET_SESSION_TOKEN,
     method: 'post',
     headers: {
       appToken,
