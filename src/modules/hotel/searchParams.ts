@@ -61,6 +61,7 @@ export const hotelFilterSearchParams = {
   destinationIds: parseAsArrayOf(parseAsString),
   pensionTypes: parseAsArrayOf(parseAsString),
   themes: parseAsArrayOf(parseAsString),
+  facilities: parseAsArrayOf(parseAsString),
 }
 
 export const hotelDetailSearchParams = {

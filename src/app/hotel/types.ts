@@ -192,6 +192,16 @@ export interface HotelSearchResponseThemes {
   priority: number
 }
 
+export interface HotelSearchResponseFacilities {
+  id: ID
+  name: string
+  scope_id: ID
+  type_id: ID
+  isPaid: boolean
+  featured: boolean
+  icon_key: null
+  priority: number
+}
 export interface HotelSearchResultApiResponse {
   data: {
     status: boolean
@@ -215,16 +225,8 @@ export interface HotelSearchResultApiResponse {
               priority: number
               facilities: null
             }[]
-        facilities: {
-          id: ID
-          name: string
-          scope_id: ID
-          type_id: ID
-          isPaid: boolean
-          featured: boolean
-          icon_key: null
-          priority: number
-        }[]
+        facilities: HotelSearchResponseFacilities[] | null
+
         pensionTypes: HotelSearchResponsePensionTypes[] | null
         themes: HotelSearchResponseThemes[] | null
         destinationsInfo: HotelSearchResponseDestinationInfos[]
