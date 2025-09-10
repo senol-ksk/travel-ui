@@ -1,0 +1,32 @@
+{
+  "family": "parafly-preprod-react",
+  "networkMode": "bridge",
+  "requiresCompatibilities": ["EC2"],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "paraflytravel-preprod-react",
+      "image": "568553758314.dkr.ecr.eu-central-1.amazonaws.com/parafly-preprod-react:preprod",
+      "portMappings": [
+        {
+          "containerPort": 9192,
+          "hostPort": 9192,
+          "protocol": "tcp",
+          "name": "paraflytravel-preprod-react",
+          "appProtocol": "http"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "PORT",
+          "value": "9192"
+        }
+      ]
+    }
+  ]
+}
