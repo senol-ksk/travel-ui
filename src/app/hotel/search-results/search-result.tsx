@@ -38,6 +38,7 @@ import { useMediaQuery } from '@mantine/hooks'
 import { FaCheck } from 'react-icons/fa'
 import { IoSearchSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
+import { Facilities } from './components/filters/facilities'
 
 type IProps = {
   slug?: string
@@ -317,6 +318,31 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                               )}
                             </Accordion.Panel>
                           </Accordion.Item>
+                          {hotelSearchRequestQuery.data?.pages
+                            .at(-1)
+                            ?.searchResults.at(-1)
+                            ?.facilityType?.map((item, index) => {
+                              return (
+                                <Accordion.Item
+                                  key={`facilityType-${index}`}
+                                  value={`facilityType-${index}`}
+                                >
+                                  <Accordion.Control>
+                                    {item.name}
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Facilities
+                                      data={
+                                        hotelSearchRequestQuery.data?.pages
+                                          .at(-1)
+                                          ?.searchResults.at(-1)?.facilities
+                                      }
+                                      facilityTypes={[item]}
+                                    />
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                              )
+                            })}
                         </Accordion>
                       </div>
                     </div>
@@ -487,6 +513,31 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                               )}
                             </Accordion.Panel>
                           </Accordion.Item>
+                          {hotelSearchRequestQuery.data?.pages
+                            .at(-1)
+                            ?.searchResults.at(-1)
+                            ?.facilityType?.map((item, index) => {
+                              return (
+                                <Accordion.Item
+                                  key={`facilityType-${index}`}
+                                  value={`facilityType-${index}`}
+                                >
+                                  <Accordion.Control>
+                                    {item.name}
+                                  </Accordion.Control>
+                                  <Accordion.Panel>
+                                    <Facilities
+                                      data={
+                                        hotelSearchRequestQuery.data?.pages
+                                          .at(-1)
+                                          ?.searchResults.at(-1)?.facilities
+                                      }
+                                      facilityTypes={[item]}
+                                    />
+                                  </Accordion.Panel>
+                                </Accordion.Item>
+                              )
+                            })}
                         </Accordion>
                       </div>
                     </div>
