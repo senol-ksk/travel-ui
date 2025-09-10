@@ -153,9 +153,11 @@ export default function EmailFlightBookResult({ data }: IProps) {
           <Row cellPadding={6}>
             <thead className='text-xs font-bold'>
               <tr>
+                <Column>ÜNVAN</Column>
                 <Column>ADI SOYADI</Column>
+                <Column>DOĞUM TARİHİ</Column>
+                <Column>TC. No.</Column>
                 <Column>E-BİLET NO.</Column>
-                <Column>PNR KODU</Column>
               </tr>
             </thead>
             <tbody className='text-sm'>
@@ -163,12 +165,16 @@ export default function EmailFlightBookResult({ data }: IProps) {
                 ({ fullName, identityNumber, bookingCode, ...passenger }) => {
                   return (
                     <tr key={identityNumber}>
+                      <Column>
+                        {passenger.gender === 0 ? 'Bay' : 'Bayan'}
+                      </Column>
                       <Column>{fullName}</Column>
                       <Column>
-                        <div>{passenger.eTicketNumber}</div>
+                        {dayjs(passenger.birthday).format('DD.MM.YYYY')}
                       </Column>
+                      <Column>{identityNumber}</Column>
                       <Column>
-                        <div>{bookingCode}</div>
+                        <div>{passenger.eTicketNumber}</div>
                       </Column>
                     </tr>
                   )
