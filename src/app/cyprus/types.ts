@@ -1,3 +1,138 @@
+export interface CyprusHotel {
+  hotel: {
+    id: number
+    name: string
+    slug: string
+    zip_code: string
+    address: string
+    destination: string
+    country_code: 'trnc'
+    location: [number, number]
+    phone: ''
+    email: ''
+    currency: ''
+    meal_type: ''
+    nearby: []
+    nearby_info: null
+    checkin_from: string
+    checkout_to: string
+    fax: ''
+    nr_rooms: null
+    stars: number
+    availability_score: null
+    max_free_child_age: number
+    min_free_child_age: null
+    images: {
+      category: null
+      tag: ''
+      original: string
+      large: null
+      small: null
+      mid: null
+      default: boolean
+      priority: number
+    }[]
+    themes: number[]
+    facilities: number[]
+    facility_scopes: null
+    tripAdvisor: null
+    price: ServicePriceType
+    descriptions: {
+      hotelInformation: string
+      hotelAmenity: string
+      roomAmenity: ''
+      locationInformation: string
+      hotelIntroduction: ''
+      attractionInformation: ''
+      dining: null
+      areaAttractions: ''
+      recreation: ''
+      policy: null
+      spa: null
+      whatToExpect: null
+      businessAmenities: null
+      beachPool: string
+      honeymoonInformation: null
+      specialDays: null
+      activities: null
+      importentInfo: null
+    }
+    year_built: null
+    nr_restaurants: null
+    nr_bars: null
+    nr_halls: null
+    last_update: string
+    video_list: null
+    web_site: ''
+    deleted: boolean
+    destination_slug: string
+    old_destination_slug: null
+    rating: number
+    listing_rate: number
+    sales_rate: number
+    destination_id: number
+    destination_map: [number, number]
+    search_rate: number
+    reviews: null
+    nearby_restaurants: null
+    comment_info: {
+      comments: {
+        startDate: string
+        endDate: string
+        commentDate: string
+        name: string
+        surname: string
+        averageScore: number
+        positiveCotent: string
+        negativeCotent: string
+        isSuggested: boolean
+        reasonLabel: null
+        withWhoLabel: null
+        userCountryCode: string
+        userCountry: string
+        userCity: null
+      }[]
+      totalComments: number
+      averageScore: number
+    }
+    documents: {
+      no: string | null
+      type: string
+      description: string
+    }[]
+    food_drinks: null
+    can_coupon_used: boolean
+  }
+  mapping: {
+    value: string
+    field: string | null
+    provider: string
+  }[]
+  facilityTypes: {
+    id: number
+    name: string
+    priority: number
+    facilities: {
+      id: number
+      name: string
+      scope_id: number
+      type_id: number
+      isPaid: boolean
+      featured: boolean
+      icon_key: null
+      priority: number
+    }[]
+  }[]
+  themes: {
+    id: number
+    themeName: string
+    icon: string
+    priority: number
+  }[]
+  imageCategories: []
+  tripAdvisor: null
+}
+
 export interface CyprusHotelDetailApiResponse {
   destinationSlug: null
   hotelDetailResponse: null | {
@@ -15,140 +150,7 @@ export interface CyprusHotelDetailApiResponse {
       subDiagnostics: null
       traceId: null
     }
-    hotelInfo: {
-      hotel: {
-        id: number
-        name: string
-        slug: string
-        zip_code: string
-        address: string
-        destination: string
-        country_code: 'trnc'
-        location: [number, number]
-        phone: ''
-        email: ''
-        currency: ''
-        meal_type: ''
-        nearby: []
-        nearby_info: null
-        checkin_from: string
-        checkout_to: string
-        fax: ''
-        nr_rooms: null
-        stars: number
-        availability_score: null
-        max_free_child_age: number
-        min_free_child_age: null
-        images: {
-          category: null
-          tag: ''
-          original: string
-          large: null
-          small: null
-          mid: null
-          default: boolean
-          priority: number
-        }[]
-        themes: number[]
-        facilities: number[]
-        facility_scopes: null
-        tripAdvisor: null
-        price: ServicePriceType
-        descriptions: {
-          hotelInformation: string
-          hotelAmenity: string
-          roomAmenity: ''
-          locationInformation: string
-          hotelIntroduction: ''
-          attractionInformation: ''
-          dining: null
-          areaAttractions: ''
-          recreation: ''
-          policy: null
-          spa: null
-          whatToExpect: null
-          businessAmenities: null
-          beachPool: string
-          honeymoonInformation: null
-          specialDays: null
-          activities: null
-          importentInfo: null
-        }
-        year_built: null
-        nr_restaurants: null
-        nr_bars: null
-        nr_halls: null
-        last_update: string
-        video_list: null
-        web_site: ''
-        deleted: boolean
-        destination_slug: string
-        old_destination_slug: null
-        rating: number
-        listing_rate: number
-        sales_rate: number
-        destination_id: number
-        destination_map: [number, number]
-        search_rate: number
-        reviews: null
-        nearby_restaurants: null
-        comment_info: {
-          comments: {
-            startDate: string
-            endDate: string
-            commentDate: string
-            name: string
-            surname: string
-            averageScore: number
-            positiveCotent: string
-            negativeCotent: string
-            isSuggested: boolean
-            reasonLabel: null
-            withWhoLabel: null
-            userCountryCode: string
-            userCountry: string
-            userCity: null
-          }[]
-          totalComments: number
-          averageScore: number
-        }
-        documents: {
-          no: string | null
-          type: string
-          description: string
-        }[]
-        food_drinks: null
-        can_coupon_used: boolean
-      }
-      mapping: {
-        value: string
-        field: string | null
-        provider: string
-      }[]
-      facilityTypes: {
-        id: number
-        name: string
-        priority: number
-        facilities: {
-          id: number
-          name: string
-          scope_id: number
-          type_id: number
-          isPaid: boolean
-          featured: boolean
-          icon_key: null
-          priority: number
-        }[]
-      }[]
-      themes: {
-        id: number
-        themeName: string
-        icon: string
-        priority: number
-      }[]
-      imageCategories: []
-      tripAdvisor: null
-    }
+    hotelInfo: CyprusHotel | null
     items: {
       hotelId: number
       hotelKey: string
@@ -247,4 +249,88 @@ export interface CyprusHotelDetailApiResponse {
   searchPassenger: null
   searchToken: string
   sessionToken: string
+}
+
+export interface CyprusFlight {
+  flightHashData: string
+  currency: string
+  flightType: string
+  flightSegmentList: {
+    origin: string
+    destination: string
+    flightType: string | null
+    flightList: {
+      departureDate: string
+      departureTime: string
+      arrivalDate: string
+      arrivalTime: string
+      flightDetails: {
+        flightNo: string
+        airline: string
+        flightSource: string
+        departureDate: string
+        departureTime: string
+        arrivalDate: string
+        arrivalTime: string
+        origin: string
+        destination: string
+        voyageCode: null
+        className: string
+        classType: string
+        seat: number
+        totalPrice: ServicePriceType
+        key: null
+        totalTax: ServicePriceType
+        totalServiceFee: ServicePriceType
+        priceCode: string
+        basePrice: ServicePriceType
+        taxes: ServicePriceType
+        discount: ServicePriceType
+        buyFee: {
+          code: null
+          price: ServicePriceType
+        }
+        fee: {
+          code: null
+          price: ServicePriceType
+        }
+        passengerPrices: null
+        taxInfos: null
+        serviceCharges: null
+      }[]
+    }[]
+  }[]
+}
+
+export interface CyprusTransfer {
+  transferHashData: string
+  currency: string
+  departureDate: string
+  returnDate: string
+  transferSegmentList: {
+    transferTitle: string
+    transferCode: string
+    transferFrom: string
+    transferTo: string
+    key: null
+    totalPrice: ServicePriceType
+    priceCode: string
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: null
+    taxInfos: null
+    serviceCharges: null
+  }[]
+}
+
+export interface CyprusTransferApiResponse {
+  flights: CyprusFlight
+  transfers: CyprusTransfer
+  hotelInfo: CyprusHotel
+  sessionToken: string
+  searchToken: string
+  productKey: string
 }

@@ -11,6 +11,7 @@ const cyprusHotelDetailSearchParams = {
   searchToken: parseAsString,
   sessionToken: parseAsString,
   productKey: parseAsString,
+  roomKey: parseAsString,
   checkInDate: parseAsIsoDate,
   checkOutDate: parseAsIsoDate,
   isTransfer: parseAsBoolean.withDefault(true),

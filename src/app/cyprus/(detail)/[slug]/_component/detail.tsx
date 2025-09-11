@@ -38,8 +38,6 @@ export const CyprusHotelDetail: React.FC<IProps> = async ({
     apiRoute: 'CyprusPackageService',
   })
 
-  console.log(detailData?.data.hotelDetailResponse)
-
   if (
     !detailData ||
     !detailData.data ||
@@ -57,7 +55,7 @@ export const CyprusHotelDetail: React.FC<IProps> = async ({
     <div className='pt-4'>
       <Container>
         <Title fz='h2'>
-          {detailData?.data?.hotelDetailResponse?.hotelInfo.hotel.name}
+          {detailData?.data?.hotelDetailResponse?.hotelInfo?.hotel.name}
         </Title>
         <div>
           {roomGroups?.map((roomGroup) => {
@@ -67,22 +65,22 @@ export const CyprusHotelDetail: React.FC<IProps> = async ({
               .filter((x) => roomKeys.includes(x[0]))
               .map((x) => x[1])
 
-            const url = (
-              searchParams.isTransfer || searchParams.isFlight
-                ? cyprusHotelDetailSerializer('/cyprus/transfer', {
-                    ...searchParams,
-                  })
-                : reservationParams('/reservation', {
-                    productKey: roomGroup.key,
-                    searchToken: searchParams.searchToken,
-                    sessionToken: searchParams.sessionToken,
-                  })
-            ) as Route
-
             return (
               <div key={roomGroup.key}>
                 {rooms.map((room) => {
                   const detail = details[0]
+                  const url = (
+                    searchParams.isTransfer || searchParams.isFlight
+                      ? cyprusHotelDetailSerializer('/cyprus/transfer', {
+                          ...searchParams,
+                          roomKey: room.key,
+                        })
+                      : reservationParams('/reservation', {
+                          productKey: roomGroup.key,
+                          searchToken: searchParams.searchToken,
+                          sessionToken: searchParams.sessionToken,
+                        })
+                  ) as Route
                   return (
                     <div key={room.key}>
                       <div>{detail.roomType}</div>
