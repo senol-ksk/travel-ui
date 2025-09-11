@@ -81,7 +81,7 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
           },
         }}
       >
-        <Body className='m-0 bg-white font-sans leading-normal text-black'>
+        <Body className='m-0 gap-5 bg-white font-sans leading-normal text-black'>
           <div className='bg-white'>
             <div className='p-3'>
               <Link href='https://www.paraflytravel.com/'>
@@ -100,7 +100,7 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
               style={{
                 minWidth: em(800),
               }}
-              className='p-4'
+              className='gap-5 p-4'
             >
               <Section className='mb-3 rounded-lg bg-blue-700 p-2'>
                 <Row>
@@ -185,17 +185,17 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
               <Section className='text-center text-xs'>
                 <Text className='mx-auto w-3/4'>
                   Paraflytravel.com sitesinin tüm seyahat hizmetleri Yeni
-                  Karamürsel Turizm ve Seyahat Acentası tarafından haftanın her
-                  günü 09:00 - 18:00 saatleri arasında verilmektedir.
+                  Karamürsel Turizm ve Seyahat Acentası tarafından
+                  verilmektedir.
                 </Text>
                 <Section width={'55%'}>
                   <div>
-                    <strong>Karya Tur Seyahat Acenteliği A.Ş</strong>
+                    <strong>Yeni Karamürsel Turizm ve Seyahat Acentası</strong>
                   </div>
                   <div>
-                    İcadiye, Cumhuriyet Cad. No:167/5, 34674 Üsküdar / İstanbul 
+                    İcadiye, Cumhuriyet Cad. No:167/5, 34674 Üsküdar / İstanbul
                   </div>
-                  <div>Mersis No: 0948006409700018 </div>
+                  <div> Mersis No: 0948006409700018 </div>
                 </Section>
               </Section>
             </Container>

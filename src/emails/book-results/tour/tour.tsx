@@ -202,7 +202,7 @@ export default function EmailTourOrderResult({ data }: IProps) {
       </EmailCard>
 
       <EmailCard title='Ödeme Bilgileri'>
-        <table cellPadding={2}>
+        <table cellPadding={4}>
           <tr>
             <td width={150}>Toplam Fiyat</td>
             <td>:</td>
