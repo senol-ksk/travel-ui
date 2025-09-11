@@ -100,7 +100,7 @@ export default function EmailTourOrderResult({ data }: IProps) {
       <EmailCard title='Yolcu Bilgileri'>
         <Row cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>ÜNVAN</Column>
               <Column>ADI SOYADI</Column>
               <Column>DOĞUM TARİHİ</Column>

@@ -66,7 +66,7 @@ export default function EmailBusOrderResult({ data }: IProps) {
       <EmailCard title='Yolcu Bilgileri'>
         <Row className='w-full' cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>ÜNVAN</Column>
               <Column>ADI SOYADI</Column>
               <Column>DOĞUM TARİHİ</Column>
@@ -190,5 +190,5 @@ export default function EmailBusOrderResult({ data }: IProps) {
 
 // Preview için gerçek dummy data kullanımı
 EmailBusOrderResult.PreviewProps = {
-  data: busDummyResponse,
+  data: busDummyResponse.data,
 }
