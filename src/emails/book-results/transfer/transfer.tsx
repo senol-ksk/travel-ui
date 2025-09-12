@@ -123,7 +123,7 @@ export default function EmailTransferOrderResult({ data }: IProps) {
       <EmailCard title='Yolcu Bilgileri'>
         <Row className='w-full' cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>ÜNVAN</Column>
               <Column>ADI SOYADI</Column>
               <Column>DOĞUM TARİHİ</Column>
