@@ -1,3 +1,9 @@
+import { getContent } from '@/libs/cms-data'
+import {
+  CmsContent,
+  holidayLandingParams,
+  holidayLandingWidgets,
+} from '@/types/cms-types'
 import {
   Container,
   Title,
@@ -15,90 +21,83 @@ import {
 } from '@mantine/core'
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
-export default function HolidaysPage() {
+export default async function HolidaysPage() {
+  const data = (
+    await getContent<CmsContent<holidayLandingWidgets[], holidayLandingParams>>(
+      'holidays/holidays'
+    )
+  )?.data
+
+  if (!data) return notFound()
+  const { params, widgets } = data
+  const holiday_link = widgets.filter((x) => x.point === 'holiday_link')
+  const getHolidayLinks = (holidayName: string) => {
+    const found = holiday_link.find(
+      (item) =>
+        item.title?.toLowerCase().includes(holidayName.toLowerCase()) ||
+        item.params?.description?.value
+          ?.toLowerCase()
+          .includes(holidayName.toLowerCase())
+    )
+    return found
+  }
+
   const holidays = [
     {
       name: 'Yılbaşı',
       date: '1 Ocak 2026',
       duration: '1 Gün',
       day: 'Perşembe',
-      hotellink: '/hotel/yilbasi',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Ramazan Bayramı',
       date: '19 Mart (Arife) - 22 Mart 2026',
       duration: '3.5 Gün',
       day: 'Perşembe-Pazar',
-      hotellink: '/hotel/ramazan-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Ulusal Egemenlik ve Çocuk Bayramı',
       date: '23 Nisan 2026',
       duration: '1 Gün',
       day: 'Perşembe',
-      hotellink: '/hotel/ulusal-egemenlik-ve-cocuk-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Emek Ve Dayanışma Günü',
       date: '1 Mayıs 2026',
       duration: '1 Gün',
       day: 'Cuma',
-      hotellink: '/hotel/emek-ve-dayanisma-gunu',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: "Atatürk'ü Anma Ve Gençlik Ve Spor Bayramı",
       date: '19 Mayıs 2026',
       duration: '1 Gün',
       day: 'Salı',
-      hotellink: '/hotel/ataturk-anma-ve-genclik-ve-spor-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Kurban Bayramı',
       date: '26 (Arife) - 30 Haziran 2026',
       duration: '4.5 Gün',
       day: 'Salı-Cumartesi',
-      hotellink:
-        '/hotel/search-results?checkinDate=2025-11-10&checkoutDate=2025-11-14&destination=Kurban+Bayramı+Oteller&destinationId=802&slug=kurban-bayrami-oteller-802&type=21&rooms={"childAges":[1]%252C"adult":1%252C"child":1%252C"infant":0%252C"student":0%252C"senior":0%252C"military":0}',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Demokrasi Ve Milli Birlik Günü',
       date: '15 Temmuz 2026',
       duration: '1 Gün',
       day: 'Çarşamba',
-      hotellink: '/hotel/demokrasi-ve-milli-birlik-gunu',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Zafer Bayramı',
       date: '30 Ağustos 2026',
       duration: '1 Gün',
       day: 'Pazar',
-      hotellink: '/hotel/zafer-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Cumhuriyet Bayramı',
       date: '28 - 29 Ekim 2026',
       duration: '1.5 Gün',
       day: 'Perşembe',
-      hotellink: '/hotel/cumhuriyet-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
   ]
 
@@ -108,147 +107,72 @@ export default function HolidaysPage() {
       date: '1 Ocak 2026',
       day: 'Çarşamba',
       duration: '1 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/yilbasi',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Ramazan Bayramı',
       date: '19-22 Mart 2026',
       day: 'Perşembe-Pazar',
       duration: '3,5 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/ramazan-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Ulusal Egemenlik ve Çocuk Bayramı',
       date: '23 Nisan 2026',
       day: 'Perşembe',
       duration: '1 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/ulusal-egemenlik-ve-cocuk-bayrami',
-      tourlink: '/tour/search-results',
-      tourIntlink: '/tour/search-results',
     },
     {
       name: 'Emek ve Dayanışma Günü',
       date: '1 Mayıs 2026',
       day: 'Cuma',
       duration: '1 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/emek-ve-dayanisma-gunu',
-      tourlink: '/tour/search-results',
     },
     {
       name: "Atatürk'ü Anma ve Gençlik ve Spor Bayramı",
       date: '19 Mayıs 2026',
       day: 'Salı',
       duration: '1 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/ataturk-anma-ve-genclik-ve-spor-bayrami',
-      tourlink: '/tour/search-results',
     },
     {
       name: 'Kurban Bayramı',
       date: '26-30 Haziran 2026',
       day: 'Salı-Cumartesi',
       duration: '4,5 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/kurban-bayrami',
-      tourlink: '/tour/search-results',
     },
     {
       name: 'Demokrasi ve Milli Birlik Günü',
       date: '15 Temmuz 2026',
       day: 'Çarşamba',
       duration: '1 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/demokrasi-ve-milli-birlik-gunu',
-      tourlink: '/tour/search-results',
     },
     {
       name: 'Zafer Bayramı',
       date: '30 Ağustos 2026',
       day: 'Pazar',
       duration: '1 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/zafer-bayrami',
-      tourlink: '/tour/search-results',
     },
     {
       name: 'Cumhuriyet Bayramı',
       date: '28-29 Ekim 2026',
       day: 'Perşembe',
       duration: '1,5 Gün İzin',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/cumhuriyet-bayrami',
-      tourlink: '/tour/search-results',
     },
     {
       name: '1. Ara Tatil',
       date: '10-14 Kasım 2025',
       day: 'Pazar',
       duration: '5 Gün Tatil',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/1-ara-tatil',
-      tourlink: '/tour/search-results',
     },
     {
       name: '2. Ara Tatil',
       date: '16-20 Mart 2026',
       day: 'Perşembe',
       duration: '5 Gün Tatil',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/2-ara-tatil',
-      tourlink: '/tour/search-results',
     },
     {
       name: 'Yarıyıl Tatili',
       date: '19-30 Ocak 2026',
       day: 'Çarşamba',
       duration: '15 Gün Tatil',
-      hotelButton: 'Yurt İçi Otelleri',
-      hotelIntButton: 'Kıbrıs Otelleri',
-      tourButton: 'Kültür Turları',
-      tourIntButton: 'Yurt Dışı Turları',
-      hotellink: '/hotel/yarıyıl-tatili',
-      tourlink: '/tour/search-results',
     },
   ]
 
@@ -336,52 +260,97 @@ export default function HolidaysPage() {
                       <strong>{holiday.duration}</strong>
                     </Text>
                   </div>
-                  <div>
-                    <div className='grid grid-cols-2 gap-2'>
-                      <a href={holiday.hotellink} className='col-span-1'>
-                        <Button
-                          variant='default'
-                          fullWidth
-                          size='sm'
-                          className='text-blue-600 hover:bg-blue-100'
-                        >
-                          {holiday.hotelButton}
-                        </Button>
-                      </a>
-                      <a href={holiday.hotellink}>
-                        <Button
-                          variant='default'
-                          fullWidth
-                          size='sm'
-                          className='text-blue-600 hover:bg-blue-100'
-                        >
-                          {holiday.hotelIntButton}
-                        </Button>
-                      </a>
-                    </div>
-                    <div className='mt-2 grid grid-cols-2 gap-2'>
-                      <a href={holiday.tourIntlink}>
-                        <Button
-                          variant='default'
-                          fullWidth
-                          size='sm'
-                          className='text-blue-600 hover:bg-blue-100'
-                        >
-                          {holiday.tourIntButton}
-                        </Button>
-                      </a>
-                      <a href={holiday.tourlink} className='col-span-1'>
-                        <Button
-                          variant='default'
-                          fullWidth
-                          size='sm'
-                          className='text-blue-600 hover:bg-blue-100'
-                        >
-                          {holiday.tourButton}
-                        </Button>
-                      </a>
-                    </div>
-                  </div>
+
+                  {(() => {
+                    const currentHolidayLinks = getHolidayLinks(holiday.name)
+                    return currentHolidayLinks ? (
+                      <div>
+                        <div className='grid grid-cols-2 gap-2'>
+                          {currentHolidayLinks.params?.dom_hotel?.value && (
+                            <a
+                              href={currentHolidayLinks.params.dom_hotel.value}
+                              className='col-span-1'
+                            >
+                              <Button
+                                variant='default'
+                                fullWidth
+                                size='sm'
+                                className='text-blue-600 hover:bg-blue-100'
+                              >
+                                Yurt İçi Otelleri
+                              </Button>
+                            </a>
+                          )}
+                          {currentHolidayLinks.params?.dom_tour?.value && (
+                            <a href={currentHolidayLinks.params.dom_tour.value}>
+                              <Button
+                                variant='default'
+                                fullWidth
+                                size='sm'
+                                className='text-blue-600 hover:bg-blue-100'
+                              >
+                                Kültür Turları
+                              </Button>
+                            </a>
+                          )}
+                        </div>
+                        <div className='mt-2 grid grid-cols-2 gap-2'>
+                          {currentHolidayLinks.params?.int_hotel?.value && (
+                            <a
+                              href={currentHolidayLinks.params.int_hotel.value}
+                            >
+                              <Button
+                                variant='default'
+                                fullWidth
+                                size='sm'
+                                className='text-blue-600 hover:bg-blue-100'
+                              >
+                                Yurt Dışı Otelleri
+                              </Button>
+                            </a>
+                          )}
+                          {currentHolidayLinks.params?.int_tour?.value && (
+                            <a
+                              href={currentHolidayLinks.params.int_tour.value}
+                              className='col-span-1'
+                            >
+                              <Button
+                                variant='default'
+                                fullWidth
+                                size='sm'
+                                className='text-blue-600 hover:bg-blue-100'
+                              >
+                                Yurt Dışı Turları
+                              </Button>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className='grid grid-cols-2 gap-2'>
+                        <a href='/otel' className='col-span-1'>
+                          <Button
+                            variant='default'
+                            fullWidth
+                            size='sm'
+                            className='text-blue-600 hover:bg-blue-100'
+                          >
+                            Yurt İçi Otelleri
+                          </Button>
+                        </a>
+                        <a href='/tur' className='col-span-1'>
+                          <Button
+                            variant='default'
+                            fullWidth
+                            size='sm'
+                            className='text-blue-600 hover:bg-blue-100'
+                          >
+                            Kültür Turları
+                          </Button>
+                        </a>
+                      </div>
+                    )
+                  })()}
                 </Card>
               </GridCol>
             ))}

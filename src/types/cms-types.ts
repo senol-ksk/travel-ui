@@ -160,6 +160,88 @@ export type HotelLandingWidgets = {
   language: string
   active: boolean
 }
+export type holidayLandingParams = {
+  sub_title: {
+    value: string
+  }
+  content: {
+    value: string
+  }
+  image: {
+    value: string
+  }
+  int_otel: {
+    value: string
+  }
+  int_tour: {
+    value: string
+  }
+  dom_otel: {
+    value: string
+  }
+  dom_tour: {
+    value: string
+  }
+}
+export type holidayLandingWidgets = {
+  id: ID
+  title: string
+  typeId: ID
+  collectionId: ID
+  point: string
+  params: {
+    destinations: {
+      destinations: {
+        id: ID
+        name: string
+        slug: string
+        code: null
+        iata: null
+        typeId: number
+        domestic: boolean
+      }[]
+    }
+    sort_desc: {
+      value: string
+    }
+    sort_description: {
+      value: string
+    }
+    description: {
+      value: string
+    }
+    btn_text: {
+      value: string
+    }
+    link: {
+      value: string
+    }
+    image: {
+      value: string
+    }
+    svg: {
+      value: string
+    }
+    view_country: {
+      value: string
+    }
+    int_hotel: {
+      value: string
+    }
+    int_tour: {
+      value: string
+    }
+    dom_hotel: {
+      value: string
+    }
+    dom_tour: {
+      value: string
+    }
+  }
+  ordering: null
+  language: string
+  active: boolean
+}
 
 export type CarLandingParams = {
   sub_title: {
