@@ -380,7 +380,7 @@ export const Header = () => {
           </Box>
         </Container>
       </header>
-      <div className='border-b shadow'>
+      <div className='border-b py-2 shadow'>
         <Container className='hidden w-full items-center text-sm font-medium md:flex'>
           {headerData.isLoading ? (
             <div className='flex gap-2 p-3'>
@@ -403,20 +403,6 @@ export const Header = () => {
                 </Link>
               </div>
             ))
-          )}
-          {headerData.isLoading ? (
-            <div className='flex gap-2'>
-              <Skeleton h={20} className='size-20 grow' />
-            </div>
-          ) : (
-            headerData.data && (
-              <Link
-                className='rounded py-3 hover:bg-blue-50'
-                href='/landings/holidays'
-              >
-                Resmi Tatil Günleri
-              </Link>
-            )
           )}
         </Container>
       </div>
