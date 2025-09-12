@@ -60,7 +60,7 @@ import {
   flightSearchParams,
   SortOrderEnums,
 } from '@/modules/flight/searchParams'
-import { useFilterActions } from './filter-actions'
+import { useFilterActions, extractBaggageOptions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { PackageFlightDrawer } from './components/package-flight-drawer'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
@@ -479,6 +479,7 @@ const FlightSearchView = () => {
                             'airlines',
                             'airports',
                             'departureHours',
+                            'baggage',
                           ]}
                           multiple
                           classNames={{
@@ -666,6 +667,59 @@ const FlightSearchView = () => {
                                                 )?.Value
                                               }
                                               value={airline.Code}
+                                            />
+                                          </div>
+                                        )
+                                      })}
+                                  </Stack>
+                                </Spoiler>
+                              </Checkbox.Group>
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                          <Accordion.Item value='baggage'>
+                            <Accordion.Control>Bagaj</Accordion.Control>
+                            <Accordion.Panel>
+                              <Checkbox.Group
+                                onChange={(value) => {
+                                  if (!isDomestic) {
+                                    setFilterParams({
+                                      baggage: value.length ? value : null,
+                                    })
+                                  }
+                                }}
+                                value={
+                                  filterParams?.baggage?.length
+                                    ? filterParams.baggage?.map(String)
+                                    : isDomestic &&
+                                        extractBaggageOptions(searchQueryData)
+                                          ?.length > 0
+                                      ? [
+                                          extractBaggageOptions(
+                                            searchQueryData
+                                          )[0],
+                                        ]
+                                      : []
+                                }
+                              >
+                                <Spoiler
+                                  maxHeight={220}
+                                  showLabel='Daha fazla göster'
+                                  hideLabel='Daha az göster'
+                                  className='w-full'
+                                >
+                                  <Stack gap={6}>
+                                    {extractBaggageOptions(searchQueryData)
+                                      ?.sort((a, b) => a.localeCompare(b))
+                                      .map((baggageOption, index) => {
+                                        const [pieces, weight] =
+                                          baggageOption.split('x')
+
+                                        return (
+                                          <div key={baggageOption}>
+                                            <Checkbox
+                                              name='baggage'
+                                              label={`${pieces} parça x ${weight} Kg Bagaj`}
+                                              value={baggageOption}
                                             />
                                           </div>
                                         )
