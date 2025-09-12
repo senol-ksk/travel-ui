@@ -16,7 +16,7 @@ export const SuccessCard: React.FC<IProps> = ({ name }: IProps) => {
       </Row>
       <div>
         Sayın {name},
-        <br /> İşleminiz  başarı ile gerçekleşmiştir. Bir sonraki seyahatinizde
+        <br /> İşleminiz başarı ile gerçekleşmiştir. Bir sonraki seyahatinizde
         görüşmek üzere
       </div>
     </div>

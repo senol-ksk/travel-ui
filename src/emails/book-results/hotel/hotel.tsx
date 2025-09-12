@@ -137,7 +137,7 @@ export default function EmailHotelOrderResult({ data }: IProps) {
       <EmailCard title='Oda Bilgisi'>
         <Row className='w-full' cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>Ünvan</Column>
               <Column>Adı Soyadı</Column>
               <Column>Doğum Tarihi</Column>

@@ -36,7 +36,7 @@ export const HomeTourDom: React.FC<IProps> = ({ data }) => {
           <CarouselSlide key={item.id}>
             <Box
               href={
-                `/hotel/${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}` as Route
+                `${item.params.link?.value.split('/').at(-1)}?slug=${item.params.link?.value.split('/').at(-1)}` as Route
               }
               component={Link}
               className='group block h-full w-full gap-3'

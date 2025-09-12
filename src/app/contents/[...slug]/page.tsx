@@ -65,7 +65,7 @@ export default async function ContentPage({
     await getContent<CmsContent<CMSWidgets[], CmsParams>>(slug.join('/'))
   )?.data
 
-  if (!data) return notFound() // or we can redirect custom not-fount page, see =>> https://nextjs.org/docs/app/api-reference/file-conventions/not-found
+  if (!data) return notFound() // or we can redirect custom not-found page, see =>> https://nextjs.org/docs/app/api-reference/file-conventions/not-found
   const { params: cmsParams, widgets, title } = data
 
   if (widgets && !widgets.length) notFound()
@@ -81,7 +81,7 @@ export default async function ContentPage({
       <div className='grid grid-cols-1 gap-3 sm:grid-cols-4'>
         <div className='max-h-[300px] w-full max-w-xs flex-shrink-0 gap-4 overflow-y-auto rounded-md border p-2 shadow md:col-span-1'>
           {widgets.map((widget) =>
-            widget.params.menu.menus.map((menu) => {
+            widget.params.menu?.menus?.map((menu) => {
               const isActive = menu.url === currentPath
               return (
                 <Link

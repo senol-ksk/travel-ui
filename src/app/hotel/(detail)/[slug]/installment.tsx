@@ -17,7 +17,7 @@ const InstallmentTable: React.FC<IProps> = ({ price, installmentData }) => {
     <Fragment key={item.bank}>
       <Table.Tr>
         <Table.Td rowSpan={3} className='bg-gray-100'>
-          <Image src={item.logo} maw={90} mx={'auto'} />
+          <Image src={item.logo} maw={90} mx={'auto'} alt={item.bank} />
         </Table.Td>
         <Table.Td className='bg-gray-100'></Table.Td>
         <Table.Td className='bg-gray-100'>

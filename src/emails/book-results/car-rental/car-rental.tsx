@@ -1,4 +1,4 @@
-import { Column, Img, Row } from '@react-email/components'
+import { Column, Img, Row, Section } from '@react-email/components'
 import dayjs from 'dayjs'
 import {
   CarSummaryResponse,
@@ -160,7 +160,7 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
       <EmailCard title={'Sürücü Bilgileri'}>
         <Row cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>ÜNVAN</Column>
               <Column>ADI SOYADI</Column>
               <Column>DOĞUM TARİHİ</Column>
@@ -249,7 +249,7 @@ export default function EmailCarRentalOrderResult({ data }: IProps) {
         ) : null
       })()}
       <EmailCard title={'Ödeme Bilgileri'}>
-        <table cellPadding={2}>
+        <table cellPadding={4}>
           <tbody>
             <tr>
               <td width={150}>Toplam Fiyat</td>

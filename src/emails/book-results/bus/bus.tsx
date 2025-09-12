@@ -18,6 +18,7 @@ type IProps = {
 export default function EmailBusOrderResult({ data }: IProps) {
   const { busJourney } = data.product.summaryResponse as BusSummaryResponse
   const { passenger } = data
+
   const passengerInfo = passenger.passengers[0]
   return (
     <EmailBody>
@@ -45,15 +46,15 @@ export default function EmailBusOrderResult({ data }: IProps) {
             <div>Firma</div>
             <div className='font-bold'>{busJourney.company}</div>
           </Column>
-          <Column width={150}>
+          <Column width={150} className='text-center'>
             <div>Kalkış</div>
             <div className='font-bold'>{busJourney.origin}</div>
           </Column>
-          <Column width={250}>
+          <Column width={250} className='text-center'>
             <div>Varış</div>
             <div className='font-bold'>{busJourney.destination}</div>
           </Column>
-          <Column width={150}>
+          <Column width={150} className='text-center'>
             <div>Tarih</div>
             <div className='font-bold'>
               {dayjs(busJourney.bus.departureDate).format('DD.MM.YYYY HH:mm')}
@@ -65,12 +66,13 @@ export default function EmailBusOrderResult({ data }: IProps) {
       <EmailCard title='Yolcu Bilgileri'>
         <Row className='w-full' cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>ÜNVAN</Column>
               <Column>ADI SOYADI</Column>
+              <Column>DOĞUM TARİHİ</Column>
               <Column>TC. NO</Column>
               <Column>KOLTUK NO</Column>
-              <Column>E-BİLET NO.</Column>
+              <Column>REZERVASYON NO.</Column>
             </tr>
           </thead>
 
@@ -88,9 +90,10 @@ export default function EmailBusOrderResult({ data }: IProps) {
                 </Column>
                 <Column width={120}>{passengerInfo.identityNumber}</Column>
                 <Column width={150}>
-                  <div className='font-bold text-blue-600'>
-                    {passengerInfo.eTicketNumber}
-                  </div>
+                  {busJourney.selectedSeats[index].no}
+                </Column>
+                <Column width={150}>
+                  <div>{passengerInfo.bookingCode}</div>
                 </Column>
               </tr>
             ))}
@@ -109,7 +112,7 @@ export default function EmailBusOrderResult({ data }: IProps) {
         />
       </EmailCard>
       <EmailCard title='Ödeme Bilgileri'>
-        <table cellPadding={2}>
+        <table cellPadding={4}>
           <tr>
             <td width={150}>Toplam Fiyat</td>
             <td>:</td>
@@ -187,5 +190,5 @@ export default function EmailBusOrderResult({ data }: IProps) {
 
 // Preview için gerçek dummy data kullanımı
 EmailBusOrderResult.PreviewProps = {
-  data: busDummyResponse,
+  data: busDummyResponse.data,
 }
