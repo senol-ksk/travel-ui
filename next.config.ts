@@ -68,6 +68,10 @@ const nextConfig: NextConfig = {
         destination: '/landings/tour',
       },
       {
+        source: '/holidays',
+        destination: '/landings/holidays',
+      },
+      {
         source: '/iletisim',
         destination: '/contact-us',
       },
