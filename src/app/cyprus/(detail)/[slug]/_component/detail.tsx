@@ -74,6 +74,7 @@ export const CyprusHotelDetail: React.FC<IProps> = async ({
                       ? cyprusHotelDetailSerializer('/cyprus/transfer', {
                           ...searchParams,
                           roomKey: room.key,
+                          roomGroupKey: roomGroup.key,
                         })
                       : reservationParams('/reservation', {
                           productKey: roomGroup.key,

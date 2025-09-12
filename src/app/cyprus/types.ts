@@ -327,10 +327,10 @@ export interface CyprusTransfer {
 }
 
 export interface CyprusTransferApiResponse {
-  flights: CyprusFlight
-  transfers: CyprusTransfer
-  hotelInfo: CyprusHotel
+  flights: CyprusFlight | null
+  transfers: CyprusTransfer | null
+  hotelInfo: CyprusHotel | null
   sessionToken: string
   searchToken: string
-  productKey: string
+  productKey: string | null
 }
