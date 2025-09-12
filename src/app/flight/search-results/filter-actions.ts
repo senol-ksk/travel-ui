@@ -103,10 +103,6 @@ export const useFilterActions = (flightData: ClientDataType[] | undefined) => {
     (data) => !!data.details.every((detail) => detail.isPromotional)
   )
 
-  if (filterParams.baggage && filterParams.baggage.length > 0) {
-    console.log('🎒 Seçilen bagaj filtreleri:', filterParams.baggage)
-  }
-
   const filteredData = sortOrder(flightData, filterParams)
     // transfer/stop count
     ?.filter((data) => {
