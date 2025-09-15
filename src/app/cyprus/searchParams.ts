@@ -7,7 +7,7 @@ import {
   parseAsString,
 } from 'nuqs/server'
 
-const cyprusHotelDetailSearchParams = {
+export const cyprusHotelDetailSearchParams = {
   searchToken: parseAsString,
   sessionToken: parseAsString,
   productKey: parseAsString,

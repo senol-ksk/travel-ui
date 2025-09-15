@@ -42,7 +42,8 @@ const request = async (options: AxiosRequestConfig) => {
       })
     }
 
-    return err
+    // return err
+    throw new Error('An error occurred ', { cause: err })
   }
 }
 
@@ -96,7 +97,7 @@ async function serviceRequest<DataType>({
       })
     }
 
-    console.log('Unhandled error ===> ', err)
+    throw new Error('An error occurred ', { cause: err })
   }
 }
 

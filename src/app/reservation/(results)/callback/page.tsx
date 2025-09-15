@@ -90,7 +90,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
         console.log(responseData)
       })
       .catch((reason) => {
-        console.log(reason)
+        throw new Error('An error occurred ', { cause: reason })
       })
   }
 

@@ -1,16 +1,10 @@
-import {
-  cyprusHotelDetailLoader,
-  CyprusHotelDetailSearchParamTypes,
-  cyprusHotelDetailSerializer,
-} from '@/app/cyprus/searchParams'
-import { CyprusHotelDetailApiResponse } from '@/app/cyprus/types'
-import { reservationParsers } from '@/app/reservation/searchParams'
-import { olRequest, serviceRequest } from '@/network'
-import { Button, Container, Title } from '@mantine/core'
-import { Route } from 'next'
-import { Link } from 'next-view-transitions'
+import { olRequest } from '@/network'
+import { Container, Title } from '@mantine/core'
 import { notFound } from 'next/navigation'
-import { createSerializer, SearchParams } from 'nuqs/server'
+
+import { CyprusHotelDetailSearchParamTypes } from '@/app/cyprus/searchParams'
+import { CyprusHotelDetailApiResponse } from '@/app/cyprus/types'
+import { CyprusRooms } from './_rooms'
 
 type IProps = {
   slug: string
@@ -48,8 +42,6 @@ export const CyprusHotelDetail: React.FC<IProps> = async ({
   const { hotelDetailResponse } = detailData.data
   const roomGroups = hotelDetailResponse.items
   const { roomDetails } = hotelDetailResponse
-  const roomDetailsKeys = Object.entries(roomDetails)
-  const reservationParams = createSerializer(reservationParsers)
 
   return (
     <div className='pt-4'>
@@ -58,44 +50,7 @@ export const CyprusHotelDetail: React.FC<IProps> = async ({
           {detailData?.data?.hotelDetailResponse?.hotelInfo?.hotel.name}
         </Title>
         <div>
-          {roomGroups?.map((roomGroup) => {
-            const rooms = roomGroup.rooms
-            const roomKeys = rooms.map((s) => s.key)
-            const details = roomDetailsKeys
-              .filter((x) => roomKeys.includes(x[0]))
-              .map((x) => x[1])
-
-            return (
-              <div key={roomGroup.key}>
-                {rooms.map((room) => {
-                  const detail = details[0]
-                  const url = (
-                    searchParams.isTransfer || searchParams.isFlight
-                      ? cyprusHotelDetailSerializer('/cyprus/transfer', {
-                          ...searchParams,
-                          roomKey: room.key,
-                          roomGroupKey: roomGroup.key,
-                        })
-                      : reservationParams('/reservation', {
-                          productKey: roomGroup.key,
-                          searchToken: searchParams.searchToken,
-                          sessionToken: searchParams.sessionToken,
-                        })
-                  ) as Route
-                  return (
-                    <div key={room.key}>
-                      <div>{detail.roomType}</div>
-                      <div>
-                        <Button component={Link} href={url}>
-                          Devam
-                        </Button>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          })}
+          <CyprusRooms roomDetails={roomDetails} roomGroups={roomGroups} />
         </div>
       </Container>
     </div>
