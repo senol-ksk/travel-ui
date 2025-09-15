@@ -12,7 +12,6 @@ type IProps = {
 export const BillingCard: React.FC<IProps> = ({ data }) => {
   return (
     <>
-
       <table cellPadding={5}>
         <tbody>
           <tr>
