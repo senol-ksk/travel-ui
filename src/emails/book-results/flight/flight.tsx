@@ -1,4 +1,4 @@
-import { Column, Heading, Img, Row } from '@react-email/components'
+import { Column, Heading, Img, Link, Row } from '@react-email/components'
 import {
   FlightSummaryResponse,
   OperationResultType,
@@ -26,7 +26,14 @@ export default function EmailFlightBookResult({ data }: IProps) {
   return (
     <EmailBody>
       <SuccessCard name={data.passenger.passengers[0].fullName} />
-
+      <Link href={`${process.env.SITE_URL}/kampanyalar?categoryId=158`}>
+        <Img
+          width={800}
+          height={200}
+          className='my-3'
+          src='https://ykmturizm.mncdn.com/11/Files/638935150899736437.png'
+        />
+      </Link>
       <div>
         {flightList.map((flight) => {
           return (

@@ -5,7 +5,7 @@ type IProps = {
 
 export const SuccessCard: React.FC<IProps> = ({ name }: IProps) => {
   return (
-    <div className='bg-green mb-3 grid rounded-lg p-3 text-center font-bold'>
+    <div className='mb-3 grid rounded-lg border border-solid border-green-800 p-3 text-center font-bold'>
       <Row className='pb-5'>
         <Column align='center'>
           <Img

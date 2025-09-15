@@ -169,7 +169,7 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
                 <Column align='center'>
                   <Link
                     href='https://whatsapp.com/channel/0029Vau83EmCRs1qIYPnNO0a'
-                    className='inline-block rounded-lg border-solid border-green-800 p-2 text-black no-underline'
+                    className='inline-block rounded-lg border border-solid border-green-800 p-2 text-black no-underline'
                   >
                     <Row>
                       <Column>

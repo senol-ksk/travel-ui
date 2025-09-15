@@ -1,4 +1,4 @@
-import { Column, Heading, Row } from '@react-email/components'
+import { Column, Heading, Row, Link } from '@react-email/components'
 import {
   BusSummaryResponse,
   OperationResultType,
@@ -23,6 +23,14 @@ export default function EmailBusOrderResult({ data }: IProps) {
   return (
     <EmailBody>
       <SuccessCard name={data.passenger.passengers[0].fullName} />
+      <Link href={`${process.env.SITE_URL}/kampanyalar?categoryId=157`}>
+        <Img
+          width={800}
+          height={200}
+          className='my-3'
+          src='https://ykmturizm.mncdn.com/11/Files/638935150922241109.png'
+        />
+      </Link>
       <EmailCard
         title={
           <Row className='w-full'>
