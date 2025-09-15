@@ -12,28 +12,31 @@ type IProps = {
 export const BillingCard: React.FC<IProps> = ({ data }) => {
   return (
     <>
-      <div className='grid gap-2 text-sm'>
-        <div className='flex items-center gap-2'>
-          <div className='w-32 font-medium'>İsim Soyisim</div>
-          <div>:</div>
-          <div>{data.fullName}</div>
-        </div>
-        <div className='flex items-center gap-2'>
-          <div className='w-32 font-medium'>TC. Kimlik No</div>
-          <div>:</div>
-          <div>{data.idNumber}</div>
-        </div>
-        <div className='flex items-center gap-2'>
-          <div className='w-32 font-medium'>GSM</div>
-          <div>:</div>
-          <div>{data.gsm}</div>
-        </div>
-        <div className='flex items-center gap-2'>
-          <div className='w-32 font-medium'>Adres</div>
-          <div>:</div>
-          <div>{data.address}</div>
-        </div>
-      </div>
+
+      <table cellPadding={5}>
+        <tbody>
+          <tr>
+            <td className='w-32 font-medium'>İsim Soyisim</td>
+            <td>:</td>
+            <td className='font-bold'>{data.fullName}</td>
+          </tr>
+          <tr>
+            <td className='w-32 font-medium'>TC. Kimlik No</td>
+            <td>:</td>
+            <td className='font-bold'>{data.idNumber}</td>
+          </tr>
+          <tr>
+            <td className='w-32 font-medium'>GSM</td>
+            <td>:</td>
+            <td className='font-bold'>{data.gsm}</td>
+          </tr>
+          <tr>
+            <td className='w-32 font-medium'>Adres</td>
+            <td>:</td>
+            <td className='font-bold'>{data.address}</td>
+          </tr>
+        </tbody>
+      </table>
       <div className='my-2 flex items-center rounded-lg bg-blue-700 p-3 text-sm font-bold text-white'>
         <Img
           alt='ikon'

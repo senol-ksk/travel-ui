@@ -8,6 +8,27 @@ import {
 } from '@/modules/flight/searchParams'
 import { useQueryStates } from 'nuqs'
 
+export const extractBaggageOptions = (
+  flightData: ClientDataType[] | undefined
+) => {
+  if (!flightData) return []
+  const baggageOptions = new Set<string>()
+
+  flightData.forEach((flight) => {
+    flight.segments.forEach((segment) => {
+      const baggage = segment.baggageAllowance
+
+      if (baggage.maxWeight.value > 0) {
+        const pieceCount =
+          baggage.piece.pieceCount === 0 ? 1 : baggage.piece.pieceCount
+        const baggageOption = `${pieceCount}x${baggage.maxWeight.value}`
+        baggageOptions.add(baggageOption)
+      }
+    })
+  })
+  return Array.from(baggageOptions)
+}
+
 export const removeDuplicateFlights = (
   data: { segments: FlightDetailSegment[] }[]
 ) => {
@@ -145,6 +166,34 @@ export const useFilterActions = (flightData: ClientDataType[] | undefined) => {
           departureHour <= filterParams.departureHours[1]
         )
 
+      return true
+    })
+    .filter((data) => {
+      if (filterParams.baggage && filterParams.baggage.length) {
+        return data.segments.some((segment) => {
+          const segmentWeight = segment.baggageAllowance.maxWeight.value
+          const segmentPieces = segment.baggageAllowance.piece.pieceCount
+
+          return filterParams.baggage?.some((selectedBaggage) => {
+            const [selectedPieces, selectedWeight] = selectedBaggage.split('x')
+            const selectedPiecesNum = parseInt(selectedPieces)
+            const selectedWeightNum = parseInt(selectedWeight)
+
+            if (
+              selectedPiecesNum === 1 &&
+              segmentPieces === 0 &&
+              selectedWeightNum === segmentWeight
+            ) {
+              return true
+            }
+
+            return (
+              selectedPiecesNum === segmentPieces &&
+              selectedWeightNum === segmentWeight
+            )
+          })
+        })
+      }
       return true
     })
 

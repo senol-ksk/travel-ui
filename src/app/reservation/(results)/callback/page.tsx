@@ -79,6 +79,7 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
           from: process.env.EMAIL_FROM,
           to: getSummary.passenger.passengers[0].email,
           subject: 'Rezervasyon Bilgileriniz',
+          bcc: 'islemsonuc@paraflytravel.com',
           react: EmailBookResult({
             data: getSummary,
           }),
