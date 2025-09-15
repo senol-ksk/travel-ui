@@ -204,7 +204,6 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
     form.getValues('isTransfer') || form.getValues('isFlight')
 
   const submitSearchResults = (data: CyprusSearchEngineSearchParams) => {
-    console.log(data)
     const searchUrl = cyprusSearchSerializer(
       '/cyprus/search-results',
       data
