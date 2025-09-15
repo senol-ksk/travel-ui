@@ -1,4 +1,4 @@
-import { Column, Heading, Img, Row } from '@react-email/components'
+import { Column, Heading, Img, Row, Link } from '@react-email/components'
 import { OperationResultType } from '@/app/reservation/types'
 import { EmailBody } from '../../_components/body'
 import { EmailCard } from '../../../app/order-components/email-card'
@@ -8,7 +8,6 @@ import { __dummy__TourDummyResponsePaymentSummaryResponse } from '../_dummy-resp
 import dayjs from 'dayjs'
 import { TourSummaryViewData } from '@/types/passengerViewModel'
 import { Spoiler } from '@mantine/core'
-import Link from 'next/link'
 import { BillingCard } from '@/app/order-components/billing-card'
 
 type IProps = {
@@ -21,10 +20,20 @@ export default function EmailTourOrderResult({ data }: IProps) {
   const billing = passenger.billingInformation[0]
   const payment = passenger.paymentInformation
   const firstPassenger = passenger.passengers[0]
-  console.log(tour)
   return (
     <EmailBody>
       <SuccessCard name={firstPassenger.fullName} />
+      <Link
+        href={`${process.env.SITE_URL}/kampanyalar?categoryId=233`}
+        target='_blank'
+      >
+        <Img
+          width={800}
+          height={200}
+          className='my-3'
+          src='https://ykmturizm.mncdn.com/11/Files/638935150943482316.png'
+        />
+      </Link>
       <EmailCard title='Tur Bilgisi'>
         <table cellPadding={4}>
           <tr>
