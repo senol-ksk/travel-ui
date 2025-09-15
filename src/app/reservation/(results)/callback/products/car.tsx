@@ -1,6 +1,6 @@
 import { CarSummaryResponse } from '@/app/reservation/types'
 import { CheckoutCard } from '@/components/card'
-import { Column, Img, Row } from '@react-email/components'
+import { Column, Img, Link, Row } from '@react-email/components'
 import dayjs from 'dayjs'
 
 type IProps = {
@@ -26,6 +26,13 @@ export const CarSummary: React.FC<IProps> = ({ data }) => {
 
   return (
     <div className='grid gap-3'>
+      <Link href={`${process.env.SITE_URL}/kampanyalar?categoryId=156`}>
+        <Img
+          height={200}
+          className='mb-3'
+          src='https://ykmturizm.mncdn.com/11/Files/638932871618301570.png'
+        />
+      </Link>
       <CheckoutCard title={'Araç Bilgisi'}>
         <div className='grid gap-3 md:grid-cols-6'>
           <div className='md:col-span-2'>
