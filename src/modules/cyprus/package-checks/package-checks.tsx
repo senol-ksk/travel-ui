@@ -29,7 +29,6 @@ export const CyprusSearchEnginePackagesCheck: React.FC<IProps> = ({
           icon={<CheckIcon />}
         >
           Otel
-          <PlusIcon />
         </Chip>
       </Tooltip>
       <Chip

@@ -60,7 +60,11 @@ export interface CyprusSearchResultsApiResponse {
     search_rate: number
     reviews: null
     nearby_restaurants: null
-    comment_info: null
+    comment_info: null | {
+      comments: null
+      totalComments: number
+      averageScore: number
+    }
     documents: null
     food_drinks: null
     can_coupon_used: boolean
@@ -179,7 +183,13 @@ export interface CyprusSearchResultsApiResponse {
         fee: ServicePriceType
       }[]
       addonInfos: null
-      freeChildAges: null
+      freeChildAges:
+        | null
+        | {
+            whichChild: number
+            ageFrom: number
+            ageTo: number
+          }[]
       freeNights: 0
       discountInformations: null
       key: string
