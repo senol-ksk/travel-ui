@@ -20,13 +20,13 @@ import {
   Text,
 } from '@mantine/core'
 import Image from 'next/image'
-import Link from 'next/link'
+
 import { notFound } from 'next/navigation'
 
 export default async function HolidaysPage() {
   const data = (
     await getContent<CmsContent<holidayLandingWidgets[], holidayLandingParams>>(
-      'holidays/holidays'
+      'resmi-tatil-gunleri'
     )
   )?.data
 

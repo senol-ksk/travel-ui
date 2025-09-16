@@ -68,7 +68,7 @@ const nextConfig: NextConfig = {
         destination: '/landings/tour',
       },
       {
-        source: '/holidays',
+        source: '/resmi-tatil-gunleri',
         destination: '/landings/holidays',
       },
       {
