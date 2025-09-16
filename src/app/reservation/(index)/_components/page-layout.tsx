@@ -6,7 +6,6 @@ import { MdDescription, MdTimer } from 'react-icons/md'
 
 import { ReservationSummarySection } from '@/app/reservation/(index)/summary-section'
 import { CheckoutProvider } from '../../store'
-import { useRef } from 'react'
 import { useCheckoutMethods } from '../../checkout-query'
 import { CheckoutCard } from '@/components/card'
 

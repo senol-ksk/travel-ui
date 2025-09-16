@@ -163,7 +163,14 @@ export type OperationResultType = {
   }
   product: {
     summaryResponse: {
-      moduleName: 'Flight' | 'Hotel' | 'Bus' | 'Transfer' | 'CarRental' | 'Tour'
+      moduleName:
+        | 'Flight'
+        | 'Hotel'
+        | 'Bus'
+        | 'Transfer'
+        | 'CarRental'
+        | 'Tour'
+        | 'CyprusPackage'
     }
   }
   hotelCancelWarranty: {
@@ -1650,4 +1657,316 @@ export interface ParafParaPaymentResponse {
     }[]
     installmentType: number
   }
+}
+
+export interface CyprusPackageSummaryResponse {
+  selectResponse: {
+    requestId: null
+    selectedVehicleCount: number
+    extraServiceIds: null
+    extraServiceInfo: null
+    pickupPointName: string
+    pickupPointType: number
+    pickupLocationName: string
+    pickupDate: string
+    pickupInfo: string
+    pickupDescription: string
+    dropPointName: string
+    dropPointType: number
+    dropLocationName: string
+    dropInfo: string
+    dropDescription: string
+    adultPassengerCount: number
+    childrenPassengerCount: number
+    babyPassengerCount: number
+    transferVehicle: {
+      productKey: null
+      id: number
+      partnerId: number
+      vehicleType: number
+      vehicleName: string
+      vehicleTitle: null
+      transferInfo: null
+      extraServices: null
+      status: null
+      transferData: null
+    }
+    sessionToken: null
+    traceId: null
+    isSucceeded: string
+    diagnostics: {
+      sessionToken: null
+      providerId: number
+      providerName: null
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: null
+      traceId: null
+    }
+  }[]
+  bookingResponse: null
+  segmentData: {
+    origin: string
+    destination: string
+    departureTime: string
+    arrivalTime: string
+    flightNumber: string
+    bookingCode: string
+    quota: number
+    marketingAirline: {
+      code: string
+      name: string
+    }
+    operatingAirline: {
+      code: string
+      name: string
+    }
+    cabinClass: string
+    baggageAllowance: {
+      piece: null
+      maxWeight: null
+    }
+    equipment: string | null
+    flightTime: string
+    freeVolatileData: null
+    isMeal: boolean
+  }[]
+  searchToken: string
+  sessionToken: string
+  destinationSlug: null
+  hotelSlug: null
+  roomGroup: {
+    hotelId: number
+    hotelKey: string
+    hotel: {
+      id: number
+      name: string
+      slug: string
+      zip_code: string
+      address: string
+      destination: string
+      country_code: 'trnc'
+      location: [number, number]
+      phone: ''
+      email: ''
+      currency: ''
+      meal_type: ''
+      nearby: []
+      nearby_info: null
+      checkin_from: string
+      checkout_to: string
+      fax: ''
+      nr_rooms: null
+      stars: number
+      availability_score: null
+      max_free_child_age: number
+      min_free_child_age: null
+      images: {
+        category: null
+        tag: ''
+        original: string
+        large: null
+        small: null
+        mid: null
+        default: boolean
+        priority: number
+      }[]
+      themes: number[]
+      facilities: number[]
+      facility_scopes: null
+      tripAdvisor: null
+      price: ServicePriceType
+      descriptions: {
+        hotelInformation: string
+        hotelAmenity: string
+        roomAmenity: ''
+        locationInformation: string
+        hotelIntroduction: ''
+        attractionInformation: ''
+        dining: null
+        areaAttractions: ''
+        recreation: ''
+        policy: null
+        spa: null
+        whatToExpect: null
+        businessAmenities: null
+        beachPool: string
+        honeymoonInformation: null
+        specialDays: null
+        activities: null
+        importentInfo: null
+      }
+      year_built: null
+      nr_restaurants: null
+      nr_bars: null
+      nr_halls: null
+      last_update: string
+      video_list: null
+      web_site: ''
+      deleted: boolean
+      destination_slug: string
+      old_destination_slug: null
+      rating: number
+      listing_rate: number
+      sales_rate: number
+      destination_id: number
+      destination_map: [number, number]
+      search_rate: number
+      reviews: null
+      nearby_restaurants: null
+      comment_info: {
+        comments: {
+          startDate: string
+          endDate: string
+          commentDate: string
+          name: string
+          surname: string
+          averageScore: number
+          positiveCotent: string
+          negativeCotent: string
+          isSuggested: boolean
+          reasonLabel: null
+          withWhoLabel: null
+          userCountryCode: string
+          userCountry: string
+          userCity: null
+        }[]
+        totalComments: number
+        averageScore: number
+      }
+      documents: {
+        no: ''
+        type: string
+        description: string
+      }[]
+      food_drinks: null
+      can_coupon_used: boolean
+    }
+    roomDetails: {
+      [key: string]: {
+        roomKey: string
+        description: ''
+        allotment: number
+        bedType: ''
+        roomType: string
+        quantity: number
+        size: number
+        facilities: []
+        pensionType: string
+        pensionTypeId: number
+        extraInformations: null
+        images: []
+      }
+    }
+    rooms: {
+      passengerKeys: null
+      nightlyRates: {
+        totalPrice: ServicePriceType
+        basePrice: ServicePriceType
+        taxes: ServicePriceType
+        fee: ServicePriceType
+      }[]
+      addonInfos: null
+      freeChildAges: null
+      freeNights: number
+      discountInformations: null
+      key: string
+      totalPrice: ServicePriceType
+      basePrice: ServicePriceType
+      taxes: ServicePriceType
+      discount: ServicePriceType
+      buyFee: ServiceFeePriceType
+      fee: ServiceFeePriceType
+      passengerPrices: null
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    averageRate: ServicePriceType
+    nightlyRateTotal: ServicePriceType
+    discountDescription: ''
+    cancelWarrantyPrice: ServicePriceType
+    useCancelWarranty: boolean
+    prepaid: boolean
+    accommodationTax: {
+      price: ServicePriceType
+      included: boolean
+    }
+    isSingleMaleRestriction: null
+    cancellationPolicy: null
+    cancellationPolicies: []
+    additionalInfos: null
+    nonRefundable: boolean
+    checkInDate: string
+    minNight: number
+    checkOutDate: string
+    earlyBooking: boolean
+    addonInfos: null
+    packageSearchType: number
+    provisionTime: string
+    provider: string
+    priceDifferenceBackGuarantee: boolean
+    canCouponUsed: boolean
+    key: string
+    totalPrice: ServicePriceType
+    basePrice: ServicePriceType
+    taxes: ServicePriceType
+    discount: ServicePriceType
+    buyFee: ServiceFeePriceType
+    fee: ServiceFeePriceType
+    passengerPrices: {
+      unitPrice: {
+        value: 0
+        currency: null
+        rateValue: null
+      }
+      unitBasePrice: {
+        value: 0
+        currency: null
+        rateValue: null
+      }
+      unitFee: {
+        code: null
+        price: {
+          value: 0
+          currency: null
+          rateValue: null
+        }
+      }
+      unitTax: {
+        value: 0
+        currency: null
+        rateValue: null
+      }
+      cancelPenalty: null
+      changePenalty: null
+      passengers: {
+        key: string
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+      taxInfos: null
+      serviceCharges: null
+    }[]
+    taxInfos: null
+    serviceCharges: null
+  }
+  status: []
+  productKey: string
+  moduleName: 'CyprusPackage'
+  providerName: null
+  providerId: number
+  priceCurrency: string
+  totalPrice: number
+  loyaltyMultiple: number
+  couponDiscountList: null
+  extraCharges: null
+  financellDiscount: ServicePriceType
 }

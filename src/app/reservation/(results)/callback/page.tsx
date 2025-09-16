@@ -14,6 +14,7 @@ import {
   OperationResultType,
   TransferSummaryResponse,
   TourSummaryResponse,
+  CyprusPackageSummaryResponse,
 } from '../../types'
 import { BusSummary } from './products/bus'
 import { TransferSummary } from './products/transfer'
@@ -26,6 +27,7 @@ import { TourSummary } from './products/tour'
 import { BillingCard } from '@/app/order-components/billing-card'
 import Image from 'next/image'
 import Link from 'next/link'
+import { CyprusPackageSummary } from './products/cyprusPackage'
 dayjs.extend(utc)
 
 type IProps = {
@@ -58,8 +60,6 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
       },
     },
   })
-
-  console.log(getSummaryData)
 
   if (!getSummaryData?.data && !getSummaryData?.success) return notFound()
 
@@ -157,6 +157,12 @@ const CallbackPage: React.FC<IProps> = async ({ searchParams }) => {
                       <TourSummary
                         data={productData as TourSummaryResponse}
                         passengerCount={passengerData?.passengers?.length}
+                      />
+                    )
+                  case 'CyprusPackage':
+                    return (
+                      <CyprusPackageSummary
+                        data={productData as CyprusPackageSummaryResponse}
                       />
                     )
                   default:
