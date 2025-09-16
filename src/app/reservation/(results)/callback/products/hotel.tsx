@@ -7,7 +7,7 @@ import { EmailCard } from '@/app/order-components/email-card'
 import { CheckoutCard } from '@/components/card'
 import { formatCurrency } from '@/libs/util'
 import { SummaryPassengerData } from '@/app/account/reservations/types'
-import { Img } from '@react-email/components'
+import { Img, Link } from '@react-email/components'
 
 type IProps = {
   data: HotelSummaryResponse
@@ -24,12 +24,19 @@ const HotelSummary: React.FC<IProps> = ({
 
   return (
     <>
+      <Link href={`${process.env.SITE_URL}/kampanyalar?categoryId=156`}>
+        <Img
+          height={200}
+          className='mb-3 w-auto'
+          src='https://ykmturizm.mncdn.com/11/Files/638932871618301570.png'
+        />
+      </Link>
       <CheckoutCard title='Otel Bilgisi'>
-        <div className='grid gap-4 md:grid-cols-6 md:gap-3'>
-          <div className='md:col-span-2'>
+        <div className='grid gap-3 md:grid-cols-8 md:gap-5'>
+          <div className='md:col-span-4'>
             <Img
               width={310}
-              height={200}
+              height={600}
               src={roomGroup.hotel.images.at(0)?.original || ''}
               alt={roomGroup.hotel.name}
               className='w-full rounded-lg'
