@@ -8,6 +8,7 @@ import EmailTourOrderResult from './tour/tour'
 import EmailBusOrderResult from './bus/bus'
 import EmailCarRentalOrderResult from './car-rental/car-rental'
 import EmailTransferOrderResult from './transfer/transfer'
+import EmailCyprusPackageBookResult from './cyprusPackage/cyprus-package'
 
 export default function EmailBookResult({
   data,
@@ -18,7 +19,6 @@ export default function EmailBookResult({
   switch (moduleName) {
     case 'Flight':
       return <EmailFlightBookResult data={data} />
-
     case 'Hotel':
       return <EmailHotelOrderResult data={data} />
     case 'Tour':
@@ -29,9 +29,10 @@ export default function EmailBookResult({
       return <EmailCarRentalOrderResult data={data} />
     case 'Transfer':
       return <EmailTransferOrderResult data={data} />
+    case 'CyprusPackage':
+      return <EmailCyprusPackageBookResult data={data} />
     default:
       return <div>Plase choose a product</div>
-      break
   }
 }
 
