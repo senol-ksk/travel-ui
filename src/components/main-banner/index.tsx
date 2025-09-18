@@ -12,6 +12,7 @@ import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
 import clsx from 'clsx'
 import { cdnImageUrl } from '@/libs/cms-data'
 import { Route } from 'next'
+import { Container } from '@mantine/core'
 
 type SlideType = {
   id: string
@@ -42,12 +43,13 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
   }, [emblaApi])
 
   return (
-    <div className='relative'>
+    <div className='w-full max-w-full overflow-hidden'>
       {!emblaApi && (
         <div className='absolute start-0 end-0 top-0 bottom-0 z-10 h-full'>
           <Skeleton h={'100%'} />
         </div>
       )}
+
       <Carousel
         withIndicators={false}
         withControls={false}
@@ -55,26 +57,37 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
         plugins={[autoplay.current]}
         onMouseEnter={autoplay.current.stop}
         onMouseLeave={() => autoplay.current.play()}
-        slideGap={'md'}
-        className={clsx('w-full', {
+        slideGap={'lg'}
+        className={clsx('w-full max-w-full overflow-hidden', {
           'opacity-100': !!emblaApi,
           'opacity-0': !emblaApi,
         })}
+        style={{ maxWidth: '100%', width: '100%' }}
       >
         {slides.map((slide) => {
           return (
-            <Carousel.Slide key={slide.id}>
+            <Carousel.Slide
+              key={slide.id}
+              className='w-full'
+              style={{ maxWidth: '100%', width: '100%' }}
+            >
               <Box
                 component={Link}
                 href={(slide.params.link?.value || '#') as Route}
-                className='block'
+                className='block w-full'
+                style={{ maxWidth: '100%', width: '100%' }}
               >
-                <AspectRatio ratio={2.6 / 1}>
+                <AspectRatio
+                  ratio={2.6 / 1}
+                  className='w-full'
+                  style={{ maxWidth: '100%', width: '100%' }}
+                >
                   <Image
-                    className='rounded-lg'
+                    className='h-full w-full rounded-lg object-cover p-0'
                     src={cdnImageUrl(slide.params.image.value)}
                     alt={slide.Title}
                     bdrs={{ base: 'md', md: 'lg' }}
+                    style={{ maxWidth: '100%', width: '100%' }}
                   />
                 </AspectRatio>
               </Box>
@@ -82,6 +95,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
           )
         })}
       </Carousel>
+
       <div className='hidden justify-between gap-4 pt-5 md:flex md:justify-center'>
         <div>
           <ActionIcon
