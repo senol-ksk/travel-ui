@@ -276,7 +276,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <HotelTableOfContents hotelInfo={hotelInfo} />
 
         <div className='grid grid-cols-2 gap-2 rounded bg-gray-50 md:grid-cols-12 md:gap-5 md:p-3'>
-          <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
+          <div className='col-span-12 flex flex-col gap-7 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
               <div className='text-xl font-semibold md:text-3xl'>
                 {hotel.name.trim()}
