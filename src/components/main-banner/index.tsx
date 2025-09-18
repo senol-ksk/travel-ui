@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ActionIcon, AspectRatio, Box, Image, Skeleton } from '@mantine/core'
 import { Link } from 'next-view-transitions'
+import Autoplay from 'embla-carousel-autoplay'
 
 import { EmblaCarouselType } from 'embla-carousel'
 
@@ -28,6 +29,7 @@ type PropType = {
 const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | null>(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const autoplay = useRef(Autoplay({ delay: 3000 }))
 
   useEffect(() => {
     if (!emblaApi) return
@@ -50,6 +52,9 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
         withIndicators={false}
         withControls={false}
         getEmblaApi={setEmblaApi}
+        plugins={[autoplay.current]}
+        onMouseEnter={autoplay.current.stop}
+        onMouseLeave={() => autoplay.current.play()}
         slideGap={'md'}
         className={clsx('w-full', {
           'opacity-100': !!emblaApi,
@@ -66,6 +71,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
               >
                 <AspectRatio ratio={2.6 / 1}>
                   <Image
+                    className='rounded-lg'
                     src={cdnImageUrl(slide.params.image.value)}
                     alt={slide.Title}
                     bdrs={{ base: 'md', md: 'lg' }}
@@ -76,7 +82,7 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
           )
         })}
       </Carousel>
-      <div className='flex justify-between gap-4 pt-5 md:justify-center'>
+      <div className='hidden justify-between gap-4 pt-5 md:flex md:justify-center'>
         <div>
           <ActionIcon
             radius={'xl'}

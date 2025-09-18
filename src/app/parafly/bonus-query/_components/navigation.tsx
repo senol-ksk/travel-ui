@@ -8,7 +8,7 @@ import { Route } from 'next'
 
 const pageLinks = [
   { title: 'ParafPara Sorgula', pathname: '/parafly/bonus-query' },
-  { title: 'ParafPara Hasapla', pathname: '/parafly/calculate' },
+  { title: 'ParafPara Hesapla', pathname: '/parafly/calculate' },
   {
     title: 'Parafly Travel Nedir?',
     pathname: '/parafly/about',
