@@ -9,12 +9,13 @@ import {
   Loader,
   LoadingOverlay,
   Modal,
-  ScrollArea,
   Skeleton,
   Title,
   Text,
   Collapse,
+  ActionIcon,
 } from '@mantine/core'
+import dayjs from 'dayjs'
 import { IoMapOutline, IoSearchSharp } from 'react-icons/io5'
 import { BiChevronRight } from 'react-icons/bi'
 import {
@@ -57,8 +58,6 @@ import { RiMapPin2Line } from 'react-icons/ri'
 import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
 import { Route } from 'next'
-import { CiCircleInfo } from 'react-icons/ci'
-import dayjs from 'dayjs'
 
 type IProps = {
   slug: string
@@ -215,11 +214,10 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
 
     return total
   }
-  console.log('hotel detail, ', hotelDetailData.data?.searchPanel.type)
 
   return (
     <>
-      <div className='border-b py-2 md:py-4'>
+      <div className='z-100 border-b py-2 md:py-4'>
         <Container>
           <div className='relative text-xs font-semibold text-blue-800 md:hidden'>
             <button
@@ -499,30 +497,8 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <Title id='rooms' className='md:text-xxl p-2 text-xl md:p-0'>
           Odalar
         </Title>
-        <div className='rounded-sm border p-3'>
-          <div
-            className='relative flex items-center gap-3 text-xs font-semibold text-blue-800 md:hidden'
-            role='button'
-            onClick={toggleRoomUpdateFormVisibility}
-          >
-            <div>{dayjs(searchParams.checkInDate).format('DD MMM')}</div>
-            <div>{dayjs(searchParams.checkOutDate).format('DD MMM')}</div>
-            <div>
-              {searchParams.rooms.length} Oda{' '}
-              {searchParams.rooms.reduce((a, b) => {
-                return a + b.adult + b.child
-              }, 0)}{' '}
-              Misafir
-            </div>
-            <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
-              <IoSearchSharp size={24} className='text-blue-800' />
-            </div>
-          </div>
-          <Collapse in={isRoomUpdateFormVisible || isBreakPointMatchesMd}>
-            <div className='pt-3 md:pt-0'>
-              <RoomUpdateForm />
-            </div>
-          </Collapse>
+        <div className='rounded-sm border bg-gray-50 p-3 md:bg-white'>
+          <RoomUpdateForm />
         </div>
 
         <Alert
