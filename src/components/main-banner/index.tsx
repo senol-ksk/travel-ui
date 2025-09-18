@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ActionIcon, AspectRatio, Box, Image, Skeleton } from '@mantine/core'
 import { Link } from 'next-view-transitions'
+import Autoplay from 'embla-carousel-autoplay'
 
 import { EmblaCarouselType } from 'embla-carousel'
 
@@ -11,6 +12,7 @@ import { RiArrowLeftLine, RiArrowRightLine } from 'react-icons/ri'
 import clsx from 'clsx'
 import { cdnImageUrl } from '@/libs/cms-data'
 import { Route } from 'next'
+import { Container } from '@mantine/core'
 
 type SlideType = {
   id: string
@@ -28,6 +30,7 @@ type PropType = {
 const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType | null>(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const autoplay = useRef(Autoplay({ delay: 3000 }))
 
   useEffect(() => {
     if (!emblaApi) return
@@ -40,35 +43,51 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
   }, [emblaApi])
 
   return (
-    <div className='relative'>
+    <div className='w-full max-w-full overflow-hidden'>
       {!emblaApi && (
         <div className='absolute start-0 end-0 top-0 bottom-0 z-10 h-full'>
           <Skeleton h={'100%'} />
         </div>
       )}
+
       <Carousel
         withIndicators={false}
         withControls={false}
         getEmblaApi={setEmblaApi}
-        slideGap={'md'}
-        className={clsx('w-full', {
+        plugins={[autoplay.current]}
+        onMouseEnter={autoplay.current.stop}
+        onMouseLeave={() => autoplay.current.play()}
+        slideGap={'lg'}
+        className={clsx('w-full max-w-full overflow-hidden', {
           'opacity-100': !!emblaApi,
           'opacity-0': !emblaApi,
         })}
+        style={{ maxWidth: '100%', width: '100%' }}
       >
         {slides.map((slide) => {
           return (
-            <Carousel.Slide key={slide.id}>
+            <Carousel.Slide
+              key={slide.id}
+              className='w-full'
+              style={{ maxWidth: '100%', width: '100%' }}
+            >
               <Box
                 component={Link}
                 href={(slide.params.link?.value || '#') as Route}
-                className='block'
+                className='block w-full'
+                style={{ maxWidth: '100%', width: '100%' }}
               >
-                <AspectRatio ratio={2.6 / 1}>
+                <AspectRatio
+                  ratio={2.6 / 1}
+                  className='w-full'
+                  style={{ maxWidth: '100%', width: '100%' }}
+                >
                   <Image
+                    className='h-full w-full rounded-lg object-cover p-0'
                     src={cdnImageUrl(slide.params.image.value)}
                     alt={slide.Title}
                     bdrs={{ base: 'md', md: 'lg' }}
+                    style={{ maxWidth: '100%', width: '100%' }}
                   />
                 </AspectRatio>
               </Box>
@@ -76,7 +95,8 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
           )
         })}
       </Carousel>
-      <div className='flex justify-between gap-4 pt-5 md:justify-center'>
+
+      <div className='hidden justify-between gap-4 pt-5 md:flex md:justify-center'>
         <div>
           <ActionIcon
             radius={'xl'}
