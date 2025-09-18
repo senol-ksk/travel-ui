@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ActionIcon, Button, Modal } from '@mantine/core'
+import { ActionIcon, Button } from '@mantine/core'
 import dayjs from 'dayjs'
 import UTC from 'dayjs/plugin/utc'
 
@@ -10,12 +10,11 @@ import { HotelPassengerDropdown } from '@/components/search-engine/passengers/ho
 
 import {
   hotelDetailSearchParams,
-  HotelRoomOptionTypes,
+  type HotelRoomOptionTypes,
 } from '@/modules/hotel/searchParams'
 import { parseAsArrayOf, parseAsIsoDate, useQueryStates } from 'nuqs'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import { IoSearchSharp } from 'react-icons/io5'
-import { useDisclosure } from '@mantine/hooks'
 
 type RoomParams = {
   rooms: HotelRoomOptionTypes[]

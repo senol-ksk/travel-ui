@@ -497,7 +497,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <Title id='rooms' className='md:text-xxl p-2 text-xl md:p-0'>
           Odalar
         </Title>
-        <div className='rounded-sm border bg-gray-50 p-3 md:bg-white'>
+        <div className='rounded border bg-gray-50 p-3 md:bg-white'>
           <RoomUpdateForm />
         </div>
 
