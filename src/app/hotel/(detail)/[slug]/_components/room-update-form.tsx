@@ -41,6 +41,8 @@ const RoomUpdateForm = () => {
     },
   })
 
+  console.log(form.formState.defaultValues)
+
   const handleSubmit: SubmitHandler<RoomParams> = (data) => {
     if (isFormDirty) {
       setSearchParams({
@@ -54,14 +56,13 @@ const RoomUpdateForm = () => {
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
-      <input type='hidden' {...form.register('checkInDate')} />
-      <input type='hidden' {...form.register('checkOutDate')} />
-      <input type='hidden' {...form.register('rooms')} />
-
       <div className='grid gap-3 md:grid-cols-3'>
         <div>
           <HotelCalendar
             showCalendar={showCalendar}
+            onClose={() => {
+              setShowCalendar(false)
+            }}
             defaultDates={[
               form.formState.defaultValues?.checkInDate ??
                 dayjs().add(2, 'd').toDate(),
@@ -101,7 +102,7 @@ const RoomUpdateForm = () => {
             color={isFormDirty ? 'green' : 'blue'}
             onClick={() => {
               if (!isFormDirty) {
-                setShowCalendar((prev) => !prev)
+                setShowCalendar(true)
               }
             }}
           >

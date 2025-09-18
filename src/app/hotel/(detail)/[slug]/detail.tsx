@@ -13,13 +13,15 @@ import {
   Skeleton,
   Title,
   Text,
+  Collapse,
 } from '@mantine/core'
-import { IoMapOutline } from 'react-icons/io5'
+import { IoMapOutline, IoSearchSharp } from 'react-icons/io5'
 import { BiChevronRight } from 'react-icons/bi'
 import {
   useDisclosure,
   useScrollIntoView,
   useElementSize,
+  useMediaQuery,
 } from '@mantine/hooks'
 import { createSerializer } from 'nuqs'
 import { notFound, useRouter } from 'next/navigation'
@@ -56,6 +58,7 @@ import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
 import { Route } from 'next'
 import { CiCircleInfo } from 'react-icons/ci'
+import dayjs from 'dayjs'
 
 type IProps = {
   slug: string
@@ -190,6 +193,11 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
   const { ref: generalInfoContentRef, height: generalInfoContentHeight } =
     useElementSize()
   const GENERAL_INFO_MAX_HEIGHT = 50
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
+  const [isRoomUpdateFormVisible, { toggle: toggleRoomUpdateFormVisibility }] =
+    useDisclosure(false)
+  const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
 
   if (!hotelDetailData && hotelDetailQuery.isLoading) {
     return <HotelDetailSkeleton />
@@ -199,11 +207,57 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
     return notFound()
   }
 
+  const totalPassengerCount = () => {
+    const total = searchParams.rooms.reduce((a, b) => {
+      a += b.adult + b.child
+      return a
+    }, 0)
+
+    return total
+  }
+  console.log('hotel detail, ', hotelDetailData.data?.searchPanel.type)
+
   return (
     <>
-      <Container className='border-b py-4'>
-        <HotelSearchEngine />
-      </Container>
+      <div className='border-b py-2 md:py-4'>
+        <Container>
+          <div className='relative text-xs font-semibold text-blue-800 md:hidden'>
+            <button
+              className='absolute start-0 end-0 top-0 bottom-0 z-10'
+              onClick={toggleSearchEngineVisibility}
+            />
+
+            <div className='flex items-center gap-2'>
+              <div>{hotel.destination}</div>
+              <div>|</div>
+              <div>
+                {dayjs(searchParams.checkInDate).format('DD MMMM')} -{' '}
+                {dayjs(searchParams.checkOutDate).format('DD MMMM')}
+              </div>
+              <div>|</div>
+              <div>{totalPassengerCount()} Yolcu</div>
+              <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+                <IoSearchSharp size={24} className='text-blue-800' />
+              </div>
+            </div>
+          </div>
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            <HotelSearchEngine
+              defaultValues={{
+                checkinDate: searchParams.checkInDate,
+                checkoutDate: searchParams.checkOutDate,
+                rooms: searchParams.rooms,
+                destination: {
+                  id: hotel.destination_id,
+                  name: hotel.destination,
+                  slug: hotel.destination_slug,
+                  type: hotelDetailData.data?.searchPanel.type ?? 0,
+                },
+              }}
+            />
+          </Collapse>
+        </Container>
+      </div>
 
       <Container
         className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-3'
@@ -446,7 +500,29 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
           Odalar
         </Title>
         <div className='rounded-sm border p-3'>
-          <RoomUpdateForm />
+          <div
+            className='relative flex items-center gap-3 text-xs font-semibold text-blue-800 md:hidden'
+            role='button'
+            onClick={toggleRoomUpdateFormVisibility}
+          >
+            <div>{dayjs(searchParams.checkInDate).format('DD MMM')}</div>
+            <div>{dayjs(searchParams.checkOutDate).format('DD MMM')}</div>
+            <div>
+              {searchParams.rooms.length} Oda{' '}
+              {searchParams.rooms.reduce((a, b) => {
+                return a + b.adult + b.child
+              }, 0)}{' '}
+              Misafir
+            </div>
+            <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+              <IoSearchSharp size={24} className='text-blue-800' />
+            </div>
+          </div>
+          <Collapse in={isRoomUpdateFormVisible || isBreakPointMatchesMd}>
+            <div className='pt-3 md:pt-0'>
+              <RoomUpdateForm />
+            </div>
+          </Collapse>
         </div>
 
         <Alert
