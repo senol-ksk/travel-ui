@@ -4,6 +4,8 @@ import { SearchParams } from 'nuqs/server'
 import { cyprusHotelDetailLoader } from '../../searchParams'
 import { notFound } from 'next/navigation'
 import { Container, Skeleton, Stack } from '@mantine/core'
+import { olRequest, OLResponse } from '@/network'
+import { CyprusHotelDetailApiResponse } from '../../types'
 
 export default async function CyprusDetail({
   params,
@@ -19,6 +21,31 @@ export default async function CyprusDetail({
     notFound()
   }
 
+  const detailData = await olRequest<CyprusHotelDetailApiResponse>({
+    data: {
+      params: {
+        ...queryParams,
+        slug,
+        isSearch: false,
+        rooms: null,
+        scopeCode: process.env.SCOPE_CODE,
+        scopeName: process.env.SCOPE_NAME,
+        appName: process.env.APP_NAME,
+        languageCode: 'tr-TR',
+      },
+    },
+    apiAction: 'api/CyprusPackage/Detail',
+    apiRoute: 'CyprusPackageService',
+  })
+
+  if (
+    !detailData ||
+    !detailData.data ||
+    !detailData?.data.hotelDetailResponse
+  ) {
+    notFound()
+  }
+
   return (
     <Suspense
       fallback={
@@ -31,7 +58,11 @@ export default async function CyprusDetail({
         </Container>
       }
     >
-      <CyprusHotelDetail searchParams={queryParams} slug={slug} />
+      <CyprusHotelDetail
+        searchParams={queryParams}
+        slug={slug}
+        detailData={detailData!}
+      />
     </Suspense>
   )
 }

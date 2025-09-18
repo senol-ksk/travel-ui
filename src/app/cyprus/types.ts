@@ -1,3 +1,10 @@
+import { HotelRoomOptionTypes } from '@/modules/hotel/searchParams'
+import {
+  HotelDetailResponseHotelInfo,
+  HotelDetailRoomDetail,
+  HotelDetailRoomItem,
+} from '../hotel/types'
+
 export interface CyprusHotel {
   hotel: {
     id: number
@@ -37,26 +44,7 @@ export interface CyprusHotel {
     facility_scopes: null
     tripAdvisor: null
     price: ServicePriceType
-    descriptions: {
-      hotelInformation: string
-      hotelAmenity: string
-      roomAmenity: ''
-      locationInformation: string
-      hotelIntroduction: ''
-      attractionInformation: ''
-      dining: null
-      areaAttractions: ''
-      recreation: ''
-      policy: null
-      spa: null
-      whatToExpect: null
-      businessAmenities: null
-      beachPool: string
-      honeymoonInformation: null
-      specialDays: null
-      activities: null
-      importentInfo: null
-    }
+    descriptions: CyprusHotelDetailDescription
     year_built: null
     nr_restaurants: null
     nr_bars: null
@@ -133,122 +121,126 @@ export interface CyprusHotel {
   tripAdvisor: null
 }
 
+export interface CyprusHotelDetailDescription {
+  hotelInformation: string | null
+  hotelAmenity: string | null
+  roomAmenity: string | null
+  locationInformation: string | null
+  hotelIntroduction: string | null
+  attractionInformation: string | null
+  dining: string | null
+  areaAttractions: string | null
+  recreation: string | null
+  policy: string | null
+  spa: string | null
+  whatToExpect: string | null
+  businessAmenities: string | null
+  beachPool: string | null
+  honeymoonInformation: string | null
+  specialDays: string | null
+  activities: string | null
+  importentInfo: string | null
+}
 export interface CyprusHotelDetailApiResponse {
-  destinationSlug: null
   hotelDetailResponse: {
-    diagnostics: {
-      callingServiceTime: '00:00:00'
-      generatingRequestTime: '00:00:00'
-      generatingResponseTime: '00:00:00'
-      lastException: null
-      providerId: 0
-      providerInfo: null
-      providerName: null
-      serviceRequestData: null
-      serviceResponseData: null
-      sessionToken: null
-      subDiagnostics: null
-      traceId: null
-    }
-    hotelInfo: CyprusHotel | null
-    items: {
-      hotelId: number
-      hotelKey: string
-      hotel: null
-      roomDetails: null
-      rooms: {
-        passengerKeys: null
-        nightlyRates: {
-          totalPrice: ServicePriceType
-          basePrice: ServicePriceType
-          taxes: ServicePriceType
-          fee: ServicePriceType
-        }[]
-        addonInfos: null
-        freeChildAges: null
-        freeNights: 0
-        discountInformations: null
-        key: string
-        totalPrice: ServicePriceType
-        basePrice: ServicePriceType
-        taxes: ServicePriceType
-        discount: ServicePriceType
-        buyFee: ServiceFeePriceType
-        fee: ServiceFeePriceType
-        passengerPrices: null
-        taxInfos: null
-        serviceCharges: null
-      }[]
-      averageRate: ServicePriceType
-      nightlyRateTotal: ServicePriceType
-      discountDescription: string | null
-      cancelWarrantyPrice: ServicePriceType
-      useCancelWarranty: boolean
-      prepaid: boolean
-      accommodationTax: {
-        price: ServicePriceType
-        included: boolean
-      }
-      isSingleMaleRestriction: null | boolean
-      cancellationPolicy: null | boolean
-      cancellationPolicies: []
-      additionalInfos: null
-      nonRefundable: boolean
-      checkInDate: string
-      minNight: number
-      checkOutDate: string
-      earlyBooking: boolean
-      addonInfos: null
-      packageSearchType: number
-      provisionTime: string
-      provider: string
-      priceDifferenceBackGuarantee: boolean
-      canCouponUsed: boolean
-      key: string
-      totalPrice: ServicePriceType
-      basePrice: ServicePriceType
-      taxes: ServicePriceType
-      discount: ServicePriceType
-      buyFee: ServiceFeePriceType
-      fee: ServiceFeePriceType
-      passengerPrices: null
-      taxInfos: null
-      serviceCharges: null
-    }[]
-    roomDetails: {
-      [key: string]: {
-        roomKey: string
-        description: string | null
-        allotment: number
-        bedType: string
-        roomType: string
-        quantity: number
-        size: number
-        facilities: []
-        pensionType: string
-        pensionTypeId: number
-        extraInformations: null
-        images: []
-      }
-    }
+    hotelInfo: HotelDetailResponseHotelInfo
+    hotelMinPrice: ServicePriceType
+    roomDetails: null | { [key: string]: HotelDetailRoomDetail }
+    isLoadProducts: boolean
+    items: null | HotelDetailRoomItem[]
     validationInformations: {
       age: {
         ageReferenceDate: string
         infantAgeBegin: string
         childAgeBegin: number
         adultAgeBegin: number
-        ageCalculationType: 0
+        ageCalculationType: number
       }
     }
-    hotelMinPrice: ServicePriceType
-  }
-  hotelSlug: null
-  isProductValid: boolean
-  productKey: null
-  searchPanel: null
-  searchPassenger: null
-  searchToken: string
+    availableSpecialRequests: null | object
+    sessionToken: null
+    traceId: null
+    isSucceeded: boolean
+    diagnostics: {
+      sessionToken: null
+      providerId: ID
+      providerName: null
+      generatingRequestTime: string
+      callingServiceTime: string
+      generatingResponseTime: string
+      subDiagnostics: null
+      lastException: null
+      serviceRequestData: null
+      serviceResponseData: null
+      providerInfo: null
+      traceId: null
+    }
+    eventMessages: []
+    appName: null
+    scopeCode: string
+    logSessionToken: null
+    logSearchToken: null
+  } | null
+  searchPassenger:
+    | {
+        key: null
+        name: null
+        passengerType: number
+        age: number
+        birthday: string
+        gender: number
+      }[]
+    | null
   sessionToken: string
+  searchToken: string
+  destinationSlug: null
+  hotelSlug: null
+  productKey: string | null
+  isProductValid: boolean
+  searchPanel: {
+    id: ID
+    name: string
+    slug: string
+    location: number[]
+    northeast: null
+    southwest: null
+    type: number
+    countryCode: string
+    checkInDate: string
+    checkOutDate: string
+    rooms: HotelRoomOptionTypes[]
+    domestic: boolean
+    tags: null
+    earlyBooking: boolean
+    pageNo: number
+    pageSize: number
+    languageCode: string
+    orderBy: number
+    hotelName: null
+    maxPrice: number
+    minPrice: number
+    maxStarRating: number
+    minStarRating: number
+    maxTripAdvisorRating: number
+    minTripAdvisorRating: number
+    facilities: null
+    pensionTypes: null
+    themes: null
+    destinationIds: null
+    nonRefundable: null
+    isAvailabilityResult: boolean
+    isSocketConnected: boolean
+    extentionData: {
+      [key: string]: ID
+    }
+    sessionToken: string
+    apiRoute: null
+    apiAction: null
+    appName: null
+    scopeName: null
+    searchToken: string
+    scopeCode: string
+  }
 }
 
 export interface CyprusFlight {
