@@ -35,6 +35,7 @@ import { PiSuitcaseRolling } from 'react-icons/pi'
 import dayjs from 'dayjs'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import duration from 'dayjs/plugin/duration'
 import 'dayjs/locale/tr'
 import { Virtuoso } from 'react-virtuoso'
 import { MdOutlineAirplanemodeActive } from 'react-icons/md'
@@ -77,6 +78,7 @@ type SelectedPackageStateProps = {
 dayjs.locale('tr')
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
+dayjs.extend(duration)
 
 const FlightSearchView = () => {
   const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
