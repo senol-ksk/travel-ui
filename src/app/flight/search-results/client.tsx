@@ -6,6 +6,7 @@ import {
   useMediaQuery,
   useMounted,
   useScrollIntoView,
+  useTimeout,
 } from '@mantine/hooks'
 import {
   Accordion,
@@ -79,6 +80,19 @@ dayjs.extend(isSameOrBefore)
 
 const FlightSearchView = () => {
   const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
+  const timeoutHasEnded = useRef(false)
+  const {
+    start: startFlightSearchQueryTimeout,
+    clear: clearFlightSearchQueryTimeout,
+  } = useTimeout(
+    () => {
+      timeoutHasEnded.current = true
+    },
+    30000,
+    {
+      autoInvoke: true,
+    }
+  )
 
   const {
     searchResultsQuery,
@@ -89,6 +103,27 @@ const FlightSearchView = () => {
     searchParams,
     airPortFlatList,
   } = useSearchResultsQueries()
+
+  if (
+    !searchResultsQuery.isFetchingNextPage &&
+    searchResultsQuery.hasNextPage &&
+    !timeoutHasEnded.current
+  ) {
+    searchResultsQuery.fetchNextPage()
+  }
+
+  useEffect(() => {
+    timeoutHasEnded.current = false
+    startFlightSearchQueryTimeout()
+    return () => {
+      timeoutHasEnded.current = false
+      clearFlightSearchQueryTimeout()
+    }
+  }, [
+    searchParams,
+    startFlightSearchQueryTimeout,
+    clearFlightSearchQueryTimeout,
+  ])
 
   const searchQueryData = useMemo(
     () => searchResultsQuery?.data,
@@ -910,10 +945,7 @@ const FlightSearchView = () => {
                                         h={2}
                                         className='rounded'
                                       />
-                                      <div
-                                        className='absolute end-0 -translate-y-1/2 rotate-90 text-blue-800'
-                                        style={{ top: 1, paddingBottom: 1 }}
-                                      >
+                                      <div className='absolute end-0 top-[1px] -translate-y-1/2 rotate-90 pb-[1px] text-blue-800'>
                                         <MdOutlineAirplanemodeActive
                                           size={18}
                                         />
@@ -1385,9 +1417,9 @@ const FlightSearchView = () => {
                       <MemoizedFlightSearchResultsDomestic
                         airlineValues={airlineValues}
                         airportValues={getAirportsByCodeList.data}
-                        detailSegments={result.segments}
-                        details={result.details}
-                        fareInfo={result.fareInfo}
+                        detailSegments={result?.segments}
+                        details={result?.details}
+                        fareInfo={result?.fareInfo}
                         onSelect={() => {
                           handleFlightSelect(result)
                         }}
@@ -1401,7 +1433,7 @@ const FlightSearchView = () => {
                   data={filteredData}
                   totalCount={filteredData?.length}
                   itemContent={(_, result) => {
-                    const segmentAirlines = result.segments.map((item) =>
+                    const segmentAirlines = result?.segments?.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code
                         ? item.marketingAirline.code
                         : item.operatingAirline.code
@@ -1417,9 +1449,9 @@ const FlightSearchView = () => {
                         <MemoizedFlightSearchResultsInternational
                           airlineValues={airlineValues}
                           airportValues={getAirportsByCodeList.data}
-                          detailSegments={result.segments}
-                          details={result.details}
-                          fareInfo={result.fareInfo}
+                          detailSegments={result?.segments}
+                          details={result?.details}
+                          fareInfo={result?.fareInfo}
                           onSelect={() => {
                             handleFlightSelect(result)
                           }}

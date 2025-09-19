@@ -41,7 +41,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
     <div className='@container items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
       <div className='col-span-4 grid gap-4'>
         {details.map((detail) => {
-          const relatedSegment = detailSegments.filter(
+          const relatedSegment = detailSegments?.filter(
             (segment) => detail.groupId === segment.groupId
           )
           const hasTransferStop = relatedSegment.length > 1
@@ -101,10 +101,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                   <div className='mt-2 grow'>
                     <div className='relative'>
                       <Box bg={'blue'} h={2} className='rounded' />
-                      <div
-                        className='absolute end-0 -translate-y-1/2 rotate-90 bg-white text-blue-800'
-                        style={{ top: 1, paddingBottom: 1 }}
-                      >
+                      <div className='top-[1px]text-blue-800 absolute end-0 -translate-y-1/2 rotate-90 bg-white pb-[1px]'>
                         <MdOutlineAirplanemodeActive size={18} />
                       </div>
                     </div>

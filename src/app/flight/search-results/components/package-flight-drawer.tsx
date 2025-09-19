@@ -43,7 +43,6 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
       onSelect(data.packages[selectedPackageIndex])
     }
   }
-  console.log(selectedFlightItemPackages)
 
   return (
     <div className='space-y-4'>

@@ -5,7 +5,7 @@ import { Box, Button } from '@mantine/core'
 import { RxCaretRight } from 'react-icons/rx'
 
 import { formatCurrency } from '@/libs/util'
-import {
+import type {
   AirportCode,
   AirlineCode,
   FlightDetail,
@@ -14,7 +14,6 @@ import {
 } from '../type'
 
 import { AirlineLogo } from '@/components/airline-logo'
-import { IoAirplaneSharp } from 'react-icons/io5'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
 import { PiSuitcaseRolling } from 'react-icons/pi'
 import { MdOutlineAirplanemodeActive } from 'react-icons/md'
@@ -44,7 +43,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
     <div className='@container items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
       <div className='col-span-4 grid'>
         {details.map((detail) => {
-          const relatedSegment = detailSegments.filter(
+          const relatedSegment = detailSegments?.filter(
             (item) => detail.groupId === item.groupId
           )
           const hasTransferStop = relatedSegment.length > 1
@@ -107,10 +106,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                   <div className='mt-2 grow'>
                     <div className='relative'>
                       <Box bg={'blue'} h={2} className='rounded' />
-                      <div
-                        className='absolute end-0 -translate-y-1/2 rotate-90 bg-white text-blue-800'
-                        style={{ top: 1, paddingBottom: 1 }}
-                      >
+                      <div className='absolute end-0 top-[1px] -translate-y-1/2 rotate-90 bg-white pb-[1px] text-blue-800'>
                         <MdOutlineAirplanemodeActive size={18} />
                       </div>
                     </div>
