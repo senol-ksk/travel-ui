@@ -33,7 +33,7 @@ const BottomSticky: React.FC<IProps> = ({ roomGroup }) => {
   )
 
   return (
-    <div className='z-max fixed right-0 bottom-0 left-0 md:hidden'>
+    <div className='fixed right-0 bottom-0 left-0 z-60 md:hidden'>
       <div className='flex items-center justify-between rounded-t-lg bg-white px-4 py-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3),0_-2px_4px_-2px_rgba(0,0,0,0.06)]'>
         <div className='flex flex-col'>
           <div className='grid items-center'>
