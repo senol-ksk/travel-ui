@@ -93,6 +93,8 @@ const FlightSearchView = () => {
       autoInvoke: true,
     }
   )
+  const [searchParams, setSearchParamsFlight] =
+    useQueryStates(flightSearchParams)
 
   const {
     searchResultsQuery,
@@ -100,7 +102,6 @@ const FlightSearchView = () => {
     submitFlightData,
     getAirlineByCodeList,
     getAirportsByCodeList,
-    searchParams,
     airPortFlatList,
   } = useSearchResultsQueries()
 
@@ -129,8 +130,6 @@ const FlightSearchView = () => {
     () => searchResultsQuery?.data,
     [searchResultsQuery?.data]
   )
-  const [searchParamsFlight, setSearchParamsFlight] =
-    useQueryStates(flightSearchParams)
 
   const handlePrevDay = () => {
     // default go and return dates on searchParams
@@ -272,8 +271,7 @@ const FlightSearchView = () => {
   const minutes = duration.minutes()
 
   const isDomestic =
-    searchParamsFlight.origin?.isDomestic &&
-    searchParamsFlight.destination?.isDomestic
+    searchParams.origin?.isDomestic && searchParams.destination?.isDomestic
 
   // if true this means Round trip, otherwise international or one way flight
   const tripKind = useMemo(

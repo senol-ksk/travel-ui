@@ -418,7 +418,6 @@ const useSearchResultsQueries = () => {
   return {
     searchResultsQuery,
     submitFlightData,
-    searchParams,
     searchSessionTokenQuery,
     getAirlineByCodeList,
     getAirportsByCodeList,
