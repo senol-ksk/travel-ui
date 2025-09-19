@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Transition, Paper, Button, ActionIcon, Title } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
@@ -11,19 +11,27 @@ import { RiUserLine } from 'react-icons/ri'
 type Props = {
   onChange?: (params: HotelRoomOptionTypes[]) => void
   initialValues: HotelRoomOptionTypes[]
+  onClose?: () => void
+  opened?: boolean
 }
 
 export const HotelPassengerDropdown: React.FC<Props> = ({
   onChange = () => {},
   initialValues,
+  onClose = () => {},
+  opened = false,
 }) => {
   const [roomState, setRoomState] = useState(initialValues)
 
   const [containerTransitionState, setContainerTransitionState] =
-    useState(false)
+    useState(opened)
   const clickOutsideRef = useClickOutside(() =>
     setContainerTransitionState(false)
   )
+
+  useEffect(() => {
+    setContainerTransitionState(opened)
+  }, [opened])
 
   return (
     <div className='relative h-full'>
@@ -41,7 +49,11 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
         onClick={() => setContainerTransitionState(true)}
       />
 
-      <Transition mounted={containerTransitionState} transition='pop-top-right'>
+      <Transition
+        mounted={containerTransitionState}
+        transition='pop-top-right'
+        onExit={onClose}
+      >
         {(styles) => {
           return (
             <div

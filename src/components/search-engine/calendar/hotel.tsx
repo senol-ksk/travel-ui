@@ -17,6 +17,7 @@ type Props = {
   onDateSelect?: (dates: DatesRangeValue) => void
   defaultDates: DatesRangeValue
   showCalendar?: boolean
+  onClose?: () => void
 }
 const defaultFormat = 'DD MMM ddd'
 
@@ -28,6 +29,7 @@ const HotelCalendar: React.FC<Props> = ({
   onDateSelect = () => {},
   defaultDates,
   showCalendar = false,
+  onClose = () => {},
 }) => {
   const [rangeValue, setRangeValue] = useState<DatesRangeValue>([
     defaultDates[0],
@@ -67,6 +69,10 @@ const HotelCalendar: React.FC<Props> = ({
       onDateSelect(dates)
     }
   }
+
+  useEffect(() => {
+    setContainerTransitionState(showCalendar)
+  }, [showCalendar])
 
   useEffect(() => {
     if (rangeValue && rangeValue[0] && rangeValue[1]) {
@@ -121,6 +127,7 @@ const HotelCalendar: React.FC<Props> = ({
                 dayjs(rangeValue[0]).add(1, 'd').toDate(),
               ])
             }
+            void onClose()
           }}
         >
           {(styles) => (
