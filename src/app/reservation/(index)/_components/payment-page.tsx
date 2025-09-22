@@ -413,11 +413,15 @@ export const PaymentPageSection = () => {
                     render={({ field }) => {
                       return (
                         <TextInput
-                          className='grid gap-1'
+                          className='grid gap-1 text-sm'
                           {...field}
                           autoComplete='cc-name'
                           size='md'
-                          label='Kart üzerindeki isim'
+                          label={
+                            <div className='text-sm font-medium'>
+                              Kart üzerindeki isim
+                            </div>
+                          }
                           placeholder='Kart Üzerindeki İsim'
                           error={
                             !!formMethods.formState.errors.cardOwner
@@ -434,10 +438,14 @@ export const PaymentPageSection = () => {
                     defaultValue=''
                     render={({ field }) => (
                       <TextInput
-                        className='grid gap-1'
+                        className='grid gap-1 text-sm font-medium'
                         {...field}
                         autoComplete='cc-number'
-                        label='Kart Numarası'
+                        label={
+                          <div className='text-sm font-medium'>
+                            Kart Numarası
+                          </div>
+                        }
                         type='tel'
                         size='md'
                         error={
@@ -456,8 +464,10 @@ export const PaymentPageSection = () => {
                   />
                   <div className='grid grid-cols-3 items-center gap-3'>
                     <div className='col-span-2'>
-                      <div className='grid gap-1'>
-                        <div className='text-sm'>Son kullanma tarihi</div>
+                      <div className='grid gap-1 text-sm'>
+                        <div className='text-sm font-medium'>
+                          Son kullanma tarihi
+                        </div>
                         <div className='flex gap-3'>
                           <div className='w-full'>
                             <Controller
@@ -519,14 +529,16 @@ export const PaymentPageSection = () => {
                         defaultValue=''
                         render={({ field }) => (
                           <TextInput
-                            className='w-full'
+                            className='w-full text-sm font-medium'
                             {...field}
                             maxLength={
                               cardValidation.number(
                                 formMethods.watch('cardNumber')
                               ).card?.code.size || 3
                             }
-                            label='CVV'
+                            label={
+                              <div className='text-sm font-medium'>CVV</div>
+                            }
                             placeholder='CVV'
                             size='md'
                             error={
