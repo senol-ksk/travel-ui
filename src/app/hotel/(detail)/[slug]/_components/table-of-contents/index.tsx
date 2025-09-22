@@ -43,7 +43,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
           isSticky
             ? 'fixed top-0 left-0 w-full shadow-xl md:shadow-xl'
             : 'sticky top-0'
-        } z-[99] rounded bg-gray-50`}
+        } z-20 rounded bg-gray-50`}
       >
         <div className='mx-auto max-w-6xl'>
           {isSticky && (
