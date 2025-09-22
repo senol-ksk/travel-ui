@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Transition, Paper, Button, ActionIcon, Title } from '@mantine/core'
+import { Transition, Paper, Button, CloseButton } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 
 import { Input } from '@/components/search-engine/input'
@@ -63,6 +63,13 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
               role='menu'
             >
               <Paper className='flex h-full flex-col rounded-lg border shadow-xl'>
+                <div className='flex justify-end md:hidden'>
+                  <CloseButton
+                    onClick={() => {
+                      setContainerTransitionState(false)
+                    }}
+                  />
+                </div>
                 <div className='grid min-w-[320px] gap-7 p-5'>
                   <HotelGuestsActions
                     initialValues={roomState}
