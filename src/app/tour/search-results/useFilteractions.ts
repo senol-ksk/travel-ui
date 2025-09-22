@@ -64,6 +64,55 @@ const useFilterActions = (
       }
       return true
     })
+    .filter((tourData) => {
+      if (
+        filterParams.departurePoints &&
+        filterParams.departurePoints.length > 0
+      ) {
+        // Ana item'ın çıkış noktalarını kontrol et
+        const mainItemHasDeparturePoint = tourData?.departurePoints?.some(
+          (departurePoint) =>
+            filterParams.departurePoints?.includes(departurePoint.code ?? '')
+        )
+
+        // Related items'ların çıkış noktalarını da kontrol et
+        const relatedItemsHaveDeparturePoint = tourData?.relatedItems?.some(
+          (relatedItem) =>
+            relatedItem?.departurePoints?.some((departurePoint) =>
+              filterParams.departurePoints?.includes(departurePoint.code ?? '')
+            )
+        )
+
+        // Ana item veya related items'lardan herhangi biri seçilen çıkış noktasına sahipse göster
+        return mainItemHasDeparturePoint || relatedItemsHaveDeparturePoint
+      }
+      return true
+    })
+
+    .filter((tourData) => {
+      if (filterParams.transportType && filterParams.transportType.length > 0) {
+        // Ana item'ın ulaşım tipini kontrol et
+        const mainItemTransportType = tourData?.transportType?.toString() ?? ''
+        const mainItemHasTransportType = filterParams.transportType.includes(
+          mainItemTransportType
+        )
+
+        // Related items'ların ulaşım tiplerini de kontrol et
+        const relatedItemsHaveTransportType = tourData?.relatedItems?.some(
+          (relatedItem) => {
+            const relatedItemTransportType =
+              relatedItem?.transportType?.toString() ?? ''
+            return filterParams.transportType?.includes(
+              relatedItemTransportType
+            )
+          }
+        )
+
+        // Ana item veya related items'lardan herhangi biri seçilen ulaşım tipine sahipse göster
+        return mainItemHasTransportType || relatedItemsHaveTransportType
+      }
+      return true
+    })
 }
 
 export { useFilterActions }
