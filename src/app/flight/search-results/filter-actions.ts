@@ -17,6 +17,7 @@ interface FlightWithDerivedData extends ClientDataType {
     lastArrivalTime: dayjs.Dayjs
     durationMs: number
     departureHour: number
+    returnDepartureHour: number | null
     group0SegmentCount: number
     group1SegmentCount: number
     marketingAirlines: Set<string>
@@ -93,6 +94,12 @@ const precomputeDerivedData = (
   const lastArrivalTime = dayjs(lastSegment?.arrivalTime)
   const now = dayjs()
 
+  const returnSegments = flight.segments.filter(
+    (segment) => segment.groupId === 1
+  )
+  const returnDepartureTime =
+    returnSegments.length > 0 ? dayjs(returnSegments[0]?.departureTime) : null
+
   // Precompute frequently used values
   const derived = {
     firstDepartureTime,
@@ -100,6 +107,9 @@ const precomputeDerivedData = (
     lastArrivalTime,
     durationMs: lastArrivalTime.diff(firstDepartureTime, 'milliseconds'),
     departureHour: firstDepartureTime.hour() * 60 + firstDepartureTime.minute(),
+    returnDepartureHour: returnDepartureTime
+      ? returnDepartureTime.hour() * 60 + returnDepartureTime.minute()
+      : null,
     group0SegmentCount: flight.segments.filter(
       (segment) => segment.groupId === 0
     ).length,
@@ -217,6 +227,17 @@ const filterFlightsWithDerivedData = (
           data._derived.departureHour >= filterParams.departureHours[0] &&
           data._derived.departureHour <= filterParams.departureHours[1]
         if (!isInTimeRange) return false
+      }
+
+      if (
+        filterParams.returnHours &&
+        filterParams.returnHours.length > 1 &&
+        data._derived.returnDepartureHour !== null
+      ) {
+        const isInReturnTimeRange =
+          data._derived.returnDepartureHour >= filterParams.returnHours[0] &&
+          data._derived.returnDepartureHour <= filterParams.returnHours[1]
+        if (!isInReturnTimeRange) return false
       }
 
       // Filter by baggage
