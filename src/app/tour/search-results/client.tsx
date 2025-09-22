@@ -32,7 +32,7 @@ import {
 } from '@/modules/tour/type'
 import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks'
 import { GoMoveToTop } from 'react-icons/go'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
 import { FaCheck } from 'react-icons/fa'
@@ -74,9 +74,6 @@ const TourSearchResultClient = () => {
   const groupTitles: string[] = []
   const searchGroupedData: (TourSearchResultGroupedItem | undefined)[] =
     searchData
-      // .sort((a, b) => {
-      //   return a.totalPrice.value - b.totalPrice.value
-      // })
       ?.map((item, itemIndex, itemArr) => {
         if (!item) return
         if (groupTitles.includes(item.region.title.trim())) {
@@ -119,6 +116,30 @@ const TourSearchResultClient = () => {
     .sort()
     .filter(Boolean)
 
+  const departurePointChecks = [
+    ...new Map(
+      searchData
+        ?.flatMap(
+          (tourData) =>
+            tourData.departurePoints?.map((departurePoint) => ({
+              title: departurePoint.title,
+              code: departurePoint.code,
+            })) || []
+        )
+        .map((item) => [item.code, item])
+    ).values(),
+  ]
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .filter((item) => item.code)
+
+  const transportTypeChecks = [
+    ...new Set(
+      searchData?.map((tourData) => tourData.transportType).filter(Boolean)
+    ),
+  ]
+    .sort()
+    .filter(Boolean)
+
   const filteredData = useFilterActions(searchGroupedData)
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
@@ -148,7 +169,6 @@ const TourSearchResultClient = () => {
     slugs: [searchParams.destinationSlug as string],
     moduleName: 'Tour',
   })
-
   if (
     !searchParamsQuery.data &&
     (searchParamsQuery.isLoading ||
@@ -350,7 +370,7 @@ const TourSearchResultClient = () => {
                             <div className='mb-2 font-medium'>Bölgeler</div>
                             <Spoiler
                               className='mb-5 grid gap-3 pb-3'
-                              maxHeight={360}
+                              maxHeight={245}
                               showLabel='Daha fazla göster'
                               hideLabel='Daha az göster'
                             >
@@ -380,6 +400,94 @@ const TourSearchResultClient = () => {
                               </Checkbox.Group>
                             </Spoiler>
                           </div>
+                          {departurePointChecks.length > 0 && (
+                            <div>
+                              <div className='mb-2 font-medium'>
+                                Çıkış Noktası{' '}
+                              </div>
+                              <Spoiler
+                                className='mb-3 grid gap-3 pb-3'
+                                maxHeight={150}
+                                showLabel='Daha fazla göster'
+                                hideLabel='Daha az göster'
+                              >
+                                <Checkbox.Group
+                                  onChange={(value) => {
+                                    setFilterParams({
+                                      departurePoints: value.length
+                                        ? value
+                                        : null,
+                                    })
+                                  }}
+                                  value={
+                                    filterParams.departurePoints
+                                      ? filterParams.departurePoints
+                                      : []
+                                  }
+                                >
+                                  <Stack gap={rem(6)}>
+                                    {departurePointChecks.map(
+                                      (departurePoint, departurePointIndex) => (
+                                        <Checkbox
+                                          key={departurePointIndex}
+                                          label={departurePoint.title}
+                                          value={departurePoint.code ?? ''}
+                                        />
+                                      )
+                                    )}
+                                  </Stack>
+                                </Checkbox.Group>
+                              </Spoiler>
+                            </div>
+                          )}
+                          {transportTypeChecks.length > 0 && (
+                            <div>
+                              <div className='mb-2 font-medium'>
+                                Ulaşım Tipi{' '}
+                              </div>
+                              <Spoiler
+                                className='mb-5 grid gap-3 pb-3'
+                                maxHeight={100}
+                                showLabel='Daha fazla göster'
+                                hideLabel='Daha az göster'
+                              >
+                                <Checkbox.Group
+                                  onChange={(value) => {
+                                    setFilterParams({
+                                      transportType: value.length
+                                        ? value
+                                        : null,
+                                    })
+                                  }}
+                                  value={
+                                    filterParams.transportType
+                                      ? filterParams.transportType
+                                      : []
+                                  }
+                                >
+                                  <Stack gap={rem(6)}>
+                                    {transportTypeChecks
+                                      .sort((a, b) => a - b)
+                                      .map((transportType, transportIndex) => (
+                                        <Checkbox
+                                          key={transportIndex}
+                                          label={
+                                            transportType === 1
+                                              ? 'Uçak'
+                                              : transportType === 2
+                                                ? 'Otobüs'
+                                                : transportType === 3
+                                                  ? 'Tren'
+                                                  : ''
+                                          }
+                                          value={transportType.toString()}
+                                        />
+                                      ))}
+                                  </Stack>
+                                </Checkbox.Group>
+                              </Spoiler>
+                            </div>
+                          )}
                         </Stack>
                       </div>
                     )}
