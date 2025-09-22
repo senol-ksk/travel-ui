@@ -613,17 +613,55 @@ const FlightSearchView = () => {
                               Kalkış saatleri
                             </Accordion.Control>
                             <Accordion.Panel className='px-3'>
-                              <HourRangeSlider
-                                filterParams={filterParams.departureHours}
-                                onChange={(hourRange) => {
-                                  setFilterParams({
-                                    departureHours: [
-                                      hourRange.at(0)?.hourValue ?? 0,
-                                      hourRange.at(-1)?.hourValue ?? 1440,
-                                    ],
-                                  })
-                                }}
-                              />
+                              <Stack gap='md'>
+                                <div>
+                                  {searchQueryData?.some((flight) =>
+                                    flight.segments.some(
+                                      (segment) => segment.groupId === 1
+                                    )
+                                  ) &&
+                                    !isDomestic && (
+                                      <Title order={6} mb='xs'>
+                                        Gidiş uçuşu
+                                      </Title>
+                                    )}
+                                  <HourRangeSlider
+                                    filterParams={filterParams.departureHours}
+                                    onChange={(hourRange) => {
+                                      setFilterParams({
+                                        departureHours: [
+                                          hourRange.at(0)?.hourValue ?? 0,
+                                          hourRange.at(-1)?.hourValue ?? 1440,
+                                        ],
+                                      })
+                                    }}
+                                  />
+                                </div>
+                                {searchQueryData?.some((flight) =>
+                                  flight.segments.some(
+                                    (segment) => segment.groupId === 1
+                                  )
+                                ) &&
+                                  !isDomestic && (
+                                    <div>
+                                      <Title order={6} mb='xs'>
+                                        Dönüş uçuşu
+                                      </Title>
+                                      <HourRangeSlider
+                                        filterParams={filterParams.returnHours}
+                                        onChange={(hourRange) => {
+                                          setFilterParams({
+                                            returnHours: [
+                                              hourRange.at(0)?.hourValue ?? 0,
+                                              hourRange.at(-1)?.hourValue ??
+                                                1440,
+                                            ],
+                                          })
+                                        }}
+                                      />
+                                    </div>
+                                  )}
+                              </Stack>
                             </Accordion.Panel>
                           </Accordion.Item>
                           <Accordion.Item value='airlines'>
