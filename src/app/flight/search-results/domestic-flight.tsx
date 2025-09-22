@@ -72,7 +72,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
               // onClick={onSelect}
             >
               <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400 md:mt-0' />
-              <div className='mb-5 flex gap-3 text-sm md:mb-0'>
+              <div className='mb-5 flex items-center gap-3 text-sm md:mb-0'>
                 <div>
                   <AirlineLogo
                     airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
@@ -82,10 +82,10 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                   <div>
                     {airlineText?.Value} {flightNumber}
                   </div>
-                  <div className='flex items-center gap-1'>
+                  {/* <div className='flex items-center gap-1'>
                     <PiSuitcaseRolling />
                     <div>8 kg El Bagajı</div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='col-span-2'>

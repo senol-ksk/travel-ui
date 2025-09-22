@@ -1022,10 +1022,10 @@ const FlightSearchView = () => {
                                           )?.Value
                                       }
                                     </div>
-                                    <div className='flex items-center gap-1 text-sm md:px-0'>
+                                    {/* <div className='flex items-center gap-1 text-sm md:px-0'>
                                       <PiSuitcaseRolling />
                                       8kg El Bagajı
-                                    </div>
+                                    </div> */}
                                   </div>
                                 </div>
                                 <div className='relative col-span-2 mt-5 grid'>

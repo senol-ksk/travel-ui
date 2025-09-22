@@ -68,7 +68,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
 
           return (
             <div
-              className='relative mt-3 grid p-3 md:mt-0 md:grid-cols-3 md:px-5 md:py-3'
+              className='relative mt-3 grid p-3 md:mt-0 md:grid-cols-3 md:px-3 md:py-3'
               key={detail.key}
               // onClick={onSelect}
             >
@@ -83,10 +83,6 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
                   <div>
                     <div>
                       {airlineText?.Value} {relatedSegment.at(0)?.flightNumber}
-                    </div>
-                    <div className='flex items-center gap-1'>
-                      <PiSuitcaseRolling />
-                      8kg El Bagajı
                     </div>
                   </div>
                 </div>
