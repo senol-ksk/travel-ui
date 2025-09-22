@@ -40,7 +40,7 @@ const FlightSearchResultsInternational: React.FC<IProps> = ({
   const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
 
   return (
-    <div className='@container items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
+    <div className='items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
       <div className='col-span-4 grid'>
         {details.map((detail) => {
           const relatedSegment = detailSegments?.filter(

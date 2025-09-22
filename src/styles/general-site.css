@@ -1,5 +1,9 @@
 .filter-accordion .mantine-Checkbox-input {
-  border: 2px solid gray;
+  border: 2px solid var(--mantine-color-gray-6);
+  transition: none;
+}
+.filter-accordion .mantine-Checkbox-icon {
+  transition: none;
 }
 .filter-accordion .mantine-Accordion-label {
   font-weight: 500;

@@ -242,7 +242,54 @@ const FlightSearchView = () => {
 
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParsers)
-  const airlineDataObj = getAirlineByCodeList.data
+  const airlineDataObj = useMemo(
+    () => getAirlineByCodeList.data,
+    [getAirlineByCodeList.data]
+  )
+
+  // Memoize sorted airline data to prevent sorting on every render
+  const sortedAirlineData = useMemo(() => {
+    return (
+      airlineDataObj?.sort((a, b) =>
+        a.Value[0].Value.localeCompare(b.Value[0].Value)
+      ) ?? []
+    )
+  }, [airlineDataObj])
+
+  // Memoize baggage options to prevent repeated extraction
+  const baggageOptions = useMemo(() => {
+    return (
+      extractBaggageOptions(searchQueryData)?.sort((a, b) =>
+        a.localeCompare(b)
+      ) ?? []
+    )
+  }, [searchQueryData])
+
+  // Memoize sorted airport data
+  const sortedAirportData = useMemo(() => {
+    return (
+      getAirportsByCodeList.data?.sort((a, b) =>
+        a.Value[0].Value.localeCompare(b.Value[0].Value)
+      ) ?? []
+    )
+  }, [getAirportsByCodeList.data])
+
+  // Memoize checkbox values to prevent expensive calculations on every render
+  const numOfStopsCheckboxValue = useMemo(() => {
+    return filterParams.numOfStops?.map(String) ?? []
+  }, [filterParams.numOfStops])
+
+  const airlinesCheckboxValue = useMemo(() => {
+    return filterParams?.airlines?.length
+      ? filterParams.airlines?.map(String)
+      : []
+  }, [filterParams?.airlines])
+
+  const airportsCheckboxValue = useMemo(() => {
+    return filterParams?.airports?.length
+      ? filterParams.airports?.map(String)
+      : []
+  }, [filterParams?.airports])
 
   const { filteredData } = useFilterActions(searchQueryData)
 
@@ -272,8 +319,73 @@ const FlightSearchView = () => {
   const hours = duration.hours()
   const minutes = duration.minutes()
 
-  const isDomestic =
-    searchParams.origin?.isDomestic && searchParams.destination?.isDomestic
+  const isDomestic = useMemo(
+    () =>
+      searchParams.origin?.isDomestic && searchParams.destination?.isDomestic,
+    [searchParams.origin?.isDomestic, searchParams.destination?.isDomestic]
+  )
+
+  // Memoize baggage checkbox value (depends on isDomestic)
+  const baggageCheckboxValue = useMemo(() => {
+    if (filterParams?.baggage?.length) {
+      return filterParams.baggage?.map(String)
+    }
+    if (isDomestic && baggageOptions.length > 0) {
+      return [baggageOptions[0]]
+    }
+    return []
+  }, [filterParams?.baggage, isDomestic, baggageOptions])
+
+  // Memoize numOfStops checkbox options to prevent expensive search operations
+  const numOfStopsOptions = useMemo(() => {
+    if (!searchQueryData) return []
+
+    const options = []
+
+    // Check for direct flights (0 stops)
+    if (
+      searchQueryData.find((result) =>
+        isDomestic
+          ? result.segments.length === 1
+          : result.segments.filter((segment) => segment.groupId === 0)
+              .length === 1 ||
+            result.segments.filter((segment) => segment.groupId === 1)
+              .length === 1
+      )
+    ) {
+      options.push({ value: '0', label: 'Aktarmasız' })
+    }
+
+    // Check for 1 stop flights
+    if (
+      searchQueryData.find((result) =>
+        isDomestic
+          ? result.segments.length === 2
+          : result.segments.filter((segment) => segment.groupId === 0)
+              .length === 2 ||
+            result.segments.filter((segment) => segment.groupId === 1)
+              .length === 2
+      )
+    ) {
+      options.push({ value: '1', label: '1 Aktarma' })
+    }
+
+    // Check for 2+ stops flights
+    if (
+      searchQueryData.find((result) =>
+        isDomestic
+          ? result.segments.length > 2
+          : result.segments.filter((segment) => segment.groupId === 0).length >
+              2 ||
+            result.segments.filter((segment) => segment.groupId === 1).length >
+              2
+      )
+    ) {
+      options.push({ value: '2', label: '2+ Aktarma' })
+    }
+
+    return options
+  }, [searchQueryData, isDomestic])
 
   // if true this means Round trip, otherwise international or one way flight
   const tripKind = useMemo(
@@ -360,16 +472,7 @@ const FlightSearchView = () => {
   const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
     useDisclosure(false)
 
-  const mounted = useMounted()
-  if (!mounted)
-    return (
-      <Container className='grid gap-3 py-4'>
-        <Skeleton h={30} radius='sm' />
-        <Skeleton h={20} radius='sm' w={'90%'} />
-        <Skeleton h={16} radius='sm' w={'95%'} />
-      </Container>
-    )
-  const totalPassengerCount = () => {
+  const totalPassengerCount = useMemo(() => {
     let total = 0
 
     if (searchParams.passengerCounts?.Adult) {
@@ -383,8 +486,52 @@ const FlightSearchView = () => {
     }
 
     return total
-  }
+  }, [searchParams.passengerCounts])
+
+  // Memoize expensive filtering operations for domestic flights
+  const domesticFilteredData = useMemo(() => {
+    if (!isDomestic || !filteredData) return []
+
+    const groupId = isReturnFlightVisible ? 1 : 0
+    let groupFiltered = filteredData.filter(
+      (item) => item.fareInfo.groupId === groupId
+    )
+
+    if (groupId === 1 && isSameDay) {
+      const selectedFlightArrivalTime = dayjs(
+        selectedFlightItemPackages?.flights.at(0)?.segments.at(-1)?.arrivalTime
+      )
+
+      groupFiltered = groupFiltered.filter((item) => {
+        return (
+          dayjs(item.segments.at(0)?.departureTime).diff(
+            selectedFlightArrivalTime,
+            'hour'
+          ) > 1
+        )
+      })
+    }
+
+    return groupFiltered
+  }, [
+    isDomestic,
+    filteredData,
+    isReturnFlightVisible,
+    isSameDay,
+    selectedFlightItemPackages,
+  ])
+
   const activeTripKind = searchParams.activeTripKind
+  const mounted = useMounted()
+
+  if (!mounted)
+    return (
+      <Container className='grid gap-3 py-4'>
+        <Skeleton h={30} radius='sm' />
+        <Skeleton h={20} radius='sm' w={'90%'} />
+        <Skeleton h={16} radius='sm' w={'95%'} />
+      </Container>
+    )
   return (
     <>
       <div className='border-b py-2'>
@@ -425,7 +572,7 @@ const FlightSearchView = () => {
                   }
                 </div>
                 <div>|</div>
-                <div>{totalPassengerCount()} Yolcu</div>
+                <div>{totalPassengerCount} Yolcu</div>
                 <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
                   <IoSearchSharp size={24} className='text-blue-800' />
                 </div>
@@ -584,61 +731,17 @@ const FlightSearchView = () => {
                                       : null,
                                   })
                                 }}
-                                value={
-                                  filterParams.numOfStops?.length
-                                    ? filterParams.numOfStops?.map(String)
-                                    : []
-                                }
+                                value={numOfStopsCheckboxValue}
                               >
                                 <Stack gap={6} className='text-lg'>
-                                  {searchQueryData?.find((result) =>
-                                    isDomestic
-                                      ? result.segments.length === 1
-                                      : result.segments.filter(
-                                          (segment) => segment.groupId === 0
-                                        ).length === 1 ||
-                                        result.segments.filter(
-                                          (segment) => segment.groupId === 1
-                                        ).length === 1
-                                  ) && (
+                                  {numOfStopsOptions.map((option) => (
                                     <Checkbox
+                                      key={option.value}
                                       name='numOfStops'
-                                      label='Aktarmasız'
-                                      value={'0'}
+                                      label={option.label}
+                                      value={option.value}
                                     />
-                                  )}
-                                  {searchQueryData?.find((result) =>
-                                    isDomestic
-                                      ? result.segments.length === 2
-                                      : result.segments.filter(
-                                          (segment) => segment.groupId === 0
-                                        ).length === 2 ||
-                                        result.segments.filter(
-                                          (segment) => segment.groupId === 1
-                                        ).length === 2
-                                  ) && (
-                                    <Checkbox
-                                      name='numOfStops'
-                                      label='1 Aktarma'
-                                      value={'1'}
-                                    />
-                                  )}
-                                  {searchQueryData?.find((result) =>
-                                    isDomestic
-                                      ? result.segments.length > 2
-                                      : result.segments.filter(
-                                          (segment) => segment.groupId === 0
-                                        ).length > 2 ||
-                                        result.segments.filter(
-                                          (segment) => segment.groupId === 1
-                                        ).length > 2
-                                  ) && (
-                                    <Checkbox
-                                      name='numOfStops'
-                                      label='2+ Aktarma'
-                                      value={'2'}
-                                    />
-                                  )}
+                                  ))}
                                 </Stack>
                               </Checkbox.Group>
                             </Accordion.Panel>
@@ -670,11 +773,7 @@ const FlightSearchView = () => {
                                     airlines: value.length ? value : null,
                                   })
                                 }}
-                                value={
-                                  filterParams?.airlines?.length
-                                    ? filterParams.airlines?.map(String)
-                                    : []
-                                }
+                                value={airlinesCheckboxValue}
                               >
                                 <Spoiler
                                   maxHeight={205}
@@ -683,29 +782,23 @@ const FlightSearchView = () => {
                                   className='w-full'
                                 >
                                   <Stack gap={6}>
-                                    {airlineDataObj
-                                      ?.sort((a, b) =>
-                                        a.Value[0].Value.localeCompare(
-                                          b.Value[0].Value
-                                        )
+                                    {sortedAirlineData.map((airline) => {
+                                      return (
+                                        <div key={airline.Code}>
+                                          <Checkbox
+                                            name='airlines'
+                                            label={
+                                              airline.Value.find(
+                                                (airlineValue) =>
+                                                  airlineValue.LangCode ===
+                                                  'tr_TR'
+                                              )?.Value
+                                            }
+                                            value={airline.Code}
+                                          />
+                                        </div>
                                       )
-                                      .map((airline) => {
-                                        return (
-                                          <div key={airline.Code}>
-                                            <Checkbox
-                                              name='airlines'
-                                              label={
-                                                airline.Value.find(
-                                                  (airlineValue) =>
-                                                    airlineValue.LangCode ===
-                                                    'tr_TR'
-                                                )?.Value
-                                              }
-                                              value={airline.Code}
-                                            />
-                                          </div>
-                                        )
-                                      })}
+                                    })}
                                   </Stack>
                                 </Spoiler>
                               </Checkbox.Group>
@@ -722,19 +815,7 @@ const FlightSearchView = () => {
                                     })
                                   }
                                 }}
-                                value={
-                                  filterParams?.baggage?.length
-                                    ? filterParams.baggage?.map(String)
-                                    : isDomestic &&
-                                        extractBaggageOptions(searchQueryData)
-                                          ?.length > 0
-                                      ? [
-                                          extractBaggageOptions(
-                                            searchQueryData
-                                          )[0],
-                                        ]
-                                      : []
-                                }
+                                value={baggageCheckboxValue}
                               >
                                 <Spoiler
                                   maxHeight={220}
@@ -743,9 +824,8 @@ const FlightSearchView = () => {
                                   className='w-full'
                                 >
                                   <Stack gap={6}>
-                                    {extractBaggageOptions(searchQueryData)
-                                      ?.sort((a, b) => a.localeCompare(b))
-                                      .map((baggageOption, index) => {
+                                    {baggageOptions.map(
+                                      (baggageOption, index) => {
                                         const [pieces, weight] =
                                           baggageOption.split('x')
 
@@ -758,7 +838,8 @@ const FlightSearchView = () => {
                                             />
                                           </div>
                                         )
-                                      })}
+                                      }
+                                    )}
                                   </Stack>
                                 </Spoiler>
                               </Checkbox.Group>
@@ -773,11 +854,7 @@ const FlightSearchView = () => {
                                     airports: value.length ? value : null,
                                   })
                                 }}
-                                value={
-                                  filterParams?.airports?.length
-                                    ? filterParams.airports?.map(String)
-                                    : []
-                                }
+                                value={airportsCheckboxValue}
                               >
                                 <Spoiler
                                   maxHeight={220}
@@ -786,29 +863,23 @@ const FlightSearchView = () => {
                                   className='w-full'
                                 >
                                   <Stack gap={6}>
-                                    {getAirportsByCodeList.data
-                                      ?.sort((a, b) =>
-                                        a.Value[0].Value.localeCompare(
-                                          b.Value[0].Value
-                                        )
+                                    {sortedAirportData.map((airports) => {
+                                      return (
+                                        <div key={airports.Code}>
+                                          <Checkbox
+                                            name='airports'
+                                            label={
+                                              airports.Value.find(
+                                                (airportValue) =>
+                                                  airportValue.LangCode ===
+                                                  'tr_TR'
+                                              )?.Value
+                                            }
+                                            value={airports.Code}
+                                          />
+                                        </div>
                                       )
-                                      .map((airports) => {
-                                        return (
-                                          <div key={airports.Code}>
-                                            <Checkbox
-                                              name='airports'
-                                              label={
-                                                airports.Value.find(
-                                                  (airportValue) =>
-                                                    airportValue.LangCode ===
-                                                    'tr_TR'
-                                                )?.Value
-                                              }
-                                              value={airports.Code}
-                                            />
-                                          </div>
-                                        )
-                                      })}
+                                    })}
                                   </Stack>
                                 </Spoiler>
                               </Checkbox.Group>
@@ -1311,7 +1382,10 @@ const FlightSearchView = () => {
                   </Alert>
                 )}
 
-              {!searchResultsQuery.isFetchingNextPage &&
+              {searchResultsQuery.data &&
+                !searchResultsQuery.isFetching &&
+                !searchResultsQuery.isLoading &&
+                !searchResultsQuery.isFetchingNextPage &&
                 !isDomestic &&
                 filteredData?.length === 0 && (
                   <Alert color='red'>
@@ -1337,24 +1411,7 @@ const FlightSearchView = () => {
                   const groupId = isReturnFlightVisible ? 1 : 0
                   return item.fareInfo.groupId === groupId
                 })?.length > 0 &&
-                filteredData?.filter((item) => {
-                  const groupId = isReturnFlightVisible ? 1 : 0
-
-                  if (groupId === 1 && isSameDay) {
-                    const selectedFlightArrivalTime = dayjs(
-                      selectedFlightItemPackages?.flights.at(0)?.segments.at(-1)
-                        ?.arrivalTime
-                    )
-
-                    return (
-                      dayjs(item.segments.at(0)?.departureTime).diff(
-                        selectedFlightArrivalTime,
-                        'hour'
-                      ) > 1
-                    )
-                  }
-                  return true
-                }).length === 0 && (
+                domesticFilteredData.length === 0 && (
                   <Alert>
                     <div>
                       Seçilen uçuş saatleri uygun değil. Gidiş uçuşunuzu
@@ -1369,64 +1426,34 @@ const FlightSearchView = () => {
                 )}
 
               {isDomestic ? (
-                filteredData
-                  ?.filter((item) => {
-                    const groupId = isReturnFlightVisible ? 1 : 0
-                    return item.fareInfo.groupId === groupId
-                  })
-                  ?.filter((item) => {
-                    const groupId = isReturnFlightVisible ? 1 : 0
-                    const { departureDate, returnDate } = searchParams
-                    const isSameDay = dayjs(departureDate).isSame(
-                      returnDate,
-                      'd'
+                domesticFilteredData.map((result) => {
+                  const segmentAirlines = result?.segments?.map((item) =>
+                    item.marketingAirline.code === item.operatingAirline.code
+                      ? item.marketingAirline.code
+                      : item.operatingAirline.code
+                  )
+
+                  const airlineValues: AirlineCode[] | undefined =
+                    airlineDataObj?.filter((airlineObj) =>
+                      segmentAirlines.find(
+                        (segment) => segment === airlineObj.Code
+                      )
                     )
 
-                    if (groupId === 1 && isSameDay) {
-                      const selectedFlightArrivalTime = dayjs(
-                        selectedFlightItemPackages?.flights
-                          .at(0)
-                          ?.segments.at(-1)?.arrivalTime
-                      )
-
-                      return (
-                        dayjs(item.segments.at(0)?.departureTime).diff(
-                          selectedFlightArrivalTime,
-                          'hour'
-                        ) > 1
-                      )
-                    }
-
-                    return true
-                  })
-                  ?.map((result) => {
-                    const segmentAirlines = result?.segments?.map((item) =>
-                      item.marketingAirline.code === item.operatingAirline.code
-                        ? item.marketingAirline.code
-                        : item.operatingAirline.code
-                    )
-
-                    const airlineValues: AirlineCode[] | undefined =
-                      airlineDataObj?.filter((airlineObj) =>
-                        segmentAirlines.find(
-                          (segment) => segment === airlineObj.Code
-                        )
-                      )
-
-                    return (
-                      <MemoizedFlightSearchResultsDomestic
-                        airlineValues={airlineValues}
-                        airportValues={getAirportsByCodeList.data}
-                        detailSegments={result?.segments}
-                        details={result?.details}
-                        fareInfo={result?.fareInfo}
-                        onSelect={() => {
-                          handleFlightSelect(result)
-                        }}
-                        key={result.fareInfo.key}
-                      />
-                    )
-                  })
+                  return (
+                    <MemoizedFlightSearchResultsDomestic
+                      airlineValues={airlineValues}
+                      airportValues={getAirportsByCodeList.data}
+                      detailSegments={result?.segments}
+                      details={result?.details}
+                      fareInfo={result?.fareInfo}
+                      onSelect={() => {
+                        handleFlightSelect(result)
+                      }}
+                      key={result.fareInfo.key}
+                    />
+                  )
+                })
               ) : (
                 <Virtuoso
                   useWindowScroll
