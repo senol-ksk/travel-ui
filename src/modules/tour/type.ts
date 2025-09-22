@@ -8,6 +8,8 @@ export interface TourSearchApiParamsResponse {
     appName: string
     scopeName: string
     scopeCode: string
+    departurePoints: string[]
+    transportType: string[]
     tourSearchRequest: {
       startDate: string
       endDate: string
@@ -52,7 +54,7 @@ export interface TourSearchApiParamsResponse {
 }
 
 export interface TourLocationInfo {
-  code: null
+  code: string
   title: string
 }
 
@@ -70,6 +72,7 @@ export interface TourSearchResultSearchItem {
   cities: TourLocationInfo[]
   group: TourLocationInfo
   region: TourLocationInfo
+  departurePoints: TourLocationInfo[]
   imageUrl: string
   startDate: string
   endDate: string
@@ -100,6 +103,7 @@ export interface TourSearchResultSearchItem {
   passengerPrices: null
   taxInfos: null
   serviceCharges: null
+  transportType: number
 }
 export interface TourSearchResultRelatedItems {
   relatedItems: TourSearchResultSearchItem[]
@@ -202,6 +206,7 @@ export interface TourDetailApiResponse {
     startDate: string
     endDate: string
     tourTime: number
+    transportType: number
     hotelInformations:
       | null
       | {
