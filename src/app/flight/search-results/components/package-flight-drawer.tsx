@@ -51,7 +51,7 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
           const isSelected = index === selectedPackageIndex
           const packagePrice =
             selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
-
+          console.log(selectedFlightItemPackages)
           const brandCode =
             selectedPackage.flightDetailSegment.freeVolatileData.BrandCode
           const bookingCode = selectedPackage.flightDetailSegment.bookingCode
