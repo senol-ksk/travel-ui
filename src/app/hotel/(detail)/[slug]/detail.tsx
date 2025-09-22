@@ -249,7 +249,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
                   id: hotel.destination_id,
                   name: hotel.destination,
                   slug: hotel.destination_slug,
-                  type: hotelDetailData.data?.searchPanel.type ?? 0,
+                  type: hotelDetailData.data?.searchPanel?.type ?? 0,
                 },
               }}
             />

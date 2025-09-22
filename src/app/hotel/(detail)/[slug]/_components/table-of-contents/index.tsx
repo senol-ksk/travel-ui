@@ -59,7 +59,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
               </div>
             </>
           )}
-          <div className='flex items-center justify-between gap-2 px-2 py-2 md:mt-0 md:flex-row md:gap-4 md:px-0 md:py-0'>
+          <div className='flex items-center justify-between gap-2 md:mt-0 md:flex-row md:gap-4 md:px-0 md:py-0'>
             <TableOfContents
               classNames={classes}
               variant='filled'
@@ -67,7 +67,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
               size='sm'
               radius='sm'
               scrollSpyOptions={{
-                selector: '#rooms, #facility-infos',
+                selector: '#rooms, #facility-infos, #location, #ratings',
               }}
               getControlProps={({ data }) => ({
                 onClick: () =>
