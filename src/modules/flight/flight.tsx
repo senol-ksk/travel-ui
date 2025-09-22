@@ -247,6 +247,7 @@ export const Flight = () => {
               <Select
                 data={options}
                 checkIconPosition='right'
+                allowDeselect={false}
                 radius='xl'
                 className='w-30'
                 rightSection={<MdKeyboardArrowDown size={24} />}

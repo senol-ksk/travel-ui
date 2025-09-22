@@ -67,7 +67,7 @@ import { HourRangeSlider } from './components/hour-range'
 import { PackageFlightDrawer } from './components/package-flight-drawer'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
 import { AirlineLogo } from '@/components/airline-logo'
-import { formatCurrency } from '@/libs/util'
+import { delayCodeExecution, formatCurrency } from '@/libs/util'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
 type SelectedPackageStateProps = {
   flightDetailSegment: FlightDetailSegment
@@ -404,12 +404,6 @@ const FlightSearchView = () => {
       flightDetails: pack.details.at(0),
     })) as SelectedPackageStateProps[]
     // setSelectedFlightItem(flight)
-
-    if (flight.package.length <= 1) {
-      handlePackageSelect(packages[0])
-      return
-    }
-
     setSelectedFlightItemPackages((prevValues) => ({
       packages,
       flights:
@@ -418,6 +412,11 @@ const FlightSearchView = () => {
           : [flight],
       providerName: flight.providerName,
     }))
+
+    if (flight.package.length <= 1) {
+      handlePackageSelect(packages[0])
+      return
+    }
 
     openPackageDrawer()
   }
@@ -436,7 +435,7 @@ const FlightSearchView = () => {
     if (!tripKind) {
       await submitFlightData.mutateAsync(selectedFlightKeys.current.toString())
     } else {
-      if (tripKind && selectedFlightItemPackages?.flights.length === 1) {
+      if (tripKind && !isReturnFlightVisible) {
         scrollIntoView()
         setIsReturnFlightVisible(true)
       } else {
@@ -1397,7 +1396,8 @@ const FlightSearchView = () => {
               activeTripKind={activeTripKind || ''}
             />
             <div className='grid gap-3 pt-3 md:gap-5'>
-              {!searchResultsQuery.isFetchingNextPage &&
+              {searchResultsQuery.data &&
+                !searchResultsQuery.isFetchingNextPage &&
                 isDomestic &&
                 filteredData?.filter((item) => {
                   const groupId = isReturnFlightVisible ? 1 : 0
