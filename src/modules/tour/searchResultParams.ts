@@ -44,4 +44,6 @@ export const filterParser = {
   priceRange: parseAsArrayOf(parseAsFloat),
   nightCount: parseAsArrayOf(parseAsInteger),
   regions: parseAsArrayOf(parseAsString),
+  departurePoints: parseAsArrayOf(parseAsString),
+  transportType: parseAsArrayOf(parseAsString),
 }
