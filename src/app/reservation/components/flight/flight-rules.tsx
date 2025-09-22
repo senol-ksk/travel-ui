@@ -104,8 +104,14 @@ const FlightRules: React.FC<Iprops> = ({ data, flightType }) => {
           </div>
           <Spoiler
             maxHeight={220}
-            hideLabel='Daha Az Görüntüle'
-            showLabel='Devamını Göster'
+            hideLabel={
+              <div className='px-4 text-sm font-semibold'>
+                Daha Az Görüntüle
+              </div>
+            }
+            showLabel={
+              <div className='px-4 text-sm font-semibold'>Devamını Göster</div>
+            }
           >
             <ul className='list-disc space-y-2 p-4'>
               <li className='text-sm text-gray-700'>

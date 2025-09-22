@@ -43,6 +43,18 @@ export const extractBaggageOptions = (
         baggageOptions.add(baggageOption)
       }
     })
+    flight.package?.forEach((pkg) => {
+      pkg.segments.forEach((segment) => {
+        const baggage = segment.baggageAllowance
+
+        if (baggage.maxWeight.value > 0) {
+          const pieceCount =
+            baggage.piece.pieceCount === 0 ? 1 : baggage.piece.pieceCount
+          const baggageOption = `${pieceCount}x${baggage.maxWeight.value}`
+          baggageOptions.add(baggageOption)
+        }
+      })
+    })
   })
   return Array.from(baggageOptions)
 }
@@ -99,8 +111,8 @@ const precomputeDerivedData = (
     ),
     originCode: firstSegment?.origin?.code ?? '',
     destinationCode: lastSegment?.destination?.code ?? '',
-    baggageOptions: new Set(
-      flight.segments
+    baggageOptions: new Set([
+      ...(flight.segments
         .map((segment) => {
           const baggage = segment.baggageAllowance
           if (baggage.maxWeight.value > 0) {
@@ -110,8 +122,22 @@ const precomputeDerivedData = (
           }
           return null
         })
-        .filter(Boolean) as string[]
-    ),
+        .filter(Boolean) as string[]),
+      ...(flight.package?.flatMap(
+        (pkg) =>
+          pkg.segments
+            .map((segment) => {
+              const baggage = segment.baggageAllowance
+              if (baggage.maxWeight.value > 0) {
+                const pieceCount =
+                  baggage.piece.pieceCount === 0 ? 1 : baggage.piece.pieceCount
+                return `${pieceCount}x${baggage.maxWeight.value}`
+              }
+              return null
+            })
+            .filter(Boolean) as string[]
+      ) || []),
+    ]),
   }
 
   return { ...flight, _derived: derived }
@@ -201,7 +227,7 @@ const filterFlightsWithDerivedData = (
             const selectedPiecesNum = parseInt(selectedPieces)
             const selectedWeightNum = parseInt(selectedWeight)
 
-            return data.segments.some((segment) => {
+            const hasMatchingInMainSegments = data.segments.some((segment) => {
               const segmentWeight = segment.baggageAllowance.maxWeight.value
               const segmentPieces = segment.baggageAllowance.piece.pieceCount
 
@@ -218,6 +244,31 @@ const filterFlightsWithDerivedData = (
                 selectedWeightNum === segmentWeight
               )
             })
+
+            if (hasMatchingInMainSegments) return true
+
+            return (
+              data.package?.some((pkg) =>
+                pkg.segments.some((segment) => {
+                  const segmentWeight = segment.baggageAllowance.maxWeight.value
+                  const segmentPieces =
+                    segment.baggageAllowance.piece.pieceCount
+
+                  if (
+                    selectedPiecesNum === 1 &&
+                    segmentPieces === 0 &&
+                    selectedWeightNum === segmentWeight
+                  ) {
+                    return true
+                  }
+
+                  return (
+                    selectedPiecesNum === segmentPieces &&
+                    selectedWeightNum === segmentWeight
+                  )
+                })
+              ) || false
+            )
           }
         )
         if (!hasMatchingBaggage) return false

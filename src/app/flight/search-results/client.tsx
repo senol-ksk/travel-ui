@@ -330,11 +330,8 @@ const FlightSearchView = () => {
     if (filterParams?.baggage?.length) {
       return filterParams.baggage?.map(String)
     }
-    if (isDomestic && baggageOptions.length > 0) {
-      return [baggageOptions[0]]
-    }
     return []
-  }, [filterParams?.baggage, isDomestic, baggageOptions])
+  }, [filterParams?.baggage])
 
   // Memoize numOfStops checkbox options to prevent expensive search operations
   const numOfStopsOptions = useMemo(() => {
@@ -846,11 +843,9 @@ const FlightSearchView = () => {
                             <Accordion.Panel>
                               <Checkbox.Group
                                 onChange={(value) => {
-                                  if (!isDomestic) {
-                                    setFilterParams({
-                                      baggage: value.length ? value : null,
-                                    })
-                                  }
+                                  setFilterParams({
+                                    baggage: value.length ? value : null,
+                                  })
                                 }}
                                 value={baggageCheckboxValue}
                               >
@@ -894,7 +889,7 @@ const FlightSearchView = () => {
                                 value={airportsCheckboxValue}
                               >
                                 <Spoiler
-                                  maxHeight={220}
+                                  maxHeight={225}
                                   showLabel='Daha fazla göster'
                                   hideLabel='Daha az göster'
                                   className='w-full'
