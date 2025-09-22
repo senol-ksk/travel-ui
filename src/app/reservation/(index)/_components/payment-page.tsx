@@ -553,13 +553,13 @@ export const PaymentPageSection = () => {
                   </div>
                 </div>
                 <div className='pt-5'>
-                  <Text fz={'xs'} mb={0} className='text-gray-600'>
+                  <Text fz={'sm'} mb={0} className='text-gray-600'>
                     Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
                   </Text>
                   <UnstyledButton
                     type='button'
                     onClick={openInstallmentTableModal}
-                    className='text-xs text-blue-800'
+                    className='text-sm font-bold text-blue-800'
                   >
                     Taksit Tablosu
                   </UnstyledButton>
