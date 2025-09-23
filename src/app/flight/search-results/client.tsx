@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   useDisclosure,
   useMediaQuery,
@@ -44,6 +44,7 @@ import { FaArrowRightLong } from 'react-icons/fa6'
 import { FaCheck } from 'react-icons/fa'
 import { IoSearchSharp } from 'react-icons/io5'
 import { IoIosClose } from 'react-icons/io'
+import { MdFlight } from 'react-icons/md'
 
 import { useSearchResultsQueries } from '@/app/flight/search-queries'
 import {
@@ -66,6 +67,11 @@ import { useFilterActions, extractBaggageOptions } from './filter-actions'
 import { HourRangeSlider } from './components/hour-range'
 import { PackageFlightDrawer } from './components/package-flight-drawer'
 import { SearchPrevNextButtons } from './components/search-prev-next-buttons'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { Params } from '@/app/car/types'
 import { AirlineLogo } from '@/components/airline-logo'
 import { delayCodeExecution, formatCurrency } from '@/libs/util'
 import { FlightDetailsSearch } from '../../flight/search-results/components/flight-detail'
@@ -79,6 +85,8 @@ dayjs.locale('tr')
 dayjs.extend(isSameOrAfter)
 dayjs.extend(isSameOrBefore)
 dayjs.extend(duration)
+
+const skeltonLoader = new Array(3).fill(true)
 
 const FlightSearchView = () => {
   const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
@@ -97,6 +105,17 @@ const FlightSearchView = () => {
   )
   const [searchParams, setSearchParamsFlight] =
     useQueryStates(flightSearchParams)
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'ucak-bilet-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('ucak-bilet-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerFlight =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_flight_react') ??
+    []
 
   const {
     searchResultsQuery,
@@ -1457,6 +1476,45 @@ const FlightSearchView = () => {
                     </div>
                   </Alert>
                 )}
+
+              {(searchResultsQuery.isLoading ||
+                searchResultsQuery.isFetching ||
+                searchResultsQuery.isFetchingNextPage ||
+                searchSessionTokenQuery.isLoading) &&
+                (!filteredData || filteredData.length === 0) &&
+                skeltonLoader.map((arr, arrIndex) => {
+                  const skeleton = (
+                    <div
+                      key={arrIndex}
+                      className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
+                    >
+                      <div className='col-span-1'>
+                        <Skeleton h={120} />
+                      </div>
+                      <div className='col-span-3 grid gap-3 align-baseline'>
+                        <Skeleton h={24} />
+                        <Skeleton h={20} w={'80%'} />
+                        <Skeleton h={18} w={'50%'} />
+                        <Skeleton h={18} w={'20%'} />
+                      </div>
+                    </div>
+                  )
+
+                  if (arrIndex === 0) {
+                    return (
+                      <React.Fragment key={arrIndex}>
+                        {skeleton}
+                        <Loaderbanner
+                          data={loaderBannerFlight}
+                          moduleName='Uçuşunuz'
+                          ıcon={MdFlight}
+                        />
+                      </React.Fragment>
+                    )
+                  }
+
+                  return skeleton
+                })}
 
               {isDomestic ? (
                 domesticFilteredData.map((result) => {
