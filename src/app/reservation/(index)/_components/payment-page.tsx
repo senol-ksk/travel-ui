@@ -11,12 +11,15 @@ import { GrAmex } from 'react-icons/gr'
 
 import { useForm, Controller } from 'react-hook-form'
 import {
+  Anchor,
+  Box,
   Button,
   Center,
   Group,
   LoadingOverlay,
   Modal,
   NativeSelect,
+  ScrollArea,
   SegmentedControl,
   Skeleton,
   Stack,
@@ -25,7 +28,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
-import { range, upperFirst, useDisclosure } from '@mantine/hooks'
+import { range, upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
 import clsx from 'clsx'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -58,6 +61,11 @@ import {
 } from '@/libs/credit-card-utils'
 
 import { MdCreditCard } from 'react-icons/md'
+import { FlightAgreementContent } from '@/components/contracts/flightAgreement'
+import { HotelAgreementContent } from '@/components/contracts/hotelAgreement'
+import { BusAgreementContent } from '@/components/contracts/busAgreement'
+import { TourAgreementContent } from '@/components/contracts/tourAgreement'
+import { PrivacyAgreementContent } from '@/components/contracts/privacy'
 
 enum PaymentMethodEnums {
   CreditCard,
@@ -83,6 +91,17 @@ export const PaymentPageSection = () => {
     isOpenInstallmentTable,
     { open: openInstallmentTableModal, close: closeInstallmentTableModal },
   ] = useDisclosure(false)
+  const [
+    isAgreementModalOpened,
+    { open: openAgreementModal, close: closeAgreementModal },
+  ] = useDisclosure(false)
+  const [
+    isPrivacyAgreementModalOpen,
+    { open: openPrivacyAgreementModal, close: closePrivacyAgreementModal },
+  ] = useDisclosure(false)
+  const isMobile = useMediaQuery('(max-width: 50em)')
+
+  const [queryStrings] = useQueryStates(reservationParsers)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnums>(
     PaymentMethodEnums.CreditCard
   )
@@ -93,7 +112,8 @@ export const PaymentPageSection = () => {
   const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
   })
-  const [queryStrings] = useQueryStates(reservationParsers)
+
+  // const openAgreementModal = () => {}
 
   const { checkoutDataQuery: checkoutQuery } = useCheckoutMethods()
   const threeDformRef = useRef<HTMLFormElement>(null)
@@ -413,11 +433,15 @@ export const PaymentPageSection = () => {
                     render={({ field }) => {
                       return (
                         <TextInput
-                          className='grid gap-1'
+                          className='grid gap-1 text-sm'
                           {...field}
                           autoComplete='cc-name'
                           size='md'
-                          label='Kart üzerindeki isim'
+                          label={
+                            <div className='text-sm font-medium'>
+                              Kart üzerindeki isim
+                            </div>
+                          }
                           placeholder='Kart Üzerindeki İsim'
                           error={
                             !!formMethods.formState.errors.cardOwner
@@ -434,10 +458,14 @@ export const PaymentPageSection = () => {
                     defaultValue=''
                     render={({ field }) => (
                       <TextInput
-                        className='grid gap-1'
+                        className='grid gap-1 text-sm font-medium'
                         {...field}
                         autoComplete='cc-number'
-                        label='Kart Numarası'
+                        label={
+                          <div className='text-sm font-medium'>
+                            Kart Numarası
+                          </div>
+                        }
                         type='tel'
                         size='md'
                         error={
@@ -456,8 +484,10 @@ export const PaymentPageSection = () => {
                   />
                   <div className='grid grid-cols-3 items-center gap-3'>
                     <div className='col-span-2'>
-                      <div className='grid gap-1'>
-                        <div className='text-sm'>Son kullanma tarihi</div>
+                      <div className='grid gap-1 text-sm'>
+                        <div className='text-sm font-medium'>
+                          Son kullanma tarihi
+                        </div>
                         <div className='flex gap-3'>
                           <div className='w-full'>
                             <Controller
@@ -519,14 +549,16 @@ export const PaymentPageSection = () => {
                         defaultValue=''
                         render={({ field }) => (
                           <TextInput
-                            className='w-full'
+                            className='w-full text-sm font-medium'
                             {...field}
                             maxLength={
                               cardValidation.number(
                                 formMethods.watch('cardNumber')
                               ).card?.code.size || 3
                             }
-                            label='CVV'
+                            label={
+                              <div className='text-sm font-medium'>CVV</div>
+                            }
                             placeholder='CVV'
                             size='md'
                             error={
@@ -541,13 +573,13 @@ export const PaymentPageSection = () => {
                   </div>
                 </div>
                 <div className='pt-5'>
-                  <Text fz={'xs'} mb={0} className='text-gray-600'>
+                  <Text fz={'sm'} mb={0} className='text-gray-600'>
                     Taksit seçenekleri için kartınızın ilk 6 hanesini giriniz
                   </Text>
                   <UnstyledButton
                     type='button'
                     onClick={openInstallmentTableModal}
-                    className='text-xs text-blue-800'
+                    className='text-sm font-bold text-blue-800'
                   >
                     Taksit Tablosu
                   </UnstyledButton>
@@ -674,8 +706,17 @@ export const PaymentPageSection = () => {
           <CheckoutCard>
             <Text className='py-5 text-center md:px-10' fz={'sm'}>
               Ödemeyi tamamla butonuna tıkladığımda{' '}
-              <span className='text-blue-800'>Mesafeli Satış Sözleşmesini</span>
-               ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
+              {moduleName !== 'TRANSFER' && (
+                <>
+                  <Anchor onClick={openAgreementModal} fz={'inherit'}>
+                    Mesafeli Satış Sözleşmesini
+                  </Anchor>
+                   ve{' '}
+                </>
+              )}
+              <Anchor fz='inherit' onClick={openPrivacyAgreementModal}>
+                Gizlilik Sözleşmesini
+              </Anchor>
                okuduğumu ve kabul ettiğimi onaylıyorum.
             </Text>
             <div className='flex justify-center'>
@@ -697,13 +738,7 @@ export const PaymentPageSection = () => {
                       />
                     </div>
                   </div>
-                  <Button
-                    className='my-3'
-                    size='lg'
-                    radius='md'
-                    type='submit'
-                    //  disabled={isPrivilegeCardCheck}
-                  >
+                  <Button className='my-3' size='lg' radius='md' type='submit'>
                     Ödemeyi Tamamla
                   </Button>
                 </div>
@@ -752,6 +787,73 @@ export const PaymentPageSection = () => {
           />
         </Modal>
       )}
+      <Modal
+        opened={isAgreementModalOpened}
+        onClose={closeAgreementModal}
+        size={'80%'}
+        title='Mesafeli Satış Sözleşmesi'
+        yOffset={0}
+        scrollAreaComponent={ScrollArea.Autosize}
+        fullScreen={isMobile}
+      >
+        {(() => {
+          switch (moduleName) {
+            case 'Flight':
+              return (
+                <FlightAgreementContent
+                  customerFullName={firstPassengerFullName}
+                />
+              )
+
+            case 'HOTEL':
+              return (
+                <HotelAgreementContent
+                  customerFullName={firstPassengerFullName}
+                />
+              )
+
+            case 'BUS':
+              return (
+                <BusAgreementContent
+                  customerFullName={firstPassengerFullName}
+                />
+              )
+
+            case 'TOUR':
+              return <TourAgreementContent />
+
+            case 'CARRENTAL':
+              return (
+                <>
+                  <Box
+                    visibleFrom='sm'
+                    mih={800}
+                    className='size-full'
+                    component='iframe'
+                    src='/car-rent-terms.pdf#toolbar=0&navpanes=0&scrollbar=0'
+                  />
+                  <Anchor
+                    hiddenFrom='sm'
+                    href='/car-rent-terms.pdf'
+                    target='_blank'
+                  >
+                    PDF&apos;yi Yeni Sekmede Aç
+                  </Anchor>
+                </>
+              )
+            default:
+              return null
+          }
+        })()}
+      </Modal>
+      <Modal
+        opened={isPrivacyAgreementModalOpen}
+        onClose={closePrivacyAgreementModal}
+        size={'80%'}
+        title='Gizlilik Sözleşmesi'
+      >
+        <PrivacyAgreementContent />
+      </Modal>
     </>
   )
 }

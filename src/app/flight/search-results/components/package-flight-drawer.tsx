@@ -43,7 +43,6 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
       onSelect(data.packages[selectedPackageIndex])
     }
   }
-  console.log(selectedFlightItemPackages)
 
   return (
     <div className='space-y-4'>
@@ -52,7 +51,7 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
           const isSelected = index === selectedPackageIndex
           const packagePrice =
             selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
-
+          console.log(selectedFlightItemPackages)
           const brandCode =
             selectedPackage.flightDetailSegment.freeVolatileData.BrandCode
           const bookingCode = selectedPackage.flightDetailSegment.bookingCode

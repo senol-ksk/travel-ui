@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import {
   ActionIcon,
   Affix,
@@ -32,7 +33,7 @@ import {
 } from '@/modules/tour/type'
 import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks'
 import { GoMoveToTop } from 'react-icons/go'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { PriceRangeSlider } from './_components/price-range-slider'
 import { cleanObj, formatCurrency, slugify } from '@/libs/util'
 import { FaCheck } from 'react-icons/fa'
@@ -41,6 +42,14 @@ import { CruiseSearchEngine } from '@/modules/cruise'
 import { TourSearchEngine } from '@/modules/tour'
 import { IoSearchSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
+import { MdTour } from 'react-icons/md'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { Params } from '@/app/car/types'
+
+const skeltonLoader = new Array(3).fill(true)
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery, searchParams } =
@@ -49,6 +58,17 @@ const TourSearchResultClient = () => {
 
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParser)
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'tur-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('tur-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerTour =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_tour_react') ??
+    []
 
   const searchRequestIsLoading =
     searchResultsQuery.isLoading || searchResultsQuery.hasNextPage
@@ -74,9 +94,6 @@ const TourSearchResultClient = () => {
   const groupTitles: string[] = []
   const searchGroupedData: (TourSearchResultGroupedItem | undefined)[] =
     searchData
-      // .sort((a, b) => {
-      //   return a.totalPrice.value - b.totalPrice.value
-      // })
       ?.map((item, itemIndex, itemArr) => {
         if (!item) return
         if (groupTitles.includes(item.region.title.trim())) {
@@ -119,6 +136,30 @@ const TourSearchResultClient = () => {
     .sort()
     .filter(Boolean)
 
+  const departurePointChecks = [
+    ...new Map(
+      searchData
+        ?.flatMap(
+          (tourData) =>
+            tourData.departurePoints?.map((departurePoint) => ({
+              title: departurePoint.title,
+              code: departurePoint.code,
+            })) || []
+        )
+        .map((item) => [item.code, item])
+    ).values(),
+  ]
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .filter((item) => item.code)
+
+  const transportTypeChecks = [
+    ...new Set(
+      searchData?.map((tourData) => tourData.transportType).filter(Boolean)
+    ),
+  ]
+    .sort()
+    .filter(Boolean)
+
   const filteredData = useFilterActions(searchGroupedData)
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
@@ -148,7 +189,6 @@ const TourSearchResultClient = () => {
     slugs: [searchParams.destinationSlug as string],
     moduleName: 'Tour',
   })
-
   if (
     !searchParamsQuery.data &&
     (searchParamsQuery.isLoading ||
@@ -350,7 +390,7 @@ const TourSearchResultClient = () => {
                             <div className='mb-2 font-medium'>Bölgeler</div>
                             <Spoiler
                               className='mb-5 grid gap-3 pb-3'
-                              maxHeight={360}
+                              maxHeight={245}
                               showLabel='Daha fazla göster'
                               hideLabel='Daha az göster'
                             >
@@ -380,6 +420,94 @@ const TourSearchResultClient = () => {
                               </Checkbox.Group>
                             </Spoiler>
                           </div>
+                          {departurePointChecks.length > 0 && (
+                            <div>
+                              <div className='mb-2 font-medium'>
+                                Çıkış Noktası{' '}
+                              </div>
+                              <Spoiler
+                                className='mb-3 grid gap-3 pb-3'
+                                maxHeight={150}
+                                showLabel='Daha fazla göster'
+                                hideLabel='Daha az göster'
+                              >
+                                <Checkbox.Group
+                                  onChange={(value) => {
+                                    setFilterParams({
+                                      departurePoints: value.length
+                                        ? value
+                                        : null,
+                                    })
+                                  }}
+                                  value={
+                                    filterParams.departurePoints
+                                      ? filterParams.departurePoints
+                                      : []
+                                  }
+                                >
+                                  <Stack gap={rem(6)}>
+                                    {departurePointChecks.map(
+                                      (departurePoint, departurePointIndex) => (
+                                        <Checkbox
+                                          key={departurePointIndex}
+                                          label={departurePoint.title}
+                                          value={departurePoint.code ?? ''}
+                                        />
+                                      )
+                                    )}
+                                  </Stack>
+                                </Checkbox.Group>
+                              </Spoiler>
+                            </div>
+                          )}
+                          {transportTypeChecks.length > 0 && (
+                            <div>
+                              <div className='mb-2 font-medium'>
+                                Ulaşım Tipi{' '}
+                              </div>
+                              <Spoiler
+                                className='mb-5 grid gap-3 pb-3'
+                                maxHeight={100}
+                                showLabel='Daha fazla göster'
+                                hideLabel='Daha az göster'
+                              >
+                                <Checkbox.Group
+                                  onChange={(value) => {
+                                    setFilterParams({
+                                      transportType: value.length
+                                        ? value
+                                        : null,
+                                    })
+                                  }}
+                                  value={
+                                    filterParams.transportType
+                                      ? filterParams.transportType
+                                      : []
+                                  }
+                                >
+                                  <Stack gap={rem(6)}>
+                                    {transportTypeChecks
+                                      .sort((a, b) => a - b)
+                                      .map((transportType, transportIndex) => (
+                                        <Checkbox
+                                          key={transportIndex}
+                                          label={
+                                            transportType === 1
+                                              ? 'Uçak'
+                                              : transportType === 2
+                                                ? 'Otobüs'
+                                                : transportType === 3
+                                                  ? 'Tren'
+                                                  : ''
+                                          }
+                                          value={transportType.toString()}
+                                        />
+                                      ))}
+                                  </Stack>
+                                </Checkbox.Group>
+                              </Spoiler>
+                            </div>
+                          )}
                         </Stack>
                       </div>
                     )}
@@ -517,12 +645,13 @@ const TourSearchResultClient = () => {
                   </Alert>
                 )}
 
-              {filteredData?.length === 0 &&
-                (searchResultsQuery.isFetching ||
-                  searchResultsQuery.isLoading ||
-                  !searchResultsQuery.data) && (
-                  <>
-                    <div className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'>
+              {searchResultsQuery.isFetching &&
+                skeltonLoader.map((arr, arrIndex) => {
+                  const skeleton = (
+                    <div
+                      key={arrIndex}
+                      className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'
+                    >
                       <div className='col-span-1'>
                         <Skeleton h={120} />
                       </div>
@@ -530,36 +659,26 @@ const TourSearchResultClient = () => {
                         <Skeleton h={24} />
                         <Skeleton h={20} w={'80%'} />
                         <Skeleton h={18} w={'50%'} />
-
                         <Skeleton h={18} w={'20%'} />
                       </div>
                     </div>
-                    <div className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'>
-                      <div className='col-span-1'>
-                        <Skeleton h={120} />
-                      </div>
-                      <div className='col-span-4 grid gap-3'>
-                        <Skeleton h={24} />
-                        <Skeleton h={20} w={'80%'} />
-                        <Skeleton h={18} w={'50%'} />
+                  )
 
-                        <Skeleton h={18} w={'20%'} />
-                      </div>
-                    </div>
-                    <div className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'>
-                      <div className='col-span-1'>
-                        <Skeleton h={120} />
-                      </div>
-                      <div className='col-span-4 grid gap-3'>
-                        <Skeleton h={24} />
-                        <Skeleton h={20} w={'80%'} />
-                        <Skeleton h={18} w={'50%'} />
+                  if (arrIndex === 0) {
+                    return (
+                      <React.Fragment key={arrIndex}>
+                        {skeleton}
+                        <Loaderbanner
+                          data={loaderBannerTour}
+                          moduleName='Turunuz'
+                          ıcon={MdTour}
+                        />
+                      </React.Fragment>
+                    )
+                  }
 
-                        <Skeleton h={18} w={'20%'} />
-                      </div>
-                    </div>
-                  </>
-                )}
+                  return skeleton
+                })}
 
               {filteredData &&
                 filteredData.length > 0 &&

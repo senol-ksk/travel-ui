@@ -92,6 +92,7 @@ const HotelSearchResultItem: React.FC<IProps> = ({
     type: searchParams.type,
     checkInDate: searchParams.checkinDate,
     checkOutDate: searchParams.checkoutDate,
+    rooms: searchParams.rooms,
   }) as Route
 
   return (

@@ -127,7 +127,7 @@ export default async function Home() {
         </div>
       )}
       <div>
-        <Container className='flex flex-col gap-7 md:gap-10'>
+        <Container className='gap-7 md:gap-10'>
           {opportunities && (
             <div className='mx-auto'>
               <MainBannerCarousel

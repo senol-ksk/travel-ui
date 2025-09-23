@@ -6,7 +6,7 @@ import {
 
 export type ModuleName =
   | 'Flight'
-  | 'Hotel'
+  | 'HOTEL'
   | 'CARRENTAL'
   | 'BUS'
   | 'TRANSFER'
@@ -1096,10 +1096,12 @@ export interface TourSummaryViewData {
     startDate: string
     endDate: string
     tourTime: number
-    hotelInformations: {
-      name: string
-      rating: 0
-    }[]
+    hotelInformations:
+      | null
+      | {
+          name: string
+          rating: 0
+        }[]
     priceInformations: {
       priceForDouble: ServicePriceType
       priceForSingle: ServicePriceType

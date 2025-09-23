@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Transition, Paper, Button, ActionIcon, Title } from '@mantine/core'
+import { Transition, Paper, Button, CloseButton } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
 
 import { Input } from '@/components/search-engine/input'
@@ -12,20 +12,28 @@ type Props = {
   onChange?: (params: HotelRoomOptionTypes[]) => void
   initialValues: HotelRoomOptionTypes[]
   maxRoomCount?: number
+  onClose?: () => void
+  opened?: boolean
 }
 
 export const HotelPassengerDropdown: React.FC<Props> = ({
   onChange = () => {},
   initialValues,
   maxRoomCount = 2,
+  onClose = () => {},
+  opened = false,
 }) => {
   const [roomState, setRoomState] = useState(initialValues)
 
   const [containerTransitionState, setContainerTransitionState] =
-    useState(false)
+    useState(opened)
   const clickOutsideRef = useClickOutside(() =>
     setContainerTransitionState(false)
   )
+
+  useEffect(() => {
+    setContainerTransitionState(opened)
+  }, [opened])
 
   return (
     <div className='relative h-full'>
@@ -43,7 +51,11 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
         onClick={() => setContainerTransitionState(true)}
       />
 
-      <Transition mounted={containerTransitionState} transition='pop-top-right'>
+      <Transition
+        mounted={containerTransitionState}
+        transition='pop-top-right'
+        onExit={onClose}
+      >
         {(styles) => {
           return (
             <div
@@ -53,6 +65,13 @@ export const HotelPassengerDropdown: React.FC<Props> = ({
               role='menu'
             >
               <Paper className='flex h-full flex-col rounded-lg border shadow-xl'>
+                <div className='flex justify-end md:hidden'>
+                  <CloseButton
+                    onClick={() => {
+                      setContainerTransitionState(false)
+                    }}
+                  />
+                </div>
                 <div className='grid min-w-[320px] gap-7 p-5'>
                   <HotelGuestsActions
                     initialValues={roomState}

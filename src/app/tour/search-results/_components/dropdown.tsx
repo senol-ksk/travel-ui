@@ -6,6 +6,7 @@ import { useState } from 'react'
 import classes from './Dropdown.module.css'
 import clsx from 'clsx'
 import { RxCalendar } from 'react-icons/rx'
+import { BiChevronDown } from 'react-icons/bi'
 
 type IProps = {
   data: TourSearchResultSearchItem[]
@@ -50,7 +51,7 @@ const TourDropdown: React.FC<IProps> = ({ data, onSelect, defaultItem }) => {
           pointer
           type='button'
           component='button'
-          rightSection={<Combobox.Chevron />}
+          rightSection={<BiChevronDown size={20} />}
           onClick={() => {
             combobox.toggleDropdown()
           }}

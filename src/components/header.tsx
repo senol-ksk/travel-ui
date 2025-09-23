@@ -380,8 +380,8 @@ export const Header = () => {
           </Box>
         </Container>
       </header>
-      <div className='border-b py-2 shadow'>
-        <Container className='hidden w-full items-center text-sm font-medium md:flex'>
+      <div className='hidden border-b py-2 shadow md:block'>
+        <Container className='w-full items-center text-sm font-medium md:flex'>
           {headerData.isLoading ? (
             <div className='flex gap-2 p-3'>
               <Skeleton h={20} className='size-20 grow' />

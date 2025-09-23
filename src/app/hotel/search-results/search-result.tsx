@@ -17,6 +17,7 @@ import {
 import { useQueryStates } from 'nuqs'
 import { useState } from 'react'
 import { useDisclosure, useMounted } from '@mantine/hooks'
+import { useQuery } from '@tanstack/react-query'
 
 import { HotelSearchEngine } from '@/modules/hotel'
 
@@ -39,15 +40,29 @@ import { FaCheck } from 'react-icons/fa'
 import { IoSearchSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
 import { Facilities } from './components/filters/facilities'
+import { Loaderbanner } from './components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets, Params } from '@/types/cms-types'
+import { MdLocalHotel } from 'react-icons/md'
 
 type IProps = {
   slug?: string
 }
-
 const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
   const mounted = useMounted()
   const [searchParams] = useQueryStates(hotelSearchParamParser)
 
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'otel-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('otel-arama').then(
+        (response) => response?.data
+      ),
+  })
+
+  const loaderBannerHotel =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_hotel_react') ??
+    []
   const {
     hotelSearchRequestQuery,
     searchParamsQuery,
@@ -730,27 +745,43 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
               searchParamsQuery.isLoading ||
               searchQueryStatus.current === 'loading' ? (
                 <>
-                  {[1, 2, 3].map((index) => (
-                    <div key={index} className='mb-4 rounded-lg border p-4'>
-                      <div className='flex gap-4'>
-                        <Skeleton height={120} width={120} radius='md' />
-                        <div className='flex-1 space-y-3'>
-                          <Skeleton height={20} width='60%' />
-                          <Skeleton height={16} width='40%' />
-                          <Skeleton height={16} width='80%' />
-                          <div className='flex gap-2'>
-                            <Skeleton height={24} width={60} />
-                            <Skeleton height={24} width={60} />
-                            <Skeleton height={24} width={60} />
-                          </div>
-                          <div className='flex justify-between'>
-                            <Skeleton height={20} width='30%' />
-                            <Skeleton height={32} width={100} />
+                  {[1, 2, 3, 4, 5, 6].map((index) => {
+                    const skeleton = (
+                      <div key={index} className='mb-4 rounded-lg border-2 p-4'>
+                        <div className='flex gap-4'>
+                          <Skeleton height={120} width={120} radius='md' />
+                          <div className='flex-1 space-y-3'>
+                            <Skeleton height={20} width='60%' />
+                            <Skeleton height={16} width='40%' />
+                            <Skeleton height={16} width='80%' />
+                            <div className='flex gap-2'>
+                              <Skeleton height={24} width={60} />
+                              <Skeleton height={24} width={60} />
+                              <Skeleton height={24} width={60} />
+                            </div>
+                            <div className='flex justify-between'>
+                              <Skeleton height={20} width='30%' />
+                              <Skeleton height={32} width={100} />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                    if (index === 1) {
+                      return (
+                        <>
+                          {skeleton}
+                          <Loaderbanner
+                            data={loaderBannerHotel}
+                            moduleName='Oteliniz'
+                            ıcon={MdLocalHotel}
+                          />
+                        </>
+                      )
+                    }
+
+                    return skeleton
+                  })}
                 </>
               ) : (
                 hotelSearchRequestQuery.data?.pages.map((page) => {
