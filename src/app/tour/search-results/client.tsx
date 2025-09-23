@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import {
   ActionIcon,
   Affix,
@@ -41,6 +42,14 @@ import { CruiseSearchEngine } from '@/modules/cruise'
 import { TourSearchEngine } from '@/modules/tour'
 import { IoSearchSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
+import { MdTour } from 'react-icons/md'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { Params } from '@/app/car/types'
+
+const skeltonLoader = new Array(3).fill(true)
 
 const TourSearchResultClient = () => {
   const { searchResultsQuery, searchParamsQuery, searchParams } =
@@ -49,6 +58,17 @@ const TourSearchResultClient = () => {
 
   const [{ order, ...filterParams }, setFilterParams] =
     useQueryStates(filterParser)
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'tur-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('tur-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerTour =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_tour_react') ??
+    []
 
   const searchRequestIsLoading =
     searchResultsQuery.isLoading || searchResultsQuery.hasNextPage
@@ -628,9 +648,13 @@ const TourSearchResultClient = () => {
               {filteredData?.length === 0 &&
                 (searchResultsQuery.isFetching ||
                   searchResultsQuery.isLoading ||
-                  !searchResultsQuery.data) && (
-                  <>
-                    <div className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'>
+                  !searchResultsQuery.data) &&
+                skeltonLoader.map((arr, arrIndex) => {
+                  const skeleton = (
+                    <div
+                      key={arrIndex}
+                      className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'
+                    >
                       <div className='col-span-1'>
                         <Skeleton h={120} />
                       </div>
@@ -638,36 +662,26 @@ const TourSearchResultClient = () => {
                         <Skeleton h={24} />
                         <Skeleton h={20} w={'80%'} />
                         <Skeleton h={18} w={'50%'} />
-
                         <Skeleton h={18} w={'20%'} />
                       </div>
                     </div>
-                    <div className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'>
-                      <div className='col-span-1'>
-                        <Skeleton h={120} />
-                      </div>
-                      <div className='col-span-4 grid gap-3'>
-                        <Skeleton h={24} />
-                        <Skeleton h={20} w={'80%'} />
-                        <Skeleton h={18} w={'50%'} />
+                  )
 
-                        <Skeleton h={18} w={'20%'} />
-                      </div>
-                    </div>
-                    <div className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'>
-                      <div className='col-span-1'>
-                        <Skeleton h={120} />
-                      </div>
-                      <div className='col-span-4 grid gap-3'>
-                        <Skeleton h={24} />
-                        <Skeleton h={20} w={'80%'} />
-                        <Skeleton h={18} w={'50%'} />
+                  if (arrIndex === 0) {
+                    return (
+                      <React.Fragment key={arrIndex}>
+                        {skeleton}
+                        <Loaderbanner
+                          data={loaderBannerTour}
+                          moduleName='Turunuz'
+                          ıcon={MdTour}
+                        />
+                      </React.Fragment>
+                    )
+                  }
 
-                        <Skeleton h={18} w={'20%'} />
-                      </div>
-                    </div>
-                  </>
-                )}
+                  return skeleton
+                })}
 
               {filteredData &&
                 filteredData.length > 0 &&

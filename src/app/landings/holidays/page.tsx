@@ -305,7 +305,7 @@ export default async function HolidaysPage() {
                                 size='sm'
                                 className='text-blue-600 hover:bg-blue-100'
                               >
-                                Yurt Dışı Otelleri
+                                Kıbrıs Otelleri
                               </Button>
                             </a>
                           )}

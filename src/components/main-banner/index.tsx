@@ -44,12 +44,11 @@ const MainBannerCarousel: React.FC<PropType> = ({ slides }) => {
 
   return (
     <div className='w-full max-w-full overflow-hidden'>
-      {!emblaApi && (
+      {/* {!emblaApi && (
         <div className='absolute start-0 end-0 top-0 bottom-0 z-10 h-full'>
-          <Skeleton h={'100%'} />
+          <Skeleton h={'30%'} />
         </div>
-      )}
-
+      )} */}
       <Carousel
         withIndicators={false}
         withControls={false}

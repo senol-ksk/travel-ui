@@ -26,43 +26,20 @@ import { Route } from 'next'
 import ProductBox from '../_components/box-link'
 
 export default async function TourLandingPage() {
-  const headersList = await headers()
-  const domain = headersList.get('x-forwarded-host') || ''
-  const protocol = headersList.get('x-forwarded-proto') || ''
-  const baseUrl = `${protocol}://${domain}`
-
   const data = (
     await getContent<CmsContent<TourLandingWidget[], TourLandingParams>>(
       'tur/tur'
     )
   )?.data
 
-  const generateSearchURL = (link: string) => {
-    const url = new URL(link, baseUrl)
-    const destinationSlug = url.pathname.split('/').filter(Boolean).at(-1)
-    const checkinDate = dayjs().add(1, 'day').toDate()
-    const checkoutDate = dayjs(checkinDate).add(1, 'years').toDate()
-
-    const serializedUrl = serializeTourSearchParams('/tour/search-results', {
-      checkinDate,
-      checkoutDate,
-      destinationSlug,
-    }) as Route
-
-    return serializedUrl
-  }
-
   if (!data) return notFound()
 
   const { params, widgets } = data
   const abroadTours = widgets?.filter((x) => x.point == 'abroad_tours')
   const abroadToursTitle = widgets?.find((x) => x.point == 'abroad_title')
-  const abroadSeeAll = widgets?.find((x) => x.point == 'abroad_see_all')
   const aidTours = widgets?.filter((x) => x.point == 'aid_tours')
   const aidTitle = widgets?.find((x) => x.point == 'aid_title')
-  const aidSeeAll = widgets?.find((x) => x.point == 'aid_see_all')
   const shipTours = widgets?.filter((x) => x.point == 'ship_tours')
-  const shipSeeAll = widgets?.find((x) => x.point == 'ship_see_all')
   const shipTitle = widgets?.find((x) => x.point == 'ship_title')
   const faqs = widgets?.filter((x) => x.point == 'sss')
   const europe_tours = widgets?.filter((x) => x.point == 'europe_tours')
@@ -102,7 +79,7 @@ export default async function TourLandingPage() {
                   description=''
                   image={tour.params.image.value}
                   title={tour.title}
-                  url={generateSearchURL(tour.params.link.value)}
+                  url={tour.params.link.value as Route}
                 />
               ))}
             </div>
@@ -120,7 +97,7 @@ export default async function TourLandingPage() {
                   description=''
                   image={tour.params.image.value}
                   title={tour.title}
-                  url={generateSearchURL(tour.params.link.value)}
+                  url={tour.params.link.value as Route}
                 />
               ))}
             </div>
@@ -139,7 +116,7 @@ export default async function TourLandingPage() {
                   description=''
                   image={tour.params.image.value}
                   title={tour.title}
-                  url={generateSearchURL(tour.params.link.value)}
+                  url={tour.params.link.value as Route}
                 />
               ))}
             </div>
@@ -157,7 +134,7 @@ export default async function TourLandingPage() {
                   description=''
                   image={tour.params.image.value}
                   title={tour.title}
-                  url={generateSearchURL(tour.params.link.value)}
+                  url={tour.params.link.value as Route}
                 />
               ))}
             </div>

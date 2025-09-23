@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Accordion,
@@ -24,7 +25,11 @@ import { upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
 
 import { useCarSearchResults } from '@/app/car/search-results/useSearchResult'
 import { CarSearchResultItem } from '@/app/car/component/result-item'
-import { CarSearchRequest, CarSearchResultItemType } from '@/app/car/types'
+import {
+  CarSearchRequest,
+  CarSearchResultItemType,
+  Params,
+} from '@/app/car/types'
 import { carDetailParams } from '@/app/car/searchParams'
 import {
   filterParsers,
@@ -41,6 +46,11 @@ import { type Route } from 'next'
 import { CarRentSearchPanel } from '@/modules/carrent'
 import { IoSearchSharp } from 'react-icons/io5'
 import dayjs from 'dayjs'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { MdLocalCarWash } from 'react-icons/md'
 
 export const createDetailParams = createSerializer(carDetailParams)
 
@@ -117,6 +127,16 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
 
   const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
     useDisclosure(false)
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'arac-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('arac-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerCar =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_car_react') ?? []
 
   return (
     <>
@@ -562,45 +582,64 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     </span>
                   </>
                 </Skeleton>
-                <div className='grid gap-4 pb-20 md:gap-6'>
-                  {carSearchResult.isLoading &&
-                    skeltonLoader.map((arr, arrIndex) => (
-                      <div
-                        key={arrIndex}
-                        className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
-                      >
-                        <div className='col-span-1'>
-                          <Skeleton h={150} />
-                        </div>
-                        <div className='col-span-3 grid gap-3 align-baseline'>
-                          <Skeleton h={16} maw={250} />
-                          <Skeleton h={16} maw={120} />
-                          <Skeleton h={16} maw={180} />
-                        </div>
-                      </div>
-                    ))}
+                {carSearchResult.isLoading && (
+                  <div className='grid gap-4 pb-20 md:gap-6'>
+                    {carSearchResult.isLoading &&
+                      skeltonLoader.map((arr, arrIndex) => {
+                        const skeleton = (
+                          <div
+                            key={arrIndex}
+                            className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
+                          >
+                            <div className='col-span-1'>
+                              <Skeleton h={150} />
+                            </div>
+                            <div className='col-span-3 grid gap-3 align-baseline'>
+                              <Skeleton h={16} maw={250} />
+                              <Skeleton h={16} maw={120} />
+                              <Skeleton h={16} maw={180} />
+                            </div>
+                          </div>
+                        )
 
-                  {!carSearchResult.isFetching &&
-                    !carSearchResult.isFetchingNextPage &&
-                    !carSearchResult.isLoading &&
-                    filteredPageItems?.length === 0 && (
-                      <div>
-                        <Alert color='red'>Sonuç bulunamadı</Alert>
-                      </div>
-                    )}
-                  {filteredPageItems?.map((carData) => {
-                    if (!carData) return null
+                        if (arrIndex === 0) {
+                          return (
+                            <React.Fragment key={arrIndex}>
+                              {skeleton}
+                              <Loaderbanner
+                                data={loaderBannerCar}
+                                moduleName='Aracınız'
+                                ıcon={MdLocalCarWash}
+                              />
+                            </React.Fragment>
+                          )
+                        }
 
-                    return (
-                      <div key={carData?.key}>
-                        <CarSearchResultItem
-                          item={carData}
-                          onSelect={() => handleCarSelect(carData)}
-                        />
-                      </div>
-                    )
-                  })}
-                </div>
+                        return skeleton
+                      })}
+                  </div>
+                )}
+
+                {!carSearchResult.isFetching &&
+                  !carSearchResult.isFetchingNextPage &&
+                  !carSearchResult.isLoading &&
+                  filteredPageItems?.length === 0 && (
+                    <div>
+                      <Alert color='red'>Sonuç bulunamadı</Alert>
+                    </div>
+                  )}
+                {filteredPageItems?.map((carData) => {
+                  if (!carData) return null
+
+                  return (
+                    <div key={carData?.key}>
+                      <CarSearchResultItem
+                        item={carData}
+                        onSelect={() => handleCarSelect(carData)}
+                      />
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
