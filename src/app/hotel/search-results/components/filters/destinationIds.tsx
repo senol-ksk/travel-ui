@@ -73,15 +73,17 @@ const DestinationIds: React.FC<IProps> = ({ destinationsInfo = [] }) => {
         >
           <Stack gap={4} p={rem(4)}>
             {filteredData?.length > 0 ? (
-              filteredData?.map((destinationInfo) => {
-                return (
-                  <Checkbox
-                    key={destinationInfo.id}
-                    label={`${destinationInfo.name} (${destinationInfo.count})`}
-                    value={'' + destinationInfo.id}
-                  />
-                )
-              })
+              filteredData
+                ?.sort((a, b) => a.name.localeCompare(b.name))
+                .map((destinationInfo) => {
+                  return (
+                    <Checkbox
+                      key={destinationInfo.id}
+                      label={`${destinationInfo.name} (${destinationInfo.count})`}
+                      value={'' + destinationInfo.id}
+                    />
+                  )
+                })
             ) : (
               <Alert color='red' variant='light' p={5}>
                 Sonuç bulunamadı.

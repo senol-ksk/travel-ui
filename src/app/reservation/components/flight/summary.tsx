@@ -1,4 +1,4 @@
-import { upperFirst, useDisclosure } from '@mantine/hooks'
+import { useDisclosure } from '@mantine/hooks'
 import { Collapse, Title, UnstyledButton } from '@mantine/core'
 
 import {
@@ -18,7 +18,6 @@ import {
   FlightReservationSummary,
   ProductPassengerApiResponseModel,
 } from '@/types/passengerViewModel'
-import { AirlineLogo } from '@/components/airline-logo'
 
 type IProps = {
   data: ProductPassengerApiResponseModel['viewBag']
@@ -30,6 +29,8 @@ import { FlightDetailSummary } from './details'
 import { FlightRules } from './flight-rules'
 import { useCheckoutContext } from '../../store'
 import { convertPassengerTitle } from '@/libs/passenger-title'
+import { RiPlaneLine } from 'react-icons/ri'
+import { FaPlaneArrival, FaPlaneDeparture } from 'react-icons/fa'
 
 const FlightSummary: React.FC<IProps> = ({ data }) => {
   const [openedPriceDetails, { toggle: togglePriceDetails }] =
@@ -85,22 +86,34 @@ const FlightSummary: React.FC<IProps> = ({ data }) => {
                       )}
                     </div>
                     <div className='mt-2 flex items-baseline justify-between'>
-                      <Title order={4} className='font-semibold'>
+                      <Title
+                        order={4}
+                        className='flex items-center gap-2 font-semibold'
+                      >
+                        {flightDetail.groupId === 0 ? (
+                          <FaPlaneDeparture size={20} />
+                        ) : (
+                          <FaPlaneArrival size={20} />
+                        )}
                         {flightDetail.groupId === 0
                           ? 'Gidiş Uçuşu'
                           : 'Dönüş Uçuşu'}
                       </Title>
-                      {flightDetail.groupId === 0 &&
-                        data.SummaryViewDataResponser.summaryResponse && (
-                          <>
-                            <FlightRules
-                              data={
-                                data.SummaryViewDataResponser
-                                  .summaryResponse as FlightReservationSummary
-                              }
-                            />
-                          </>
-                        )}
+                      {data.SummaryViewDataResponser.summaryResponse && (
+                        <>
+                          <FlightRules
+                            data={
+                              data.SummaryViewDataResponser
+                                .summaryResponse as FlightReservationSummary
+                            }
+                            flightType={
+                              flightDetail.groupId === 0
+                                ? 'departure'
+                                : 'return'
+                            }
+                          />
+                        </>
+                      )}
                     </div>
                     <FlightDetailSummary
                       flightSegments={flightSegments}

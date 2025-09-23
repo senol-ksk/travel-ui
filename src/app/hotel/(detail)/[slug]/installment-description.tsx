@@ -1,6 +1,7 @@
 import { Button, Collapse, Transition } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs'
+import { FaChevronDown } from 'react-icons/fa'
 
 type IProps = {
   content: React.ReactNode
@@ -13,15 +14,16 @@ const InstallmentBankDescription: React.FC<IProps> = ({ content }) => {
     <div>
       <div className='text-end'>
         <Button
+          className='font-normal'
           type='button'
           variant='white'
           size='xs'
           onClick={toggle}
           rightSection={
-            !opened ? <BsChevronDown size={16} /> : <BsChevronUp size={16} />
+            !opened ? <FaChevronDown size={12} /> : <BsChevronUp size={12} />
           }
         >
-          Taksit ve Kampanya
+          Kampanya Detayı
         </Button>
       </div>
       <Collapse in={opened}>

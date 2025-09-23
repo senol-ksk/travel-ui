@@ -5,7 +5,7 @@ type IProps = {
 
 export const SuccessCard: React.FC<IProps> = ({ name }: IProps) => {
   return (
-    <div className='bg-green mb-3 grid rounded-lg p-3 text-center font-bold'>
+    <div className='mb-3 grid rounded-lg border border-solid border-green-800 p-3 text-center font-bold'>
       <Row className='pb-5'>
         <Column align='center'>
           <Img
@@ -16,7 +16,7 @@ export const SuccessCard: React.FC<IProps> = ({ name }: IProps) => {
       </Row>
       <div>
         Sayın {name},
-        <br /> İşleminiz  başarı ile gerçekleşmiştir. Bir sonraki seyahatinizde
+        <br /> İşleminiz başarı ile gerçekleşmiştir. Bir sonraki seyahatinizde
         görüşmek üzere
       </div>
     </div>

@@ -38,10 +38,10 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
 }) => {
   const [detailsOpened, { toggle: toggleDetails }] = useDisclosure(false)
   return (
-    <div className='@container items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
+    <div className='items-center gap-x-4 rounded-lg border shadow hover:border-1 md:grid md:grid-cols-5'>
       <div className='col-span-4 grid gap-4'>
         {details.map((detail) => {
-          const relatedSegment = detailSegments.filter(
+          const relatedSegment = detailSegments?.filter(
             (segment) => detail.groupId === segment.groupId
           )
           const hasTransferStop = relatedSegment.length > 1
@@ -72,7 +72,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
               // onClick={onSelect}
             >
               <div className='start-0-0 absolute top-1/2 mt-5 h-8 w-1 -translate-y-1/2 rounded-tr-md rounded-br-md bg-gray-400 md:mt-0' />
-              <div className='mb-5 flex gap-3 text-sm md:mb-0'>
+              <div className='mb-5 flex items-center gap-3 text-sm md:mb-0'>
                 <div>
                   <AirlineLogo
                     airlineCode={relatedSegment[0].marketingAirline.code.toLocaleLowerCase()}
@@ -82,10 +82,10 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                   <div>
                     {airlineText?.Value} {flightNumber}
                   </div>
-                  <div className='flex items-center gap-1'>
+                  {/* <div className='flex items-center gap-1'>
                     <PiSuitcaseRolling />
                     <div>8 kg El Bagajı</div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='col-span-2'>
@@ -101,10 +101,7 @@ const FlightSearchResultsOneWayDomestic: React.FC<IProps> = ({
                   <div className='mt-2 grow'>
                     <div className='relative'>
                       <Box bg={'blue'} h={2} className='rounded' />
-                      <div
-                        className='absolute end-0 -translate-y-1/2 rotate-90 bg-white text-blue-800'
-                        style={{ top: 1, paddingBottom: 1 }}
-                      >
+                      <div className='top-[1px]text-blue-800 absolute end-0 -translate-y-1/2 rotate-90 bg-white pb-[1px]'>
                         <MdOutlineAirplanemodeActive size={18} />
                       </div>
                     </div>

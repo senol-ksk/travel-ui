@@ -555,11 +555,13 @@ export interface FlightReservationFlightList {
     isOWCCombinable: boolean
     isPromotional: boolean
     reservable: boolean
+    providerName: string | null
     freeVolatileData: {
       data: string
       OfferID: string
       Owner: string
       ResponseID: string
+      BrandCode: string | null
       BrandName: string | null
       brandname: string | null
       Seq: string
@@ -570,6 +572,8 @@ export interface FlightReservationFlightList {
       FreeSandwich: boolean
       Entertainment: boolean
       FlexibleReturnChangeRight: boolean
+      BrandFeatures: string[]
+      ProviderName: string | null
     }
   }
   flightSegments: {
@@ -593,7 +597,7 @@ export interface FlightReservationFlightList {
     arrivalTime: string
     flightTime: string
     operatingAirline: {
-      code: number
+      code: string
       value: null
       countryCode: null
     }
@@ -698,6 +702,7 @@ export interface FlightReservationSummary {
   couponDiscountList: null | CouponDiscountListType[]
   extraCharges: null
   financellDiscount: ServicePriceType
+  providerName: string
 }
 
 export interface FlightAdditionalData {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   Alert,
   Button,
@@ -23,6 +23,7 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { FaCheck } from 'react-icons/fa'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { IoSearchSharp } from 'react-icons/io5'
+import { MdLocalTaxi } from 'react-icons/md'
 
 import { TransferSearchItem } from '@/app/transfer/search-results/search-item'
 import { useQueryStates } from 'nuqs'
@@ -36,6 +37,11 @@ import { cleanObj, formatCurrency } from '@/libs/util'
 import { TransferSearchEngine } from '@/modules/transfer'
 import { useDestinationGetBySlug } from '@/hooks/destination'
 import { useTransferSearchResults } from './useSearchResults'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { Params } from '@/app/car/types'
 
 const skeltonLoader = new Array(3).fill(true)
 
@@ -47,6 +53,18 @@ const TransferSearchResults = () => {
 
   const [filterSectionIsOpened, setFilterSectionIsOpened] = useState(false)
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'transfer-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('transfer-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerTransfer =
+    cmsData?.widgets?.filter(
+      (x) => x.point === 'loader_banner_transfer_react'
+    ) ?? []
 
   const searchResults =
     transferSearchResultsQuery.data?.pages.flatMap((page) =>
@@ -409,24 +427,39 @@ const TransferSearchResults = () => {
                 </>
               </Skeleton>
               <div className='grid gap-4 md:gap-6'>
-                {filteredData.length === 0 &&
-                  (!transferSearchResultsQuery.data ||
-                    transferSearchResultsQuery.isLoading) &&
-                  skeltonLoader.map((arr, arrIndex) => (
-                    <div
-                      key={arrIndex}
-                      className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
-                    >
-                      <div className='col-span-1'>
-                        <Skeleton h={100} />
+                {transferSearchResultsQuery.isFetching &&
+                  skeltonLoader.map((arr, arrIndex) => {
+                    const skeleton = (
+                      <div
+                        key={arrIndex}
+                        className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
+                      >
+                        <div className='col-span-1'>
+                          <Skeleton h={100} />
+                        </div>
+                        <div className='col-span-3 grid gap-3 align-baseline'>
+                          <Skeleton h={16} w={250} />
+                          <Skeleton h={16} w={120} />
+                          <Skeleton h={16} w={180} />
+                        </div>
                       </div>
-                      <div className='col-span-3 grid gap-3 align-baseline'>
-                        <Skeleton h={16} w={250} />
-                        <Skeleton h={16} w={120} />
-                        <Skeleton h={16} w={180} />
-                      </div>
-                    </div>
-                  ))}
+                    )
+
+                    if (arrIndex === 0) {
+                      return (
+                        <React.Fragment key={arrIndex}>
+                          {skeleton}
+                          <Loaderbanner
+                            data={loaderBannerTransfer}
+                            moduleName='Transferiniz'
+                            ıcon={MdLocalTaxi}
+                          />
+                        </React.Fragment>
+                      )
+                    }
+
+                    return skeleton
+                  })}
 
                 {!transferSearchResultsQuery.isFetchingNextPage &&
                   !transferSearchResultsQuery.isLoading &&

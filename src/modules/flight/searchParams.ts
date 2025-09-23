@@ -59,6 +59,8 @@ export const filterParsers = {
   airlines: parseAsArrayOf(parseAsString),
   airports: parseAsArrayOf(parseAsString),
   departureHours: parseAsArrayOf(parseAsInteger, '-'),
+  returnHours: parseAsArrayOf(parseAsInteger, '-'),
+  baggage: parseAsArrayOf(parseAsString),
 }
 
 export type FlightFilterSearchParams = inferParserType<typeof filterParsers>

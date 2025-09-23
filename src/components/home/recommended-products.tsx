@@ -67,20 +67,30 @@ const RecommendedProducts: React.FC<IProps> = ({ data }) => {
                       className='rounded-t-xl'
                     />
                   </AspectRatio>
-                  {item.params.discount_price?.value && (
-                    <Badge
-                      size='lg'
-                      radius={'md'}
-                      className='absolute top-2 left-3 bg-orange-500'
-                    >
-                      %{discedPrice.toFixed(0)} indirim
-                    </Badge>
-                  )}
+                  {item.params.discount_price?.value &&
+                    item.params.price?.value &&
+                    mainPrice > 0 &&
+                    discPrice > 0 && (
+                      <Badge
+                        size='lg'
+                        radius={'md'}
+                        className='absolute top-2 left-3 bg-orange-500'
+                      >
+                        %{discedPrice.toFixed(0)} indirim
+                      </Badge>
+                    )}
                   {item.params.tag.value && (
                     <Badge
                       size='lg'
                       radius={'md'}
-                      className='absolute top-10 left-3 bg-blue-900 font-normal'
+                      className={`absolute left-3 bg-blue-900 font-normal ${
+                        item.params.discount_price?.value &&
+                        item.params.price?.value &&
+                        mainPrice > 0 &&
+                        discPrice > 0
+                          ? 'top-10'
+                          : 'top-2'
+                      }`}
                     >
                       {item.params.tag.value}
                     </Badge>

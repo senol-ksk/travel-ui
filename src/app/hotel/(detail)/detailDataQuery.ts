@@ -29,8 +29,8 @@ const useHotelDataQuery = () => {
         axiosOptions: {
           // signal,
           url: 'api/hotel/detail',
-          method: 'get',
-          params: {
+          method: 'post',
+          data: {
             ...searchParams,
           },
         },
@@ -60,12 +60,11 @@ const useHotelDataQuery = () => {
     enabled: !!hotelDetailQuery.data?.data?.productKey,
     queryKey: [
       'hotel-rooms',
+      searchParams,
       hotelDetailQuery.data?.data?.sessionToken,
       hotelDetailQuery.data?.data?.searchToken,
       searchParams.hotelSlug,
       hotelProductKey,
-      searchParams.checkInDate,
-      searchParams.checkOutDate,
       roomRefetchCount.current,
     ],
     initialPageParam: {
@@ -78,8 +77,8 @@ const useHotelDataQuery = () => {
         axiosOptions: {
           signal,
           url: 'api/hotel/rooms',
-          method: 'get',
-          params: {
+          method: 'post',
+          data: {
             appName: process.env.NEXT_PUBLIC_APP_NAME,
             scopeCode: process.env.NEXT_PUBLIC_SCOPE_CODE,
             sessionToken: hotelDetailQuery.data?.data?.sessionToken,
@@ -90,6 +89,7 @@ const useHotelDataQuery = () => {
             checkOutDate: searchParams.checkOutDate,
             page: pageParam.page,
             size: 5,
+            rooms: searchParams.rooms,
           },
         },
       })

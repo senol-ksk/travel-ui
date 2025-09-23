@@ -4,6 +4,8 @@ import { Image, Table } from '@mantine/core'
 import { HotelDetailInstallmentData } from '@/app/hotel/types'
 import { formatCurrency } from '@/libs/util'
 import { InstallmentBankDescription } from './installment-description'
+import { CiCircleInfo } from 'react-icons/ci'
+import { MdInfo } from 'react-icons/md'
 
 type IProps = {
   price: number
@@ -14,12 +16,23 @@ const InstallmentTable: React.FC<IProps> = ({ price, installmentData }) => {
   const bankRows = installmentData.items.map((item) => (
     <Fragment key={item.bank}>
       <Table.Tr>
-        <Table.Td>
-          <div className='flex h-[40px] w-[60px] items-center justify-center'>
-            <Image src={item.logo} alt={item.bank} />
-          </div>
+        <Table.Td rowSpan={3} className='bg-gray-100'>
+          <Image src={item.logo} maw={90} mx={'auto'} alt={item.bank} />
         </Table.Td>
-
+        <Table.Td className='bg-gray-100'></Table.Td>
+        <Table.Td className='bg-gray-100'>
+          <div className='text-center font-bold'>Tek Çekim</div>
+        </Table.Td>
+        {installmentData.headers.map((header) => (
+          <Table.Td key={header} className='bg-gray-100'>
+            <div className='text-center font-bold'>
+              <div>{header} Taksit</div>
+            </div>
+          </Table.Td>
+        ))}
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td className='font-bold'>Aylık Taksit</Table.Td>
         <Table.Td>{formatCurrency(price)}</Table.Td>
         {installmentData.headers.map((header, headerIndex) => {
           const calculatedPrice =
@@ -28,11 +41,27 @@ const InstallmentTable: React.FC<IProps> = ({ price, installmentData }) => {
             <Table.Td key={headerIndex}>
               <div className='text-center'>
                 {typeof item.installments[header] === 'number' ? (
-                  <div>
-                    <div>{formatCurrency(calculatedPrice / header)}</div>
-                    <div className='font-semibold'>
-                      {formatCurrency(calculatedPrice)}
-                    </div>
+                  <div>{formatCurrency(calculatedPrice / header)}</div>
+                ) : (
+                  '-'
+                )}
+              </div>
+            </Table.Td>
+          )
+        })}
+      </Table.Tr>
+      <Table.Tr>
+        <Table.Td className='bg-white font-bold'>Toplam Fiyat</Table.Td>
+        <Table.Td className='bg-white'>{formatCurrency(price)}</Table.Td>
+        {installmentData.headers.map((header, headerIndex) => {
+          const calculatedPrice =
+            price + (price * item.installments[header]) / 100
+          return (
+            <Table.Td key={headerIndex} className='bg-white'>
+              <div className='text-center'>
+                {typeof item.installments[header] === 'number' ? (
+                  <div className='font-normal'>
+                    {formatCurrency(calculatedPrice)}
                   </div>
                 ) : (
                   '-'
@@ -44,7 +73,7 @@ const InstallmentTable: React.FC<IProps> = ({ price, installmentData }) => {
       </Table.Tr>
       {item.description && (
         <Table.Tr>
-          <Table.Td colSpan={installmentData.headers.length + 2}>
+          <Table.Td colSpan={installmentData.headers.length + 3}>
             <InstallmentBankDescription
               content={
                 <div
@@ -60,30 +89,18 @@ const InstallmentTable: React.FC<IProps> = ({ price, installmentData }) => {
       )}
     </Fragment>
   ))
-  const headers = installmentData.headers.map((header) => {
-    return (
-      <Table.Th key={header}>
-        <div className='text-center font-normal'>
-          <div>{header} Taksit</div>
-          <div className='text-xs font-semibold'>Toplam</div>
-        </div>
-      </Table.Th>
-    )
-  })
 
   return (
-    <Table stickyHeader stickyHeaderOffset={0} striped withColumnBorders>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th></Table.Th>
-          <Table.Th>
-            <div className='font-normal'>Tek Çekim</div>
-          </Table.Th>
-          {headers}
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{bankRows}</Table.Tbody>
-    </Table>
+    <div>
+      <Table stickyHeader stickyHeaderOffset={0} striped withColumnBorders>
+        <Table.Tbody>{bankRows}</Table.Tbody>
+      </Table>
+      <div className='my-2 flex gap-1 text-xs'>
+        <MdInfo className='text-blue-900' size={18} />
+        Yönetmelik doğrultusunda; ticari kartlarla yapılan işlemlerde ödeme
+        erteleme kampanyasından yararlanılamıyor ve taksit yapılamıyor.
+      </div>
+    </div>
   )
 }
 

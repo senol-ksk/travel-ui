@@ -52,7 +52,7 @@ export const ParafParaView: React.FC<IProps> = ({ data }) => {
                 <Table.Tr>
                   <Table.Td>Avans ParafParanız</Table.Td>
                   <Table.Td align='right' fz={'lg'} c={'blue'} fw={600}>
-                    {data.advance}
+                    {data.advance.toFixed(2)}
                   </Table.Td>
                 </Table.Tr>
                 <Table.Tr>
