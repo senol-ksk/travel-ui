@@ -645,10 +645,7 @@ const TourSearchResultClient = () => {
                   </Alert>
                 )}
 
-              {filteredData?.length === 0 &&
-                (searchResultsQuery.isFetching ||
-                  searchResultsQuery.isLoading ||
-                  !searchResultsQuery.data) &&
+              {searchResultsQuery.isFetching &&
                 skeltonLoader.map((arr, arrIndex) => {
                   const skeleton = (
                     <div

@@ -582,41 +582,40 @@ export const Search: React.FC<Props> = ({ searchRequestParams }) => {
                     </span>
                   </>
                 </Skeleton>
-                {carSearchResult.isLoading && (
+                {carSearchResult.isFetching && (
                   <div className='grid gap-4 pb-20 md:gap-6'>
-                    {carSearchResult.isLoading &&
-                      skeltonLoader.map((arr, arrIndex) => {
-                        const skeleton = (
-                          <div
-                            key={arrIndex}
-                            className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
-                          >
-                            <div className='col-span-1'>
-                              <Skeleton h={150} />
-                            </div>
-                            <div className='col-span-3 grid gap-3 align-baseline'>
-                              <Skeleton h={16} maw={250} />
-                              <Skeleton h={16} maw={120} />
-                              <Skeleton h={16} maw={180} />
-                            </div>
+                    {skeltonLoader.map((arr, arrIndex) => {
+                      const skeleton = (
+                        <div
+                          key={arrIndex}
+                          className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
+                        >
+                          <div className='col-span-1'>
+                            <Skeleton h={150} />
                           </div>
+                          <div className='col-span-3 grid gap-3 align-baseline'>
+                            <Skeleton h={16} maw={250} />
+                            <Skeleton h={16} maw={120} />
+                            <Skeleton h={16} maw={180} />
+                          </div>
+                        </div>
+                      )
+
+                      if (arrIndex === 0) {
+                        return (
+                          <React.Fragment key={arrIndex}>
+                            {skeleton}
+                            <Loaderbanner
+                              data={loaderBannerCar}
+                              moduleName='Aracınız'
+                              ıcon={MdLocalCarWash}
+                            />
+                          </React.Fragment>
                         )
+                      }
 
-                        if (arrIndex === 0) {
-                          return (
-                            <React.Fragment key={arrIndex}>
-                              {skeleton}
-                              <Loaderbanner
-                                data={loaderBannerCar}
-                                moduleName='Aracınız'
-                                ıcon={MdLocalCarWash}
-                              />
-                            </React.Fragment>
-                          )
-                        }
-
-                        return skeleton
-                      })}
+                      return skeleton
+                    })}
                   </div>
                 )}
 

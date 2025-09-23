@@ -546,14 +546,7 @@ const BusSearchResults: React.FC = () => {
                 </div>
               </div>
               <div className='md:col-span-3'>
-                <Skeleton
-                  className=''
-                  visible={
-                    searchRequestQuery.isLoading ||
-                    searchRequestQuery.isFetchingNextPage ||
-                    searchRequestQuery.isFetching
-                  }
-                >
+                <Skeleton className='' visible={searchRequestQuery.isFetching}>
                   <div className='flex items-center justify-between gap-1'>
                     <Button
                       size='sm'
@@ -568,7 +561,7 @@ const BusSearchResults: React.FC = () => {
                     {totalCount > 1 && (
                       <div className='hidden items-center gap-2 md:flex'>
                         <div className='text-lg font-normal'>
-                          Toplam{' '}
+                          Toplam,{' '}
                           <span className='text-xl font-bold'>
                             {' '}
                             {totalCount}{' '}
@@ -583,11 +576,7 @@ const BusSearchResults: React.FC = () => {
                         {totalCount > 0 && (
                           <Skeleton
                             className='hidden items-center gap-2 md:flex'
-                            visible={
-                              searchRequestQuery.isLoading ||
-                              searchRequestQuery.isFetchingNextPage ||
-                              searchRequestQuery.isFetching
-                            }
+                            visible={searchRequestQuery.isFetching}
                           >
                             {filterOptions.map((option) => (
                               <Button
@@ -620,11 +609,7 @@ const BusSearchResults: React.FC = () => {
 
                       <Skeleton
                         className='md:hidden'
-                        visible={
-                          searchRequestQuery.isLoading ||
-                          searchRequestQuery.isFetchingNextPage ||
-                          searchRequestQuery.isFetching
-                        }
+                        visible={searchRequestQuery.isFetching}
                       >
                         <div>
                           <NativeSelect
@@ -660,30 +645,18 @@ const BusSearchResults: React.FC = () => {
                 </Skeleton>
                 <Skeleton
                   className='my-3 flex items-center gap-2'
-                  visible={
-                    searchRequestQuery.isLoading ||
-                    searchRequestQuery.isFetchingNextPage ||
-                    searchRequestQuery.isFetching
-                  }
+                  visible={searchRequestQuery.isFetching}
                 >
-                  {totalCount > 0 && (
-                    <div className='flex items-center gap-2 md:hidden'>
-                      <span className='text-sm'>
-                        Toplam{' '}
-                        <span className='text-lg font-bold'>{totalCount}</span>{' '}
-                        Otobüs Seferi Bulundu
-                      </span>{' '}
-                    </div>
-                  )}
+                  <div className='flex items-center gap-2 md:hidden'>
+                    <span className='text-sm'>
+                      Toplam,{' '}
+                      <span className='text-lg font-bold'>{totalCount}</span>{' '}
+                      Otobüs Seferi Bulundu
+                    </span>{' '}
+                  </div>
                 </Skeleton>
                 {totalCount > 0 && (
-                  <Skeleton
-                    visible={
-                      searchRequestQuery.isLoading ||
-                      searchRequestQuery.isFetchingNextPage ||
-                      searchRequestQuery.isFetching
-                    }
-                  >
+                  <Skeleton visible={searchRequestQuery.isFetching}>
                     <BusSearchPrevNextButtons
                       busDates={busDates}
                       handlePrevDay={handlePrevDay}
@@ -714,10 +687,7 @@ const BusSearchResults: React.FC = () => {
                         </div>
                       </Alert>
                     )}
-                  {filteredSearchResults.length === 0 &&
-                    (searchRequestQuery.isLoading ||
-                      searchRequestQuery.isFetchingNextPage ||
-                      searchRequestQuery.isFetching) &&
+                  {searchRequestQuery.isFetching &&
                     skeltonLoader.map((arr, arrIndex) => {
                       const skeleton = (
                         <div
