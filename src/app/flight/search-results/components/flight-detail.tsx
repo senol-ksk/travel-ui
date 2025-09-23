@@ -72,6 +72,20 @@ function FlightDetailsSearch({
               </Button>
             ) : null
           })}
+          {detailSegments.map((roundTrip, index) => {
+            return roundTrip.groupId === 1 ? (
+              <Button
+                key={index}
+                className='border-0'
+                onClick={() => setActiveLegGroupId(1)}
+                variant={activeLegGroupId === 1 ? 'filled' : 'default'}
+                color={activeLegGroupId === 1 ? 'gray' : ''}
+                radius='md'
+              >
+                Dönüş Uçuşu
+              </Button>
+            ) : null
+          })}
         </div>
       )}
       <div className='w-full rounded-lg p-3'>
