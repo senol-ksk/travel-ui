@@ -686,12 +686,7 @@ const FlightSearchView = () => {
                         >
                           <Skeleton
                             className='flex md:hidden'
-                            visible={
-                              searchResultsQuery.isLoading ||
-                              searchResultsQuery.isFetching ||
-                              searchResultsQuery.isFetchingNextPage ||
-                              searchSessionTokenQuery.isLoading
-                            }
+                            visible={searchResultsQuery.isFetching}
                           >
                             <div className='mx-3 justify-self-end font-medium'>
                               <Select
@@ -1219,14 +1214,7 @@ const FlightSearchView = () => {
                         <div>
                           <div className='flex md:mb-5 md:hidden md:justify-between'>
                             <div className='ms-auto flex items-center gap-1'>
-                              <Skeleton
-                                visible={
-                                  searchResultsQuery.isLoading ||
-                                  searchResultsQuery.isFetching ||
-                                  searchResultsQuery.isFetchingNextPage ||
-                                  searchSessionTokenQuery.isLoading
-                                }
-                              >
+                              <Skeleton visible={searchResultsQuery.isFetching}>
                                 <Box className='justify-self-start'>
                                   <Button
                                     onClick={() =>
@@ -1246,12 +1234,7 @@ const FlightSearchView = () => {
 
                           <Skeleton
                             className='hidden md:flex'
-                            visible={
-                              searchResultsQuery.isLoading ||
-                              searchResultsQuery.isFetching ||
-                              searchResultsQuery.isFetchingNextPage ||
-                              searchSessionTokenQuery.isLoading
-                            }
+                            visible={searchResultsQuery.isFetching}
                           >
                             <div className='justify-self-end'>
                               <Select
@@ -1303,12 +1286,7 @@ const FlightSearchView = () => {
                   ) : (
                     <Skeleton
                       className='flex items-center justify-between pb-3'
-                      visible={
-                        searchResultsQuery.isLoading ||
-                        searchResultsQuery.isFetching ||
-                        searchResultsQuery.isFetchingNextPage ||
-                        searchSessionTokenQuery.isLoading
-                      }
+                      visible={searchResultsQuery.isFetching}
                     >
                       <span className='text-xl font-medium md:text-2xl'>
                         {!isReturnFlightVisible && filteredData?.length
@@ -1320,12 +1298,7 @@ const FlightSearchView = () => {
                       <div>
                         <Skeleton
                           className='flex md:hidden'
-                          visible={
-                            searchResultsQuery.isLoading ||
-                            searchResultsQuery.isFetching ||
-                            searchResultsQuery.isFetchingNextPage ||
-                            searchSessionTokenQuery.isLoading
-                          }
+                          visible={searchResultsQuery.isFetching}
                         >
                           <Box className='justify-self-start'>
                             <Button
@@ -1343,12 +1316,7 @@ const FlightSearchView = () => {
                         </Skeleton>
                         <Skeleton
                           className='hidden md:flex'
-                          visible={
-                            searchResultsQuery.isLoading ||
-                            searchResultsQuery.isFetching ||
-                            searchResultsQuery.isFetchingNextPage ||
-                            searchSessionTokenQuery.isLoading
-                          }
+                          visible={searchResultsQuery.isFetching}
                         >
                           <div className=''>
                             <Select
@@ -1477,11 +1445,7 @@ const FlightSearchView = () => {
                   </Alert>
                 )}
 
-              {(searchResultsQuery.isLoading ||
-                searchResultsQuery.isFetching ||
-                searchResultsQuery.isFetchingNextPage ||
-                searchSessionTokenQuery.isLoading) &&
-                (!filteredData || filteredData.length === 0) &&
+              {searchResultsQuery.isFetching &&
                 skeltonLoader.map((arr, arrIndex) => {
                   const skeleton = (
                     <div

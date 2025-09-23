@@ -427,9 +427,7 @@ const TransferSearchResults = () => {
                 </>
               </Skeleton>
               <div className='grid gap-4 md:gap-6'>
-                {filteredData.length === 0 &&
-                  (!transferSearchResultsQuery.data ||
-                    transferSearchResultsQuery.isLoading) &&
+                {transferSearchResultsQuery.isFetching &&
                   skeltonLoader.map((arr, arrIndex) => {
                     const skeleton = (
                       <div
