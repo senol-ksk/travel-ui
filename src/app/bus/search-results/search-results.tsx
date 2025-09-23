@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { BusSearchItem } from './components/search-item'
 import {
   Accordion,
@@ -52,7 +53,13 @@ import dayjs from 'dayjs'
 import { BusSearchEngine } from '@/modules/bus'
 import { IoSearchSharp } from 'react-icons/io5'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import { MdDirectionsBus } from 'react-icons/md'
 import { useDestinationGetBySlug } from '@/hooks/destination'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { Params } from '@/app/car/types'
 const skeltonLoader = new Array(3).fill(true)
 
 const BusSearchResults: React.FC = () => {
@@ -62,6 +69,16 @@ const BusSearchResults: React.FC = () => {
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
   const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
     useDisclosure(false)
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'otobus-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('otobus-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerBus =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_bus_react') ?? []
 
   const {
     searchRequestQuery,
@@ -701,21 +718,38 @@ const BusSearchResults: React.FC = () => {
                     (searchRequestQuery.isLoading ||
                       searchRequestQuery.isFetchingNextPage ||
                       searchRequestQuery.isFetching) &&
-                    skeltonLoader.map((arr, arrIndex) => (
-                      <div
-                        key={arrIndex}
-                        className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
-                      >
-                        <div className='col-span-1'>
-                          <Skeleton h={150} />
+                    skeltonLoader.map((arr, arrIndex) => {
+                      const skeleton = (
+                        <div
+                          key={arrIndex}
+                          className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
+                        >
+                          <div className='col-span-1'>
+                            <Skeleton h={150} />
+                          </div>
+                          <div className='col-span-3 grid gap-3 align-baseline'>
+                            <Skeleton h={16} w={250} />
+                            <Skeleton h={16} w={120} />
+                            <Skeleton h={16} w={180} />
+                          </div>
                         </div>
-                        <div className='col-span-3 grid gap-3 align-baseline'>
-                          <Skeleton h={16} w={250} />
-                          <Skeleton h={16} w={120} />
-                          <Skeleton h={16} w={180} />
-                        </div>
-                      </div>
-                    ))}
+                      )
+
+                      if (arrIndex === 0) {
+                        return (
+                          <React.Fragment key={arrIndex}>
+                            {skeleton}
+                            <Loaderbanner
+                              data={loaderBannerBus}
+                              moduleName='Otobüsünüz'
+                              ıcon={MdDirectionsBus}
+                            />
+                          </React.Fragment>
+                        )
+                      }
+
+                      return skeleton
+                    })}
                   {filteredSearchResults.length > 0 && (
                     <div className='grid gap-4'>
                       {filteredSearchResults?.map((searchItem) => (
