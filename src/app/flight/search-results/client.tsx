@@ -1480,69 +1480,75 @@ const FlightSearchView = () => {
                   return skeleton
                 })}
 
-              {isDomestic ? (
-                domesticFilteredData.map((result) => {
-                  const segmentAirlines = result?.segments?.map((item) =>
-                    item.marketingAirline.code === item.operatingAirline.code
-                      ? item.marketingAirline.code
-                      : item.operatingAirline.code
-                  )
-
-                  const airlineValues: AirlineCode[] | undefined =
-                    airlineDataObj?.filter((airlineObj) =>
-                      segmentAirlines.find(
-                        (segment) => segment === airlineObj.Code
-                      )
-                    )
-
-                  return (
-                    <MemoizedFlightSearchResultsDomestic
-                      airlineValues={airlineValues}
-                      airportValues={getAirportsByCodeList.data}
-                      detailSegments={result?.segments}
-                      details={result?.details}
-                      fareInfo={result?.fareInfo}
-                      onSelect={() => {
-                        handleFlightSelect(result)
-                      }}
-                      key={result.fareInfo.key}
-                    />
-                  )
-                })
-              ) : (
-                <Virtuoso
-                  useWindowScroll
-                  data={filteredData}
-                  totalCount={filteredData?.length}
-                  itemContent={(_, result) => {
+              {!searchResultsQuery.isLoading &&
+              !searchResultsQuery.isFetching &&
+              !searchResultsQuery.isFetchingNextPage &&
+              !searchSessionTokenQuery.isLoading ? (
+                isDomestic ? (
+                  domesticFilteredData.map((result) => {
                     const segmentAirlines = result?.segments?.map((item) =>
                       item.marketingAirline.code === item.operatingAirline.code
                         ? item.marketingAirline.code
                         : item.operatingAirline.code
                     )
+
                     const airlineValues: AirlineCode[] | undefined =
                       airlineDataObj?.filter((airlineObj) =>
                         segmentAirlines.find(
                           (segment) => segment === airlineObj.Code
                         )
                       )
+
                     return (
-                      <div className='pb-3 md:pb-5'>
-                        <MemoizedFlightSearchResultsInternational
-                          airlineValues={airlineValues}
-                          airportValues={getAirportsByCodeList.data}
-                          detailSegments={result?.segments}
-                          details={result?.details}
-                          fareInfo={result?.fareInfo}
-                          onSelect={() => {
-                            handleFlightSelect(result)
-                          }}
-                        />
-                      </div>
+                      <MemoizedFlightSearchResultsDomestic
+                        airlineValues={airlineValues}
+                        airportValues={getAirportsByCodeList.data}
+                        detailSegments={result?.segments}
+                        details={result?.details}
+                        fareInfo={result?.fareInfo}
+                        onSelect={() => {
+                          handleFlightSelect(result)
+                        }}
+                        key={result.fareInfo.key}
+                      />
                     )
-                  }}
-                />
-              )}
+                  })
+                ) : (
+                  <Virtuoso
+                    useWindowScroll
+                    data={filteredData}
+                    totalCount={filteredData?.length}
+                    itemContent={(_, result) => {
+                      const segmentAirlines = result?.segments?.map((item) =>
+                        item.marketingAirline.code ===
+                        item.operatingAirline.code
+                          ? item.marketingAirline.code
+                          : item.operatingAirline.code
+                      )
+                      const airlineValues: AirlineCode[] | undefined =
+                        airlineDataObj?.filter((airlineObj) =>
+                          segmentAirlines.find(
+                            (segment) => segment === airlineObj.Code
+                          )
+                        )
+                      return (
+                        <div className='pb-3 md:pb-5'>
+                          <MemoizedFlightSearchResultsInternational
+                            airlineValues={airlineValues}
+                            airportValues={getAirportsByCodeList.data}
+                            detailSegments={result?.segments}
+                            details={result?.details}
+                            fareInfo={result?.fareInfo}
+                            onSelect={() => {
+                              handleFlightSelect(result)
+                            }}
+                          />
+                        </div>
+                      )
+                    }}
+                  />
+                )
+              ) : null}
             </div>
           </div>
         </div>
