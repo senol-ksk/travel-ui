@@ -64,7 +64,7 @@ const CruiseSearchEngine = () => {
       queryKey: ['cruise-locations'],
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/tour/searchcruise`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/tour/searchcruise`,
         })
 
         return getLocations
