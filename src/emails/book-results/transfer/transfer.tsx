@@ -1,4 +1,4 @@
-import { Column, Img, Row } from '@react-email/components'
+import { Column, Img, Row, Link } from '@react-email/components'
 import dayjs from 'dayjs'
 import {
   TransferSummaryResponse,
@@ -24,15 +24,22 @@ export default function EmailTransferOrderResult({ data }: IProps) {
   return (
     <EmailBody>
       <SuccessCard name={data.passenger.passengers[0].fullName} />
-
+      <Link href={`${process.env.SITE_URL}/kampanyalar?categoryId=156`}>
+        <Img
+          width={800}
+          height={200}
+          className='my-3'
+          src='https://ykmturizm.mncdn.com/11/Files/638932871618301570.png'
+        />
+      </Link>
       <EmailCard title='Transfer Bilgisi'>
         <Row>
-          <Column width={220} valign='top'>
+          <Column width={320} valign='top'>
             <Img
               className='rounded-lg'
               src={transferVehicle.transferInfo.vehiclePhotoUrl}
               alt={transferVehicle.vehicleName}
-              width={200}
+              width={300}
             />
           </Column>
           <Column valign='top'>
@@ -123,7 +130,7 @@ export default function EmailTransferOrderResult({ data }: IProps) {
       <EmailCard title='Yolcu Bilgileri'>
         <Row className='w-full' cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>ÜNVAN</Column>
               <Column>ADI SOYADI</Column>
               <Column>DOĞUM TARİHİ</Column>
@@ -145,9 +152,7 @@ export default function EmailTransferOrderResult({ data }: IProps) {
                 </Column>
                 <Column width={120}>{passengerInfo.identityNumber}</Column>
                 <Column width={150}>
-                  <div className='font-bold text-blue-600'>
-                    {passengerInfo.bookingCode}
-                  </div>
+                  <div>{passengerInfo.bookingCode}</div>
                 </Column>
               </tr>
             ))}

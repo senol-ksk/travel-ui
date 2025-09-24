@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
 import { Button, TableOfContents } from '@mantine/core'
 import classes from './Toc.module.css'
@@ -39,8 +40,10 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
       <div ref={stickyRef} className='-mt-3 -mb-3 h-0 overflow-hidden'></div>
       <div
         className={`${
-          isSticky ? 'fixed top-0 left-0 w-full shadow-xl' : 'sticky top-0'
-        } z-[99] rounded bg-gray-50`}
+          isSticky
+            ? 'fixed top-0 left-0 w-full shadow-xl md:shadow-xl'
+            : 'sticky top-0'
+        } z-20 rounded bg-gray-50`}
       >
         <div className='mx-auto max-w-6xl'>
           {isSticky && (
@@ -56,7 +59,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
               </div>
             </>
           )}
-          <div className='flex items-center justify-between gap-4 md:mt-0 md:flex-row'>
+          <div className='flex items-center justify-between gap-2 md:mt-0 md:flex-row md:gap-4 md:px-0 md:py-0'>
             <TableOfContents
               classNames={classes}
               variant='filled'
@@ -64,7 +67,7 @@ const HotelTableOfContents: React.FC<IProps> = ({ hotelInfo }) => {
               size='sm'
               radius='sm'
               scrollSpyOptions={{
-                selector: '#rooms, #location, #facility-infos, #ratings',
+                selector: '#rooms, #facility-infos, #location, #ratings',
               }}
               getControlProps={({ data }) => ({
                 onClick: () =>

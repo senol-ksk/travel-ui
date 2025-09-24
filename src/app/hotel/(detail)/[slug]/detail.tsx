@@ -9,17 +9,20 @@ import {
   Loader,
   LoadingOverlay,
   Modal,
-  ScrollArea,
   Skeleton,
   Title,
   Text,
+  Collapse,
+  ActionIcon,
 } from '@mantine/core'
-import { IoMapOutline } from 'react-icons/io5'
+import dayjs from 'dayjs'
+import { IoMapOutline, IoSearchSharp } from 'react-icons/io5'
 import { BiChevronRight } from 'react-icons/bi'
 import {
   useDisclosure,
   useScrollIntoView,
   useElementSize,
+  useMediaQuery,
 } from '@mantine/hooks'
 import { createSerializer } from 'nuqs'
 import { notFound, useRouter } from 'next/navigation'
@@ -189,6 +192,11 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
   const { ref: generalInfoContentRef, height: generalInfoContentHeight } =
     useElementSize()
   const GENERAL_INFO_MAX_HEIGHT = 50
+  const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
+    useDisclosure(false)
+  const [isRoomUpdateFormVisible, { toggle: toggleRoomUpdateFormVisibility }] =
+    useDisclosure(false)
+  const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
 
   if (!hotelDetailData && hotelDetailQuery.isLoading) {
     return <HotelDetailSkeleton />
@@ -198,11 +206,56 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
     return notFound()
   }
 
+  const totalPassengerCount = () => {
+    const total = searchParams.rooms.reduce((a, b) => {
+      a += b.adult + b.child
+      return a
+    }, 0)
+
+    return total
+  }
+
   return (
     <>
-      <Container className='border-b py-4'>
-        <HotelSearchEngine />
-      </Container>
+      <div className='z-100 border-b py-2 md:py-4'>
+        <Container>
+          <div className='relative text-xs font-semibold text-blue-800 md:hidden'>
+            <button
+              className='absolute start-0 end-0 top-0 bottom-0 z-10'
+              onClick={toggleSearchEngineVisibility}
+            />
+
+            <div className='flex items-center gap-2'>
+              <div>{hotel.destination}</div>
+              <div>|</div>
+              <div>
+                {dayjs(searchParams.checkInDate).format('DD MMMM')} -{' '}
+                {dayjs(searchParams.checkOutDate).format('DD MMMM')}
+              </div>
+              <div>|</div>
+              <div>{totalPassengerCount()} Yolcu</div>
+              <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
+                <IoSearchSharp size={24} className='text-blue-800' />
+              </div>
+            </div>
+          </div>
+          <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
+            <HotelSearchEngine
+              defaultValues={{
+                checkinDate: searchParams.checkInDate,
+                checkoutDate: searchParams.checkOutDate,
+                rooms: searchParams.rooms,
+                destination: {
+                  id: hotel.destination_id,
+                  name: hotel.destination,
+                  slug: hotel.destination_slug,
+                  type: hotelDetailData.data?.searchPanel?.type ?? 0,
+                },
+              }}
+            />
+          </Collapse>
+        </Container>
+      </div>
 
       <Container
         className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-3'
@@ -275,7 +328,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <HotelTableOfContents hotelInfo={hotelInfo} />
 
         <div className='grid grid-cols-2 gap-2 rounded bg-gray-50 md:grid-cols-12 md:gap-5 md:p-3'>
-          <div className='col-span-12 grid gap-2 rounded bg-white p-3 md:col-span-8'>
+          <div className='col-span-12 flex flex-col gap-7 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
               <div className='text-xl font-semibold md:text-3xl'>
                 {hotel.name.trim()}
@@ -444,7 +497,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         <Title id='rooms' className='md:text-xxl p-2 text-xl md:p-0'>
           Odalar
         </Title>
-        <div className='rounded-sm border p-3'>
+        <div className='rounded border bg-gray-50 p-3 md:bg-white'>
           <RoomUpdateForm />
         </div>
 
@@ -725,8 +778,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
         opened={installmentTableOpened}
         onClose={closeInstallmentTable}
         title='Tüm Kartlara Göre Taksit Tablosu'
-        size={'auto'}
-        scrollAreaComponent={ScrollArea.Autosize}
+        size='auto'
       >
         {roomInstallmentQuery.isPending && (
           <div className='flex h-[500px] items-center justify-center'>

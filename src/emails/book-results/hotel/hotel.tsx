@@ -11,6 +11,7 @@ import dayjs from 'dayjs'
 import { formatCurrency } from '@/libs/util'
 import { SuccessCard } from '@/app/order-components/success-card'
 import { BillingCard } from '@/app/order-components/billing-card'
+import { Link } from '@react-email/components'
 
 type IProps = {
   data: OperationResultType
@@ -23,7 +24,14 @@ export default function EmailHotelOrderResult({ data }: IProps) {
   return (
     <EmailBody>
       <SuccessCard name={data.passenger.passengers[0].fullName} />
-
+      <Link href={`${process.env.SITE_URL}/kampanyalar?categoryId=156`}>
+        <Img
+          width={800}
+          height={200}
+          className='my-3'
+          src='https://ykmturizm.mncdn.com/11/Files/638932871618301570.png'
+        />
+      </Link>
       {hotelCancelWarranty.couponActive && (
         <EmailCard
           title={
@@ -137,7 +145,7 @@ export default function EmailHotelOrderResult({ data }: IProps) {
       <EmailCard title='Oda Bilgisi'>
         <Row className='w-full' cellPadding={6}>
           <thead>
-            <tr className='font-bold'>
+            <tr className='text-xs font-bold'>
               <Column>Ünvan</Column>
               <Column>Adı Soyadı</Column>
               <Column>Doğum Tarihi</Column>

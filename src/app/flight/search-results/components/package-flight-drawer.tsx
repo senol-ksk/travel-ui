@@ -43,7 +43,6 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
       onSelect(data.packages[selectedPackageIndex])
     }
   }
-  console.log(selectedFlightItemPackages)
 
   return (
     <div className='space-y-4'>
@@ -52,7 +51,7 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
           const isSelected = index === selectedPackageIndex
           const packagePrice =
             selectedPackage.flightFareInfo.totalPrice.value - mainPricePackage
-
+          console.log(selectedFlightItemPackages)
           const brandCode =
             selectedPackage.flightDetailSegment.freeVolatileData.BrandCode
           const bookingCode = selectedPackage.flightDetailSegment.bookingCode
@@ -152,12 +151,31 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
                       bagajı (55 x 35 x 25 cm)
                     </div>
                   )}
-                {baggageAllowance.maxWeight.value !== 0 && (
-                  <div className='flex items-center gap-2'>
-                    <MdCheck size={18} className='text-green-800' />
-                    {baggageAllowance.maxWeight.value} Kg Kabin Bagaj Hakkı
-                  </div>
-                )}{' '}
+                {baggageAllowance.maxWeight.value > 0 &&
+                  data.providerName === 'SabreATPCO' &&
+                  (operatingAirline === 'AF' ||
+                    operatingAirline === 'KL' ||
+                    operatingAirline === 'BA' ||
+                    operatingAirline === 'EY' ||
+                    operatingAirline === 'EK') && (
+                    <div className='flex items-center gap-2'>
+                      <MdCheck size={18} className='text-green-800' />
+                      {baggageAllowance.piece.pieceCount > 0 && (
+                        <div>{baggageAllowance.piece.pieceCount} x</div>
+                      )}
+                      {baggageAllowance.maxWeight.value} Kg Kabin Bagaj Hakkı
+                    </div>
+                  )}{' '}
+                {baggageAllowance.maxWeight.value > 0 &&
+                  data.providerName !== 'SabreATPCO' && (
+                    <div className='flex items-center gap-2'>
+                      <MdCheck size={18} className='text-green-800' />
+                      {baggageAllowance.piece.pieceCount > 0 && (
+                        <div>{baggageAllowance.piece.pieceCount} x</div>
+                      )}
+                      {baggageAllowance.maxWeight.value} Kg Kabin Bagaj Hakkı
+                    </div>
+                  )}{' '}
                 {!isDomestic && (
                   <>
                     {operatingAirline === 'TK' && (
@@ -564,7 +582,6 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
                 {data.providerName === 'SabreATPCO' &&
                   operatingAirline !== 'AF' &&
                   operatingAirline !== 'KL' &&
-                  operatingAirline !== 'LH' &&
                   operatingAirline !== 'BA' &&
                   operatingAirline !== 'EY' &&
                   operatingAirline !== 'EK' &&
@@ -1179,7 +1196,7 @@ const PackageFlightDrawer: React.FC<IProps> = ({ data, onSelect }) => {
           )
         })}
       </div>
-      <div className='flex items-center md:justify-center'>
+      <div className='sticky bottom-0 flex items-center md:justify-center'>
         <Button
           type='button'
           radius={'xl'}

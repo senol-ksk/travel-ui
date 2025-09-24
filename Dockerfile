@@ -14,7 +14,7 @@ WORKDIR /src
 RUN apk add --no-cache libc6-compat
 
 # Paket yöneticisi ve bağımlılık kurulumu
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json pnpm-lock.yaml* .env ./
 RUN corepack enable && corepack prepare pnpm@latest --activate
 RUN pnpm install --frozen-lockfile --ignore-scripts
 

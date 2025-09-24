@@ -69,6 +69,10 @@ const nextConfig: NextConfig = {
         destination: '/landings/tour',
       },
       {
+        source: '/resmi-tatil-gunleri',
+        destination: '/landings/holidays',
+      },
+      {
         source: '/iletisim',
         destination: '/contact-us',
       },

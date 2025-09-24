@@ -42,7 +42,7 @@
     &[data-active] {
       background-color: transparent;
       color: var(--mantine-color-blue-filled);
-      font-weight: 500;
+      font-weight: 600;
 
       &::after {
         content: '';

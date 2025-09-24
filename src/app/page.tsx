@@ -100,6 +100,9 @@ export default async function Home() {
             clipPath: 'ellipse(90% 90% at 50% 00%)',
           }}
         />
+        <div className='absolute top-0 right-0 m-1 hidden rounded bg-gray-200 p-1 text-center text-xs opacity-85 md:flex'>
+          Yeni Karamürsel Turizm ve Seyahat Acentası Belge No: 3102
+        </div>
         <div>
           <Container className='px-0 md:px-4 md:pt-[58px]'>
             <Title
@@ -108,7 +111,9 @@ export default async function Home() {
             >
               Parafly ile ParafPara&apos;ların keyfini çıkarın!
             </Title>
-
+            <div className='mb-1 rounded bg-gray-200 p-1 py-2 text-center text-xs opacity-85 md:hidden'>
+              Yeni Karamürsel Turizm ve Seyahat Acentası Belge No: 3102
+            </div>
             <div className='z-50 bg-white shadow-lg md:rounded-lg md:border'>
               <SearchEngine />
             </div>
@@ -122,7 +127,7 @@ export default async function Home() {
         </div>
       )}
       <div>
-        <Container className='flex flex-col gap-7 md:gap-10'>
+        <Container className='gap-7 md:gap-10'>
           {opportunities && (
             <div className='mx-auto'>
               <MainBannerCarousel
@@ -177,12 +182,13 @@ export default async function Home() {
           )}
           {homeTourDomData && homeTourDomData.length > 0 && (
             <div>
-              <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:mb-0 md:text-3xl'>
+              <h2 className='my-8 text-center text-2xl font-bold text-blue-900 md:text-3xl'>
                 Yurtiçi Kültür Turları
               </h2>
               <div>
                 <HomeTourDom data={homeTourDomData} />
               </div>
+              <div>* Çift kişilik odada kişi fiyatıdır.</div>
             </div>
           )}
           {tourDeals?.data && tourDeals.data?.length > 0 && (

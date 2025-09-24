@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { BusSearchItem } from './components/search-item'
 import {
   Accordion,
@@ -52,7 +53,13 @@ import dayjs from 'dayjs'
 import { BusSearchEngine } from '@/modules/bus'
 import { IoSearchSharp } from 'react-icons/io5'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import { MdDirectionsBus } from 'react-icons/md'
 import { useDestinationGetBySlug } from '@/hooks/destination'
+import { Loaderbanner } from '@/app/hotel/search-results/components/loader-banner'
+import { getContent } from '@/libs/cms-data'
+import { CmsContent, Widgets } from '@/types/cms-types'
+import { useQuery } from '@tanstack/react-query'
+import { Params } from '@/app/car/types'
 const skeltonLoader = new Array(3).fill(true)
 
 const BusSearchResults: React.FC = () => {
@@ -62,6 +69,16 @@ const BusSearchResults: React.FC = () => {
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
   const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
     useDisclosure(false)
+
+  const { data: cmsData } = useQuery({
+    queryKey: ['cms-data', 'otobus-arama'],
+    queryFn: () =>
+      getContent<CmsContent<Widgets, Params>>('otobus-arama').then(
+        (response) => response?.data
+      ),
+  })
+  const loaderBannerBus =
+    cmsData?.widgets?.filter((x) => x.point === 'loader_banner_bus_react') ?? []
 
   const {
     searchRequestQuery,
@@ -529,14 +546,7 @@ const BusSearchResults: React.FC = () => {
                 </div>
               </div>
               <div className='md:col-span-3'>
-                <Skeleton
-                  className=''
-                  visible={
-                    searchRequestQuery.isLoading ||
-                    searchRequestQuery.isFetchingNextPage ||
-                    searchRequestQuery.isFetching
-                  }
-                >
+                <Skeleton className='' visible={searchRequestQuery.isFetching}>
                   <div className='flex items-center justify-between gap-1'>
                     <Button
                       size='sm'
@@ -551,7 +561,7 @@ const BusSearchResults: React.FC = () => {
                     {totalCount > 1 && (
                       <div className='hidden items-center gap-2 md:flex'>
                         <div className='text-lg font-normal'>
-                          Toplam{' '}
+                          Toplam,{' '}
                           <span className='text-xl font-bold'>
                             {' '}
                             {totalCount}{' '}
@@ -566,11 +576,7 @@ const BusSearchResults: React.FC = () => {
                         {totalCount > 0 && (
                           <Skeleton
                             className='hidden items-center gap-2 md:flex'
-                            visible={
-                              searchRequestQuery.isLoading ||
-                              searchRequestQuery.isFetchingNextPage ||
-                              searchRequestQuery.isFetching
-                            }
+                            visible={searchRequestQuery.isFetching}
                           >
                             {filterOptions.map((option) => (
                               <Button
@@ -603,11 +609,7 @@ const BusSearchResults: React.FC = () => {
 
                       <Skeleton
                         className='md:hidden'
-                        visible={
-                          searchRequestQuery.isLoading ||
-                          searchRequestQuery.isFetchingNextPage ||
-                          searchRequestQuery.isFetching
-                        }
+                        visible={searchRequestQuery.isFetching}
                       >
                         <div>
                           <NativeSelect
@@ -643,30 +645,18 @@ const BusSearchResults: React.FC = () => {
                 </Skeleton>
                 <Skeleton
                   className='my-3 flex items-center gap-2'
-                  visible={
-                    searchRequestQuery.isLoading ||
-                    searchRequestQuery.isFetchingNextPage ||
-                    searchRequestQuery.isFetching
-                  }
+                  visible={searchRequestQuery.isFetching}
                 >
-                  {totalCount > 0 && (
-                    <div className='flex items-center gap-2 md:hidden'>
-                      <span className='text-sm'>
-                        Toplam{' '}
-                        <span className='text-lg font-bold'>{totalCount}</span>{' '}
-                        Otobüs Seferi Bulundu
-                      </span>{' '}
-                    </div>
-                  )}
+                  <div className='flex items-center gap-2 md:hidden'>
+                    <span className='text-sm'>
+                      Toplam,{' '}
+                      <span className='text-lg font-bold'>{totalCount}</span>{' '}
+                      Otobüs Seferi Bulundu
+                    </span>{' '}
+                  </div>
                 </Skeleton>
                 {totalCount > 0 && (
-                  <Skeleton
-                    visible={
-                      searchRequestQuery.isLoading ||
-                      searchRequestQuery.isFetchingNextPage ||
-                      searchRequestQuery.isFetching
-                    }
-                  >
+                  <Skeleton visible={searchRequestQuery.isFetching}>
                     <BusSearchPrevNextButtons
                       busDates={busDates}
                       handlePrevDay={handlePrevDay}
@@ -697,25 +687,39 @@ const BusSearchResults: React.FC = () => {
                         </div>
                       </Alert>
                     )}
-                  {filteredSearchResults.length === 0 &&
-                    (searchRequestQuery.isLoading ||
-                      searchRequestQuery.isFetchingNextPage ||
-                      searchRequestQuery.isFetching) &&
-                    skeltonLoader.map((arr, arrIndex) => (
-                      <div
-                        key={arrIndex}
-                        className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
-                      >
-                        <div className='col-span-1'>
-                          <Skeleton h={150} />
+                  {searchRequestQuery.isFetching &&
+                    skeltonLoader.map((arr, arrIndex) => {
+                      const skeleton = (
+                        <div
+                          key={arrIndex}
+                          className='grid grid-cols-4 items-start gap-3 rounded-md border p-3 md:p-5'
+                        >
+                          <div className='col-span-1'>
+                            <Skeleton h={150} />
+                          </div>
+                          <div className='col-span-3 grid gap-3 align-baseline'>
+                            <Skeleton h={16} w={250} />
+                            <Skeleton h={16} w={120} />
+                            <Skeleton h={16} w={180} />
+                          </div>
                         </div>
-                        <div className='col-span-3 grid gap-3 align-baseline'>
-                          <Skeleton h={16} w={250} />
-                          <Skeleton h={16} w={120} />
-                          <Skeleton h={16} w={180} />
-                        </div>
-                      </div>
-                    ))}
+                      )
+
+                      if (arrIndex === 0) {
+                        return (
+                          <React.Fragment key={arrIndex}>
+                            {skeleton}
+                            <Loaderbanner
+                              data={loaderBannerBus}
+                              moduleName='Otobüsünüz'
+                              ıcon={MdDirectionsBus}
+                            />
+                          </React.Fragment>
+                        )
+                      }
+
+                      return skeleton
+                    })}
                   {filteredSearchResults.length > 0 && (
                     <div className='grid gap-4'>
                       {filteredSearchResults?.map((searchItem) => (

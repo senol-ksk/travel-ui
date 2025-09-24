@@ -28,6 +28,7 @@ import { reservationParsers } from '@/app/reservation/searchParams'
 const requestedDayFormat = 'YYYY-MM-DD'
 
 import { removeDuplicateFlights } from './search-results/filter-actions'
+import { useTimeout } from '@mantine/hooks'
 
 const useSearchResultsQueries = () => {
   const airPortFlatList: Array<AirportCode> = useRef([]).current
@@ -104,6 +105,7 @@ const useSearchResultsQueries = () => {
 
       return response
     },
+    staleTime: 30000,
   })
 
   const searchQueryKey = [
@@ -307,16 +309,10 @@ const useSearchResultsQueries = () => {
 
         return lastPageParams
       }
+
       return undefined
     },
   })
-
-  if (
-    !searchResultsQuery.isFetchingNextPage &&
-    searchResultsQuery.hasNextPage
-  ) {
-    searchResultsQuery.fetchNextPage()
-  }
 
   const submitFlightData = useMutation({
     mutationFn: async (key: string) => {
@@ -422,7 +418,6 @@ const useSearchResultsQueries = () => {
   return {
     searchResultsQuery,
     submitFlightData,
-    searchParams,
     searchSessionTokenQuery,
     getAirlineByCodeList,
     getAirportsByCodeList,
