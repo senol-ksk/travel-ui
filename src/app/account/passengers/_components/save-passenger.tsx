@@ -26,6 +26,12 @@ export const SavePassenger = () => {
     },
     onSuccess(data) {
       if (data?.success) {
+        notifications.show({
+          title: 'Başarılı',
+          message: 'Yolcu başarıyla eklendi. Sayfayı yenileyiniz.',
+          color: 'green',
+          position: 'top-right',
+        })
         close()
       } else {
         notifications.show({
