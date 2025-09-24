@@ -82,7 +82,7 @@ const BusSearchEngine = () => {
       enabled: !!pickupLocation && pickupLocation.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/bus/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/bus/search`,
           params: {
             s: pickupLocation,
             id: null,
@@ -100,7 +100,7 @@ const BusSearchEngine = () => {
       enabled: !!targetLocation && targetLocation.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/bus/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/bus/search`,
           params: {
             s: targetLocation,
             id: null,

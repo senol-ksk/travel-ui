@@ -81,7 +81,7 @@ const TransferSearchEngine = () => {
         !!originLocationInputValue && originLocationInputValue.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/transfer/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/transfer/search`,
           params: {
             s: originLocationInputValue,
             id: null,
@@ -101,7 +101,7 @@ const TransferSearchEngine = () => {
         destinationLocationInputValue.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/transfer/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/transfer/search`,
           params: {
             s: destinationLocationInputValue,
             id: null,

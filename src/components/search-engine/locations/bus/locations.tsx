@@ -117,9 +117,8 @@ export const BusLocations: React.FC<Props> = ({
                 <div>
                   {data.map((location) => {
                     const { Name, SubDestinations, Id } = location
-
-                    if (!SubDestinations.length) {
-                      return (
+                    const mainLocation = (
+                      <>
                         <div key={Id}>
                           <div className='relative'>
                             <button
@@ -141,32 +140,37 @@ export const BusLocations: React.FC<Props> = ({
                             </div>
                           </div>
                         </div>
-                      )
-                    }
-
-                    return SubDestinations.map((destination) => (
-                      <div key={destination.Id}>
-                        <div className='relative'>
-                          <button
-                            type='button'
-                            className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
-                            onClick={() => {
-                              setLocationName(destination.Name)
-                              onSelect(destination)
-                              setLocationContainerOpened(false)
-                            }}
-                          >
-                            <span className='sr-only'>{destination.Name}</span>
-                          </button>
-                          <div className='flex items-center gap-2 px-4 py-2'>
-                            <div className='flex flex-col text-sm'>
-                              <strong>{destination.Name}</strong>
-                              <small>{Name}</small>
+                      </>
+                    )
+                    const subDestinations = SubDestinations.map(
+                      (destination) => (
+                        <div key={destination.Id}>
+                          <div className='relative'>
+                            <button
+                              type='button'
+                              className='absolute start-0 end-0 top-0 bottom-0 border-0 bg-transparent p-0 transition-all hover:bg-blue-300/15'
+                              onClick={() => {
+                                setLocationName(destination.Name)
+                                onSelect(destination)
+                                setLocationContainerOpened(false)
+                              }}
+                            >
+                              <span className='sr-only'>
+                                {destination.Name}
+                              </span>
+                            </button>
+                            <div className='flex items-center gap-2 px-4 py-2'>
+                              <div className='flex flex-col text-sm'>
+                                <strong>{destination.Name}</strong>
+                                <small>{Name}</small>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))
+                      )
+                    )
+
+                    return [mainLocation, ...subDestinations]
                   })}
                 </div>
               )}
