@@ -119,7 +119,7 @@ export const Flight = () => {
     enabled: false,
     queryFn: async () => {
       const getLocations = await request({
-        url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
+        url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/flight/search`,
         params: {
           s: form.getValues('Origin.Slug'),
           id: null,
@@ -139,7 +139,7 @@ export const Flight = () => {
     enabled: false,
     queryFn: async () => {
       const getLocations = await request({
-        url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/flight/search`,
+        url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/flight/search`,
         params: {
           s: form.getValues('Destination.Slug'),
           id: null,
