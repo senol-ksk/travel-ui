@@ -58,6 +58,7 @@ import { RiMapPin2Line } from 'react-icons/ri'
 import { MainDrawer } from './_components/main-drawer'
 import { BsCheck } from 'react-icons/bs'
 import { Route } from 'next'
+import { NoRoomsForm } from './_components/no-rooms-form'
 
 type IProps = {
   slug: string
@@ -535,13 +536,7 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
               </div>
             </div>
           )}
-          {roomsQuery?.data?.pages.length === 0 && (
-            <div>
-              <Alert color='red' title='Oda Sonuçları Bulunamadı'>
-                Oda kalmamış veya bir hata oldu. Tekrar deneyiniz.
-              </Alert>
-            </div>
-          )}
+          {roomsQuery?.data?.pages.length === 0 && <NoRoomsForm />}
           {roomsQuery.data?.pages.map((page) => {
             const roomDetails = page?.data?.hotelDetailResponse?.roomDetails
             const roomGroups = page?.data?.hotelDetailResponse?.items
