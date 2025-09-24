@@ -6,6 +6,7 @@ import { IoPersonAddOutline } from 'react-icons/io5'
 import { useDisclosure } from '@mantine/hooks'
 import { useMutation } from '@tanstack/react-query'
 import { serviceRequest } from '@/network'
+import { notifications } from '@mantine/notifications'
 
 export const SavePassenger = () => {
   const [opened, { open, close }] = useDisclosure(false)
@@ -25,6 +26,20 @@ export const SavePassenger = () => {
     },
     onSuccess(data) {
       if (data?.success) {
+        notifications.show({
+          title: 'Başarılı',
+          message: 'Yolcu başarıyla eklendi. Sayfayı yenileyiniz.',
+          color: 'green',
+          position: 'top-right',
+        })
+        close()
+      } else {
+        notifications.show({
+          title: 'Hata',
+          message: 'Aynı isimde yolcu bulunmaktadır.',
+          color: 'red',
+          position: 'top-right',
+        })
         close()
       }
     },

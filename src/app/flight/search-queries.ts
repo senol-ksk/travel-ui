@@ -374,7 +374,7 @@ const useSearchResultsQueries = () => {
     queryKey: ['airports-code-list', airportQueryParamsCodeArr().sort()],
     queryFn: async () => {
       const response = (await request({
-        url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairportbycodelist',
+        url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/flight/getairportbycodelist`,
         params: {
           l: 'tr_TR',
           cl: airportQueryParamsCodeArr().toString(),
@@ -401,7 +401,7 @@ const useSearchResultsQueries = () => {
     queryKey: ['airline-code-list', airlineQueryParamsCodeArr().sort()],
     queryFn: async () => {
       const response = (await request({
-        url: 'https://apipfn.lidyateknoloji.com/d/v1.1/api/flight/getairlinebycodelist',
+        url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/flight/getairlinebycodelist`,
         params: {
           l: 'tr_TR',
           cl: airlineQueryParamsCodeArr().toString(),
