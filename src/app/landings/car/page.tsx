@@ -40,7 +40,6 @@ export default async function CarLandingPage() {
   )
   const faqs = widgets.filter((item) => item.point === 'sss')
   const teaser_bottom = widgets.filter((item) => item.point === 'teaser_bottom')
-  const teaser = widgets.filter((item) => item.point === 'teaser')
 
   return (
     <div>
