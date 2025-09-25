@@ -274,10 +274,7 @@ export default function Page() {
                                 }
                                 error={fieldState.error?.message}
                                 description={
-                                  <div className='text-xs'>
-                                    *Sürücünüz uçuşunuzun durumunu
-                                    inceleyecektir
-                                  </div>
+                                  '*Sürücünüz uçuşunuzun durumunu inceleyecektir'
                                 }
                                 inputWrapperOrder={[
                                   'label',
@@ -343,9 +340,7 @@ export default function Page() {
                                 </div>
                               }
                               error={fieldState.error?.message}
-                              description={
-                                <div className='text-xs'>Adres Bilgisi</div>
-                              }
+                              description={'Adres Bilgisi'}
                               inputWrapperOrder={[
                                 'label',
                                 'error',

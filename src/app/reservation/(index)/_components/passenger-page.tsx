@@ -674,18 +674,18 @@ export function CheckoutPassengerPage() {
             <BillingForm />
           </CheckoutCard>
           <CheckoutCard>
-            <div className='text-sm'>
-              <List type='ordered' className='mt-3'>
-                <List.Item className='text-center text-sm'>
-                  Tarihlerin ve saatlerin doğru olduğundan emin olmak için
-                  seyahat bilgilerinizi inceleyin.
-                </List.Item>
-                <List.Item className='text-center text-sm'>
+            <div className='flex flex-col gap-2 pt-3 text-center text-sm'>
+              <p>
+                Tarihlerin ve saatlerin doğru olduğundan emin olmak için seyahat
+                bilgilerinizi inceleyin.
+              </p>
+              {moduleName === 'Flight' && (
+                <p>
                   Yazımınızı kontrol edin. Uçuş yolcularının isimleri, devlet
                   tarafından verilen fotoğraflı kimlikle tam olarak
                   eşleşmelidir.
-                </List.Item>
-              </List>
+                </p>
+              )}
             </div>
             <div className='flex justify-center'>
               {checkQueryData.data ? (
