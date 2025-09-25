@@ -16,6 +16,7 @@ import { Link, useTransitionRouter } from 'next-view-transitions'
 import { serviceRequest } from '@/network'
 import { modals } from '@mantine/modals'
 import { useMutation } from '@tanstack/react-query'
+import { Route } from 'next'
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -123,7 +124,7 @@ export const LoginForm = () => {
       <div className='text-center'>
         <Anchor
           component={Link}
-          href={'/auth/forgot-password'}
+          href={'/auth/forgot-password' as Route}
           onClick={modals.closeAll}
         >
           Şifremi unuttum
