@@ -1,13 +1,13 @@
 'use client'
 
 import { useDisclosure } from '@mantine/hooks'
-import { Drawer, ScrollArea, Skeleton } from '@mantine/core'
+import { Drawer, ScrollArea, Skeleton, Title } from '@mantine/core'
 import { MdDescription, MdTimer } from 'react-icons/md'
 
 import { ReservationSummarySection } from '@/app/reservation/(index)/summary-section'
 import { CheckoutProvider } from '../../store'
-import { useRef } from 'react'
 import { useCheckoutMethods } from '../../checkout-query'
+import { CheckoutCard } from '@/components/card'
 
 export const ReservationLayout = ({
   children,
@@ -73,6 +73,14 @@ export const ReservationLayout = ({
         </div>
       </div>
     )
+
+  if (!checkoutDataQuery.data || checkoutDataQuery.data?.errors) {
+    return (
+      <CheckoutCard>
+        <Title>Bir hata olustu</Title>
+      </CheckoutCard>
+    )
+  }
 
   const totalPrice =
     checkoutDataQuery.data?.data?.viewBag.SummaryViewDataResponser

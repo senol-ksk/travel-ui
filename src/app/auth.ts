@@ -1,7 +1,6 @@
-import { serviceRequest } from '@/network'
 import NextAuth, { type DefaultSession } from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
-import { Account } from '@/app/account/type'
+
 // import { cookies, headers } from 'next/headers'
 
 // const getUserInfo = async () => {

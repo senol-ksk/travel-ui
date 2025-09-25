@@ -2,15 +2,7 @@
 
 import { operationResultParams } from '@/libs/onlineOperations/searchParams'
 import { serviceRequest } from '@/network'
-import {
-  Alert,
-  Grid,
-  Image,
-  SimpleGrid,
-  Skeleton,
-  Stack,
-  Title,
-} from '@mantine/core'
+import { Alert, Skeleton, Stack, Title } from '@mantine/core'
 import { useQuery } from '@tanstack/react-query'
 import { useQueryStates } from 'nuqs'
 import { useMemo } from 'react'
