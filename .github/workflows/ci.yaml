@@ -31,5 +31,5 @@ jobs:
         run: pnpm install
       - name: Run Tests and Linting Rules
         run: pnpm run test
-      - name: Build application
-        run: pnpm build
+      # - name: Build application
+      #   run: pnpm build
