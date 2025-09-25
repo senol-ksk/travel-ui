@@ -665,7 +665,7 @@ const CyprusTransferSelect: React.FC<IProps> = ({ queryParams }) => {
             </div>
           )}
           <div>
-            {cyprusAddRemoveTransportQuery.data?.data.totalPrice &&
+            {cyprusAddRemoveTransportQuery.data?.data?.totalPrice &&
               formatCurrency(
                 cyprusAddRemoveTransportQuery.data?.data.totalPrice
               )}
