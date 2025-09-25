@@ -65,11 +65,11 @@ async function serviceRequest<DataType>({
 }: ServiceRequestParams): Promise<ServiceResponse<DataType> | undefined> {
   const url =
     typeof window === 'undefined'
-      ? `${process.env.SERVICE_PATH}/${axiosOptions.url}`.replace(
+      ? `${process.env.SERVICE_PATH ?? ''}/${axiosOptions.url}`.replace(
           /([^:])(\/{2,})/g,
           '$1/'
         )
-      : `${process.env.NEXT_PUBLIC_SERVICE_PATH}/${axiosOptions.url}`.replace(
+      : `${process.env.NEXT_PUBLIC_SERVICE_PATH ?? ''}/${axiosOptions.url}`.replace(
           /([^:])(\/{2,})/g,
           '$1/'
         )
