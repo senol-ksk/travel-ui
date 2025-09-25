@@ -769,14 +769,14 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                     )
                     if (index === 1) {
                       return (
-                        <>
+                        <div key={`skeleton-with-banner-${index}`}>
                           {skeleton}
                           <Loaderbanner
                             data={loaderBannerHotel}
                             moduleName='Oteliniz'
                             ıcon={MdLocalHotel}
                           />
-                        </>
+                        </div>
                       )
                     }
 
@@ -784,7 +784,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                   })}
                 </>
               ) : (
-                hotelSearchRequestQuery.data?.pages.map((page) => {
+                hotelSearchRequestQuery.data?.pages.map((page, pageIndex) => {
                   if (!page) return null
                   return (
                     page.searchResults.length &&
@@ -812,7 +812,7 @@ const HotelSearchResults: React.FC<IProps> = ({ slug }) => {
                               searchParamsQuery.data?.hotelSearchApiRequest
                                 .hotelSearchModuleRequest.sessionToken as string
                             }
-                            key={result.hotelId}
+                            key={`${result.hotelId}-${pageIndex}-${resultIndex}`}
                             roomDetail={roomDetail}
                             hotelInfo={hotelInfo}
                             resultItem={result}
