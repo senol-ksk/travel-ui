@@ -75,7 +75,6 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
     setSearchParams,
     searchParams,
   } = useHotelDataQuery()
-
   const [
     roomStateModalOpened,
     { open: openRoomStateModal, close: closeRoomStateModal },
@@ -140,7 +139,6 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
       handleReservation(roomStatus?.data?.productKey)
     }
   }
-
   const installmentTableData = useRef(roomInstallmentQuery.data?.data)
   const handleInstallment = async (roomGroup: HotelDetailRoomItem) => {
     openInstallmentTable()
@@ -514,29 +512,47 @@ const HotelDetailSection: React.FC<IProps> = ({ slug }) => {
             iptal hakkın olsun!
           </span>
         </Alert>
-
         <div className='relative grid gap-3 @lg:gap-5'>
-          {(roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null) && (
+          {roomsQuery.isLoading || roomsQuery.data?.pages.at(0) === null ? (
             <div>
-              {/* <div className='text-center text-gray-500'>Odalar yükleniyor</div> */}
-              <div className='grid gap-2 rounded p-2'>
-                <div className='flex gap-3'>
-                  <Skeleton height={140} radius='md' width='35%' />
-                  <div className='grid items-center' style={{ width: '33%' }}>
-                    <Skeleton height={35} radius='xl' width='100%' />
-                    <Skeleton height={35} radius='xl' width='100%' />
-                    <Skeleton height={35} radius='xl' width='100%' />
-                  </div>
-                  <div className='grid items-center' style={{ width: '32%' }}>
-                    <Skeleton height={35} radius='xl' width='100%' />
-                    <Skeleton height={35} radius='xl' width='100%' />
-                    <Skeleton height={35} radius='xl' width='100%' />
-                  </div>{' '}
-                </div>
+              <div className='my-3 flex animate-pulse items-center justify-center gap-2 text-center text-lg font-bold text-gray-700'>
+                {' '}
+                <Loader color='blue' />
+                <span>Fiyat Ve Oda Bilgisi Yükleniyor...</span>
               </div>
+              {[1, 2, 3].map((index) => {
+                const skeleton = (
+                  <div key={index} className='mb-4 rounded-lg border-2 p-4'>
+                    <div className='flex gap-4'>
+                      <Skeleton height={120} width={120} radius='md' />
+                      <div className='flex-1 space-y-3'>
+                        <Skeleton height={20} width='60%' />
+                        <Skeleton height={16} width='40%' />
+                        <Skeleton height={16} width='80%' />
+                        <div className='flex gap-2'>
+                          <Skeleton height={24} width={60} />
+                          <Skeleton height={24} width={60} />
+                          <Skeleton height={24} width={60} />
+                        </div>
+                        <div className='flex justify-between'>
+                          <Skeleton height={20} width='30%' />
+                          <Skeleton height={32} width={100} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+                return skeleton
+              })}
             </div>
+          ) : (
+            !roomsQuery?.data?.pages.at(-1)?.data && (
+              <div>
+                <NoRoomsForm />
+              </div>
+            )
           )}
-          {roomsQuery?.data?.pages.length === 0 && <NoRoomsForm />}
+
           {roomsQuery.data?.pages.map((page) => {
             const roomDetails = page?.data?.hotelDetailResponse?.roomDetails
             const roomGroups = page?.data?.hotelDetailResponse?.items
