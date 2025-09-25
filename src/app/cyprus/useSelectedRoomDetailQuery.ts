@@ -1,5 +1,3 @@
-'use client'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   CyprusFlight,
@@ -9,6 +7,18 @@ import {
 } from './types'
 import { CyprusHotelDetailSearchParamTypes } from './searchParams'
 import { olRequest } from '@/network'
+import dayjs from 'dayjs'
+
+type TransferInfoParams = {
+  flightDate?: Date
+  airport?: string
+  airline?: string
+  departureHour?: string
+  departureMin?: string
+  arravialHour?: string
+  arravialMin?: string
+  flightCode?: string
+}
 
 type IProps = {
   transportData?: CyprusTransferApiResponse | undefined
@@ -23,6 +33,8 @@ type IProps = {
     | undefined
   selectedTransfer?: CyprusTransfer['transferSegmentList'][0] | null | undefined
   roomKey: string | null
+  departureTransferInformation?: TransferInfoParams
+  arrivalTransferInformation?: TransferInfoParams
 }
 export const useSelectedRoomDetailQuery = ({
   transportData,
@@ -31,6 +43,8 @@ export const useSelectedRoomDetailQuery = ({
   selectedReturnFlight,
   selectedTransfer,
   roomKey,
+  arrivalTransferInformation,
+  departureTransferInformation,
 }: IProps) =>
   useQuery({
     queryKey: [
@@ -41,6 +55,8 @@ export const useSelectedRoomDetailQuery = ({
       selectedTransfer,
       transportData,
       roomKey,
+      arrivalTransferInformation,
+      departureTransferInformation,
     ],
     enabled: !!(transportData?.flights && transportData?.transfers),
     queryFn: async () => {
@@ -51,6 +67,8 @@ export const useSelectedRoomDetailQuery = ({
         selectedReturnFlight,
         selectedTransfer,
         transportData,
+        arrivalTransferInformation,
+        departureTransferInformation,
       })
       return response
     },
@@ -66,6 +84,8 @@ export const useSelectedRoomDetailMutation = () =>
       selectedReturnFlight,
       selectedTransfer,
       roomKey,
+      arrivalTransferInformation,
+      departureTransferInformation,
     }: IProps) => {
       const response = fetchRoomDetail({
         queryParams,
@@ -74,6 +94,8 @@ export const useSelectedRoomDetailMutation = () =>
         selectedReturnFlight,
         selectedTransfer,
         transportData,
+        arrivalTransferInformation,
+        departureTransferInformation,
       })
       return response
     },
@@ -86,6 +108,8 @@ const fetchRoomDetail = ({
   selectedReturnFlight,
   selectedTransfer,
   transportData,
+  arrivalTransferInformation,
+  departureTransferInformation,
 }: IProps) =>
   olRequest<CyprusSelectedRoomDetailResponse>({
     apiRoute: 'CyprusPackageService',
@@ -104,12 +128,84 @@ const fetchRoomDetail = ({
         returnFlightCode: selectedReturnFlight?.flightDetails.at(0)?.priceCode,
         departureTransferCode: selectedTransfer?.priceCode,
         returnTransferCode: selectedTransfer?.priceCode,
-        flightHashCode: queryParams.isFlight
+        flightHashCode: transportData?.hotelInfo?.isFlight
           ? transportData?.flights?.flightHashData
           : null,
-        transferHashCode: queryParams.isTransfer
+        transferHashCode: transportData?.hotelInfo?.isTransfer
           ? transportData?.transfers?.transferHashData
           : null,
+
+        departureTransferInformation:
+          !transportData?.hotelInfo?.isFlight &&
+          transportData?.hotelInfo?.isTransfer &&
+          !departureTransferInformation
+            ? {
+                airline: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.flightDetails.at(0)?.airline,
+                airport:
+                  transportData?.flights?.flightSegmentList.at(0)?.destination,
+                arravialHour: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.arrivalTime.split(':')[0],
+                arravialMin: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.arrivalTime.split(':')[1],
+                departureHour: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.departureTime.split(':')[0],
+                departureMin: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.departureTime.split(':')[1],
+                flightCode: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.flightDetails.at(0)?.flightNo,
+                flightDate: dayjs(
+                  transportData?.flights?.flightSegmentList
+                    .at(0)
+                    ?.flightList.at(0)
+                    ?.flightDetails.at(0)?.departureDate
+                ).toDate(),
+              }
+            : { ...departureTransferInformation },
+        arrivalTransferInformation:
+          !transportData?.hotelInfo?.isFlight &&
+          transportData?.hotelInfo?.isTransfer &&
+          !arrivalTransferInformation
+            ? {
+                airline: selectedDepartureFlight?.flightDetails.at(0)?.airline,
+                airport:
+                  selectedDepartureFlight?.flightDetails.at(0)?.destination,
+                arravialHour: selectedDepartureFlight?.flightDetails
+                  .at(0)
+                  ?.arrivalTime.split(':')[0],
+                arravialMin: selectedDepartureFlight?.flightDetails
+                  .at(0)
+                  ?.arrivalTime.split(':')[1],
+                departureHour: selectedDepartureFlight?.flightDetails
+                  .at(0)
+                  ?.departureTime.split(':')[0],
+                departureMin: selectedDepartureFlight?.flightDetails
+                  .at(0)
+                  ?.departureTime.split(':')[1],
+                flightCode: transportData?.flights?.flightSegmentList
+                  .at(0)
+                  ?.flightList.at(0)
+                  ?.flightDetails.at(0)?.flightNo,
+                flightDate: dayjs(
+                  transportData?.flights?.flightSegmentList
+                    .at(0)
+                    ?.flightList.at(0)
+                    ?.flightDetails.at(0)?.departureDate
+                ).toDate(),
+              }
+            : { ...arrivalTransferInformation },
       },
     },
   })

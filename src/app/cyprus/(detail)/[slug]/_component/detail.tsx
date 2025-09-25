@@ -1,6 +1,9 @@
 'use client'
 
-import { Container, Alert, Title, Button, Collapse } from '@mantine/core'
+import { useTransitionRouter } from 'next-view-transitions'
+import { createSerializer } from 'nuqs'
+
+import { Container, Alert, Title, Collapse } from '@mantine/core'
 import { LuShieldCheck } from 'react-icons/lu'
 import { RiMapPin2Line } from 'react-icons/ri'
 import { MdOutlineRoomService } from 'react-icons/md'
@@ -8,7 +11,10 @@ import { IoSearchSharp } from 'react-icons/io5'
 import { notFound } from 'next/navigation'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import dayjs from 'dayjs'
-import { CyprusHotelDetailSearchParamTypes } from '@/app/cyprus/searchParams'
+import {
+  CyprusHotelDetailSearchParamTypes,
+  cyprusHotelDetailSerializer,
+} from '@/app/cyprus/searchParams'
 import { CyprusHotelDetailApiResponse } from '@/app/cyprus/types'
 import { OLResponse } from '@/network'
 import { HotelRoom } from '@/components/hotel-room'
@@ -16,44 +22,83 @@ import { CyprusMediaGallery } from './cyprus-media-gallery'
 import { CyprusHotelInfo } from './cyprus-hotel-info'
 import { CyprusDetailClient } from './cyprus-detail-client'
 import { CyprusDetailClientWrapper } from './cyprus-detail-client-wrapper'
-import { olRequest } from '@/network'
 import { CyprusSearchEngine } from '@/modules/cyprus'
 import { HotelDetailResponseHotelInfo } from '@/app/hotel/types'
 import { HotelTableOfContents } from '@/app/hotel/(detail)/[slug]/_components/table-of-contents'
 import { HotelFeatures } from './hotel-features'
+import { reservationParsers } from '@/app/reservation/searchParams'
+
+import { useSelectedRoomDetailMutation } from '@/app/cyprus/useSelectedRoomDetailQuery'
 
 type IProps = {
   slug: string
   searchParams: CyprusHotelDetailSearchParamTypes
-  detailData: OLResponse<CyprusHotelDetailApiResponse>
+  detailData: CyprusHotelDetailApiResponse
 }
 
 export const CyprusHotelDetail: React.FC<IProps> = ({
-  slug,
-  searchParams,
   detailData,
+  searchParams,
 }) => {
   const isBreakPointMatchesMd = useMediaQuery('(min-width: 62em)')
   const [isSearchEngineOpened, { toggle: toggleSearchEngineVisibility }] =
     useDisclosure(false)
+  const router = useTransitionRouter()
+  const roomDetailMutation = useSelectedRoomDetailMutation()
+  const handleRedirect = ({
+    roomGroupKey,
+    roomKey,
+  }: {
+    roomKey: string
+    roomGroupKey: string
+  }) => {
+    if (isTransfer || isFlight) {
+      const url = cyprusHotelDetailSerializer('/cyprus/transfer', {
+        ...searchParams,
+        roomKey,
+        roomGroupKey,
+      })
+      return router.push(url)
+    }
+    roomDetailMutation.mutate(
+      {
+        queryParams: searchParams,
+        roomKey: roomGroupKey,
+        selectedDepartureFlight: null,
+        selectedReturnFlight: null,
+        selectedTransfer: null,
+      },
+      {
+        onSuccess: (query) => {
+          const url = reservationParams('/reservation', {
+            productKey: roomGroupKey,
+            searchToken: searchParams.searchToken,
+            sessionToken: searchParams.sessionToken,
+          })
 
-  if (
-    !detailData ||
-    !detailData.data ||
-    !detailData?.data.hotelDetailResponse
-  ) {
-    return notFound()
+          return router.push(url)
+        },
+      }
+    )
   }
-  const { hotelDetailResponse } = detailData.data
+
+  const { hotelDetailResponse, isFlight, isTransfer, searchPassenger } =
+    detailData
+  console.log(detailData)
+
+  if (!hotelDetailResponse) {
+    return <div>Detay datası yok</div>
+  }
+
+  const { roomDetails, hotelInfo } = hotelDetailResponse
   const roomGroups = hotelDetailResponse.items
-  const roomDetails = hotelDetailResponse.roomDetails
-  const hotelInfo = hotelDetailResponse.hotelInfo
   const images = hotelInfo?.hotel.images.map((img) => img.original)
   const hotelName = hotelInfo?.hotel.name
-  const destination = hotelInfo?.hotel.destination
+  const { destination, destination_slug } = hotelInfo.hotel
   const mealType = hotelInfo?.hotel.meal_type
   const hotelInformation = hotelInfo?.hotel.descriptions.hotelInformation
   const facilityTypes = hotelInfo?.facilityTypes
+  const reservationParams = createSerializer(reservationParsers)
 
   return (
     <>
@@ -66,14 +111,14 @@ export const CyprusHotelDetail: React.FC<IProps> = ({
             />
 
             <div className='flex items-center gap-2'>
-              <div>Kıbrıs</div>
-              <div>|</div>
+              <div>{destination}</div>
+              <div>{'|'}</div>
               <div>
-                {dayjs().add(1, 'months').format('DD MMMM')} -{' '}
-                {dayjs().add(1, 'months').add(5, 'days').format('DD MMMM')}
+                {dayjs(searchParams.checkInDate).format('DD MMMM')} -{' '}
+                {dayjs(searchParams.checkOutDate).format('DD MMMM')}
               </div>
               <div>|</div>
-              <div>2 Yolcu</div>
+              <div>{searchPassenger?.length} Yolcu</div>
               <div className='z-0 ms-auto rounded-md bg-blue-100 p-2'>
                 <IoSearchSharp size={24} className='text-blue-800' />
               </div>
@@ -81,7 +126,13 @@ export const CyprusHotelDetail: React.FC<IProps> = ({
           </div>
           <Collapse in={isBreakPointMatchesMd || isSearchEngineOpened}>
             <div className='pb-3 md:pb-0'>
-              <CyprusSearchEngine />
+              <CyprusSearchEngine
+                defaultValues={{
+                  isFlight,
+                  isTransfer,
+                  slug: destination_slug,
+                }}
+              />
             </div>
           </Collapse>
         </Container>
@@ -93,19 +144,14 @@ export const CyprusHotelDetail: React.FC<IProps> = ({
         <div>
           <div className='relative'>
             <CyprusMediaGallery
-              hotel={
-                detailData.data.hotelDetailResponse
-                  .hotelInfo as HotelDetailResponseHotelInfo
-              }
+              hotel={hotelDetailResponse.hotelInfo}
               images={images}
               hotelName={hotelName}
             />
           </div>
         </div>
 
-        <HotelTableOfContents
-          hotelInfo={hotelInfo as HotelDetailResponseHotelInfo}
-        />
+        <HotelTableOfContents hotelInfo={hotelInfo} />
         <div className='grid grid-cols-2 gap-2 rounded bg-gray-50 md:grid-cols-12 md:gap-5 md:p-3'>
           <div className='col-span-12 flex flex-col gap-7 rounded bg-white p-3 md:col-span-8'>
             <div className='grid'>
@@ -159,10 +205,7 @@ export const CyprusHotelDetail: React.FC<IProps> = ({
           </div>
 
           <div className='col-span-12 md:col-span-4'>
-            <CyprusHotelInfo
-              displayData={detailData.data}
-              hotelInfo={hotelInfo as HotelDetailResponseHotelInfo}
-            />
+            <CyprusHotelInfo displayData={detailData} hotelInfo={hotelInfo} />
           </div>
         </div>
 
@@ -189,15 +232,14 @@ export const CyprusHotelDetail: React.FC<IProps> = ({
               key={roomGroup.key}
               hotelInfo={hotelInfo as HotelDetailResponseHotelInfo}
               roomGroup={roomGroup}
-              roomDetails={roomDetails || {}}
+              roomDetails={roomDetails}
               onSelect={(selectedRoomGroup) => {
-                // Kıbrıs için rezervasyon logic'i buraya eklenebilir
-                console.log('Room selected:', selectedRoomGroup)
+                handleRedirect({
+                  roomGroupKey: roomGroup.key,
+                  roomKey: selectedRoomGroup.key,
+                })
               }}
-              onInstallmentClick={(selectedRoomGroup) => {
-                // Taksit seçenekleri logic'i buraya eklenebilir
-                console.log('Installment clicked:', selectedRoomGroup)
-              }}
+              // onInstallmentClick={(selectedRoomGroup) => {}}
             />
           ))}
         </div>
@@ -210,12 +252,7 @@ export const CyprusHotelDetail: React.FC<IProps> = ({
           Tesis Bilgileri
         </Title>
 
-        <CyprusDetailClientWrapper
-          hotelInfo={
-            detailData.data.hotelDetailResponse
-              .hotelInfo as unknown as HotelDetailResponseHotelInfo
-          }
-        />
+        <CyprusDetailClientWrapper hotelInfo={hotelDetailResponse.hotelInfo} />
       </Container>
     </>
   )

@@ -11,6 +11,7 @@ import {
 
 import type {
   HotelDetailResponseHotelInfo,
+  HotelDetailRoom,
   HotelDetailRoomDetail,
   HotelDetailRoomItem,
 } from '@/app/hotel/types'
@@ -27,7 +28,7 @@ import { IoClose } from 'react-icons/io5'
 type IProps = {
   roomGroup: HotelDetailRoomItem
   roomDetails: { [key: string]: HotelDetailRoomDetail }
-  onSelect: (roomGroup: HotelDetailRoomItem) => void
+  onSelect: (room: HotelDetailRoom) => void
   onInstallmentClick?: (roomGroup: HotelDetailRoomItem) => void
   hotelInfo: HotelDetailResponseHotelInfo | undefined
 }
@@ -259,7 +260,7 @@ const HotelRoom: React.FC<IProps> = ({
                     type='button'
                     fullWidth
                     radius={'md'}
-                    onClick={() => onSelect(roomGroup)}
+                    onClick={() => onSelect(room)}
                   >
                     Rezervasyon Yap
                   </Button>

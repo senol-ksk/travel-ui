@@ -91,6 +91,7 @@ export interface CyprusHotel {
     food_drinks: null
     can_coupon_used: boolean
   }
+  hotelMinPrice: ServicePriceType
   mapping: {
     value: string
     field: string | null
@@ -118,7 +119,11 @@ export interface CyprusHotel {
     priority: number
   }[]
   imageCategories: []
-  tripAdvisor: null
+
+  isFlight: boolean
+  isLoadProducts: boolean
+  isSucceeded: boolean
+  isTransfer: boolean
 }
 
 export interface CyprusHotelDetailDescription {
@@ -145,7 +150,7 @@ export interface CyprusHotelDetailApiResponse {
   hotelDetailResponse: {
     hotelInfo: HotelDetailResponseHotelInfo
     hotelMinPrice: ServicePriceType
-    roomDetails: null | { [key: string]: HotelDetailRoomDetail }
+    roomDetails: { [key: string]: HotelDetailRoomDetail }
     isLoadProducts: boolean
     items: null | HotelDetailRoomItem[]
     validationInformations: {
@@ -241,6 +246,8 @@ export interface CyprusHotelDetailApiResponse {
     searchToken: string
     scopeCode: string
   }
+  isFlight: boolean
+  isTransfer: boolean
 }
 
 export interface CyprusFlight {

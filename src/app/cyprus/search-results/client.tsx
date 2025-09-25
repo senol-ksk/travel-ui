@@ -57,11 +57,6 @@ const CyprusSearchResults = () => {
   )
   const { orderBy, ...restFilterParams } = filterParams
 
-  console.log(' items', cyprusSearchResultsQuery?.data?.searchResults[0].items)
-  console.log(
-    'Hotel Infos:',
-    cyprusSearchResultsQuery?.data?.searchResults.at(-1)?.hotelInfos
-  )
   return (
     <>
       <div className='border-b md:py-4'>

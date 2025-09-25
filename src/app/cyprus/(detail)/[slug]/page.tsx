@@ -17,6 +17,7 @@ export default async function CyprusDetail({
   const { slug } = await params
   const queryParams = await cyprusHotelDetailLoader(searchParams)
 
+  console.log(queryParams)
   if (!queryParams) {
     notFound()
   }
@@ -43,7 +44,7 @@ export default async function CyprusDetail({
     !detailData.data ||
     !detailData?.data.hotelDetailResponse
   ) {
-    notFound()
+    return notFound()
   }
 
   return (
@@ -61,7 +62,7 @@ export default async function CyprusDetail({
       <CyprusHotelDetail
         searchParams={queryParams}
         slug={slug}
-        detailData={detailData!}
+        detailData={detailData.data}
       />
     </Suspense>
   )
