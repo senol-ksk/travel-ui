@@ -163,10 +163,10 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
       queryKey: ['cyprus-locations', destinationLocationInputValue],
       enabled:
         !!destinationLocationInputValue &&
-        destinationLocationInputValue.length > 0,
+        destinationLocationInputValue.length > 1,
       queryFn: async () => {
         const getLocations = (await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/hotel/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/hotelcy/search`,
           params: {
             s: destinationLocationInputValue,
             id: null,
@@ -177,7 +177,8 @@ const CyprusSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
         return getLocations
       },
       select: (query) => {
-        return query.Result.filter((item) => item.CountryCode === 'trnc')
+        // return query.Result.filter((item) => item.CountryCode === 'trnc')
+        return query.Result
       },
     })
   const [airlineLocationInputValue, setAirlineLocationInputValue] = useState('')
