@@ -117,14 +117,14 @@ export const SearchEngine = () => {
           >
             {searchModules.tour.title}
           </TabsTab>
-          {process.env.NODE_ENV === 'development' && (
-            <TabsTab
-              value={searchModules.cyprus.value}
-              leftSection={<FaUmbrellaBeach size={20} />}
-            >
-              {searchModules.cyprus.title}
-            </TabsTab>
-          )}
+
+          <TabsTab
+            value={searchModules.cyprus.value}
+            leftSection={<FaUmbrellaBeach size={20} />}
+          >
+            {searchModules.cyprus.title}
+          </TabsTab>
+
           <TabsTab
             value={searchModules.cruise.value}
             leftSection={<RiShipLine size={20} />}
