@@ -69,7 +69,6 @@ export default function RootLayout({
                     <Footer />
                   </div>
                 </Suspense>
-                <CallFormDrawer />
               </Providers>
             </MantineProvider>
           </body>

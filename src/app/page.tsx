@@ -32,6 +32,7 @@ import { EbultenForm } from '@/components/home/ebulten-form'
 
 import populerDestinationClasses from '@/styles/OutlineTabs.module.css'
 import { HomeTourDom } from '@/components/home/home-tours'
+import { CallFormDrawer } from '@/components/call-form/CallFormDrawer'
 export default async function Home() {
   const cmsData = (await getContent<CmsContent<Widgets, Params>>('ana-sayfa'))
     ?.data
@@ -289,6 +290,7 @@ export default async function Home() {
               </Tabs>
             </div>
           )}
+          <CallFormDrawer />
         </Container>
       </div>
     </div>
