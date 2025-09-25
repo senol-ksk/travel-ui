@@ -86,7 +86,7 @@ export const HotelSearchEngine: React.FC<IProps> = ({ defaultValues }) => {
         destinationLocationInputValue.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/hotel/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/hotel/search`,
           params: {
             s: destinationLocationInputValue,
             id: null,

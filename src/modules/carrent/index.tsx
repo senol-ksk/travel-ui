@@ -71,7 +71,7 @@ const CarRentSearchPanel: React.FC = () => {
       enabled: !!pickupLocation && pickupLocation.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/carrental/search`,
+          url: `${process.env.NEXT_PUBLIC_API_DESTINATION_ROUTE}/v1.1/api/carrental/search`,
           params: {
             s: pickupLocation,
             id: null,
@@ -88,7 +88,7 @@ const CarRentSearchPanel: React.FC = () => {
       enabled: !!dropoffLocation && dropoffLocation.length > 2,
       queryFn: async () => {
         const getLocations = await request({
-          url: `${process.env.NEXT_PUBLIC_API_GW_ROUTE}/d/v1.1/api/carrental/search`,
+          url: `${process.env.API_DESTINATION_ROUTE}/v1.1/api/carrental/search`,
           params: {
             s: dropoffLocation,
             id: null,

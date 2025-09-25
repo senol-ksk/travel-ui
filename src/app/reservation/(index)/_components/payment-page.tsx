@@ -11,12 +11,15 @@ import { GrAmex } from 'react-icons/gr'
 
 import { useForm, Controller } from 'react-hook-form'
 import {
+  Anchor,
+  Box,
   Button,
   Center,
   Group,
   LoadingOverlay,
   Modal,
   NativeSelect,
+  ScrollArea,
   SegmentedControl,
   Skeleton,
   Stack,
@@ -25,7 +28,7 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { useMutation } from '@tanstack/react-query'
-import { range, upperFirst, useDisclosure } from '@mantine/hooks'
+import { range, upperFirst, useDisclosure, useMediaQuery } from '@mantine/hooks'
 import clsx from 'clsx'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -58,6 +61,11 @@ import {
 } from '@/libs/credit-card-utils'
 
 import { MdCreditCard } from 'react-icons/md'
+import { FlightAgreementContent } from '@/components/contracts/flightAgreement'
+import { HotelAgreementContent } from '@/components/contracts/hotelAgreement'
+import { BusAgreementContent } from '@/components/contracts/busAgreement'
+import { TourAgreementContent } from '@/components/contracts/tourAgreement'
+import { PrivacyAgreementContent } from '@/components/contracts/privacy'
 
 enum PaymentMethodEnums {
   CreditCard,
@@ -83,6 +91,17 @@ export const PaymentPageSection = () => {
     isOpenInstallmentTable,
     { open: openInstallmentTableModal, close: closeInstallmentTableModal },
   ] = useDisclosure(false)
+  const [
+    isAgreementModalOpened,
+    { open: openAgreementModal, close: closeAgreementModal },
+  ] = useDisclosure(false)
+  const [
+    isPrivacyAgreementModalOpen,
+    { open: openPrivacyAgreementModal, close: closePrivacyAgreementModal },
+  ] = useDisclosure(false)
+  const isMobile = useMediaQuery('(max-width: 50em)')
+
+  const [queryStrings] = useQueryStates(reservationParsers)
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnums>(
     PaymentMethodEnums.CreditCard
   )
@@ -93,7 +112,8 @@ export const PaymentPageSection = () => {
   const formMethods = useForm({
     resolver: zodResolver(paymentValidationSchema),
   })
-  const [queryStrings] = useQueryStates(reservationParsers)
+
+  // const openAgreementModal = () => {}
 
   const { checkoutDataQuery: checkoutQuery } = useCheckoutMethods()
   const threeDformRef = useRef<HTMLFormElement>(null)
@@ -686,8 +706,17 @@ export const PaymentPageSection = () => {
           <CheckoutCard>
             <Text className='py-5 text-center md:px-10' fz={'sm'}>
               Ödemeyi tamamla butonuna tıkladığımda{' '}
-              <span className='text-blue-800'>Mesafeli Satış Sözleşmesini</span>
-               ve <span className='text-blue-800'>Gizlilik Sözleşmesini</span>
+              {moduleName !== 'TRANSFER' && (
+                <>
+                  <Anchor onClick={openAgreementModal} fz={'inherit'}>
+                    Mesafeli Satış Sözleşmesini
+                  </Anchor>
+                   ve{' '}
+                </>
+              )}
+              <Anchor fz='inherit' onClick={openPrivacyAgreementModal}>
+                Gizlilik Sözleşmesini
+              </Anchor>
                okuduğumu ve kabul ettiğimi onaylıyorum.
             </Text>
             <div className='flex justify-center'>
@@ -709,13 +738,7 @@ export const PaymentPageSection = () => {
                       />
                     </div>
                   </div>
-                  <Button
-                    className='my-3'
-                    size='lg'
-                    radius='md'
-                    type='submit'
-                    //  disabled={isPrivilegeCardCheck}
-                  >
+                  <Button className='my-3' size='lg' radius='md' type='submit'>
                     Ödemeyi Tamamla
                   </Button>
                 </div>
@@ -764,6 +787,73 @@ export const PaymentPageSection = () => {
           />
         </Modal>
       )}
+      <Modal
+        opened={isAgreementModalOpened}
+        onClose={closeAgreementModal}
+        size={'80%'}
+        title='Mesafeli Satış Sözleşmesi'
+        yOffset={0}
+        scrollAreaComponent={ScrollArea.Autosize}
+        fullScreen={isMobile}
+      >
+        {(() => {
+          switch (moduleName) {
+            case 'Flight':
+              return (
+                <FlightAgreementContent
+                  customerFullName={firstPassengerFullName}
+                />
+              )
+
+            case 'HOTEL':
+              return (
+                <HotelAgreementContent
+                  customerFullName={firstPassengerFullName}
+                />
+              )
+
+            case 'BUS':
+              return (
+                <BusAgreementContent
+                  customerFullName={firstPassengerFullName}
+                />
+              )
+
+            case 'TOUR':
+              return <TourAgreementContent />
+
+            case 'CARRENTAL':
+              return (
+                <>
+                  <Box
+                    visibleFrom='sm'
+                    mih={800}
+                    className='size-full'
+                    component='iframe'
+                    src='/car-rent-terms.pdf#toolbar=0&navpanes=0&scrollbar=0'
+                  />
+                  <Anchor
+                    hiddenFrom='sm'
+                    href='/car-rent-terms.pdf'
+                    target='_blank'
+                  >
+                    PDF&apos;yi Yeni Sekmede Aç
+                  </Anchor>
+                </>
+              )
+            default:
+              return null
+          }
+        })()}
+      </Modal>
+      <Modal
+        opened={isPrivacyAgreementModalOpen}
+        onClose={closePrivacyAgreementModal}
+        size={'80%'}
+        title='Gizlilik Sözleşmesi'
+      >
+        <PrivacyAgreementContent />
+      </Modal>
     </>
   )
 }

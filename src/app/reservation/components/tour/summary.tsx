@@ -73,6 +73,10 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
         <div className='flex items-center justify-between'>
           <div>Otel & Ulaşım Bilgisi</div>
           <Tooltip
+            disabled={
+              !tourData.package.hotelInformations &&
+              !tourData.detail.flightInformation
+            }
             label={
               <div className='grid gap-3'>
                 {tourData.detail.flightInformation && (
@@ -83,14 +87,15 @@ const TourSummary: React.FC<IProps> = ({ data }) => {
                     }}
                   />
                 )}
-                {tourData.package.hotelInformations[0] && (
-                  <div
-                    className='text-sm'
-                    dangerouslySetInnerHTML={{
-                      __html: tourData.package.hotelInformations[0].name,
-                    }}
-                  />
-                )}
+                {tourData.package.hotelInformations &&
+                  tourData.package.hotelInformations[0] && (
+                    <div
+                      className='text-sm'
+                      dangerouslySetInnerHTML={{
+                        __html: tourData.package.hotelInformations[0].name,
+                      }}
+                    />
+                  )}
               </div>
             }
           >

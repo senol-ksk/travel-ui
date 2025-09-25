@@ -79,19 +79,11 @@ const TourDetailClient = () => {
     adultCount: '2:0',
   })
 
-  const calculateTotalPriceQuery = useQuery({
-    enabled: !!detailQuery.data && detailQuery.isSuccess,
+  const calculateTotalPriceQuery = useMutation({
+    // enabled: !!detailQuery.data && detailQuery.isSuccess,
 
-    queryKey: [
-      searchParams?.searchToken,
-      searchParams?.sessionToken,
-      lastKeys.current.packageKey.length,
-      lastKeys.current.packageKey,
-      searchParams?.productKey,
-      passengers.adultCount,
-      passengers.childAge,
-    ],
-    queryFn: async () => {
+    mutationKey: [searchParams?.searchToken, searchParams?.sessionToken],
+    mutationFn: async () => {
       const response = await serviceRequest<{
         value: ServicePriceType
         packageKey: string
@@ -102,9 +94,10 @@ const TourDetailClient = () => {
           data: {
             SearchToken: searchParams?.searchToken,
             SessionToken: searchParams?.sessionToken,
-            Package: lastKeys.current.packageKey.length
+            Package: lastKeys.current.packageKey
               ? lastKeys.current.packageKey
               : searchParams?.productKey,
+
             AdultCount: passengers.adultCount,
             ChildAges: passengers.childAge,
             CampaignCode: null,
@@ -115,11 +108,21 @@ const TourDetailClient = () => {
         },
       })
 
-      lastKeys.current.packageKey = response?.data?.packageKey ?? ''
-
       return response
     },
+    onSuccess: (query) => {
+      lastKeys.current.packageKey = query?.data?.packageKey ?? ''
+    },
   })
+
+  if (
+    detailQuery.data &&
+    detailQuery.isSuccess &&
+    !detailQuery.isLoading &&
+    calculateTotalPriceQuery.isIdle
+  ) {
+    calculateTotalPriceQuery.mutate()
+  }
 
   const extraServicesMutation = useMutation({
     mutationKey: ['tour-extra-services'],
@@ -141,20 +144,17 @@ const TourDetailClient = () => {
         },
       })
 
-      lastKeys.current = {
-        calculatedId: response?.data?.calculatedId ?? '',
-        packageKey: response?.data?.package.key ?? '',
-      }
-
       return response
     },
-    onSuccess(data) {
-      // setSearchParams({
-      //   productKey: data?.data?.package.key,
-      // })
+    onSuccess(query) {
+      lastKeys.current = {
+        calculatedId: query?.data?.calculatedId ?? '',
+        packageKey: query?.data?.package.key ?? '',
+      }
+
       if (
-        data?.data?.extraServices &&
-        data?.data?.extraServices?.filter(
+        query?.data?.extraServices &&
+        query?.data?.extraServices?.filter(
           (item) => !(item.isMandatory && item.isPackage)
         ).length > 0
       ) {
@@ -194,9 +194,6 @@ const TourDetailClient = () => {
       return response
     },
     onSuccess: (data) => {
-      // setSearchParams({
-      //   productKey: data?.data?.key,
-      // })
       lastKeys.current = {
         calculatedId: data?.data?.calculatedId ?? '',
         packageKey: data?.data?.key ?? '',
@@ -235,8 +232,8 @@ const TourDetailClient = () => {
 
       const url = resParams('/reservation', {
         productKey: data?.data?.package.key,
-        searchToken: detailQuery.data?.searchToken,
-        sessionToken: detailQuery.data?.sessionToken,
+        searchToken: searchParams.searchToken,
+        sessionToken: searchParams.sessionToken,
       })
 
       router.push(url)
@@ -431,7 +428,10 @@ const TourDetailClient = () => {
                             : 0
                         }
                         data={detailQuery.data}
-                        onPassengerChange={setPassengers}
+                        onPassengerChange={async (params) => {
+                          setPassengers(params)
+                          await calculateTotalPriceQuery.mutateAsync()
+                        }}
                       />
                       <div className='py-4'>
                         <Button
