@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [latest]
     steps:
       - uses: actions/checkout@v5
       - name: Install pnpm
