@@ -1,7 +1,7 @@
 'use client'
 
 import { Container, Button, Drawer } from '@mantine/core'
-import { MdPhone, MdPhoneInTalk, MdSettingsPhone } from 'react-icons/md'
+import { MdPhone, MdPhoneInTalk } from 'react-icons/md'
 import { CallForm } from '.'
 import { useDisclosure } from '@mantine/hooks'
 

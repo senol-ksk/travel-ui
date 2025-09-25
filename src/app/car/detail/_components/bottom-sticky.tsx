@@ -39,7 +39,7 @@ const CarBottomSticky: React.FC<IProps> = ({
           className='flex cursor-pointer items-center justify-between'
           onClick={toggleExpanded}
         >
-          <div className='text-sm font-medium'>Fiyat Özeti</div>
+          <div className='text-lg font-semibold'>Fiyat Özeti</div>
           <div className='flex items-center gap-2'>
             <div className='text-lg font-semibold'>
               {formatCurrency(allTotalPrice)}
@@ -53,19 +53,45 @@ const CarBottomSticky: React.FC<IProps> = ({
         </div>
         {isExpanded && (
           <div className='space-y-2'>
-            <div className='flex items-center justify-between text-sm'>
-              <div>Kartınızdan Çekilecek Tutar</div>
-              <div>{formatCurrency(totalPrice)}</div>
+            <div className='text-md flex items-center justify-between'>
+              <div className='font-semibold'>Kartınızdan Çekilecek Tutar</div>
+              <div className='font-semibold'>{formatCurrency(totalPrice)}</div>
             </div>
             {(selectedExtraOptionPrice || selectedInsurancePrice) > 0 && (
-              <div className='flex items-center justify-between text-sm'>
-                <div>Ofiste Ödenecek Tutar</div>
-                <div>
-                  {formatCurrency(
-                    selectedExtraOptionPrice + selectedInsurancePrice
-                  )}
+              <>
+                <div className='text-md flex items-center justify-between'>
+                  <div className='font-semibold'>Ofiste Ödenecek Tutar</div>
+                  <div className='font-semibold'>
+                    {formatCurrency(
+                      selectedExtraOptionPrice + selectedInsurancePrice
+                    )}
+                  </div>
                 </div>
-              </div>
+                <div>
+                  {detailItem.carExtraOption
+                    .filter((item) => item.selected)
+                    .map((item) => (
+                      <div
+                        key={item.code}
+                        className='flex items-center justify-between text-sm font-bold text-gray-600'
+                      >
+                        <div className='px-4'>{item.name}</div>
+                        <div>{formatCurrency(item.totalPrice.value)}</div>
+                      </div>
+                    ))}
+                  {detailItem.carInsurances
+                    .filter((item) => item.selected)
+                    .map((item) => (
+                      <div
+                        key={item.code}
+                        className='flex items-center justify-between text-sm font-bold text-gray-600'
+                      >
+                        <div className='px-4'>{item.description}</div>
+                        <div>{formatCurrency(item.totalPrice.value)}</div>
+                      </div>
+                    ))}
+                </div>
+              </>
             )}
             <Divider />
           </div>
