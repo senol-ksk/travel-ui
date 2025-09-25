@@ -9,6 +9,7 @@ import { serviceRequest } from '@/network'
 import { modals } from '@mantine/modals'
 import { Link } from 'next-view-transitions'
 import { GoCheckCircleFill } from 'react-icons/go'
+import { Route } from 'next'
 
 const PasswordRenewForm: React.FC<{ token: string }> = ({ token }) => {
   const form = useForm({
@@ -70,7 +71,7 @@ const PasswordRenewForm: React.FC<{ token: string }> = ({ token }) => {
                 Daha önce bu bağlantı ile işlem yapmış olabilirsiniz. Eğer
                 şifrenizi unuttuysanız tekrar{' '}
                 <Link
-                  href={'/auth/forgot-password'}
+                  href={'/auth/forgot-password' as Route}
                   className='text-blue-800 hover:underline'
                   onClick={() => {
                     modals.closeAll()

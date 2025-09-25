@@ -1,6 +1,5 @@
 import { Spoiler } from '@mantine/core'
 import dayjs from 'dayjs'
-import Image from 'next/image'
 
 import { TourSummaryResponse } from '@/app/reservation/types'
 import { CheckoutCard } from '@/components/card'

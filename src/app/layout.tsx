@@ -6,7 +6,7 @@ import {
 
 import '@/styles/global.css'
 
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { SessionProvider } from 'next-auth/react'
 
 import { ViewTransitions } from 'next-view-transitions'
@@ -31,6 +31,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: './',
   },
+  icons: [{ rel: 'icon', url: '/favicon.png' }],
+}
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  colorScheme: 'only light',
+  themeColor: '#fff',
 }
 
 export default function RootLayout({
@@ -44,11 +53,6 @@ export default function RootLayout({
         <html lang='tr' {...mantineHtmlProps}>
           <head>
             <ColorSchemeScript forceColorScheme='light' />
-            <link rel='icon' href='/favicon.ico' sizes='any' />
-            <meta
-              name='viewport'
-              content='minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no'
-            />
           </head>
 
           <body className='flex flex-col'>
