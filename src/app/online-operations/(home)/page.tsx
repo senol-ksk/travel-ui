@@ -19,6 +19,7 @@ import {
   OperationResultWithBookingCodeResponse,
 } from '@/app/online-operations/types'
 import { serviceRequest } from '@/network'
+import { Route } from 'next'
 
 export default function OnlineOperationsPage() {
   const form = useForm({
@@ -54,7 +55,7 @@ export default function OnlineOperationsPage() {
             firstName,
             lastName,
           }
-        )
+        ) as Route
 
         router.push(resultUrl)
       }

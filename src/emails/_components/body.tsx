@@ -7,6 +7,7 @@ import {
   Img,
   Link,
   pixelBasedPreset,
+  Preview,
   Row,
   Section,
   Tailwind,
@@ -19,9 +20,10 @@ dayjs.locale('tr')
 
 type IProps = {
   children: React.ReactNode
+  previewText?: string
 }
 
-export const EmailBody: React.FC<IProps> = ({ children }) => {
+export const EmailBody: React.FC<IProps> = ({ children, previewText }) => {
   return (
     <Html>
       <Tailwind
@@ -82,6 +84,7 @@ export const EmailBody: React.FC<IProps> = ({ children }) => {
         }}
       >
         <Body className='m-0 gap-5 bg-white font-sans leading-normal text-black'>
+          {previewText && <Preview>{previewText}</Preview>}
           <div className='bg-white'>
             <div className='p-3'>
               <Link href='https://www.paraflytravel.com/'>

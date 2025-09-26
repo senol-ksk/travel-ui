@@ -22,6 +22,8 @@ import { TourSearchEngine } from '@/modules/tour'
 
 import classes from '@/components/search-engine/Search.module.css'
 import { CruiseSearchEngine } from '@/modules/cruise'
+import { FaUmbrellaBeach } from 'react-icons/fa6'
+import { CyprusSearchEngine } from '@/modules/cyprus'
 
 const searchModules = {
   flight: { value: 'flight', title: 'Uçak' },
@@ -31,6 +33,7 @@ const searchModules = {
   transfer: { value: 'transfer', title: 'Transfer' },
   tour: { value: 'tour', title: 'Tur' },
   cruise: { value: 'cruise', title: 'Gemi' },
+  cyprus: { value: 'cyprus', title: 'Kıbrıs' },
 }
 
 export const SearchEngine = () => {
@@ -114,6 +117,14 @@ export const SearchEngine = () => {
           >
             {searchModules.tour.title}
           </TabsTab>
+
+          <TabsTab
+            value={searchModules.cyprus.value}
+            leftSection={<FaUmbrellaBeach size={20} />}
+          >
+            {searchModules.cyprus.title}
+          </TabsTab>
+
           <TabsTab
             value={searchModules.cruise.value}
             leftSection={<RiShipLine size={20} />}
@@ -144,6 +155,15 @@ export const SearchEngine = () => {
         </Tabs.Panel>
         <Tabs.Panel value={searchModules.cruise.value}>
           <CruiseSearchEngine />
+        </Tabs.Panel>
+
+        <Tabs.Panel value={searchModules.cyprus.value}>
+          <CyprusSearchEngine
+            defaultValues={{
+              isTransfer: true,
+              isFlight: true,
+            }}
+          />
         </Tabs.Panel>
       </div>
     </Tabs>
