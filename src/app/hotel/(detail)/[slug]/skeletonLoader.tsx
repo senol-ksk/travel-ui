@@ -3,7 +3,7 @@ import { Skeleton, Container, Title } from '@mantine/core'
 const HotelDetailSkeleton = () => {
   return (
     <>
-      <Container className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-3'>
+      <div className='flex flex-col gap-3 px-0 py-5 sm:px-4 md:gap-5 md:py-3'>
         <div>
           <div className='grid auto-cols-fr gap-4 sm:grid-cols-4 md:grid-rows-2'>
             <Skeleton className='aspect-16/9 h-full w-full rounded-md sm:col-start-[span_2] sm:row-start-[span_2]' />
@@ -91,7 +91,7 @@ const HotelDetailSkeleton = () => {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </>
   )
 }

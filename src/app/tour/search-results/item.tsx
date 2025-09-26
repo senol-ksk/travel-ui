@@ -127,7 +127,6 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
   const dayjsEndDate = dayjs(endDate)
   const totalNights = dayjsEndDate.diff(dayjsStartDate, 'day')
   const totalDays = totalNights + 1
-
   const [descOpened, setDescOpened] = useState(false)
   const [wayOpened, setWayOpened] = useState(false)
   return (
@@ -217,10 +216,13 @@ export const TourSearchResultItem: React.FC<Props> = ({ data }) => {
                   </div>
                 </Popover.Target>
 
-                <Popover.Dropdown className='max-w-[150px] rounded-2xl bg-gray-200 text-sm text-black'>
-                  {selectedTour.cities.map((item, index) => (
+                <Popover.Dropdown className='flex max-w-[650px] flex-wrap gap-2 rounded-2xl bg-gray-200 text-sm text-black'>
+                  {Array.from(
+                    new Set(selectedTour.cities.map((item) => item.title))
+                  ).map((title, index, array) => (
                     <div key={index}>
-                      {index + 1}. Gün: {item.title}
+                      {title}
+                      {index < array.length - 1 ? ',' : ''}
                     </div>
                   ))}
                 </Popover.Dropdown>

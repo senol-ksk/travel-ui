@@ -488,20 +488,22 @@ export const DetailClient = () => {
       </div>
       <div className='hidden md:sticky md:top-1 md:col-span-2 md:grid md:w-full'>
         <div className='flex flex-col gap-3 rounded-md border bg-white p-4'>
-          <Title order={4} fw='normal'>
+          <Title order={3} fw='semibold'>
             Fiyat Özeti
           </Title>
           <div className='flex items-center justify-between rounded bg-gray-50 p-3'>
-            <div>Kartınızdan Çekilecek Tutar</div>
-            <div>{formatCurrency(detailItem.totalPrice.value)}</div>
+            <div className='font-semibold'>Kartınızdan Çekilecek Tutar</div>
+            <div className='font-semibold'>
+              {formatCurrency(detailItem.totalPrice.value)}
+            </div>
           </div>
-          <div className='px-3 text-sm text-gray-600'>
+          <div className='ms-auto text-sm text-gray-800'>
             {formatCurrency(detailItem.basePrice.value)} / Günlük{' '}
           </div>
           {(selectedExtraOptionPrice || selectedInsurancePrice) > 0 && (
             <div className='flex items-center justify-between rounded bg-gray-50 p-3'>
-              <div>Ofiste Ödenecek Tutar</div>
-              <div>
+              <div className='font-semibold'>Ofiste Ödenecek Tutar</div>
+              <div className='font-semibold'>
                 {formatCurrency(
                   selectedExtraOptionPrice + selectedInsurancePrice
                 )}
@@ -510,7 +512,7 @@ export const DetailClient = () => {
           )}
           <Divider />
           <div className='flex items-center justify-between p-3'>
-            <div>Toplam Tutar:</div>{' '}
+            <div className='font-semibold'>Toplam Tutar:</div>{' '}
             <div className='text-xl font-semibold'>
               {formatCurrency(allTotalPrice)}
             </div>

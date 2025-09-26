@@ -10,6 +10,7 @@ import { FaRegCheckCircle } from 'react-icons/fa'
 import { GoNoEntry } from 'react-icons/go'
 import { TbWorld } from 'react-icons/tb'
 import { CiLocationOn } from 'react-icons/ci'
+import { HiOutlineLocationMarker } from 'react-icons/hi'
 // import { TourPassengers } from '../_components/tour-passengers'
 type Props = {
   data: TourDetailApiResponse
@@ -34,9 +35,17 @@ const TourDetail: React.FC<Props> = ({ data }) => {
       </Title>
       <div className='flex flex-col gap-5 rounded-lg border p-5 shadow-sm'>
         <Spoiler
-          maxHeight={200}
-          hideLabel={'Daha Az Görüntüle'}
-          showLabel={'Devamını Göster'}
+          maxHeight={300}
+          hideLabel={
+            <div className='text-sm font-semibold underline'>
+              Daha Az Görüntüle
+            </div>
+          }
+          showLabel={
+            <div className='text-sm font-semibold underline'>
+              Devamını Göster
+            </div>
+          }
           classNames={{
             root: 'pb-3',
           }}
@@ -69,13 +78,14 @@ const TourDetail: React.FC<Props> = ({ data }) => {
       </Title>
       <div className='flex flex-col gap-5 rounded-lg border p-5 shadow-sm'>
         {data.detail.flightInformation &&
-          data.detail.flightInformation.length && (
+          data.detail.flightInformation.length &&
+          data.detail.flightInformation.length > 0 && (
             <>
               <div className='flex items-center gap-3 text-lg font-semibold'>
                 <div>
-                  <CiLocationOn size={22} />
+                  <HiOutlineLocationMarker size={22} />
                 </div>
-                <div>Ulaşım Bilgisi</div>
+                <div>Araç Bilgisi</div>
               </div>
               <Divider />
               <div className='grid gap-4'>
@@ -87,23 +97,25 @@ const TourDetail: React.FC<Props> = ({ data }) => {
               </div>
             </>
           )}
-        {data.package.hotelInformations && (
-          <>
-            <div className='flex items-center gap-3 text-lg font-semibold'>
-              <div>
-                <MdOutlineLocalHotel size={22} />
+        {data.package.hotelInformations &&
+          data.package.hotelInformations.length > 0 && (
+            <>
+              <Divider className='shadow-xl' />
+              <div className='flex items-center gap-3 text-lg font-semibold'>
+                <div>
+                  <MdOutlineLocalHotel size={22} />
+                </div>
+                <div>Otel Bilgisi</div>
               </div>
-              <div>Otel Bilgisi</div>
-            </div>
-            <Divider />
-            <div>
-              {data.package.hotelInformations &&
-                data.package.hotelInformations.map((hotel, hotelIndex) => (
-                  <div key={hotelIndex}>{hotel.name}</div>
-                ))}
-            </div>
-          </>
-        )}
+              <Divider />
+              <div>
+                {data.package.hotelInformations &&
+                  data.package.hotelInformations.map((hotel, hotelIndex) => (
+                    <div key={hotelIndex}>{hotel.name}</div>
+                  ))}
+              </div>
+            </>
+          )}
       </div>
 
       <Title
@@ -122,18 +134,13 @@ const TourDetail: React.FC<Props> = ({ data }) => {
           </span>
         </div>
         <Divider />
-        <Spoiler
-          maxHeight={100}
-          hideLabel={<div className='px-3'>Daha Az Görüntüle</div>}
-          showLabel={<div className='px-3'>Devamını Göster</div>}
-          className='px-3'
-        >
-          <div
-            dangerouslySetInnerHTML={{
-              __html: data.detail.includedInformation,
-            }}
-          />
-        </Spoiler>
+
+        <div
+          className='px-10'
+          dangerouslySetInnerHTML={{
+            __html: data.detail.includedInformation,
+          }}
+        />
         <Accordion
           multiple={false}
           variant='default'
@@ -149,9 +156,17 @@ const TourDetail: React.FC<Props> = ({ data }) => {
               </div>
             </Accordion.Control>
             <Spoiler
-              maxHeight={100}
-              hideLabel={<div className='px-4'>Daha Az Görüntüle</div>}
-              showLabel={<div className='px-4'>Devamını Göster</div>}
+              maxHeight={200}
+              hideLabel={
+                <div className='px-9 text-sm font-semibold'>
+                  Daha Az Görüntüle
+                </div>
+              }
+              showLabel={
+                <div className='px-9 text-sm font-semibold'>
+                  Devamını Göster
+                </div>
+              }
             >
               <Accordion.Panel>
                 <ul className='list-disc space-y-2 ps-5'>
@@ -264,9 +279,17 @@ const TourDetail: React.FC<Props> = ({ data }) => {
               </div>
             </Accordion.Control>
             <Spoiler
-              maxHeight={100}
-              hideLabel={<div className='px-4'>Daha Az Görüntüle</div>}
-              showLabel={<div className='px-4'>Devamını Göster</div>}
+              maxHeight={200}
+              hideLabel={
+                <div className='mt-1 px-4 text-sm font-semibold'>
+                  Daha Az Görüntüle
+                </div>
+              }
+              showLabel={
+                <div className='mt-1 px-4 text-sm font-semibold'>
+                  Devamını Göster
+                </div>
+              }
             >
               <Accordion.Panel>
                 <div

@@ -196,18 +196,42 @@ const TourSearchResultClient = () => {
       searchParamsQuery.isRefetching)
   ) {
     return (
-      <Container className='py-10'>
-        <div className='grid items-start gap-4 sm:grid-cols-12 md:gap-6'>
-          <div className='grid gap-3 sm:col-span-4 lg:col-span-3'>
-            <Skeleton h={22} />
-            <Skeleton h={16} />
+      <Container className='px-0 py-0 sm:px-3 md:py-10'>
+        <div className='grid items-start gap-4 md:grid-cols-12 md:gap-6'>
+          <div className='sm:col-span-4 lg:col-span-3'>
+            <div className='grid gap-2'>
+              <Skeleton h={20} w={150} mb={rem(9)} />
+              <Skeleton h={12} w={220} />
+              <Skeleton h={12} w={170} />
+              <Skeleton h={12} w={190} />
+              <Skeleton h={12} w={160} />
+              <Skeleton h={12} w={200} />
+              <Skeleton h={12} w={180} />
+              <Skeleton h={12} w={140} />
+            </div>
           </div>
-          <div className='sm:col-span-8 lg:col-span-9'>
-            <div className='grid gap-3'>
-              <Skeleton h={24} radius={'md'} />
-              <Skeleton h={12} w={'85%'} radius={'md'} />
-              <Skeleton h={12} w={'75%'} radius={'md'} />
-              <Skeleton h={12} w={'50%'} radius={'md'} />
+          <div className='grid gap-2 sm:col-span-8 lg:col-span-9'>
+            <div className='flex justify-between gap-3 md:px-0'>
+              <Skeleton h={24} w={200} className='hidden md:flex' />
+              <Skeleton h={32} w={100} />
+            </div>
+            <div className='grid gap-5'>
+              {skeltonLoader.map((_, index) => (
+                <div
+                  key={index}
+                  className='grid grid-cols-5 items-start gap-3 rounded-md border p-3'
+                >
+                  <div className='col-span-1'>
+                    <Skeleton h={120} />
+                  </div>
+                  <div className='col-span-4 grid gap-3'>
+                    <Skeleton h={24} />
+                    <Skeleton h={20} w={'80%'} />
+                    <Skeleton h={18} w={'50%'} />
+                    <Skeleton h={18} w={'20%'} />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

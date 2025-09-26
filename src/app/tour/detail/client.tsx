@@ -35,6 +35,7 @@ import dayjs from 'dayjs'
 import { CiLocationOn } from 'react-icons/ci'
 import { validateUrl } from '@/libs/util'
 import { cdnSiteImageUrl } from '@/libs/cms-data'
+import { HotelDetailSkeleton } from '@/app/hotel/(detail)/[slug]/skeletonLoader'
 const TourDetailClient = () => {
   const router = useTransitionRouter()
   const [
@@ -293,7 +294,7 @@ const TourDetailClient = () => {
   return (
     <>
       <div className='border-b p-4'>
-        <Container>
+        <Container className='px-0'>
           {searchParams.isCruise ? (
             <CruiseSearchEngine />
           ) : (
@@ -306,11 +307,9 @@ const TourDetailClient = () => {
           {!detailQuery.isLoading && !detailQuery.data ? (
             <div>no data</div>
           ) : detailQuery.isLoading || !detailQuery.data ? (
-            <div className='grid gap-4'>
-              <Skeleton h={70} radius={'md'} />
-              <Skeleton h={20} radius={'xl'} />
-              <Skeleton h={20} radius={'xl'} className='max-w-6xl' />
-            </div>
+            <>
+              <HotelDetailSkeleton />
+            </>
           ) : detailQuery.data ? (
             <div>
               <div
@@ -447,7 +446,9 @@ const TourDetailClient = () => {
                             extraServicesMutation.mutate()
                           }}
                         >
-                          Rezervasyon Yap
+                          {calculateTotalPriceQuery.data?.success
+                            ? 'Rezervasyon Yap'
+                            : 'Müsaitlik Bulunmamaktadır'}
                         </Button>
                       </div>
                     </div>
