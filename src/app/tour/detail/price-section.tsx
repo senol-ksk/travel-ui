@@ -22,14 +22,10 @@ const TourDetailPriceSection: React.FC<Props> = ({
   onPassengerChange = () => null,
   calculatedTotalPrice = 0,
 }) => {
-  const adultSelectGroupBy = Object.groupBy(data.detail.hotelRooms, (items) => {
-    return items.adultCount + ':' + items.additionalBedCount
-  })
-
-  const adultSelect = Object.keys(adultSelectGroupBy).map((value, index) => {
+  const adultSelect = range(1, 3).map((value) => {
     return {
-      label: `${adultSelectGroupBy[value]?.at(0)?.adultCount} Kişi`,
-      value,
+      label: `${value} Kişi`,
+      value: `${value}:0`,
     }
   })
 

@@ -219,11 +219,11 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                     <Badge
                       component={UnstyledButton}
                       variant='outline'
-                      radius={'sm'}
+                      radius={'lg'}
                       size='lg'
                       className='cursor-pointer'
                       classNames={{
-                        root: 'border-gray-300 shadow-xs',
+                        root: 'border-gray-300 shadow-xl bg-gray-50 hover:shadow',
                         label: 'text-dark-700 font-normal',
                       }}
                     >
@@ -248,14 +248,6 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                       <div className='rounded-md border-l-4 border-l-blue-800 bg-blue-100 px-3 py-2'>
                         {campaign.title}
                       </div>
-                      {/* <Box
-                        component='a'
-                        href={campaign.params.link.value}
-                        target='_blank'
-                        className='block rounded-md border-l-4 border-l-blue-800 bg-blue-100 px-3 py-2'
-                      >
-                        {campaign.title}
-                      </Box> */}
                     </Carousel.Slide>
                   ))}
                 </Carousel>
@@ -307,6 +299,26 @@ const HotelSearchResultItem: React.FC<IProps> = ({
                 </Button>
               </div>
             </div>
+            {campaignContents && campaignContents[0] ? (
+              <div className='border-t md:hidden'>
+                <div className='p-3 text-sm'>
+                  <Carousel
+                    slideSize={'auto'}
+                    withControls={false}
+                    emblaOptions={{ dragFree: true, align: 'start' }}
+                    slideGap={'md'}
+                  >
+                    {campaignContents?.map((campaign) => (
+                      <Carousel.Slide key={campaign.id}>
+                        <div className='rounded-md border-l-4 border-l-blue-800 bg-blue-100 px-3 py-2'>
+                          {campaign.title}
+                        </div>
+                      </Carousel.Slide>
+                    ))}
+                  </Carousel>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
